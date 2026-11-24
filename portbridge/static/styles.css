@@ -199,6 +199,8 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 .lab-primary:hover { background: #0a453d; }
 .lab-agent textarea { width: 100%; min-height: 125px; padding: 8px; border: 1px solid var(--stroke); border-radius: 6px; background: var(--surface); color: var(--ink); font: inherit; font-size: .9rem; }
 .lab-bar select { min-width: min(220px, 100%); }
+.lab-filter-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; }
+.lab-tasks + .lab-entrypoints { margin-top: 16px; }
 .lab-checked { display: flex; flex-wrap: wrap; gap: 4px 8px; color: var(--muted); font-size: .82rem; }
 .lab-checked time { font-variant-numeric: tabular-nums; font-weight: 650; }
 .lab-count { margin-bottom: 10px; }

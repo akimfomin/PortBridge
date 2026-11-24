@@ -926,9 +926,10 @@ const labEquipment = {
 const portbridgeRepository = 'https://github.com/akimfomin/PortBridge';
 const portbridgePublicSite = 'https://akimfomin.github.io/PortBridge/';
 const labTaskID = /^[a-z0-9-]{1,80}$/;
-function labTaskPath(id, equipment = '') {
+function labTaskPath(id, equipment = '', showAll = false) {
   const params = new URLSearchParams({task: id});
   if (equipment) params.set('equipment', equipment);
+  if (showAll) params.set('status', 'all');
   return `#/lab?${params}`;
 }
 const labStatus = {
@@ -966,12 +967,12 @@ function labAgentEntry(task) {
   const actions = element('div', 'lab-agent-actions');
   const copy = element('button', 'lab-primary', task
     ? t('Copy this task for an agent', 'Копировать эту проверку для агента')
-    : t('Copy agent instructions', 'Копировать задание для агента'));
+    : t('Copy instructions for finding a test', 'Копировать инструкцию по выбору проверки'));
   const prompt = element('textarea');
   prompt.value = labAgentPrompt;
   if (task) {
     const page = portbridgePublicSite + labTaskPath(task.id);
-    prompt.value = t(
+    const intro = t(
       `Open ${page}. In MCP use portbridge_lab with task "${task.id}", or find the same ID in https://akimfomin.github.io/PortBridge/data/lab.json. `
       + 'Check whether the linked discussion still needs this run and confirm the exact revision. '
       + 'Use only synthetic inputs in a separate checkout. Report the revision, environment, expected result and what you observed. Draft any public message for approval.',
@@ -979,6 +980,14 @@ function labAgentEntry(task) {
       + 'В исходном обсуждении проверь, нужен ли ещё прогон, и сверь точную версию. '
       + 'Используй синтетические данные в отдельной копии. Запиши версию, стенд, ожидаемый и фактический результат. Публичное сообщение подготовь для согласования.',
     );
+    prompt.value = [intro, '', editorial(task, 'title'),
+      t('Pinned versions', 'Точные версии'),
+      ...list(task.revisions).map((revision) => `- ${editorial(revision, 'label')} ${revision.sha} ${revision.url}`),
+      t('Steps', 'Шаги'),
+      ...list(editorial(task, 'steps')).map((step, index) => `${index + 1}. ${step}`),
+      `${t('Expected result', 'Ожидаемый результат')} — ${editorial(task, 'expected')}`,
+      `${t('Reporting discussion', 'Обсуждение для отчёта')} — ${task.result_url}`,
+    ].join('\n');
   }
   prompt.readOnly = true;
   prompt.hidden = true;
@@ -1038,14 +1047,21 @@ function labChecklist(title, items, ordered = false) {
   return section;
 }
 
-function labQueuePath(task, equipment) {
+function labQueuePath(equipment, showAll) {
+  const params = new URLSearchParams();
+  if (Object.hasOwn(labEquipment, equipment)) params.set('equipment', equipment);
+  if (showAll) params.set('status', 'all');
+  return '#/lab' + (params.size ? '?' + params : '');
+}
+
+function labCompatibleEquipment(task, equipment) {
   const compatible = list(task.equipment).filter((kind) => Object.hasOwn(labEquipment, kind));
   let next = compatible.length === 1 ? compatible[0] : '';
   if (compatible.includes(equipment)) next = equipment;
-  return next ? `#/lab?${new URLSearchParams({equipment: next})}` : '#/lab';
+  return next;
 }
 
-function labReport(task, equipment) {
+function labReport(task, returnPath) {
   const section = element('section', 'lab-agent');
   const actions = element('div', 'lab-agent-actions');
   const field = element('textarea');
@@ -1068,12 +1084,13 @@ function labReport(task, equipment) {
   bindCopyText(copy, field, status, t('Copied. Fill in your result before sharing.',
     'Скопировано. Впишите свой результат перед публикацией.'));
 
-  actions.append(copy, internalLink(t('Find another check', 'Выбрать другую проверку'), labQueuePath(task, equipment)), status);
+  actions.append(copy, githubLink(t('Share result in the discussion', 'Оставить результат в обсуждении'), task.result_url),
+    internalLink(t('Find another check', 'Выбрать другую проверку'), returnPath), status);
   section.append(element('h3', '', t('After the run', 'После прогона')), actions, field);
   return section;
 }
 
-function labTask(task, focused = false, queueEquipment = '') {
+function labTask(task, focused = false, queueEquipment = '', showAll = false) {
   const card = element('article', 'card lab-task');
   const blocked = task.status === 'blocked';
   const status = element('div', 'meta-row lab-status');
@@ -1111,12 +1128,12 @@ function labTask(task, focused = false, queueEquipment = '') {
 
   const links = element('div', 'lab-links');
   if (!focused && typeof task.id === 'string' && labTaskID.test(task.id)) {
-    const open = internalLink(t('Open this test', 'Открыть эту проверку'), labTaskPath(task.id, queueEquipment));
+    const open = internalLink(t('Open this test', 'Открыть эту проверку'), labTaskPath(task.id, queueEquipment, showAll));
     open.setAttribute('aria-label', `${open.textContent} · ${editorial(task, 'title')}`);
     links.append(open);
   }
   if (!blocked) links.append(githubLink(t('Open instructions', 'Открыть инструкцию'), task.procedure_url));
-  links.append(githubLink(blocked ? t('Report a confirmed public source', 'Сообщить публичный адрес')
+  if (blocked || !focused) links.append(githubLink(blocked ? t('Report a confirmed public source', 'Сообщить публичный адрес')
     : t('Share result in the discussion', 'Оставить результат в обсуждении'), task.result_url));
   if (task.evidence_url) links.append(githubLink(t('Existing evidence', 'Что уже проверили'), task.evidence_url));
   if (task.source_url && ![task.procedure_url, task.result_url, task.evidence_url].includes(task.source_url)) {
@@ -1130,10 +1147,12 @@ function labTask(task, focused = false, queueEquipment = '') {
       : t('Request a test', 'Запросить тест');
     links.append(githubLink(label, request));
   }
-  if (focused && blocked) links.append(internalLink(t('Find another check', 'Выбрать другую проверку'),
-    labQueuePath(task, queueEquipment)));
   card.append(links, details);
-  if (focused && !blocked) card.append(labReport(task, queueEquipment));
+  if (focused) {
+    const returnPath = labQueuePath(labCompatibleEquipment(task, queueEquipment), showAll);
+    if (blocked) links.append(internalLink(t('Find another check', 'Выбрать другую проверку'), returnPath));
+    else card.append(labReport(task, returnPath));
+  }
   return card;
 }
 
@@ -1144,13 +1163,15 @@ function drawLab(data, params) {
   viewStatus.textContent = '';
   if (selected !== null) {
     const task = labTaskID.test(selected) && all.find((entry) => entry.id === selected);
-    const back = internalLink(t('All tests', 'Все проверки'), '#/lab');
+    const equipment = params.get('equipment') || '';
+    const showAll = params.get('status') === 'all';
+    const back = internalLink(t('Back to Test Lab', 'К очереди проверок'), labQueuePath(equipment, showAll));
     const bar = element('div', 'lab-bar');
     bar.append(back);
     lab.append(bar);
     if (task) {
       if (task.status !== 'blocked') lab.append(labAgentEntry(task));
-      lab.append(labTask(task, true, params.get('equipment') || ''));
+      lab.append(labTask(task, true, equipment, showAll));
     } else {
       lab.append(element('p', 'empty', t('This test is unavailable in the current queue.',
         'Этой проверки сейчас нет в очереди.')));
@@ -1173,7 +1194,12 @@ function drawLab(data, params) {
   equipment.value = params.get('equipment') || '';
   if (equipment.selectedIndex === -1) equipment.selectedIndex = 0;
   group.append(label, equipment);
-  bar.append(group);
+  const showAllLabel = element('label', 'lab-filter-toggle');
+  const showAll = element('input');
+  showAll.type = 'checkbox';
+  showAll.checked = params.get('status') === 'all';
+  showAllLabel.append(showAll, t('Show all statuses', 'Показать все статусы'));
+  bar.append(group, showAllLabel);
   if (data.checked_at) {
     const checked = element('p', 'lab-checked', t('Task status checked', 'Статусы сверены'));
     checked.append(activityTime(data.checked_at));
@@ -1183,19 +1209,23 @@ function drawLab(data, params) {
   count.setAttribute('role', 'status');
   const tasks = element('div', 'cards lab-tasks');
   function renderTasks() {
-    const chosen = all.filter((task) => !equipment.value || list(task.equipment).includes(equipment.value));
+    const chosen = all.filter((task) => (showAll.checked || task.status === 'needs_run')
+      && (!equipment.value || list(task.equipment).includes(equipment.value)));
     count.textContent = t(`Tasks shown: ${numberFormat.format(chosen.length)}`, `Задач показано: ${numberFormat.format(chosen.length)}`);
-    tasks.replaceChildren(...chosen.map((task) => labTask(task, false, equipment.value)));
-    if (!chosen.length) tasks.append(element('p', 'empty', t('No tasks for this equipment in the current snapshot.', 'В этом снимке нет задач для выбранного оборудования.')));
+    tasks.replaceChildren(...chosen.map((task) => labTask(task, false, equipment.value, showAll.checked)));
+    if (!chosen.length) tasks.append(element('p', 'empty', showAll.checked
+      ? t('No tests for this equipment.', 'Для этого оборудования пока нет проверок.')
+      : t('There are no tests to take for this equipment. Show all statuses or request a test below.',
+        'Для этого оборудования пока нет проверок, которые можно взять. Покажите все статусы или запросите тест ниже.')));
   }
-  equipment.addEventListener('change', () => {
-    const next = new URLSearchParams();
-    if (equipment.value) next.set('equipment', equipment.value);
-    history.replaceState(null, '', `#/lab${next.size ? `?${next}` : ''}`);
+  function updateFilters() {
+    history.replaceState(null, '', labQueuePath(equipment.value, showAll.checked));
     updateLanguageLinks();
     renderTasks();
-  });
-  lab.append(entrypoints, bar, count, tasks);
+  }
+  equipment.addEventListener('change', updateFilters);
+  showAll.addEventListener('change', updateFilters);
+  lab.append(bar, count, tasks, entrypoints);
   renderTasks();
   content.replaceChildren(lab);
 }

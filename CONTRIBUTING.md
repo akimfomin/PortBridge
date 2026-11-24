@@ -11,7 +11,9 @@ PortBridge helps independent Xbox Series compatibility teams share fixes and evi
 3. Submit one report with its original source and attribution. Include negative findings if they will save another team a repeat investigation. [Evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml)
 4. If it helps a second project, post the link in the relevant existing issue or PR with a specific proposed check or patch. Keep the resulting decision or change linked from the report.
 
-Public source links and synthetic fixtures are welcome. Keep game assets, credentials, and private logs out of contributions.
+Public primary-source links and synthetic fixtures are welcome. Pin the source revision and credit the author. For reused code or fixtures, record their origin and applicable license, confirm it permits the reuse, and keep its required notices.
+
+Keep game files, executables, proprietary SDK files, keys, credentials, and private logs out of contributions. Leave out download links to leaked or restricted materials and instructions for bypassing protection. [Publication rules](docs/PUBLISHING.md#происхождение-материалов-и-жалобы)
 
 ## Suggest an improvement
 

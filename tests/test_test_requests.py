@@ -170,8 +170,10 @@ class TestRequestTests(TestCase):
         self.assertIn("@LiveCandidate", body)
         self.assertNotIn("@Curated", body)
 
-    def test_fma_request_needs_rdna4_as_well_as_native_wave64(self):
+    @patch("portbridge.test_requests.build_lab")
+    def test_fma_request_needs_rdna4_as_well_as_native_wave64(self, lab):
         task = next(row for row in build_lab()["tasks"] if row["id"] == "xcl-1100-fma")
+        lab.return_value = {"tasks": [{**task, "status": "needs_run"}]}
         request = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
         self.issue["body"] = self.current["body"] = request
         roster = [tester("NativeOtherArchitecture", "d3d12-native-wave64")]
@@ -180,8 +182,10 @@ class TestRequestTests(TestCase):
         discovery.assert_called_once_with("amd", ("d3d12-native-wave64-rdna4",))
         self.github.comment.assert_not_called()
 
-    def test_labeled_request_checks_live_receiving_head_before_inviting(self):
+    @patch("portbridge.test_requests.build_lab")
+    def test_labeled_request_checks_live_receiving_head_before_inviting(self, lab):
         task = next(row for row in build_lab()["tasks"] if row["id"] == "xcl-1100-fma")
+        lab.return_value = {"tasks": [{**task, "status": "needs_run"}]}
         request = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
         self.issue["body"] = self.current["body"] = request
         candidate = tester("Volunteer", "d3d12-native-wave64-rdna4")
@@ -203,6 +207,13 @@ class TestRequestTests(TestCase):
         receiving["state"] = "open"
         self.assertIn("Posted one", self.run_dispatch([candidate]))
         self.github.comment.assert_called_once()
+
+    def test_completed_fma_request_cannot_invite_another_tester(self):
+        task = build_lab(task="xcl-1100-fma")["tasks"][0]
+        self.issue["body"] = self.current["body"] = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
+        with self.assertRaisesRegex(ValueError, "does not match the open test"):
+            self.run_dispatch([tester("Volunteer", "d3d12-native-wave64-rdna4")])
+        self.github.comment.assert_not_called()
 
     @patch("portbridge.test_requests.build_lab")
     def test_native_carry_invites_only_the_qualified_reporter_at_the_open_head(self, lab):

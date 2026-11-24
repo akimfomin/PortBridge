@@ -23,7 +23,16 @@ class LabTest(CatalogFixture):
         presenter = tasks["pb-9-reforge-present"]
         self.assertEqual((presenter["status"], presenter["evidence_stage"]), ("blocked", "reviewed_gpu"))
         self.assertEqual(presenter["result_url"], "https://github.com/akimfomin/PortBridge/issues/9")
-        self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "author_gpu")
+        fma = tasks["xcl-1100-fma"]
+        self.assertEqual((fma["status"], fma["evidence_stage"], fma["adoption"]),
+                         ("awaiting_review", "reviewed_gpu", "pending"))
+        self.assertEqual(fma["revisions"][0]["sha"], "1b3fbc4bc8c3088e69d78f85a2e73f1cccf4df51")
+        self.assertEqual(fma["evidence_url"], "https://github.com/xcl-dev/xcl/pull/1100#issuecomment-7144197194")
+        self.assertIn("PastiiJay", fma["evidence"])
+        self.assertTrue(any("gpu_wave32_program_in_wave64_hardware" in step for step in fma["steps"]))
+        xcl = next(solution for solution in self.catalog.problem("PB-0006")["solutions"] if solution["project"] == "xcl")
+        report = next(evidence for evidence in xcl["evidence"] if evidence["url"] == fma["evidence_url"])
+        self.assertEqual((report["kind"], report["revision"]), ("independent", fma["revisions"][0]["sha"]))
         native = tasks["anyxboxx-133-native-carry"]
         self.assertEqual((native["status"], native["evidence_stage"]), ("awaiting_review", "reviewed_gpu"))
         self.assertEqual(native["revisions"][0]["sha"], "9736508b0d201c641b119d2e4a18fb72f28bdde4")
@@ -67,7 +76,7 @@ class LabTest(CatalogFixture):
         payload = build_lab()
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
-                         ["pb-5-xcl-wave64", "xcl-1100-fma", "continued-511-repeated-draw",
+                         ["pb-5-xcl-wave64", "continued-511-repeated-draw",
                           "anyxboxx-147-native-wave64-gather", "framelab-12-vulkan-handoff"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
         self.assertEqual([task["id"] for task in build_lab(status="blocked")["tasks"]], ["pb-9-reforge-present"])
@@ -79,8 +88,9 @@ class LabTest(CatalogFixture):
             build_lab(status="merged")
 
     def test_exact_task_selection_preserves_filters_and_rejects_invalid_ids(self):
-        selected = build_lab(task="xcl-1100-fma", equipment="amd", status="needs_run")
+        selected = build_lab(task="xcl-1100-fma", equipment="amd", status="awaiting_review")
         self.assertEqual([task["id"] for task in selected["tasks"]], ["xcl-1100-fma"])
+        self.assertEqual(build_lab(task="xcl-1100-fma", equipment="amd", status="needs_run")["tasks"], [])
         self.assertEqual(build_lab(task="unknown-check")["tasks"], [])
         self.assertEqual(build_lab(task="xcl-1100-fma", equipment="cpu")["tasks"], [])
         self.assertEqual(build_lab(task="framelab-12-vulkan-handoff", equipment="nvidia")["tasks"], [])

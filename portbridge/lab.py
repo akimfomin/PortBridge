@@ -4,7 +4,7 @@ from copy import deepcopy
 import re
 
 
-CHECKED_AT = "2026-11-24T15:51:11Z"
+CHECKED_AT = "2026-11-24T21:00:10Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review", "blocked")
 TASK_ID_PATTERN = r"^[a-z0-9-]{1,80}$"
@@ -20,6 +20,7 @@ BYTE_CARRY = f"{XCL}/pull/925#issuecomment-7129094971"
 PRESENTER_REPORT = f"{REFORGE}/pull/86#issuecomment-7130696664"
 FMA = f"{XCL}/pull/1100"
 FMA_HEAD = "1b3fbc4bc8c3088e69d78f85a2e73f1cccf4df51"
+FMA_RDNA4_REPORT = f"{FMA}#issuecomment-7144197194"
 XCL_SETUP = "https://github.com/akimfomin/xcl/blob"
 CARRY = "https://github.com/LooperSalty/AnyXboxX/pull/133"
 CARRY_HEAD = "9736508b0d201c641b119d2e4a18fb72f28bdde4"
@@ -162,33 +163,37 @@ TASKS = (
     {
         "id": "xcl-1100-fma",
         "priority": 4,
-        "title": "Repeat the XCL FMA test on AMD RDNA4",
+        "title": "Review the XCL FMA check on AMD RDNA4",
         "projects": ["xcl", "scarlett-layer"],
         "equipment": ["amd"],
         "os": ["Windows"],
         "requirements": ["AMD RDNA4 D3D12 adapter with native Wave64", "Rust", "DXC"],
-        "status": "needs_run", "evidence_stage": "author_gpu", "adoption": "pending",
+        "status": "awaiting_review", "evidence_stage": "reviewed_gpu", "adoption": "pending",
         "source_url": FMA, "procedure_url": f"{XCL_SETUP}/{FMA_HEAD}/README.md#tests",
-        "evidence_url": FMA, "result_url": FMA,
+        "evidence_url": FMA_RDNA4_REPORT, "result_url": FMA,
         "revisions": [revision("Test PR", "PR с тестом", "akimfomin/xcl", FMA_HEAD)],
-        "why": "The earlier XCL revision passed on RDNA2. The rebased revision still needs the native RDNA4 check.",
-        "evidence": "The new PR head passed Wave32 and split Wave64 on NVIDIA. The independent AMD RDNA2 report belongs to the earlier revision.",
+        "why": "The native RDNA4 check is complete on the pinned revision. XCL #1100 is open for review.",
+        "evidence": ("PastiiJay (KLBF Lab) ran both checks without skips on a Radeon RX 9070 XT. "
+                     "All 64 modified and all 64 plain FMA values matched in native Wave64, Wave32 and split Wave64."),
         "steps": [
-            "Check out the pinned PR. Select the AMD RDNA4 adapter and set XCL_REQUIRE_GPU=wave64.",
+            "To repeat the check, check out the pinned PR. Select the AMD RDNA4 adapter and set XCL_REQUIRE_GPU=wave64.",
             "Run gpu_wave32_program_in_wave64_hardware to confirm native Wave64 is available.",
             "Run gpu_fma_f32_abs_neg_clamp_oracle with the XCL GPU test setup.",
+            "Keep the adapter probe with the FMA result. The FMA test can pass on NVIDIA while omitting native Wave64, even with XCL_REQUIRE_GPU=wave64.",
         ],
         "expected": "Both tests pass without skips. The FMA output includes wave64 split=false and 64/64 matching values.",
         "report": ["Commit, GPU, driver, Windows build and DXC version", "Adapter check, FMA result and any skipped case"],
         "translations": {"ru": {
-            "title": "Повторить тест FMA в XCL на AMD RDNA4",
+            "title": "Ревью проверки FMA в XCL на AMD RDNA4",
             "requirements": ["Видеокарта AMD RDNA4 с D3D12 и аппаратным Wave64", "Rust", "DXC"],
-            "why": "Предыдущая версия прошла на AMD RDNA2. Обновлённую версию нужно проверить на аппаратном RDNA4.",
-            "evidence": "Новая версия PR прошла Wave32 и разделённый Wave64 на NVIDIA. Независимый прогон AMD RDNA2 относится к предыдущей версии.",
+            "why": "Аппаратный RDNA4 проверен на указанной версии. XCL #1100 открыт на ревью.",
+            "evidence": ("PastiiJay (KLBF Lab) выполнил обе проверки на Radeon RX 9070 XT без пропусков. "
+                         "В аппаратном Wave64, Wave32 и разделённом Wave64 совпали все 64 результата FMA с модификаторами и все 64 контрольных значения."),
             "steps": [
-                "Перейдите на указанную версию PR, выберите AMD RDNA4 и задайте XCL_REQUIRE_GPU=wave64.",
+                "Чтобы повторить прогон, перейдите на указанную версию PR, выберите AMD RDNA4 и задайте XCL_REQUIRE_GPU=wave64.",
                 "Убедитесь, что доступен аппаратный Wave64, тестом gpu_wave32_program_in_wave64_hardware.",
                 "Запустите gpu_fma_f32_abs_neg_clamp_oracle по инструкции XCL для GPU-тестов.",
+                "Укажите результат проверки адаптера вместе с FMA. На NVIDIA тест FMA может пройти без запуска аппаратного Wave64 даже при XCL_REQUIRE_GPU=wave64.",
             ],
             "expected": "Оба теста проходят без пропусков. В выводе FMA есть wave64 split=false и 64 из 64 совпадений.",
             "report": ["Коммит, видеокарта, драйвер, версия Windows и DXC", "Итог проверки видеокарты, FMA и пропуски"],

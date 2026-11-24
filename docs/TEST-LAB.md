@@ -2,9 +2,9 @@
 
 [Choose a check](https://akimfomin.github.io/PortBridge/#/lab) · [Выбрать проверку](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) · [Request a test](TEST-REQUESTS.md) · [Instructions for agents](AGENT-PROMPT.md)
 
-Pick a check for equipment you can use. Each task links the original discussion, the exact source revisions, the expected result, and where to report it. Labels show which checks need a run, which need a revision selected, which are waiting for a maintainer, and which are paused because the source is unavailable.
+Choose your equipment first. The queue starts with tests that need a run. Use **Show all statuses** to see checks waiting for a revision or review, and paused checks. Each task links the original discussion, exact source revisions, expected result, and reporting thread.
 
-Use **Open this test** to share a link to one check. The page opens its instructions and lets you copy the exact task into an agent chat. [Example task](https://akimfomin.github.io/PortBridge/#/lab?task=xcl-1100-fma)
+Use **Open this test** to share a link to one check. **Copy this task for an agent** includes the pinned revisions, steps and expected result. [Example task](https://akimfomin.github.io/PortBridge/#/lab?task=framelab-12-vulkan-handoff)
 
 After the run, use **Copy result template** to get the link and fields for a report in the source discussion. Fill in what happened before posting. **Find another check** takes you back to the queue and keeps the relevant equipment filter. If your setup has no GPU or build tools, try the Scarlett Commons and Continued check with Git and Python. [CPU check](https://akimfomin.github.io/PortBridge/#/lab?task=scarlett-commons-continued-add-basic)
 
@@ -17,9 +17,9 @@ Volunteers choose a task and execute it locally. If you need another setup, open
 
 ## Для участника
 
-Откройте очередь и выберите AMD, NVIDIA или CPU. Для каждой проверки видны требования, точные версии и куда отправить результат. Можно передать агенту [ссылку на PortBridge](https://github.com/akimfomin/PortBridge) и указать, какой компьютер доступен.
+Откройте очередь и выберите AMD, NVIDIA или CPU. Сначала показаны проверки, которым нужен исполнитель. Включите **Показать все статусы**, чтобы увидеть также результаты на ревью и отложенные проверки.
 
-Нажмите **Открыть эту проверку**, чтобы отправить ссылку на одну задачу. В открытой карточке можно скопировать именно эту проверку для агента. [Пример](https://akimfomin.github.io/PortBridge/?lang=ru#/lab?task=xcl-1100-fma)
+Нажмите **Открыть эту проверку**, чтобы отправить ссылку на одну задачу. Кнопка **Копировать эту проверку для агента** включает точные версии, шаги и ожидаемый итог. [Пример](https://akimfomin.github.io/PortBridge/?lang=ru#/lab?task=framelab-12-vulkan-handoff)
 
 После прогона кнопка **Копировать шаблон результата** подставит ссылку на карточку и поля отчёта. Заполните их перед публикацией в исходном обсуждении. Кнопка **Выбрать другую проверку** возвращает к очереди с подходящим фильтром. Для прогона без видеокарты и компилятора есть проверка Scarlett Commons и Continued через Git и Python. [Проверка на процессоре](https://akimfomin.github.io/PortBridge/?lang=ru#/lab?task=scarlett-commons-continued-add-basic)
 
