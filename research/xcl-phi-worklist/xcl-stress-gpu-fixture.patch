@@ -1,0 +1,56 @@
+--- a/crates/xcl/tests/gpu_compute_e2e.rs
++++ b/crates/xcl/tests/gpu_compute_e2e.rs
+@@ -184,8 +184,38 @@
+ /// Hand the wave64 mirror program to the CreateComputePipelineState hook, dispatch the
+ /// pipeline it built and check every thread's output.
+ fn mirror_program_through_the_hook(dev: &ID3D12Device) {
++    let Some(count) = std::env::var("PORTBRIDGE_RND_PSO_LOOPS").ok().and_then(|v| v.parse::<usize>().ok()) else {
++        return mirror_program_with_code(dev, &program());
++    };
++    assert!((1..=128).contains(&count));
++    let mut code = Vec::new();
++    let mut emit = |name, enc, fields: &[(&str, u64)]| {
++        code.extend(encode(name, enc, fields, None).expect(name));
++    };
++    for reg in 4..100 {
++        emit("S_MOV_B32", "ENC_SOP1", &[("SDST", reg), ("SSRC0", 151)]);
++    }
++    for _ in 0..count {
++        emit("S_MOV_B32", "ENC_SOP1", &[("SDST", 100), ("SSRC0", 130)]);
++        for reg in 4..99 {
++            emit("S_MOV_B32", "ENC_SOP1", &[("SDST", reg), ("SSRC0", reg + 1)]);
++        }
++        emit("S_MOV_B32", "ENC_SOP1", &[("SDST", 99), ("SSRC0", 151)]);
++        emit("S_SUB_U32", "ENC_SOP2", &[("SDST", 100), ("SSRC0", 100), ("SSRC1", 129)]);
++        emit("S_CMP_LG_U32", "ENC_SOPC", &[("SSRC0", 100), ("SSRC1", 128)]);
++        emit("S_CBRANCH_SCC1", "ENC_SOPP", &[("SIMM16", 0x10000 - 99)]);
++    }
++    code.extend(program());
++    mirror_program_with_code(dev, &code);
++    let route = xcl::gpu::dxil::coverage::fallback_summary();
++    assert!(route.contains("CS direct 1 / HLSL fallback 0;"), "{route}");
++    println!("{route}");
++    println!("verified readback: 1536 dwords (loops={count})");
++}
++
++fn mirror_program_with_code(dev: &ID3D12Device, code: &[u8]) {
+     // user SGPRs 2, TGID_X + TGID_Y, thread ids v0 + v1
+-    let blob = console_cs(&program(), 2 << 1 | 1 << 7 | 1 << 8 | 1 << 11, [16, 8, 1]);
++    let blob = console_cs(code, 2 << 1 | 1 << 7 | 1 << 8 | 1 << 11, [16, 8, 1]);
+     assert!(xcl::gpu::xbox::is_xbox(&blob), "expected a console container");
+     let game_rs: ID3D12RootSignature = unsafe {
+         let mut ser = None;
+@@ -199,11 +229,13 @@
+         ..Default::default()
+     };
+     let before = real::stats();
++    let start = std::time::Instant::now();
+     let pso: Result<ID3D12PipelineState, _> = unsafe { dev.CreateComputePipelineState(&desc) };
+     unsafe { std::mem::ManuallyDrop::drop(&mut desc.pRootSignature) };
+     let pso = pso.expect("CreateComputePipelineState through the backend hook");
+     // built in the background behind a stand-in when its shader was not compiled yet
+     let real_raw = xcl::hle::d3d12x::pso_async::resolve_wait(pso.as_raw() as usize) as *mut std::ffi::c_void;
++    println!("PSO ready in {:.4} ms", start.elapsed().as_secs_f64() * 1e3);
+     let after = real::stats();
+     assert_eq!(after.translated_pipelines, before.translated_pipelines + 1, "PSO was not built from the translated shader: {:?}", after.translation_errors);
+     assert!(

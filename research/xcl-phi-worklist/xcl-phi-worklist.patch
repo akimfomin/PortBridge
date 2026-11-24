@@ -1,0 +1,313 @@
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index d852d8a..0df26b1 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -8,7 +8,8 @@
+ //! results); this pass removes the redundancy without changing what any
+ //! remaining instruction computes.
+ 
+-use std::collections::HashMap;
++use std::cmp::Reverse;
++use std::collections::{BinaryHeap, HashMap};
+ 
+ use super::{BinOp, CastOp, FnAttrs, Module, Op, Pred, Ty, Value};
+ 
+@@ -344,6 +345,72 @@ impl Module {
+         idom
+     }
+ 
++    /// Collapse trivial phis in block order, then revisit only phis whose inputs change.
++    fn simplify_phis(&self, order: &[u32], repl: &mut [Option<Value>]) {
++        let phis = || {
++            order.iter().flat_map(|&b| {
++                self.blocks[b as usize].iter().copied()
++                    .take_while(|&i| matches!(self.insts[i as usize].op, Op::Phi(_)))
++            })
++        };
++        // Small cascades can finish before building the dependency table.
++        for _ in 0..2 {
++            let mut saw_conflict = false;
++            let mut revisit = false;
++            for &b in order {
++                for &i in &self.blocks[b as usize] {
++                    if repl[i as usize].is_some() {
++                        continue;
++                    }
++                    let Op::Phi(incoming) = &self.insts[i as usize].op else { break };
++                    match phi_value(repl, i, incoming) {
++                        Ok(Some(v)) => {
++                            repl[i as usize] = Some(v);
++                            revisit |= saw_conflict;
++                        }
++                        Ok(None) => {}
++                        Err(_) => saw_conflict = true,
++                    }
++                }
++            }
++            if !revisit {
++                return;
++            }
++        }
++
++        // Keep the scan order within each logical round so cycles choose the same
++        // representatives. A changed input only schedules affected phis.
++        let candidates: Vec<_> = phis().filter(|&i| repl[i as usize].is_none()).collect();
++        let mut initial = 0..candidates.len();
++        let mut ready = BinaryHeap::new();
++        let mut waiters = PhiWaiters::new(self.insts.len(), candidates.len());
++        // The first sweep only wakes already visited ranks, all for round one.
++        while let Some(Reverse((round, rank))) = initial.next().map(|rank| Reverse((0, rank))).or_else(|| ready.pop()) {
++            let i = candidates[rank];
++            let Op::Phi(incoming) = &self.insts[i as usize].op else { unreachable!() };
++            match phi_value(repl, i, incoming) {
++                Ok(Some(v)) => {
++                    repl[i as usize] = Some(v);
++                    while let Some(user) = waiters.take_user(i as usize) {
++                        ready.push(Reverse((round + usize::from(user < rank), user)));
++                    }
++                }
++                Ok(None) => {}
++                Err(conflict) => {
++                    // Two different non-self inputs are enough to rule out a
++                    // replacement. Either must change before this phi can fold.
++                    for (slot, input) in conflict.into_iter().enumerate() {
++                        if let Value::Inst(j) = input {
++                            if matches!(self.insts[j as usize].op, Op::Phi(_)) {
++                                waiters.link(2 * rank + slot, j as usize);
++                            }
++                        }
++                    }
++                }
++            }
++        }
++    }
++
+     /// Cleans up the entry function (see the module docs of `opt`). Values
+     /// keep their identities; replaced ones simply lose their uses.
+     ///
+@@ -378,39 +445,8 @@ impl Module {
+ 
+         let mut repl: Vec<Option<Value>> = vec![None; self.insts.len()];
+ 
+-        // trivial phis (all incoming values the phi itself or one value), to a fixed point
+-        while !skip("phi") {
+-            let mut changed = false;
+-            for &b in &order {
+-                for &i in &self.blocks[b as usize] {
+-                    let i = i as usize;
+-                    if repl[i].is_some() {
+-                        continue;
+-                    }
+-                    let Op::Phi(inc) = &self.insts[i].op else { break };
+-                    let me = Value::Inst(i as u32);
+-                    let mut same: Option<Value> = None;
+-                    let mut trivial = true;
+-                    for &(v, _) in inc {
+-                        let v = resolve(&mut repl, v);
+-                        if v == me || Some(v) == same {
+-                            continue;
+-                        }
+-                        if same.is_some() {
+-                            trivial = false;
+-                            break;
+-                        }
+-                        same = Some(v);
+-                    }
+-                    if let (true, Some(v)) = (trivial, same) {
+-                        repl[i] = Some(v);
+-                        changed = true;
+-                    }
+-                }
+-            }
+-            if !changed {
+-                break;
+-            }
++        if !skip("phi") {
++            self.simplify_phis(&order, &mut repl);
+         }
+ 
+         // CSE along the dominator tree (preorder walk with a scoped table)
+@@ -479,39 +515,7 @@ impl Module {
+         }
+         // second trivial-phi fixed point if CSE/simplification collapsed incoming values
+         if cse_replaced && !skip("phi") {
+-            loop {
+-                let mut changed = false;
+-                for &b in &order {
+-                    for &i in &self.blocks[b as usize] {
+-                        let i = i as usize;
+-                        if repl[i].is_some() {
+-                            continue;
+-                        }
+-                        let Op::Phi(inc) = &self.insts[i].op else { break };
+-                        let me = Value::Inst(i as u32);
+-                        let mut same: Option<Value> = None;
+-                        let mut trivial = true;
+-                        for &(v, _) in inc {
+-                            let v = resolve(&mut repl, v);
+-                            if v == me || Some(v) == same {
+-                                continue;
+-                            }
+-                            if same.is_some() {
+-                                trivial = false;
+-                                break;
+-                            }
+-                            same = Some(v);
+-                        }
+-                        if let (true, Some(v)) = (trivial, same) {
+-                            repl[i] = Some(v);
+-                            changed = true;
+-                        }
+-                    }
+-                }
+-                if !changed {
+-                    break;
+-                }
+-            }
++            self.simplify_phis(&order, &mut repl);
+         }
+         // phis may name values defined later (back edges): resolve once more
+         for &b in &order {
+@@ -550,6 +554,82 @@ impl Module {
+     }
+ }
+ 
++const NO_WATCH: usize = usize::MAX;
++
++#[derive(Clone, Copy)]
++struct PhiWatch {
++    input: usize,
++    previous: usize,
++    next: usize,
++}
++
++/// Each phi has two reserved watch slots. The lists index those slots so
++/// retargeting a watch needs no per-edge allocation or search.
++struct PhiWaiters {
++    first: Vec<usize>,
++    slots: Vec<PhiWatch>,
++}
++
++impl PhiWaiters {
++    fn new(insts: usize, phis: usize) -> Self {
++        let empty = PhiWatch { input: NO_WATCH, previous: NO_WATCH, next: NO_WATCH };
++        Self { first: vec![NO_WATCH; insts], slots: vec![empty; 2 * phis] }
++    }
++
++    fn link(&mut self, slot: usize, input: usize) {
++        debug_assert_eq!(self.slots[slot].input, NO_WATCH);
++        let next = self.first[input];
++        self.slots[slot] = PhiWatch { input, previous: NO_WATCH, next };
++        if next != NO_WATCH {
++            self.slots[next].previous = slot;
++        }
++        self.first[input] = slot;
++    }
++
++    fn unlink(&mut self, slot: usize) {
++        let PhiWatch { input, previous, next } = self.slots[slot];
++        if input == NO_WATCH {
++            return;
++        }
++        if previous == NO_WATCH {
++            self.first[input] = next;
++        } else {
++            self.slots[previous].next = next;
++        }
++        if next != NO_WATCH {
++            self.slots[next].previous = previous;
++        }
++        self.slots[slot].input = NO_WATCH;
++    }
++
++    fn take_user(&mut self, input: usize) -> Option<usize> {
++        let slot = self.first[input];
++        if slot == NO_WATCH {
++            return None;
++        }
++        // A scheduled phi has no active watches until it is evaluated again.
++        self.unlink(slot);
++        self.unlink(slot ^ 1);
++        Some(slot / 2)
++    }
++}
++
++/// A single non-self input, or two different inputs that keep the phi live.
++fn phi_value(repl: &mut [Option<Value>], i: u32, incoming: &[(Value, super::Block)]) -> Result<Option<Value>, [Value; 2]> {
++    let mut same = None;
++    for &(input, _) in incoming {
++        let value = resolve(repl, input);
++        if value == Value::Inst(i) || Some(value) == same {
++            continue;
++        }
++        if let Some(other) = same {
++            return Err([other, value]);
++        }
++        same = Some(value);
++    }
++    Ok(same)
++}
++
+ /// The value `v` stands for after replacements (path-compressing the chain).
+ fn resolve(repl: &mut [Option<Value>], v: Value) -> Value {
+     let mut r = v;
+@@ -571,3 +651,59 @@ fn resolve(repl: &mut [Option<Value>], v: Value) -> Value {
+     }
+     r
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::gpu::dxil::module::Block;
++
++    #[test]
++    fn phi_worklist_closes_backward_chains_and_preserves_a_live_cycle() {
++        for after_cse in [false, true] {
++            let mut m = Module::new();
++            m.define_entry("main");
++            let ty = m.i32();
++            let void = m.void();
++            let sink_ty = m.func_ty(void, &[ty, ty]);
++            let sink = m.declare("observe", sink_ty, FnAttrs::None);
++            let seed = m.i32c(23);
++            let different = m.i32c(29);
++            let zero = m.i32c(0);
++            let one = m.i32c(1);
++            let two = m.i32c(2);
++            let tail = if after_cse { m.bin(BinOp::Add, seed, zero) } else { seed };
++            let header = m.new_block();
++            let latch = m.new_block();
++            let exit = m.new_block();
++            m.br(header);
++            m.set_block(header);
++            let counter = m.phi(ty);
++            let left = m.phi(ty);
++            let right = m.phi(ty);
++            let chain: Vec<_> = (0..64).map(|_| m.phi(ty)).collect();
++            let cond = m.cmp(Pred::Ne, counter, zero);
++            m.cond_br(cond, latch, exit);
++            m.set_block(latch);
++            let dec = m.bin(BinOp::Sub, counter, one);
++            m.br(header);
++            m.set_block(exit);
++            let call = m.call(sink, &[chain[0], left]);
++            m.ret();
++            for (phi, start, next) in [(counter, two, dec), (left, seed, right), (right, different, left)] {
++                m.add_incoming(phi, start, Block(0));
++                m.add_incoming(phi, next, latch);
++            }
++            for (i, &phi) in chain.iter().enumerate() {
++                m.add_incoming(phi, seed, Block(0));
++                m.add_incoming(phi, chain.get(i + 1).copied().unwrap_or(tail), latch);
++            }
++            m.optimize();
++            assert_eq!(m.block_insts(header).len(), 5, "three phis, compare and branch");
++            let Value::Inst(call) = call else { unreachable!() };
++            let mut operands = Vec::new();
++            m.insts[call as usize].op.for_each_operand(|v| operands.push(v));
++            assert_eq!(operands, [seed, left]);
++            assert!(m.try_to_bitcode("dxil-ms-dx", "").is_ok());
++        }
++    }
++}
