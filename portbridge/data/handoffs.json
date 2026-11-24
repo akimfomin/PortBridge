@@ -55,5 +55,20 @@
     "revision": "9ae6f1253ffc45cc1ebf774dcaa630959111ccb0",
     "delivered_url": "https://github.com/ubiquitarianism/leonida/pull/966",
     "review_url": "https://github.com/ubiquitarianism/leonida/pull/966#pullrequestreview-6042837366"
+  },
+  {
+    "problem_id": "PB-0019",
+    "project": "continued",
+    "revision": "40a2b1c6b60aac005cbe2ecaf4b1130a630d6494",
+    "delivered_url": "https://github.com/ubiquitarianism/leonida/pull/1026",
+    "independent_url": "https://github.com/ubiquitarianism/leonida/pull/1026#issuecomment-7138695955"
+  },
+  {
+    "problem_id": "PB-0020",
+    "project": "continued",
+    "revision": "5496f79f93c41f1134ce4c9e1d2674aa00c6bb55",
+    "delivered_url": "https://github.com/ubiquitarianism/leonida/pull/1042",
+    "independent_url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7138758788",
+    "review_url": "https://github.com/ubiquitarianism/leonida/pull/1042#pullrequestreview-6044064503"
   }
 ]

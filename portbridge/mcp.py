@@ -10,6 +10,7 @@ import sys
 from .activity import build_activity
 from .catalog import PROBLEM_ID, ReadOnlyCatalog
 from .discussion import MAX_MESSAGE_CHARS, MAX_WAIT_SECONDS, MESSAGE_KEY
+from .ecosystem import build_ecosystem
 from .exchange_client import ExchangeClient, ExchangeClientError
 from .lab import EQUIPMENT, STATUSES, build_lab, filter_lab
 from .preflight import preflight, public_preflight, public_problem, snapshot
@@ -48,6 +49,8 @@ def tool(name, description, properties, *, read_only=True, **schema_rules):
 TOOLS = [
     tool("portbridge_activity", "Read recent cross-project progress, reviewed results, and open opportunities "
          "for a shared check. Returns only public catalog data.", {}),
+    tool("portbridge_ecosystem", "Read candidate repositories and reviewed, source-linked technical capabilities. "
+         "Candidate links require review before any reuse.", {}),
     tool("portbridge_lab", "Find public volunteer tests by equipment and readiness. Provide the equipment yourself. "
          "The tool returns pinned revisions, expected results, and the discussion for reporting a run.",
          {"equipment": {"type": "string", "enum": list(EQUIPMENT)},
@@ -158,6 +161,11 @@ class PortBridgeMCP:
             if args:
                 return tool_error("The activity tool takes no arguments.")
             payload = snapshot("activity") if self.catalog is None else build_activity(self.catalog)
+            return tool_result(payload)
+        if name == "portbridge_ecosystem":
+            if args:
+                return tool_error("The ecosystem tool takes no arguments.")
+            payload = snapshot("ecosystem") if self.catalog is None else build_ecosystem(self.catalog)
             return tool_result(payload)
         if name == "portbridge_lab":
             allowed = {"equipment": EQUIPMENT, "status": STATUSES}
@@ -291,7 +299,9 @@ class PortBridgeMCP:
             try:
                 return self.run_tool(params)
             except (OSError, sqlite3.Error, ValueError, KeyError, TypeError) as exc:
-                if self.exchange is not None and params.get("name") not in {"portbridge_activity", "portbridge_lab"}:
+                if self.exchange is not None and params.get("name") not in {
+                    "portbridge_activity", "portbridge_ecosystem", "portbridge_lab",
+                }:
                     return tool_error("Could not read the local exchange. Check its port and read key.")
                 if self.catalog is None:
                     return tool_error("The public PortBridge snapshot is unavailable. Try again or start with --db.")

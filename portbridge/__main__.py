@@ -12,6 +12,7 @@ from .activity import build_activity
 from .case_pages import CASE_FILE, case_languages, case_page, case_path
 from .catalog import Catalog, OBSERVATION_KIND, PROBLEM_ID, PROBLEM_STATUS
 from .coordination import knowledge_graph, recommendations
+from .ecosystem import build_ecosystem, refresh_ecosystem
 from .exchange_api import ExchangeHandlerMixin
 from .feed import build_feed
 from .lab import build_lab
@@ -32,7 +33,7 @@ OFFICE_STATIC = {
     "/static/office.css": (PACKAGE / "static" / "office.css", "text/css; charset=utf-8"),
     "/static/office.js": (PACKAGE / "static" / "office.js", "text/javascript; charset=utf-8"),
 }
-COLLECTIONS = ("projects", "problems", "observations", "matches", "related", "preflight", "coordination", "activity", "lab",
+COLLECTIONS = ("projects", "ecosystem", "problems", "observations", "matches", "related", "preflight", "coordination", "activity", "lab",
                "graph", "source-history", "recommendations", "outreach", "health")
 
 
@@ -72,6 +73,7 @@ def sync_catalog(catalog, *, refresh=False, pages=1, sources=()):
     if candidates:
         checked = refresh_references(projects, catalog.path, candidates, refresh=refresh)
     catalog.record_sync({**result, "items": checked["items"], "warnings": result["warnings"] + checked["warnings"]})
+    refresh_ecosystem(catalog)
     return catalog.health()
 
 
@@ -196,6 +198,8 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
         name = path.removeprefix("/api/v1/")
         if name == "projects":
             return 200, {"projects": catalog.projects()}
+        if path == "/api/v1/ecosystem":
+            return 200, build_ecosystem(catalog)
         if name == "health":
             return 200, catalog.health()
         if name == "activity":

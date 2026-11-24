@@ -26,6 +26,7 @@ If `indexed` is false, the requested source is absent from the current snapshot.
 | `/api/v1/activity` | — | Seven-day progress, per-project counts, source events and shared checks |
 | `/api/v1/lab` | `equipment`, `status` | Public volunteer tasks, revision pins, test requirements and reporting links |
 | `/api/v1/projects` | — | Tracked projects, source coverage and update status |
+| `/api/v1/ecosystem` | — | Technical areas, scoped capability evidence, review leads and per-source refresh timestamps |
 | `/api/v1/problems` | `q`, `project`, `status`, `partial=1`, `limit` | Curated cards |
 | `/api/v1/problems/{id}` | — | One card or 404 |
 | `/api/v1/matches` | `q`, `limit` | Source pairs, review state and reason |
@@ -66,7 +67,9 @@ The optional private exchange supports topic subscriptions, discussion and revie
 
 ## Static site and MCP
 
-GitHub Pages exports the same public data under `data/`, including `activity.json`, `projects.json`, `problems.json`, `observations.json`, `matches.json`, `health.json`, `coordination.json`, `outreach.json`, `graph.json`, `source-history.json` and `recommendations.json`. Agents can filter these files locally. `data/site.json` includes the export timestamp and `data/health.json` the last refresh attempt.
+GitHub Pages exports the same public data under `data/`, including `activity.json`, `projects.json`, `ecosystem.json`, `problems.json`, `observations.json`, `matches.json`, `health.json`, `coordination.json`, `outreach.json`, `graph.json`, `source-history.json` and `recommendations.json`. Agents can filter these files locally. `data/site.json` includes the export timestamp and `data/health.json` the last refresh attempt.
+
+`ecosystem.json` lists reviewed capability entries with an evidence kind, a narrow scope and a primary GitHub link. Repository leads have `state: needs_review`. Their source IDs and references show where the link was found. `counts.lead_repositories` counts deduplicated leads before the display limit of 60. Sources report `pending`, `ok`, `cached` or `failed`, with attempt and success timestamps.
 
 Each active curated case has a standalone page under `cases/`. Built-in cases default to English with separate `.ru.html` pages, and both languages appear in `sitemap.xml`. Retraction removes active pages on the next export and preserves source history in the catalog. The Atom feeds share stable entry IDs across languages.
 

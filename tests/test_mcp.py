@@ -69,7 +69,8 @@ class MCPTests(unittest.TestCase):
         self.assertEqual(discover["result"]["_meta"]["io.modelcontextprotocol/serverInfo"]["name"], "portbridge")
         definitions = tools["result"]["tools"]
         self.assertEqual({tool["name"] for tool in definitions},
-                         {"portbridge_activity", "portbridge_lab", "portbridge_problem", "portbridge_preflight"})
+                         {"portbridge_activity", "portbridge_ecosystem", "portbridge_lab", "portbridge_problem",
+                          "portbridge_preflight"})
         self.assertTrue(all(tool["annotations"]["readOnlyHint"] for tool in definitions))
         self.assertEqual([item["result"]["resultType"] for item in (discover, tools, result)], ["complete"] * 3)
         payload = result["result"]["structuredContent"]

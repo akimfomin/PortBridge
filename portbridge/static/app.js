@@ -220,7 +220,7 @@ async function readSnapshot(name) {
 }
 
 async function fetchJSON(path, signal) {
-  if (path === '/activity' || path === '/lab') {
+  if (['/activity', '/ecosystem', '/lab'].includes(path)) {
     return getJSON(snapshotSite ? `./data${path}.json` : `${apiRoot}${path}`, signal, 'no-cache');
   }
   if (!snapshotSite) return getJSON(`${apiRoot}${path}`, signal);
@@ -823,7 +823,66 @@ function showActivity(data, quiet = false) {
   return true;
 }
 
-function drawProjects() {
+const capabilityKinds = {
+  source: t('Source inspected', 'Исходник сверён'),
+  reported: t('Author report', 'Отчёт автора'),
+  tested: t('Test result', 'Результат теста'),
+  merged: t('Merged change', 'Принято в проект'),
+};
+
+function drawEcosystem(data) {
+  const section = element('section', 'ecosystem-panel');
+  const capabilities = element('details', 'activity-panel');
+  const leads = element('details', 'activity-panel');
+  capabilities.append(element('summary', '', t('Technical capability map', 'Карта технических возможностей')),
+    element('p', 'activity-note', t('Each entry covers the linked test or code. Areas with no entry remain unverified here.',
+      'Каждая запись относится к конкретному тесту или коду. Пустые направления ещё не сверены.')));
+  for (const area of list(data.areas)) {
+    if (!area?.name?.[language]) continue;
+    const records = list(data.capabilities).filter((entry) => entry.area === area.id);
+    const entries = element('ul', 'ecosystem-list');
+    for (const entry of records) {
+      const row = element('li');
+      row.append(githubLink(projectName(entry.project), entry.evidence),
+        element('span', '', editorial(entry, 'scope')),
+        element('small', '', capabilityKinds[entry.kind] || t('Evidence', 'Источник')));
+      entries.append(row);
+    }
+    capabilities.append(element('h3', '', area.name[language]));
+    capabilities.append(records.length ? entries : element('p', 'activity-note', t('No evidence yet.', 'Данных пока нет.')));
+  }
+  const count = numberFormat.format(data.counts.lead_repositories);
+  leads.append(element('summary', '', t(`Repository leads (${count})`, `Репозитории на проверку (${count})`)),
+    element('p', 'activity-note', t('Review repository scope, license and sources before tracking a lead.',
+      'Перед подключением проверьте назначение, лицензию и источники проекта.')));
+  const names = new Map(list(data.sources).map((source) => [source.id, source.name]));
+  const statuses = {ok: t('Last check succeeded', 'Источник ответил'), cached: cachedData,
+    failed: t('Unavailable', 'Недоступно'), pending: syncStates.pending};
+  const sourceStatus = element('ul', 'ecosystem-list ecosystem-sources');
+  for (const source of list(data.sources)) {
+    const state = [statuses[source.state] || statuses.pending, source.last_success && stamp(source.last_success)].filter(Boolean);
+    sourceStatus.append(element('li', '', `${source.name} · ${state.join(' · ')}`));
+  }
+  leads.append(sourceStatus);
+  const entries = element('ul', 'ecosystem-list');
+  const rows = list(data.leads);
+  for (const lead of rows) {
+    const row = element('li');
+    const sources = list(lead.sources).map((id) => names.get(id)).filter(Boolean);
+    if (list(lead.references).length) sources.push(t('Linked by a tracked project', 'Есть ссылка из отслеживаемого проекта'));
+    row.append(githubLink(lead.repo, lead.url), element('span', '', sources.join(' · ')));
+    entries.append(row);
+  }
+  leads.append(entries);
+  if (rows.length < data.counts.lead_repositories) {
+    const shown = numberFormat.format(rows.length);
+    leads.append(element('p', 'activity-note', t(`Showing ${shown} of ${count} leads.`, `Показано ${shown} из ${count} кандидатов.`)));
+  }
+  section.append(capabilities, leads);
+  return section;
+}
+
+function drawProjects(ecosystem) {
   const count = numberFormat.format(projects.size);
   viewStatus.textContent = t(`Tracked projects: ${count}`, `Отслеживается проектов: ${count}`);
   if (!projects.size) {
@@ -846,7 +905,9 @@ function drawProjects() {
     card.append(stats);
     wrapper.append(card);
   }
-  content.replaceChildren(wrapper);
+  const showMap = Number.isInteger(ecosystem?.counts?.lead_repositories)
+    && ['areas', 'capabilities', 'leads', 'sources'].every((key) => Array.isArray(ecosystem[key]));
+  content.replaceChildren(...(showMap ? [drawEcosystem(ecosystem), wrapper] : [wrapper]));
 }
 
 const labEquipment = {
@@ -1079,8 +1140,10 @@ async function loadView(current, focus = false) {
       const result = await fetchJSON('/lab', active.signal);
       if (!active.signal.aborted) drawLab(result, current.params);
     } else if (current.view === 'projects') {
-      await loadProjects(active.signal);
-      if (!active.signal.aborted) drawProjects();
+      const [, ecosystem] = await Promise.all([
+        loadProjects(active.signal), fetchJSON('/ecosystem', active.signal).catch(() => null),
+      ]);
+      if (!active.signal.aborted) drawProjects(ecosystem);
     } else if (current.id) {
       const result = await fetchJSON(`/problems/${encodeURIComponent(current.id)}`, active.signal);
       if (!active.signal.aborted) drawProblem(result.problem);

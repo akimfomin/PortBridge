@@ -107,6 +107,60 @@
       "stack": "C++, синтетические тесты D3D12 и WARP",
       "license": "MIT",
       "translations": {"en": {"stack": "C++, synthetic D3D12 and WARP tests"}}
+    },
+    {
+      "slug": "palmwave",
+      "name": "Palmwave",
+      "repo": "fablinoo/palmwave",
+      "url": "https://github.com/fablinoo/palmwave",
+      "stack": "Rust, Windows D3D12, ветка XCL",
+      "license": "GPL-2.0-only",
+      "translations": {"en": {"stack": "Rust, Windows D3D12, XCL fork"}}
+    },
+    {
+      "slug": "tuxbox",
+      "name": "TuxBox",
+      "repo": "brcly/TuxBox",
+      "url": "https://github.com/brcly/TuxBox",
+      "stack": "Linux, Proton и анализ трасс Vulkan",
+      "license": "Apache-2.0",
+      "translations": {"en": {"stack": "Linux, Proton and Vulkan trace analysis"}}
+    },
+    {
+      "slug": "openscarlett",
+      "name": "OpenScarlett",
+      "repo": "californiaAlmonds/OpenScarlett",
+      "url": "https://github.com/californiaAlmonds/OpenScarlett",
+      "stack": "C++, Windows D3D12, WARP и WASAPI",
+      "license": "MIT",
+      "translations": {"en": {"stack": "C++, Windows D3D12, WARP and WASAPI"}}
+    },
+    {
+      "slug": "openscarlett-ce",
+      "name": "OpenScarlett Community Edition",
+      "repo": "OpenCommunityEdition/OpenScarlett",
+      "url": "https://github.com/OpenCommunityEdition/OpenScarlett",
+      "stack": "C++, Windows D3D12 и модульные синтетические тесты",
+      "license": "AGPL-3.0-or-later / MIT",
+      "translations": {"en": {"stack": "C++, Windows D3D12 and synthetic unit tests"}}
+    },
+    {
+      "slug": "percyscarlett",
+      "name": "PercyScarlett",
+      "repo": "rpatty-dev/PercyScarlett",
+      "url": "https://github.com/rpatty-dev/PercyScarlett",
+      "stack": "Rust, Windows, D3D12 и XAudio2",
+      "license": "GPL-2.0",
+      "translations": {"en": {"stack": "Rust, Windows, D3D12 and XAudio2"}}
+    },
+    {
+      "slug": "victory-macos",
+      "name": "VIctory macOS",
+      "repo": "pragyaangaur/VIctory-macOS",
+      "url": "https://github.com/pragyaangaur/VIctory-macOS",
+      "stack": "Rust, Apple Silicon и Metal, ветка VIctory",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "Rust, Apple Silicon and Metal, VIctory fork"}}
     }
   ],
   "coordination": {
@@ -1786,12 +1840,12 @@
       "id": "PB-0019",
       "recorded_at": "2026-11-24T16:18:38Z",
       "title": "Нативный тест читает результат LDS до завершения загрузки",
-      "summary": "yawn-animals обнаружил, что в cs_lds_b64_cmpst последняя загрузка LDS используется до ожидания. Однострочная правка Reforge прошла три прогона на AMD RDNA2. В Continued найден тот же файл, перенос требует проверки.",
+      "summary": "yawn-animals обнаружил преждевременное чтение LDS в Reforge и перенёс проверенную правку в Continued #1026. Автор подтвердил результат на AMD, morodirule отдельно проверил вариант через SPIR-V на RTX. PR открыт.",
       "status": "verified",
       "tags": ["RDNA2", "LDS", "s_waitcnt", "lgkmcnt", "cs_lds_b64_cmpst"],
       "translations": {"en": {
         "title": "Native test uses an LDS load before it completes",
-        "summary": "yawn-animals found that cs_lds_b64_cmpst uses the last LDS read without a wait. The one-line Reforge fix passed three native runs on AMD RDNA2. Continued has the identical fixture and is a candidate for the same check.",
+        "summary": "yawn-animals found an early LDS read in Reforge and carried the tested fix to Continued #1026. The author confirmed the result on AMD, and morodirule ran a separate SPIR-V check on RTX. The PR is open.",
         "tags": ["RDNA2", "LDS", "s_waitcnt", "lgkmcnt", "cs_lds_b64_cmpst"]
       }},
       "platforms": ["AMD Radeon RX 6800 XT (gfx1030)", "Arch Linux", "Vulkan RADV"],
@@ -1821,13 +1875,23 @@
         },
         {
           "project": "continued",
-          "status": "reported",
-          "summary": "Файл в 3ed8e50b совпадает побайтно с исходным Reforge. В локальном интерпретаторе SPIR-V исходный тест и тест с ожиданием вернули восемь ожидаемых слов, включая 0x3579badc. Нативный прогон на AMD ожидается.",
-          "translations": {"en": {"summary": "The fixture at 3ed8e50b is byte-identical to Reforge's baseline. In the local SPIR-V interpreter, the original fixture and the version with the wait both returned all eight expected words, including 0x3579badc. A native AMD run is pending."}},
+          "status": "verified",
+          "summary": "В #1026 yawn-animals добавил ожидание в совпадающий файл Continued. Нативный прогон автора на gfx1030 отличил дефект от исправления. Независимый прогон через SPIR-V проверил ожидаемые слова, PR открыт.",
+          "translations": {"en": {"summary": "In #1026, yawn-animals inserted the wait into the matching Continued fixture. The author's native gfx1030 run distinguished the baseline and fix. A separate SPIR-V run checked the expected output words. The PR is open."}},
           "source_refs": [
+            {"title": "Перенос yawn-animals в Continued #1026", "url": "https://github.com/ubiquitarianism/leonida/pull/1026", "translations": {"en": {"title": "yawn-animals' Continued #1026 port"}}},
             {"title": "Исходный участок теста Continued", "url": "https://github.com/ubiquitarianism/leonida/blob/3ed8e50b754eb9dcf9e3819eddbbbccd52fc1177/runtime/test/shaders/cs_lds_b64_cmpst.asm#L127-L129", "translations": {"en": {"title": "Original Continued test sequence"}}}
           ],
           "evidence": [
+            {
+              "kind": "independent", "outcome": "passed", "check_for": ["https://github.com/ubiquitarianism/leonida/pull/1026"],
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1026#issuecomment-7138695955",
+              "title": "Прогон morodirule через Vulkan на RTX",
+              "revision": "40a2b1c6b60aac005cbe2ecaf4b1130a630d6494", "reported_at": "2026-11-24T17:06:29Z",
+              "platforms": ["Linux", "NVIDIA RTX 4070", "Vulkan SPIR-V"],
+              "observed": "В переведённом тесте нет несовпадений. Слово 7 равно 0x3579badc. Нативный сценарий RDNA2 проверял автор на другом стенде.",
+              "translations": {"en": {"title": "morodirule's RTX Vulkan run", "observed": "The translated test had zero mismatches and produced word 7 0x3579badc. The author's separate run covered the native RDNA2 path."}}
+            },
             {
               "kind": "source_observation",
               "outcome": "observed",
@@ -1847,12 +1911,12 @@
       "id": "PB-0020",
       "recorded_at": "2026-11-24T16:49:35Z",
       "title": "Ожидание кадра может зависнуть при остановке",
-      "summary": "PortBridge проверил исправление rizzzz64 из Reforge #63 на точном исходном коде и воспроизвёл те же два сбоя в Continued. Синтетические проверки подтвердили локальный перенос с сохранением логики событий Continued.",
+      "summary": "PortBridge сопоставил правку rizzzz64 из Reforge с двумя сбоями в Continued. После отчёта madhyn подготовил Continued #1042, а morodirule независимо проверил исправление на Linux.",
       "status": "verified",
       "tags": ["FramePacer", "WaitFrameEventX", "frame pacing", "shutdown"],
       "translations": {"en": {
         "title": "Frame pacing waits can hang during shutdown",
-        "summary": "PortBridge checked rizzzz64's Reforge #63 change against the original source and reproduced the same two failures in Continued. Synthetic checks passed with a local adaptation that preserves Continued's event handling.",
+        "summary": "PortBridge matched rizzzz64's Reforge change to two Continued failures. After the report, madhyn opened Continued #1042 and morodirule independently tested the fix on Linux.",
         "tags": ["FramePacer", "WaitFrameEventX", "frame pacing", "shutdown"]
       }},
       "platforms": ["Windows 11 build 28000", "LLVM-MinGW Clang 23.1.6", "Synthetic CPU tests"],
@@ -1884,13 +1948,23 @@
         {
           "project": "continued",
           "status": "verified",
-          "summary": "В 82a2aabc воспроизведены зависание и пропущенное уведомление. Локальный перенос сохраняет аргументы event и flags, добавляет два регрессионных теста и ограничивает время выполнения теста CTest. Результат относится к синтетической проверке CPU.",
-          "translations": {"en": {"summary": "The hang and missed wakeup reproduced at 82a2aabc. The local adaptation preserves event and flags, adds both regressions, and bounds the CTest runtime. The result covers the synthetic CPU check."}},
+          "summary": "В 82a2aabc PortBridge воспроизвёл зависание и пропущенное уведомление. madhyn открыл #1042 по этому отчёту. Независимый CPU-прогон на Linux подтвердил пробуждение при смене режима. PR открыт.",
+          "translations": {"en": {"summary": "PortBridge reproduced the hang and missed wakeup at 82a2aabc. madhyn opened #1042 using the report. An independent Linux CPU run confirmed the mode-change wakeup. The PR is open."}},
           "source_refs": [
+            {"title": "Перенос madhyn в Continued #1042", "url": "https://github.com/ubiquitarianism/leonida/pull/1042", "translations": {"en": {"title": "madhyn's Continued #1042 fix"}}},
             {"title": "Исходная реализация ожидания Continued", "url": "https://github.com/ubiquitarianism/leonida/blob/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e/runtime/src/frame_pacer.h#L215-L223", "translations": {"en": {"title": "Original Continued wait implementation"}}},
             {"title": "Точная базовая версия Continued", "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e", "translations": {"en": {"title": "Exact Continued baseline"}}}
           ],
           "evidence": [
+            {
+              "kind": "independent", "outcome": "passed", "check_for": ["https://github.com/ubiquitarianism/leonida/pull/1042"],
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7138758788",
+              "title": "Проверка morodirule на Linux",
+              "revision": "5496f79f93c41f1134ce4c9e1d2674aa00c6bb55", "reported_at": "2026-11-24T17:08:57Z",
+              "platforms": ["Linux", "g++", "Synthetic CPU tests"],
+              "observed": "На Linux прошли прежние и новые тесты frame_pacer. Ожидающий поток проснулся при переключении в режим без ограничения частоты.",
+              "translations": {"en": {"title": "morodirule's Linux check", "observed": "The original and new frame_pacer tests passed on Linux. The blocked wait woke when the pacing mode switched to uncapped."}}
+            },
             {
               "kind": "automated_test",
               "outcome": "mixed",
@@ -1901,6 +1975,48 @@
               "platforms": ["Windows 11 build 28000", "LLVM-MinGW Clang 23.1.6", "CTest"],
               "observed": "Исходный тест прошёл 3/3. С новыми проверками на прежнем заголовке завершение исчерпало лимит 8 секунд в 3/3 прогонах. Отдельный контроль пробуждения при смене режима упал 3/3. После локального переноса полный тест и отдельный контроль прошли по 3/3 прогона. Оригинальная цель frame_pacer прошла CTest 1/1 за 1,03 секунды со сборкой только синтетического CPU-теста.",
               "translations": {"en": {"title": "PortBridge checked the local Continued adaptation", "observed": "The original test passed 3/3 runs. With the added tests and original header, teardown hit the eight-second limit in 3/3 runs. The separate mode-wakeup control failed 3/3 runs. The local adaptation passed 3/3 runs of the full test and 3/3 of the separate control. The repository's frame_pacer CTest target passed 1/1 in 1.03 seconds in a CPU-test-only build."}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0021",
+      "recorded_at": "2026-11-24T17:15:48Z",
+      "title": "Проверка пикселей первого кадра в SceneGate VI",
+      "summary": "PortBridge подтвердил общую проверку очистки и чтения 851 пикселя на Vulkan, D3D12 и WARP. Отдельная проверка треугольника поймала намеренно пропущенную отрисовку на RTX и WARP.",
+      "status": "verified",
+      "tags": ["first frame", "D3D12", "Vulkan", "RGBA8", "pixel readback", "WARP"],
+      "translations": {"en": {
+        "title": "First-frame pixel readback in SceneGate VI",
+        "summary": "PortBridge verified a shared 851-pixel clear and readback check on Vulkan, D3D12, and WARP. A separate triangle check caught an intentionally omitted draw on RTX and WARP.",
+        "tags": ["first frame", "D3D12", "Vulkan", "RGBA8", "pixel readback", "WARP"]
+      }},
+      "platforms": ["Windows 11 build 28000", "NVIDIA RTX 4070 Ti SUPER driver 617.14", "Microsoft Basic Render Driver (WARP)", "LLVM-MinGW Clang 23.1.6"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "scenegate-vi",
+          "status": "verified",
+          "summary": "Исходные проверки сверяют каждый пиксель обработанного кадра с ожидаемыми значениями. Проверка треугольника меняет цвет между кадрами и возвращает координаты первого несовпадения.",
+          "translations": {"en": {"summary": "The upstream checks compare every returned pixel with its expected value. The triangle fixture changes color between frames and identifies the first mismatched pixel channel."}},
+          "source_refs": [
+            {"title": "Исходная проверка очистки D3D12", "url": "https://github.com/7jycwjmbfn-eng/scenegate-vi/blob/804b4f81cf2ce74ee085da0783442a37dfbb0e9e/src/tools/d3d12_check.cpp", "translations": {"en": {"title": "Original D3D12 clear check"}}},
+            {"title": "Исходная проверка очистки Vulkan", "url": "https://github.com/7jycwjmbfn-eng/scenegate-vi/blob/804b4f81cf2ce74ee085da0783442a37dfbb0e9e/src/tools/vulkan_check.cpp", "translations": {"en": {"title": "Original Vulkan clear check"}}},
+            {"title": "Исходные проверки пикселей треугольника", "url": "https://github.com/7jycwjmbfn-eng/scenegate-vi/blob/804b4f81cf2ce74ee085da0783442a37dfbb0e9e/tests/guest/d3d12_guest.c", "translations": {"en": {"title": "Original triangle pixel checks"}}}
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "mixed",
+              "url": "https://github.com/akimfomin/PortBridge/issues/9#issuecomment-7139124282",
+              "title": "Проверка пикселей и контроль без отрисовки",
+              "revision": "804b4f81cf2ce74ee085da0783442a37dfbb0e9e",
+              "reported_at": "2026-11-24T17:15:48Z",
+              "platforms": ["Windows 11 build 28000", "RTX 4070 Ti SUPER driver 617.14", "WARP", "D3D12", "Vulkan"],
+              "check_for": ["https://github.com/7jycwjmbfn-eng/scenegate-vi/blob/804b4f81cf2ce74ee085da0783442a37dfbb0e9e/tests/guest/d3d12_guest.c"],
+              "observed": "Исходные тесты очистки проверили 851 из 851 пикселя на D3D12 с RTX, D3D12 с WARP и Vulkan с RTX. Исходная проверка треугольника с прямым подключением к функциям D3D12 прошла 3/3 на RTX и 3/3 на WARP: шесть пикселей очистки и 32 кадра по 64 пикселя. С вызовом только очистки вместо треугольника каждый контроль выявил расхождение первого красного канала, код 0x100. Прогон ограничен функциями хоста и синтетическим вводом.",
+              "translations": {"en": {"title": "Pixel readback and omitted-draw control", "observed": "The original clear checks verified 851 of 851 pixels on D3D12 with RTX, D3D12 with WARP, and Vulkan with RTX. The original triangle checks, connected directly to the D3D12 callbacks, passed 3/3 on RTX and 3/3 on WARP: six clear pixels and 32 frames of 64 pixels each. Substituting a clear for the triangle caused every control to report the first red-channel mismatch, code 0x100. The runs covered host graphics functions with synthetic inputs."}}
             }
           ]
         }

@@ -11,6 +11,7 @@ PortBridge connects public issues, pull requests, and test results across projec
 | What you want to do | Where to go |
 | --- | --- |
 | See what changed or find a shared check | Open the home dashboard for the last seven days of activity, progress by team, and tests that can help an open PR or issue. |
+| Compare what teams have tested | Open the [technical capability map](https://akimfomin.github.io/PortBridge/#/projects) for scoped evidence and repository leads from public trackers and GitHub. |
 | Check existing work before investigating an issue | Search by an exact error, instruction, PR number, or GitHub URL. Open the original sources before using a suggested match. [Issue catalog](https://akimfomin.github.io/PortBridge/#/problems) |
 | Share a test, a fix, or a result that ruled something out | Include the original source, exact commit, platform, and observed result. [Evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) |
 | Take a shared check or see where a result was delivered | Choose a task by hardware in the [Test Lab](https://akimfomin.github.io/PortBridge/#/lab). See prior runs in the [cross-project work log](docs/PORTING-WORK.en.md). |

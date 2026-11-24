@@ -1,0 +1,134 @@
+[
+  {
+    "project": "continued", "area": "shaders", "kind": "tested",
+    "scope": "Парная запись LDS, два теста на Linux.",
+    "translations": {"en": {"scope": "Paired LDS writes, two fixture tests on Linux."}},
+    "evidence": "https://github.com/ubiquitarianism/leonida/pull/966#issuecomment-7138331703"
+  },
+  {
+    "project": "continued", "area": "frames", "kind": "tested",
+    "scope": "Пробуждение при смене режима кадров, проверено на Linux.",
+    "translations": {"en": {"scope": "Frame-pacer mode-change wakeup, tested on Linux."}},
+    "evidence": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7138758788"
+  },
+  {
+    "project": "reforge", "area": "gpu-sync", "kind": "tested",
+    "scope": "Пять сценариев вложенных вызовов очереди в синтетическом тесте Windows.",
+    "translations": {"en": {"scope": "Five synthetic queue-hold cases on Windows."}},
+    "evidence": "https://github.com/LeonidaReforge/Leonida/pull/55#issuecomment-7138510549"
+  },
+  {
+    "project": "reforge", "area": "hardware", "kind": "tested",
+    "scope": "Порядок чтения LDS проверен нативно на AMD gfx1030.",
+    "translations": {"en": {"scope": "Native LDS read ordering measured on AMD gfx1030."}},
+    "evidence": "https://github.com/LeonidaReforge/Leonida/pull/166#issuecomment-7138585152"
+  },
+  {
+    "project": "xcl", "area": "rdna2-wave64", "kind": "tested",
+    "scope": "Перенос между словами в локальной памяти, прогон через Proton на RTX 3060.",
+    "translations": {"en": {"scope": "Cross-word LDS carry check through Proton on an RTX 3060."}},
+    "evidence": "https://github.com/ivall/xcl/pull/1100#issuecomment-7134615164"
+  },
+  {
+    "project": "victory", "area": "rdna2-wave64", "kind": "tested",
+    "scope": "Парная запись LDS и переполнение, Steam Deck под Proton.",
+    "translations": {"en": {"scope": "Paired LDS writes and overflow checks on Steam Deck with Proton."}},
+    "evidence": "https://github.com/Marvisak/VIctory/pull/1088#issuecomment-7137333841"
+  },
+  {
+    "project": "leonida-ce", "area": "hardware", "kind": "reported",
+    "scope": "Матрица синтетических Wave64 проверок на AMD и NVIDIA с отдельными результатами для аппаратного и эмулированного режимов.",
+    "translations": {"en": {"scope": "Reported AMD and NVIDIA synthetic Wave64 matrix with hardware and emulated results."}},
+    "evidence": "https://github.com/IAmNotSiob/leonida-ce/blob/e21105763bb82bf4345e5c4f8c8998410d4858d2/docs/gpu_test_results.md#L1-L12"
+  },
+  {
+    "project": "kestrelx", "area": "shaders", "kind": "source",
+    "scope": "Синтетические проверки LDS и барьеров Wave32 и Wave64.",
+    "translations": {"en": {"scope": "Synthetic LDS and barrier fixtures for Wave32 and Wave64."}},
+    "evidence": "https://github.com/Batushn/KestrelX/commit/f12368099388c64ea72ad8effd4e2ee77263cbb5"
+  },
+  {
+    "project": "xportpc", "area": "rdna2-wave64", "kind": "source",
+    "scope": "Тест обмена данными между потоками для двух размеров групп.",
+    "translations": {"en": {"scope": "Lane shuffle fixture for two wave sizes."}},
+    "evidence": "https://github.com/Its3rr0rsWRLD/XPortPC/commit/5b60c481a818a356b38f710113265f98ee60b17b"
+  },
+  {
+    "project": "rebox", "area": "shaders", "kind": "source",
+    "scope": "Синтетическое вычисление через SPIR-V и Vulkan.",
+    "translations": {"en": {"scope": "Synthetic compute input and output through SPIR-V and Vulkan."}},
+    "evidence": "https://github.com/idvwork/rebox/commit/56f8f93b8a9e8f69ca24aae167716cbd05742c1d"
+  },
+  {
+    "project": "scarlett-layer", "area": "shaders", "kind": "source",
+    "scope": "Эталон для FMA с модификаторами abs, neg и clamp.",
+    "translations": {"en": {"scope": "FMA oracle with abs, neg and clamp modifiers."}},
+    "evidence": "https://github.com/jadeowaowa/scarlett-layer/blob/0e436b3e1c654765b193c1cb705918fbf101b10b/src/tests/scarlett_tests/tests_rdna2_oracle.cpp#L31-L46"
+  },
+  {
+    "project": "anyxboxx", "area": "shaders", "kind": "merged",
+    "scope": "Контроль для парной записи LDS вошёл в основную ветку.",
+    "translations": {"en": {"scope": "Paired LDS write regression check merged into main."}},
+    "evidence": "https://github.com/LooperSalty/AnyXboxX/commit/b15d8821bffcd8fbc98e56f41daf07fc91118192"
+  },
+  {
+    "project": "xbox2windows", "area": "ray-tracing", "kind": "source",
+    "scope": "Синтетическое сравнение результатов обхода BVH на CPU и GPU.",
+    "translations": {"en": {"scope": "Synthetic BVH traversal comparison between CPU and GPU."}},
+    "evidence": "https://github.com/R0Y00/Xbox2Windows/blob/c864f1380f0f408a50822470cbe3ce24c969fec6/docs/experiments.md"
+  },
+  {
+    "project": "scenegate-vi", "area": "graphics", "kind": "source",
+    "scope": "Гостевой D3D12 тест очистки, треугольника и чтения пикселей.",
+    "translations": {"en": {"scope": "Guest D3D12 fixture for a clear, triangle and pixel readback."}},
+    "evidence": "https://github.com/7jycwjmbfn-eng/scenegate-vi/blob/804b4f81cf2ce74ee085da0783442a37dfbb0e9e/tests/guest/d3d12_bridge_check.cpp"
+  },
+  {
+    "project": "scenegate-vi", "area": "frames", "kind": "tested",
+    "scope": "Цвет каждого пикселя проверен на RTX и WARP. Контроль поймал пропущенную отрисовку.",
+    "translations": {"en": {"scope": "Exact pixel values checked on RTX and WARP. The control detected an omitted draw."}},
+    "evidence": "https://github.com/akimfomin/PortBridge/issues/9#issuecomment-7139124282"
+  },
+  {
+    "project": "palmwave", "area": "gpu-sync", "kind": "source",
+    "scope": "Чтение sparse-ресурса после сигнала очереди, есть отдельный перенос в XCL #433.",
+    "translations": {"en": {"scope": "Sparse resource readback after a queue signal, with an existing port in XCL #433."}},
+    "evidence": "https://github.com/fablinoo/palmwave/blob/fc216a5bd1e2cc5caf215d82faa3422c6bfd9e52/crates/xcl/tests/sparse_readback_fence.rs#L45-L101"
+  },
+  {
+    "project": "tuxbox", "area": "performance", "kind": "source",
+    "scope": "Тест отличает суммарную работу Vulkan-команд от времени кадра при перекрытии.",
+    "translations": {"en": {"scope": "Fixture separates total Vulkan command work from elapsed frame time when work overlaps."}},
+    "evidence": "https://github.com/brcly/TuxBox/blob/336655183ba85a6caa1cb98db92fe1b567d826a7/tests/test_vulkan_frames.py#L10-L35"
+  },
+  {
+    "project": "openscarlett", "area": "frames", "kind": "source",
+    "scope": "Проверка оконного представления кадра на WARP.",
+    "translations": {"en": {"scope": "WARP fixture for windowed frame presentation."}},
+    "evidence": "https://github.com/californiaAlmonds/OpenScarlett/blob/46d8e2c2f47ce48f84e54d11eeaf7effdbd8ad57/tests/test_presentx_windowing.cpp#L688-L703"
+  },
+  {
+    "project": "openscarlett", "area": "audio", "kind": "source",
+    "scope": "Проверки декодирования, режима тишины и передачи звука через WASAPI.",
+    "translations": {"en": {"scope": "Checks for decoding, deterministic silence and WASAPI output."}},
+    "evidence": "https://github.com/californiaAlmonds/OpenScarlett/blob/46d8e2c2f47ce48f84e54d11eeaf7effdbd8ad57/tests/test_audio_opus_wasapi.cpp#L524-L550"
+  },
+  {
+    "project": "openscarlett-ce", "area": "memory", "kind": "source",
+    "scope": "Синтетическая проверка выделения и освобождения памяти.",
+    "translations": {"en": {"scope": "Synthetic memory allocation and release smoke check."}},
+    "evidence": "https://github.com/OpenCommunityEdition/OpenScarlett/blob/6ec7598ecd0746b89523e8dbf82bcafda9c52885/tests/synthetic/xmem_smoke.cpp#L10-L44"
+  },
+  {
+    "project": "percyscarlett", "area": "audio", "kind": "source",
+    "scope": "Изолированная проверка создания звукового движка XAudio2.",
+    "translations": {"en": {"scope": "Isolated XAudio2 engine creation check."}},
+    "evidence": "https://github.com/rpatty-dev/PercyScarlett/blob/64719f96d32f74d9d68cec69243b515ba675741f/src/self_test.rs#L416-L442"
+  },
+  {
+    "project": "victory-macos", "area": "graphics", "kind": "reported",
+    "scope": "Прогоны автора на Apple M4 для отдельной реализации Metal.",
+    "translations": {"en": {"scope": "Author-reported Apple M4 checks for the separate Metal implementation."}},
+    "evidence": "https://github.com/pragyaangaur/VIctory-macOS/blob/f5660fdcfdd6eb5cb6495be47a23af9aa30f5617/README.md#L26-L40"
+  }
+]

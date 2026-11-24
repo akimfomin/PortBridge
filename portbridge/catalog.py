@@ -130,6 +130,10 @@ CREATE TABLE IF NOT EXISTS history_sync (
 CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY, value TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS ecosystem_sources (
+    source TEXT PRIMARY KEY, repositories TEXT NOT NULL, etag TEXT,
+    attempt_at REAL NOT NULL, success_at REAL, state TEXT NOT NULL
+);
 """
 
 

@@ -219,6 +219,13 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 .lab-commits a { min-width: 0; overflow-wrap: anywhere; font-size: .76rem; }
 
 .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ecosystem-panel { display: grid; gap: 12px; margin-bottom: 16px; }
+.ecosystem-panel summary { min-height: 44px; padding-block: 10px; cursor: pointer; font-weight: 700; }
+.ecosystem-panel h3 { margin-top: 14px; font-size: 1rem; }
+.ecosystem-list { list-style: none; padding: 0; margin: 8px 0; }
+.ecosystem-list li { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; padding-block: 8px; border-bottom: 1px solid var(--stroke); overflow-wrap: anywhere; }
+.ecosystem-list li :is(span, small), .ecosystem-sources { color: var(--muted); }
+.ecosystem-list a { font-weight: 650; }
 .card { min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 17px 19px; background: var(--surface); border: 1px solid var(--stroke); border-radius: var(--radius); box-shadow: 0 2px 7px #13232105; }
 .card:hover { border-color: #a8c7bc; }
 .card-top, .card-footer, .meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
