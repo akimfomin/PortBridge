@@ -3,14 +3,14 @@
 from copy import deepcopy
 
 
-CHECKED_AT = "2026-11-24T12:06:04Z"
+CHECKED_AT = "2026-11-24T12:24:51Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review")
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
 CONTINUED = "https://github.com/ubiquitarianism/leonida"
 REFORGE = "https://github.com/LeonidaReforge/Leonida"
 XCL = "https://github.com/ivall/xcl"
-D16_REPORT = f"{CONTINUED}/pull/265#issuecomment-7128554846"
+D16_REVIEW = f"{CONTINUED}/pull/701"
 RECT_REPORT = f"{CONTINUED}/pull/511#issuecomment-7130673446"
 BYTE_CARRY = "https://github.com/maximecmb/xcl/pull/1"
 PRESENTER_REPORT = f"{REFORGE}/pull/86#issuecomment-7130696664"
@@ -183,15 +183,17 @@ TASKS = (
         "requirements": ["Python 3.12.14 for the recorded test setup"],
         "status": "awaiting_review", "evidence_stage": "reviewed_cpu", "adoption": "pending",
         "source_url": f"{PORTBRIDGE}/issues/4", "procedure_url": f"{PORTBRIDGE}/issues/4",
-        "evidence_url": D16_REPORT, "result_url": f"{CONTINUED}/pull/265",
+        "evidence_url": D16_REVIEW, "result_url": D16_REVIEW,
         "revisions": [
             revision("Continued base", "Исходная версия Continued", "ubiquitarianism/leonida",
                      "21625bca8c675c62f9dbffc318ce6a59d57faf31"),
             revision("Reforge follow-up", "Правка Reforge", "ecox982745/Leonida",
                      "a300ba63d1a9a4cdfde1d64f136728545b4ab7b8"),
+            revision("Continued review revision", "Версия PR в Continued", "ubiquitarianism/leonida",
+                     "66dbbf3e176880487617609547b02c98add60297"),
         ],
         "why": "The receiving team's decision tells both projects whether the tested fix will carry over.",
-        "evidence": "PortBridge reproduced seven misclassifications with the added checks and passed 15/15 with the fix.",
+        "evidence": "The new tests exposed seven misclassifications. The exact change in Continued #701 passed 137 CPU checks.",
         "steps": [
             "Review the documented CPU result in the receiving discussion.",
             "To reproduce it, run the pinned baseline, tests-only control and full focused suite from the procedure.",
@@ -203,7 +205,7 @@ TASKS = (
             "title": "Сверить проверку D16 из Reforge в Continued",
             "requirements": ["Python 3.12.14 для повторения на том же окружении"],
             "why": "Решение Continued покажет обеим командам, будет ли использована проверенная правка.",
-            "evidence": "PortBridge воспроизвёл семь ошибок классификации. С исправлением прошли 15 из 15 тестов.",
+            "evidence": "Новые тесты выявили семь ошибок классификации. Правка из Continued #701 прошла 137 проверок на процессоре.",
             "steps": [
                 "Прочитайте результат проверки на процессоре в обсуждении Continued.",
                 "Для повторения прогоните исходную версию, контроль с одними тестами и полный комплект по инструкции.",
