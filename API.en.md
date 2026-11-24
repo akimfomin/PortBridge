@@ -43,6 +43,8 @@ If `indexed` is false, the requested source is absent from the current snapshot.
 
 Most list endpoints accept a `q` of up to 300 characters and a `limit` from 1 to 200. `kind` accepts `issue`, `pr`, `commit` or `test`. Invalid parameters return 400, unknown paths return 404, and writes to the public API return 405.
 
+Project `sync_status: unavailable` records an observed public access failure. Previous observations and `last_success` remain available. A Test Lab task with `status: blocked` remains readable and cannot trigger an invitation.
+
 ### Activity
 
 `as_of` and `window_start` bound the seven-day window in UTC. `refreshed_at` records the last source refresh attempt. Check `health` and each project's sync status and last successful refresh for coverage.

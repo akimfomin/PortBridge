@@ -19,7 +19,9 @@ SOLUTION_STATUS = {"reported", "open", "partial", "verified", "merged", "unknown
 EVIDENCE_KIND = {"maintainer_claim", "automated_test", "independent", "source_observation"}
 EVIDENCE_OUTCOME = {"passed", "failed", "mixed", "observed", "unknown"}
 OBSERVATION_KIND = {"issue", "pr", "commit", "test"}
-SYNC_STATUS = {"ok", "partial", "stale", "error", "seed-only"}
+SYNC_STATUS = {"ok", "partial", "stale", "error", "unavailable", "seed-only"}
+FAILED_SYNC_STATES = {"stale", "error", "unavailable"}
+SOURCE_KINDS = {"issues": "issue", "pull": "pr", "commit": "commit", "actions": "test"}
 PROBLEM_ID = re.compile(r"PB-[0-9]{4,}")
 REPO_NAME = re.compile(r"[\w.-]+/[\w.-]+", re.ASCII)
 
@@ -41,6 +43,14 @@ def public_url(url):
         return False
     return (parsed.scheme == "https" and parsed.netloc == "github.com" and
             bool(parsed.path.strip("/")) and not any(ch.isspace() for ch in url))
+
+
+def source_sync_failed(project, url):
+    if project.get("sync_status") in FAILED_SYNC_STATES:
+        return True
+    parts = urlsplit(url).path.split("/", 4)
+    kind = SOURCE_KINDS.get(parts[3].lower()) if len(parts) > 3 else None
+    return project.get("sources", {}).get(kind, {}).get("sync_status") in FAILED_SYNC_STATES
 
 
 def expect(condition, message):
@@ -427,7 +437,8 @@ class Catalog:
         drafts = []
         for problem in self.problems(partial=True):
             sources = [solution for solution in problem["solutions"]
-                       if solution["status"] in {"verified", "merged"} and solution.get("outreach_summary")]
+                       if solution["status"] in {"verified", "merged"} and solution.get("outreach_summary")
+                       and not source_sync_failed(projects[solution["project"]], solution["source_refs"][0]["url"])]
             if not sources or problem.get("relationship") == "shared_symptom":
                 continue
             for target in problem["solutions"]:
@@ -438,6 +449,7 @@ class Catalog:
                 target_url = next((ref["url"] for ref in target["source_refs"]
                                    if re.fullmatch(re.escape(target_path) + r"/(?:issues|pull)/[0-9]+",
                                                    canonical_url(ref["url"]))
+                                   and not source_sync_failed(receiver, ref["url"])
                                    and states.get(canonical_url(ref["url"])) not in {"closed", "merged"}), None)
                 if not target_url:
                     continue

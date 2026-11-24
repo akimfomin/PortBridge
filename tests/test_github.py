@@ -212,8 +212,63 @@ class GitHubSyncTest(unittest.TestCase):
             result = github.collect([self.project], self.db_path)
         self.assertEqual(network.call_count, 1)
         self.assertFalse(result["items"])
-        self.assertEqual(result["projects"][0]["sync_status"], "error")
+        self.assertEqual(result["projects"][0]["sync_status"], "unavailable")
         self.assertTrue(all("repository is not public" in msg for msg in result["warnings"]))
+
+    def test_authenticated_repository_access_distinguishes_http_failures(self):
+        for status, expected in ((404, "unavailable"), (451, "unavailable"), (403, "error"), (429, "error")):
+            with self.subTest(status=status):
+                error = github.Unavailable(f"GitHub HTTP {status}", http_status=status)
+                with patch.dict(os.environ, {"PORTBRIDGE_GITHUB_TOKEN": "test-token"}), \
+                        patch.object(github._Sync, "_request", side_effect=error) as network:
+                    result = github.collect([self.project], self.db_path)
+                network.assert_called_once_with(f"{github.API}/repos/example/port", "core", None)
+                self.assertEqual(result["projects"][0]["sync_status"], expected)
+                self.assertFalse(result["items"])
+
+    def test_anonymous_repository_access_holds_cache_until_verified_recovery(self):
+        with patch.object(github._Sync, "_request", side_effect=self.fake_request), \
+                patch.object(github.time, "time", return_value=1700000000):
+            original = github.collect([self.project], self.db_path)
+
+        def missing(url, resource, etag):
+            if "/search/issues?" in url:
+                return github.NOT_MODIFIED, {}
+            raise github.Unavailable("GitHub HTTP 404", http_status=404)
+
+        with patch.object(github._Sync, "_request", side_effect=missing), \
+                patch.object(github.time, "time", return_value=1700000040):
+            interrupted = github.collect([self.project], self.db_path, refresh=True)
+        project = interrupted["projects"][0]
+        self.assertEqual(project["sync_status"], "unavailable")
+        self.assertEqual(project["sources"]["pr"]["sync_status"], "stale")
+        self.assertEqual(project["sources"]["pr"]["last_success"], original["projects"][0]["last_success"])
+        self.assertEqual(interrupted["items"], original["items"])
+
+        limited = github.Unavailable("GitHub HTTP 403 (rate limited)", http_status=403)
+        with patch.object(github._Sync, "_request", side_effect=limited) as network, \
+                patch.object(github.time, "time", return_value=1700000080):
+            pending = github.collect([project], self.db_path)
+        self.assertEqual(network.call_count, 4)
+        self.assertEqual(pending["projects"][0]["sync_status"], "unavailable")
+        self.assertEqual(pending["items"], original["items"])
+
+        with patch.object(github._Sync, "_request", return_value=(github.NOT_MODIFIED, {})), \
+                patch.object(github.time, "time", return_value=1700000120):
+            restored = github.collect(pending["projects"], self.db_path)
+        self.assertEqual(restored["projects"][0]["sync_status"], "ok")
+        self.assertEqual(restored["items"], original["items"])
+
+    def test_anonymous_single_endpoint_failure_keeps_repository_visible(self):
+        def partial(url, resource, etag):
+            if "/actions/runs?" in url:
+                raise github.Unavailable("GitHub HTTP 404", http_status=404)
+            return self.fake_request(url, resource, etag)
+
+        with patch.object(github._Sync, "_request", side_effect=partial):
+            result = github.collect([self.project], self.db_path)
+        self.assertEqual(result["projects"][0]["sync_status"], "partial")
+        self.assertEqual(result["projects"][0]["sources"]["test"]["sync_status"], "error")
 
     def test_rate_limit_suppresses_more_requests_for_the_same_resource(self):
         with closing(sqlite3.connect(self.db_path)) as db:

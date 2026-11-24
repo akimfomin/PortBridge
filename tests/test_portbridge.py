@@ -163,6 +163,37 @@ class CatalogTest(CatalogFixture):
         self.assertEqual([draft["problem_id"] for draft in self.catalog.outreach()], ["PB-0001"])
         self.assertIn("reviewed_symptom", {match["state"] for match in self.catalog.matches()})
 
+    def test_active_handoffs_pause_until_source_sync_recovers(self):
+        draft = next(row for row in self.catalog.outreach() if row["target_project"] == "reforge")
+        receiver = self.observation("reforge", "issue", 21, "EXEC", draft["target_url"])
+        sender = self.observation("continued", "issue", 1234, "Compare the received result",
+                                  "https://github.com/ubiquitarianism/leonida/issues/1234",
+                                  {"technical": {"references": [receiver["url"]]}})
+        self.catalog.record_sync({"items": [receiver, sender]})
+        recorded = self.catalog.problem(draft["problem_id"])
+        history = self.catalog.observations()
+
+        def actions():
+            return (any(entry["id"] == draft["id"] for entry in self.catalog.outreach()),
+                    any(entry["kind"] == "review_active_overlap" and "reforge" in entry["projects"]
+                        for entry in recommendations(self.catalog)))
+
+        self.assertEqual(actions(), (True, True))
+        for state in (
+            {"sync_status": "partial", "sources": {"issue": {"sync_status": "stale"}}},
+            {"sync_status": "error"},
+            {"sync_status": "unavailable"},
+        ):
+            with self.subTest(state=state):
+                self.catalog.record_sync({"items": [], "projects": [{"slug": "reforge", **state}]})
+                self.assertEqual(actions(), (False, False))
+                self.assertEqual(self.catalog.problem(draft["problem_id"]), recorded)
+                self.assertEqual(self.catalog.observations(), history)
+        self.catalog.record_sync({"items": [], "projects": [
+            {"slug": "reforge", "sync_status": "ok", "sources": {"issue": {"sync_status": "ok"}}},
+        ]})
+        self.assertEqual(actions(), (True, True))
+
     def test_real_demo_cards_have_persistent_ids_sources_and_evidence(self):
         projects = {project["slug"] for project in self.catalog.projects()}
         self.assertEqual(projects, {"continued", "reforge", "xcl", "victory",

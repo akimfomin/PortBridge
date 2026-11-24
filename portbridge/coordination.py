@@ -3,6 +3,7 @@
 from collections import defaultdict
 from hashlib import sha256
 
+from .catalog import source_sync_failed
 from .matching import canonical_url
 
 
@@ -63,14 +64,17 @@ def recommendations(catalog, *, project="", limit=20):
                        "decision_by": draft["target_project"], "source_url": draft["source_url"],
                        "target_url": draft["target_url"], "target_status": draft["target_status"]})
 
-    observations = {canonical_url(row["url"]): row["status"] for row in catalog.observations(limit=None)}
+    projects = {row["slug"]: row for row in catalog.projects()}
+    open_discussions = {canonical_url(row["url"]) for row in catalog.observations(limit=None)
+                        if row["status"] == "open"
+                        and not source_sync_failed(projects.get(row["project"], {}), row["url"])}
     for hint in catalog.matches(limit=200):
         if hint.get("basis") != "reference":
             continue
         sources = [hint["left"], hint["right"]]
         pair = [source["project"] for source in sources]
         urls = sorted(canonical_url(source["url"]) for source in sources)
-        if (project and project not in pair) or any(observations.get(url) != "open" for url in urls):
+        if (project and project not in pair) or not all(url in open_discussions for url in urls):
             continue
         ident = sha256("\n".join(urls).encode()).hexdigest()[:16]
         result.append({"id": f"overlap:{ident}", "kind": "review_active_overlap", "projects": pair,

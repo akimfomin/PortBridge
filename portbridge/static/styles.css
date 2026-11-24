@@ -205,6 +205,7 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 .lab-tasks { align-items: start; }
 .lab-task .pill-needs_run { background: #e5f2de; color: #215837; }
 .lab-task :is(.pill-needs_revision, .pill-awaiting_review) { background: #fff0cf; color: #714a16; }
+.lab-task .pill-blocked { background: #f7e7df; color: #75442d; }
 .lab-task :is(.pill-reviewed_gpu, .pill-reviewed_cpu) { background: #e7effb; color: #315384; }
 .lab-task .lab-evidence { border-left: 2px solid #8eb8a9; padding: 6px 10px; background: var(--surface-subtle); }
 .lab-links { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 13px; }

@@ -34,6 +34,7 @@ SIGNATURE_LIMIT = 16
 INSTRUCTION_LIMIT = 48
 UPDATE_OVERLAP = 60
 INITIAL_UPDATE_WINDOW = 24 * 60 * 60
+PUBLIC_ACCESS_FAILURES = {404, 451}
 URL = re.compile(r"https?://[^\s<>()\[\]\"`]+", re.I)
 REFERENCE = re.compile(r"/([A-Za-z0-9_-]+/[A-Za-z0-9_.-]+)/(issues|pull|commit)/([A-Za-z0-9]+)/?")
 REPOSITORY_PATH = re.compile(rf"/({REPO.pattern})/?")
@@ -72,6 +73,14 @@ class NoRedirect(HTTPRedirectHandler):
 
 class Unavailable(Exception):
     """The page is temporarily unavailable or cannot be read."""
+
+    def __init__(self, message, *, http_status=None):
+        super().__init__(message)
+        self.http_status = http_status
+
+
+class RepositoryNotPublic(Unavailable):
+    """An authenticated lookup explicitly confirmed nonpublic visibility."""
 
 
 def _text(value, limit=300):
@@ -344,6 +353,7 @@ class _Sync:
         if self.token:
             headers["Authorization"] = f"Bearer {self.token}"
         for attempt in range(2):
+            http_status = None
             limit = self.db.execute("SELECT resume_at FROM github_rate_limit WHERE context=? AND resource=?",
                                     (self.context, resource)).fetchone()
             if limit and limit[0] > time.time():
@@ -364,6 +374,7 @@ class _Sync:
                     self._rate_headers(resource, e.headers, e.code)
                     if e.code == 304:
                         return NOT_MODIFIED, e.headers
+                    http_status = e.code
                     failure = f"GitHub HTTP {e.code}"
                     retryable = e.code in (500, 502, 503, 504) and not e.headers.get("Retry-After")
                     detail = b""
@@ -385,7 +396,7 @@ class _Sync:
             except (ValueError, UnicodeError) as e:
                 raise Unavailable("GitHub returned invalid JSON metadata") from e
             if attempt or not retryable:
-                raise Unavailable(failure)
+                raise Unavailable(failure, http_status=http_status)
             time.sleep(0.25)
         raise Unavailable("GitHub request failed")
 
@@ -397,14 +408,35 @@ class _Sync:
         if repo not in self.public_checks:
             try:
                 data, _ = self._request(f"{API}/repos/{repo}", "core", None)
-                if _object(data).get("private") is not False or _object(data).get("visibility", "public") != "public":
-                    raise Unavailable("repository is not public")
+                private = _object(data).get("private")
+                visibility = _object(data).get("visibility", "public")
+                if private is True or visibility in ("private", "internal"):
+                    raise RepositoryNotPublic("repository is not public")
+                if private is not False or visibility != "public":
+                    raise Unavailable("GitHub returned unexpected repository visibility")
             except Unavailable as e:
-                self.public_checks[repo] = str(e)
+                self.public_checks[repo] = e
             else:
                 self.public_checks[repo] = None
         if self.public_checks[repo]:
-            raise Unavailable(self.public_checks[repo])
+            raise self.public_checks[repo]
+
+    def public_access(self, repo, first_pages):
+        if self.token:
+            if repo not in self.public_checks:
+                return None
+            failure = self.public_checks[repo]
+            if failure is None:
+                return True
+            if isinstance(failure, RepositoryNotPublic) or failure.http_status in PUBLIC_ACCESS_FAILURES:
+                return False
+            return None
+        if any(state == "live" for state, _ in first_pages):
+            return True
+        # A single missing endpoint can describe the endpoint, rather than the repository.
+        if sum(bool(error and error.http_status in PUBLIC_ACCESS_FAILURES) for _, error in first_pages) >= 2:
+            return False
+        return None
 
     def page(self, project, kind, number, *, since=None):
         url, resource = _query(project, kind, number, since=since)
@@ -421,7 +453,8 @@ class _Sync:
             except (TypeError, ValueError):
                 pass
             current_schema = cached is not None and _current_signatures(cached, kind)
-            if fetched_at + CACHE_TTL > time.time() and current_schema and not self.refresh:
+            if (fetched_at + CACHE_TTL > time.time() and current_schema and not self.refresh
+                    and project.get("sync_status") != "unavailable"):
                 return cached, has_next, "cached", fetched_at, None
         try:
             self._require_public(project["repo"])
@@ -468,8 +501,8 @@ class _Sync:
             return items, has_next, "live", fetched_at, None
         except Unavailable as e:
             if cached is not None:
-                return cached, row[3], "stale", row[1], str(e)
-            return [], False, "error", None, str(e)
+                return cached, row[3], "stale", row[1], e
+            return [], False, "error", None, e
 
 
 def _status(states):
@@ -491,6 +524,7 @@ def collect(projects: list[dict], db_path: Path, *, refresh=False, pages=1) -> d
     with sync_status, last_success (latest known successful page time in UTC), and per-kind sources.
     Existing cached pages remain available if an endpoint fails. An item's fetched_at is the
     UTC time when its response body arrived, retained across stale reads and HTTP 304 responses.
+    Repository-level access failures are separate from the per-kind cached result states.
     The caller owns catalog storage.
     """
     if type(pages) is not int or not 1 <= pages <= 5:
@@ -504,6 +538,7 @@ def collect(projects: list[dict], db_path: Path, *, refresh=False, pages=1) -> d
         sync = _Sync(db, refresh, checked)
         for project in checked:
             source_data = {}
+            first_pages = []
             results = []
             seen = set()
             for kind in ("issue", "pr", "commit", "test"):
@@ -511,6 +546,8 @@ def collect(projects: list[dict], db_path: Path, *, refresh=False, pages=1) -> d
                 count = 0
                 for index in range(1, pages + 1):
                     items, has_next, state, stamp, warning = sync.page(project, kind, index)
+                    if index == 1 and kind != "issue":
+                        first_pages.append((state, warning))
                     states.append(state)
                     if stamp is not None:
                         times.append(stamp)
@@ -537,9 +574,13 @@ def collect(projects: list[dict], db_path: Path, *, refresh=False, pages=1) -> d
                     "more_available": bool(has_next),
                 }
             flags = {source["sync_status"] for source in source_data.values()}
+            status = next(iter(flags)) if len(flags) == 1 else "partial"
+            access = sync.public_access(project["repo"], first_pages)
+            if access is False or (access is None and project.get("sync_status") == "unavailable"):
+                status = "unavailable"
             result["projects"].append({
                 **project,
-                "sync_status": next(iter(flags)) if len(flags) == 1 else "partial",
+                "sync_status": status,
                 "last_success": max((x["last_success"] for x in source_data.values() if x["last_success"]),
                                     default=None),
                 "sources": source_data,
@@ -831,7 +872,7 @@ def _collect_history(projects, db_path, *, mode, pages):
                                         "fetched_at": item.get("fetched_at") or _utc(stamp)}
                 if warning:
                     result["warnings"].append(f"{project['repo']} {mode} page {number}: {warning}")
-                    failure = warning
+                    failure = str(warning)
                     break
                 if number > 1:
                     prior, _, _, _, boundary_error = sync.page(
@@ -841,7 +882,7 @@ def _collect_history(projects, db_path, *, mode, pages):
                         if not boundary_error:
                             cursor.update(next_page=1, anchor=[])
                             checkpoint_changed = True
-                        reason = boundary_error or "page boundary changed; will replay the current window"
+                        reason = str(boundary_error) if boundary_error else "page boundary changed; will replay the current window"
                         result["warnings"].append(f"{project['repo']} {mode} page {number}: {reason}")
                         failure = reason
                         states[-1] = "partial"

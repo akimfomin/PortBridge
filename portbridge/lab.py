@@ -6,7 +6,7 @@ import re
 
 CHECKED_AT = "2026-11-24T15:51:11Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
-STATUSES = ("needs_run", "needs_revision", "awaiting_review")
+STATUSES = ("needs_run", "needs_revision", "awaiting_review", "blocked")
 TASK_ID_PATTERN = r"^[a-z0-9-]{1,80}$"
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
 CONTINUED = "https://github.com/ubiquitarianism/leonida"
@@ -127,32 +127,30 @@ TASKS = (
         "equipment": ["amd"],
         "os": ["Windows"],
         "requirements": ["AMD adapter with Vulkan 1.3 and Win32 presentation", "C++ build tools and Vulkan headers"],
-        "status": "needs_run", "evidence_stage": "reviewed_gpu", "adoption": "pending",
+        "status": "blocked", "evidence_stage": "reviewed_gpu", "adoption": "pending",
         "source_url": f"{PORTBRIDGE}/issues/9", "procedure_url": f"{REFORGE}/pull/86",
-        "evidence_url": PRESENTER_REPORT, "result_url": f"{REFORGE}/pull/86",
+        "evidence_url": PRESENTER_REPORT, "result_url": f"{PORTBRIDGE}/issues/9",
         "revisions": [
             revision("Test PR", "PR с тестом", "rizzzz64/Leonida", "b84739e39aee69d2611dfc3982cc2ef35f876916"),
             revision("Unchanged control", "Контроль без правок", "LeonidaReforge/Leonida",
                      "2ebde81ec07e530a3558bc3f7c4b79da6c37ab65"),
         ],
-        "why": "An AMD run extends the existing NVIDIA evidence for the canceled ninth Present.",
-        "evidence": "The independent NVIDIA run passed twice. The same fixture failed on the unchanged runtime.",
+        "why": "The AMD run is paused. GitHub returned 404 for the original Reforge repository on 24 November 2026. A public source confirmed by its maintainers is needed before resuming.",
+        "evidence": "Before the source became unavailable, the independent NVIDIA run passed twice. The same fixture failed on the unchanged runtime.",
         "steps": [
-            "Check out the pinned PR and build only vk_presenter_sync_test on Windows.",
-            "Run the synthetic test on the AMD adapter. Check whether the canceled ninth Present is refused.",
-            "For a comparison, run the identical fixture with the pinned unchanged runtime.",
+            "Wait for the original repository to return or for the maintainers to confirm its new address.",
+            "Share that public source in PortBridge #9 so the pinned test and control can be rechecked.",
         ],
         "expected": "All six checks pass on the PR. Eight queued frames drain and the canceled ninth is refused.",
         "report": ["Commit, GPU, driver, Windows build and compiler", "Six check outcomes and the ninth-Present result"],
         "translations": {"ru": {
             "title": "Проверить отмену кадра Reforge на AMD",
             "requirements": ["Видеокарта AMD с Vulkan 1.3 и Win32", "Компилятор C++ и заголовки Vulkan"],
-            "why": "Прогон на AMD дополнит результат NVIDIA по отмене девятого кадра.",
-            "evidence": "На NVIDIA независимый тест прошёл дважды. Та же проверка на исходной версии выявила ошибку.",
+            "why": "Прогон на AMD приостановлен. 24 ноября 2026 года GitHub вернул 404 для исходного репозитория Reforge. Для продолжения нужен публичный источник, подтверждённый сопровождающими.",
+            "evidence": "До потери доступа независимый тест на NVIDIA прошёл дважды. Та же проверка на исходной версии выявила ошибку.",
             "steps": [
-                "Перейдите на указанную версию PR и соберите только vk_presenter_sync_test на Windows.",
-                "Запустите синтетический тест на AMD. Проверьте, что отменённый девятый кадр отклонён.",
-                "Для сравнения запустите тот же тест с указанной исходной версией.",
+                "Дождитесь восстановления исходного репозитория или подтверждения нового адреса сопровождающими.",
+                "Оставьте подтверждённую публичную ссылку в PortBridge #9, чтобы сверить версии теста и контроля.",
             ],
             "expected": "В PR проходят все шесть проверок. Восемь кадров выходят из очереди, девятый отклонён.",
             "report": ["Коммит, видеокарта, драйвер, версия Windows и компилятора", "Итоги шести проверок и девятого кадра"],

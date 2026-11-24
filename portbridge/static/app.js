@@ -48,6 +48,7 @@ const initialData = t('Initial catalog', 'Исходная подборка');
 const syncStates = {
   ok: currentData, fresh: currentData, stale: cachedData, cached: cachedData, seed: initialData, 'seed-only': initialData,
   partial: t('Partially updated', 'Частичное обновление'), error: t('Update failed', 'Ошибка обновления'),
+  unavailable: t('GitHub source unavailable', 'Источник GitHub недоступен'),
   pending: t('Waiting for an update', 'Ожидает обновления'),
 };
 const labels = {
@@ -418,6 +419,10 @@ function solutionCard(solution) {
   const top = element('div', 'card-top');
   top.append(element('h3', '', projectName(solution.project)), badge(solution.status, solutionStates));
   card.append(top);
+  if (projects.get(solution.project)?.sync_status === 'unavailable') {
+    card.append(element('p', 'revision', t('GitHub source unavailable. Last recorded evidence is shown.',
+      'Источник GitHub недоступен. Показаны ранее сохранённые результаты.')));
+  }
   const description = editorial(solution, 'summary');
   if (description) card.append(element('p', '', description));
   if (list(solution.evidence).length) {
@@ -930,6 +935,7 @@ const labStatus = {
   needs_run: t('A test run is needed', 'Нужен прогон'),
   needs_revision: t('Awaiting combined revision', 'Ждём объединённую версию'),
   awaiting_review: t('Awaiting team review', 'Ждём ответа команды'),
+  blocked: t('Source unavailable', 'Источник недоступен'),
 };
 const labEvidence = {
   assembled_offline: t('Assembled offline', 'Собрано без запуска'),
@@ -1032,6 +1038,13 @@ function labChecklist(title, items, ordered = false) {
   return section;
 }
 
+function labQueuePath(task, equipment) {
+  const compatible = list(task.equipment).filter((kind) => Object.hasOwn(labEquipment, kind));
+  let next = compatible.length === 1 ? compatible[0] : '';
+  if (compatible.includes(equipment)) next = equipment;
+  return next ? `#/lab?${new URLSearchParams({equipment: next})}` : '#/lab';
+}
+
 function labReport(task, equipment) {
   const section = element('section', 'lab-agent');
   const actions = element('div', 'lab-agent-actions');
@@ -1055,17 +1068,14 @@ function labReport(task, equipment) {
   bindCopyText(copy, field, status, t('Copied. Fill in your result before sharing.',
     'Скопировано. Впишите свой результат перед публикацией.'));
 
-  const compatible = list(task.equipment).filter((kind) => Object.hasOwn(labEquipment, kind));
-  let next = compatible.length === 1 ? compatible[0] : '';
-  if (compatible.includes(equipment)) next = equipment;
-  const queue = next ? `#/lab?${new URLSearchParams({equipment: next})}` : '#/lab';
-  actions.append(copy, internalLink(t('Find another check', 'Выбрать другую проверку'), queue), status);
+  actions.append(copy, internalLink(t('Find another check', 'Выбрать другую проверку'), labQueuePath(task, equipment)), status);
   section.append(element('h3', '', t('After the run', 'После прогона')), actions, field);
   return section;
 }
 
 function labTask(task, focused = false, queueEquipment = '') {
   const card = element('article', 'card lab-task');
+  const blocked = task.status === 'blocked';
   const status = element('div', 'meta-row lab-status');
   status.append(badge(task.status, labStatus), badge(task.evidence_stage, labEvidence), badge(task.adoption, labAdoption));
   const projects = element('div', 'meta-row');
@@ -1105,8 +1115,9 @@ function labTask(task, focused = false, queueEquipment = '') {
     open.setAttribute('aria-label', `${open.textContent} · ${editorial(task, 'title')}`);
     links.append(open);
   }
-  links.append(githubLink(t('Open instructions', 'Открыть инструкцию'), task.procedure_url),
-    githubLink(t('Share result in the discussion', 'Оставить результат в обсуждении'), task.result_url));
+  if (!blocked) links.append(githubLink(t('Open instructions', 'Открыть инструкцию'), task.procedure_url));
+  links.append(githubLink(blocked ? t('Report a confirmed public source', 'Сообщить публичный адрес')
+    : t('Share result in the discussion', 'Оставить результат в обсуждении'), task.result_url));
   if (task.evidence_url) links.append(githubLink(t('Existing evidence', 'Что уже проверили'), task.evidence_url));
   if (task.source_url && ![task.procedure_url, task.result_url, task.evidence_url].includes(task.source_url)) {
     links.append(githubLink(t('Coordination issue', 'Задача координации'), task.source_url));
@@ -1119,8 +1130,10 @@ function labTask(task, focused = false, queueEquipment = '') {
       : t('Request a test', 'Запросить тест');
     links.append(githubLink(label, request));
   }
+  if (focused && blocked) links.append(internalLink(t('Find another check', 'Выбрать другую проверку'),
+    labQueuePath(task, queueEquipment)));
   card.append(links, details);
-  if (focused) card.append(labReport(task, queueEquipment));
+  if (focused && !blocked) card.append(labReport(task, queueEquipment));
   return card;
 }
 
@@ -1135,9 +1148,13 @@ function drawLab(data, params) {
     const bar = element('div', 'lab-bar');
     bar.append(back);
     lab.append(bar);
-    if (task) lab.append(labAgentEntry(task), labTask(task, true, params.get('equipment') || ''));
-    else lab.append(element('p', 'empty', t('This test is unavailable in the current queue.',
-      'Этой проверки сейчас нет в очереди.')));
+    if (task) {
+      if (task.status !== 'blocked') lab.append(labAgentEntry(task));
+      lab.append(labTask(task, true, params.get('equipment') || ''));
+    } else {
+      lab.append(element('p', 'empty', t('This test is unavailable in the current queue.',
+        'Этой проверки сейчас нет в очереди.')));
+    }
     content.replaceChildren(lab);
     return;
   }

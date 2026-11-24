@@ -5,7 +5,7 @@ PortBridge читает открытые задачи, изменения и с�
 | Проект | За чем следим |
 | --- | --- |
 | [Leonida Continued](https://github.com/ubiquitarianism/leonida) | Сборки, проверки Vulkan и SPIR-V, порядок интеграции исправлений |
-| [LeonidaReforge](https://github.com/LeonidaReforge/Leonida) | Переносы из Continued, отдельные прогоны на Vulkan и ограничения применимости |
+| [LeonidaReforge](https://github.com/LeonidaReforge/Leonida) | Публичный репозиторий и страница организации возвращают 404. Последнее успешное обновление PortBridge было 24 ноября в 21:21:57 МСК, в 21:41:02 МСК сборка уже видела 404. Проверенная история сохранена. Новый адрес от команды пока не подтверждён. [Журнал обновления](https://github.com/akimfomin/PortBridge/actions/runs/45461886343/job/138686401465) · [Запрос в PortBridge](https://github.com/akimfomin/PortBridge/issues/9) |
 | [Leonida CE](https://github.com/IAmNotSiob/leonida-ce) | Изменения в прямом продолжении Leonida, которые могут пригодиться другим веткам |
 | [VIctory](https://github.com/Marvisak/VIctory) | Реализация графики через D3D12 и тесты перевода RDNA2 в DXIL |
 | [XCL](https://github.com/xcl-dev/xcl) | Проверки GPU, перевод шейдеров и отдельные сценарии Wave32/Wave64. Старые ссылки на `ivall/xcl` ведут к тем же работам. |

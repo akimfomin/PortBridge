@@ -132,8 +132,15 @@ class TestRequestTests(TestCase):
         self.github.get.assert_any_call("/repos/example/public/commits/" + "a" * 40, public=True)
 
     def test_control_revision_is_not_an_actionable_lab_pin(self):
+        task = next(row for row in build_lab()["tasks"] if row["id"] == "scarlett-commons-continued-add-basic")
+        self.issue["body"] = issue_body(task=task["id"], equipment="cpu", revision=task["revisions"][1]["url"])
+        with self.assertRaisesRegex(ValueError, "does not match"):
+            self.run_dispatch([tester("Volunteer", "python-cpu", equipment="cpu")])
+        self.github.comment.assert_not_called()
+
+    def test_blocked_lab_task_cannot_invite_a_tester(self):
         task = next(row for row in build_lab()["tasks"] if row["id"] == "pb-9-reforge-present")
-        self.issue["body"] = issue_body(task=task["id"], revision=task["revisions"][1]["url"])
+        self.issue["body"] = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
         with self.assertRaisesRegex(ValueError, "does not match"):
             self.run_dispatch([tester("Volunteer", "win32-vulkan-1.3")])
         self.github.comment.assert_not_called()

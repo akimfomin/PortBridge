@@ -2,7 +2,7 @@
 
 [Choose a check](https://akimfomin.github.io/PortBridge/#/lab) · [Выбрать проверку](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) · [Request a test](TEST-REQUESTS.md) · [Instructions for agents](AGENT-PROMPT.md)
 
-Pick a check for equipment you can use. Each task links the original discussion, the exact source revisions, the expected result, and where to report it. Labels show which checks need a run, which need a revision selected, and which are waiting for a maintainer.
+Pick a check for equipment you can use. Each task links the original discussion, the exact source revisions, the expected result, and where to report it. Labels show which checks need a run, which need a revision selected, which are waiting for a maintainer, and which are paused because the source is unavailable.
 
 Use **Open this test** to share a link to one check. The page opens its instructions and lets you copy the exact task into an agent chat. [Example task](https://akimfomin.github.io/PortBridge/#/lab?task=xcl-1100-fma)
 
@@ -24,6 +24,8 @@ Volunteers choose a task and execute it locally. If you need another setup, open
 После прогона кнопка **Копировать шаблон результата** подставит ссылку на карточку и поля отчёта. Заполните их перед публикацией в исходном обсуждении. Кнопка **Выбрать другую проверку** возвращает к очереди с подходящим фильтром. Для прогона без видеокарты и компилятора есть проверка Scarlett Commons и Continued через Git и Python. [Проверка на процессоре](https://akimfomin.github.io/PortBridge/?lang=ru#/lab?task=scarlett-commons-continued-add-basic)
 
 Если нужного оборудования нет, нажмите **Запросить тест** в карточке или создайте свой запрос. [Порядок работы](TEST-REQUESTS.md#по-русски)
+
+Если исходный проект недоступен, карточка сохраняет прежние результаты и ведёт в обсуждение, где можно оставить подтверждённый командой публичный адрес. Приглашения возобновляются после проверки точной версии теста.
 
 Сначала проверьте, нужна ли ещё помощь в исходном обсуждении. Затем повторите тест в отдельной копии проекта и оставьте результат со своим стендом и точной версией. Подробности о том, как передать результат и сохранить авторство, есть в [инструкции для агента](AGENT-PROMPT.md).
 

@@ -20,7 +20,9 @@ class LabTest(CatalogFixture):
         self.assertEqual((combined["status"], combined["evidence_stage"], combined["adoption"]),
                          ("awaiting_review", "reviewed_gpu", "pending"))
         self.assertEqual([row["sha"][:8] for row in combined["revisions"]], ["88658f1b", "21dc3889", "b8572d92"])
-        self.assertEqual(tasks["pb-9-reforge-present"]["evidence_stage"], "reviewed_gpu")
+        presenter = tasks["pb-9-reforge-present"]
+        self.assertEqual((presenter["status"], presenter["evidence_stage"]), ("blocked", "reviewed_gpu"))
+        self.assertEqual(presenter["result_url"], "https://github.com/akimfomin/PortBridge/issues/9")
         self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "author_gpu")
         native = tasks["anyxboxx-133-native-carry"]
         self.assertEqual((native["status"], native["evidence_stage"]), ("awaiting_review", "reviewed_gpu"))
@@ -56,9 +58,10 @@ class LabTest(CatalogFixture):
         payload = build_lab()
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
-                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma", "continued-511-repeated-draw",
+                         ["pb-5-xcl-wave64", "xcl-1100-fma", "continued-511-repeated-draw",
                           "anyxboxx-147-native-wave64-gather"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
+        self.assertEqual([task["id"] for task in build_lab(status="blocked")["tasks"]], ["pb-9-reforge-present"])
         self.assertEqual(len(payload["tasks"]), 9)
         self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)
         self.assertEqual([task["id"] for task in build_lab(equipment="cpu", status="needs_run")["tasks"]],

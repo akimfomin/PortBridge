@@ -1876,12 +1876,12 @@
       "id": "PB-0019",
       "recorded_at": "2026-11-24T16:18:38Z",
       "title": "Нативный тест читает результат LDS до завершения загрузки",
-      "summary": "yawn-animals обнаружил преждевременное чтение LDS в Reforge и перенёс проверенную правку в Continued #1026. Автор подтвердил результат на AMD, morodirule отдельно проверил вариант через SPIR-V на RTX. PR открыт.",
+      "summary": "yawn-animals обнаружил преждевременное чтение LDS в Reforge и перенёс проверенную правку в Continued #1026. Результаты AMD и независимого прогона SPIR-V на RTX сохранены. GitHub закрыл PR после удаления исходного форка. Правка доступна в истории PR и отсутствует в проверенной основной ветке.",
       "status": "verified",
       "tags": ["RDNA2", "LDS", "s_waitcnt", "lgkmcnt", "cs_lds_b64_cmpst"],
       "translations": {"en": {
         "title": "Native test uses an LDS load before it completes",
-        "summary": "yawn-animals found an early LDS read in Reforge and carried the tested fix to Continued #1026. The author confirmed the result on AMD, and morodirule ran a separate SPIR-V check on RTX. The PR is open.",
+        "summary": "yawn-animals found an early LDS read in Reforge and carried the tested fix to Continued #1026. The AMD result and the independent RTX SPIR-V run are recorded. GitHub closed the PR after the head fork was deleted. The patch is still visible in the PR history and is absent from the checked main revision.",
         "tags": ["RDNA2", "LDS", "s_waitcnt", "lgkmcnt", "cs_lds_b64_cmpst"]
       }},
       "platforms": ["AMD Radeon RX 6800 XT (gfx1030)", "Arch Linux", "Vulkan RADV"],
@@ -1890,8 +1890,8 @@
         {
           "project": "reforge",
           "status": "verified",
-          "summary": "В #166 yawn-animals добавил s_waitcnt lgkmcnt(0) между чтением и XOR. Этот тест проверяет исправление синтетического шейдера. PR открыт.",
-          "translations": {"en": {"summary": "In #166, yawn-animals inserted s_waitcnt lgkmcnt(0) between the read and XOR and tested the synthetic fixture. The PR is open."}},
+          "summary": "В #166 yawn-animals добавил s_waitcnt lgkmcnt(0) между чтением и XOR и проверил синтетический шейдер. При сверке 24 ноября GitHub вернул 404 для репозитория Reforge. Ниже сохранены результаты, полученные до потери доступа.",
+          "translations": {"en": {"summary": "In #166, yawn-animals inserted s_waitcnt lgkmcnt(0) between the read and XOR and tested the synthetic fixture. Reforge returned HTTP 404 when checked on 24 November. The earlier results are retained below."}},
           "source_refs": [
             {"title": "Правка и прогоны автора Reforge #166", "url": "https://github.com/LeonidaReforge/Leonida/pull/166", "translations": {"en": {"title": "Reforge #166 fix and author runs"}}}
           ],
@@ -1912,10 +1912,13 @@
         {
           "project": "continued",
           "status": "verified",
-          "summary": "В #1026 yawn-animals добавил ожидание в совпадающий файл Continued. Нативный прогон автора на gfx1030 отличил дефект от исправления. Независимый прогон через SPIR-V проверил ожидаемые слова, PR открыт.",
-          "translations": {"en": {"summary": "In #1026, yawn-animals inserted the wait into the matching Continued fixture. The author's native gfx1030 run distinguished the baseline and fix. A separate SPIR-V run checked the expected output words. The PR is open."}},
+          "summary": "GitHub закрыл #1026 после удаления исходного форка yawn-animals. В основной ветке Continued на 6293c1c4 чтение по-прежнему сразу сменяется XOR. Оригинальная однострочная правка доступна в коммите 40a2b1c6. PortBridge локально применил её на 6293c1c4 с сохранением авторства. Прошли 87 проверок шейдеров на CPU.",
+          "translations": {"en": {"summary": "GitHub closed #1026 after yawn-animals' head fork was deleted. On Continued main at 6293c1c4 the read is still immediately followed by XOR. The original one-line change is available in commit 40a2b1c6. PortBridge applied it locally to 6293c1c4 with attribution. All 87 CPU shader checks passed."}},
           "source_refs": [
             {"title": "Перенос yawn-animals в Continued #1026", "url": "https://github.com/ubiquitarianism/leonida/pull/1026", "translations": {"en": {"title": "yawn-animals' Continued #1026 port"}}},
+            {"title": "Причина закрытия по данным GitHub", "url": "https://github.com/ubiquitarianism/leonida/pull/1026#event-37167321018", "translations": {"en": {"title": "GitHub's closure event"}}},
+            {"title": "Однострочная правка yawn-animals", "url": "https://github.com/ubiquitarianism/leonida/commit/40a2b1c6b60aac005cbe2ecaf4b1130a630d6494", "translations": {"en": {"title": "yawn-animals' one-line fix"}}},
+            {"title": "Основная ветка Continued без ожидания", "url": "https://github.com/ubiquitarianism/leonida/blob/6293c1c4f88c7ea2088ec595fea51362f1759996/runtime/test/shaders/cs_lds_b64_cmpst.asm#L126-L132", "translations": {"en": {"title": "Continued main still lacks the wait"}}},
             {"title": "Исходный участок теста Continued", "url": "https://github.com/ubiquitarianism/leonida/blob/3ed8e50b754eb9dcf9e3819eddbbbccd52fc1177/runtime/test/shaders/cs_lds_b64_cmpst.asm#L127-L129", "translations": {"en": {"title": "Original Continued test sequence"}}}
           ],
           "evidence": [
