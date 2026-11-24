@@ -48,6 +48,8 @@ Most list endpoints accept a `q` of up to 300 characters and a `limit` from 1 to
 
 `counts` and `projects[].counts` distinguish actual PR merges (`merged_at`), currently open PRs with recent updates (including drafts), observed status or revision changes, and dated reviewed test outcomes (including failures). One PR may contribute to more than one count. `events` shows up to ten of each event kind. A project's `last_activity` can also point to an event outside that display limit. `opportunities` links to open work where a reviewed test explicitly lists the target in its scope. Follow the source link for the exact revision, platform and result.
 
+`handoffs` lists reviewed PortBridge contributions across all dates. Each item exposes the examined `revision` and links the receiving discussion in `delivered_url`. It can also link an independent reproduction, a formal review, or adoption in `independent_url`, `review_url`, or `adopted_url`. A receiving pull request merged at the recorded head is counted automatically when it appears in the public index. A changed head needs separate reviewed proof. `counts` totals each stage with proof.
+
 ## Read the evidence
 
 - A card lists relevant projects, implementations, dependencies and reviewed sources. Built-in editorial records include English text at `translations.en` where available. Identifiers, URLs, outcome codes and original text remain stable. Automatically collected sources retain the contributor's wording.

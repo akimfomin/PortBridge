@@ -80,6 +80,33 @@ class ActivityTest(CatalogFixture):
         winner = next(team for team in summary["projects"] if team["slug"] == "victory")
         self.assertEqual(winner["last_activity"]["url"], older_open)
 
+    def test_handoffs_keep_delivery_review_reproduction_and_adoption_distinct(self):
+        date = (NOW - timedelta(hours=2)).isoformat()
+        self.save_pr("xcl", 111, at=date, status="merged", merged_at=date)
+        summary = build_activity(self.catalog, now=NOW)
+        handoffs = summary["handoffs"]
+        self.assertEqual(summary["counts"]["merged"], 1)
+        self.assertEqual(handoffs["counts"], {"delivered": 2, "independently_reproduced": 2,
+                                             "formally_reviewed": 1, "adopted": 0})
+        continued, xcl = handoffs["items"]
+        self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
+        self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
+        self.assertTrue(xcl["independent_url"].endswith("#issuecomment-7131880483"))
+        self.assertNotIn("review_url", xcl)
+        self.assertTrue(all("adopted_url" not in item for item in handoffs["items"]))
+        self.assertEqual(build_activity(self.catalog, now=NOW, cards=[])["handoffs"]["items"], [])
+
+    def test_handoffs_automatically_count_only_the_reviewed_head_on_merge(self):
+        date = (NOW - timedelta(hours=2)).isoformat()
+        fix = "66dbbf3e176880487617609547b02c98add60297"
+        self.save_pr("continued", 701, at=date, status="merged", merged_at=date, revision=fix)
+        self.save_pr("xcl", 1100, at=date, status="merged", merged_at=date, revision="a" * 40)
+        handoffs = build_activity(self.catalog, now=NOW)["handoffs"]
+        self.assertEqual(handoffs["counts"]["adopted"], 1)
+        continued, xcl = handoffs["items"]
+        self.assertEqual(continued["adopted_url"], continued["delivered_url"])
+        self.assertNotIn("adopted_url", xcl)
+
     def test_opportunity_requires_reviewed_evidence_and_observed_open_target(self):
         self.assertEqual(build_activity(self.catalog, now=NOW)["opportunities"], [])
         target = self.save_pr("continued", 207, at=(NOW - timedelta(hours=2)).isoformat())

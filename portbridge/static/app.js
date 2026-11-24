@@ -729,6 +729,42 @@ function activityTimeline(title, events, limit, empty) {
   return panel;
 }
 
+function activityMetrics(counts, labels) {
+  const metrics = element('dl', 'activity-metrics');
+  for (const [key, label] of labels) {
+    const metric = element('div', 'activity-metric');
+    metric.append(element('dt', '', label), element('dd', '', numberFormat.format(counts?.[key] ?? 0)));
+    metrics.append(metric);
+  }
+  return metrics;
+}
+
+function activityHandoffs(handoffs) {
+  const panel = activityPanel(t('PortBridge contributions', 'Вклад PortBridge'));
+  const stages = [
+    ['delivered', 'delivered_url', t('Submitted', 'Передано в проект')],
+    ['independently_reproduced', 'independent_url', t('Independently reproduced', 'Проверено независимо')],
+    ['formally_reviewed', 'review_url', t('Reviewed in project', 'Ревью в проекте')],
+    ['adopted', 'adopted_url', t('Adopted', 'Внедрено')],
+  ];
+  panel.append(activityMetrics(handoffs.counts, stages.map(([key, , label]) => [key, label])),
+    element('p', 'activity-note', t('Counts cover the contributions below across all dates.',
+      'Счётчики учитывают работы из этого списка за всё время.')));
+  const items = element('ul', 'activity-timeline');
+  for (const handoff of list(handoffs.items)) {
+    const row = element('li', 'activity-entry');
+    const links = element('div', 'activity-handoff-proof');
+    for (const [, field, label] of stages) {
+      if (handoff[field]) links.append(githubLink(label, handoff[field]));
+    }
+    row.append(element('span', 'activity-meta activity-project-name', projectName(handoff.project)),
+      element('h3', '', editorial(handoff, 'title') || handoff.problem_id), links);
+    items.append(row);
+  }
+  panel.append(items);
+  return panel;
+}
+
 function showActivity(data, quiet = false) {
   const {as_of, window_start, ...observed} = data;
   const signature = JSON.stringify(observed);
@@ -743,17 +779,12 @@ function showActivity(data, quiet = false) {
   freshness.append(element('span', '', t('Last sync attempt', 'Последняя попытка обновления')), activityTime(data.refreshed_at));
   overviewHeading.append(element('h2', '', t(`Last ${windowDays} days`, `Последние ${windowDays} дней`)), freshness);
   stats.append(overviewHeading);
-  const metrics = element('dl', 'activity-metrics');
-  for (const [key, label] of [
+  const metrics = activityMetrics(data.counts, [
     ['merged', t('Merged PRs', 'Принятые PR')],
     ['open', t('Open PRs with updates', 'Открытые PR с обновлениями')],
     ['changed', t('Revision or status changes', 'Смены ревизий или статусов')],
     ['verified', t('Reviewed test results', 'Проверенные результаты')],
-  ]) {
-    const metric = element('div', 'activity-metric');
-    metric.append(element('dt', '', label), element('dd', '', numberFormat.format(data.counts?.[key] ?? 0)));
-    metrics.append(metric);
-  }
+  ]);
   stats.append(metrics, element('p', 'activity-note', t('Counts cover indexed public sources. Reviewed results include failed tests.',
     'Подсчёт по открытым источникам в индексе. Проверенные результаты включают неудачные прогоны.')));
   const columns = element('div', 'activity-columns');
@@ -784,7 +815,9 @@ function showActivity(data, quiet = false) {
   teamList.append(...list(data.projects).map(activityProject));
   if (teamList.childElementCount) teams.append(teamList);
   else teams.append(element('p', 'activity-note', t('Project data is unavailable.', 'Данные о проектах недоступны.')));
-  board.append(stats, columns, feed, teams);
+  board.append(stats);
+  if (list(data.handoffs?.items).length) board.append(activityHandoffs(data.handoffs));
+  board.append(columns, feed, teams);
   viewStatus.textContent = '';
   content.replaceChildren(board);
   return true;

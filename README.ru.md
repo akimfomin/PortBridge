@@ -19,6 +19,7 @@
 | Найти проекты по направлению | [Отслеживаемые репозитории](docs/PROJECTS.md) |
 | Взять совместную проверку | [Очередь Test Lab для AMD, NVIDIA и CPU](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) |
 | Запросить проверку на другом железе | Откройте запрос из Test Lab или предложите свой тест. PortBridge ищет подходящего человека по публичным отчётам и приглашает его после проверки запроса. [Как это работает](docs/TEST-REQUESTS.md#по-русски) |
+| Попробовать PortBridge в своём проекте | Сверьте один открытый PR с уже проверенными результатами. [Порядок для сопровождающих](docs/AGENT-PROMPT.md#try-portbridge-in-your-repository) |
 | Подключить помощника к поиску | [Codex и Claude Code через MCP](docs/MCP.md) |
 | Попросить агента взять задачу и довести её до результата | [Готовый запрос и порядок работы](docs/AGENT-PROMPT.md) |
 | Попробовать совместную проверку с другой командой | [Один тест на два проекта](docs/PILOT.md) |
@@ -30,7 +31,7 @@
 
 **XCL и VIctory.** Сопоставили работу по Wave64 с замерами RDNA2. После исправления XCL проверили, что его эталон совпадает с четырьмя опубликованными измерениями, и передали вход для отдельного теста смещения. [Проверка и предложение в XCL](https://github.com/ivall/xcl/pull/925#issuecomment-7128418828)
 
-**Reforge и Continued.** Нашли одну и ту же исходную правку в обоих проектах. Проверили уточнение из Reforge, с которым прошли 15 CPU-тестов, и передали результат в Continued. [Результат в Continued](https://github.com/ubiquitarianism/leonida/pull/265#issuecomment-7128554846)
+**Reforge и Continued.** PortBridge передал правку D16 из Reforge в Continued. Независимый участник подтвердил 15 из 15 тестов на macOS, другой одобрил эту версию. [Независимый прогон](https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7131731339) · [Одобрение](https://github.com/ubiquitarianism/leonida/pull/701#pullrequestreview-6039203797)
 
 ## Как проходит задача
 

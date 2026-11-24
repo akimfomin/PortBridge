@@ -2,7 +2,7 @@
 
 Maintainers can add a job that searches for prior work when someone opens or updates a pull request. It lists relevant catalog cards, possible matches, and a first check when one is available. Open the workflow run under **Actions** to read the job summary. The result is advisory and can be incomplete.
 
-Add this file to the repository where the summary should appear, for example `.github/workflows/portbridge-summary.yml`. This example pins the tested commit from the first public release. Keep the job optional in branch protection. [GitHub Marketplace](https://github.com/marketplace/actions/portbridge-prior-work-summary) · [Pinning actions to a commit](https://docs.github.com/en/actions/reference/security/secure-use#using-third-party-actions)
+If the maintainers want to try the Action, add the following workflow as `.github/workflows/portbridge-summary.yml`. This example pins the tested v0.1.1 commit. Keep the job optional in branch protection. [v0.1.1 release](https://github.com/akimfomin/PortBridge/releases/tag/v0.1.1) · [GitHub Marketplace listing](https://github.com/marketplace/actions/portbridge-prior-work-summary) · [Pinning actions to a commit](https://docs.github.com/en/actions/reference/security/secure-use#using-third-party-actions)
 
 ```yaml
 name: PortBridge prior work
@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Add prior-work links to Job Summary
         continue-on-error: true
-        uses: akimfomin/PortBridge@5ac6c3fd58cf10faf34ab7175da33e99cc55eebf # v0.1.0
+        uses: akimfomin/PortBridge@7b1dbdedccccdf75b257c130e970344e3434d0e4 # v0.1.1
 ```
 
 The action reads the title and GitHub PR URL from `GITHUB_EVENT_PATH`. It uses those values locally against PortBridge's public JSON snapshot. The snapshot fetch does not include the title or PR URL. The job uses the runner's Python 3.10 or newer and needs no secrets, repository checkout, or installed Python packages. It writes only to `GITHUB_STEP_SUMMARY`. If the snapshot cannot be read, the summary tells the reviewer to continue the usual review. [Composite action metadata](https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax#runs-for-composite-actions) · [GitHub job summaries](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#adding-a-job-summary)
@@ -28,6 +28,8 @@ The action reads the title and GitHub PR URL from `GITHUB_EVENT_PATH`. It uses t
 Use `pull_request` as shown. The action works with a public GitHub PR URL and declines other event types. Keep any unrelated workflow that runs contributor code separate from this job. For external contributions, GitHub may require a maintainer to approve running the workflow. [GitHub pull request events and forks](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request)
 
 The summary distinguishes confirmed catalog sources from possible matches. The first check includes the reported outcome and scope. Separate history indicators show whether the source repository's older records and recent changes were indexed.
+
+For a pilot, open the summary for one public pull request. If a source helped the review, link it in that PR and state what changed, such as a test the team ran or work it chose to reuse. Credit the source author and link PortBridge when it helped find the source. The job summary records that the Action ran. The receiving team's linked decision or test report records that the result was useful. [One-PR pilot and setup-free alternative](AGENT-PROMPT.md#try-portbridge-in-your-repository)
 
 ## Verify a release candidate
 

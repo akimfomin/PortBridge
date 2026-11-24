@@ -35,3 +35,17 @@ For a reusable command in a local session, copy the [portable `portbridge` skill
 The destination should contain `SKILL.md`. If the command does not appear, start a new local session. [Codex skills](https://learn.chatgpt.com/docs/build-skills) · [Claude Code skills](https://code.claude.com/docs/en/skills)
 
 If you want the agent to call search and catalog tools directly, use the optional MCP connection. [MCP setup](MCP.md) · [Public API](../API.en.md)
+
+## Try PortBridge in your repository
+
+Pick one public issue or pull request where a second project may already have useful evidence. Give the agent the original link and ask it to look for a verified test or fix. A session that opens public links can do this with no account setup. [Public catalog](https://akimfomin.github.io/PortBridge/) · [Test Lab](https://akimfomin.github.io/PortBridge/#/lab)
+
+If the trial helps, maintainers can add this optional paragraph to their existing `AGENTS.md` or `CLAUDE.md`. Keep your normal contribution and review rules. Remove the paragraph to stop using the integration.
+
+```markdown
+For public compatibility work, look for related tests and fixes in [PortBridge](https://akimfomin.github.io/PortBridge/) before repeating an investigation. Check the original source and exact revision. If a result helps, say in the current issue or pull request what you used and credit the source author and [PortBridge](https://github.com/akimfomin/PortBridge).
+```
+
+If a result is useful, record what the receiving team actually did in that same issue or PR, with a link to its test, adopted change, or maintainer decision. For example, a reviewer may report that they ran the shared test at a pinned revision and got the expected result. Count an adopted result only when the receiving team's public evidence confirms it. [Pilot record](PILOT.md#что-записать-после-проверки)
+
+Teams that prefer a job summary for each pull request can add the optional GitHub Action after maintainer approval. [Action setup](GITHUB-ACTION.md)

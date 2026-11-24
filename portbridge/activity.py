@@ -3,6 +3,9 @@
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from hashlib import sha256
+import json
+from pathlib import Path
+import re
 
 from .matching import canonical_url, source_revision
 from .preflight import english_text
@@ -14,6 +17,11 @@ OPPORTUNITY_LIMIT = 6
 COUNT_FOR = {
     "merged_pr": "merged", "open_pr": "open", "revision_change": "changed",
     "status_change": "changed", "verified_result": "verified",
+}
+HANDOFFS = Path(__file__).with_name("data") / "handoffs.json"
+HANDOFF_STAGES = {
+    "delivered_url": "delivered", "independent_url": "independently_reproduced",
+    "review_url": "formally_reviewed", "adopted_url": "adopted",
 }
 
 
@@ -132,6 +140,57 @@ def current_opportunities(cards, drafts):
     return found
 
 
+def handoff_summary(cards, projects, observations, as_of):
+    """Count only reviewed contributions with explicit public proof for each stage."""
+    cases = {card["id"]: card for card in cards}
+    repos = {project["slug"]: project["repo"] for project in projects}
+    merged_heads = {
+        (row["project"], canonical_url(row["url"])): source_revision(row)
+        for row in observations
+        if row["kind"] == "pr" and row["status"] == "merged"
+        and (merged_at := source_time(row["metadata"].get("merged_at"))) and merged_at <= as_of
+    }
+    counts = dict.fromkeys(HANDOFF_STAGES.values(), 0)
+    items, seen = [], set()
+    for row in json.loads(HANDOFFS.read_text(encoding="utf-8")):
+        case = cases.get(row["problem_id"])
+        repo = repos.get(row["project"])
+        if case is None or repo is None:
+            continue
+        if not any(solution["project"] == row["project"] for solution in case["solutions"]):
+            raise ValueError(f"Handoff project is missing from case: {case['id']}")
+        delivery = row["delivered_url"]
+        revision = row["revision"]
+        prefix = rf"https://github\.com/{re.escape(repo)}/"
+        subject = r"(?:pull|issues)/[1-9][0-9]*"
+        if not isinstance(delivery, str) or not re.fullmatch(prefix + subject, delivery, re.I):
+            raise ValueError(f"Invalid handoff delivery: {case['id']}")
+        if not isinstance(revision, str) or not re.fullmatch(r"[a-f0-9]{40}", revision):
+            raise ValueError(f"Invalid handoff revision: {case['id']}")
+        identity = delivery.casefold()
+        if identity in seen:
+            raise ValueError(f"Duplicate handoff delivery: {case['id']}")
+        seen.add(identity)
+        proofs = {"independent_url": re.escape(delivery) + r"#issuecomment-[1-9][0-9]*",
+                  "review_url": re.escape(delivery) + r"#pullrequestreview-[1-9][0-9]*",
+                  "adopted_url": prefix + rf"(?:{subject}(?:#issuecomment-[1-9][0-9]*)?|commit/[0-9a-f]{{40}})"}
+        item = {"problem_id": case["id"], "project": row["project"], "delivered_url": delivery, "revision": revision,
+                **public_text(case["title"], english_text(case, "title"))}
+        for key, pattern in proofs.items():
+            if key in row:
+                value = row[key]
+                if not isinstance(value, str) or not re.fullmatch(pattern, value, re.I):
+                    raise ValueError(f"Invalid handoff proof ({key}): {case['id']}")
+                item[key] = value
+        if "adopted_url" not in item and merged_heads.get((row["project"], canonical_url(delivery))) == revision:
+            item["adopted_url"] = delivery
+        for field, stage in HANDOFF_STAGES.items():
+            if field in item:
+                counts[stage] += 1
+        items.append(item)
+    return {"counts": counts, "items": items}
+
+
 def build_activity(catalog, *, now=None, projects=None, cards=None, observations=None, health=None, drafts=None):
     as_of = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(microsecond=0)
     start = as_of - timedelta(days=WINDOW_DAYS)
@@ -176,4 +235,5 @@ def build_activity(catalog, *, now=None, projects=None, cards=None, observations
     return {"as_of": as_of.isoformat(), "refreshed_at": health["refresh_at"], "health": health["status"],
             "window_days": WINDOW_DAYS, "window_start": start.isoformat(),
             "counts": {**counts, "projects": len(per_project)}, "projects": list(per_project.values()),
+            "handoffs": handoff_summary(cards, projects, observations, as_of),
             "events": events, "opportunities": current_opportunities(cards, drafts)}

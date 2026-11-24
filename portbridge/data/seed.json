@@ -659,15 +659,15 @@
       "id": "PB-044801754884724660835754613454516035131",
       "recorded_at": "2026-11-24T11:13:37Z",
       "title": "Проверка классификации загрузок D16 в Reforge и Continued",
-      "summary": "PortBridge связал одинаковую исходную правку в Reforge и Continued. Уточнение ecox982745 из Reforge прошло целевую проверку на основной ветке Continued. Решение о переносе ещё не опубликовано.",
+      "summary": "PortBridge связал работы Reforge и Continued и передал уточнение ecox982745 в Continued #701. Независимый участник подтвердил все 15 целевых тестов на macOS, другой участник одобрил ту же версию PR.",
       "status": "verified",
       "tags": ["D16", "Wave64", "MUBUF", "MTBUF"],
       "translations": {"en": {
         "title": "D16 load classification in Reforge and Continued",
-        "summary": "PortBridge linked the same original change in Reforge and Continued. ecox982745's Reforge follow-up passed focused tests on Continued main. The receiving team has yet to decide whether to adopt it.",
+        "summary": "PortBridge linked Reforge and Continued and submitted ecox982745's follow-up in Continued #701. An independent contributor passed all 15 focused tests on macOS and another contributor approved the same PR revision.",
         "tags": ["D16", "Wave64", "MUBUF", "MTBUF"]
       }},
-      "platforms": ["Windows 11", "Python 3.12", "Vulkan"],
+      "platforms": ["Windows 11", "macOS", "Python", "Vulkan"],
       "dependency_ids": [],
       "solutions": [
         {
@@ -687,16 +687,20 @@
         {
           "project": "continued",
           "status": "verified",
-          "summary": "На проверенной версии Continued с кодом и тестами из Reforge прошли все 15 целевых CPU-тестов. Решение команды о переносе ещё не опубликовано.",
-          "translations": {"en": {"summary": "All 15 focused CPU checks passed on Continued main with the Reforge code and tests applied. The team has yet to publish an adoption decision."}},
+          "summary": "На Windows и macOS прошли все 15 целевых CPU-тестов. Участник Continued одобрил проверенную версию #701.",
+          "translations": {"en": {"summary": "All 15 focused CPU checks passed on Windows and macOS. A Continued contributor approved the tested revision of #701."}},
           "source_refs": [
             {"title": "Исходная правка Continued #265", "url": "https://github.com/ubiquitarianism/leonida/pull/265", "translations": {"en": {"title": "Original change in Continued #265"}}},
             {"title": "Точная базовая ревизия проверки", "url": "https://github.com/ubiquitarianism/leonida/commit/21625bca8c675c62f9dbffc318ce6a59d57faf31", "translations": {"en": {"title": "Exact base revision for the receiving-side test"}}},
-            {"title": "Карточка совместной проверки PortBridge", "url": "https://github.com/akimfomin/PortBridge/issues/4", "translations": {"en": {"title": "PortBridge pilot issue"}}}
+            {"title": "Карточка совместной проверки PortBridge", "url": "https://github.com/akimfomin/PortBridge/issues/4", "translations": {"en": {"title": "PortBridge pilot issue"}}},
+            {"title": "Правка передана в Continued #701", "url": "https://github.com/ubiquitarianism/leonida/pull/701", "translations": {"en": {"title": "Patch submitted to Continued #701"}}},
+            {"title": "Одобрение проверенной версии #701", "url": "https://github.com/ubiquitarianism/leonida/pull/701#pullrequestreview-6039203797", "translations": {"en": {"title": "Approval of the tested #701 revision"}}}
           ],
           "evidence": [
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/265#issuecomment-7128554846", "title": "PortBridge проверил правку Reforge на Continued", "revision": "21625bca8c675c62f9dbffc318ce6a59d57faf31", "reported_at": "2026-11-24T11:13:37Z", "platforms": ["Windows 11", "Python 3.12.14 (CPU)"], "observed": "База Continued прошла 13 исходных тестов. Два новых теста без исправления выявили семь ошибок классификации. С кодом и тестами из коммита a300ba63 прошли все 15 тестов на CPU.",
-              "translations": {"en": {"title": "PortBridge rechecked the Reforge fix on Continued", "observed": "Continued main passed the original 13 tests. The added tests alone exposed seven misclassifications. With the code and tests from a300ba63 applied, all 15 focused CPU tests passed."}}}
+              "translations": {"en": {"title": "PortBridge rechecked the Reforge fix on Continued", "observed": "Continued main passed the original 13 tests. The added tests alone exposed seven misclassifications. With the code and tests from a300ba63 applied, all 15 focused CPU tests passed."}}},
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7131731339", "title": "GeorgiyDemo подтвердил результат на Apple M5 Pro", "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T12:38:58Z", "platforms": ["macOS 26.7.3", "Apple M5 Pro", "Python 3.15.2 (CPU)"], "observed": "На версии PR прошли 15 из 15 целевых тестов. На базовой d42773d07 с теми же тестами 11 из 15 завершились ошибкой. Проверка ограничена синтетическими тестами на процессоре.",
+              "translations": {"en": {"title": "GeorgiyDemo reproduced the result on an Apple M5 Pro", "observed": "All 15 focused tests passed on the PR head. The same tests failed 11 of 15 cases on baseline d42773d07. The run covered synthetic CPU tests."}}}
           ]
         }
       ]

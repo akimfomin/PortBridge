@@ -3,7 +3,7 @@
 from copy import deepcopy
 
 
-CHECKED_AT = "2026-11-24T12:47:42Z"
+CHECKED_AT = "2026-11-24T13:04:54Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review")
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
@@ -11,6 +11,7 @@ CONTINUED = "https://github.com/ubiquitarianism/leonida"
 REFORGE = "https://github.com/LeonidaReforge/Leonida"
 XCL = "https://github.com/ivall/xcl"
 D16_REVIEW = f"{CONTINUED}/pull/701"
+D16_REPRODUCTION = f"{D16_REVIEW}#issuecomment-7131731339"
 RECT_REPORT = f"{CONTINUED}/pull/511#issuecomment-7130673446"
 BYTE_CARRY = "https://github.com/maximecmb/xcl/pull/1"
 PRESENTER_REPORT = f"{REFORGE}/pull/86#issuecomment-7130696664"
@@ -177,14 +178,14 @@ TASKS = (
     {
         "id": "pb-4-d16",
         "priority": 5,
-        "title": "Review the Reforge D16 check in Continued",
+        "title": "Follow the tested D16 fix in Continued",
         "projects": ["reforge", "continued"],
         "equipment": ["cpu"],
-        "os": ["Windows"],
-        "requirements": ["Python 3.12.14 for the recorded test setup"],
+        "os": ["Windows", "macOS"],
+        "requirements": ["Python for the synthetic CPU checks"],
         "status": "awaiting_review", "evidence_stage": "reviewed_cpu", "adoption": "pending",
         "source_url": f"{PORTBRIDGE}/issues/4", "procedure_url": f"{PORTBRIDGE}/issues/4",
-        "evidence_url": D16_REVIEW, "result_url": D16_REVIEW,
+        "evidence_url": D16_REPRODUCTION, "result_url": D16_REVIEW,
         "revisions": [
             revision("Continued base", "Исходная версия Continued", "ubiquitarianism/leonida",
                      "21625bca8c675c62f9dbffc318ce6a59d57faf31"),
@@ -194,7 +195,7 @@ TASKS = (
                      "66dbbf3e176880487617609547b02c98add60297"),
         ],
         "why": "The receiving team's decision tells both projects whether the tested fix will carry over.",
-        "evidence": "The new tests exposed seven misclassifications. The exact change in Continued #701 passed 137 CPU checks.",
+        "evidence": "Alongside 137 local CPU checks, an independent Apple M5 Pro run passed all 15 focused tests. A Continued contributor approved that revision. Follow the merge decision in #701.",
         "steps": [
             "Review the documented CPU result in the receiving discussion.",
             "To reproduce it, run the pinned baseline, tests-only control and full focused suite from the procedure.",
@@ -203,10 +204,10 @@ TASKS = (
         "expected": "The baseline passes 13 tests. The added tests expose seven misclassifications. The fix passes all 15.",
         "report": ["Tested revision, system, Python version and outcomes, or link to the receiving team's decision"],
         "translations": {"ru": {
-            "title": "Сверить проверку D16 из Reforge в Continued",
-            "requirements": ["Python 3.12.14 для повторения на том же окружении"],
+            "title": "Проследить за проверенной правкой D16 в Continued",
+            "requirements": ["Python для синтетических проверок на процессоре"],
             "why": "Решение Continued покажет обеим командам, будет ли использована проверенная правка.",
-            "evidence": "Новые тесты выявили семь ошибок классификации. Правка из Continued #701 прошла 137 проверок на процессоре.",
+            "evidence": "У нас прошли 137 проверок на процессоре. Независимый прогон на Apple M5 Pro подтвердил все 15 целевых тестов. Участник Continued одобрил эту версию. Решение о слиянии можно проверить в #701.",
             "steps": [
                 "Прочитайте результат проверки на процессоре в обсуждении Continued.",
                 "Для повторения прогоните исходную версию, контроль с одними тестами и полный комплект по инструкции.",
