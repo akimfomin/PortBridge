@@ -23,7 +23,7 @@ PortBridge читает открытые задачи, изменения и с�
 | [PercyScarlett](https://github.com/rpatty-dev/PercyScarlett) | Проверки вызовов PresentX и создания звукового движка XAudio2. |
 | [VIctory macOS](https://github.com/pragyaangaur/VIctory-macOS) | Отдельная реализация Metal и отчёты автора о проверках на Apple M4. |
 | [XValkyrie](https://github.com/sammwyy/xvalkyrie) | Синтетический тест проверяет входы, выходы и предел в четыре вершины геометрического шейдера для списка прямоугольников. [Исходный тест](https://github.com/sammwyy/xvalkyrie/blob/4e02c6815d254764a266a2de30994d96cfaef0b0/tests/console_shader.cpp#L160-L184) |
-| [Holy Interoperability](https://github.com/mewiof/Holy-Interoperability) | Синтетический тест D3D12 читает пиксели и сверяет точные значения после перестановок потоков внутри группы из четырёх. [Исходный тест](https://github.com/mewiof/Holy-Interoperability/blob/a991f51c6726b390ba85bbfed1b27434f28201b1/tests/unit/test_shader_execute.cpp#L358-L417) |
+| [Holy Interoperability](https://github.com/mewiof/Holy-Interoperability) | Синтетический тест D3D12 сверяет пиксели после перестановок потоков внутри группы из четырёх. PortBridge получает коммиты и результаты CI. Список PR недоступен через GitHub API. [Исходный тест](https://github.com/mewiof/Holy-Interoperability/blob/a991f51c6726b390ba85bbfed1b27434f28201b1/tests/unit/test_shader_execute.cpp#L358-L417) |
 
 Сверяйте одинаковый вход и ожидаемый результат на каждом стенде. При переносе теста или кода указывайте исходный репозиторий и автора. [Где нужна помощь](PORTING-WORK.md) · [Предложить источник или улучшение](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml)
 
