@@ -2,7 +2,7 @@
 
 **Общий рабочий штаб для команд совместимости Xbox Series с ПК.**
 
-[Найти решение](https://akimfomin.github.io/PortBridge/) · [Поделиться тестом или правкой](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) · [Где нужна помощь](docs/PORTING-WORK.md) · [Дать задачу агенту](docs/AGENT-PROMPT.md) · [English](README.md)
+[Прогресс команд](https://akimfomin.github.io/PortBridge/?lang=ru) · [Поделиться тестом или правкой](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) · [Где нужна помощь](docs/PORTING-WORK.md) · [Дать задачу агенту](docs/AGENT-PROMPT.md) · [English](README.md)
 
 После разделения Leonida работа продолжилась в разных репозиториях. Поэтому одна команда может уже исправить ошибку, другая — проверить тот же случай, а третья — начать разбор заново. PortBridge находит эту связь, помогает перенести полезную проверку или правку и сохраняет исходные ссылки, версии и авторство.
 
@@ -12,7 +12,8 @@
 
 | Ваша задача | Куда идти |
 | --- | --- |
-| Перед правкой узнать, что уже пробовали | [Поиск по ошибке, термину или PR](https://akimfomin.github.io/PortBridge/) |
+| Узнать, что изменилось и где можно помочь | На [главной](https://akimfomin.github.io/PortBridge/?lang=ru) видны события за семь дней, прогресс по командам и проверки, которые можно повторить в другой команде. |
+| Перед правкой узнать, что уже пробовали | [Поиск по ошибке, термину или PR](https://akimfomin.github.io/PortBridge/?lang=ru#/problems) |
 | Передать тест, исправление или отрицательный результат | [Форма результата](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) |
 | Подхватить работу или проверить чужой вывод | [Журнал портирования](docs/PORTING-WORK.md) |
 | Найти проекты по направлению | [Отслеживаемые репозитории](docs/PROJECTS.md) |

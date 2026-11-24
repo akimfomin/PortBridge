@@ -37,7 +37,7 @@ class FeedTest(unittest.TestCase):
             self.assertEqual(english.findtext(ATOM + field), russian.findtext(ATOM + field))
 
         english_entries, russian_entries = self.entries(english), self.entries(russian)
-        self.assertEqual(list(english_entries), ["urn:portbridge:PB-0002", "urn:portbridge:PB-0001"])
+        self.assertEqual(list(english_entries), ["urn:portbridge:PB-0005", "urn:portbridge:PB-0002", "urn:portbridge:PB-0001"])
         self.assertEqual(list(english_entries), list(russian_entries))
         for ident, entry in english_entries.items():
             other = russian_entries[ident]

@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '23 * * * *'
+    - cron: '13,43 * * * *'
 
 permissions: {}
 
@@ -59,6 +59,23 @@ jobs:
 
       - name: Export site and JSON
         run: python -m portbridge export --out dist --repository "$GITHUB_REPOSITORY"
+
+      - name: Show published activity
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          import os
+          from pathlib import Path
+
+          activity = json.loads(Path("dist/data/activity.json").read_text(encoding="utf-8"))
+          print("## Public activity snapshot")
+          print(f"- Trigger: {os.environ['GITHUB_EVENT_NAME']}")
+          print(f"- Last source refresh attempt: {activity['refreshed_at'] or 'unavailable'}")
+          print(f"- Source health: {activity['health']}")
+          print(f"- Tracked projects: {len(activity['projects'])}")
+          print(f"- Events in the feed: {len(activity['events'])}")
+          print(f"- Shared checks suggested: {len(activity['opportunities'])}")
+          PY
 
       - name: Upload GitHub Pages artifact
         if: vars.PORTBRIDGE_ENABLE_GITHUB_PAGES == 'true'

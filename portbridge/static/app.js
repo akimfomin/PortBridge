@@ -11,6 +11,7 @@ const filters = byId('filters');
 const viewStatus = byId('view-status');
 const summary = byId('summary');
 const coordinationSection = byId('coordination');
+const refreshActivity = byId('refresh-activity');
 const languageLinks = document.querySelectorAll('[data-language]');
 const language = new URLSearchParams(window.location.search).get('lang') === 'ru' ? 'ru' : 'en';
 const t = (english, russian) => language === 'ru' ? russian : english;
@@ -20,6 +21,7 @@ let snapshotSite = null;
 let request = null;
 let debounce = null;
 let summaryData = null;
+let activitySignature = '';
 
 const problemStates = {
   investigating: t('Under investigation', 'Исследуется'), partial: t('Partially resolved', 'Частично решено'),
@@ -49,6 +51,8 @@ const syncStates = {
   pending: t('Waiting for an update', 'Ожидает обновления'),
 };
 const labels = {
+  activity: [t('Project activity', 'Обновления проектов'), t('Recent changes on GitHub, reviewed test results, and work you can help with.',
+    'Свежие изменения на GitHub, проверенные результаты и задачи, где можно помочь.')],
   problems: [t('Issue catalog', 'Каталог проблем'), t('Fixes and test results from open Xbox Series compatibility projects.',
     'Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.')],
   partial: [t('Cross-project leads', 'Где есть задел'), t('Issues where another team has tested a fix or made progress toward one.',
@@ -60,6 +64,7 @@ const labels = {
 };
 const dateFormat = new Intl.DateTimeFormat(language, {dateStyle: 'short', timeStyle: 'short'});
 const numberFormat = new Intl.NumberFormat(language);
+const freshnessLimit = 2 * 60 * 60 * 1000;
 
 function applyPageLanguage() {
   document.documentElement.lang = language;
@@ -123,7 +128,8 @@ function stamp(value) {
 function route() {
   const [path, query] = window.location.hash.replace(/^#\/?/, '').split('?', 2);
   const [view, id] = path.split('/', 2);
-  const validView = Object.hasOwn(labels, view) ? view : 'problems';
+  const fallback = path || query ? 'problems' : 'activity';
+  const validView = Object.hasOwn(labels, view) ? view : fallback;
   return {
     view: validView,
     id: validView === 'problems' && /^[A-Za-z0-9_-]{1,70}$/.test(id || '') ? id : null,
@@ -187,8 +193,8 @@ function tagRow(values) {
   return row;
 }
 
-async function getJSON(url, signal) {
-  const response = await fetch(url, {headers: {Accept: 'application/json'}, signal});
+async function getJSON(url, signal, cache = 'default') {
+  const response = await fetch(url, {headers: {Accept: 'application/json'}, signal, cache});
   if (!response.ok) {
     const err = new Error('Data request failed');
     err.status = response.status;
@@ -212,6 +218,9 @@ async function readSnapshot(name) {
 }
 
 async function fetchJSON(path, signal) {
+  if (path === '/activity') {
+    return getJSON(snapshotSite ? './data/activity.json' : `${apiRoot}/activity`, signal, 'no-cache');
+  }
   if (!snapshotSite) return getJSON(`${apiRoot}${path}`, signal);
   const [endpoint, query] = path.split('?', 2);
   const [, name, id] = endpoint.split('/');
@@ -263,7 +272,7 @@ async function initializeData() {
 
 function setHealth(health) {
   const line = byId('sync-status');
-  const aged = Date.now() - Date.parse(health.refresh_at) > 2 * 60 * 60 * 1000;
+  const aged = Date.now() - Date.parse(health.refresh_at) > freshnessLimit;
   const variant = health.status === 'ok' && !aged ? 'sync-ok' : (health.status ? 'sync-warning' : '');
   let title = snapshotSite && health.status === 'ok' ? t('GitHub data snapshot', 'Снимок данных GitHub') : syncStates[health.status];
   if (aged) title = t('Data is over two hours old', 'Данные старше двух часов');
@@ -600,6 +609,161 @@ function drawMatches(matches) {
 const retryAdvice = t('Try again. For a local installation, check that the PortBridge server is running.',
   'Повторите попытку. Для локальной установки проверьте, запущен ли сервер PortBridge.');
 
+const activityKinds = {
+  merged_pr: t('Merged PR', 'PR принят'),
+  open_pr: t('Open PR updated', 'Обновлён открытый PR'),
+  draft_pr: t('Draft PR updated', 'Обновлён черновик PR'),
+  revision_change: t('Revision changed', 'Изменилась ревизия'),
+  status_change: t('Status changed', 'Изменился статус'),
+  verified_result: t('Reviewed test', 'Проверенный тест'),
+};
+
+function activityTime(value) {
+  if (!value || !Number.isFinite(Date.parse(value))) return element('span', '', t('No record yet', 'Записей пока нет'));
+  const time = element('time', '', stamp(value));
+  time.dateTime = value;
+  return time;
+}
+
+function activityEntry(event) {
+  const entry = element('li', 'activity-entry');
+  const meta = element('div', 'activity-meta');
+  const kind = event.kind === 'open_pr' && event.draft ? 'draft_pr' : event.kind;
+  meta.append(badge(kind, activityKinds), element('span', 'activity-project-name', projectName(event.project)), activityTime(event.at));
+  entry.append(meta, githubLink(editorial(event, 'title') || t('Source', 'Источник'), event.url));
+  const details = element('div', 'activity-meta');
+  if (event.kind === 'verified_result') {
+    if (event.outcome) details.append(badge(event.outcome, evidenceOutcomes));
+    if (event.revision) details.append(element('code', 'identifier', String(event.revision).slice(0, 12)));
+    if (list(event.platforms).length) details.append(tagRow(event.platforms));
+  }
+  if (event.kind === 'revision_change' && event.previous_revision && event.revision) {
+    details.append(element('code', 'identifier', `${event.previous_revision.slice(0, 12)} → ${event.revision.slice(0, 12)}`));
+  }
+  if (event.kind === 'status_change' && githubStates[event.previous_status] && githubStates[event.status]) {
+    details.append(element('span', '', `${githubStates[event.previous_status]} → ${githubStates[event.status]}`));
+  }
+  if (details.childElementCount) entry.append(details);
+  const description = editorial(event, 'summary');
+  if (description) entry.append(element('p', '', description));
+  return entry;
+}
+
+function activityProject(project) {
+  const card = element('li', 'activity-team');
+  const name = element('h3');
+  name.append(githubLink(editorial(project, 'name') || project.slug, project.url));
+  const counts = project.counts || {};
+  const merged = numberFormat.format(counts.merged ?? 0);
+  const open = numberFormat.format(counts.open ?? 0);
+  const changed = numberFormat.format(counts.changed ?? 0);
+  const tested = numberFormat.format(counts.verified ?? 0);
+  const totals = element('p', 'activity-team-totals', t(`Merged ${merged} · Open with updates ${open} · Changes ${changed} · Reviewed tests ${tested}`,
+    `Принято ${merged} · открытых с обновлениями ${open} · изменений ${changed} · тестов ${tested}`));
+  const checks = element('p', 'activity-team-check');
+  let status = syncStates[project.status] || t('Update status unavailable', 'Состояние обновления неизвестно');
+  if (status === currentData && Date.now() - Date.parse(project.last_success) > freshnessLimit) status = cachedData;
+  checks.append(element('span', '', status));
+  if (project.last_success) checks.append(element('span', '', t('Last success', 'Последнее обновление')), activityTime(project.last_success));
+  card.append(name, totals);
+  const latest = project.last_activity;
+  if (latest) {
+    const source = element('div', 'activity-team-latest');
+    const kind = latest.kind === 'open_pr' && latest.draft ? 'draft_pr' : latest.kind;
+    const meta = element('div', 'activity-meta');
+    meta.append(badge(kind, activityKinds), activityTime(latest.at));
+    source.append(meta, githubLink(editorial(latest, 'title') || t('Latest work', 'Последняя работа'), latest.url));
+    card.append(source);
+  } else {
+    card.append(element('p', 'activity-team-empty', t('No recent item in the index.', 'В индексе нет свежих записей.')));
+  }
+  card.append(checks);
+  return card;
+}
+
+function activityOpportunity(item) {
+  const card = element('article', 'activity-opportunity');
+  const title = element('h3');
+  const name = editorial(item, 'title') || t('Review the source', 'Сверить источник');
+  const detail = editorial(item, 'summary');
+  const nextStep = editorial(item, 'next_step');
+  title.append(githubLink(name, item.target_url || item.url));
+  card.append(title);
+  const [sourceProject, targetProject] = list(item.projects);
+  if (sourceProject && targetProject) card.append(element('p', 'activity-opportunity-projects', `${projectName(sourceProject)} → ${projectName(targetProject)}`));
+  if (detail) card.append(element('p', '', detail));
+  if (nextStep) card.append(element('p', 'activity-next-step', nextStep));
+  if (item.source_url && item.source_url !== (item.target_url || item.url)) {
+    card.append(githubLink(t('Read the evidence', 'Открыть подтверждение'), item.source_url));
+  }
+  return card;
+}
+
+function activityPanel(title, className = '') {
+  const panel = element('section', `activity-panel ${className}`.trim());
+  panel.append(element('h2', '', title));
+  return panel;
+}
+
+function showActivity(data, quiet = false) {
+  const {as_of, window_start, ...observed} = data;
+  const signature = JSON.stringify(observed);
+  setHealth({status: data.health, refresh_at: data.refreshed_at});
+  if (quiet && signature === activitySignature) return false;
+  activitySignature = signature;
+  const board = element('div', 'activity-board');
+  const windowDays = numberFormat.format(data.window_days);
+  const stats = element('section', 'activity-overview');
+  const overviewHeading = element('div', 'activity-overview-head');
+  const freshness = element('p', 'activity-freshness');
+  freshness.append(element('span', '', t('Last sync attempt', 'Последняя попытка обновления')), activityTime(data.refreshed_at));
+  overviewHeading.append(element('h2', '', t(`Last ${windowDays} days`, `Последние ${windowDays} дней`)), freshness);
+  stats.append(overviewHeading);
+  const metrics = element('dl', 'activity-metrics');
+  for (const [key, label] of [
+    ['merged', t('Merged PRs', 'Принятые PR')],
+    ['open', t('Open PRs with updates', 'Открытые PR с обновлениями')],
+    ['changed', t('Revision or status changes', 'Смены ревизий или статусов')],
+    ['verified', t('Reviewed test results', 'Проверенные результаты')],
+  ]) {
+    const metric = element('div', 'activity-metric');
+    metric.append(element('dt', '', label), element('dd', '', numberFormat.format(data.counts?.[key] ?? 0)));
+    metrics.append(metric);
+  }
+  stats.append(metrics, element('p', 'activity-note', t('Counts cover indexed public sources. Reviewed results include failed tests.',
+    'Подсчёт по открытым источникам в индексе. Проверенные результаты включают неудачные прогоны.')));
+  const columns = element('div', 'activity-columns');
+  const feed = activityPanel(t('Recent changes', 'Свежие изменения'));
+  const events = list(data.events);
+  function timeline(items) {
+    const entries = element('ol', 'activity-timeline');
+    entries.append(...items.map(activityEntry));
+    return entries;
+  }
+  feed.append(events.length ? timeline(events.slice(0, 8)) : element('p', 'activity-note', t('No recent changes in the index.', 'В индексе нет свежих изменений.')));
+  if (events.length > 8) {
+    const more = element('details', 'activity-expand');
+    const remaining = numberFormat.format(events.length - 8);
+    more.append(element('summary', '', t(`Show ${remaining} more`, `Показать ещё ${remaining}`)), timeline(events.slice(8)));
+    feed.append(more);
+  }
+  const opportunities = activityPanel(t('Where you can help', 'Где можно помочь'), 'activity-actions');
+  const suggestions = list(data.opportunities).slice(0, 3);
+  if (suggestions.length) opportunities.append(...suggestions.map(activityOpportunity));
+  else opportunities.append(element('p', 'activity-note', t('No open work linked to a reviewed test in this snapshot.', 'В этом снимке нет открытых задач, связанных с проверенным тестом.')));
+  opportunities.append(internalLink(t('Browse cross-project leads', 'Смотреть задачи между командами'), '#/partial', 'activity-more'));
+  columns.append(feed, opportunities);
+  const teams = activityPanel(t('Across the projects', 'По проектам'), 'activity-projects');
+  const teamList = element('ul', 'activity-team-list');
+  teamList.append(...list(data.projects).map(activityProject));
+  if (teamList.childElementCount) teams.append(teamList);
+  else teams.append(element('p', 'activity-note', t('Project data is unavailable.', 'Данные о проектах недоступны.')));
+  board.append(stats, columns, teams);
+  viewStatus.textContent = '';
+  content.replaceChildren(board);
+  return true;
+}
+
 function drawProjects() {
   const count = numberFormat.format(projects.size);
   viewStatus.textContent = t(`Tracked projects: ${count}`, `Отслеживается проектов: ${count}`);
@@ -631,10 +795,17 @@ async function loadView(current, focus = false) {
   request = new AbortController();
   const active = request;
   const [title, description] = labels[current.view];
+  const isActivity = current.view === 'activity';
+  const onlySearch = isActivity || current.view === 'matches';
   filters.hidden = current.id !== null || current.view === 'projects';
-  filters.classList.toggle('filters-only-search', current.view === 'matches');
-  byId('project-group').hidden = current.view === 'matches';
-  byId('status-group').hidden = current.view === 'matches';
+  filters.classList.toggle('filters-only-search', onlySearch);
+  byId('project-group').hidden = onlySearch;
+  byId('status-group').hidden = onlySearch;
+  byId('reset').hidden = isActivity;
+  byId('search-submit').hidden = !isActivity;
+  byId('readonly-mode').hidden = isActivity;
+  refreshActivity.hidden = !isActivity;
+  refreshActivity.disabled = isActivity;
   summary.hidden = true;
   coordinationSection.hidden = !coordinationSection.hasChildNodes() || current.view !== 'problems' || current.id !== null;
   heading.textContent = current.id ? current.id : title;
@@ -646,7 +817,10 @@ async function loadView(current, focus = false) {
   content.setAttribute('aria-busy', 'true');
   viewStatus.textContent = t('Loading…', 'Загрузка…');
   try {
-    if (current.view === 'projects') {
+    if (isActivity) {
+      const result = await fetchJSON('/activity', active.signal);
+      if (!active.signal.aborted) showActivity(result);
+    } else if (current.view === 'projects') {
       await loadProjects(active.signal);
       if (!active.signal.aborted) drawProjects();
     } else if (current.id) {
@@ -677,9 +851,15 @@ async function loadView(current, focus = false) {
     if (err.status === 404 && current.id) {
       stateScreen(t('Issue not found', 'Карточка не найдена'),
         t('Choose another issue from the catalog.', 'Откройте другую проблему из каталога.'));
+    } else if (isActivity) {
+      stateScreen(t('Activity is temporarily unavailable', 'Обновления временно недоступны'),
+        t('Try again or choose Issue catalog in the menu.', 'Повторите попытку или откройте каталог проблем в меню.'), true);
     } else stateScreen(t('Could not load data', 'Не удалось загрузить данные'), retryAdvice, true);
   } finally {
-    if (request === active) content.setAttribute('aria-busy', 'false');
+    if (request === active) {
+      content.setAttribute('aria-busy', 'false');
+      refreshActivity.disabled = false;
+    }
   }
 }
 
@@ -705,17 +885,23 @@ function restoreFields(current) {
 function filterHash(current) {
   const params = new URLSearchParams();
   if (searchField.value.trim()) params.set('q', searchField.value.trim());
-  if (current.view !== 'matches') {
+  if (current.view !== 'matches' && current.view !== 'activity') {
     if (projectField.value) params.set('project', projectField.value);
     if (statusField.value) params.set('status', statusField.value);
   }
   const suffix = params.size ? `?${params}` : '';
-  return `#/${current.view}${suffix}`;
+  return `#/${current.view === 'activity' ? 'problems' : current.view}${suffix}`;
 }
 
 function applyFilters() {
   clearTimeout(debounce);
-  history.replaceState(null, '', filterHash(route()));
+  const current = route();
+  if (current.view === 'activity') {
+    if (searchField.value.trim()) window.location.hash = filterHash(current);
+    else searchField.focus();
+    return;
+  }
+  history.replaceState(null, '', filterHash(current));
   updateLanguageLinks();
   loadView(route());
 }
@@ -729,9 +915,39 @@ filters.addEventListener('submit', (event) => {
 });
 searchField.addEventListener('input', () => {
   clearTimeout(debounce);
-  updateLanguageLinks(filterHash(route()));
+  const current = route();
+  if (current.view === 'activity') return;
+  updateLanguageLinks(filterHash(current));
   debounce = setTimeout(applyFilters, 200);
 });
+refreshActivity.addEventListener('click', async () => {
+  const active = request;
+  if (!active || route().view !== 'activity') return;
+  refreshActivity.disabled = true;
+  viewStatus.textContent = t('Checking for updates…', 'Проверяем обновления…');
+  try {
+    const data = await fetchJSON('/activity', active.signal);
+    if (request === active) {
+      viewStatus.textContent = showActivity(data, true)
+        ? t('Activity updated.', 'Данные обновлены.')
+        : t('You have the latest available snapshot.', 'Открыт последний доступный снимок.');
+    }
+  } catch {
+    if (request === active) viewStatus.textContent = t('Could not check for updates. Try again.', 'Не удалось проверить обновления. Повторите попытку.');
+  } finally {
+    if (request === active) refreshActivity.disabled = false;
+  }
+});
+window.setInterval(async () => {
+  const active = request;
+  if (!active || document.hidden || route().view !== 'activity' || refreshActivity.disabled || content.contains(document.activeElement)) return;
+  try {
+    const data = await fetchJSON('/activity', active.signal);
+    if (request === active && !refreshActivity.disabled && !content.contains(document.activeElement)) showActivity(data, true);
+  } catch {
+    // Keep the last available snapshot when a background request fails.
+  }
+}, 5 * 60 * 1000);
 projectField.addEventListener('change', applyFilters);
 statusField.addEventListener('change', applyFilters);
 byId('reset').addEventListener('click', () => {

@@ -287,6 +287,38 @@
           ]
         }
       ]
+    },
+    {
+      "id": "PB-0005",
+      "recorded_at": "2026-11-24T10:39:56Z",
+      "title": "Перенос байта при перестановке потоков в XCL",
+      "summary": "По опубликованным измерениям RDNA2 PortBridge подготовил тест для ds_permute_b32. Автор XCL запросил отдельную правку. Проверка передана в черновом PR. Нужен прогон на AMD с аппаратным Wave64.",
+      "status": "verified",
+      "tags": ["ds_permute_b32", "Wave64", "DXIL"],
+      "translations": {"en": {
+        "title": "Byte carry in XCL lane permutation",
+        "summary": "PortBridge used published RDNA2 measurements to prepare a ds_permute_b32 test. The XCL author requested a follow-up, and the test is in a draft PR. A native AMD Wave64 run is still needed.",
+        "tags": ["ds_permute_b32", "Wave64", "DXIL"]
+      }},
+      "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "xcl",
+          "status": "verified",
+          "summary": "Два теста прошли в Wave32 и разделённом Wave64. Новый случай поймал ошибку в намеренно изменённой версии, которую пропускал прежний тест.",
+          "translations": {"en": {"summary": "Two focused tests passed on hardware with Wave32 and split Wave64. The new case caught an intentional arithmetic error missed by the original fixture."}},
+          "source_refs": [
+            {"title": "Исходный PR XCL #925", "url": "https://github.com/ivall/xcl/pull/925", "translations": {"en": {"title": "Original XCL PR #925"}}},
+            {"title": "Запрос автора на отдельную правку", "url": "https://github.com/ivall/xcl/pull/925#issuecomment-7128723618", "translations": {"en": {"title": "Author's request for the follow-up"}}},
+            {"title": "Черновой PR с тестом", "url": "https://github.com/maximecmb/xcl/pull/1", "translations": {"en": {"title": "Draft test PR"}}}
+          ],
+          "evidence": [
+            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/maximecmb/xcl/pull/1", "title": "PortBridge передал тест XCL", "revision": "3858abc46e4c9c3b9db5e4ae648d6636c37bfb51", "reported_at": "2026-11-24T10:39:56Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "Два теста прошли на RTX 4070 Ti SUPER. Новый случай выявил намеренно внесённую ошибку в порядке сдвига и сложения. Для аппаратного Wave64 нужен отдельный прогон.",
+              "translations": {"en": {"title": "PortBridge delivered a regression test to XCL", "observed": "Two tests passed on an RTX 4070 Ti SUPER. The added case caught a deliberate shift-before-add error. Native Wave64 still needs a separate run."}}}
+          ]
+        }
+      ]
     }
   ]
 }

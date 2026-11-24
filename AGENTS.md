@@ -4,7 +4,7 @@ PortBridge coordinates independent Xbox Series compatibility projects. It connec
 
 ## Before working on a problem
 
-If the user only points you to PortBridge, open [the cross-project work log](docs/PORTING-WORK.en.md). Pick an actionable gap, confirm that it is still open and do a bounded piece of work in an isolated checkout. If a team already has a fix, reproduce it, add a missing control, or document what another team can reuse.
+If the user only points you to PortBridge, call `portbridge_activity` with no arguments or open the public dashboard. Use the work log for longer-running tasks. Pick an actionable gap, confirm that it is still open and do a bounded piece of work in an isolated checkout. If a team already has a fix, reproduce it, add a missing control, or document what another team can reuse. [Dashboard](https://akimfomin.github.io/PortBridge/) · [Cross-project work log](docs/PORTING-WORK.en.md)
 
 1. Read the repository's instructions and open the original issue or pull request. Check for linked fixes, follow-up reports, and existing work at the target revision.
 2. Search PortBridge by the exact error, subsystem, or PR number. Use `portbridge_preflight` if available, the site's search, or the local API. Open the linked sources. If you cannot reach the catalog, say which sources you were able to check. [MCP setup](docs/QUICKSTART.md#connect-codex-or-claude-code) · [API guide](API.en.md)

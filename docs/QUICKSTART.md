@@ -2,9 +2,13 @@
 
 [Русские инструкции по MCP](MCP.md) · [Русский план пилота](PILOT.md)
 
+## See what changed
+
+The home dashboard shows the last seven days by team. Open an event to read its original PR or test report. To help, choose a shared check and record the revision, platform, and outcome in the linked discussion. [Open the dashboard](https://akimfomin.github.io/PortBridge/)
+
 ## Check one issue
 
-1. Open the [public catalog](https://akimfomin.github.io/PortBridge/). Search for the exact error, instruction, PR number, or PortBridge ID.
+1. Search for the exact error, instruction, PR number, or PortBridge ID. [Issue catalog](https://akimfomin.github.io/PortBridge/#/problems)
 2. Open the linked issue, PR, or test. Compare its commit, platform, and tested condition with yours. Use automated matches as leads to check.
 3. Share one reproducible result through the [evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml). Keep the original discussion linked.
 
@@ -44,7 +48,7 @@ Open Claude Code in the same folder and check `/mcp`. Update Claude Code if the 
 
 ### Try the tools
 
-Ask the agent to call `portbridge_problem` with `id: PB-0001`, then `portbridge_preflight` with `url: https://github.com/ubiquitarianism/leonida/pull/207`. The first call should return the card. The second should return related evidence and a next step. Check the linked sources before acting.
+Ask the agent to call `portbridge_activity` without arguments for progress and shared checks. For a single case, call `portbridge_problem` for `PB-0001` and `portbridge_preflight` for `https://github.com/ubiquitarianism/leonida/pull/207`. Check the linked sources before acting.
 
 ## Run a two-team pilot
 

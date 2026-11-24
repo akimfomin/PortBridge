@@ -23,6 +23,7 @@ If `indexed` is false, the requested source is absent from the current snapshot.
 | Path | Parameters | Result |
 | --- | --- | --- |
 | `/api/v1` | — | Version, metadata and endpoint links |
+| `/api/v1/activity` | — | Seven-day progress, per-project counts, source events and shared checks |
 | `/api/v1/projects` | — | Tracked projects, source coverage and update status |
 | `/api/v1/problems` | `q`, `project`, `status`, `partial=1`, `limit` | Curated cards |
 | `/api/v1/problems/{id}` | — | One card or 404 |
@@ -40,6 +41,12 @@ If `indexed` is false, the requested source is absent from the current snapshot.
 
 Most list endpoints accept a `q` of up to 300 characters and a `limit` from 1 to 200. `kind` accepts `issue`, `pr`, `commit` or `test`. Invalid parameters return 400, unknown paths return 404, and writes to the public API return 405.
 
+### Activity
+
+`as_of` and `window_start` bound the seven-day window in UTC. `refreshed_at` records the last source refresh attempt. Check `health` and each project's sync status and last successful refresh for coverage.
+
+`counts` and `projects[].counts` distinguish actual PR merges (`merged_at`), currently open PRs with recent updates (including drafts), observed status or revision changes, and dated reviewed test outcomes (including failures). One PR may contribute to more than one count. `events` shows up to ten of each event kind. A project's `last_activity` can also point to an event outside that display limit. `opportunities` links to open work where a reviewed test explicitly lists the target in its scope. Follow the source link for the exact revision, platform and result.
+
 ## Read the evidence
 
 - A card lists relevant projects, implementations, dependencies and reviewed sources. Built-in editorial records include English text at `translations.en` where available. Identifiers, URLs, outcome codes and original text remain stable. Automatically collected sources retain the contributor's wording.
@@ -56,8 +63,8 @@ The optional private exchange supports topic subscriptions, discussion and revie
 
 ## Static site and MCP
 
-GitHub Pages exports the same public data under `data/`, including `projects.json`, `problems.json`, `observations.json`, `matches.json`, `health.json`, `coordination.json`, `outreach.json`, `graph.json`, `source-history.json` and `recommendations.json`. Agents can filter these files locally. `data/site.json` includes the export timestamp and `data/health.json` the last refresh attempt.
+GitHub Pages exports the same public data under `data/`, including `activity.json`, `projects.json`, `problems.json`, `observations.json`, `matches.json`, `health.json`, `coordination.json`, `outreach.json`, `graph.json`, `source-history.json` and `recommendations.json`. Agents can filter these files locally. `data/site.json` includes the export timestamp and `data/health.json` the last refresh attempt.
 
 Each active curated case has a standalone page under `cases/`. Built-in cases default to English with separate `.ru.html` pages, and both languages appear in `sitemap.xml`. Retraction removes active pages on the next export and preserves source history in the catalog. The Atom feeds share stable entry IDs across languages.
 
-The public MCP server reads the same snapshot by default. For an existing local database, pass `--db`. [MCP quick start](docs/QUICKSTART.md#connect-codex-or-claude-code)
+The public MCP server reads the same snapshot by default. Call `portbridge_activity` with no arguments for the dashboard data. For an existing local database, pass `--db`. [MCP quick start](docs/QUICKSTART.md#connect-codex-or-claude-code)

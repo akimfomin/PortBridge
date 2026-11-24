@@ -4,6 +4,7 @@ from html import escape
 import json
 from pathlib import Path
 
+from .activity import build_activity
 from .case_pages import CASE_FILE, case_languages, case_page, case_path, sitemap
 from .catalog import REPO_NAME, timestamp
 from .coordination import knowledge_graph, recommendations
@@ -13,7 +14,7 @@ from .feed import build_feed
 PACKAGE = Path(__file__).resolve().parent
 ROOT = PACKAGE.parent
 ASSETS = {"index.html": "index.html", "static/styles.css": "styles.css", "static/app.js": "app.js"}
-SNAPSHOTS = {"site", "projects", "problems", "matches", "health", "observations", "coordination", "outreach",
+SNAPSHOTS = {"site", "projects", "problems", "matches", "health", "observations", "coordination", "outreach", "activity",
              "graph", "source-history", "recommendations"}
 EXPORT_FILES = {*ASSETS, "api.html", "api.ru.html", "feed.xml", "feed.ru.xml", "sitemap.xml", ".nojekyll",
                 *(f"data/{name}.json" for name in SNAPSHOTS)}
@@ -76,6 +77,9 @@ def export(catalog, directory, repository=""):
         "recommendations": {"recommendations": recommendations(catalog)},
         "outreach": {"drafts": catalog.outreach()},
     }
+    data["activity"] = build_activity(catalog, projects=data["projects"]["projects"], cards=data["problems"]["problems"],
+                                      observations=data["observations"]["observations"], health=data["health"],
+                                      drafts=data["outreach"]["drafts"])
     contents = {f"data/{name}.json": json.dumps(value, ensure_ascii=False).encode("utf-8")
                 for name, value in data.items()}
     contents.update({path: (PACKAGE / "static" / source).read_bytes() for path, source in ASSETS.items()})

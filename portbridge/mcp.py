@@ -7,10 +7,11 @@ from pathlib import Path
 import sqlite3
 import sys
 
+from .activity import build_activity
 from .catalog import PROBLEM_ID, ReadOnlyCatalog
 from .discussion import MAX_MESSAGE_CHARS, MAX_WAIT_SECONDS, MESSAGE_KEY
 from .exchange_client import ExchangeClient, ExchangeClientError
-from .preflight import preflight, public_preflight, public_problem
+from .preflight import preflight, public_preflight, public_problem, snapshot
 
 
 MODERN_VERSION = "2026-07-28"
@@ -44,6 +45,8 @@ def tool(name, description, properties, *, read_only=True, **schema_rules):
 
 
 TOOLS = [
+    tool("portbridge_activity", "Read recent cross-project progress, reviewed results, and open opportunities "
+         "for a shared check. Returns only public catalog data.", {}),
     tool("portbridge_preflight", "Check PortBridge for existing work before investigating a compatibility issue. "
          "Provide a search query, a public GitHub source URL, or both.",
          {"q": {"type": "string", "minLength": 1, "maxLength": MAX_QUERY_CHARS,
@@ -146,6 +149,11 @@ class PortBridgeMCP:
             raise RPCError(-32602, "Expected a known tool name and an arguments object")
         if name in self.discussion_tools:
             return self.run_discussion_tool(name, args)
+        if name == "portbridge_activity":
+            if args:
+                return tool_error("The activity tool takes no arguments.")
+            payload = snapshot("activity") if self.catalog is None else build_activity(self.catalog)
+            return tool_result(payload)
         if name not in ("portbridge_preflight", "portbridge_problem"):
             raise RPCError(-32602, "Expected a known tool name and an arguments object")
         if name == "portbridge_preflight":
@@ -267,7 +275,7 @@ class PortBridgeMCP:
             try:
                 return self.run_tool(params)
             except (OSError, sqlite3.Error, ValueError, KeyError, TypeError) as exc:
-                if self.exchange is not None:
+                if self.exchange is not None and params.get("name") != "portbridge_activity":
                     return tool_error("Could not read the local exchange. Check its port and read key.")
                 if self.catalog is None:
                     return tool_error("The public PortBridge snapshot is unavailable. Try again or start with --db.")

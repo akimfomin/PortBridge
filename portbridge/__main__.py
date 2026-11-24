@@ -8,6 +8,7 @@ import sys
 from threading import Event, Thread
 from urllib.parse import parse_qs, unquote, urlsplit
 
+from .activity import build_activity
 from .case_pages import CASE_FILE, case_languages, case_page, case_path
 from .catalog import Catalog, OBSERVATION_KIND, PROBLEM_ID, PROBLEM_STATUS
 from .coordination import knowledge_graph, recommendations
@@ -30,7 +31,7 @@ OFFICE_STATIC = {
     "/static/office.css": (PACKAGE / "static" / "office.css", "text/css; charset=utf-8"),
     "/static/office.js": (PACKAGE / "static" / "office.js", "text/javascript; charset=utf-8"),
 }
-COLLECTIONS = ("projects", "problems", "observations", "matches", "related", "preflight", "coordination",
+COLLECTIONS = ("projects", "problems", "observations", "matches", "related", "preflight", "coordination", "activity",
                "graph", "source-history", "recommendations", "outreach", "health")
 
 
@@ -196,6 +197,8 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
             return 200, {"projects": catalog.projects()}
         if name == "health":
             return 200, catalog.health()
+        if name == "activity":
+            return 200, build_activity(catalog)
         if name == "coordination":
             return 200, {"coordination": catalog.coordination()}
         if name == "graph":

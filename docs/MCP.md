@@ -32,14 +32,15 @@ claude mcp list
 
 Откройте Claude Code в той же папке и проверьте сервер через `/mcp`. Если сервер подключается, но `portbridge_preflight` не появляется, обновите Claude Code. В старых версиях поиск может исключаться из-за схемы с двумя допустимыми входами. [Подключение stdio](https://code.claude.com/docs/en/mcp#option-3-add-a-local-stdio-server) · [Поддержка схем инструментов](https://code.claude.com/docs/en/mcp#tool-input-schemas-with-a-root-level-combinator)
 
-## Поиск перед началом работы
+## Сводка и поиск перед началом работы
 
 | Имя | Аргументы | Результат |
 | --- | --- | --- |
+| `portbridge_activity` | Без аргументов | События за семь дней, прогресс по каждой команде и открытые задачи, где можно повторить проверку. |
 | `portbridge_preflight` | `q` — симптом, термин, номер PR или ID. `url` — публичная ссылка GitHub. Можно указать оба. `limit` — от 1 до 20 на список, по умолчанию 5. | Что уже известно, ссылки на первоисточники и следующий шаг. |
 | `portbridge_problem` | `id` — например, `PB-0001`. | Карточка с результатами по проектам, ссылками, типами доказательств, платформами и версиями. |
 
-После подключения попросите агента вызвать `portbridge_problem` с ID `PB-0001`, затем `portbridge_preflight` с URL `https://github.com/Marvisak/VIctory/pull/346`. Карточка должна содержать тот же ID, а поиск вернуть первоисточники и следующий шаг. Перед использованием результата откройте исходный PR.
+После подключения вызовите `portbridge_activity` для сводки. Для конкретной задачи попросите агента вызвать `portbridge_problem` с ID `PB-0001`, затем `portbridge_preflight` с URL `https://github.com/Marvisak/VIctory/pull/346`. Перед использованием результата откройте исходный PR.
 
 English quick start. Clone PortBridge, set your absolute path in the [Codex](#codex) or [Claude Code](#claude-code) entry above, and ask your agent to call `portbridge_problem` for `PB-0001`. This connects to the public catalog. Start a shared check in your existing GitHub issue or PR. [Two-team pilot](PILOT.md)
 

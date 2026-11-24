@@ -1,0 +1,120 @@
+"""Verify public activity keeps source dates, evidence, and work states distinct."""
+
+from contextlib import closing
+from datetime import datetime, timedelta, timezone
+from http.client import HTTPConnection
+import json
+from threading import Thread
+
+from portbridge.__main__ import make_server
+from portbridge.activity import EVENTS_PER_KIND, build_activity
+from portbridge.export import export
+
+from test_portbridge import CatalogFixture
+
+
+NOW = datetime(2026, 11, 24, 12, tzinfo=timezone.utc)
+
+
+class ActivityTest(CatalogFixture):
+    def save_pr(self, project, number, *, at, status="open", merged_at=None, revision=None, draft=False):
+        repo = next(item["repo"] for item in self.catalog.projects() if item["slug"] == project)
+        url = f"https://github.com/{repo}/pull/{number}"
+        row = self.observation(project, "pr", number, f"Change {number}", url,
+                               {"merged_at": merged_at, "head_sha": revision, "draft": draft})
+        self.catalog.record_sync({"items": [{**row, "status": status, "updated_at": at, "fetched_at": at}]})
+        return url
+
+    def test_activity_uses_actual_merge_date_and_current_pull_state(self):
+        recent = (NOW - timedelta(hours=2)).isoformat()
+        old = (NOW - timedelta(days=8)).isoformat()
+        future = (NOW + timedelta(hours=1)).isoformat()
+        merged = self.save_pr("xcl", 10, at=recent, status="merged", merged_at=recent)
+        old_merge = self.save_pr("xcl", 11, at=recent, status="merged", merged_at=old)
+        undated_merge = self.save_pr("xcl", 12, at=recent, status="merged")
+        open_draft = self.save_pr("continued", 13, at=recent, draft=True)
+        future_open = self.save_pr("xcl", 14, at=future)
+        self.save_pr("xcl", 15, at="invalid-date")
+        summary = build_activity(self.catalog, now=NOW)
+        self.assertEqual(summary["window_start"], (NOW - timedelta(days=7)).isoformat())
+        self.assertEqual((summary["counts"]["merged"], summary["counts"]["open"]), (1, 1))
+        events = {event["url"]: event for event in summary["events"]}
+        self.assertEqual(events[merged]["date_basis"], "merged_at")
+        self.assertEqual(events[open_draft]["date_basis"], "updated_at")
+        self.assertTrue(events[open_draft]["draft"])
+        self.assertTrue({old_merge, undated_merge, future_open}.isdisjoint(events))
+
+    def test_status_and_revision_are_real_changes_and_reviewed_failures_remain_visible(self):
+        at = lambda hour: (NOW - timedelta(hours=hour)).isoformat()
+        self.save_pr("xcl", 71, at=at(4), revision="a" * 40)
+        self.save_pr("xcl", 71, at=at(3), revision="b" * 40)
+        self.save_pr("xcl", 71, at=at(2), status="closed", revision="b" * 40)
+        self.save_pr("xcl", 71, at=at(1), status="closed", revision="b" * 40)
+        summary = build_activity(self.catalog, now=NOW)
+        self.assertEqual(summary["counts"]["changed"], 2)
+        self.assertEqual(summary["counts"]["open"], 0)
+        events = {e["kind"]: e for e in summary["events"] if e["project"] == "xcl"}
+        self.assertEqual(events["revision_change"]["previous_revision"], "a" * 40)
+        self.assertEqual(events["revision_change"]["revision"], "b" * 40)
+        self.assertEqual(events["status_change"]["previous_status"], "open")
+        self.assertEqual(events["status_change"]["at"], at(2))
+        self.assertEqual(events["status_change"]["date_basis"], "observed_at")
+        evidence = {e["url"].split("#")[-1]: e for e in summary["events"] if e["kind"] == "verified_result"}
+        for comment, outcome in (("issuecomment-7120734503", "passed"), ("issuecomment-7122054510", "failed")):
+            result = evidence[comment]
+            self.assertEqual(result["outcome"], outcome)
+            self.assertEqual(result["evidence_kind"], "independent")
+            self.assertTrue(result["translations"]["en"]["summary"])
+
+    def test_timeline_cap_preserves_counts_and_each_projects_latest_event(self):
+        recent = (NOW - timedelta(hours=2)).isoformat()
+        older = (NOW - timedelta(hours=3)).isoformat()
+        for number in range(EVENTS_PER_KIND + 4):
+            self.save_pr("xcl", number + 100, at=recent)
+        older_open = self.save_pr("victory", 99, at=older)
+        summary = build_activity(self.catalog, now=NOW)
+        visible = [event for event in summary["events"] if event["kind"] == "open_pr"]
+        self.assertEqual(len(visible), EVENTS_PER_KIND)
+        self.assertEqual(summary["counts"]["open"], EVENTS_PER_KIND + 5)
+        self.assertNotIn(older_open, {event["url"] for event in visible})
+        winner = next(team for team in summary["projects"] if team["slug"] == "victory")
+        self.assertEqual(winner["last_activity"]["url"], older_open)
+
+    def test_opportunity_requires_reviewed_evidence_and_observed_open_target(self):
+        self.assertEqual(build_activity(self.catalog, now=NOW)["opportunities"], [])
+        target = self.save_pr("continued", 207, at=(NOW - timedelta(hours=2)).isoformat())
+        opportunity, = build_activity(self.catalog, now=NOW)["opportunities"]
+        self.assertEqual(opportunity["kind"], "reuse_test")
+        self.assertEqual(opportunity["target_url"], target)
+        self.assertIn("7120734503", opportunity["source_url"])
+        self.assertEqual(opportunity["outcome"], "passed")
+        self.assertIn("revision", opportunity["translations"]["en"]["next_step"])
+        cards = self.catalog.problems()
+        for card in cards:
+            for solution in card["solutions"]:
+                for evidence in solution["evidence"]:
+                    evidence.pop("check_for", None)
+        self.assertEqual(build_activity(self.catalog, now=NOW, cards=cards)["opportunities"], [])
+        self.save_pr("continued", 207, at=(NOW - timedelta(hours=1)).isoformat(), status="closed")
+        self.assertEqual(build_activity(self.catalog, now=NOW)["opportunities"], [])
+
+    def test_local_route_and_static_snapshot_share_the_public_payload(self):
+        self.save_pr("xcl", 111, at=(datetime.now(timezone.utc) - timedelta(hours=1)).isoformat())
+        directory = export(self.catalog, self.workspace / "activity-site")
+        snapshot = json.loads((directory / "data/activity.json").read_bytes())
+        with make_server(self.catalog, 0) as server:
+            thread = Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            try:
+                with closing(HTTPConnection("127.0.0.1", server.server_port, timeout=5)) as connection:
+                    connection.request("GET", "/api/v1/activity")
+                    response = connection.getresponse()
+                    self.assertEqual(response.status, 200)
+                    local = json.loads(response.read())
+            finally:
+                server.shutdown()
+                thread.join()
+        for timing_field in ("as_of", "window_start"):
+            snapshot.pop(timing_field)
+            local.pop(timing_field)
+        self.assertEqual(local, snapshot)

@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Verified fixes, test results, and shared work for Xbox Series compatibility projects." data-ru-content="Каталог проблем и проверенных решений для проектов совместимости Xbox Series с ПК">
+  <meta name="description" content="Recent changes, verified results, and shared work across Xbox Series compatibility projects." data-ru-content="Свежие изменения, проверенные результаты и совместная работа проектов совместимости Xbox Series с ПК">
   <title data-ru="PortBridge — координация портов">PortBridge — Xbox Series Compatibility</title>
-  <link rel="stylesheet" href="./static/styles.css">
+  <link rel="stylesheet" href="./static/styles.css?v=activity">
   <link id="feed-alternate" rel="alternate" type="application/atom+xml" title="PortBridge — verified progress" data-ru-title="PortBridge — проверенный прогресс" href="./feed.xml">
-  <script src="./static/app.js" defer></script>
+  <script src="./static/app.js?v=activity" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#page-title" data-ru="К содержанию">Skip to content</a>
   <div class="shell">
     <aside class="sidebar" aria-label="PortBridge navigation" data-ru-aria-label="Навигация PortBridge">
       <div class="sidebar-lead">
-        <a class="brand" href="#/problems" aria-label="PortBridge issue catalog" data-ru-aria-label="PortBridge, каталог проблем">
+        <a class="brand" href="#/activity" aria-label="PortBridge activity" data-ru-aria-label="PortBridge, обновления проектов">
           <span class="brand-mark" aria-hidden="true"></span>
           <span>PortBridge</span>
         </a>
@@ -24,6 +24,7 @@
         </nav>
       </div>
       <nav class="navigation" aria-label="Sections" data-ru-aria-label="Разделы">
+        <a class="nav-item" data-route="activity" href="#/activity" aria-current="page"><span class="nav-icon icon-activity" aria-hidden="true"></span><span data-ru="Обновления">Activity</span></a>
         <a class="nav-item" data-route="problems" href="#/problems"><span class="nav-icon icon-grid" aria-hidden="true"></span><span data-ru="Каталог проблем">Issue catalog</span></a>
         <a class="nav-item" data-route="partial" href="#/partial"><span class="nav-icon icon-progress" aria-hidden="true"></span><span data-ru="Где есть задел">Cross-project leads</span></a>
         <a class="nav-item" data-route="matches" href="#/matches"><span class="nav-icon icon-link" aria-hidden="true"></span><span data-ru="Схожие проблемы">Related work</span></a>
@@ -41,29 +42,31 @@
       <div class="workspace-inner">
         <header class="masthead">
           <div>
-            <h1 id="page-title" tabindex="-1" data-ru="Каталог проблем">Issue catalog</h1>
-            <p id="page-description" data-ru="Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.">Fixes and test results from open Xbox Series compatibility projects.</p>
+            <h1 id="page-title" tabindex="-1" data-ru="Обновления проектов">Project activity</h1>
+            <p id="page-description" data-ru="Свежие изменения на GitHub, проверенные результаты и задачи, где можно помочь.">Recent changes on GitHub, reviewed test results, and work you can help with.</p>
           </div>
-          <span class="readonly"><span aria-hidden="true" class="lock-icon"></span><span data-ru="Только чтение">Read only</span></span>
+          <button id="refresh-activity" class="activity-refresh" type="button" data-ru="Проверить обновления">Check for updates</button>
+          <span class="readonly" id="readonly-mode" hidden><span aria-hidden="true" class="lock-icon"></span><span data-ru="Только чтение">Read only</span></span>
         </header>
 
         <section id="coordination" class="coordination" aria-label="Shared baseline" data-ru-aria-label="Общая точка отсчёта" hidden></section>
         <section id="summary" class="summary" aria-label="Catalog summary" data-ru-aria-label="Сводка каталога" hidden></section>
 
-        <form id="filters" class="filters" role="search" aria-label="Catalog filters" data-ru-aria-label="Фильтры каталога">
+        <form id="filters" class="filters filters-only-search" role="search" aria-label="Catalog filters" data-ru-aria-label="Фильтры каталога">
           <div id="search-group" class="filter-group search-group">
             <label for="search" data-ru="Поиск">Search</label>
             <div class="search-control"><span class="search-icon" aria-hidden="true"></span><input id="search" name="q" type="search" maxlength="200" placeholder="Issue, technology, or ID" data-ru-placeholder="Проблема, технология или ID" autocomplete="off"></div>
           </div>
-          <div id="project-group" class="filter-group">
+          <div id="project-group" class="filter-group" hidden>
             <label for="project-filter" data-ru="Проект">Project</label>
             <select id="project-filter" name="project"><option value="" data-ru="Все проекты">All projects</option></select>
           </div>
-          <div id="status-group" class="filter-group">
+          <div id="status-group" class="filter-group" hidden>
             <label for="status-filter" data-ru="Статус проблемы">Issue status</label>
             <select id="status-filter" name="status"><option value="" data-ru="Любой статус">Any status</option></select>
           </div>
-          <button class="filter-reset" id="reset" type="button" data-ru="Сбросить">Reset</button>
+          <button class="filter-reset" id="reset" type="button" data-ru="Сбросить" hidden>Reset</button>
+          <button class="filter-reset search-submit" id="search-submit" type="submit" data-ru="Искать в каталоге">Search catalog</button>
         </form>
 
         <p id="view-status" class="view-status" role="status" aria-live="polite"></p>
