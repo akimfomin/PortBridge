@@ -89,6 +89,24 @@
       "stack": "C++ / Python, интерпретатор RDNA2 и HLSL",
       "license": "GPL-3.0-or-later",
       "translations": {"en": {"stack": "C++ / Python, RDNA2 interpreter and HLSL"}}
+    },
+    {
+      "slug": "xbox2windows",
+      "name": "Xbox2Windows",
+      "repo": "R0Y00/Xbox2Windows",
+      "url": "https://github.com/R0Y00/Xbox2Windows",
+      "stack": "C++ / Python, Windows D3D12 и DXR",
+      "license": "MIT",
+      "translations": {"en": {"stack": "C++ / Python, Windows D3D12 and DXR"}}
+    },
+    {
+      "slug": "scenegate-vi",
+      "name": "SceneGate VI",
+      "repo": "7jycwjmbfn-eng/scenegate-vi",
+      "url": "https://github.com/7jycwjmbfn-eng/scenegate-vi",
+      "stack": "C++, синтетические тесты D3D12 и WARP",
+      "license": "MIT",
+      "translations": {"en": {"stack": "C++, synthetic D3D12 and WARP tests"}}
     }
   ],
   "coordination": {
@@ -1820,6 +1838,69 @@
               "platforms": ["Source comparison"],
               "observed": "Идентификатор файла в обеих исходных версиях 0998d85765162e06761ac79d699dbc68e59cf911. После чтения v11 сразу идёт XOR.",
               "translations": {"en": {"title": "Matching Reforge and Continued source fixtures", "observed": "Both baseline trees have the same file identifier, 0998d85765162e06761ac79d699dbc68e59cf911. The XOR immediately follows the v11 read."}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0020",
+      "recorded_at": "2026-11-24T16:49:35Z",
+      "title": "Ожидание кадра может зависнуть при остановке",
+      "summary": "PortBridge проверил исправление rizzzz64 из Reforge #63 на точном исходном коде и воспроизвёл те же два сбоя в Continued. Синтетические проверки подтвердили локальный перенос с сохранением логики событий Continued.",
+      "status": "verified",
+      "tags": ["FramePacer", "WaitFrameEventX", "frame pacing", "shutdown"],
+      "translations": {"en": {
+        "title": "Frame pacing waits can hang during shutdown",
+        "summary": "PortBridge checked rizzzz64's Reforge #63 change against the original source and reproduced the same two failures in Continued. Synthetic checks passed with a local adaptation that preserves Continued's event handling.",
+        "tags": ["FramePacer", "WaitFrameEventX", "frame pacing", "shutdown"]
+      }},
+      "platforms": ["Windows 11 build 28000", "LLVM-MinGW Clang 23.1.6", "Synthetic CPU tests"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "reforge",
+          "status": "verified",
+          "summary": "Правка rizzzz64 освобождает счётчик ожидающих даже при исключении и будит ожидающий поток при смене режима. Изменение проверено на CPU, PR открыт.",
+          "translations": {"en": {"summary": "rizzzz64's fix releases the waiter count even on exceptions and wakes a blocked wait on a pacing-mode change. The CPU checks passed and the PR remains open."}},
+          "source_refs": [
+            {"title": "Исходная правка rizzzz64 и тесты Reforge #63", "url": "https://github.com/LeonidaReforge/Leonida/pull/63", "translations": {"en": {"title": "rizzzz64's Reforge #63 change and tests"}}},
+            {"title": "Приоритеты сопровождения первого кадра Reforge", "url": "https://github.com/LeonidaReforge/Leonida/pull/86#issuecomment-7137433644", "translations": {"en": {"title": "Reforge maintainer's first-frame priorities"}}}
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "mixed",
+              "url": "https://github.com/LeonidaReforge/Leonida/pull/63",
+              "title": "PortBridge проверил исходный тест Reforge на Windows",
+              "revision": "9e9442fc67574d00ede9d70f9a8978d35befc608",
+              "reported_at": "2026-11-24T16:49:35Z",
+              "platforms": ["Windows 11 build 28000", "LLVM-MinGW Clang 23.1.6", "CTest"],
+              "observed": "Прежний тест с исходным заголовком 2ebde81e прошёл 3/3. Тест из #63 с тем же заголовком исчерпал лимит 8 секунд в 3/3 прогонах при завершении после исключения. Отдельный контроль смены режима, без блока исключения, упал 3/3 на неизменённом заголовке f553e1e7. С заголовком 9e9442fc полный тест и отдельный контроль прошли по 3/3 прогона. Цель frame_pacer из репозитория прошла CTest 1/1 за 0,95 секунды.",
+              "translations": {"en": {"title": "PortBridge checked the original Reforge test on Windows", "observed": "The original test and header at 2ebde81e passed 3/3 runs. The #63 test with that header hit the eight-second limit in 3/3 runs on teardown after a throw. With the throwing block omitted, the separate mode-wakeup control failed 3/3 runs with the unchanged f553e1e7 header. With the 9e9442fc header, the full test and separate control each passed 3/3 runs. The repository's frame_pacer CTest target passed 1/1 in 0.95 seconds."}}
+            }
+          ]
+        },
+        {
+          "project": "continued",
+          "status": "verified",
+          "summary": "В 82a2aabc воспроизведены зависание и пропущенное уведомление. Локальный перенос сохраняет аргументы event и flags, добавляет два регрессионных теста и ограничивает время выполнения теста CTest. Результат относится к синтетической проверке CPU.",
+          "translations": {"en": {"summary": "The hang and missed wakeup reproduced at 82a2aabc. The local adaptation preserves event and flags, adds both regressions, and bounds the CTest runtime. The result covers the synthetic CPU check."}},
+          "source_refs": [
+            {"title": "Исходная реализация ожидания Continued", "url": "https://github.com/ubiquitarianism/leonida/blob/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e/runtime/src/frame_pacer.h#L215-L223", "translations": {"en": {"title": "Original Continued wait implementation"}}},
+            {"title": "Точная базовая версия Continued", "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e", "translations": {"en": {"title": "Exact Continued baseline"}}}
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e",
+              "title": "PortBridge проверил локальный перенос в Continued",
+              "revision": "82a2aabcc33bf296b5c2e3e4e7021fa506f8570e",
+              "reported_at": "2026-11-24T16:49:35Z",
+              "platforms": ["Windows 11 build 28000", "LLVM-MinGW Clang 23.1.6", "CTest"],
+              "observed": "Исходный тест прошёл 3/3. С новыми проверками на прежнем заголовке завершение исчерпало лимит 8 секунд в 3/3 прогонах. Отдельный контроль пробуждения при смене режима упал 3/3. После локального переноса полный тест и отдельный контроль прошли по 3/3 прогона. Оригинальная цель frame_pacer прошла CTest 1/1 за 1,03 секунды со сборкой только синтетического CPU-теста.",
+              "translations": {"en": {"title": "PortBridge checked the local Continued adaptation", "observed": "The original test passed 3/3 runs. With the added tests and original header, teardown hit the eight-second limit in 3/3 runs. The separate mode-wakeup control failed 3/3 runs. The local adaptation passed 3/3 runs of the full test and 3/3 of the separate control. The repository's frame_pacer CTest target passed 1/1 in 1.03 seconds in a CPU-test-only build."}}
             }
           ]
         }

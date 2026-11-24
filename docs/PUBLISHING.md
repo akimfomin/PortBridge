@@ -10,6 +10,14 @@ Homepage — [PortBridge Pages](https://akimfomin.github.io/PortBridge/). Тем
 
 Для представления проекта используйте [журнал проверок](PORTING-WORK.md), [открытый пилот](PILOT.md) и [локальную демонстрацию](EXCHANGE-DEMO.md). В обсуждениях команды начинайте с результата, который полезен именно в этой ветке. Для общего знакомства подходят действующие публичные темы координации, если участники принимают такие предложения. Новые публикации и обращения выполняются после отдельного согласования с владельцем.
 
+## Пилот с трекерами и сообществами
+
+- Six on PC принимает предложения о недостающих инструментах в закреплённом обсуждении. PortWatch VI принимает заявки в Issues и показывает инструменты в Toolkit. Для первого пилота хватает ссылки на открытую проверку, а при интересе авторов есть [пример блока Test Lab](TEST-LAB.md#show-open-checks-on-a-partner-site). [Six on PC #3](https://github.com/Github-Samuel/sixonpc/discussions/3) · [PortWatch VI Issues](https://github.com/4lwayz/portwatch-vi/issues)
+- Для разговора о конкретном тесте используйте техническое обсуждение проекта или связанный с ним Discord-канал. У Xbox2Windows открыта категория Development Q&A, а в README указан Discord команды. Для более широкой подборки есть Awesome GTA VI с правилами самостоятельного добавления. [Xbox2Windows Discussions](https://github.com/R0Y00/Xbox2Windows/discussions/categories/development-q-a) · [Discord в README проекта](https://github.com/R0Y00/Xbox2Windows#readme) · [Правила Awesome GTA VI](https://github.com/Ahmet-Dedeler/awesome-gta6-reverse-engineering/blob/main/CONTRIBUTING.md)
+- Для каталогов ИИ-инструментов сначала проверяем установку MCP в чистом окружении. Официальный Registry принимает метаданные публично доступного пакета или удалённого сервера. В Awesome MCP Servers есть отдельные правила подачи. [MCP Registry](https://modelcontextprotocol.io/registry/quickstart) · [Awesome MCP Servers](https://github.com/punkpeye/awesome-mcp-servers/blob/main/CONTRIBUTING.md)
+
+В [журнале взаимодействий](COMMUNITY-COORDINATION.md#проверяемые-взаимодействия--verified-interactions) фиксируем ссылку на предложение, ответ, появление записи на сайте партнёра и отчёты о выполненных участниками проверках. Пробный блок или отправленная заявка сами по себе ещё не подтверждают использование сторонней командой.
+
 ## План для MCP Registry
 
 Текущая установка запускает `python -m portbridge.mcp` из копии репозитория. Для Registry предлагается версия публичного MCP в пакете Python со стандартным транспортом stdio. [Установка из репозитория](MCP.md) · [Поддержка PyPI в MCP Registry](https://modelcontextprotocol.io/registry/package-types#pypi-packages)

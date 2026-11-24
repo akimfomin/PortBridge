@@ -22,3 +22,64 @@ Volunteers choose a task and execute it locally. If you need another setup, open
 ## For integrations
 
 Read `data/lab.json` from the public site, call the local `GET /api/v1/lab` endpoint, or use the read-only `portbridge_lab` MCP tool. The equipment filter uses a value supplied by the caller. `checked_at` records when the queue was reviewed. Consult the linked discussions for the latest claims, source revisions, and decisions.
+
+### Show open checks on a partner site
+
+Start with a link to [PortBridge Test Lab](https://akimfomin.github.io/PortBridge/#/lab). This optional snippet shows up to three checks marked `needs_run`, the equipment they need, and the source discussion for each. It reads the [public JSON](https://akimfomin.github.io/PortBridge/data/lab.json) across origins without credentials. The Test Lab link stays visible if the feed is empty or unavailable. Visitors can check the source discussion before taking a task.
+
+```html
+<section id="portbridge-open-tests" aria-labelledby="portbridge-tests-title">
+  <h2 id="portbridge-tests-title">Help run a compatibility check</h2>
+  <p><a href="https://akimfomin.github.io/PortBridge/#/lab">Open PortBridge Test Lab</a></p>
+  <ul hidden></ul>
+  <small hidden></small>
+</section>
+<script type="module">
+  const section = document.getElementById('portbridge-open-tests')
+  const list = section.querySelector('ul')
+  const reviewed = section.querySelector('small')
+  const equipment = new Map([['amd', 'AMD'], ['nvidia', 'NVIDIA'], ['cpu', 'CPU']])
+
+  function discussion(value) {
+    try {
+      const url = new URL(value)
+      return url.origin === 'https://github.com' && !url.username && !url.password &&
+        /^\/[^/]+\/[^/]+\/(issues|pull)\/\d+\/?$/.test(url.pathname) ? url.href : null
+    } catch {
+      return null
+    }
+  }
+
+  try {
+    const reply = await fetch('https://akimfomin.github.io/PortBridge/data/lab.json', {
+      credentials: 'omit', referrerPolicy: 'no-referrer'
+    })
+    if (reply.ok) {
+      const lab = await reply.json()
+      const tasks = Array.isArray(lab.tasks) ? lab.tasks : []
+      for (const task of tasks) {
+        if (task?.status !== 'needs_run' || typeof task.title !== 'string' || !task.title.trim()) continue
+        const source = discussion(task.source_url)
+        if (!source) continue
+        const item = document.createElement('li')
+        const link = document.createElement('a')
+        link.href = source
+        link.textContent = task.title
+        const kinds = (Array.isArray(task.equipment) ? task.equipment : [])
+          .map((kind) => equipment.get(kind)).filter(Boolean)
+        item.append(link, kinds.length ? ' · ' + kinds.join(', ') : '')
+        list.append(item)
+        if (list.children.length === 3) break
+      }
+      list.hidden = list.children.length === 0
+      const date = new Date(lab.checked_at)
+      if (!list.hidden && typeof lab.checked_at === 'string' && Number.isFinite(date.getTime())) {
+        reviewed.textContent = 'Queue reviewed ' + date.toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+        reviewed.hidden = false
+      }
+    }
+  } catch {
+    // The Test Lab link remains available.
+  }
+</script>
+```
