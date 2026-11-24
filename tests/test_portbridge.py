@@ -168,7 +168,8 @@ class CatalogTest(CatalogFixture):
         self.assertEqual(projects, {"continued", "reforge", "xcl", "victory",
                                     "leonida-ce", "kestrelx", "xportpc", "rebox", "scarlett-layer", "anyxboxx",
                                     "xbox2windows", "scenegate-vi", "palmwave", "tuxbox", "openscarlett",
-                                    "openscarlett-ce", "percyscarlett", "victory-macos", "xvalkyrie", "holy-interoperability"})
+                                    "openscarlett-ce", "percyscarlett", "victory-macos", "xvalkyrie", "holy-interoperability",
+                                    "scarlett-commons", "five-star-recomp"})
         cards = self.catalog.problems()
         ids = [card["id"] for card in cards]
         self.assertGreaterEqual(len(ids), 3)

@@ -132,15 +132,27 @@
     "evidence": "https://github.com/pragyaangaur/VIctory-macOS/blob/f5660fdcfdd6eb5cb6495be47a23af9aa30f5617/README.md#L26-L40"
   },
   {
-    "project": "xvalkyrie", "area": "graphics", "kind": "source",
-    "scope": "Синтетический тест проверяет заявленный предел в четыре вершины у геометрического шейдера для списка прямоугольников.",
-    "translations": {"en": {"scope": "Synthetic check of the generated rectangle-list geometry shader's declared four-vertex output limit."}},
-    "evidence": "https://github.com/sammwyy/xvalkyrie/blob/4e02c6815d254764a266a2de30994d96cfaef0b0/tests/console_shader.cpp#L160-L184"
+    "project": "xvalkyrie", "area": "graphics", "kind": "tested",
+    "scope": "256 из 256 пикселей синтетического прямоугольника совпали в отдельном D3D12-тесте на RTX 4070 Ti SUPER и WARP.",
+    "translations": {"en": {"scope": "Standalone D3D12 readback matched all 256 synthetic rectangle pixels on RTX 4070 Ti SUPER and WARP."}},
+    "evidence": "https://github.com/akimfomin/PortBridge/blob/main/docs/PORTING-WORK.en.md#xvalkyrie-rectangle-list-readback"
   },
   {
     "project": "holy-interoperability", "area": "shaders", "kind": "source",
     "scope": "Синтетический тест сверяет точные значения пикселей для горизонтальной и диагональной перестановки потоков.",
     "translations": {"en": {"scope": "Synthetic pixel readback checks exact values after horizontal and diagonal lane permutations."}},
     "evidence": "https://github.com/mewiof/Holy-Interoperability/blob/a991f51c6726b390ba85bbfed1b27434f28201b1/tests/unit/test_shader_execute.cpp#L358-L417"
+  },
+  {
+    "project": "scarlett-commons", "area": "shaders", "kind": "tested",
+    "scope": "Случай сложения FP32 из общего каталога прошёл на CPU-интерпретаторе Continued. Контроль с вычитанием отклонён.",
+    "translations": {"en": {"scope": "The shared FP32 addition case passed in Continued's CPU interpreter. The subtraction control was rejected."}},
+    "evidence": "https://github.com/akimfomin/PortBridge/tree/main/contrib/scarlett-commons-add-basic"
+  },
+  {
+    "project": "five-star-recomp", "area": "shaders", "kind": "source",
+    "scope": "Тесты WARP сравнивают результаты отдельных потоков с эталоном на CPU для групп разного размера.",
+    "translations": {"en": {"scope": "WARP tests compare each lane against a CPU reference across several group sizes."}},
+    "evidence": "https://github.com/ThatRecompDev/five-star-recomp/blob/2d1aee93adccd6b2c5e34ab0427c33daa008dce8/tests/FiveStar.Shaders.Tests/WaveEmulationTests.cs#L34-L59"
   }
 ]

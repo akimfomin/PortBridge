@@ -179,6 +179,24 @@
       "stack": "C++20, Windows и D3D12",
       "license": "MIT",
       "translations": {"en": {"stack": "C++20, Windows and D3D12"}}
+    },
+    {
+      "slug": "scarlett-commons",
+      "name": "Scarlett Commons",
+      "repo": "scarlett-commons/scarlett-commons",
+      "url": "https://github.com/scarlett-commons/scarlett-commons",
+      "stack": "Python, общие тесты RDNA2 и сбор результатов",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "Python, shared RDNA2 test cases and result collection"}}
+    },
+    {
+      "slug": "five-star-recomp",
+      "name": "Five Star Recomp",
+      "repo": "ThatRecompDev/five-star-recomp",
+      "url": "https://github.com/ThatRecompDev/five-star-recomp",
+      "stack": "C#, D3D12, тесты трансляции шейдеров",
+      "license": "GPL-3.0-or-later",
+      "translations": {"en": {"stack": "C#, D3D12, shader translation tests"}}
     }
   ],
   "coordination": {
@@ -1982,6 +2000,24 @@
               "platforms": ["Linux", "g++", "Synthetic CPU tests"],
               "observed": "На Linux прошли прежние и новые тесты frame_pacer. Ожидающий поток проснулся при переключении в режим без ограничения частоты.",
               "translations": {"en": {"title": "morodirule's Linux check", "observed": "The original and new frame_pacer tests passed on Linux. The blocked wait woke when the pacing mode switched to uncapped."}}
+            },
+            {
+              "kind": "independent", "outcome": "passed", "check_for": ["https://github.com/ubiquitarianism/leonida/pull/1042"],
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1042#pullrequestreview-6044649650",
+              "title": "Проверка fin-github на Windows",
+              "revision": "5496f79f93c41f1134ce4c9e1d2674aa00c6bb55", "reported_at": "2026-11-24T18:00:48Z",
+              "platforms": ["Windows 11 build 26200", "MSVC", "CPU"],
+              "observed": "Штатный тест прошёл пять из пяти прогонов. На контрольной версии тест поймал пропущенное пробуждение. Случай завершения на контроле прошёл, и проверяющий предложил дополнить тест поздним запросом.",
+              "translations": {"en": {"title": "fin-github's Windows check", "observed": "The registered test passed five of five runs. The baseline caught the missed wakeup. The shutdown subcase passed on the control, and the reviewer suggested adding a late-wait check."}}
+            },
+            {
+              "kind": "automated_test", "outcome": "passed",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7140165184",
+              "title": "PortBridge проверил поздний запрос после остановки",
+              "revision": "5496f79f93c41f1134ce4c9e1d2674aa00c6bb55", "reported_at": "2026-11-24T18:06:23Z",
+              "platforms": ["Windows 11 build 28000", "LLVM-MinGW Clang 23.1.6", "CPU"],
+              "observed": "В пяти прогонах правка отклонила поздний запрос до обращения к часам. Базовая версия и правка с удалённой ранней проверкой обращались к часам один раз за прогон. Код результата совпал во всех трёх вариантах. Объект оставался активным на протяжении теста.",
+              "translations": {"en": {"title": "PortBridge checked a late wait after shutdown", "observed": "In five runs the fix rejected the late wait before reading the clock. The parent and the head with its early guard removed each read the clock once per run. All three variants returned the same status. The object stayed alive throughout the test."}}
             },
             {
               "kind": "automated_test",
