@@ -160,5 +160,11 @@
     "scope": "В четырёх синтетических сценариях передачи кадров через Vulkan совпали все 64 пикселя на RTX 4070 Ti SUPER. Проверены обе разновидности семафоров внутри одной семьи очередей и между семьями.",
     "translations": {"en": {"scope": "All 64 pixels matched in each of four Vulkan handoff cases on RTX 4070 Ti SUPER. Both semaphore kinds were checked within and across queue families."}},
     "evidence": "https://github.com/5headsmartbtw/leonida-framelab/pull/12#issuecomment-7142089405"
+  },
+  {
+    "project": "victory-gta6", "area": "hardware", "kind": "source",
+    "scope": "Стенд шейдеров сверяет адаптер фактически созданного D3D12-устройства и отдельно отмечает программный адаптер для тестов, требующих видеокарту.",
+    "translations": {"en": {"scope": "The shader harness identifies the adapter of the actual D3D12 device and distinguishes software adapters for tests that require a GPU."}},
+    "evidence": "https://github.com/fxceless/victory-gta6/commit/7b0f736d0b29c2c512a9506e38df92f1f8d50986"
   }
 ]
