@@ -30,6 +30,10 @@ CARRY_REPLY = f"{CARRY}#issuecomment-7136721736"
 DRAW_SEQUENCE = f"{CONTINUED}/pull/511"
 DRAW_HEAD = "88658f1b3fcdca2231358c18d09253a213dc8533"
 DRAW_GUIDE = f"{PORTBRIDGE}/tree/main/contrib/continued-repeated-draw"
+SCARLETT_ADAPTER = "https://github.com/scarlett-commons/scarlett-commons/issues/32"
+SCARLETT_GUIDE = f"{PORTBRIDGE}/tree/de376382b79d75d635c1c04b31e030ebba979036/contrib/scarlett-commons-add-basic"
+WAVE64_CASE = "https://github.com/LooperSalty/AnyXboxX/pull/147"
+WAVE64_GUIDE = f"{PORTBRIDGE}/tree/main/contrib/rdna2-wave64-bpermute"
 
 
 def revision(label, label_ru, repository, sha):
@@ -302,6 +306,82 @@ TASKS = (
             ],
             "expected": "В обоих режимах совпадают все пиксели 32 кадров по 4 096 пикселей. При пропуске восьмой отрисовки тест возвращает код 44 и расхождение в кадре 7, пиксель (0,0).",
             "report": ["Коммит, видеокарта AMD, драйвер, версия Windows и инструменты сборки", "Результаты в обоих режимах и контроль с пропущенной отрисовкой"],
+        }},
+    },
+    {
+        "id": "scarlett-commons-continued-add-basic",
+        "priority": 8,
+        "title": "Independently repeat the Scarlett Commons addition case in Continued",
+        "projects": ["scarlett-commons", "continued"],
+        "equipment": ["cpu"],
+        "os": ["Linux", "Windows"],
+        "requirements": ["Git and Python 3.12", "Two clean public source checkouts"],
+        "status": "needs_run", "evidence_stage": "author_cpu", "adoption": "pending",
+        "source_url": SCARLETT_ADAPTER, "procedure_url": SCARLETT_GUIDE,
+        "evidence_url": f"{SCARLETT_ADAPTER}#issuecomment-7140402183", "result_url": SCARLETT_ADAPTER,
+        "revisions": [
+            revision("Continued translator and CPU interpreter", "Транслятор и CPU-интерпретатор Continued",
+                     "ubiquitarianism/leonida", "5496f79f93c41f1134ce4c9e1d2674aa00c6bb55"),
+            revision("Scarlett Commons addition case", "Тест сложения Scarlett Commons",
+                     "scarlett-commons/scarlett-commons", "ba9549c254647b9f6ef3b4e47684e69a668b9ec1"),
+        ],
+        "why": "An independent run can confirm that the shared addition case and its failing control are reproducible on a separate setup before adapter work.",
+        "evidence": "PortBridge ran this one synthetic Wave32 case on the Continued CPU interpreter under Windows with Python 3.12.14. The Vulkan runner and full adapter are separate work.",
+        "steps": [
+            "Check Scarlett Commons #32 for a result on your setup. Prefer Linux, or use a separate clean Windows setup.",
+            "Inspect the procedure and run compare.py with the two clean checkouts at the exact revisions below.",
+            "Share your output or a blocking error in #32, with a link to this check.",
+        ],
+        "expected": "The case validator reports one case and zero problems. Addition returns 0x40700000. Replacing addition with subtraction returns 0x3f400000 and fails the original expectation.",
+        "report": ["Both exact commits, OS and Python version", "Case validation, addition output and subtraction control"],
+        "translations": {"ru": {
+            "title": "Независимо повторить тест сложения Scarlett Commons в Continued",
+            "requirements": ["Git и Python 3.12", "Две чистые копии публичных исходников"],
+            "why": "Независимый прогон покажет, воспроизводятся ли общий тест сложения и контроль с ошибкой на другом стенде до работы над адаптером.",
+            "evidence": "PortBridge прогнал один синтетический тест Wave32 на CPU-интерпретаторе Continued под Windows с Python 3.12.14. Запуск через Vulkan и полный адаптер требуют отдельной работы.",
+            "steps": [
+                "Проверьте в Scarlett Commons #32, есть ли результат для вашего стенда. Лучше использовать Linux, также подойдёт отдельный чистый стенд Windows.",
+                "Прочитайте инструкцию и запустите compare.py с чистыми копиями двух проектов на указанных версиях.",
+                "Оставьте вывод или ошибку, помешавшую прогону, в #32 со ссылкой на эту проверку.",
+            ],
+            "expected": "Проверка входных данных находит один тест без ошибок. Сложение даёт 0x40700000. Замена сложения вычитанием даёт 0x3f400000 и не проходит исходное сравнение.",
+            "report": ["Оба точных коммита, ОС и версия Python", "Проверка входных данных, результат сложения и контроль с вычитанием"],
+        }},
+    },
+    {
+        "id": "anyxboxx-147-native-wave64-gather",
+        "priority": 9,
+        "title": "Measure native RDNA2 Wave64 lane gather for AnyXboxX",
+        "projects": ["anyxboxx"],
+        "equipment": ["amd"],
+        "os": ["Windows", "Linux"],
+        "requirements": ["Physical gfx1036 with native Wave64", "LLVM tools and a HIP module harness"],
+        "status": "needs_run", "evidence_stage": "assembled_offline", "adoption": "pending",
+        "source_url": WAVE64_CASE, "procedure_url": WAVE64_GUIDE,
+        "evidence_url": f"{WAVE64_CASE}#issuecomment-7140576454", "result_url": WAVE64_CASE,
+        "revisions": [revision("AnyXboxX translated Wave64 comparison", "Сравнение перевода Wave64 в AnyXboxX",
+                               "LooperSalty/AnyXboxX", "28524547b9f0751581257279a329b8cae2f1dc1e")],
+        "why": "The AnyXboxX reviewer identified a missing native measurement after running the translated HLSL. One native run can check the expected half-wave addressing.",
+        "evidence": "PortBridge assembled and linked the synthetic probe for gfx1036. The object declares Wave64 and a maximum group size of 64. Native execution is pending.",
+        "steps": [
+            "Check AnyXboxX #147 for a native result or a volunteer already running the probe.",
+            "Build the public probe and launch one 64-thread workgroup with an existing HIP module harness or the optional launcher.",
+            "Report the output in #147. If the toolchain cannot launch native Wave64, report the environment and the error as a skip.",
+        ],
+        "expected": "All 64 lane and EXEC controls pass. For lane i, both addresses return 0xa5000000 OR (i XOR 1) if the gather stays within the current half.",
+        "report": ["GPU target, driver, OS, assembler and module metadata", "Lane and EXEC controls and both output words for lanes 0, 31, 32 and 63, or all 64 rows"],
+        "translations": {"ru": {
+            "title": "Измерить чтение из соседнего потока в нативном Wave64 для AnyXboxX",
+            "requirements": ["Физическая AMD gfx1036 с нативным Wave64", "LLVM и стенд запуска модулей HIP"],
+            "why": "После прогона переведённого HLSL проверяющий AnyXboxX отметил, что аппаратного результата для исходной инструкции ещё нет. Один прогон проверит адресацию внутри половин волны.",
+            "evidence": "PortBridge собрал синтетическую проверку для gfx1036. В параметрах полученного файла указаны Wave64 и группа до 64 потоков. Нужен аппаратный прогон.",
+            "steps": [
+                "Проверьте в AnyXboxX #147, есть ли аппаратный результат или доброволец уже выполняет прогон.",
+                "Соберите проверку и запустите одну группу из 64 потоков в своём стенде HIP или через приложенный запускатель.",
+                "Оставьте вывод в #147. Если нативный Wave64 недоступен, укажите стенд и ошибку как пропуск теста.",
+            ],
+            "expected": "Все 64 потока и обе половины маски EXEC проходят контроль. Для потока i оба адреса дают 0xa5000000 OR (i XOR 1), если чтение остаётся внутри своей половины.",
+            "report": ["Модель AMD, драйвер, ОС, ассемблер и параметры модуля", "Контроль номера потока и EXEC, оба значения для потоков 0, 31, 32 и 63 либо результаты всех 64"],
         }},
     },
 )

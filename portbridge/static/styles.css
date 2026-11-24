@@ -193,6 +193,7 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 .lab-agent p, .lab-agent > a { font-size: .88rem; }
 .lab-agent > a, .lab-agent-actions a { display: inline-flex; align-items: center; width: fit-content; min-height: 44px; font-weight: 650; }
 .lab-agent-actions { display: flex; flex-wrap: wrap; gap: 5px 12px; align-items: center; }
+.lab-agent-actions .retry { margin: 0; }
 .lab-agent-actions .view-status { min-height: 0; margin: 0; }
 .lab-primary { min-height: 44px; padding: 6px 12px; border: 1px solid #18584e; border-radius: 7px; background: #18584e; color: #fff; font-weight: 670; font-size: .87rem; text-decoration: none; }
 .lab-primary:hover { background: #0a453d; }

@@ -919,8 +919,13 @@ const labEquipment = {
   amd: t('AMD graphics', 'Видеокарта AMD'), cpu: t('CPU only', 'Только процессор'), nvidia: t('NVIDIA graphics', 'Видеокарта NVIDIA'),
 };
 const portbridgeRepository = 'https://github.com/akimfomin/PortBridge';
+const portbridgePublicSite = 'https://akimfomin.github.io/PortBridge/';
 const labTaskID = /^[a-z0-9-]{1,80}$/;
-const labTaskPath = (id) => `#/lab?${new URLSearchParams({task: id})}`;
+function labTaskPath(id, equipment = '') {
+  const params = new URLSearchParams({task: id});
+  if (equipment) params.set('equipment', equipment);
+  return `#/lab?${params}`;
+}
 const labStatus = {
   needs_run: t('A test run is needed', 'Нужен прогон'),
   needs_revision: t('Awaiting combined revision', 'Ждём объединённую версию'),
@@ -928,6 +933,7 @@ const labStatus = {
 };
 const labEvidence = {
   assembled_offline: t('Assembled offline', 'Собрано без запуска'),
+  author_cpu: t('CPU run by the author', 'Тест автора на процессоре'),
   author_gpu: t('GPU run by the author', 'Тест автора на видеокарте'),
   reviewed_gpu: t('Independent GPU result', 'Независимый тест на видеокарте'),
   reviewed_cpu: t('Independent CPU result', 'Независимый тест на процессоре'),
@@ -958,7 +964,7 @@ function labAgentEntry(task) {
   const prompt = element('textarea');
   prompt.value = labAgentPrompt;
   if (task) {
-    const page = `https://akimfomin.github.io/PortBridge/${labTaskPath(task.id)}`;
+    const page = portbridgePublicSite + labTaskPath(task.id);
     prompt.value = t(
       `Open ${page}. In MCP use portbridge_lab with task "${task.id}", or find the same ID in https://akimfomin.github.io/PortBridge/data/lab.json. `
       + 'Check whether the linked discussion still needs this run and confirm the exact revision. '
@@ -1026,7 +1032,39 @@ function labChecklist(title, items, ordered = false) {
   return section;
 }
 
-function labTask(task, focused = false) {
+function labReport(task, equipment) {
+  const section = element('section', 'lab-agent');
+  const actions = element('div', 'lab-agent-actions');
+  const field = element('textarea');
+  const page = portbridgePublicSite + labTaskPath(task.id);
+  field.value = [
+    `[PortBridge Test Lab](${page}) · ${editorial(task, 'title')}`,
+    '',
+    t('- Tested revision(s): ', '- Проверенные версии: '),
+    t('- Environment and command: ', '- Стенд и команда запуска: '),
+    t('- Expected: ', '- Ожидалось: ') + editorial(task, 'expected'),
+    t('- Observed (include a failure or skip): ', '- Фактический результат (включая сбой или пропуск): '),
+    t('- Limits or next step: ', '- Ограничения или следующий шаг: '),
+  ].join('\n');
+  field.readOnly = true;
+  field.hidden = true;
+  field.setAttribute('aria-label', t('Report template', 'Шаблон отчёта'));
+  const status = element('span', 'view-status');
+  status.setAttribute('role', 'status');
+  const copy = element('button', 'retry', t('Copy result template', 'Копировать шаблон результата'));
+  bindCopyText(copy, field, status, t('Copied. Fill in your result before sharing.',
+    'Скопировано. Впишите свой результат перед публикацией.'));
+
+  const compatible = list(task.equipment).filter((kind) => Object.hasOwn(labEquipment, kind));
+  let next = compatible.length === 1 ? compatible[0] : '';
+  if (compatible.includes(equipment)) next = equipment;
+  const queue = next ? `#/lab?${new URLSearchParams({equipment: next})}` : '#/lab';
+  actions.append(copy, internalLink(t('Find another check', 'Выбрать другую проверку'), queue), status);
+  section.append(element('h3', '', t('After the run', 'После прогона')), actions, field);
+  return section;
+}
+
+function labTask(task, focused = false, queueEquipment = '') {
   const card = element('article', 'card lab-task');
   const status = element('div', 'meta-row lab-status');
   status.append(badge(task.status, labStatus), badge(task.evidence_stage, labEvidence), badge(task.adoption, labAdoption));
@@ -1063,7 +1101,7 @@ function labTask(task, focused = false) {
 
   const links = element('div', 'lab-links');
   if (!focused && typeof task.id === 'string' && labTaskID.test(task.id)) {
-    const open = internalLink(t('Open this test', 'Открыть эту проверку'), labTaskPath(task.id));
+    const open = internalLink(t('Open this test', 'Открыть эту проверку'), labTaskPath(task.id, queueEquipment));
     open.setAttribute('aria-label', `${open.textContent} · ${editorial(task, 'title')}`);
     links.append(open);
   }
@@ -1082,6 +1120,7 @@ function labTask(task, focused = false) {
     links.append(githubLink(label, request));
   }
   card.append(links, details);
+  if (focused) card.append(labReport(task, queueEquipment));
   return card;
 }
 
@@ -1096,7 +1135,7 @@ function drawLab(data, params) {
     const bar = element('div', 'lab-bar');
     bar.append(back);
     lab.append(bar);
-    if (task) lab.append(labAgentEntry(task), labTask(task, true));
+    if (task) lab.append(labAgentEntry(task), labTask(task, true, params.get('equipment') || ''));
     else lab.append(element('p', 'empty', t('This test is unavailable in the current queue.',
       'Этой проверки сейчас нет в очереди.')));
     content.replaceChildren(lab);
@@ -1129,7 +1168,7 @@ function drawLab(data, params) {
   function renderTasks() {
     const chosen = all.filter((task) => !equipment.value || list(task.equipment).includes(equipment.value));
     count.textContent = t(`Tasks shown: ${numberFormat.format(chosen.length)}`, `Задач показано: ${numberFormat.format(chosen.length)}`);
-    tasks.replaceChildren(...chosen.map((task) => labTask(task)));
+    tasks.replaceChildren(...chosen.map((task) => labTask(task, false, equipment.value)));
     if (!chosen.length) tasks.append(element('p', 'empty', t('No tasks for this equipment in the current snapshot.', 'В этом снимке нет задач для выбранного оборудования.')));
   }
   equipment.addEventListener('change', () => {

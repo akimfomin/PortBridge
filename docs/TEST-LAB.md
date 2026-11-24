@@ -6,6 +6,8 @@ Pick a check for equipment you can use. Each task links the original discussion,
 
 Use **Open this test** to share a link to one check. The page opens its instructions and lets you copy the exact task into an agent chat. [Example task](https://akimfomin.github.io/PortBridge/#/lab?task=xcl-1100-fma)
 
+After the run, use **Copy result template** to get the link and fields for a report in the source discussion. Fill in what happened before posting. **Find another check** takes you back to the queue and keeps the relevant equipment filter. If your setup has no GPU or build tools, try the Scarlett Commons and Continued check with Git and Python. [CPU check](https://akimfomin.github.io/PortBridge/#/lab?task=scarlett-commons-continued-add-basic)
+
 1. Open the source discussion and check that the run is still needed. If you are taking it, say so there to avoid duplicate work.
 2. Read the project's setup and inspect the test you plan to run. Use the pinned revision in a separate checkout and synthetic inputs. When a task requires choosing a combined revision, agree on it in the linked discussion before running the test.
 3. Report a pass, failure, or skip in the linked discussion and give the tested commit, the hardware and driver or CPU toolchain, and the expected and observed result. A failing control or an explicit skip can save another contributor time.
@@ -18,6 +20,8 @@ Volunteers choose a task and execute it locally. If you need another setup, open
 Откройте очередь и выберите AMD, NVIDIA или CPU. Для каждой проверки видны требования, точные версии и куда отправить результат. Можно передать агенту [ссылку на PortBridge](https://github.com/akimfomin/PortBridge) и указать, какой компьютер доступен.
 
 Нажмите **Открыть эту проверку**, чтобы отправить ссылку на одну задачу. В открытой карточке можно скопировать именно эту проверку для агента. [Пример](https://akimfomin.github.io/PortBridge/?lang=ru#/lab?task=xcl-1100-fma)
+
+После прогона кнопка **Копировать шаблон результата** подставит ссылку на карточку и поля отчёта. Заполните их перед публикацией в исходном обсуждении. Кнопка **Выбрать другую проверку** возвращает к очереди с подходящим фильтром. Для прогона без видеокарты и компилятора есть проверка Scarlett Commons и Continued через Git и Python. [Проверка на процессоре](https://akimfomin.github.io/PortBridge/?lang=ru#/lab?task=scarlett-commons-continued-add-basic)
 
 Если нужного оборудования нет, нажмите **Запросить тест** в карточке или создайте свой запрос. [Порядок работы](TEST-REQUESTS.md#по-русски)
 

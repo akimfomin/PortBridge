@@ -15,7 +15,7 @@ class LabTest(CatalogFixture):
     def test_tasks_pin_public_sources_and_track_evidence_separately(self):
         payload = build_lab()
         tasks = {task["id"]: task for task in payload["tasks"]}
-        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 8)))
+        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 10)))
         combined = tasks["pb-9-continued-first-frame"]
         self.assertEqual((combined["status"], combined["evidence_stage"], combined["adoption"]),
                          ("awaiting_review", "reviewed_gpu", "pending"))
@@ -28,6 +28,19 @@ class LabTest(CatalogFixture):
         self.assertEqual(native["revisions"][1]["sha"], "9923c3bba74f4a7f3249e0c820f2e6821327c1f4")
         self.assertEqual(native["evidence_url"], "https://github.com/akimfomin/PortBridge/issues/19#issuecomment-7136020663")
         self.assertEqual(native["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136721736")
+        addition = tasks["scarlett-commons-continued-add-basic"]
+        self.assertEqual((addition["equipment"], addition["status"], addition["evidence_stage"]),
+                         (["cpu"], "needs_run", "author_cpu"))
+        self.assertEqual([row["sha"] for row in addition["revisions"]], [
+            "5496f79f93c41f1134ce4c9e1d2674aa00c6bb55",
+            "ba9549c254647b9f6ef3b4e47684e69a668b9ec1",
+        ])
+        self.assertEqual(addition["result_url"], "https://github.com/scarlett-commons/scarlett-commons/issues/32")
+        gather = tasks["anyxboxx-147-native-wave64-gather"]
+        self.assertEqual((gather["equipment"], gather["status"], gather["evidence_stage"]),
+                         (["amd"], "needs_run", "assembled_offline"))
+        self.assertEqual(gather["revisions"][0]["sha"], "28524547b9f0751581257279a329b8cae2f1dc1e")
+        self.assertEqual(gather["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/147")
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")
             self.assertTrue(task["steps"] and task["expected"] and task["report"])
@@ -43,11 +56,13 @@ class LabTest(CatalogFixture):
         payload = build_lab()
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
-                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma", "continued-511-repeated-draw"])
+                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma", "continued-511-repeated-draw",
+                          "anyxboxx-147-native-wave64-gather"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
-        self.assertEqual(len(payload["tasks"]), 7)
+        self.assertEqual(len(payload["tasks"]), 9)
         self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)
-        self.assertEqual(build_lab(equipment="cpu", status="needs_run")["tasks"], [])
+        self.assertEqual([task["id"] for task in build_lab(equipment="cpu", status="needs_run")["tasks"]],
+                         ["scarlett-commons-continued-add-basic"])
         with self.assertRaises(ValueError):
             build_lab(status="merged")
 
