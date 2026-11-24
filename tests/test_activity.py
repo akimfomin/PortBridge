@@ -86,14 +86,15 @@ class ActivityTest(CatalogFixture):
         summary = build_activity(self.catalog, now=NOW)
         handoffs = summary["handoffs"]
         self.assertEqual(summary["counts"]["merged"], 1)
-        self.assertEqual(handoffs["counts"], {"delivered": 3, "independently_reproduced": 2,
+        self.assertEqual(handoffs["counts"], {"delivered": 4, "independently_reproduced": 2,
                                              "formally_reviewed": 1, "adopted": 1})
-        continued, xcl, anyxboxx = handoffs["items"]
+        continued, xcl, anyxboxx, rounding = handoffs["items"]
         self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
         self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
-        self.assertTrue(xcl["independent_url"].endswith("#issuecomment-7131880483"))
+        self.assertNotIn("independent_url", xcl)
+        self.assertTrue(rounding["independent_url"].endswith("#issuecomment-7133315650"))
         self.assertNotIn("review_url", xcl)
-        self.assertTrue(all("adopted_url" not in item for item in (continued, xcl)))
+        self.assertTrue(all("adopted_url" not in item for item in (continued, xcl, rounding)))
         self.assertTrue(anyxboxx["adopted_url"].endswith("b15d8821bffcd8fbc98e56f41daf07fc91118192"))
         self.assertEqual(build_activity(self.catalog, now=NOW, cards=[])["handoffs"]["items"], [])
 
@@ -104,7 +105,7 @@ class ActivityTest(CatalogFixture):
         self.save_pr("xcl", 1100, at=date, status="merged", merged_at=date, revision="a" * 40)
         handoffs = build_activity(self.catalog, now=NOW)["handoffs"]
         self.assertEqual(handoffs["counts"]["adopted"], 2)
-        continued, xcl, _ = handoffs["items"]
+        continued, xcl, *_ = handoffs["items"]
         self.assertEqual(continued["adopted_url"], continued["delivered_url"])
         self.assertNotIn("adopted_url", xcl)
 

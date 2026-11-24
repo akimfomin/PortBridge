@@ -9,7 +9,7 @@ Post the result or a link to it in the request. Include the tested commit, hardw
 ## For maintainers
 
 1. Verify that the request is still useful, the source is public and pinned, and the test uses synthetic or public source-only inputs. For a custom request, check that its hardware field is specific enough for a useful invitation.
-2. Apply the `notify-testers` label to approve one invitation. Check the workflow result and the comment in the original request. If GitHub did not start the workflow, review the current issue text, then run **PortBridge test invitations** on `main` with its issue number. Leave a note on the issue if the available hardware reports have no suitable match.
+2. Apply the `notify-testers` label to approve one invitation. For a task with a receiving PR, the invitation requires the recorded revision to still be its open head. Check the workflow result and the comment in the original request. If GitHub did not start the workflow, review the current issue text, then run **PortBridge test invitations** on `main` with its issue number. Leave a note if the available reports have no suitable match.
 3. Keep discussions and outcomes in the request. If someone asks to stop receiving invitations, honor that request before any further contact.
 
 ## По-русски

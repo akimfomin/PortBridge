@@ -27,6 +27,7 @@ GITHUB_LOGIN = r"[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}"
 GITHUB_REPO = r"[A-Za-z0-9_.-]{1,100}"
 LOGIN = re.compile(GITHUB_LOGIN)
 COMMIT = re.compile(rf"https://github\.com/({GITHUB_LOGIN})/({GITHUB_REPO})/commit/([A-Fa-f0-9]{{40}})")
+PULL = re.compile(rf"https://github\.com/({GITHUB_LOGIN})/({GITHUB_REPO})/pull/([1-9][0-9]*)")
 EVIDENCE_URL = re.compile(
     rf"https://github\.com/{GITHUB_LOGIN}/{GITHUB_REPO}/(?:(?:pull|issues)/[1-9][0-9]*"
     r"(?:#(?:issuecomment-|discussion_r|pullrequestreview-)[1-9][0-9]*)?|commit/[A-Fa-f0-9]{40})"
@@ -207,6 +208,14 @@ def dispatch(event, testers, github, *, event_name="issues", now=None, discover=
     if not candidates:
         return "No matching tester outside the recent invitation window."
     selected = max(candidates, key=lambda row: (source_time(row["reported_at"]), row["login"].casefold()))
+    receiving = PULL.fullmatch(original or "")
+    if receiving:
+        owner, repo, pull = receiving.groups()
+        source = github.get(f"/repos/{owner}/{repo}/pulls/{pull}", public=True)
+        revision = commit_parts(fields["revision"])[2]
+        head = (source.get("head") or {}).get("sha") or ""
+        if source.get("state") != "open" or head.casefold() != revision.casefold():
+            return "The receiving pull request changed or closed. Review the current revision before inviting a tester."
     current = github.get(path)
     if not approved_issue(current):
         return "The request is no longer open and approved."

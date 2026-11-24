@@ -380,7 +380,8 @@
               "translations": {"en": {"title": "PortBridge replayed the Scarlett Layer check in XCL", "observed": "All 64 outputs and 64 plain controls matched in Wave32 and split Wave64."}}},
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100#issuecomment-7131880483", "title": "bjarngard подтвердил аппаратный Wave64 на RDNA2", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T12:45:36Z", "platforms": ["Windows 11", "AMD RDNA2", "D3D12"], "observed": "Отчёт на встроенной графике Ryzen 9 9950X: 742 проверки прошли, отказов 0, 41 исключена. Тест FMA прошёл с обязательным аппаратным Wave64. RDNA3 и RDNA4 не проверялись.",
               "translations": {"en": {"title": "bjarngard confirmed native Wave64 on RDNA2", "observed": "On Ryzen 9 9950X integrated graphics, 742 tests passed, 0 failed, and 41 were ignored. The FMA test passed with native Wave64 required. RDNA3 and RDNA4 remain untested."}}},
-            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "PortBridge проверил чувствительность теста FMA", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T13:24:17Z", "platforms": ["Windows 11", "RTX 4070 Ti SUPER", "D3D12"], "observed": "На точной версии тест прошёл без пропуска в Wave32 и разделённом Wave64. Тот же тест выявил три ошибки, при которых abs, neg или clamp отключались по отдельности. После восстановления исходной версии тест снова прошёл.", "translations": {"en": {"title": "PortBridge verified that the FMA regression detects each modifier", "observed": "The exact head passed without skips in Wave32 and split Wave64. The unchanged test caught three controls that individually removed abs, neg, or clamp. The restored head passed again."}}}
+            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "PortBridge проверил чувствительность теста FMA", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T13:24:17Z", "platforms": ["Windows 11", "RTX 4070 Ti SUPER", "D3D12"], "observed": "На точной версии тест прошёл без пропуска в Wave32 и разделённом Wave64. Тот же тест выявил три ошибки, при которых abs, neg или clamp отключались по отдельности. После восстановления исходной версии тест снова прошёл.", "translations": {"en": {"title": "PortBridge verified that the FMA regression detects each modifier", "observed": "The exact head passed without skips in Wave32 and split Wave64. The unchanged test caught three controls that individually removed abs, neg, or clamp. The restored head passed again."}}},
+            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "Тест FMA прошёл после устранения конфликта XCL", "revision": "1b3fbc4bc8c3088e69d78f85a2e73f1cccf4df51", "reported_at": "2026-11-24T13:50:57Z", "platforms": ["Windows 11", "RTX 4070 Ti SUPER", "D3D12"], "observed": "После переноса на 930e8b49 точная опубликованная версия прошла целевой тест без пропусков в Wave32 и разделённом Wave64. Прежний отчёт AMD RDNA2 сохранён на исходной версии.", "translations": {"en": {"title": "The FMA test passed after resolving the XCL rebase conflict", "observed": "After rebasing onto 930e8b49, the published head passed the focused test without skips in Wave32 and split Wave64. The earlier AMD RDNA2 report remains attached to the original revision."}}}
           ]
         }
       ]
@@ -710,10 +711,10 @@
       "id": "PB-0011",
       "recorded_at": "2026-11-24T13:27:47Z",
       "title": "Округление и NaN при переводе RDNA2 в AnyXboxX",
-      "summary": "PortBridge нашёл измерения RDNA2 в VIctory и перенёс 16 входов в проверку AnyXboxX #133. Исходная версия расходилась с железом в RPI и FLR. С локальной правкой прошли 93 проверки на WARP.",
+      "summary": "PortBridge сопоставил 16 измерений RDNA2 из VIctory с AnyXboxX #133. KainanP подтвердил ошибку, исправил её в своей ветке и включил измерения в тесты. Независимый прогон подтвердил исправление.",
       "status": "verified",
       "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"],
-      "translations": {"en": {"title": "RDNA2 rounding and NaN conversion in AnyXboxX", "summary": "PortBridge found the VIctory RDNA2 measurements and replayed 16 inputs in AnyXboxX #133. The original head differed on RPI and FLR. The local fix passed 93 checks with WARP.", "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"]}},
+      "translations": {"en": {"title": "RDNA2 rounding and NaN conversion in AnyXboxX", "summary": "PortBridge replayed 16 VIctory RDNA2 measurements in AnyXboxX #133. KainanP confirmed the issue, corrected it in the PR branch and added the measured inputs as tests. An independent run confirmed the fix.", "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"]}},
       "platforms": ["RDNA2 hardware reference", "Windows 11", "AnyXboxX CPU interpreter", "Microsoft WARP"],
       "dependency_ids": [],
       "solutions": [
@@ -728,10 +729,53 @@
         {
           "project": "anyxboxx",
           "status": "verified",
-          "summary": "На версии 4a67f676 у каждой формы инструкции 9 из 16 расхождений для RPI и 4 из 16 для FLR. Обычное преобразование совпало во всех 16 случаях. Локальная правка интерпретатора и HLSL прошла 93 проверки на WARP без пропусков.",
-          "translations": {"en": {"summary": "On head 4a67f676 each instruction form had 9 of 16 RPI mismatches and 4 of 16 FLR mismatches. The plain conversion matched all 16. The local interpreter and HLSL fix passed all 93 checks on WARP."}},
-          "source_refs": [{"title": "Проверенная версия AnyXboxX #133", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133", "translations": {"en": {"title": "Tested AnyXboxX #133"}}}],
-          "evidence": [{"kind": "independent", "outcome": "failed", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7132864418", "title": "Воспроизведение расхождений с измерениями RDNA2", "revision": "4a67f67619b10c5fabc2a60de986fdd02f8ee457", "reported_at": "2026-11-24T13:27:47Z", "platforms": ["Windows 11", "AnyXboxX CPU interpreter"], "observed": "В RPI вход 0x3effffff дал 1 при ожидаемом 0. FLR для 0xffc00000 дал 0 при ожидаемом 0x80000000. Результат повторяется в VOP1 и VOP3.", "translations": {"en": {"title": "Reproduction against RDNA2 values", "observed": "RPI of 0x3effffff returned 1 instead of 0. FLR of 0xffc00000 returned 0 instead of 0x80000000. Both discrepancies reproduced in VOP1 and VOP3."}}}]
+          "summary": "У исходной версии было 9 расхождений из 16 для RPI и 4 из 16 для FLR в каждой форме. Последняя проверенная версия исправления KainanP прошла 49 целевых проверок, включая эталонные входы и WARP.",
+          "translations": {"en": {"summary": "The original head had 9 of 16 RPI mismatches and 4 of 16 FLR mismatches per form. The latest tested revision of KainanP's fix passed 49 focused checks including the measured inputs and WARP."}},
+          "source_refs": [
+            {"title": "Проверка AnyXboxX #133", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133", "translations": {"en": {"title": "AnyXboxX #133"}}},
+            {"title": "Подтверждение и исправление от KainanP", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7133079649", "translations": {"en": {"title": "KainanP's confirmation and fix"}}}
+          ],
+          "evidence": [
+            {"kind": "independent", "outcome": "failed", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7132864418", "title": "Воспроизведение расхождений с измерениями RDNA2", "revision": "4a67f67619b10c5fabc2a60de986fdd02f8ee457", "reported_at": "2026-11-24T13:27:47Z", "platforms": ["Windows 11", "AnyXboxX CPU interpreter"], "observed": "В RPI вход 0x3effffff дал 1 при ожидаемом 0. FLR для 0xffc00000 дал 0 при ожидаемом 0x80000000. Результат повторяется в VOP1 и VOP3.", "translations": {"en": {"title": "Reproduction against RDNA2 values", "observed": "RPI of 0x3effffff returned 1 instead of 0. FLR of 0xffc00000 returned 0 instead of 0x80000000. Both discrepancies reproduced in VOP1 and VOP3."}}},
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7133315650", "title": "Независимая проверка исправления AnyXboxX", "revision": "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d", "reported_at": "2026-11-24T13:53:51Z", "platforms": ["Windows 11", "AnyXboxX CPU interpreter", "Microsoft WARP"], "observed": "49 целевых проверок прошли без пропусков. На исходной версии аппаратный эталон ловит ошибку RPI в обеих формах. Результаты интерпретатора и WARP на той версии совпадают между собой.", "translations": {"en": {"title": "Independent check of the AnyXboxX fix", "observed": "All 49 focused checks passed without skips. On the original revision, the hardware oracle caught the RPI error in both forms. The interpreter and WARP agreed with each other on that revision."}}}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0012",
+      "recorded_at": "2026-11-24T13:47:21Z",
+      "title": "Порог обнуления результата деления в RDNA2",
+      "summary": "PortBridge связал измерения Lyrnc на AMD, проверки Continued и перевод операции деления XCL. В изолированной проверке XCL расходился в 5 из 14 случаев. Пробное уточнение выдало ожидаемый результат во всех 14.",
+      "status": "verified",
+      "tags": ["v_div_fixup_f32", "RDNA2", "underflow", "NaN"],
+      "translations": {"en": {"title": "RDNA2 division underflow boundary", "summary": "PortBridge linked Lyrnc's AMD measurements, the Continued tests and the XCL division helper. The isolated XCL check differed on 5 of 14 inputs. A local adjustment matched all 14.", "tags": ["v_div_fixup_f32", "RDNA2", "underflow", "NaN"]}},
+      "platforms": ["AMD RDNA2 gfx1036", "Microsoft WARP", "Continued CPU interpreter"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "victory",
+          "status": "verified",
+          "summary": "Lyrnc измерил на gfx1036 переход от ненулевого результата к знаковому нулю при разнице показателей −151.",
+          "translations": {"en": {"summary": "Lyrnc measured the transition from a nonzero quotient to signed zero at an exponent difference of −151 on gfx1036."}},
+          "source_refs": [{"title": "VIctory #200, аппаратный прогон", "url": "https://github.com/Marvisak/VIctory/pull/200#issuecomment-7123455468", "translations": {"en": {"title": "VIctory #200 hardware probe"}}}],
+          "evidence": [{"kind": "source_observation", "outcome": "observed", "url": "https://github.com/Marvisak/VIctory/pull/200#issuecomment-7123455468", "title": "Измеренные значения разделительной границы", "revision": null, "platforms": ["AMD RDNA2 gfx1036"], "observed": "Для проверенных входов результат при −151 стал нулём, а при −150 сохранился.", "translations": {"en": {"title": "Measured division boundary", "observed": "At −151 the measured input produced zero. At −150 it preserved the quotient."}}}]
+        },
+        {
+          "project": "continued",
+          "status": "verified",
+          "summary": "Транслятор и CPU-интерпретатор Continued совпали в 14 из 14 синтетических случаев. Прошли 18 штатных тестов этой группы.",
+          "translations": {"en": {"summary": "The Continued translator and CPU interpreter matched 14 of 14 synthetic cases. All 18 existing focused tests passed."}},
+          "source_refs": [{"title": "Continued #762", "url": "https://github.com/ubiquitarianism/leonida/pull/762", "translations": {"en": {"title": "Continued #762"}}}],
+          "evidence": [{"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458", "title": "Сравнение через транслятор Continued", "revision": "79834b22fbaac99d67becf13a697878c7c2bcffe", "reported_at": "2026-11-24T13:47:21Z", "platforms": ["CPU", "SPIR-V interpreter"], "observed": "Continued совпал в 14 из 14 случаев, из которых 10 взяты из аппаратного прогона.", "translations": {"en": {"title": "Continued translator comparison", "observed": "Continued matched all 14 cases, including 10 from the hardware probe."}}}]
+        },
+        {
+          "project": "xcl",
+          "status": "partial",
+          "summary": "Функция из XCL #1144 совпала в 9 из 14 случаев на WARP. Локальная проверка с обработкой границы и порядка NaN совпала во всех 14.",
+          "translations": {"en": {"summary": "The helper from XCL #1144 matched 9 of 14 cases on WARP. A local control with the exponent boundary and NaN ordering matched all 14."}},
+          "source_refs": [{"title": "Проверенный PR XCL #1144", "url": "https://github.com/ivall/xcl/pull/1144", "translations": {"en": {"title": "Tested XCL #1144"}}}],
+          "evidence": [{"kind": "independent", "outcome": "mixed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458", "title": "Сравнение функции XCL на WARP", "revision": "2aa8211b9d72243dbe521cb0e0fbea9352dcf0dd", "reported_at": "2026-11-24T13:47:21Z", "platforms": ["Windows 11", "Microsoft WARP", "DXC 1.9.2602.17"], "observed": "При −151 ожидаемый результат 0x00000000, а исходная функция XCL вернула 0x40000000. Контроль при −150 прошёл. Проверка относится к изолированной функции.", "translations": {"en": {"title": "XCL helper comparison on WARP", "observed": "At −151 the expected result was 0x00000000 and the original helper returned 0x40000000. The −150 control passed. This was an isolated helper check."}}}]
         }
       ]
     },

@@ -21,7 +21,7 @@ class LabTest(CatalogFixture):
                          ("awaiting_review", "reviewed_gpu", "pending"))
         self.assertEqual([row["sha"][:8] for row in combined["revisions"]], ["88658f1b", "21dc3889", "b8572d92"])
         self.assertEqual(tasks["pb-9-reforge-present"]["evidence_stage"], "reviewed_gpu")
-        self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "reviewed_gpu")
+        self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "author_gpu")
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")
             self.assertTrue(task["steps"] and task["expected"] and task["report"])

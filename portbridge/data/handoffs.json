@@ -10,9 +10,8 @@
   {
     "problem_id": "PB-0006",
     "project": "xcl",
-    "revision": "c612b62656fb30eca308fd461209339f6a7c7d32",
-    "delivered_url": "https://github.com/ivall/xcl/pull/1100",
-    "independent_url": "https://github.com/ivall/xcl/pull/1100#issuecomment-7131880483"
+    "revision": "1b3fbc4bc8c3088e69d78f85a2e73f1cccf4df51",
+    "delivered_url": "https://github.com/ivall/xcl/pull/1100"
   },
   {
     "problem_id": "PB-0010",
@@ -20,5 +19,12 @@
     "revision": "1bc9e47b13a96bf39a21109700b003eacdc86240",
     "delivered_url": "https://github.com/LooperSalty/AnyXboxX/pull/129",
     "adopted_url": "https://github.com/LooperSalty/AnyXboxX/commit/b15d8821bffcd8fbc98e56f41daf07fc91118192"
+  },
+  {
+    "problem_id": "PB-0011",
+    "project": "anyxboxx",
+    "revision": "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d",
+    "delivered_url": "https://github.com/LooperSalty/AnyXboxX/pull/133",
+    "independent_url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7133315650"
   }
 ]

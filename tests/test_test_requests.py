@@ -173,6 +173,30 @@ class TestRequestTests(TestCase):
         discovery.assert_called_once_with("amd", ("d3d12-native-wave64-rdna4",))
         self.github.comment.assert_not_called()
 
+    def test_labeled_request_checks_live_receiving_head_before_inviting(self):
+        task = next(row for row in build_lab()["tasks"] if row["id"] == "xcl-1100-fma")
+        request = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
+        self.issue["body"] = self.current["body"] = request
+        candidate = tester("Volunteer", "d3d12-native-wave64-rdna4")
+        current_sha = task["revisions"][0]["sha"]
+        endpoint = "/repos/ivall/xcl/pulls/1100"
+        receiving = {"state": "open", "head": {"sha": "f" * 40}}
+
+        def get(path, *, public=False):
+            if path == endpoint:
+                self.assertTrue(public)
+                return receiving
+            return self.github_get(path, public=public)
+
+        self.github.get.side_effect = get
+        self.assertIn("changed or closed", self.run_dispatch([candidate]))
+        receiving.update(state="closed", head={"sha": current_sha})
+        self.assertIn("changed or closed", self.run_dispatch([candidate]))
+        self.github.comment.assert_not_called()
+        receiving["state"] = "open"
+        self.assertIn("Posted one", self.run_dispatch([candidate]))
+        self.github.comment.assert_called_once()
+
     def test_prior_public_handoffs_count_towards_the_same_cooldown(self):
         roster = [tester("Invited", "d3d12-native-wave64"), tester("Volunteer", "d3d12-native-wave64")]
         prior = [{"login": "INVITED", "sent_at": "2026-11-24T09:00:00Z", "evidence_url": REPORT},
