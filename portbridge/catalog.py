@@ -386,7 +386,7 @@ class Catalog:
                     "source_project": source["project"],
                     "source_url": source_url,
                     "mode": mode,
-                    "message": f"Cross-project note prepared with PortBridge ({ident}).\n\n"
+                    "message": f"Cross-project note prepared with [PortBridge](https://github.com/akimfomin/PortBridge) ({ident}).\n\n"
                                f"{source['outreach_summary']}\n\n{caveat}",
                 })
         return drafts

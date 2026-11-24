@@ -18,6 +18,7 @@ Update the work log with the project, source, contributor, exact revision, obser
 - Label a proposal as a proposal. Keep an author report, source inspection, automated check, and independent reproduction distinct. State exactly what the check covered. A merged PR or green CI job only establishes its own result.
 - Preserve the origin of ports and cherry-picks. Identical revisions and attributed ports can point to useful work. Treat an independent reproduction as a separate fact with its own test and revision.
 - Share a reproducible finding through the relevant open discussion or the PortBridge form. Link to the same public evidence when referring to it elsewhere. Catalog changes go through review in this repository. [Share compatibility evidence](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml)
+- When sharing work done with PortBridge in another team's discussion, name its concrete role and link directly to [PortBridge](https://github.com/akimfomin/PortBridge). Keep the result, evidence, and proposed next step at the center of the message.
 - Suggestions are welcome. Describe the workflow that is failing, who it affects, and a small change with a testable outcome. Check existing PortBridge issues before opening another. [PortBridge issues](https://github.com/akimfomin/PortBridge/issues) · [Suggest an improvement](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml)
 
 ## Work locally by default

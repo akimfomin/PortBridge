@@ -68,6 +68,7 @@ class CatalogTest(CatalogFixture):
         self.assertEqual(set(drafts), {"PB-0001", "PB-0002"})
         self.assertEqual(drafts["PB-0001"]["mode"], "comparison")
         self.assertEqual(drafts["PB-0001"]["target_project"], "continued")
+        self.assertIn("[PortBridge](https://github.com/akimfomin/PortBridge)", drafts["PB-0001"]["message"])
         self.assertIn("independent synthetic test", drafts["PB-0001"]["message"])
         self.assertEqual(drafts["PB-0002"]["mode"], "reference")
         self.assertIn("full automated semantic job failed", drafts["PB-0002"]["message"])
