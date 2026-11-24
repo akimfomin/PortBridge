@@ -3,7 +3,7 @@
 from copy import deepcopy
 
 
-CHECKED_AT = "2026-11-24T15:40:43Z"
+CHECKED_AT = "2026-11-24T15:51:11Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review")
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
