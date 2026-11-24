@@ -746,10 +746,10 @@
       "id": "PB-0012",
       "recorded_at": "2026-11-24T13:47:21Z",
       "title": "Порог обнуления результата деления в RDNA2",
-      "summary": "PortBridge связал измерения Lyrnc на AMD, проверки Continued и перевод операции деления XCL. В изолированной проверке XCL расходился в 5 из 14 случаев. Пробное уточнение выдало ожидаемый результат во всех 14.",
+      "summary": "PortBridge сопоставил измерения Lyrnc на AMD, проверки Continued и перевод операции деления XCL. После отчёта о пяти расхождениях b3IKK уточнил обработку порога и NaN и добавил проверки в свою ветку.",
       "status": "verified",
       "tags": ["v_div_fixup_f32", "RDNA2", "underflow", "NaN"],
-      "translations": {"en": {"title": "RDNA2 division underflow boundary", "summary": "PortBridge linked Lyrnc's AMD measurements, the Continued tests and the XCL division helper. The isolated XCL check differed on 5 of 14 inputs. A local adjustment matched all 14.", "tags": ["v_div_fixup_f32", "RDNA2", "underflow", "NaN"]}},
+      "translations": {"en": {"title": "RDNA2 division underflow boundary", "summary": "PortBridge linked Lyrnc's AMD measurements, the Continued tests and the XCL division helper. After the five discrepancies were reported, b3IKK adjusted the boundary and NaN handling and added tests in the PR branch.", "tags": ["v_div_fixup_f32", "RDNA2", "underflow", "NaN"]}},
       "platforms": ["AMD RDNA2 gfx1036", "Microsoft WARP", "Continued CPU interpreter"],
       "dependency_ids": [],
       "solutions": [
@@ -772,10 +772,16 @@
         {
           "project": "xcl",
           "status": "partial",
-          "summary": "Функция из XCL #1144 совпала в 9 из 14 случаев на WARP. Локальная проверка с обработкой границы и порядка NaN совпала во всех 14.",
-          "translations": {"en": {"summary": "The helper from XCL #1144 matched 9 of 14 cases on WARP. A local control with the exponent boundary and NaN ordering matched all 14."}},
-          "source_refs": [{"title": "Проверенный PR XCL #1144", "url": "https://github.com/ivall/xcl/pull/1144", "translations": {"en": {"title": "Tested XCL #1144"}}}],
-          "evidence": [{"kind": "independent", "outcome": "mixed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458", "title": "Сравнение функции XCL на WARP", "revision": "2aa8211b9d72243dbe521cb0e0fbea9352dcf0dd", "reported_at": "2026-11-24T13:47:21Z", "platforms": ["Windows 11", "Microsoft WARP", "DXC 1.9.2602.17"], "observed": "При −151 ожидаемый результат 0x00000000, а исходная функция XCL вернула 0x40000000. Контроль при −150 прошёл. Проверка относится к изолированной функции.", "translations": {"en": {"title": "XCL helper comparison on WARP", "observed": "At −151 the expected result was 0x00000000 and the original helper returned 0x40000000. The −150 control passed. This was an isolated helper check."}}}]
+          "summary": "На исходной версии совпали 9 из 14 входов. После исправления b3IKK независимо подтвердили все 14 исходных и 17 входов обновлённого теста на WARP.",
+          "translations": {"en": {"summary": "The original helper matched 9 of 14 inputs. After b3IKK's fix, an independent WARP run passed all 14 original inputs and all 17 inputs from the updated test."}},
+          "source_refs": [
+            {"title": "Проверенный PR XCL #1144", "url": "https://github.com/ivall/xcl/pull/1144", "translations": {"en": {"title": "Tested XCL #1144"}}},
+            {"title": "Ответ и исправление b3IKK", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133518162", "translations": {"en": {"title": "b3IKK's reply and correction"}}}
+          ],
+          "evidence": [
+            {"kind": "independent", "outcome": "mixed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458", "title": "Сравнение функции XCL на WARP", "revision": "2aa8211b9d72243dbe521cb0e0fbea9352dcf0dd", "reported_at": "2026-11-24T13:47:21Z", "platforms": ["Windows 11", "Microsoft WARP", "DXC 1.9.2602.17"], "observed": "При −151 ожидаемый результат 0x00000000, а исходная функция XCL вернула 0x40000000. Контроль при −150 прошёл. Проверка относится к изолированной функции.", "translations": {"en": {"title": "XCL helper comparison on WARP", "observed": "At −151 the expected result was 0x00000000 and the original helper returned 0x40000000. The −150 control passed. This was an isolated helper check."}}},
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458", "title": "Независимая проверка исправления b3IKK", "revision": "eac652c3d11927169ea46739249ebcc188ad800e", "reported_at": "2026-11-24T13:59:17Z", "platforms": ["Windows 11", "Microsoft WARP", "DXC 1.9.2602.17"], "observed": "В изолированной проверке прошло 14 из 14 исходных входов и 17 из 17 входов нового теста. На старой версии прошли соответственно 9 и 13. Сверены биты результата NaN и оба знаковых нуля.", "translations": {"en": {"title": "Independent run of b3IKK's fix", "observed": "The isolated helper passed all 14 original inputs and all 17 updated fixture inputs. The old helper passed 9 and 13 respectively. The comparison included exact NaN payloads and both signed zero cases."}}}
+          ]
         }
       ]
     },
