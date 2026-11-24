@@ -191,6 +191,17 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 .project-status dt { color: var(--muted); font-size: .78rem; }
 .project-status dd { margin: 0 0 7px; font-size: .87rem; }
 .api-documentation { max-width: 960px; margin: 32px auto; padding: 0 20px; }
+.case-page { max-width: 820px; margin: 0 auto; padding: 24px 20px 56px; }
+.case-page nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.case-page header { display: grid; gap: 12px; margin: 20px 0 28px; }
+.case-page h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.15; }
+.case-page time { color: var(--muted); }
+.case-section { padding: clamp(16px, 4vw, 26px); margin-top: 16px; border: 1px solid var(--stroke);
+  border-radius: var(--radius); background: var(--surface); }
+.case-section h2 { margin-bottom: 10px; }
+.case-results { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 12px; }
+.case-evidence { padding: 14px; border-radius: 8px; background: var(--surface-subtle); overflow-wrap: anywhere; }
+.case-evidence p + p { margin-top: 6px; }
 .api-documentation pre { padding: 20px; overflow-wrap: anywhere; white-space: pre-wrap; border: 1px solid var(--stroke); border-radius: var(--radius); background: var(--surface); font: .92rem/1.5 var(--mono); }
 
 @media (max-width: 920px) {

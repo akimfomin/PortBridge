@@ -438,6 +438,9 @@ function drawProblem(problem) {
   const status = element('div', 'meta-row');
   status.append(element('span', 'identifier', problem.id), badge(problem.status, problemStates));
   detail.append(internalLink('← Каталог проблем', '#/problems', 'detail-back'), status);
+  if (snapshotSite && /^PB-[0-9]{4,}$/.test(problem.id)) {
+    detail.append(internalLink('Страница для ссылки', `./cases/${problem.id.toLowerCase()}.html`));
+  }
   if (list(problem.tags).length || list(problem.platforms).length) {
     detail.append(tagRow([...list(problem.tags), ...list(problem.platforms)]));
   }

@@ -49,4 +49,8 @@ class ExchangeDemoTests(TestCase):
         self.assertEqual(result["preflight_reports_after_review"], [report["id"]])
         self.assertNotEqual(report["revision"], check["revision"])
         self.assertIn("SIMULATION: 6/6", report["summary"])
+        self.assertEqual(result["new_topic"]["reports_before_review"], 0)
+        fresh, = result["new_topic"]["reports_after_review"]
+        self.assertEqual(fresh["problem_id"], result["new_topic"]["topic"]["id"])
+        self.assertEqual(fresh["outcome"], "unknown")
         self.assertNotIn('"token"', json.dumps(result))

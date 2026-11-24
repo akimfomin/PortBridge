@@ -24,21 +24,51 @@ STATIC = {
     "/static/app.js": (PACKAGE / "static" / "app.js", "text/javascript; charset=utf-8"),
     "/api/docs": (ROOT / "API.md", "text/plain; charset=utf-8"),
 }
+OFFICE_STATIC = {
+    "/office": (PACKAGE / "static" / "office.html", "text/html; charset=utf-8"),
+    "/static/office.css": (PACKAGE / "static" / "office.css", "text/css; charset=utf-8"),
+    "/static/office.js": (PACKAGE / "static" / "office.js", "text/javascript; charset=utf-8"),
+}
 COLLECTIONS = ("projects", "problems", "observations", "matches", "related", "preflight", "coordination",
                "graph", "source-history", "recommendations", "outreach", "health")
 
 
-def sync_catalog(catalog, *, refresh=False, pages=1):
-    from .github import collect, refresh_references
+def sync_catalog(catalog, *, refresh=False, pages=1, sources=()):
+    from .github import PAIR_CHECK_LIMIT, WORK_URL, collect, refresh_references, revision_references
+    from .matching import canonical_url
 
     projects = catalog.projects()
+    if sources:
+        repos = {project["repo"].casefold() for project in projects}
+        if len(sources) > PAIR_CHECK_LIMIT or any(not WORK_URL.fullmatch(source) for source in sources):
+            raise ValueError("--source accepts up to eight public GitHub issue or PR URLs")
+        if any("/".join(urlsplit(source).path.split("/")[1:3]).casefold() not in repos for source in sources):
+            raise ValueError("--source must belong to a configured public repository")
+        requested = list(dict.fromkeys(map(canonical_url, sources)))
+        checked = refresh_references(projects, catalog.path, requested, refresh=refresh)
+        catalog.record_sync(checked, update_health=False)
+        candidates = revision_references(catalog.observations(limit=None), sources=requested)
+        related = {"items": [], "warnings": []}
+        if candidates:
+            related = refresh_references(projects, catalog.path, candidates, refresh=refresh)
+            catalog.record_sync(related, update_health=False)
+        return {**catalog.health(), "targeted_refresh": {
+            "requested": sources[0] if len(sources) == 1 else requested,
+            "observations_saved": len(checked["items"]), "related_saved": len(related["items"]),
+            "warnings": checked["warnings"] + related["warnings"],
+        }}
     result = collect(projects, catalog.path, refresh=refresh, pages=pages)
     references = [ref["url"] for card in catalog.problems() for solution in card["solutions"]
                   for ref in solution["source_refs"] + solution["evidence"]]
     watched = refresh_references(projects, catalog.path, references, refresh=refresh)
     result["items"].extend(watched["items"])
     result["warnings"].extend(watched["warnings"])
-    catalog.record_sync(result)
+    catalog.record_sync(result, update_health=False)
+    candidates = revision_references(catalog.observations(limit=None))
+    checked = {"items": [], "warnings": []}
+    if candidates:
+        checked = refresh_references(projects, catalog.path, candidates, refresh=refresh)
+    catalog.record_sync({**result, "items": checked["items"], "warnings": result["warnings"] + checked["warnings"]})
     return catalog.health()
 
 
@@ -118,8 +148,11 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
             if path == "/feed.xml":
                 self.respond(200, "application/atom+xml; charset=utf-8", build_feed(self.server.catalog), head=head)
                 return
-            if path in STATIC:
-                file, content_type = STATIC[path]
+            asset = STATIC.get(path)
+            if self.server.exchange is not None:
+                asset = asset or OFFICE_STATIC.get(path)
+            if asset:
+                file, content_type = asset
                 if not file.is_file():
                     self.json_response(404, {"error": "asset missing"}, head=head)
                     return
@@ -195,6 +228,15 @@ def serve(catalog, args):
                 sync_catalog(catalog, pages=args.pages)
             except Exception as exc:
                 print(f"GitHub sync failed: {type(exc).__name__}", file=sys.stderr)
+            if args.office and not stop.is_set():
+                from .discovery import refresh_project_leads
+                from .office_engine import refresh_external_sources
+
+                try:
+                    refresh_external_sources(exchange)
+                    refresh_project_leads(exchange)
+                except Exception as exc:
+                    print(f"Office source check failed: {type(exc).__name__}", file=sys.stderr)
             if stop.wait(args.interval):
                 return
 
@@ -202,10 +244,24 @@ def serve(catalog, args):
     if args.exchange_db:
         from .exchange import Exchange
 
-        exchange = Exchange(args.exchange_db, problem_exists=lambda ident: catalog.problem(ident) is not None)
+        exchange = Exchange(args.exchange_db, problem_exists=lambda ident: catalog.problem(ident) is not None,
+                            find_curated_topic=catalog.curated_topic)
     with make_server(catalog, args.port, exchange=exchange) as server:
         if not args.offline:
             Thread(target=poll, name="portbridge-sync", daemon=True).start()
+        if args.coordinate or args.office:
+            from .coordinator import COORDINATION_INTERVAL, run_coordination
+
+            def coordinate():
+                while not stop.is_set():
+                    try:
+                        run_coordination(catalog, exchange, office=args.office)
+                    except Exception as exc:
+                        print(f"Coordination pass failed: {type(exc).__name__}", file=sys.stderr)
+                    if stop.wait(COORDINATION_INTERVAL):
+                        return
+
+            Thread(target=coordinate, name="portbridge-coordinator", daemon=True).start()
         print(f"PortBridge — http://127.0.0.1:{server.server_port}", flush=True)
         try:
             server.serve_forever()
@@ -223,6 +279,7 @@ def main(argv=None):
     refresh = commands.add_parser("sync", help="refresh public GitHub metadata once")
     refresh.add_argument("--force", action="store_true", help="revalidate even fresh cached responses")
     refresh.add_argument("--pages", type=int, choices=range(1, 4), default=1)
+    refresh.add_argument("--source", action="append", help="refresh an exact public issue or PR URL (repeatable)")
     backfill = commands.add_parser("backfill", help="index older public issues and pull requests")
     backfill.add_argument("--pages", type=int, choices=range(1, 11), default=3,
                           help="maximum history pages per project in this run")
@@ -245,11 +302,15 @@ def main(argv=None):
     run.add_argument("--port", type=int, default=8765)
     run.add_argument("--offline", action="store_true", help="serve without any requests to GitHub")
     run.add_argument("--exchange-db", type=Path, help="enable optional exchange with this separate local database")
+    run.add_argument("--coordinate", action="store_true", help="post automated notices in subscribed local topics")
+    run.add_argument("--office", action="store_true", help="propose and reconcile private cross-project plans")
     run.add_argument("--interval", type=int, default=900, help="automatic refresh seconds (minimum 60)")
     run.add_argument("--pages", type=int, choices=range(1, 4), default=1)
     args = parser.parse_args(argv)
     if args.command == "serve" and (args.interval < 60 or not 0 <= args.port <= 65535):
         parser.error("use an interval of at least 60 seconds and a valid port")
+    if args.command == "serve" and (args.coordinate or args.office) and args.exchange_db is None:
+        parser.error("coordination requires --exchange-db")
     if getattr(args, "exchange_db", None) and args.exchange_db.resolve() == args.db.resolve():
         parser.error("the exchange needs a separate SQLite database")
     if args.command in {"exchange-key", "exchange-revoke"}:
@@ -288,13 +349,22 @@ def main(argv=None):
 
         operation = backfill if args.command == "backfill" else incremental
         batch = operation(catalog.projects(), catalog.path, pages=args.pages)
-        catalog.record_sync(batch, update_health=False)
+        catalog.record_sync(batch, update_health=False, history_mode=args.command)
         commit_backfill(catalog.path, batch["checkpoint"])
         print(json.dumps({"observations_saved": len(batch["items"]), "warnings": batch["warnings"],
                           "history": backfill_status(catalog.path, mode=args.command)}, indent=2, ensure_ascii=True))
         return 0
-    status = sync_catalog(catalog, refresh=args.force, pages=args.pages) if args.command == "sync" else catalog.health()
+    if args.command == "sync":
+        try:
+            status = sync_catalog(catalog, refresh=args.force, pages=args.pages, sources=args.source or ())
+        except ValueError as exc:
+            parser.error(str(exc))
+    else:
+        status = catalog.health()
     print(json.dumps(status, indent=2, ensure_ascii=True))
+    targeted = status.get("targeted_refresh")
+    if targeted:
+        return int(not targeted["observations_saved"])
     return int(args.command == "sync" and status["status"] == "error")
 
 

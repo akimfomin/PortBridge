@@ -10,6 +10,8 @@ from urllib.error import HTTPError
 from urllib.parse import parse_qs, urlsplit
 
 from portbridge import github
+from portbridge.__main__ import DEFAULT_SEED, sync_catalog
+from portbridge.catalog import Catalog
 
 
 class GitHubSyncTest(unittest.TestCase):
@@ -44,6 +46,29 @@ class GitHubSyncTest(unittest.TestCase):
         else:
             self.fail(f"unexpected endpoint {url}")
         return data, headers
+
+    def test_targeted_refresh_groups_exact_issues_and_prs_without_scanning_pages(self):
+        catalog = Catalog(self.db_path, DEFAULT_SEED)
+        pr = "https://github.com/Marvisak/VIctory/pull/571"
+        issue = "https://github.com/ivall/xcl/issues/772"
+
+        def read_exact(url, resource, etag):
+            lookup = {
+                "https://api.github.com/repos/Marvisak/VIctory/pulls/571": (571, "Implement LDS byte reads"),
+                "https://api.github.com/repos/ivall/xcl/issues/772": (772, "Check LDS on Wave64"),
+            }
+            number, title = lookup[url]
+            return {"number": number, "title": title, "state": "open", "head": {"sha": self.sha}}, {}
+
+        with patch.object(github._Sync, "_request", side_effect=read_exact) as network:
+            result = sync_catalog(catalog, sources=[pr, issue, pr.lower()])["targeted_refresh"]
+            self.assertEqual(network.call_count, 2)
+            self.assertEqual(result["observations_saved"], 2)
+            self.assertEqual(result["warnings"], [])
+            with self.assertRaisesRegex(ValueError, "configured public"):
+                sync_catalog(catalog, sources=[pr, "https://github.com/other/project/issues/2"])
+            self.assertEqual(network.call_count, 2)
+        self.assertEqual({record["url"] for record in catalog.observations()}, {pr, issue})
 
     def test_collect_normalized_metadata_and_reuse_fresh_cache(self):
         with patch.object(github._Sync, "_request", side_effect=self.fake_request) as network:
@@ -87,6 +112,38 @@ class GitHubSyncTest(unittest.TestCase):
         self.assertEqual([item["status"] for item in result["items"]], ["merged", "failure"])
         self.assertEqual(result["items"][1]["metadata"]["scope"], "workflow_job")
         self.assertEqual(result["items"][1]["url"], refs[1])
+
+    def test_old_signature_cache_is_reloaded_then_uses_conditional_requests(self):
+        source = "https://github.com/example/port/pull/2"
+
+        def exact(url, resource, etag):
+            self.assertTrue(url.endswith("/pulls/2"))
+            self.assertIsNone(etag)
+            return {"number": 2, "title": "Lane exchange", "body": "Check ds_bpermute_b32."}, {"ETag": '"new"'}
+
+        with closing(sqlite3.connect(self.db_path)) as db:
+            github._Sync(db, False)
+            with db:
+                db.execute("INSERT INTO github_cache VALUES (?, ?, ?, ?, 0)", (
+                    f"{github.API}/repos/example/port/pulls/2", '"old"', github.time.time(),
+                    '[{"metadata":{"technical":{"terms":[],"signals":[]}}}]',
+                ))
+        with patch.object(github._Sync, "_request", side_effect=exact) as network:
+            first = github.refresh_references([self.project], self.db_path, [source])
+            self.assertEqual(network.call_count, 1)
+        self.assertEqual(first["items"][0]["metadata"]["technical"]["signals"], ["ds_bpermute_b32"])
+        with patch.object(github._Sync, "_request", return_value=(github.NOT_MODIFIED, {})) as network:
+            compared = github.refresh_references([self.project], self.db_path, [source], refresh=True)
+            network.assert_called_once_with(f"{github.API}/repos/example/port/pulls/2", "core", '"new"')
+        self.assertEqual(first, compared)
+
+    def test_long_instruction_list_retains_later_diagnostics_and_api_symbols(self):
+        head = " ".join(f"DS_READ{i}_B64" for i in range(21))
+        body = f"{head} `DS_READ_U8_D16/_HI` and `IMAGE_SAMPLE_C_D`, vkCreateGraphicsPipelines."
+        signals = github._technical({"body": body}, [], {})["signals"]
+        self.assertIn("ds_read_u8_d16_hi", signals)
+        self.assertIn("image_sample_c_d", signals)
+        self.assertIn("vkcreategraphicspipelines", signals)
 
     def test_conditional_refresh_retains_stale_page_when_other_pages_are_revalidated(self):
         with patch.object(github._Sync, "_request", side_effect=self.fake_request), \
@@ -214,6 +271,8 @@ class GitHubSyncTest(unittest.TestCase):
             first = github.backfill([self.project], self.db_path, pages=2)
             self.assertEqual(github.backfill_status(self.db_path), [])
             self.assertEqual(first["projects"][0]["sync_status"], "partial")
+            self.assertEqual(first["history"][0]["status"], "partial")
+            self.assertEqual(first["history"][0]["warning"], "rate limit test")
             self.assertEqual(first["checkpoint"][0]["next_page"], 2)
             self.assertEqual(first["items"][0]["kind"], "issue")
             replay = github.backfill([self.project], self.db_path, pages=1)
@@ -224,11 +283,29 @@ class GitHubSyncTest(unittest.TestCase):
             last = github.backfill([self.project], self.db_path)
             self.assertEqual(last["items"][0]["kind"], "pr")
             self.assertEqual(last["items"][0]["status"], "merged")
+            self.assertEqual(last["history"][0]["status"], "complete")
+            self.assertIsNone(last["history"][0]["warning"])
             github.commit_backfill(self.db_path, last["checkpoint"])
             github.commit_backfill(self.db_path, replay["checkpoint"])
             self.assertTrue(github.backfill_status(self.db_path)[0]["complete"])
             self.assertFalse(github.backfill([self.project], self.db_path)["items"])
         self.assertEqual(requests, [1, 2, 1, 2, 1])
+
+    def test_complete_legacy_history_reindexes_new_signatures_in_batches(self):
+        with closing(github._history_db(self.db_path)) as db, db:
+            github._history_anchor_table(db)
+            db.execute("INSERT INTO github_history VALUES (?, ?, 'backfill', 2, 99, 1, 1, NULL, 1)",
+                       (self.project["slug"], self.project["repo"]))
+            db.execute("INSERT INTO github_history_anchor VALUES (?, ?, 'backfill', '[]')",
+                       (self.project["slug"], self.project["repo"]))
+        body = [{"number": 1, "title": "Wave behavior", "body": "Check ds_read_b64."}]
+        with patch.object(github._Sync, "_request", return_value=(body, {})) as network:
+            refreshed = github.backfill([self.project], self.db_path, pages=1)
+            github.commit_backfill(self.db_path, refreshed["checkpoint"])
+            self.assertFalse(github.backfill([self.project], self.db_path, pages=1)["items"])
+            self.assertEqual(network.call_count, 1)
+            self.assertEqual(parse_qs(urlsplit(network.call_args.args[0]).query)["page"], ["1"])
+        self.assertEqual(refreshed["items"][0]["metadata"]["technical"]["signals"], ["ds_read_b64"])
 
     def test_incremental_moves_time_cursor_with_boundary_overlap(self):
         now = 1700000000

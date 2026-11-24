@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PortBridge — рабочий штаб</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/office.css">
+  <script src="/static/office.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#office-title">К содержанию</a>
+  <header class="office-header">
+    <a class="brand" href="/" aria-label="PortBridge, открытый каталог"><span class="brand-mark" aria-hidden="true"></span>PortBridge</a>
+    <a href="/">Открытый каталог</a>
+  </header>
+  <main class="office">
+    <div class="office-intro">
+      <div>
+        <h1 id="office-title">Рабочий штаб</h1>
+        <p>Общие задачи, проверки и решения команд.</p>
+      </div>
+      <div id="office-account" class="office-actions" hidden>
+        <span id="office-viewer"></span>
+        <button id="office-refresh" type="button">Обновить</button>
+        <button id="office-logout" type="button">Выйти</button>
+      </div>
+    </div>
+    <p id="office-status" class="office-status" role="status"></p>
+    <form id="office-login" class="office-panel office-login" method="post">
+      <label for="office-key">Ключ участника</label>
+      <input id="office-key" type="password" required autocomplete="off" maxlength="128" spellcheck="false">
+      <button type="submit" class="office-primary">Войти в штаб</button>
+    </form>
+    <section id="office-overview" class="office-panel office-overview" aria-labelledby="office-overview-title" hidden>
+      <h2 id="office-overview-title">Общий прогресс</h2>
+      <div id="office-progress"></div>
+    </section>
+    <div id="office-board" class="office-grid" hidden>
+      <section aria-labelledby="office-plans-title">
+        <div class="office-section-head">
+          <h2 id="office-plans-title" tabindex="-1">План работ</h2>
+          <div id="office-plan-form"></div>
+        </div>
+        <div id="office-plans" class="office-list"></div>
+      </section>
+      <aside class="office-aside" aria-label="Темы и проекты">
+        <section class="office-panel" aria-labelledby="office-topics-title">
+          <h2 id="office-topics-title">Темы</h2>
+          <div id="office-subscriptions" class="office-actions"></div>
+          <div id="office-topic-forms" class="office-list"></div>
+          <form id="office-subscribe" class="office-form">
+            <label for="office-topic-id">ID темы</label>
+            <div class="office-actions">
+              <input id="office-topic-id" maxlength="64" placeholder="PB-0001" required>
+              <button type="submit">Присоединиться</button>
+            </div>
+          </form>
+        </section>
+        <section id="office-thread" class="office-panel" aria-labelledby="office-thread-title" hidden>
+          <h2 id="office-thread-title" tabindex="-1">Обсуждение</h2>
+          <div id="office-messages" class="office-list"></div>
+          <div id="office-thread-form"></div>
+        </section>
+        <section class="office-panel" aria-labelledby="office-projects-title">
+          <h2 id="office-projects-title">Новые проекты</h2>
+          <div id="office-project-form"></div>
+          <div id="office-projects" class="office-list"></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

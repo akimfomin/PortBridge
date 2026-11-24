@@ -10,6 +10,7 @@ from statistics import median
 from tempfile import TemporaryDirectory
 from threading import Thread
 from time import perf_counter_ns
+from urllib.parse import urlencode
 
 from .__main__ import make_server
 from .catalog import Catalog
@@ -22,6 +23,7 @@ SEED = Path(__file__).resolve().parent / "data" / "seed.json"
 PROBLEM = "PB-0001"
 START = "https://github.com/ubiquitarianism/leonida/pull/207"
 REFERENCE = "https://github.com/Marvisak/VIctory/pull/346#issuecomment-7120734503"
+NEW_SOURCE = "https://github.com/ivall/xcl/issues/772"
 CASES = ((0, 0), (1, 0), (0, 1))
 EXPECTED_CORNERS = {(0, 0), (1, 0), (0, 1), (1, 1)}
 EXPECTED_DIAGONAL = {(0, 1), (1, 0)}
@@ -64,7 +66,7 @@ def timed_lookup(lookup, repeats=9):
 def compare_lookups(catalog):
     manual, raw_elapsed = timed_lookup(lambda: manual_lookup(catalog))
     prepared, preflight_elapsed = timed_lookup(lambda: preflight(catalog, url=START)["first_check"])
-    if manual != prepared or not prepared or prepared["url"] != REFERENCE:
+    if not manual or not prepared or any(prepared[key] != value for key, value in manual.items()) or prepared["url"] != REFERENCE:
         raise RuntimeError("The two demo lookups did not identify the same public reference")
     return prepared, {"measure": "local elapsed time per lookup, microseconds, median of 9",
                       "raw_catalog": raw_elapsed, "preflight": preflight_elapsed,
@@ -126,6 +128,27 @@ def call_exchange(port, agent, route, *, body=None, expected=200):
         connection.close()
 
 
+def demonstrate_new_topic(port, author, reader, reviewer):
+    proposal = {"source_url": NEW_SOURCE, "title": "Wave64 lane behavior"}
+    call_exchange(port, author, "propose-topic", body=proposal)
+    topic = call_exchange(port, reviewer, "review-topic", body={
+        "source_url": NEW_SOURCE, "decision": "accepted",
+    })["topic"]
+    call_exchange(port, author, "register", body={"problem_id": topic["id"]})
+    submitted = call_exchange(port, author, "submit", body={
+        "problem_id": topic["id"], "source_url": NEW_SOURCE, "revision": SIMULATION_REVISION,
+        "platform": "SIMULATION local API, no hardware check",
+        "evidence_kind": "simulation", "outcome": "unknown",
+        "summary": "Workflow simulation. A hardware result for the source issue is still needed.",
+    })["result"]
+    route = "preflight?" + urlencode({"url": NEW_SOURCE})
+    before = call_exchange(port, reader, route)
+    call_exchange(port, reviewer, "review", body={"result_id": submitted["id"], "decision": "accepted"})
+    after = call_exchange(port, reader, route)
+    return {"topic": after["exchange_topic"], "reports_before_review": len(before["reviewed_reports"]),
+            "reports_after_review": after["reviewed_reports"]}
+
+
 def run_demo(*, temp_root=None):
     with TemporaryDirectory(prefix=".portbridge-exchange-demo-", dir=temp_root or Path.cwd()) as directory:
         path = Path(directory)
@@ -162,6 +185,7 @@ def run_demo(*, temp_root=None):
             repeat = call_exchange(port, victory, f"poll?after={received['next_cursor']}")
             evidence = call_exchange(port, victory, f"evidence?problem_id={PROBLEM}")["results"]
             preflight_after = call_exchange(port, victory, f"preflight?q={PROBLEM}")["reviewed_reports"]
+            new_topic = demonstrate_new_topic(port, continued, victory, reviewer)
         return {
             "mode": "simulation",
             "transport": "loopback HTTP API",
@@ -182,6 +206,7 @@ def run_demo(*, temp_root=None):
             "accepted_evidence_ids": [row["id"] for row in evidence],
             "preflight_reports_after_review": [row["id"] for row in preflight_after],
             "events_after_advancing_cursor": len(repeat["events"]),
+            "new_topic": new_topic,
         }
 
 

@@ -8,11 +8,11 @@ import string
 from urllib.parse import quote
 
 from .catalog import PROBLEM_ID, public_url
+from .github import PR_URL
 from .preflight import PUBLIC_BASE, public_preflight
 
 
 EVENT_LIMIT = 4 * 1024 * 1024
-PR_URL = re.compile(r"https://github\.com/[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+/pull/[1-9][0-9]*")
 ESCAPE_MARKDOWN = str.maketrans({char: f"&#{ord(char)};" for char in string.punctuation})
 HEADER = "## PortBridge prior-work summary\n\n"
 UNAVAILABLE = "The public catalog is unavailable. Continue the usual review.\n"
@@ -56,8 +56,22 @@ def render_report(result):
     lines = ["Review these leads against the target revision and configuration.", ""]
     if result.get("catalog_status") in {"partial", "stale", "error", "seed-only"}:
         lines.extend(["The public snapshot may be incomplete.", ""])
+    if result.get("origin_url") and result.get("indexed") is False:
+        lines.extend(["This pull request is absent from the public index. Check its current details on GitHub.", ""])
+    for source in result.get("source_coverage", []):
+        repo = label(source.get("repo", source["slug"]))
+        for mode, health in source["history"].items():
+            if health["status"] != "complete":
+                lines.append(f"- {repo} · {label(mode)} history: {label(health['status'])}")
+        if source.get("freshness") in {"partial", "stale", "error"}:
+            lines.append(f"- {repo} · recent sources: {label(source['freshness'])}")
+            for kind, state in source.get("kinds", {}).items():
+                if state["sync_status"] != "ok":
+                    lines.append(f"  - {label(kind)}: {label(state['sync_status'])}")
+    if lines[-1]:
+        lines.append("")
 
-    cards = []
+    cards, candidates = [], []
     for card in result["problems"][:5]:
         ident = card["id"]
         if not PROBLEM_ID.fullmatch(ident):
@@ -66,8 +80,11 @@ def render_report(result):
         sources = [source_link(solution["project"], solution["source_url"]) for solution in card["solutions"][:4]]
         suffix = " · ".join(link for link in sources if link)
         row = f"- [{ident} {label(card['title'])}]({card_url})"
-        cards.append(f"{row} · {suffix}" if suffix else row)
+        section = candidates if card.get("match_level") == "candidate" else cards
+        section.append(f"{row} · {suffix}" if suffix else row)
     groups = ["### Reviewed catalog", "", *cards, ""] if cards else []
+    if candidates:
+        groups.extend(["### Possible catalog matches", "", *candidates, ""])
     groups.extend(source_group("Suggested cross-project leads", [
         match["right"] for match in result["matches"] if match.get("relationship") != "same_revision"
     ]))
@@ -91,6 +108,8 @@ def render_report(result):
             scope.extend(label(platform) for platform in check.get("platforms", [])[:4])
             details = f" ({', '.join(scope)})" if scope else ""
             lines.extend([f"**First check** · {link}{details}", ""])
+            if check.get("observed"):
+                lines.extend([f"**{label(check['outcome'].capitalize())}** · {label(check['observed'])}", ""])
 
     if groups and result.get("next_step"):
         lines.extend([label(result["next_step"]), ""])

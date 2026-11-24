@@ -4,6 +4,7 @@ from html import escape
 import json
 from pathlib import Path
 
+from .case_pages import CASE_FILE, case_page, case_path, sitemap
 from .catalog import REPO_NAME, timestamp
 from .coordination import knowledge_graph, recommendations
 from .feed import build_feed
@@ -14,7 +15,7 @@ ROOT = PACKAGE.parent
 ASSETS = {"index.html": "index.html", "static/styles.css": "styles.css", "static/app.js": "app.js"}
 SNAPSHOTS = {"site", "projects", "problems", "matches", "health", "observations", "coordination", "outreach",
              "graph", "source-history", "recommendations"}
-EXPORT_FILES = {*ASSETS, "api.html", "feed.xml", ".nojekyll", *(f"data/{name}.json" for name in SNAPSHOTS)}
+EXPORT_FILES = {*ASSETS, "api.html", "feed.xml", "sitemap.xml", ".nojekyll", *(f"data/{name}.json" for name in SNAPSHOTS)}
 
 
 def docs_page():
@@ -31,14 +32,20 @@ def output_path(directory):
     if directory == ROOT or directory in ROOT.parents or directory == PACKAGE or PACKAGE in directory.parents:
         raise ValueError("export must use a separate output directory")
     if directory.is_dir():
-        allowed_dirs = {"data", "static"}
+        allowed_dirs = {"data", "static", "cases"}
         for child in directory.iterdir():
             if child.is_symlink() or (hasattr(child, "is_junction") and child.is_junction()):
                 raise ValueError("export directory contains a link")
             if child.is_dir() and child.name in allowed_dirs:
                 for entry in child.iterdir():
-                    if entry.is_symlink() or not entry.is_file() or f"{child.name}/{entry.name}" not in EXPORT_FILES:
+                    is_output_file = (CASE_FILE.fullmatch(entry.name) if child.name == "cases"
+                                      else f"{child.name}/{entry.name}" in EXPORT_FILES)
+                    if entry.is_symlink() or not entry.is_file() or not is_output_file:
                         raise ValueError("export directory contains files outside PortBridge's public snapshot")
+                    if child.name == "cases":
+                        with entry.open("rb") as stream:
+                            if b'<meta name="generator" content="PortBridge">' not in stream.read(4096):
+                                raise ValueError("export directory contains an unrecognized case page")
             elif not child.is_file() or child.name not in EXPORT_FILES:
                 raise ValueError("export directory contains files outside PortBridge's public snapshot")
     return directory
@@ -68,6 +75,15 @@ def export(catalog, directory, repository=""):
     contents["api.html"] = docs_page().encode("utf-8")
     contents["feed.xml"] = build_feed(catalog)
     contents[".nojekyll"] = b""
+    cards = data["problems"]["problems"]
+    names = {project["slug"]: project["name"] for project in data["projects"]["projects"]}
+    contents["sitemap.xml"] = sitemap(cards)
+    for card in cards:
+        contents[case_path(card)] = case_page(card, names).encode("utf-8")
+    if (directory / "cases").is_dir():
+        for path in (directory / "cases").iterdir():
+            if f"cases/{path.name}" not in contents:
+                path.unlink()
     for path, value in contents.items():
         target = directory / path
         target.parent.mkdir(parents=True, exist_ok=True)

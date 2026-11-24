@@ -101,8 +101,8 @@
             {"title": "Интеграционная ветка #321", "url": "https://github.com/ubiquitarianism/leonida/pull/321"}
           ],
           "evidence": [
-            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/321#issuecomment-7122193634", "title": "Sigtryggur-Mani-Gudmundsson проверил покрытие", "revision": "e0d4fd2b81e6636b1c6bb2f76be79e910e84d84b", "platforms": ["Linux", "NVIDIA RTX 4070 Ti"], "observed": "Локальный перенос выбора угла из #207 покрыл 24 проверенных порядка вершин. Для верного однотонного цвета тестировщик также сохранил правило выбора первой вершины интеграционной ветки. Тест касался искусственных прямоугольников."},
-            {"kind": "independent", "outcome": "failed", "url": "https://github.com/ubiquitarianism/leonida/pull/207#issuecomment-7122054510", "title": "Отдельная проверка индексированных четырёхугольников", "revision": "21dc3889280dba49916f63342dab72750d3ee4b9", "platforms": ["NVIDIA RTX 4070 Ti"], "observed": "Индексированный четырёхугольник в проверенной версии показал пустой кадр. Это отдельный путь от списка прямоугольников, а вариант исправления проверялся локально."}
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/321#issuecomment-7122193634", "title": "Sigtryggur-Mani-Gudmundsson проверил покрытие", "revision": "e0d4fd2b81e6636b1c6bb2f76be79e910e84d84b", "platforms": ["Linux", "NVIDIA RTX 4070 Ti"], "check_for": ["https://github.com/Marvisak/VIctory/pull/346"], "reported_at": "2026-11-24T04:37:44Z", "observed": "Локальный перенос выбора угла из #207 покрыл 24 проверенных порядка вершин. Для верного однотонного цвета тестировщик также сохранил правило выбора первой вершины интеграционной ветки. Тест касался искусственных прямоугольников."},
+            {"kind": "independent", "outcome": "failed", "url": "https://github.com/ubiquitarianism/leonida/pull/207#issuecomment-7122054510", "title": "Отдельная проверка индексированных четырёхугольников", "revision": "21dc3889280dba49916f63342dab72750d3ee4b9", "platforms": ["NVIDIA RTX 4070 Ti"], "reported_at": "2026-11-24T04:28:37Z", "observed": "Индексированный четырёхугольник в проверенной версии показал пустой кадр. Это отдельный путь от списка прямоугольников, а вариант исправления проверялся локально."}
           ]
         },
         {
@@ -115,7 +115,7 @@
             {"title": "Отчёт #255 о пропусках отрисовки", "url": "https://github.com/Marvisak/VIctory/issues/255"}
           ],
           "evidence": [
-            {"kind": "independent", "outcome": "passed", "url": "https://github.com/Marvisak/VIctory/pull/346#issuecomment-7120734503", "title": "fuzeofficlal, проверка на двух GPU", "revision": "cee702eb4797a2288a2519b4cbda61720cfb7db4", "platforms": ["Windows 11", "NVIDIA RTX 5090", "AMD Radeon"], "observed": "В каждом окружении прошли все восемь тестов прямоугольников. В отдельном испытании все 64 пикселя искусственного изображения совпали с ожидаемыми. Результат ограничен тестовой сценой и выбранным путём отрисовки."},
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/Marvisak/VIctory/pull/346#issuecomment-7120734503", "title": "fuzeofficlal, проверка на двух GPU", "revision": "cee702eb4797a2288a2519b4cbda61720cfb7db4", "platforms": ["Windows 11", "NVIDIA RTX 5090", "AMD Radeon"], "check_for": ["https://github.com/ubiquitarianism/leonida/pull/207", "https://github.com/ubiquitarianism/leonida/pull/321"], "reported_at": "2026-11-24T03:03:42Z", "observed": "В каждом окружении прошли все восемь тестов прямоугольников. В отдельном испытании все 64 пикселя искусственного изображения совпали с ожидаемыми. Результат ограничен тестовой сценой и выбранным путём отрисовки."},
             {"kind": "maintainer_claim", "url": "https://github.com/Marvisak/VIctory/pull/346", "title": "Область реализации по описанию автора PR", "revision": "0aebe86b0c0d0a73f92a274d35b5e6061afbf7af", "platforms": ["Windows D3D12"], "observed": "Автор описал обработку непрямого неиндексированного вызова GPU-стадией. Статус GitHub на момент проверки — открыто."}
           ]
         }
@@ -225,7 +225,7 @@
             {"title": "Результат контроля на VIctory", "url": "https://github.com/Marvisak/VIctory/pull/346#issuecomment-7121170075"}
           ],
           "evidence": [
-            {"kind": "independent", "outcome": "observed", "url": "https://github.com/Marvisak/VIctory/pull/346#issuecomment-7121170075", "title": "Тот же проверяющий повторил симптом на основной ветке", "revision": "97c78d1087808bd6ce5eabb5d566083a38406a90", "platforms": ["Windows 11", "NVIDIA RTX 3080 Ti"], "observed": "Тот же симптом произошёл на основной версии и на проверенной ветке PR #346 на одной машине. Это наблюдение в запуске игры отдельно от лабораторной проверки прямоугольников."}
+            {"kind": "independent", "outcome": "observed", "url": "https://github.com/Marvisak/VIctory/pull/346#issuecomment-7121170075", "title": "Тот же проверяющий повторил симптом на основной ветке", "revision": "97c78d1087808bd6ce5eabb5d566083a38406a90", "platforms": ["Windows 11", "NVIDIA RTX 3080 Ti"], "reported_at": "2026-11-24T03:30:55Z", "observed": "Тот же симптом произошёл на основной версии и на проверенной ветке PR #346 на одной машине. Это наблюдение в запуске игры отдельно от лабораторной проверки прямоугольников."}
           ]
         }
       ]

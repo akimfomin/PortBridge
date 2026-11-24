@@ -1,7 +1,7 @@
 """Persistent curated problems and public GitHub observations."""
 
 from collections import defaultdict
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from datetime import datetime, timezone
 from itertools import combinations
 import json
@@ -10,7 +10,8 @@ import re
 import sqlite3
 from urllib.parse import urlsplit
 
-from .matching import RelatedIndex, canonical_url
+from . import PROJECT_LINK
+from .matching import RelatedIndex, canonical_url, source_revision
 
 
 PROBLEM_STATUS = {"investigating", "partial", "verified", "resolved"}
@@ -65,6 +66,7 @@ def validate_seed(seed):
         expect(problem["status"] in PROBLEM_STATUS, f"Invalid problem status: {ident}")
         dependencies = set(problem["dependency_ids"])
         expect(dependencies <= ids and ident not in dependencies, f"Invalid dependencies: {ident}")
+        subjects = {source["url"] for solution in problem["solutions"] for source in solution["source_refs"]}
         solution_projects = set()
         for solution in problem["solutions"]:
             project = solution["project"]
@@ -78,6 +80,10 @@ def validate_seed(seed):
                 expect(evidence["kind"] in EVIDENCE_KIND, f"Invalid evidence kind: {ident}")
                 expect(evidence.get("outcome", "unknown") in EVIDENCE_OUTCOME, f"Invalid evidence outcome: {ident}")
                 expect(bool(evidence["observed"]), f"Missing evidence summary: {ident}")
+                if "check_for" in evidence:
+                    scope = evidence["check_for"]
+                    expect(isinstance(scope, list) and all(isinstance(url, str) and url in subjects for url in scope),
+                           f"Invalid evidence scope: {ident}")
     reference = seed.get("coordination", {}).get("reference")
     if reference:
         expect(reference["project"] in slugs and public_url(reference["url"]), "Invalid reference build")
@@ -89,6 +95,9 @@ CREATE TABLE IF NOT EXISTS projects (
 );
 CREATE TABLE IF NOT EXISTS problems (
     id TEXT PRIMARY KEY, payload TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS withdrawn_problems (
+    id TEXT NOT NULL, payload TEXT NOT NULL, withdrawn_at TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS observations (
     project TEXT NOT NULL REFERENCES projects(slug),
@@ -114,6 +123,10 @@ CREATE INDEX IF NOT EXISTS source_changes_url ON source_changes(lower(url), id);
 CREATE TABLE IF NOT EXISTS sync_projects (
     slug TEXT PRIMARY KEY REFERENCES projects(slug), payload TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS history_sync (
+    slug TEXT NOT NULL REFERENCES projects(slug), mode TEXT NOT NULL, payload TEXT NOT NULL,
+    PRIMARY KEY (slug, mode)
+);
 CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY, value TEXT NOT NULL
 );
@@ -133,8 +146,14 @@ class Catalog:
         with self.connect() as db:
             db.execute("PRAGMA journal_mode=WAL")
             db.executescript(SCHEMA)
+            db.execute("BEGIN IMMEDIATE")
             db.executemany("INSERT INTO projects VALUES(?, ?) ON CONFLICT(slug) DO UPDATE SET payload=excluded.payload",
                            ((p["slug"], encode(p)) for p in seed["projects"]))
+            managed = {problem["id"] for problem in seed["problems"]}
+            withdrawn = [(row["id"], row["payload"], timestamp())
+                         for row in db.execute("SELECT id, payload FROM problems") if row["id"] not in managed]
+            db.executemany("INSERT INTO withdrawn_problems VALUES (?, ?, ?)", withdrawn)
+            db.executemany("DELETE FROM problems WHERE id=?", ((row[0],) for row in withdrawn))
             db.executemany("INSERT INTO problems VALUES(?, ?) ON CONFLICT(id) DO UPDATE SET payload=excluded.payload",
                            ((p["id"], encode(p)) for p in seed["problems"]))
             db.execute("INSERT INTO settings VALUES('coordination', ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
@@ -167,7 +186,7 @@ class Catalog:
             row = db.execute("SELECT value FROM settings WHERE key='coordination'").fetchone()
         return json.loads(row[0]) if row else {}
 
-    def record_sync(self, result, *, update_health=True):
+    def record_sync(self, result, *, update_health=True, history_mode=None):
         observed_at = timestamp()
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
@@ -181,8 +200,10 @@ class Catalog:
                     WHERE project=? AND kind=? AND source_id=?""", key).fetchone()
                 updated_at = utc_sort_key(item["updated_at"])
                 fetched_at = item.get("fetched_at") or observed_at
-                status, metadata = item["status"], item["metadata"]
+                status, metadata = item["status"], dict(item["metadata"])
+                incoming_revision = source_revision({"metadata": metadata})
                 old_metadata = {}
+                before = after = None
                 if previous:
                     older_update = utc_sort_key(previous["updated_at"])
                     prev_state = (older_update, utc_sort_key(previous["fetched_at"]))
@@ -190,25 +211,35 @@ class Catalog:
                         continue
                     old_metadata = json.loads(previous["metadata"])
                     metadata = {**old_metadata, **metadata}
-                    preserve = ("merged_at", "head_sha", "base_branch") if updated_at == older_update else ("merged_at",)
+                    preserve = ("merged_at", "base_branch") if updated_at == older_update else ("merged_at",)
                     for name in preserve:
                         if not metadata.get(name) and name in old_metadata:
                             metadata[name] = old_metadata[name]
                     if previous["status"] == "merged" and status == "closed":
                         status = "merged"
+                if item["kind"] in {"pr", "test"}:
+                    before = old_metadata.get("last_known_head_sha") or source_revision({"metadata": old_metadata})
+                    after = incoming_revision
+                    if previous and updated_at == older_update and not after:
+                        after = source_revision({"metadata": old_metadata})
+                    metadata["head_sha"] = after
+                    metadata["last_known_head_sha"] = after or before
                 db.execute("""INSERT INTO observations VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(project, kind, source_id) DO UPDATE SET
                     title=excluded.title, url=excluded.url, status=excluded.status,
                     updated_at=excluded.updated_at, fetched_at=excluded.fetched_at, metadata=excluded.metadata""",
                     (*key, item["title"][:300], item["url"], status, item["updated_at"], fetched_at, encode(metadata)))
                 if previous:
-                    before = old_metadata.get("head_sha")
-                    after = metadata.get("head_sha")
                     if previous["status"] != status or (before and after and before != after):
                         db.execute("""INSERT INTO source_changes(project, kind, url, previous_status, status,
                                       previous_revision, revision, observed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
                                    (item["project"], item["kind"], item["url"], previous["status"], status,
                                     before, after, fetched_at))
+            if history_mode in {"backfill", "incremental"}:
+                db.executemany("""INSERT INTO history_sync VALUES (?, ?, ?)
+                    ON CONFLICT(slug, mode) DO UPDATE SET payload=excluded.payload""",
+                               ((entry["slug"], history_mode, encode({**entry, "checked_at": observed_at}))
+                                for entry in result.get("history", []) if entry["slug"] in projects))
             if not update_health:
                 return
             for status in result.get("projects", []):
@@ -228,10 +259,14 @@ class Catalog:
         with self.connect() as db:
             row = db.execute("SELECT value FROM settings WHERE key='sync'").fetchone()
             count = db.execute("SELECT count(*) FROM observations").fetchone()[0]
-            table = db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='github_history'").fetchone()
+            tables = {state[0] for state in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             history = [dict(state) for state in db.execute(
                 "SELECT slug, next_page, complete FROM github_history WHERE mode='backfill' ORDER BY slug"
-            )] if table else []
+            )] if "github_history" in tables else []
+            history_checks = defaultdict(dict)
+            if "history_sync" in tables:
+                for check in db.execute("SELECT * FROM history_sync"):
+                    history_checks[check["slug"]][check["mode"]] = json.loads(check["payload"])
         projects = self.projects()
         states = {project["sync_status"] for project in projects}
         details = json.loads(row[0]) if row else {"refresh_at": None, "warnings": []}
@@ -245,7 +280,19 @@ class Catalog:
             status = "error"
         else:
             status = "partial"
-        return {"status": status, "observation_count": count, "history": history, **details}
+        backfill = {entry["slug"]: entry for entry in history}
+        sources = []
+        for project in projects:
+            slug = project["slug"]
+            cursor = backfill.get(slug, {})
+            history_state = "complete" if cursor.get("complete") else "partial" if cursor else "unknown"
+            modes = {"backfill": {"status": history_state, "next_page": cursor.get("next_page")},
+                     "incremental": {"status": "unknown"}}
+            for mode, check in history_checks[slug].items():
+                modes[mode].update(check)
+            sources.append({"slug": slug, "repo": project["repo"], "freshness": project["sync_status"],
+                            "last_success": project["last_success"], "kinds": project["sources"], "history": modes})
+        return {"status": status, "observation_count": count, "history": history, "sources": sources, **details}
 
     def problems(self, *, q="", project="", status="", partial=False):
         with self.connect() as db:
@@ -267,6 +314,25 @@ class Catalog:
         with self.connect() as db:
             row = db.execute("SELECT payload FROM problems WHERE id=?", (ident,)).fetchone()
         return self.annotate_sources([summarize(json.loads(row[0]))])[0] if row else None
+
+    def curated_topic(self, source):
+        matches = [card["id"] for card in self.problems() if any(
+            not urlsplit(ref["url"]).fragment and canonical_url(ref["url"]) == source
+            for solution in card["solutions"] for ref in solution["source_refs"]
+        )]
+        return matches[0] if len(matches) == 1 else None
+
+    def observed_revisions(self, sources):
+        urls = sorted({canonical_url(source) for source in sources})
+        result = {}
+        with self.connect() as db:
+            for start in range(0, len(urls), 200):
+                chunk = urls[start:start + 200]
+                placeholders = ", ".join("?" for _ in chunk)
+                for row in db.execute(f"""SELECT lower(url) AS url, metadata FROM observations
+                    WHERE lower(url) IN ({placeholders})""", chunk):
+                    result[row["url"]] = source_revision({"metadata": json.loads(row["metadata"])})
+        return result
 
     def annotate_sources(self, problems):
         references = defaultdict(list)
@@ -386,10 +452,22 @@ class Catalog:
                     "source_project": source["project"],
                     "source_url": source_url,
                     "mode": mode,
-                    "message": f"Cross-project note prepared with [PortBridge](https://github.com/akimfomin/PortBridge) ({ident}).\n\n"
+                    "message": f"Cross-project note prepared with {PROJECT_LINK} ({ident}).\n\n"
                                f"{source['outreach_summary']}\n\n{caveat}",
                 })
         return drafts
+
+
+class ReadOnlyCatalog(Catalog):
+    def __init__(self, path):
+        self.path = Path(path).resolve()
+
+    @contextmanager
+    def connect(self):
+        uri = f"{self.path.as_uri()}?mode=ro"
+        with closing(sqlite3.connect(uri, uri=True, timeout=2)) as db:
+            db.row_factory = sqlite3.Row
+            yield db
 
 
 def summarize(problem):

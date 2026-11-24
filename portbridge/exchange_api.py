@@ -1,11 +1,15 @@
 """Opt-in HTTP routes for the local, human-reviewed exchange queue."""
 
 import json
+from datetime import datetime, timezone
 import sqlite3
 from urllib.parse import parse_qs, urlsplit
 
 from .catalog import PROBLEM_ID
+from .coordinator import outreach_drafts
+from .discussion import MAX_WAIT_SECONDS
 from .exchange import AuthError, Conflict, PermissionDenied
+from .matching import canonical_url
 from .preflight import preflight
 
 
@@ -18,14 +22,37 @@ ROUTES = {
     "evidence": ("read", "GET, HEAD"),
     "preflight": ("read", "GET, HEAD"),
     "pending": ("review", "GET, HEAD"),
+    "pending-topics": ("review", "GET, HEAD"),
+    "propose-topic": ("contribute", "POST"),
+    "review-topic": ("review", "POST"),
     "register": ("contribute", "POST"),
     "submit": ("contribute", "POST"),
     "review": ("review", "POST"),
+    "withdraw": ("review", "POST"),
+    "subscriptions": ("read", "GET, HEAD"),
+    "thread": ("read", "GET, HEAD"),
+    "updates": ("read", "GET, HEAD"),
+    "coordination": ("read", "GET, HEAD"),
+    "subscribe": ("read", "POST"),
+    "message": ("contribute", "POST"),
+    "plans": ("read", "GET, HEAD"),
+    "plan-propose": ("contribute", "POST"),
+    "plan-review": ("review", "POST"),
+    "plan-claim": ("contribute", "POST"),
+    "plan-result": ("contribute", "POST"),
+    "plan-decision": ("review", "POST"),
+    "office-projects": ("read", "GET, HEAD"),
+    "project-nominate": ("contribute", "POST"),
+    "project-review": ("review", "POST"),
 }
 QUERY_KEYS = {
     "poll": {"after", "limit"}, "work": {"problem_id"},
-    "evidence": {"problem_id", "limit"}, "pending": {"limit"},
+    "evidence": {"problem_id", "limit"}, "pending": {"limit"}, "pending-topics": {"limit"},
     "preflight": {"q", "url", "limit"},
+    "subscriptions": set(), "thread": {"problem_id", "after", "limit"},
+    "updates": {"after", "limit", "wait_seconds"},
+    "coordination": {"problem_id"},
+    "plans": {"problem_id"}, "office-projects": set(),
 }
 
 
@@ -53,6 +80,19 @@ def unique_json_object(pairs):
 
 def reject_non_json(_value):
     raise ValueError("invalid JSON value")
+
+
+def report_contexts(catalog, reports):
+    revisions = catalog.observed_revisions(report["source_url"] for report in reports)
+    now = datetime.now(timezone.utc)
+    contexts = {}
+    for report in reports:
+        current = revisions.get(canonical_url(report["source_url"]))
+        age = (now - datetime.fromisoformat(report["reviewed_at"])).days
+        status = ("unknown" if not current else "current" if current == report["revision"] else "different")
+        contexts[str(report["id"])] = {"current_revision": current, "revision_status": status,
+                                       "review_age_days": max(0, age)}
+    return contexts
 
 
 class ExchangeHandlerMixin:
@@ -140,23 +180,45 @@ class ExchangeHandlerMixin:
             raise ValueError("invalid problem ID")
         if route == "work":
             return {"work": exchange.active_work(token, problem_id=ident)}
+        if route == "subscriptions":
+            return {"subscriptions": exchange.discussions.subscriptions(token)}
+        if route == "plans":
+            return exchange.office.board(token, ident, catalog=self.server.catalog)
+        if route == "office-projects":
+            return exchange.discovery.projects(token, self.server.catalog)
         if route == "preflight":
             catalog = getattr(self.server, "catalog", None)
             if catalog is None:
                 raise ExchangeRequestError(404, "local catalog unavailable")
             limit = positive_query(args.get("limit", "5"), 1, 20)
             result = preflight(catalog, q=args.get("q", ""), url=args.get("url", ""), limit=limit)
-            reports = [report for problem in result["problems"]
-                       for report in exchange.evidence(token, problem["id"], limit=limit)]
-            return {**result, "reviewed_reports": reports}
+            query_id = result["query"].upper()
+            topic = exchange.find_topic(token, source_url=result["origin_url"],
+                                        ident=query_id if PROBLEM_ID.fullmatch(query_id) else None)
+            ids = [problem["id"] for problem in result["problems"] if problem["match_level"] == "confirmed"]
+            if topic:
+                ids.append(topic["id"])
+            reports = [report for ident in ids for report in exchange.evidence(token, ident, limit=limit)]
+            return {**result, "exchange_topic": topic, "reviewed_reports": reports,
+                    "report_contexts": report_contexts(catalog, reports)}
         limit = positive_query(args.get("limit", "50"), 1, 100)
+        if route in {"evidence", "coordination", "thread"} and ident is None:
+            raise ValueError("problem ID required")
         if route == "evidence":
-            if ident is None:
-                raise ValueError("problem ID required")
             return {"results": exchange.evidence(token, ident, limit=limit)}
+        if route == "coordination":
+            links = exchange.discussions.coordination_links(token, ident)
+            return {"links": links, "drafts": outreach_drafts(links)}
         if route == "pending":
             return {"results": exchange.pending_results(token, limit=limit)}
+        if route == "pending-topics":
+            return {"topics": exchange.pending_topics(token, limit=limit)}
         after = positive_query(args.get("after", "0"), 0, MAX_CURSOR)
+        if route == "thread":
+            return exchange.discussions.thread(token, ident, after=after, limit=limit)
+        if route == "updates":
+            wait = positive_query(args.get("wait_seconds", "0"), 0, MAX_WAIT_SECONDS)
+            return exchange.discussions.updates(token, after=after, limit=limit, wait_seconds=wait)
         return exchange.poll_events(token, after=after, limit=limit)
 
     def exchange_read_json(self):
@@ -190,16 +252,52 @@ class ExchangeHandlerMixin:
         if query:
             raise ValueError("write routes do not accept query parameters")
         body = self.exchange_read_json()
+        if route.startswith(("plan-", "project-")):
+            return self.office_write(exchange, token, route, body)
         if route == "register":
             if body.keys() - {"problem_id", "ttl_seconds"} or "problem_id" not in body:
                 raise ValueError("invalid registration fields")
             return {"work": exchange.register_work(token, body["problem_id"], ttl_seconds=body.get("ttl_seconds", 3600))}
         if route == "submit":
             return {"result": exchange.submit_result(token, body)}
+        if route == "subscribe" and body.keys() == {"problem_id", "enabled"}:
+            return {"subscription": exchange.discussions.subscribe(token, body["problem_id"], body["enabled"])}
+        if route == "message":
+            return {"message": exchange.discussions.add_message(token, body)}
+        if route == "propose-topic" and body.keys() == {"source_url", "title"}:
+            return {"topic": exchange.propose_topic(token, body["source_url"], body["title"])}
+        if route == "review-topic" and body.keys() == {"source_url", "decision"}:
+            return {"topic": exchange.review_topic(token, body["source_url"], body["decision"])}
+        if route == "withdraw" and body.keys() == {"result_id", "reason"}:
+            return {"result": exchange.withdraw_result(token, body["result_id"], reason=body["reason"])}
+        if route != "review":
+            raise ValueError("invalid exchange fields")
         if body.keys() - {"result_id", "decision", "reason"} or not {"result_id", "decision"} <= body.keys():
             raise ValueError("invalid review fields")
         return {"result": exchange.review_result(token, body["result_id"], decision=body["decision"],
                                                 reason=body.get("reason", ""))}
+
+    def office_write(self, exchange, token, route, body):
+        catalog = self.server.catalog
+        if route == "project-nominate":
+            return {"project": exchange.discovery.nominate(token, body, catalog)}
+        if route == "project-review" and body.keys() == {"repo", "decision"}:
+            return {"project": exchange.discovery.review(token, body["repo"], body["decision"])}
+        if route == "plan-propose":
+            return {"plan": exchange.office.propose(token, body, catalog)}
+        ident = body.get("plan_id")
+        if route == "plan-review" and {"plan_id", "decision"} <= body.keys() <= {"plan_id", "decision", "priority", "requires"}:
+            plan = exchange.office.review(token, ident, body["decision"], body.get("priority", 2),
+                                          body.get("requires", []), catalog)
+        elif route == "plan-claim" and {"plan_id"} <= body.keys() <= {"plan_id", "release"}:
+            plan = exchange.office.claim(token, ident, catalog, release=body.get("release", False))
+        elif route == "plan-result" and body.keys() == {"plan_id", "result_id"}:
+            plan = exchange.office.link_report(token, ident, body["result_id"], catalog)
+        elif route == "plan-decision" and body.keys() == {"plan_id", "decision", "reason"}:
+            plan = exchange.office.decide(token, ident, body["decision"], body["reason"], catalog)
+        else:
+            raise ValueError("invalid office fields")
+        return {"plan": plan}
 
     def exchange_response(self, status, payload, *, head=False, allow=None):
         data = json.dumps(payload, separators=(",", ":")).encode("utf-8")

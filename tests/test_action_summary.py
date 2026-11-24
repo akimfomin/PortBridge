@@ -72,6 +72,13 @@ class ActionSummaryTests(TestCase):
             self.assertEqual(action_summary.main(self.env), 0)
         self.assertIn("No related work was found", self.report.read_text(encoding="utf-8"))
 
+    def test_successful_snapshot_reports_an_unindexed_pull_request(self):
+        result = {"origin_url": self.source, "indexed": False, "catalog_status": "ok",
+                  "problems": [], "matches": [], "observations": []}
+        markdown = action_summary.render_report(result)
+        self.assertIn("absent from the public index", markdown)
+        self.assertIn("current details on GitHub", markdown)
+
     def test_privileged_event_and_non_github_url_never_scan(self):
         with mock.patch.object(action_summary, "public_preflight") as preflight:
             self.assertEqual(action_summary.main({**self.env, "GITHUB_EVENT_NAME": "pull_request_target"}), 0)

@@ -1,11 +1,16 @@
 from http.client import HTTPConnection
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
 from tempfile import TemporaryDirectory
 from threading import Thread
 import unittest
+from urllib.parse import urlencode
 
 from portbridge.__main__ import DEFAULT_SEED, make_server
+from portbridge.backup import backup_database
 from portbridge.catalog import Catalog
 from portbridge.exchange import Exchange
 from portbridge.exchange_api import MAX_BODY_BYTES, PREFIX
@@ -100,6 +105,78 @@ class ExchangeAPITest(unittest.TestCase):
         self.assertFalse(self.request("GET", "/api/v1")[1]["exchange_enabled"])
         self.assertEqual(self.request("POST", "submit", self.worker, payload=self.result)[0], 404)
 
+    def test_new_topic_reaches_an_isolated_client_and_can_be_withdrawn(self):
+        reader = self.exchange.create_principal("copy-of-client-two", {"read"})["token"]
+        source = "https://github.com/ivall/xcl/issues/772"
+        path = "preflight?" + urlencode({"url": source})
+        proposal = {"source_url": source, "title": "Wave64 lane behavior"}
+        self.assertEqual(self.request("POST", "propose-topic", self.worker, payload=proposal)[1]["topic"]["status"],
+                         "submitted")
+        retry = {**proposal, "source_url": source.replace("/ivall/xcl/", "/IVALL/XCL/")}
+        self.assertEqual(self.request("POST", "propose-topic", self.worker, payload=retry)[0], 200)
+        self.assertEqual(self.request("GET", "pending-topics", reader)[0], 403)
+        self.assertIsNone(self.request("GET", path, reader)[1]["exchange_topic"])
+        listed, = self.request("GET", "pending-topics", self.reviewer)[1]["topics"]
+        decision = {"source_url": source, "decision": "accepted"}
+        approved = self.request("POST", "review-topic", self.reviewer, payload=decision)[1]["topic"]
+        ident = approved["id"]
+        self.assertEqual(ident, listed["id"])
+        self.assertEqual(self.request("POST", "propose-topic", self.worker, payload=proposal)[1]["topic"]["id"], ident)
+        self.assertEqual(self.request("POST", "register", self.worker, payload={"problem_id": ident})[0], 200)
+
+        body = {**self.result, "problem_id": ident, "source_url": source, "outcome": "failed",
+                "evidence_kind": "simulation", "summary": "Synthetic negative control."}
+        result = self.request("POST", "submit", self.worker, payload=body)[1]["result"]
+        self.assertEqual(self.request("GET", "pending", reader)[0], 403)
+        self.assertEqual(self.request("GET", path, reader)[1]["reviewed_reports"], [])
+        acceptance = {"result_id": result["id"], "decision": "accepted"}
+        self.assertEqual(self.request("POST", "review", self.reviewer, payload=acceptance)[0], 200)
+        self.assertEqual(self.request("POST", "submit", self.worker, payload=body)[1]["result"]["id"], result["id"])
+        self.assertEqual(self.request("POST", "review", self.reviewer, payload=acceptance)[0], 409)
+        events = self.request("GET", "poll", reader)[1]
+        self.assertEqual(len(events["events"]), 1)
+
+        environment = {**os.environ, "PORTBRIDGE_EXCHANGE_TOKEN": reader}
+        port = str(self.server.server_port)
+        cli = subprocess.run([sys.executable, "-m", "portbridge.preflight", "--exchange-port", port, "--url", source],
+                             env=environment, capture_output=True, check=True, timeout=8)
+        call = {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {
+            "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28",
+                      "io.modelcontextprotocol/clientCapabilities": {}},
+            "name": "portbridge_preflight", "arguments": {"url": source},
+        }}
+        mcp = subprocess.run([sys.executable, "-m", "portbridge.mcp", "--exchange-port", port],
+                             env=environment, input=json.dumps(call).encode() + b"\n",
+                             capture_output=True, check=True, timeout=8)
+        cli_result, mcp_result = json.loads(cli.stdout), json.loads(mcp.stdout)["result"]["structuredContent"]
+        for response in (cli_result, mcp_result):
+            self.assertEqual(response["exchange_topic"]["id"], ident)
+            self.assertEqual(response["reviewed_reports"][0]["outcome"], "failed")
+            self.assertEqual(response["report_contexts"][str(result["id"])]["revision_status"], "unknown")
+            self.assertIsNone(response["first_check"])
+        self.assertNotIn("exchange_topic", self.request("GET", "/api/v1/" + path)[1])
+
+        self.exchange.revoke_principal("agent-one")
+        self.assertEqual(self.request("GET", path, self.worker)[0], 401)
+        pending_user = self.exchange.create_principal("pending-agent", {"read", "contribute"})["token"]
+        self.request("POST", "submit", pending_user, payload={**body, "revision": "b" * 40})
+        backup = backup_database(self.exchange.path, self.exchange.path.parent / "restored.sqlite3")
+        restored = Exchange(backup, problem_exists=lambda _ident: False)
+        self.assertEqual(restored.authenticate(self.reviewer)["scopes"], ["read", "review"])
+        self.assertEqual(len(restored.pending_results(self.reviewer)), 1)
+        self.assertEqual(restored.find_topic(reader, source_url=source)["id"], ident)
+        self.assertEqual(restored.poll_events(reader), events)
+        self.server.exchange = restored
+        self.assertEqual(self.request("GET", path, self.worker)[0], 401)
+        for _ in range(2):
+            self.assertEqual(self.request("POST", "withdraw", self.reviewer, payload={
+                "result_id": result["id"], "reason": "Simulation superseded.",
+            })[0], 200)
+        self.assertEqual(self.request("GET", path, reader)[1]["reviewed_reports"], [])
+        followup = self.request("GET", f"poll?after={events['next_cursor']}", reader)[1]
+        self.assertEqual([item["kind"] for item in followup["events"]], ["result_withdrawn"])
+        self.assertNotIn("Synthetic negative control", json.dumps(self.request("GET", "poll", reader)[1]))
+
     def test_private_preflight_reads_reviewed_simulation_without_promotion(self):
         path = "preflight?q=PB-0001&limit=1"
         self.assertEqual(self.request("GET", path)[0], 401)
@@ -114,6 +191,9 @@ class ExchangeAPITest(unittest.TestCase):
         self.assertEqual(after["problems"], before["problems"])
         self.assertEqual(after["reviewed_reports"], [accepted["result"]])
         self.assertEqual(after["reviewed_reports"][0]["evidence_kind"], "simulation")
+        _, unrelated, _ = self.request("GET", path + "&url=https://github.com/Marvisak/VIctory/pull/641", self.worker)
+        self.assertIsNone(unrelated["first_check"])
+        self.assertEqual(unrelated["reviewed_reports"], [])
         self.assertEqual(self.request("GET", "preflight?q=PB-0002", self.reviewer)[1]["reviewed_reports"], [])
         self.assertNotIn("reviewed_reports", self.request("GET", f"/api/v1/{path}")[1])
 

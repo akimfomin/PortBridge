@@ -13,6 +13,7 @@ from xml.etree import ElementTree
 
 from portbridge.__main__ import DEFAULT_SEED, make_server
 from portbridge.backup import backup_database
+from portbridge.case_pages import case_path
 from portbridge.catalog import Catalog
 from portbridge.coordination import knowledge_graph, recommendations
 from portbridge.export import EXPORT_FILES, export
@@ -41,6 +42,63 @@ class CatalogFixture(unittest.TestCase):
 
 
 class CatalogTest(CatalogFixture):
+    def test_seed_withdrawal_preserves_attribution_but_removes_active_references(self):
+        seed = json.loads(DEFAULT_SEED.read_bytes())
+        seed["problems"] = [card for card in seed["problems"] if card["id"] != "PB-0001"]
+        updated_seed = self.workspace / "updated-seed.json"
+        updated_seed.write_text(json.dumps(seed), encoding="utf-8")
+        out = export(self.catalog, self.workspace / "snapshot")
+        for _ in range(2):
+            self.catalog = Catalog(self.db_path, updated_seed)
+            self.assertIsNone(self.catalog.problem("PB-0001"))
+            export(self.catalog, out)
+            self.assertNotIn("PB-0001", (out / "data/problems.json").read_text(encoding="utf-8"))
+            self.assertFalse((out / "cases/pb-0001.html").is_file())
+        with self.catalog.connect() as db:
+            archived, = db.execute("SELECT payload FROM withdrawn_problems WHERE id='PB-0001'").fetchall()
+        self.assertIn("7122193634", archived[0])
+
+    def test_unknown_and_late_pr_updates_preserve_one_revision_change(self):
+        url = "https://github.com/ubiquitarianism/leonida/pull/207"
+        row = self.observation("continued", "pr", 207, "Rectangle implementation", url)
+        def write(second, revision):
+            self.catalog.record_sync({"items": [{**row, "updated_at": f"2026-11-24T10:00:0{second}Z",
+                                                  "metadata": {"head_sha": revision}}]}, update_health=False)
+
+        write(1, "a" * 40)
+        write(2, None)
+        unknown = self.catalog.observations()[0]["metadata"]
+        self.assertIsNone(unknown["head_sha"])
+        self.assertEqual(unknown["last_known_head_sha"], "a" * 40)
+        write(3, "b" * 40)
+        write(3, "b" * 40)
+        write(1, "a" * 40)
+        change, = self.catalog.source_changes(url=url)
+        self.assertEqual((change["previous_revision"], change["revision"]), ("a" * 40, "b" * 40))
+        recorded = self.catalog.problem("PB-0001")["solutions"][0]["evidence"][1]
+        self.assertEqual(recorded["revision"], "21dc3889280dba49916f63342dab72750d3ee4b9")
+        self.assertEqual(recorded["github"]["revision"], "b" * 40)
+
+    def test_history_check_survives_regular_successful_sync(self):
+        from portbridge.action_summary import render_report
+        from portbridge.preflight import preflight
+
+        entry = {"slug": "victory", "status": "unavailable", "next_page": 2, "warning": "GitHub rate limit"}
+        states = [{"slug": project["slug"], "sync_status": "ok"} for project in self.catalog.projects()]
+        self.catalog.record_sync({"items": [], "history": [entry]}, update_health=False, history_mode="backfill")
+        self.catalog.record_sync({"items": [], "projects": states})
+        report = preflight(self.catalog, url="https://github.com/Marvisak/VIctory/pull/641")
+        self.assertEqual(report["catalog_status"], "ok")
+        coverage, = report["source_coverage"]
+        self.assertEqual(coverage["freshness"], "ok")
+        self.assertEqual(coverage["history"]["backfill"]["warning"], "GitHub rate limit")
+        self.assertIn("backfill history: unavailable", render_report(report))
+        self.catalog.record_sync({"items": [], "history": [{**entry, "status": "complete", "warning": None}]},
+                                 update_health=False, history_mode="backfill")
+        coverage, = preflight(self.catalog, url="https://github.com/Marvisak/VIctory/pull/641")["source_coverage"]
+        self.assertEqual(coverage["history"]["backfill"]["status"], "complete")
+        self.assertIsNone(coverage["history"]["backfill"]["warning"])
+
     def test_recommendation_records_only_observed_ci_change(self):
         source = self.observation("continued", "test", 11228, "Workflow test",
                                   "https://github.com/ubiquitarianism/leonida/actions/runs/11228")
@@ -148,7 +206,7 @@ class CatalogTest(CatalogFixture):
         records = self.catalog.observations(kind="test", project="continued", limit=10)
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0]["status"], "failure")
-        self.assertEqual(records[0]["metadata"], {"head_sha": "a" * 40})
+        self.assertEqual(records[0]["metadata"], {"head_sha": "a" * 40, "last_known_head_sha": "a" * 40})
         project = next(item for item in self.catalog.projects() if item["slug"] == "continued")
         self.assertEqual((project["sync_status"], project["last_success"]), ("stale", when))
 
@@ -272,7 +330,7 @@ class SnapshotTest(CatalogFixture):
         with patch.dict(os.environ, {"PORTBRIDGE_GITHUB_TOKEN": sentinel}):
             destination = export(self.catalog, self.workspace / "dist", "example/PortBridge")
         files = {path.relative_to(destination).as_posix() for path in destination.rglob("*") if path.is_file()}
-        self.assertEqual(files, EXPORT_FILES)
+        self.assertEqual(files, EXPORT_FILES | {case_path(card) for card in self.catalog.problems()})
         for name in files:
             with self.subTest(file=name):
                 self.assertNotIn(sentinel.encode(), (destination / name).read_bytes())
@@ -281,6 +339,11 @@ class SnapshotTest(CatalogFixture):
         self.assertEqual(site["mode"], "snapshot")
         cards = json.loads((destination / "data/problems.json").read_text(encoding="utf-8"))
         self.assertEqual(cards["problems"], self.catalog.problems())
+        case = (destination / "cases/pb-0001.html").read_text(encoding="utf-8")
+        self.assertIn('rel="canonical" href="https://akimfomin.github.io/PortBridge/cases/pb-0001.html"', case)
+        self.assertIn("7120734503", case)
+        self.assertIn("Windows 11", case)
+        self.assertIn("pb-0001.html", (destination / "sitemap.xml").read_text(encoding="utf-8"))
         self.assertEqual(export(self.catalog, destination), destination)
 
     def test_export_refuses_unrelated_directory_contents(self):

@@ -1,23 +1,42 @@
 name: Improve PortBridge
-description: Suggest a way to make it easier for projects to share work.
+description: Suggest a tracked project, correct a match, or improve the collaboration workflow.
 title: "[Idea] "
 body:
+  - type: markdown
+    attributes:
+      value: |
+        PortBridge is open to suggestions from any project. Check existing issues for your idea and keep game files, credentials, and private logs out of the report.
+  - type: dropdown
+    id: area
+    attributes:
+      label: What is this about?
+      options:
+        - New project to track
+        - Missing link between projects
+        - Incorrect search result or recommendation
+        - Coordination and task handoffs
+        - Agent or MCP integration
+        - Sharing results or joint testing
+        - Installation or setup
+        - Other
+    validations:
+      required: true
   - type: textarea
     id: workflow
     attributes:
       label: What should be easier?
-      description: Describe the work you were trying to do and where you got stuck.
+      description: Describe the task and what happened. For a search issue, include the exact query or GitHub URL, the result you got, and the result you expected.
     validations:
       required: true
   - type: textarea
     id: suggestion
     attributes:
       label: Your idea
-      description: Tell us what you would change and how a contributor or project would use it.
+      description: Describe a small change or experiment and what would show that it helps your team.
     validations:
       required: true
   - type: textarea
     id: examples
     attributes:
       label: Examples and related discussions
-      description: Add public URLs or PortBridge IDs that help explain the idea. Keep private information and game files out of the submission.
+      description: Add public URLs or PortBridge IDs. For a new project, link its repository and one issue, PR, or test that another team could use.
