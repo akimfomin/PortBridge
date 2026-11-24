@@ -2050,6 +2050,15 @@
               "translations": {"en": {"title": "madhyn applied the Continued test cleanup", "observed": "The author moved the result assertions after releasing and joining the blocked threads, as proposed by PortBridge. The registered test passed under Wine at this revision. The PR is open."}}
             },
             {
+              "kind": "automated_test", "outcome": "mixed",
+              "url": "https://github.com/akimfomin/PortBridge/issues/41#issuecomment-7142175216",
+              "title": "PortBridge проверил счётчик при исключении из ожидания",
+              "revision": "0b65330e0efca116777f2fd1b91fb9e4b40df320", "reported_at": "2026-11-24T19:29:37Z",
+              "platforms": ["Windows", "Synthetic CPU test"],
+              "observed": "После обычного вызова счётчик ожиданий вернулся к нулю. После исключения, вызванного тестовым объектом часов до освобождения блокировки, счётчик остался равен одному. Тест сбросил его перед завершением объекта. Сценарий проверял учёт ожиданий.",
+              "translations": {"en": {"title": "PortBridge checked the waiter count after a thrown wait", "observed": "The waiter count returned to zero after a normal call. It stayed at one when the synthetic clock threw before releasing the lock. The probe reset the counter before object destruction. This check covered waiter bookkeeping."}}
+            },
+            {
               "kind": "automated_test",
               "outcome": "mixed",
               "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e",
@@ -2175,7 +2184,16 @@
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7131731339", "title": "GeorgiyDemo подтвердил результат на Apple M5 Pro", "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T12:38:58Z", "platforms": ["macOS 26.7.3", "Apple M5 Pro", "Python 3.15.2 (CPU)"], "observed": "На версии PR прошли 15 из 15 целевых тестов. На базовой d42773d07 с теми же тестами 11 из 15 завершились ошибкой. Проверка ограничена синтетическими тестами на процессоре.",
               "translations": {"en": {"title": "GeorgiyDemo reproduced the result on an Apple M5 Pro", "observed": "All 15 focused tests passed on the PR head. The same tests failed 11 of 15 cases on baseline d42773d07. The run covered synthetic CPU tests."}}},
             {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7132758424", "title": "PortBridge сверил текущую базу и сбои в Linux CI", "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T13:23:20Z", "platforms": ["Windows 11", "CPU"], "observed": "После локального объединения с основной веткой 2d73c242 прошли 267 целевых CPU-тестов. Два сбоя TFE в Linux CI совпали на исходной версии PR и на PR, включая число ошибок.", "translations": {"en": {"title": "PortBridge compared the current base and Linux CI failures", "observed": "The local merge into main 2d73c242 passed 267 focused CPU tests. The two Linux TFE CI failures also occurred on the original PR base, with identical mismatch counts."}}},
-            {"kind": "automated_test", "outcome": "mixed", "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7132758424", "title": "PortBridge сравнил полные прогоны macOS", "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T14:12:10Z", "platforms": ["macOS", "GitHub Actions"], "observed": "На базе 21625bca8 и тестовом объединении 9692d505 совпали все 248 результатов. В обоих прогонах 181 тест прошёл, 4 упали, 63 пропущены.", "translations": {"en": {"title": "PortBridge compared both full macOS runs", "observed": "All 248 outcomes matched between baseline 21625bca8 and test merge 9692d505. Each run had 181 passes, 4 failures and 63 skips."}}}
+            {"kind": "automated_test", "outcome": "mixed", "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7132758424", "title": "PortBridge сравнил полные прогоны macOS", "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T14:12:10Z", "platforms": ["macOS", "GitHub Actions"], "observed": "На базе 21625bca8 и тестовом объединении 9692d505 совпали все 248 результатов. В обоих прогонах 181 тест прошёл, 4 упали, 63 пропущены.", "translations": {"en": {"title": "PortBridge compared both full macOS runs", "observed": "All 248 outcomes matched between baseline 21625bca8 and test merge 9692d505. Each run had 181 passes, 4 failures and 63 skips."}}},
+            {
+              "kind": "independent", "outcome": "mixed", "check_for": ["https://github.com/ubiquitarianism/leonida/pull/701"],
+              "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7140888240",
+              "title": "Прогон Sangonapou на RTX 3080 Ti Laptop",
+              "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T18:36:43Z",
+              "platforms": ["Windows 11 build 26300", "NVIDIA RTX 3080 Ti Laptop", "Vulkan 1.4.357"],
+              "observed": "Прошли 15 целевых CPU-тестов и два набора графических проверок Wave64, 9 из 9 и 8 из 8. Набор C пропущен. Два сбоя TFE в полном прогоне совпали с основной веткой на том же стенде.",
+              "translations": {"en": {"title": "Sangonapou's RTX 3080 Ti Laptop run", "observed": "All 15 focused CPU checks passed, along with Wave64 graphics tiers A (9/9) and B (8/8). Tier C was skipped. Two TFE failures in the full run matched main on the same setup."}}
+            }
           ]
         }
       ]
