@@ -166,7 +166,7 @@ class CatalogTest(CatalogFixture):
     def test_real_demo_cards_have_persistent_ids_sources_and_evidence(self):
         projects = {project["slug"] for project in self.catalog.projects()}
         self.assertEqual(projects, {"continued", "reforge", "xcl", "victory",
-                                    "leonida-ce", "kestrelx", "xportpc", "rebox"})
+                                    "leonida-ce", "kestrelx", "xportpc", "rebox", "scarlett-layer"})
         cards = self.catalog.problems()
         ids = [card["id"] for card in cards]
         self.assertGreaterEqual(len(ids), 3)
@@ -344,7 +344,10 @@ class LocalAPITest(CatalogFixture):
         feed = ElementTree.fromstring(body)
         entries = feed.findall("{http://www.w3.org/2005/Atom}entry")
         ids = {entry.findtext("{http://www.w3.org/2005/Atom}id") for entry in entries}
-        self.assertEqual(ids, {"urn:portbridge:PB-0001", "urn:portbridge:PB-0002", "urn:portbridge:PB-0005"})
+        self.assertEqual(ids, {
+            "urn:portbridge:PB-0001", "urn:portbridge:PB-0002", "urn:portbridge:PB-0005",
+            "urn:portbridge:PB-044801754884724660835754613454516035131",
+        })
         _, _, body = self.request("GET", "/api/v1/outreach")
         self.assertEqual(json.loads(body), {"drafts": self.catalog.outreach()})
         self.assertEqual(self.request("POST", "/api/v1/outreach")[0], 405)

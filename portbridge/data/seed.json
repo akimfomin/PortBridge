@@ -71,6 +71,15 @@
       "stack": "Linux, WineGDK, vkd3d-proton и SPIR-V",
       "license": "GPL-2.0",
       "translations": {"en": {"stack": "Linux, WineGDK, vkd3d-proton and SPIR-V"}}
+    },
+    {
+      "slug": "scarlett-layer",
+      "name": "Scarlett Layer",
+      "repo": "jadeowaowa/scarlett-layer",
+      "url": "https://github.com/jadeowaowa/scarlett-layer",
+      "stack": "C++, Windows D3D12 и WARP",
+      "license": "Apache-2.0",
+      "translations": {"en": {"stack": "C++, Windows D3D12 and WARP"}}
     }
   ],
   "coordination": {
@@ -311,11 +320,58 @@
           "source_refs": [
             {"title": "Исходный PR XCL #925", "url": "https://github.com/ivall/xcl/pull/925", "translations": {"en": {"title": "Original XCL PR #925"}}},
             {"title": "Запрос автора на отдельную правку", "url": "https://github.com/ivall/xcl/pull/925#issuecomment-7128723618", "translations": {"en": {"title": "Author's request for the follow-up"}}},
-            {"title": "Черновой PR с тестом", "url": "https://github.com/maximecmb/xcl/pull/1", "translations": {"en": {"title": "Draft test PR"}}}
+            {"title": "Черновой PR с тестом", "url": "https://github.com/maximecmb/xcl/pull/1", "translations": {"en": {"title": "Draft test PR"}}},
+            {"title": "Задача для участника с AMD Wave64", "url": "https://github.com/akimfomin/PortBridge/issues/5", "translations": {"en": {"title": "Help wanted for an AMD Wave64 run"}}}
           ],
           "evidence": [
             {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/maximecmb/xcl/pull/1", "title": "PortBridge передал тест XCL", "revision": "3858abc46e4c9c3b9db5e4ae648d6636c37bfb51", "reported_at": "2026-11-24T10:39:56Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "Два теста прошли на RTX 4070 Ti SUPER. Новый случай выявил намеренно внесённую ошибку в порядке сдвига и сложения. Для аппаратного Wave64 нужен отдельный прогон.",
               "translations": {"en": {"title": "PortBridge delivered a regression test to XCL", "observed": "Two tests passed on an RTX 4070 Ti SUPER. The added case caught a deliberate shift-before-add error. Native Wave64 still needs a separate run."}}}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-044801754884724660835754613454516035131",
+      "recorded_at": "2026-11-24T11:13:37Z",
+      "title": "Проверка классификации загрузок D16 в Reforge и Continued",
+      "summary": "PortBridge связал одинаковую исходную правку в Reforge и Continued. Уточнение ecox982745 из Reforge прошло целевую проверку на основной ветке Continued. Решение о переносе ещё не опубликовано.",
+      "status": "verified",
+      "tags": ["D16", "Wave64", "MUBUF", "MTBUF"],
+      "translations": {"en": {
+        "title": "D16 load classification in Reforge and Continued",
+        "summary": "PortBridge linked the same original change in Reforge and Continued. ecox982745's Reforge follow-up passed focused tests on Continued main. The receiving team has yet to decide whether to adopt it.",
+        "tags": ["D16", "Wave64", "MUBUF", "MTBUF"]
+      }},
+      "platforms": ["Windows 11", "Python 3.12", "Vulkan"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "reforge",
+          "status": "partial",
+          "summary": "ecox982745 предложил отдельно учитывать два слова назначения для загрузки D16 XYZ и проверил результат на синтетических шейдерах.",
+          "translations": {"en": {"summary": "ecox982745 proposed tracking the two destination words separately for D16 XYZ loads and tested the result with synthetic shaders."}},
+          "source_refs": [
+            {"title": "Обсуждение Reforge #15", "url": "https://github.com/LeonidaReforge/Leonida/pull/15", "translations": {"en": {"title": "Reforge #15 discussion"}}},
+            {"title": "Исправление D16 от ecox982745", "url": "https://github.com/ecox982745/Leonida/commit/a300ba63d1a9a4cdfde1d64f136728545b4ab7b8", "translations": {"en": {"title": "D16 fix by ecox982745"}}}
+          ],
+          "evidence": [
+            {"kind": "maintainer_claim", "outcome": "observed", "url": "https://github.com/LeonidaReforge/Leonida/pull/15#issuecomment-7125522634", "title": "Отчёт автора исправления на RTX 4090", "revision": "a300ba63d1a9a4cdfde1d64f136728545b4ab7b8", "reported_at": "2026-11-24T07:55:26Z", "platforms": ["Windows 11", "NVIDIA RTX 4090", "Vulkan"], "observed": "На 12 синтетических шейдерах строгий режим стал принимать восемь ожидаемых случаев вместо двух. Гистограммы вывода не изменились, контрольные отказы сохранились.",
+              "translations": {"en": {"title": "Fix author's RTX 4090 report", "observed": "Across 12 synthetic shaders, strict mode admitted the expected eight cases instead of two. Output histograms stayed identical and the controls were still rejected."}}}
+          ]
+        },
+        {
+          "project": "continued",
+          "status": "verified",
+          "summary": "На проверенной версии Continued с кодом и тестами из Reforge прошли все 15 целевых CPU-тестов. Решение команды о переносе ещё не опубликовано.",
+          "translations": {"en": {"summary": "All 15 focused CPU checks passed on Continued main with the Reforge code and tests applied. The team has yet to publish an adoption decision."}},
+          "source_refs": [
+            {"title": "Исходная правка Continued #265", "url": "https://github.com/ubiquitarianism/leonida/pull/265", "translations": {"en": {"title": "Original change in Continued #265"}}},
+            {"title": "Точная базовая ревизия проверки", "url": "https://github.com/ubiquitarianism/leonida/commit/21625bca8c675c62f9dbffc318ce6a59d57faf31", "translations": {"en": {"title": "Exact base revision for the receiving-side test"}}},
+            {"title": "Карточка совместной проверки PortBridge", "url": "https://github.com/akimfomin/PortBridge/issues/4", "translations": {"en": {"title": "PortBridge pilot issue"}}}
+          ],
+          "evidence": [
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/265#issuecomment-7128554846", "title": "PortBridge проверил правку Reforge на Continued", "revision": "21625bca8c675c62f9dbffc318ce6a59d57faf31", "reported_at": "2026-11-24T11:13:37Z", "platforms": ["Windows 11", "Python 3.12.14 (CPU)"], "observed": "База Continued прошла 13 исходных тестов. Два новых теста без исправления выявили семь ошибок классификации. С кодом и тестами из коммита a300ba63 прошли все 15 тестов на CPU.",
+              "translations": {"en": {"title": "PortBridge rechecked the Reforge fix on Continued", "observed": "Continued main passed the original 13 tests. The added tests alone exposed seven misclassifications. With the code and tests from a300ba63 applied, all 15 focused CPU tests passed."}}}
           ]
         }
       ]

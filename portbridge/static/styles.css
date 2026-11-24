@@ -169,6 +169,7 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 .activity-opportunity h3 { font-size: 1rem; line-height: 1.25; }
 .activity-opportunity h3 a, .activity-opportunity > a, .activity-more { display: inline-flex; width: fit-content; min-height: 44px; align-items: center; }
 .activity-opportunity > a, .activity-more { font-size: .83rem; font-weight: 650; }
+.activity-actions > .activity-more { display: flex; }
 .activity-opportunity .activity-opportunity-projects { font-size: .76rem; font-weight: 650; }
 .activity-opportunity .activity-next-step { padding: 7px 9px; border-left: 2px solid #77a597; background: #edf5f2; color: #23483f; }
 .activity-team-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }

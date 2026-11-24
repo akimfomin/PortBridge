@@ -12,5 +12,6 @@ PortBridge читает открытые задачи, изменения и с�
 | [KestrelX](https://github.com/Batushn/KestrelX) | Синтетические проверки шейдеров и локальной памяти на AMD и NVIDIA |
 | [XPortPC](https://github.com/Its3rr0rsWRLD/XPortPC) | Компактные тесты D3D12 и чтения данных между потоками |
 | [Rebox](https://github.com/idvwork/rebox) | Отдельный Linux/Vulkan-путь для сравнения результата вычислительных шейдеров |
+| [Scarlett Layer](https://github.com/jadeowaowa/scarlett-layer) | Синтетические сравнения RDNA2 и D3D12 и публичные проверки на WARP. Есть готовый случай для сравнения порядка операций FMA. [Исходный тест](https://github.com/jadeowaowa/scarlett-layer/blob/0e436b3e1c654765b193c1cb705918fbf101b10b/src/tests/scarlett_tests/tests_rdna2_oracle.cpp#L31-L46) |
 
 Сверяйте одинаковый вход и ожидаемый результат на каждом стенде. При переносе теста или кода указывайте исходный репозиторий и автора. [Где нужна помощь](PORTING-WORK.md) · [Предложить источник или улучшение](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml)

@@ -33,7 +33,7 @@ const solutionStates = {
   unknown: t('Unknown status', 'Статус неизвестен'),
 };
 const evidenceKinds = {
-  maintainer_claim: t('Maintainer report', 'Отчёт сопровождающего'),
+  maintainer_claim: t('Author report', 'Отчёт автора'),
   automated_test: t('Automated test', 'Автоматический тест'),
   independent: t('Independent test', 'Независимая проверка'),
   source_observation: t('Source observation', 'Наблюдение по источнику'),
@@ -751,6 +751,14 @@ function showActivity(data, quiet = false) {
   const suggestions = list(data.opportunities).slice(0, 3);
   if (suggestions.length) opportunities.append(...suggestions.map(activityOpportunity));
   else opportunities.append(element('p', 'activity-note', t('No open work linked to a reviewed test in this snapshot.', 'В этом снимке нет открытых задач, связанных с проверенным тестом.')));
+  const repository = repositoryURL(snapshotSite?.repository);
+  if (repository) {
+    const queue = new URL(`${repository}/issues`);
+    queue.searchParams.set('q', 'is:issue is:open label:"help wanted"');
+    const help = githubLink(t('Open tasks for volunteers', 'Открытые задачи для участников'), queue.href);
+    help.classList.add('activity-more');
+    opportunities.append(help);
+  }
   opportunities.append(internalLink(t('Browse cross-project leads', 'Смотреть задачи между командами'), '#/partial', 'activity-more'));
   columns.append(feed, opportunities);
   const teams = activityPanel(t('Across the projects', 'По проектам'), 'activity-projects');

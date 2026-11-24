@@ -17,6 +17,7 @@
 | Передать тест, исправление или отрицательный результат | [Форма результата](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) |
 | Подхватить работу или проверить чужой вывод | [Журнал портирования](docs/PORTING-WORK.md) |
 | Найти проекты по направлению | [Отслеживаемые репозитории](docs/PROJECTS.md) |
+| Взять совместную проверку | [Открытые задачи для участников](https://github.com/akimfomin/PortBridge/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) |
 | Подключить помощника к поиску | [Codex и Claude Code через MCP](docs/MCP.md) |
 | Попросить агента взять задачу и довести её до результата | [Готовый запрос и порядок работы](docs/AGENT-PROMPT.md) |
 | Попробовать совместную проверку с другой командой | [Один тест на два проекта](docs/PILOT.md) |
