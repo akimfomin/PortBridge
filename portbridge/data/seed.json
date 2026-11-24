@@ -1208,6 +1208,17 @@
                   "observed": "The difference persisted with -O3, -Od and -Gis. The DXIL output has three separate operations. Point-sampling controls pass."
                 }
               }
+            },
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/152#issuecomment-7137656168",
+              "title": "Округление #145 на базе и в AnyXboxX #152",
+              "revision": "fd2a5b36db7770fc663b979ad98baf438ca89aa1",
+              "reported_at": "2026-11-24T16:25:57Z",
+              "platforms": ["Windows 11 28000", "WARP 10.0.28000.3365", "RTX 4070 Ti SUPER (617.14)", "DXC 1.9.2609.5"],
+              "observed": "База 49c605a6 и ветка #152 дали одинаковые результаты в 12 контролях #145. RTX прошла все 12. На WARP прошли восемь и повторились те же четыре расхождения. Отдельно все 24 новых и 10 прежних тестов изображения прошли на обоих стендах без пропусков.",
+              "translations": {"en": {"title": "Issue #145 rounding on the base and AnyXboxX #152", "observed": "Base 49c605a6 and #152 gave the same results on all twelve #145 controls. RTX passed all twelve. WARP passed eight and reproduced the same four mismatches. Separately, all 24 new and 10 existing image tests passed on both backends without skips."}}
             }
           ]
         }
@@ -1522,6 +1533,7 @@
         "Windows 11",
         "D3D12 WARP",
         "NVIDIA RTX 4070 Ti SUPER",
+        "AMD Van Gogh (Steam Deck)",
         "D3D12 and Vulkan",
         "SPIR-V interpreter"
       ],
@@ -1565,6 +1577,17 @@
                   "observed": "The author reported eight dispatches for equal and distinct offsets across four forms and 64 lanes. Equal-offset checks failed on the baseline and passed with the patch."
                 }
               }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/Marvisak/VIctory/pull/1088#issuecomment-7137333841",
+              "title": "Четыре проверки парных записей на Steam Deck от nullmarsh",
+              "revision": "59ab6b736af3037780f46b706ddce67362c26448",
+              "reported_at": "2026-11-24T16:14:07Z",
+              "platforms": ["AMD RDNA2 Van Gogh", "SteamOS 3.8.28", "RADV 26.1.99", "Proton 11.0-3 (vkd3d-proton)"],
+              "observed": "Прошли все четыре синтетические проверки парных записей LDS на 64 потока. В общей проверке один сбой stub_pipeline_is_created повторялся на исходной версии. Тест с отключённым исправлением и нативный драйвер Windows не проверялись.",
+              "translations": {"en": {"title": "nullmarsh's four paired-store checks on Steam Deck", "observed": "All four synthetic 64-lane paired LDS store checks passed. The full suite's stub_pipeline_is_created failure also affected main. The run did not test a reverted fix or a native Windows AMD driver."}}
             }
           ]
         },
@@ -1736,6 +1759,67 @@
                   "observed": "KernelSmoker passed both new tests and all six existing b64 paired LDS checks. The no-game-data guard and git diff --check passed. The reviewer did not run a GPU test."
                 }
               }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0019",
+      "recorded_at": "2026-11-24T16:18:38Z",
+      "title": "Нативный тест читает результат LDS до завершения загрузки",
+      "summary": "yawn-animals обнаружил, что в cs_lds_b64_cmpst последняя загрузка LDS используется до ожидания. Однострочная правка Reforge прошла три прогона на AMD RDNA2. В Continued найден тот же файл, перенос требует проверки.",
+      "status": "verified",
+      "tags": ["RDNA2", "LDS", "s_waitcnt", "lgkmcnt", "cs_lds_b64_cmpst"],
+      "translations": {"en": {
+        "title": "Native test uses an LDS load before it completes",
+        "summary": "yawn-animals found that cs_lds_b64_cmpst uses the last LDS read without a wait. The one-line Reforge fix passed three native runs on AMD RDNA2. Continued has the identical fixture and is a candidate for the same check.",
+        "tags": ["RDNA2", "LDS", "s_waitcnt", "lgkmcnt", "cs_lds_b64_cmpst"]
+      }},
+      "platforms": ["AMD Radeon RX 6800 XT (gfx1030)", "Arch Linux", "Vulkan RADV"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "reforge",
+          "status": "verified",
+          "summary": "В #166 yawn-animals добавил s_waitcnt lgkmcnt(0) между чтением и XOR. Этот тест проверяет исправление синтетического шейдера. PR открыт.",
+          "translations": {"en": {"summary": "In #166, yawn-animals inserted s_waitcnt lgkmcnt(0) between the read and XOR and tested the synthetic fixture. The PR is open."}},
+          "source_refs": [
+            {"title": "Правка и прогоны автора Reforge #166", "url": "https://github.com/LeonidaReforge/Leonida/pull/166", "translations": {"en": {"title": "Reforge #166 fix and author runs"}}}
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/LeonidaReforge/Leonida/pull/166",
+              "title": "Сравнение исходной и исправленной версий на AMD от yawn-animals",
+              "revision": "9ad7b4f7949ea1d442b96f23bb8c9adff32cfb5f",
+              "reported_at": "2026-11-24T16:18:38Z",
+              "platforms": ["AMD Radeon RX 6800 XT (gfx1030)", "Arch Linux 7.3.4", "Mesa 26.3.1", "Native RDNA2 ISA"],
+              "observed": "В трёх нативных прогонах база 45ad349e вернула устаревшее значение 0x064aabcf в слове 7. Правка вернула 0x3579badc и совпала по всем восьми словам в трёх прогонах. Тот же тест через Vulkan прошёл до и после правки.",
+              "translations": {"en": {"title": "yawn-animals' AMD baseline and fix runs", "observed": "Across three native runs, base 45ad349e returned the stale word 7 value 0x064aabcf. The fix returned 0x3579badc and matched all eight words in three runs. The translated Vulkan fixture passed before and after the fix."}}
+            }
+          ]
+        },
+        {
+          "project": "continued",
+          "status": "reported",
+          "summary": "Файл в 3ed8e50b совпадает побайтно с исходным Reforge. В локальном интерпретаторе SPIR-V исходный тест и тест с ожиданием вернули восемь ожидаемых слов, включая 0x3579badc. Нативный прогон на AMD ожидается.",
+          "translations": {"en": {"summary": "The fixture at 3ed8e50b is byte-identical to Reforge's baseline. In the local SPIR-V interpreter, the original fixture and the version with the wait both returned all eight expected words, including 0x3579badc. A native AMD run is pending."}},
+          "source_refs": [
+            {"title": "Исходный участок теста Continued", "url": "https://github.com/ubiquitarianism/leonida/blob/3ed8e50b754eb9dcf9e3819eddbbbccd52fc1177/runtime/test/shaders/cs_lds_b64_cmpst.asm#L127-L129", "translations": {"en": {"title": "Original Continued test sequence"}}}
+          ],
+          "evidence": [
+            {
+              "kind": "source_observation",
+              "outcome": "observed",
+              "url": "https://github.com/ubiquitarianism/leonida/blob/3ed8e50b754eb9dcf9e3819eddbbbccd52fc1177/runtime/test/shaders/cs_lds_b64_cmpst.asm#L127-L129",
+              "title": "Совпадение исходных файлов Reforge и Continued",
+              "revision": "3ed8e50b754eb9dcf9e3819eddbbbccd52fc1177",
+              "reported_at": "2026-11-24T16:30:42Z",
+              "platforms": ["Source comparison"],
+              "observed": "Идентификатор файла в обеих исходных версиях 0998d85765162e06761ac79d699dbc68e59cf911. После чтения v11 сразу идёт XOR.",
+              "translations": {"en": {"title": "Matching Reforge and Continued source fixtures", "observed": "Both baseline trees have the same file identifier, 0998d85765162e06761ac79d699dbc68e59cf911. The XOR immediately follows the v11 read."}}
             }
           ]
         }

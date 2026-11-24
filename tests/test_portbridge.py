@@ -349,7 +349,7 @@ class LocalAPITest(CatalogFixture):
             "urn:portbridge:PB-0001", "urn:portbridge:PB-0002", "urn:portbridge:PB-0005", "urn:portbridge:PB-0006",
             "urn:portbridge:PB-0007", "urn:portbridge:PB-0008", "urn:portbridge:PB-0009",
             "urn:portbridge:PB-0010", "urn:portbridge:PB-0011", "urn:portbridge:PB-0012", "urn:portbridge:PB-0013", "urn:portbridge:PB-0014",
-            "urn:portbridge:PB-0018", "urn:portbridge:PB-044801754884724660835754613454516035131",
+            "urn:portbridge:PB-0018", "urn:portbridge:PB-0019", "urn:portbridge:PB-044801754884724660835754613454516035131",
         })
         _, _, body = self.request("GET", "/api/v1/outreach")
         self.assertEqual(json.loads(body), {"drafts": self.catalog.outreach()})
