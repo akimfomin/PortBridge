@@ -1,19 +1,63 @@
 "use strict";
 
 const byId = id => document.getElementById(`office-${id}`);
+const languageFromURL = () => new URLSearchParams(window.location.search).get("lang") === "ru" ? "ru" : "en";
+let language = languageFromURL();
+const t = (english, russian) => () => language === "ru" ? russian : english;
+const resolveText = value => typeof value === "function" ? value() : value;
+const localizedText = new WeakMap();
+const languageLinks = document.querySelectorAll("[data-office-language]");
+const catalogLinks = document.querySelectorAll("[data-office-catalog]");
+const ariaLabels = Array.from(document.querySelectorAll("[data-ru-aria-label]"),
+  element => [element, t(element.getAttribute("aria-label"), element.dataset.ruAriaLabel)]);
+
 const states = {
-  draft: "На согласовании", waiting_sources: "Ждёт источников", blocked: "Ждёт зависимостей",
-  ready: "Можно взять", testing: "В работе", review_report: "Отчёт на проверке",
-  decision: "Нужно решение", done: "Завершён", declined: "Отклонён", superseded: "Нужен пересмотр",
+  draft: t("Awaiting approval", "На согласовании"),
+  waiting_sources: t("Waiting for sources", "Ждёт источников"),
+  blocked: t("Waiting for dependencies", "Ждёт зависимостей"),
+  ready: t("Ready to claim", "Можно взять"),
+  testing: t("In progress", "В работе"),
+  review_report: t("Report under review", "Отчёт на проверке"),
+  decision: t("Awaiting a decision", "Нужно решение"),
+  done: t("Completed", "Завершён"),
+  declined: t("Declined", "Отклонён"),
+  superseded: t("Needs reconsideration", "Нужен пересмотр"),
 };
-const projectStates = {mentioned: "Найдено в источниках", found: "Найдено на GitHub", nominated: "Предложен",
-  compare: "К сравнению", defer: "Отложен"};
-const decisions = {adopt: "Переиспользовать", investigate: "Продолжить исследование", defer: "Отложить"};
-const outcomes = {passed: "Прошла", failed: "Не прошла", mixed: "Смешанный", observed: "Наблюдение", unknown: "Неясно"};
+const nextSteps = {
+  draft: t("Review the objective and agree on priority and dependencies.", "Проверить цель, согласовать приоритет и зависимости."),
+  waiting_sources: t("Confirm the current revisions of both sources.", "Подтвердить текущие ревизии обоих источников."),
+  blocked: t("Complete the plans this check depends on.", "Завершить планы, от которых зависит эта проверка."),
+  ready: t("Claim the check and verify the condition in your build.", "Взяться за проверку и сверить условие в своей сборке."),
+  testing: t("Reproduce the check and report the result for the recorded revision.", "Воспроизвести проверку и приложить отчёт по зафиксированной версии."),
+  review_report: t("Ask another participant to review the report.", "Попросить другого участника проверить отчёт."),
+  decision: t("Decide whether to reuse the result, investigate further, or defer.", "Решить, переиспользовать результат, продолжить расследование или отложить."),
+};
+const projectStates = {
+  mentioned: t("Mentioned in sources", "Найдено в источниках"), found: t("Found on GitHub", "Найдено на GitHub"),
+  nominated: t("Nominated", "Предложен"), compare: t("Ready to compare", "К сравнению"), defer: t("Deferred", "Отложен"),
+};
+const decisions = {
+  adopt: t("Reuse", "Переиспользовать"), investigate: t("Investigate further", "Продолжить исследование"), defer: t("Defer", "Отложить"),
+};
+const outcomes = {
+  passed: t("Passed", "Прошла"), failed: t("Failed", "Не прошла"), mixed: t("Mixed", "Смешанный"),
+  observed: t("Observation", "Наблюдение"), unknown: t("Unknown", "Неясно"),
+};
 const evidence = {
-  independent: "Независимая проверка", automated_test: "Автоматический тест", simulation: "Учебный сценарий",
-  maintainer_claim: "Заявление сопровождающего", source_observation: "Проверка источника",
+  independent: t("Independent check", "Независимая проверка"),
+  automated_test: t("Automated test", "Автоматический тест"),
+  simulation: t("Simulation", "Учебный сценарий"),
+  maintainer_claim: t("Maintainer report", "Заявление сопровождающего"),
+  source_observation: t("Source inspection", "Проверка источника"),
 };
+const errors = {
+  400: t("Check the form. Enter GitHub links in their own fields.", "Проверьте поля. Ссылки на GitHub указываются в отдельных полях."),
+  401: t("This key was not accepted. Sign in with a valid key.", "Ключ не принят. Войдите с действующим ключом."),
+  403: t("This action requires a different role or a topic subscription.", "Для этого действия требуется другая роль или подписка на тему."),
+  404: t("Record not found. Check the ID or link.", "Запись не найдена. Проверьте идентификатор или ссылку."),
+  409: t("The plan or report changed, or the action no longer applies. Refresh the board.", "План или отчёт изменился, либо действие не подходит к его текущему состоянию. Обновите доску."),
+};
+const joined = t("You joined the topic.", "Вы присоединились к теме.");
 let token = "";
 let viewer;
 let topic;
@@ -21,9 +65,42 @@ let cursor = 0;
 let reading;
 let titles = new Map();
 
+function setText(element, text) {
+  const content = document.createTextNode(resolveText(text) ?? "");
+  element.replaceChildren(content);
+  if (typeof text === "function") {
+    // Keep the surrounding form and its inputs alive when the language changes.
+    localizedText.set(element, () => { content.data = text(); });
+    element.dataset.officeText = "";
+  } else {
+    localizedText.delete(element);
+    element.removeAttribute("data-office-text");
+  }
+}
+
+function updateLanguageLinks() {
+  for (const link of languageLinks) {
+    const url = new URL(window.location.href);
+    const choice = link.dataset.officeLanguage;
+    if (choice === "ru") url.searchParams.set("lang", "ru");
+    else url.searchParams.delete("lang");
+    link.href = url.href;
+    if (choice === language) link.setAttribute("aria-current", "true");
+    else link.removeAttribute("aria-current");
+  }
+}
+
+function applyLanguage() {
+  document.documentElement.lang = language;
+  for (const element of document.querySelectorAll("[data-office-text]")) localizedText.get(element)?.();
+  for (const [element, label] of ariaLabels) element.setAttribute("aria-label", label());
+  for (const link of catalogLinks) link.href = language === "ru" ? "/?lang=ru" : "/";
+  updateLanguageLinks();
+}
+
 function node(tag, text, className) {
   const element = document.createElement(tag);
-  if (text !== undefined) element.textContent = text;
+  if (text !== undefined) setText(element, text);
   if (className) element.className = className;
   return element;
 }
@@ -40,7 +117,7 @@ function githubLink(url, label) {
 }
 
 function status(message, error = false) {
-  byId("status").textContent = message;
+  setText(byId("status"), message);
   byId("status").dataset.error = error;
 }
 
@@ -55,15 +132,11 @@ async function api(route, body) {
   });
   if (key !== token) throw new DOMException("Session ended", "AbortError");
   if (response.ok) return response.json();
-  const errors = {
-    400: "Проверьте поля. Ссылки на GitHub указываются в отдельных полях.",
-    401: "Ключ не принят. Войдите с действующим ключом.",
-    403: "Для этого действия требуется другая роль или подписка на тему.",
-    404: "Запись не найдена. Проверьте идентификатор или ссылку.",
-    409: "План или отчёт изменился, либо действие не подходит к его текущему состоянию. Обновите доску.",
-  };
   if (response.status === 401 && viewer) leave();
-  throw new Error(errors[response.status] || "Штаб временно недоступен.");
+  const message = errors[response.status] || t("The office is temporarily unavailable.", "Штаб временно недоступен.");
+  const error = new Error(message());
+  error.uiMessage = message;
+  throw error;
 }
 
 async function perform(control, work, confirmation) {
@@ -72,7 +145,9 @@ async function perform(control, work, confirmation) {
     const message = await work();
     status(confirmation || message || "");
   } catch (error) {
-    if (error.name !== "AbortError") status(error.message || "Нет соединения со штабом.", true);
+    if (error.name !== "AbortError") {
+      status(error.uiMessage || error.message || t("Could not connect to the office.", "Нет соединения со штабом."), true);
+    }
   } finally {
     control.disabled = false;
   }
@@ -112,7 +187,7 @@ function actionForm(title, fields, action) {
   form.addEventListener("submit", event => {
     event.preventDefault();
     const values = Object.fromEntries(new FormData(form));
-    perform(submit, () => action(values), "Сохранено.");
+    perform(submit, () => action(values), t("Saved.", "Сохранено."));
   });
   return form;
 }
@@ -138,41 +213,41 @@ function planActions(plan) {
     actions.append(button(label, () => change(route, {plan_id: plan.id, ...fields})));
   const reviewer = allowed("review") && plan.volunteer !== viewer.name;
   if (plan.state === "draft" && reviewer && plan.author !== viewer.name) {
-    const selectPriority = {"1": "1 · Высокий", "2": "2 · Обычный", "3": "3 · Отложенный"};
-    actions.append(details("Согласовать план", actionForm("Согласовать", [
-      ["priority", "Приоритет", {choices: selectPriority, value: "2"}],
-      ["requires", "Номера зависимостей через запятую", {optional: true, max: 165}],
+    const selectPriority = {"1": t("1 · High", "1 · Высокий"), "2": t("2 · Normal", "2 · Обычный"), "3": t("3 · Deferred", "3 · Отложенный")};
+    actions.append(details(t("Approve plan", "Согласовать план"), actionForm(t("Approve", "Согласовать"), [
+      ["priority", t("Priority", "Приоритет"), {choices: selectPriority, value: "2"}],
+      ["requires", t("Dependency plan IDs, separated by commas", "Номера зависимостей через запятую"), {optional: true, max: 165}],
     ], fields => change("plan-review", {plan_id: plan.id, decision: "accept", priority: Number(fields.priority),
       requires: fields.requires.trim() ? fields.requires.split(",").map(id => Number(id.trim())) : []}))));
-    act("Отклонить план", "plan-review", {decision: "decline"});
+    act(t("Decline plan", "Отклонить план"), "plan-review", {decision: "decline"});
   }
-  if (allowed("contribute") && plan.state === "ready") act("Взять в работу", "plan-claim", {});
+  if (allowed("contribute") && plan.state === "ready") act(t("Claim plan", "Взять в работу"), "plan-claim", {});
   if (allowed("contribute") && plan.volunteer === viewer.name && plan.state === "testing") {
-    const report = actionForm("Передать на проверку", [
-      ["source_url", "Ссылка на исходную работу или журнал теста", {type: "url", max: 300, value: plan.origin_url}],
-      ["platform", "Стенд и настройки", {max: 120}],
-      ["evidence_kind", "Вид проверки", {choices: evidence, value: "maintainer_claim"}],
-      ["outcome", "Результат", {choices: outcomes}],
-      ["summary", "Что проверили и что получили", {max: 600, multiline: true}],
+    const report = actionForm(t("Submit for review", "Передать на проверку"), [
+      ["source_url", t("Link to the source or test log", "Ссылка на исходную работу или журнал теста"), {type: "url", max: 300, value: plan.origin_url}],
+      ["platform", t("Test setup and settings", "Стенд и настройки"), {max: 120}],
+      ["evidence_kind", t("Evidence type", "Вид проверки"), {choices: evidence, value: "maintainer_claim"}],
+      ["outcome", t("Outcome", "Результат"), {choices: outcomes}],
+      ["summary", t("What you tested and what happened", "Что проверили и что получили"), {max: 600, multiline: true}],
     ], async fields => {
       const {result} = await api("submit", {...fields, problem_id: plan.problem_id, revision: plan.origin_revision});
       await change("plan-result", {plan_id: plan.id, result_id: result.id});
     });
-    actions.append(details("Передать отчёт", report));
-    act("Освободить план", "plan-claim", {release: true});
+    actions.append(details(t("Submit report", "Передать отчёт"), report));
+    act(t("Release plan", "Освободить план"), "plan-claim", {release: true});
   }
   if (plan.state === "review_report" && plan.report && reviewer) {
-    actions.append(button("Принять отчёт", () => change("review", {result_id: plan.report.id, decision: "accepted"})));
-    actions.append(details("Вернуть отчёт", actionForm("Вернуть на доработку", [
-      ["reason", "Что требуется уточнить", {max: 400}],
+    actions.append(button(t("Accept report", "Принять отчёт"), () => change("review", {result_id: plan.report.id, decision: "accepted"})));
+    actions.append(details(t("Return report", "Вернуть отчёт"), actionForm(t("Request changes", "Вернуть на доработку"), [
+      ["reason", t("What needs clarification", "Что требуется уточнить"), {max: 400}],
     ], fields => change("review", {result_id: plan.report.id, decision: "rejected", ...fields}))));
   }
   if (plan.state === "decision" && reviewer) {
     const choices = {...decisions};
     if (plan.report.outcome !== "passed" || !["independent", "automated_test"].includes(plan.report.evidence_kind)) delete choices.adopt;
-    actions.append(details("Принять решение", actionForm("Сохранить решение", [
-      ["decision", "Дальнейшее действие", {choices, value: "investigate"}],
-      ["reason", "Что показала проверка", {max: 400}],
+    actions.append(details(t("Make a decision", "Принять решение"), actionForm(t("Save decision", "Сохранить решение"), [
+      ["decision", t("Next action", "Дальнейшее действие"), {choices, value: "investigate"}],
+      ["reason", t("What the check showed", "Что показала проверка"), {max: 400}],
     ], fields => change("plan-decision", {plan_id: plan.id, ...fields}))));
   }
   return actions;
@@ -182,29 +257,37 @@ function planCard(plan) {
   const card = node("article", undefined, "office-panel office-card");
   card.id = `office-plan-${plan.id}`;
   const head = node("div", undefined, "office-card-head");
-  const label = node("p", `План №${plan.id} · Приоритет ${plan.priority}`, "office-meta");
+  const label = node("p", t(`Plan #${plan.id} · Priority ${plan.priority}`,
+    `План №${plan.id} · Приоритет ${plan.priority}`), "office-meta");
   label.title = plan.problem_id;
   head.append(label, node("span", states[plan.state], "office-state"));
   card.append(head, node("h3", plan.objective));
-  if (plan.next_action) card.append(node("p", plan.next_action, "office-next"));
-  if (plan.volunteer) card.append(node("p", `Проверяет ${plan.volunteer}`, "office-meta"));
-  if (plan.unblocks && plan.state !== "done") card.append(node("p", `После принятия результата разблокируется шагов: ${plan.unblocks}`, "office-meta"));
-  const blockers = plan.requires.filter(item => !item.ready).map(item => `№${item.id}`);
-  if (blockers.length) card.append(node("p", `Ждёт завершения планов ${blockers.join(", ")}`, "office-meta"));
+  if (plan.next_action) card.append(node("p", nextSteps[plan.state] || plan.next_action, "office-next"));
+  if (plan.volunteer) card.append(node("p", t(`Volunteer · ${plan.volunteer}`, `Проверяет ${plan.volunteer}`), "office-meta"));
+  if (plan.unblocks && plan.state !== "done") {
+    card.append(node("p", t(`Accepting the result unblocks ${plan.unblocks} ${plan.unblocks === 1 ? "step" : "steps"}`,
+      `После принятия результата разблокируется шагов: ${plan.unblocks}`), "office-meta"));
+  }
+  const blockers = plan.requires.filter(item => !item.ready).map(item => item.id);
+  if (blockers.length) {
+    card.append(node("p", t(`Waiting for plans #${blockers.join(", #")}`,
+      `Ждёт завершения планов №${blockers.join(", №")}`), "office-meta"));
+  }
   const sources = node("div", undefined, "office-actions");
   for (const [url, revision, name] of [
-    [plan.origin_url, plan.origin_revision, "Проверяемая работа"],
-    [plan.comparison_url, plan.comparison_revision, "Связанная работа"],
+    [plan.origin_url, plan.origin_revision, t("Work under test", "Проверяемая работа")],
+    [plan.comparison_url, plan.comparison_revision, t("Related work", "Связанная работа")],
   ]) {
-    const link = githubLink(url, revision ? `${name} · ${revision.slice(0, 8)}` : name);
+    const link = githubLink(url, revision ? () => `${name()} · ${revision.slice(0, 8)}` : name);
     if (revision) link.title = revision;
     sources.append(link);
   }
-  sources.append(button("Обсуждение", () => openThread(plan.problem_id)));
+  sources.append(button(t("Discussion", "Обсуждение"), () => openThread(plan.problem_id)));
   card.append(sources);
   if (plan.report) {
-    card.append(node("p", [outcomes[plan.report.outcome], evidence[plan.report.evidence_kind], plan.report.platform].filter(Boolean).join(" · "), "office-meta"),
-      node("p", plan.report.summary), githubLink(plan.report.source_url, "Источник отчёта"));
+    const reportLabels = [outcomes[plan.report.outcome], evidence[plan.report.evidence_kind], plan.report.platform];
+    card.append(node("p", () => reportLabels.map(resolveText).filter(Boolean).join(" · "), "office-meta"),
+      node("p", plan.report.summary), githubLink(plan.report.source_url, t("Report source", "Источник отчёта")));
   }
   if (plan.decision) card.append(node("p", decisions[plan.decision], "office-state"), node("p", plan.decision_reason));
   const actions = planActions(plan);
@@ -214,22 +297,22 @@ function planCard(plan) {
     for (const draft of plan.outreach_drafts) {
       const entry = node("div", undefined, "office-entry");
       entry.append(githubLink(draft.target_url, new URL(draft.target_url).pathname.slice(1)),
-        node("p", draft.message), button("Скопировать текст", async () => {
+        node("p", draft.message), button(t("Copy text", "Скопировать текст"), async () => {
           await navigator.clipboard.writeText(draft.message);
-          return "Текст скопирован.";
+          return t("Text copied.", "Текст скопирован.");
         }));
       drafts.append(entry);
     }
-    card.append(details("Черновики для GitHub", drafts));
+    card.append(details(t("GitHub drafts", "Черновики для GitHub"), drafts));
   }
   return card;
 }
 
 function nomination(repo = "") {
-  return details("Предложить проект", actionForm("Добавить к рассмотрению", [
-    ["repo", "Репозиторий", {max: 140, value: repo}],
-    ["evidence_url", "Ссылка на конкретную работу", {type: "url", max: 300}],
-    ["next_step", "Первый совместный шаг", {max: 400}],
+  return details(t("Suggest a project", "Предложить проект"), actionForm(t("Submit for review", "Добавить к рассмотрению"), [
+    ["repo", t("Repository", "Репозиторий"), {max: 140, value: repo}],
+    ["evidence_url", t("Link to specific work", "Ссылка на конкретную работу"), {type: "url", max: 300}],
+    ["next_step", t("First shared step", "Первый совместный шаг"), {max: 400}],
   ], fields => change("project-nominate", fields)));
 }
 
@@ -238,7 +321,7 @@ function projectCard(project) {
   const heading = node("h3");
   heading.append(githubLink(project.url, project.repo));
   card.append(heading, node("p", projectStates[project.state], "office-meta"));
-  if (project.next_step) card.append(node("p", project.next_step), githubLink(project.evidence_url, "Работа проекта"));
+  if (project.next_step) card.append(node("p", project.next_step), githubLink(project.evidence_url, t("Project work", "Работа проекта")));
   if (project.references) {
     const list = node("ul", undefined, "office-project-refs");
     for (const {url} of project.references) {
@@ -252,7 +335,7 @@ function projectCard(project) {
   if (["found", "mentioned"].includes(project.state) && allowed("contribute")) card.append(nomination(project.repo));
   if (project.author && allowed("review") && project.author !== viewer.name) {
     const actions = node("div", undefined, "office-actions");
-    actions.append(...Object.entries({compare: "Сравнить", defer: "Отложить"}).filter(([decision]) => decision !== project.state).map(([decision, label]) =>
+    actions.append(...Object.entries({compare: t("Compare", "Сравнить"), defer: decisions.defer}).filter(([decision]) => decision !== project.state).map(([decision, label]) =>
       button(label, () => change("project-review", {repo: project.repo, decision}))));
     card.append(actions);
   }
@@ -266,7 +349,7 @@ function topicName(id) {
 async function joinTopic(id) {
   await change("subscribe", {problem_id: id, enabled: true});
   await openThread(id);
-  return "Вы присоединились к теме.";
+  return joined;
 }
 
 function topicForms(topics, subscriptions, requests) {
@@ -275,14 +358,14 @@ function topicForms(topics, subscriptions, requests) {
   const panels = [];
   if (choices.length) {
     const options = Object.fromEntries(choices.map(({id, title}) => [id, title]));
-    panels.push(details("Найти общую тему", actionForm("Присоединиться к выбранной теме", [
-      ["id", "Доступные темы", {choices: options}],
+    panels.push(details(t("Find a shared topic", "Найти общую тему"), actionForm(t("Join the selected topic", "Присоединиться к выбранной теме"), [
+      ["id", t("Available topics", "Доступные темы"), {choices: options}],
     ], fields => joinTopic(fields.id))));
   }
   if (allowed("contribute")) {
-    panels.push(details("Предложить тему", actionForm("Передать тему на проверку", [
-      ["source_url", "Первая относящаяся к теме работа", {type: "url", max: 300}],
-      ["title", "Общая задача", {max: 160}],
+    panels.push(details(t("Suggest a topic", "Предложить тему"), actionForm(t("Submit topic for review", "Передать тему на проверку"), [
+      ["source_url", t("First source for this topic", "Первая относящаяся к теме работа"), {type: "url", max: 300}],
+      ["title", t("Shared task", "Общая задача"), {max: 160}],
     ], async fields => {
       await api("propose-topic", fields);
       await refresh();
@@ -294,34 +377,34 @@ function topicForms(topics, subscriptions, requests) {
       const entry = node("div", undefined, "office-entry");
       const actions = node("div", undefined, "office-actions");
       const review = decision => () => change("review-topic", {source_url: request.source_url, decision});
-      actions.append(button("Принять тему", review("accepted")), button("Отклонить тему", review("rejected")));
+      actions.append(button(t("Accept topic", "Принять тему"), review("accepted")), button(t("Reject topic", "Отклонить тему"), review("rejected")));
       entry.append(githubLink(request.source_url, request.title), actions);
       entries.append(entry);
     }
-    panels.push(details("Предложенные темы", entries));
+    panels.push(details(t("Suggested topics", "Предложенные темы"), entries));
   }
   container.replaceChildren(...panels);
 }
 
-const progressLabels = {available: "можно взять", review: "ждут решения", working: "в работе",
-  waiting: "заблокированы", verified: "подтверждены", adopted: "к применению"};
+const progressLabels = {available: t("ready to claim", "можно взять"), review: t("awaiting review", "ждут решения"), working: t("in progress", "в работе"),
+  waiting: t("blocked", "заблокированы"), verified: t("verified", "подтверждены"), adopted: t("ready to use", "к применению")};
 
 function renderProgress(progress, plans) {
   const summary = byId("progress");
   const metrics = node("div", undefined, "office-metrics");
   for (const [key, label] of Object.entries(progressLabels)) {
-    metrics.append(node("p", `${progress[key]} · ${label}`, "office-metric"));
+    metrics.append(node("p", () => `${progress[key]} · ${label()}`, "office-metric"));
   }
   summary.replaceChildren(metrics);
-  for (const [title, planIds] of [["Где нужна помощь", progress.needs], ["Подтверждённые результаты", progress.milestones]]) {
+  for (const [title, planIds] of [[t("Where help is needed", "Где нужна помощь"), progress.needs], [t("Verified results", "Подтверждённые результаты"), progress.milestones]]) {
     if (!planIds.length) continue;
     const list = node("ul");
     for (const id of planIds) {
       const plan = plans.find(item => item.id === id);
       const entry = node("li");
-      const link = node("a", `№${id} · ${plan.objective}`);
+      const link = node("a", t(`#${id} · ${plan.objective}`, `№${id} · ${plan.objective}`));
       link.href = `#office-plan-${id}`;
-      entry.append(link, node("span", ` · ${states[plan.state]}`, "office-meta"));
+      entry.append(link, node("span", () => ` · ${states[plan.state]()}`, "office-meta"));
       list.append(entry);
     }
     summary.append(node("h3", title), list);
@@ -330,12 +413,12 @@ function renderProgress(progress, plans) {
     const list = node("ul");
     for (const project of progress.by_project) {
       const item = node("li");
-      const counts = Object.entries(progressLabels).filter(([key]) => project[key] > 0)
-        .map(([key, label]) => `${project[key]} ${label}`).join(" · ");
-      item.append(githubLink(`https://github.com/${project.repo}`, project.name), node("span", ` · ${counts}`, "office-meta"));
+      const counts = Object.entries(progressLabels).filter(([key]) => project[key] > 0);
+      item.append(githubLink(`https://github.com/${project.repo}`, project.name),
+        node("span", () => ` · ${counts.map(([key, label]) => `${project[key]} ${label()}`).join(" · ")}`, "office-meta"));
       list.append(item);
     }
-    const byProject = details("По проектам", list);
+    const byProject = details(t("By project", "По проектам"), list);
     byProject.open = true;
     summary.append(byProject);
   }
@@ -350,11 +433,11 @@ async function refresh() {
   byId("account").hidden = byId("board").hidden = byId("overview").hidden = false;
   byId("login").hidden = true;
   byId("plans").replaceChildren(...(board.plans.length ? board.plans.map(planCard) : [
-    node("p", "Планов пока нет. Присоединитесь к теме, чтобы увидеть совместную работу.", "office-empty"),
+    node("p", t("No plans yet. Join a topic to see shared work.", "Планов пока нет. Присоединитесь к теме, чтобы увидеть совместную работу."), "office-empty"),
   ]));
   renderProgress(board.progress, board.plans);
   byId("projects").replaceChildren(...(discovery.projects.length ? discovery.projects.map(projectCard) : [
-    node("p", "Предложений пока нет.", "office-empty"),
+    node("p", t("No suggestions yet.", "Предложений пока нет."), "office-empty"),
   ]));
   byId("subscriptions").replaceChildren(...feeds.subscriptions.map(id => {
     const control = button(topicName(id), () => openThread(id));
@@ -364,11 +447,11 @@ async function refresh() {
   topicForms(board.topics, feeds.subscriptions, requests.filter(request => request.author !== viewer.name));
   if (allowed("contribute") && !byId("project-form").childElementCount) byId("project-form").append(nomination());
   if (allowed("contribute") && feeds.subscriptions.length && !byId("plan-form").childElementCount) {
-    byId("plan-form").append(details("Предложить план", actionForm("Передать на согласование", [
-      ["problem_id", "ID темы", {max: 64, value: feeds.subscriptions[0]}],
-      ["objective", "Цель проверки", {max: 240}],
-      ["origin_url", "Работа, где проверяем", {type: "url", max: 300}],
-      ["comparison_url", "Связанная работа другой команды", {type: "url", max: 300}],
+    byId("plan-form").append(details(t("Suggest a plan", "Предложить план"), actionForm(t("Submit for approval", "Передать на согласование"), [
+      ["problem_id", t("Topic ID", "ID темы"), {max: 64, value: feeds.subscriptions[0]}],
+      ["objective", t("Test objective", "Цель проверки"), {max: 240}],
+      ["origin_url", t("Work under test", "Работа, где проверяем"), {type: "url", max: 300}],
+      ["comparison_url", t("Related work from another team", "Связанная работа другой команды"), {type: "url", max: 300}],
     ], async fields => {
       await change("plan-propose", fields);
       byId("plan-form").querySelector("details").open = false;
@@ -388,7 +471,7 @@ async function readMessages() {
     for (const message of updates.messages) {
       const article = node("article", undefined, "office-entry");
       article.append(node("strong", message.author), node("p", message.text, "office-message"));
-      if (message.source_url) article.append(githubLink(message.source_url, "Ссылка из обсуждения"));
+      if (message.source_url) article.append(githubLink(message.source_url, t("Discussion link", "Ссылка из обсуждения")));
       byId("messages").append(article);
     }
     cursor = updates.next_cursor;
@@ -407,8 +490,8 @@ async function openThread(id) {
   byId("thread-title").focus();
   byId("thread-form").replaceChildren();
   if (allowed("contribute")) {
-    const form = actionForm("Отправить в обсуждение", [
-      ["text", "Сообщение", {max: 1600, multiline: true}],
+    const form = actionForm(t("Post to discussion", "Отправить в обсуждение"), [
+      ["text", t("Message", "Сообщение"), {max: 1600, multiline: true}],
     ], async fields => {
       await api("message", {...fields, problem_id: id, client_id: crypto.randomUUID()});
       form.reset();
@@ -435,6 +518,32 @@ function leave() {
   status("");
 }
 
+for (const element of document.querySelectorAll("[data-ru]")) {
+  setText(element, t(element.textContent, element.dataset.ru));
+}
+for (const link of languageLinks) {
+  link.addEventListener("click", event => {
+    if (event.defaultPrevented || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    event.preventDefault();
+    const choice = link.dataset.officeLanguage;
+    if (choice === language) return;
+    window.history.pushState(null, "", link.href);
+    language = choice;
+    applyLanguage();
+  });
+}
+window.addEventListener("popstate", () => {
+  const choice = languageFromURL();
+  if (choice === language) {
+    updateLanguageLinks();
+  } else {
+    language = choice;
+    applyLanguage();
+  }
+});
+window.addEventListener("hashchange", updateLanguageLinks);
+applyLanguage();
+
 byId("login").addEventListener("submit", event => {
   event.preventDefault();
   const key = byId("key");
@@ -458,12 +567,12 @@ byId("subscribe").addEventListener("submit", event => {
   perform(event.currentTarget.querySelector("button"), async () => {
     await joinTopic(id);
     input.value = "";
-  }, "Вы присоединились к теме.");
+  }, joined);
 });
-byId("refresh").addEventListener("click", () => perform(byId("refresh"), refresh, "Доска обновлена."));
+byId("refresh").addEventListener("click", () => perform(byId("refresh"), refresh, t("Board refreshed.", "Доска обновлена.")));
 byId("logout").addEventListener("click", leave);
 setInterval(() => {
   if (token && topic && !document.hidden) readMessages().catch(error => {
-    if (error.name !== "AbortError") status(error.message, true);
+    if (error.name !== "AbortError") status(error.uiMessage || error.message, true);
   });
 }, 5000);

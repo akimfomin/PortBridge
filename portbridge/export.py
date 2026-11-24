@@ -4,7 +4,7 @@ from html import escape
 import json
 from pathlib import Path
 
-from .case_pages import CASE_FILE, case_page, case_path, sitemap
+from .case_pages import CASE_FILE, case_languages, case_page, case_path, sitemap
 from .catalog import REPO_NAME, timestamp
 from .coordination import knowledge_graph, recommendations
 from .feed import build_feed
@@ -15,15 +15,22 @@ ROOT = PACKAGE.parent
 ASSETS = {"index.html": "index.html", "static/styles.css": "styles.css", "static/app.js": "app.js"}
 SNAPSHOTS = {"site", "projects", "problems", "matches", "health", "observations", "coordination", "outreach",
              "graph", "source-history", "recommendations"}
-EXPORT_FILES = {*ASSETS, "api.html", "feed.xml", "sitemap.xml", ".nojekyll", *(f"data/{name}.json" for name in SNAPSHOTS)}
+EXPORT_FILES = {*ASSETS, "api.html", "api.ru.html", "feed.xml", "feed.ru.xml", "sitemap.xml", ".nojekyll",
+                *(f"data/{name}.json" for name in SNAPSHOTS)}
 
 
-def docs_page():
-    docs = escape((ROOT / "API.md").read_text(encoding="utf-8"))
+def docs_page(language="en"):
+    filename, back, alternate, label = {
+        "en": ("API.en.md", "Back to PortBridge", "api.ru.html", "Русский"),
+        "ru": ("API.md", "Вернуться в PortBridge", "api.html", "English"),
+    }[language]
+    suffix = "?lang=ru" if language == "ru" else ""
+    docs = escape((ROOT / filename).read_text(encoding="utf-8"))
     return f'''<!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PortBridge API</title><link rel="stylesheet" href="./static/styles.css"></head>
-<body><main class="api-documentation"><p><a href="./">← Вернуться в PortBridge</a></p><pre>{docs}</pre></main></body></html>
+<body><main class="api-documentation"><p><a href="./{suffix}">← {back}</a> · <a href="./{alternate}">{label}</a></p>
+<pre>{docs}</pre></main></body></html>
 '''
 
 
@@ -72,14 +79,17 @@ def export(catalog, directory, repository=""):
     contents = {f"data/{name}.json": json.dumps(value, ensure_ascii=False).encode("utf-8")
                 for name, value in data.items()}
     contents.update({path: (PACKAGE / "static" / source).read_bytes() for path, source in ASSETS.items()})
-    contents["api.html"] = docs_page().encode("utf-8")
-    contents["feed.xml"] = build_feed(catalog)
+    contents["api.html"] = docs_page("en").encode("utf-8")
+    contents["api.ru.html"] = docs_page("ru").encode("utf-8")
+    contents["feed.xml"] = build_feed(catalog, language="en")
+    contents["feed.ru.xml"] = build_feed(catalog, language="ru")
     contents[".nojekyll"] = b""
     cards = data["problems"]["problems"]
     names = {project["slug"]: project["name"] for project in data["projects"]["projects"]}
     contents["sitemap.xml"] = sitemap(cards)
     for card in cards:
-        contents[case_path(card)] = case_page(card, names).encode("utf-8")
+        for language in case_languages(card):
+            contents[case_path(card, language)] = case_page(card, names, language).encode("utf-8")
     if (directory / "cases").is_dir():
         for path in (directory / "cases").iterdir():
             if f"cases/{path.name}" not in contents:

@@ -66,6 +66,18 @@ class ActionSummaryTests(TestCase):
         self.assertIn("The public catalog is unavailable", markdown)
         self.assertNotIn("private error", markdown)
 
+    def test_report_prefers_reviewed_english_editorial_text(self):
+        result = {"problems": [{"id": "PB-0001", "title": "Original title", "solutions": [],
+                                "translations": {"en": {"title": "Translated title"}}}],
+                  "matches": [], "observations": [], "first_check": {
+                      "url": "https://github.com/example/port/pull/42", "observed": "Original observation",
+                      "outcome": "passed", "translations": {"en": {"observed": "Translated observation"}},
+                  }}
+        markdown = action_summary.render_report(result)
+        self.assertIn("Translated title", markdown)
+        self.assertIn("Translated observation", markdown)
+        self.assertNotIn("Original", markdown)
+
     def test_empty_snapshot_is_distinct_from_unavailable(self):
         response = {"problems": [], "matches": [], "observations": [], "catalog_status": "ok"}
         with mock.patch.object(action_summary, "public_preflight", return_value=response):

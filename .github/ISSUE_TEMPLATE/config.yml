@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Search existing compatibility work
+    url: https://akimfomin.github.io/PortBridge/
+    about: Find related issues, tested fixes, and source links before opening a new report.
+  - name: Get started with PortBridge
+    url: https://github.com/akimfomin/PortBridge/blob/main/docs/QUICKSTART.md
+    about: Find setup instructions for Codex and Claude Code or try one test with another team.

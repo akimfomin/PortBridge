@@ -91,6 +91,19 @@ class PreflightTest(CatalogFixture):
         self.assertFalse(report["indexed"])
         self.assertIn("missing", report["next_step"])
 
+    def test_translated_cards_are_searchable_and_preserve_reviewed_evidence(self):
+        card = self.catalog.problem("PB-0001")
+        title = "Quadrilateral topology expansion"
+        card["translations"] = {"en": {"title": title}}
+        candidate, = assess([card], self.catalog.projects(), [], {}, q="quadrilateral topology")["problems"]
+        self.assertEqual(candidate["translations"]["en"]["title"], title)
+        self.assertEqual(candidate["title"], card["title"])
+        self.assertEqual(candidate["match_level"], "candidate")
+        source = "https://github.com/ubiquitarianism/leonida/pull/207"
+        first = assess([card], self.catalog.projects(), [], {}, url=source)["first_check"]
+        self.assertIn("7120734503", first["url"])
+        self.assertTrue(first["translations"]["en"]["observed"])
+
     def test_platform_terms_do_not_match_cross_queue_fences_to_rectangle_draws(self):
         xcl = "https://github.com/ivall/xcl/pull/795"
         rectangle = "https://github.com/Marvisak/VIctory/pull/346"

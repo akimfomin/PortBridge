@@ -8,6 +8,7 @@ import sys
 from threading import Event, Thread
 from urllib.parse import parse_qs, unquote, urlsplit
 
+from .case_pages import CASE_FILE, case_languages, case_page, case_path
 from .catalog import Catalog, OBSERVATION_KIND, PROBLEM_ID, PROBLEM_STATUS
 from .coordination import knowledge_graph, recommendations
 from .exchange_api import ExchangeHandlerMixin
@@ -145,8 +146,16 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
         try:
             target = urlsplit(self.path)
             path = unquote(target.path)
-            if path == "/feed.xml":
-                self.respond(200, "application/atom+xml; charset=utf-8", build_feed(self.server.catalog), head=head)
+            if path in {"/feed.xml", "/feed.ru.xml"}:
+                language = "ru" if path == "/feed.ru.xml" else "en"
+                self.respond(200, "application/atom+xml; charset=utf-8",
+                             build_feed(self.server.catalog, language=language), head=head)
+                return
+            if path == "/api/docs" and target.query == "lang=en":
+                self.respond(200, "text/plain; charset=utf-8", (ROOT / "API.en.md").read_bytes(), head=head)
+                return
+            if path.startswith("/cases/") and CASE_FILE.fullmatch(path.removeprefix("/cases/")):
+                self.read_case(path, head=head)
                 return
             asset = STATIC.get(path)
             if self.server.exchange is not None:
@@ -163,6 +172,18 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
         except ValueError as exc:
             status, result = 400, {"error": str(exc)}
         self.json_response(status, result, head=head)
+
+    def read_case(self, path, *, head=False):
+        ident = path.removeprefix("/cases/").split(".", 1)[0].upper()
+        catalog = self.server.catalog
+        card = catalog.problem(ident)
+        if card:
+            language = "ru" if path.endswith(".ru.html") else case_languages(card)[0]
+            if f"/{case_path(card, language)}" == path:
+                names = {project["slug"]: project["name"] for project in catalog.projects()}
+                self.respond(200, "text/html; charset=utf-8", case_page(card, names, language).encode("utf-8"), head=head)
+                return
+        self.json_response(404, {"error": "case not found"}, head=head)
 
     def api(self, path, params):
         catalog = self.server.catalog

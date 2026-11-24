@@ -2,6 +2,8 @@
 
 PortBridge helps independent Xbox Series compatibility teams share fixes and evidence. You can contribute from any project and keep the discussion in the repository where the work belongs.
 
+[Quick start in English](docs/QUICKSTART.md) · [Русский](README.ru.md)
+
 ## Share a result
 
 1. Search by the exact error, shader instruction, or PR number. Open the original links and check their revisions and scope. [Search PortBridge](https://akimfomin.github.io/PortBridge/)
@@ -11,8 +13,12 @@ PortBridge helps independent Xbox Series compatibility teams share fixes and evi
 
 Public source links and synthetic fixtures are welcome. Keep game assets, credentials, and private logs out of contributions.
 
+## Suggest an improvement
+
+Use the feedback form to propose a tracked repository, correct a search result, link related work, or improve the agent or two-team workflow. Include a public source and describe what a useful result would look like. English helps teams review a report together. Source links can be in any language. [Feedback form](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml)
+
 ## Review or pick up work
 
 Check the current work and its sources before starting. Distinguish an author's report, a CI result, a source inspection, and an independent reproduction. Check both the receiving project and the exact revision before calling a result transferable. [Porting work log](docs/PORTING-WORK.md)
 
-For code changes to PortBridge, read [AGENTS.md](AGENTS.md), keep the change scoped, and run `python -m unittest discover -s tests -v`. For workflow suggestions, describe the current friction and what a useful result would look like. [Suggest an improvement](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml)
+For code changes to PortBridge, read [AGENTS.md](AGENTS.md), keep the change scoped, and run `python -m unittest discover -s tests -v`.

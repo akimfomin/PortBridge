@@ -74,6 +74,13 @@ def rank(text, title, technical):
     return (2 * len(anchors & shared) + len(hints & shared)) / len(text)
 
 
+def english_text(record, field):
+    translations = record.get("translations")
+    english = translations.get("en") if isinstance(translations, dict) else None
+    value = english.get(field) if isinstance(english, dict) else None
+    return value if isinstance(value, str) and value.strip() else None
+
+
 def compact_card(card, stacks, origin_project, matched_by):
     results = []
     relation = card.get("relationship", "related_implementation")
@@ -95,9 +102,11 @@ def compact_card(card, stacks, origin_project, matched_by):
             "project": project, "status": solution["status"], "applicability": applicability,
             "summary": solution["summary"], "source_refs": solution["source_refs"][:3],
             "source_url": primary["url"], "evidence": evidence,
+            **({"translations": solution["translations"]} if "translations" in solution else {}),
         })
     return {"id": card["id"], "title": card["title"], "summary": card["summary"],
             "status": card["status"], "relationship": relation, "solutions": results,
+            **({"translations": card["translations"]} if "translations" in card else {}),
             "matched_by": matched_by, "match_level": (
                 "confirmed" if matched_by in {"source", "problem_id"} else "candidate"
             )}
@@ -129,7 +138,8 @@ def first_test(found, origin, origin_project):
                            and canonical_url(evidence["url"]) == canonical_url(solution["source_url"]))
                 basis = "test_on_reviewed_implementation"
             if applies:
-                return {key: evidence[key] for key in ("url", "revision", "platforms", "kind", "outcome", "observed")} | {
+                fields = ("url", "revision", "platforms", "kind", "outcome", "observed", "translations")
+                return {key: evidence[key] for key in fields if key in evidence} | {
                     "project": solution["project"], "problem_id": card["id"], "origin_url": origin,
                     "basis": basis, "applicability": solution["applicability"],
                 }
@@ -179,7 +189,9 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5):
         direct = origin and any(urlsplit(ref["url"]).fragment == origin_fragment and canonical_url(ref["url"]) == origin
                                 for solution in card["solutions"] for ref in solution["source_refs"])
         exact_number = number_query and any(source_number(ref["url"]) == number_query for ref in refs)
-        details = [card["summary"], *card.get("tags", []), *(item["title"] for item in refs)]
+        title = " ".join([card["title"], english_text(card, "title") or ""])
+        details = [card["summary"], english_text(card, "summary") or "", *card.get("tags", []),
+                   *(item["title"] for item in refs), *(english_text(item, "title") or "" for item in refs)]
         if direct:
             score, basis = 5, "source"
         elif card["id"] == problem_query:
@@ -187,7 +199,7 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5):
         elif exact_number:
             score, basis = 4, "source_number"
         else:
-            score = 0 if problem_query or number_query else rank(card_query, card["title"], details)
+            score = 0 if problem_query or number_query else rank(card_query, title, details)
             basis = "text"
         if score:
             ranked.append((score, card["id"], card, basis))

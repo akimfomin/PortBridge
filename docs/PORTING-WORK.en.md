@@ -1,0 +1,17 @@
+# Cross-project work log
+
+[Русский](PORTING-WORK.md) · [Try a two-team check](QUICKSTART.md#run-a-two-team-pilot)
+
+PortBridge records the original work, the tested revision, and the next useful check. A published handoff marks delivery. A team's reply, test report, or merged patch records what happened next.
+
+| Topic | Verified result and next action |
+| --- | --- |
+| **LDS reads in VIctory, XCL and Continued** | XCL's destination-half checks and Continued's single-writer fix informed two VIctory tests. Both passed on RTX 4070 Ti SUPER and WARP at `d27cb78960ed`. The previous translator failed both controls. VIctory received the patch, and XCL received the same boundary input and result. A matching XCL run would close the comparison. [VIctory test patch](https://github.com/Marvisak/VIctory/pull/571#issuecomment-7128201680) · [XCL handoff](https://github.com/ivall/xcl/pull/544#issuecomment-7128210080) |
+| **Wave64 byte carry in XCL** | The XCL author confirmed the case and requested a follow-up. PortBridge submitted a one-file test PR stacked on `c3e3442`. Both focused tests passed on RTX 4070 Ti SUPER, including Wave32 and split Wave64. The new case detected a deliberate shift-before-add error that the previous fixture missed. A native AMD Wave64 run of the added case remains open. [Author response](https://github.com/ivall/xcl/pull/925#issuecomment-7128723618) · [Test PR](https://github.com/maximecmb/xcl/pull/1) |
+| **Partial Wave64 destinations in Reforge and Continued** | Both PRs share source commit `ad1e53e`. The Reforge D16 follow-up passed all 15 focused CPU tests on Windows. Seven added checks failed without that follow-up. The result was sent to Continued for a check on its receiving revision. [Reforge evidence](https://github.com/LeonidaReforge/Leonida/pull/15#issuecomment-7125522634) · [Continued handoff](https://github.com/ubiquitarianism/leonida/pull/265#issuecomment-7128554846) |
+| **Skipped compute work in XCL and VIctory** | XCL can skip a dispatch when a pipeline arrives late. VIctory traces reads from ranges whose writer was skipped. A shared synthetic trace could compare a skipped producer, a dependent read, and a successful control write. [XCL #891](https://github.com/ivall/xcl/pull/891) · [VIctory #638](https://github.com/Marvisak/VIctory/pull/638) |
+| **Cross-queue progress in XCL and Continued** | XCL has cross-queue wait tests. Continued exposes a live fence value. A compact receiving-side check would hold a stale-value control and verify that a signal updates the value without CPU polling. [XCL #795](https://github.com/ivall/xcl/pull/795) · [Continued #432](https://github.com/ubiquitarianism/leonida/pull/432) |
+
+Work stays in each team's existing coordination thread or board. Continued and Reforge track task claims on GitHub. XCL tracks overlap across contributor branches. VIctory has a source-only contributor guide in review. [Continued board](https://github.com/ubiquitarianism/leonida/issues/14) · [Reforge board](https://github.com/LeonidaReforge/Leonida/issues/99) · [XCL coordination](https://github.com/ivall/xcl/issues/198) · [VIctory guide](https://github.com/Marvisak/VIctory/pull/580)
+
+To contribute, pick one active check and leave the exact revision, input, observed result, and scope in that team's existing discussion. Link the evidence so the receiving team can report whether it helped. [Share evidence with PortBridge](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml)

@@ -9,7 +9,7 @@ from urllib.parse import quote
 
 from .catalog import PROBLEM_ID, public_url
 from .github import PR_URL
-from .preflight import PUBLIC_BASE, public_preflight
+from .preflight import PUBLIC_BASE, english_text, public_preflight
 
 
 EVENT_LIMIT = 4 * 1024 * 1024
@@ -79,7 +79,8 @@ def render_report(result):
         card_url = f"{PUBLIC_BASE}#/problems/{ident}"
         sources = [source_link(solution["project"], solution["source_url"]) for solution in card["solutions"][:4]]
         suffix = " · ".join(link for link in sources if link)
-        row = f"- [{ident} {label(card['title'])}]({card_url})"
+        title = english_text(card, "title") or card["title"]
+        row = f"- [{ident} {label(title)}]({card_url})"
         section = candidates if card.get("match_level") == "candidate" else cards
         section.append(f"{row} · {suffix}" if suffix else row)
     groups = ["### Reviewed catalog", "", *cards, ""] if cards else []
@@ -108,8 +109,9 @@ def render_report(result):
             scope.extend(label(platform) for platform in check.get("platforms", [])[:4])
             details = f" ({', '.join(scope)})" if scope else ""
             lines.extend([f"**First check** · {link}{details}", ""])
-            if check.get("observed"):
-                lines.extend([f"**{label(check['outcome'].capitalize())}** · {label(check['observed'])}", ""])
+            observed = english_text(check, "observed") or check.get("observed")
+            if observed:
+                lines.extend([f"**{label(check['outcome'].capitalize())}** · {label(observed)}", ""])
 
     if groups and result.get("next_step"):
         lines.extend([label(result["next_step"]), ""])

@@ -498,6 +498,11 @@ def contains(payload, query):
 
 
 def match(left, right, score, reason, state, problem_id=None):
-    return {"left": {k: left[k] for k in ("project", "title", "url")},
-            "right": {k: right[k] for k in ("project", "title", "url")},
+    def side(source):
+        result = {key: source[key] for key in ("project", "title", "url")}
+        if "translations" in source:
+            result["translations"] = source["translations"]
+        return result
+
+    return {"left": side(left), "right": side(right),
             "score": score, "reason": reason, "state": state, "problem_id": problem_id}

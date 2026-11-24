@@ -2,12 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 8px 16px;
   padding: 12px max(20px, calc((100vw - 1220px) / 2));
   background: var(--sidebar);
 }
 .office-header > a { color: var(--sidebar-ink); margin: 0; }
-.office-header > a:last-child { padding: 10px 0; }
+.office-header-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+.office-header-nav > a { color: var(--sidebar-ink); display: inline-flex; align-items: center; min-height: 44px; }
+.office-header-nav .language-switch { margin: 0; }
 .office-header :focus-visible { outline-color: var(--accent); }
 .office { max-width: 1260px; margin: auto; padding: clamp(24px, 4vw, 48px) 20px; }
 .office-intro, .office-section-head, .office-card-head {

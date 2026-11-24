@@ -7,6 +7,7 @@ body:
       value: |
         PortBridge tracks public engineering results. Link to the original work so reviewers can verify it and keep the author's credit.
         You can report a finding once for several projects. Add any related discussions you know about so we can check where it applies.
+        An English summary helps contributors across projects review your result. Source links can be in any language.
 
         Use synthetic or public source-only evidence. Keep game files, game data, credentials, and private logs out of this issue.
   - type: input

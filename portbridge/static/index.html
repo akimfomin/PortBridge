@@ -1,68 +1,74 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Каталог проблем и проверенных решений для проектов совместимости Xbox Series с ПК">
-  <title>PortBridge — координация портов</title>
+  <meta name="description" content="Verified fixes, test results, and shared work for Xbox Series compatibility projects." data-ru-content="Каталог проблем и проверенных решений для проектов совместимости Xbox Series с ПК">
+  <title data-ru="PortBridge — координация портов">PortBridge — Xbox Series Compatibility</title>
   <link rel="stylesheet" href="./static/styles.css">
-  <link rel="alternate" type="application/atom+xml" title="PortBridge — проверенный прогресс" href="./feed.xml">
+  <link id="feed-alternate" rel="alternate" type="application/atom+xml" title="PortBridge — verified progress" data-ru-title="PortBridge — проверенный прогресс" href="./feed.xml">
   <script src="./static/app.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#page-title">К содержанию</a>
+  <a class="skip-link" href="#page-title" data-ru="К содержанию">Skip to content</a>
   <div class="shell">
-    <aside class="sidebar" aria-label="Навигация PortBridge">
-      <a class="brand" href="#/problems" aria-label="PortBridge, каталог проблем">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>PortBridge</span>
-      </a>
-      <nav class="navigation" aria-label="Разделы">
-        <a class="nav-item" data-route="problems" href="#/problems"><span class="nav-icon icon-grid" aria-hidden="true"></span>Каталог проблем</a>
-        <a class="nav-item" data-route="partial" href="#/partial"><span class="nav-icon icon-progress" aria-hidden="true"></span>Где есть задел</a>
-        <a class="nav-item" data-route="matches" href="#/matches"><span class="nav-icon icon-link" aria-hidden="true"></span>Схожие проблемы</a>
-        <a class="nav-item" data-route="projects" href="#/projects"><span class="nav-icon icon-projects" aria-hidden="true"></span>Проекты</a>
+    <aside class="sidebar" aria-label="PortBridge navigation" data-ru-aria-label="Навигация PortBridge">
+      <div class="sidebar-lead">
+        <a class="brand" href="#/problems" aria-label="PortBridge issue catalog" data-ru-aria-label="PortBridge, каталог проблем">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>PortBridge</span>
+        </a>
+        <nav class="language-switch" aria-label="Language" data-ru-aria-label="Язык">
+          <a data-language="en" href="./" lang="en" hreflang="en" aria-current="true">English</a>
+          <a data-language="ru" href="?lang=ru" lang="ru" hreflang="ru">Русский</a>
+        </nav>
+      </div>
+      <nav class="navigation" aria-label="Sections" data-ru-aria-label="Разделы">
+        <a class="nav-item" data-route="problems" href="#/problems"><span class="nav-icon icon-grid" aria-hidden="true"></span><span data-ru="Каталог проблем">Issue catalog</span></a>
+        <a class="nav-item" data-route="partial" href="#/partial"><span class="nav-icon icon-progress" aria-hidden="true"></span><span data-ru="Где есть задел">Cross-project leads</span></a>
+        <a class="nav-item" data-route="matches" href="#/matches"><span class="nav-icon icon-link" aria-hidden="true"></span><span data-ru="Схожие проблемы">Related work</span></a>
+        <a class="nav-item" data-route="projects" href="#/projects"><span class="nav-icon icon-projects" aria-hidden="true"></span><span data-ru="Проекты">Projects</span></a>
       </nav>
       <div class="sidebar-footer">
-        <a id="contribute-link" class="nav-item contribute-link" target="_blank" rel="noopener noreferrer" hidden>Предложить правку <span class="arrow" aria-hidden="true">↗</span></a>
-        <a id="contributor-guide" class="nav-item" lang="en" target="_blank" rel="noopener noreferrer" hidden>Contributor guide (EN) <span class="arrow" aria-hidden="true">↗</span></a>
-        <a id="api-link" class="nav-item api-link" href="/api/docs"><span class="api-icon" aria-hidden="true">&lt;/&gt;</span> Документация API <span class="arrow" aria-hidden="true">↗</span></a>
-        <a class="nav-item feed-link" href="./feed.xml">Лента прогресса <span class="arrow" aria-hidden="true">↗</span></a>
-        <div id="sync-status" class="sync-status" role="status">Загрузка данных…</div>
+        <a id="contribute-link" class="nav-item contribute-link" target="_blank" rel="noopener noreferrer" hidden><span data-ru="Предложить правку">Submit evidence</span><span class="arrow" aria-hidden="true">↗</span></a>
+        <a id="contributor-guide" class="nav-item" target="_blank" rel="noopener noreferrer" hidden><span data-ru="Руководство (EN)">Contributor guide</span><span class="arrow" aria-hidden="true">↗</span></a>
+        <a id="api-link" class="nav-item api-link" href="/api/docs?lang=en"><span class="api-icon" aria-hidden="true">&lt;/&gt;</span><span data-ru="Документация API">API documentation</span><span class="arrow" aria-hidden="true">↗</span></a>
+        <a id="feed-link" class="nav-item feed-link" href="./feed.xml"><span data-ru="Лента прогресса">Progress feed</span><span class="arrow" aria-hidden="true">↗</span></a>
+        <div id="sync-status" class="sync-status" role="status" data-ru="Загрузка данных…">Loading data…</div>
       </div>
     </aside>
     <main id="main" class="workspace">
       <div class="workspace-inner">
         <header class="masthead">
           <div>
-            <h1 id="page-title" tabindex="-1">Каталог проблем</h1>
-            <p id="page-description">Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.</p>
+            <h1 id="page-title" tabindex="-1" data-ru="Каталог проблем">Issue catalog</h1>
+            <p id="page-description" data-ru="Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.">Fixes and test results from open Xbox Series compatibility projects.</p>
           </div>
-          <span class="readonly"><span aria-hidden="true" class="lock-icon"></span>Только чтение</span>
+          <span class="readonly"><span aria-hidden="true" class="lock-icon"></span><span data-ru="Только чтение">Read only</span></span>
         </header>
 
-        <section id="coordination" class="coordination" aria-label="Общая точка отсчёта" hidden></section>
-        <section id="summary" class="summary" aria-label="Сводка каталога" hidden></section>
+        <section id="coordination" class="coordination" aria-label="Shared baseline" data-ru-aria-label="Общая точка отсчёта" hidden></section>
+        <section id="summary" class="summary" aria-label="Catalog summary" data-ru-aria-label="Сводка каталога" hidden></section>
 
-        <form id="filters" class="filters" role="search" aria-label="Фильтры каталога">
+        <form id="filters" class="filters" role="search" aria-label="Catalog filters" data-ru-aria-label="Фильтры каталога">
           <div id="search-group" class="filter-group search-group">
-            <label for="search">Поиск</label>
-            <div class="search-control"><span class="search-icon" aria-hidden="true"></span><input id="search" name="q" type="search" maxlength="200" placeholder="Проблема, технология или ID" autocomplete="off"></div>
+            <label for="search" data-ru="Поиск">Search</label>
+            <div class="search-control"><span class="search-icon" aria-hidden="true"></span><input id="search" name="q" type="search" maxlength="200" placeholder="Issue, technology, or ID" data-ru-placeholder="Проблема, технология или ID" autocomplete="off"></div>
           </div>
           <div id="project-group" class="filter-group">
-            <label for="project-filter">Проект</label>
-            <select id="project-filter" name="project"><option value="">Все проекты</option></select>
+            <label for="project-filter" data-ru="Проект">Project</label>
+            <select id="project-filter" name="project"><option value="" data-ru="Все проекты">All projects</option></select>
           </div>
           <div id="status-group" class="filter-group">
-            <label for="status-filter">Статус проблемы</label>
-            <select id="status-filter" name="status"><option value="">Любой статус</option></select>
+            <label for="status-filter" data-ru="Статус проблемы">Issue status</label>
+            <select id="status-filter" name="status"><option value="" data-ru="Любой статус">Any status</option></select>
           </div>
-          <button class="filter-reset" id="reset" type="button">Сбросить</button>
+          <button class="filter-reset" id="reset" type="button" data-ru="Сбросить">Reset</button>
         </form>
 
         <p id="view-status" class="view-status" role="status" aria-live="polite"></p>
         <div id="content" class="content" aria-busy="true"></div>
-        <noscript><p class="notice">Для фильтров и просмотра карточек включите JavaScript. Данные также доступны через <a href="/api/docs">API</a>.</p></noscript>
+        <noscript><p class="notice">Enable JavaScript to search and open catalog entries. Data is also available through the <a href="/api/docs?lang=en">API</a>.</p></noscript>
       </div>
     </main>
   </div>

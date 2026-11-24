@@ -11,6 +11,9 @@ const filters = byId('filters');
 const viewStatus = byId('view-status');
 const summary = byId('summary');
 const coordinationSection = byId('coordination');
+const languageLinks = document.querySelectorAll('[data-language]');
+const language = new URLSearchParams(window.location.search).get('lang') === 'ru' ? 'ru' : 'en';
+const t = (english, russian) => language === 'ru' ? russian : english;
 const projects = new Map();
 const snapshots = new Map();
 let snapshotSite = null;
@@ -19,32 +22,86 @@ let debounce = null;
 let summaryData = null;
 
 const problemStates = {
-  investigating: 'Исследуется', partial: 'Частично решено', verified: 'Решение проверено', resolved: 'Решено',
+  investigating: t('Under investigation', 'Исследуется'), partial: t('Partially resolved', 'Частично решено'),
+  verified: t('Fix verified', 'Решение проверено'), resolved: t('Resolved', 'Решено'),
 };
 const solutionStates = {
-  reported: 'Сообщено', open: 'Открыто', partial: 'Частичное решение', verified: 'Проверено',
-  merged: 'Принято в проект', unknown: 'Статус неизвестен',
+  reported: t('Reported', 'Сообщено'), open: t('Open', 'Открыто'), partial: t('Partial fix', 'Частичное решение'),
+  verified: t('Verified', 'Проверено'), merged: t('Merged', 'Принято в проект'),
+  unknown: t('Unknown status', 'Статус неизвестен'),
 };
 const evidenceKinds = {
-  maintainer_claim: 'Отчёт сопровождающего', automated_test: 'Автоматический тест',
-  independent: 'Независимая проверка', source_observation: 'Наблюдение по источнику',
+  maintainer_claim: t('Maintainer report', 'Отчёт сопровождающего'),
+  automated_test: t('Automated test', 'Автоматический тест'),
+  independent: t('Independent test', 'Независимая проверка'),
+  source_observation: t('Source observation', 'Наблюдение по источнику'),
 };
 const matchStates = {
-  suggested: 'Нужна проверка', reviewed_same: 'Связь подтверждена',
-  reviewed_symptom: 'Совпадает симптом', reviewed_distinct: 'Разные проблемы',
+  suggested: t('Needs review', 'Нужна проверка'), reviewed_same: t('Confirmed relationship', 'Связь подтверждена'),
+  reviewed_symptom: t('Shared symptom', 'Совпадает симптом'), reviewed_distinct: t('Distinct issues', 'Разные проблемы'),
 };
+const currentData = t('Data is up to date', 'Данные обновлены');
+const cachedData = t('Cached data', 'Данные из кэша');
+const initialData = t('Initial catalog', 'Исходная подборка');
 const syncStates = {
-  ok: 'Данные обновлены', fresh: 'Данные обновлены', partial: 'Частичное обновление',
-  stale: 'Данные из кэша', cached: 'Данные из кэша', error: 'Ошибка обновления',
-  'seed-only': 'Исходная подборка', seed: 'Исходная подборка', pending: 'Ожидает обновления',
+  ok: currentData, fresh: currentData, stale: cachedData, cached: cachedData, seed: initialData, 'seed-only': initialData,
+  partial: t('Partially updated', 'Частичное обновление'), error: t('Update failed', 'Ошибка обновления'),
+  pending: t('Waiting for an update', 'Ожидает обновления'),
 };
 const labels = {
-  problems: ['Каталог проблем', 'Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.'],
-  partial: ['Где есть задел', 'Проблемы, по которым другая команда проверила решение или продвинулась в его поиске.'],
-  matches: ['Схожие проблемы', 'Кандидаты на совпадение. При проверке учитывайте платформу и устройство каждого проекта.'],
-  projects: ['Проекты', 'Репозитории, которые отслеживает PortBridge, и свежесть данных GitHub.'],
+  problems: [t('Issue catalog', 'Каталог проблем'), t('Fixes and test results from open Xbox Series compatibility projects.',
+    'Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.')],
+  partial: [t('Cross-project leads', 'Где есть задел'), t('Issues where another team has tested a fix or made progress toward one.',
+    'Проблемы, по которым другая команда проверила решение или продвинулась в его поиске.')],
+  matches: [t('Related work', 'Схожие проблемы'), t('Potential matches to review against each project’s platform and architecture.',
+    'Кандидаты на совпадение. При проверке учитывайте платформу и устройство каждого проекта.')],
+  projects: [t('Projects', 'Проекты'), t('Repositories tracked by PortBridge and the latest data from GitHub.',
+    'Репозитории, которые отслеживает PortBridge, и свежесть данных GitHub.')],
 };
-const dateFormat = new Intl.DateTimeFormat('ru-RU', {dateStyle: 'short', timeStyle: 'short'});
+const dateFormat = new Intl.DateTimeFormat(language, {dateStyle: 'short', timeStyle: 'short'});
+const numberFormat = new Intl.NumberFormat(language);
+
+function applyPageLanguage() {
+  document.documentElement.lang = language;
+  if (language === 'en') return;
+  byId('api-link').href = '/api/docs';
+  byId('feed-link').href = './feed.ru.xml';
+  byId('feed-alternate').href = './feed.ru.xml';
+  document.querySelectorAll('[data-ru]').forEach((node) => { node.textContent = node.dataset.ru; });
+  for (const attribute of ['aria-label', 'placeholder', 'content', 'title']) {
+    const localized = `data-ru-${attribute}`;
+    document.querySelectorAll(`[${localized}]`).forEach((node) => {
+      node.setAttribute(attribute, node.getAttribute(localized));
+    });
+  }
+}
+
+function updateLanguageLinks(hash = window.location.hash) {
+  for (const link of languageLinks) {
+    const target = new URL(window.location.href);
+    const choice = link.dataset.language;
+    target.hash = hash;
+    if (choice === 'ru') target.searchParams.set('lang', 'ru');
+    else target.searchParams.delete('lang');
+    link.href = target.href;
+    if (choice === language) link.setAttribute('aria-current', 'true');
+    else link.removeAttribute('aria-current');
+  }
+}
+
+function editorial(record, field, locale = language) {
+  const original = record[field];
+  const translated = record.translations?.[locale]?.[field];
+  if (Array.isArray(original)) {
+    return Array.isArray(translated) && translated.every((item) => typeof item === 'string') ? translated : original;
+  }
+  return typeof translated === 'string' && translated.trim() ? translated : original;
+}
+
+function hasEnglishCase(problem) {
+  const translation = problem.translations?.en;
+  return ['title', 'summary'].every((key) => typeof translation?.[key] === 'string' && translation[key].trim());
+}
 
 function element(tag, className, value) {
   const node = document.createElement(tag);
@@ -58,7 +115,7 @@ function list(value) {
 }
 
 function stamp(value) {
-  if (!value) return 'Ещё нет данных';
+  if (!value) return t('No data yet', 'Ещё нет данных');
   const date = new Date(value);
   return Number.isNaN(date.valueOf()) ? String(value) : dateFormat.format(date);
 }
@@ -112,11 +169,12 @@ function repositoryURL(repository) {
 
 function badge(state, dictionary) {
   const known = Object.hasOwn(dictionary, state);
-  return element('span', known ? `pill pill-${state}` : 'pill', known ? dictionary[state] : 'Статус неизвестен');
+  return element('span', known ? `pill pill-${state}` : 'pill', known ? dictionary[state] : solutionStates.unknown);
 }
 
 function projectName(slug) {
-  return projects.get(slug)?.name || slug || 'Проект';
+  const project = projects.get(slug);
+  return (project && editorial(project, 'name')) || slug || t('Project', 'Проект');
 }
 
 function projectPill(slug) {
@@ -186,7 +244,7 @@ async function initializeData() {
   const settings = await getJSON('./data/site.json').catch(() => null);
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) return {};
   snapshotSite = settings;
-  byId('api-link').href = './api.html';
+  byId('api-link').href = t('./api.html', './api.ru.html');
   const repository = repositoryURL(settings.repository);
   if (repository) {
     const issue = byId('contribute-link');
@@ -207,45 +265,48 @@ function setHealth(health) {
   const line = byId('sync-status');
   const aged = Date.now() - Date.parse(health.refresh_at) > 2 * 60 * 60 * 1000;
   const variant = health.status === 'ok' && !aged ? 'sync-ok' : (health.status ? 'sync-warning' : '');
-  let title = snapshotSite && health.status === 'ok' ? 'Снимок данных GitHub' : syncStates[health.status];
-  if (aged) title = 'Данные старше двух часов';
-  line.replaceChildren(element('span', `sync-label ${variant}`, title || 'Данные GitHub недоступны'));
+  let title = snapshotSite && health.status === 'ok' ? t('GitHub data snapshot', 'Снимок данных GitHub') : syncStates[health.status];
+  if (aged) title = t('Data is over two hours old', 'Данные старше двух часов');
+  line.replaceChildren(element('span', `sync-label ${variant}`, title || t('GitHub data is unavailable', 'Данные GitHub недоступны')));
   if (health.refresh_at) line.append(element('span', '', stamp(health.refresh_at)));
 }
 
 function showSummary(problems) {
   const stats = [
-    [projects.size, 'Проекты'],
-    [problems.length, 'Проблемы в каталоге'],
-    [problems.filter((problem) => problem.partial_opportunity).length, 'Есть задел в других проектах'],
+    [projects.size, labels.projects[0]],
+    [problems.length, t('Catalog entries', 'Проблемы в каталоге')],
+    [problems.filter((problem) => problem.partial_opportunity).length, t('Cross-project leads', 'Есть задел в других проектах')],
   ];
   summary.replaceChildren(...stats.map(([value, name]) => {
     const block = element('div', 'summary-item');
-    block.append(element('span', 'summary-number', value), element('span', 'summary-label', name));
+    block.append(element('span', 'summary-number', numberFormat.format(value)), element('span', 'summary-label', name));
     return block;
   }));
   summary.hidden = false;
 }
 
 function showCoordination(data) {
-  const reference = data?.coordination?.reference;
-  if (!reference?.title) return;
+  const coordination = data?.coordination;
+  const reference = coordination?.reference;
+  if (!reference) return;
+  const title = editorial(reference, 'title');
+  if (!title) return;
   const headline = element('div', 'card-top');
-  headline.append(element('h2', '', 'Общая точка отсчёта'),
-    element('span', 'pill', reference.status === 'proposed' ? 'Предложенный ориентир' : 'Ориентир'));
+  const baseline = reference.status === 'proposed' ? t('Proposed baseline', 'Предложенный ориентир') : t('Baseline', 'Ориентир');
+  headline.append(element('h2', '', t('Shared baseline', 'Общая точка отсчёта')), element('span', 'pill', baseline));
   const source = element('div', 'meta-row');
-  source.append(githubLink(reference.title, reference.url));
+  source.append(githubLink(title, reference.url));
   if (reference.revision) source.append(element('span', 'identifier', String(reference.revision).slice(0, 12)));
   coordinationSection.append(headline, source);
-  for (const detail of [reference.scope, reference.observed]) {
+  for (const detail of [editorial(reference, 'scope'), editorial(reference, 'observed')]) {
     if (detail) coordinationSection.append(element('p', '', detail));
   }
-  const steps = list(data.coordination.steps);
+  const steps = list(editorial(coordination, 'steps'));
   if (steps.length) {
     const details = element('details');
     const items = element('ol');
     steps.forEach((step) => items.append(element('li', '', step)));
-    details.append(element('summary', '', 'Как сравнивать сборки'), items);
+    details.append(element('summary', '', t('How to compare builds', 'Как сравнивать сборки')), items);
     coordinationSection.append(details);
   }
   const current = route();
@@ -256,7 +317,7 @@ function stateScreen(title, explanation, retry = false) {
   const section = element('section', retry ? 'empty notice-error' : 'empty');
   section.append(element('h2', '', title), element('p', '', explanation));
   if (retry) {
-    const button = element('button', 'retry', 'Повторить');
+    const button = element('button', 'retry', t('Retry', 'Повторить'));
     button.type = 'button';
     button.addEventListener('click', () => loadView(route()));
     section.append(button);
@@ -269,24 +330,32 @@ function problemCard(problem, view) {
   const top = element('div', 'card-top');
   top.append(element('span', 'identifier', problem.id), badge(problem.status, problemStates));
   const title = element('h2');
-  title.append(internalLink(problem.title, urlFor(problem.id)));
+  title.append(internalLink(editorial(problem, 'title'), urlFor(problem.id)));
   const projectRow = element('div', 'meta-row');
   [...new Set(list(problem.solutions).map((solution) => solution.project))].forEach((slug) => projectRow.append(projectPill(slug)));
   const footer = element('div', 'card-footer');
   const verified = Number(problem.verified_count || 0);
-  if (verified > 0) footer.append(element('span', '', `Проектов с проверками: ${verified}`));
-  if (view === 'partial' && problem.partial_opportunity) footer.append(badge('partial', {partial: 'Есть задел'}));
-  footer.append(internalLink('Сравнить решения →', urlFor(problem.id)));
-  card.append(top, title, element('p', '', problem.summary), projectRow);
-  if (list(problem.tags).length) card.append(tagRow(problem.tags));
+  if (verified > 0) {
+    const count = numberFormat.format(verified);
+    footer.append(element('span', '', t(`Projects with tests: ${count}`, `Проектов с проверками: ${count}`)));
+  }
+  if (view === 'partial' && problem.partial_opportunity) {
+    footer.append(badge('partial', {partial: t('Work to build on', 'Есть задел')}));
+  }
+  footer.append(internalLink(t('Compare solutions →', 'Сравнить решения →'), urlFor(problem.id)));
+  card.append(top, title, element('p', '', editorial(problem, 'summary')), projectRow);
+  const tags = list(editorial(problem, 'tags'));
+  if (tags.length) card.append(tagRow(tags));
   card.append(footer);
   return card;
 }
 
 function drawProblems(problems, view) {
-  viewStatus.textContent = `Проблем в списке: ${problems.length}`;
+  const count = numberFormat.format(problems.length);
+  viewStatus.textContent = t(`Issues: ${count}`, `Проблем в списке: ${count}`);
   if (!problems.length) {
-    stateScreen('Проблемы не найдены', 'Измените поисковый запрос или сбросьте фильтры.');
+    stateScreen(t('No issues found', 'Проблемы не найдены'),
+      t('Try another search or reset the filters.', 'Измените поисковый запрос или сбросьте фильтры.'));
     return;
   }
   const wrapper = element('div', 'cards');
@@ -294,10 +363,15 @@ function drawProblems(problems, view) {
   content.replaceChildren(wrapper);
 }
 
-const evidenceOutcomes = {passed: 'Проверка прошла', failed: 'Обнаружен сбой',
-  mixed: 'Результаты различаются', observed: 'Наблюдение'};
-const githubStates = {open: 'Открыто', closed: 'Закрыто', merged: 'Слито',
-  success: 'Проверка прошла', failure: 'Проверка провалилась', cancelled: 'Отменено', in_progress: 'Выполняется'};
+const evidenceOutcomes = {
+  passed: t('Passed', 'Проверка прошла'), failed: t('Failed', 'Обнаружен сбой'),
+  mixed: t('Mixed results', 'Результаты различаются'), observed: t('Observation', 'Наблюдение'),
+};
+const githubStates = {
+  open: solutionStates.open, closed: t('Closed', 'Закрыто'), merged: t('Merged', 'Слито'),
+  success: evidenceOutcomes.passed, failure: t('Failed', 'Проверка провалилась'),
+  cancelled: t('Canceled', 'Отменено'), in_progress: t('In progress', 'Выполняется'),
+};
 
 function githubStatus(state) {
   if (!state || !githubStates[state.status]) return null;
@@ -308,14 +382,15 @@ function evidenceItem(evidence) {
   const item = element('li', 'evidence');
   item.append(badge(evidence.kind, evidenceKinds));
   if (evidenceOutcomes[evidence.outcome]) item.append(badge(evidence.outcome, evidenceOutcomes));
-  const title = githubLink(evidence.title || 'Первоисточник', evidence.url);
+  const title = githubLink(editorial(evidence, 'title') || t('Source', 'Первоисточник'), evidence.url);
   title.classList.add('evidence-title');
   item.append(title);
-  if (evidence.revision) item.append(element('p', 'revision', `Ревизия ${evidence.revision}`));
-  if (list(evidence.platforms).length) item.append(tagRow(evidence.platforms));
-  if (evidence.observed) {
-    const observed = /^\d{4}-\d\d-\d\d[T ]/.test(evidence.observed) ? stamp(evidence.observed) : evidence.observed;
-    item.append(element('p', '', observed));
+  if (evidence.revision) item.append(element('p', 'revision', `${t('Revision', 'Ревизия')} ${evidence.revision}`));
+  const platforms = list(editorial(evidence, 'platforms'));
+  if (platforms.length) item.append(tagRow(platforms));
+  const observed = editorial(evidence, 'observed');
+  if (observed) {
+    item.append(element('p', '', /^\d{4}-\d\d-\d\d[T ]/.test(observed) ? stamp(observed) : observed));
   }
   const state = githubStatus(evidence.github);
   if (state && evidence.kind === 'automated_test') item.append(state);
@@ -327,25 +402,26 @@ function solutionCard(solution) {
   const top = element('div', 'card-top');
   top.append(element('h3', '', projectName(solution.project)), badge(solution.status, solutionStates));
   card.append(top);
-  if (solution.summary) card.append(element('p', '', solution.summary));
+  const description = editorial(solution, 'summary');
+  if (description) card.append(element('p', '', description));
   if (list(solution.evidence).length) {
     const evidence = element('ul', 'evidence-list');
     solution.evidence.forEach((entry) => evidence.append(evidenceItem(entry)));
     card.append(evidence);
   } else {
-    card.append(element('p', '', 'Проверки пока не добавлены.'));
+    card.append(element('p', '', t('No tests recorded yet.', 'Проверки пока не добавлены.')));
   }
   if (list(solution.source_refs).length) {
     const sources = element('div', 'sources');
     const links = element('ul', 'source-list');
     solution.source_refs.forEach((ref) => {
       const item = element('li');
-      item.append(githubLink(ref.title || 'Первоисточник', ref.url));
+      item.append(githubLink(editorial(ref, 'title') || t('Source', 'Первоисточник'), ref.url));
       const state = githubStatus(ref.github);
       if (state) item.append(document.createTextNode(' · '), state);
       links.append(item);
     });
-    sources.append(element('h4', '', 'Первоисточники'), links);
+    sources.append(element('h4', '', t('Primary sources', 'Первоисточники')), links);
     card.append(sources);
   }
   return card;
@@ -356,19 +432,20 @@ function draftEditor(message, language) {
   field.value = message;
   field.readOnly = true;
   if (language) field.lang = language;
-  field.setAttribute('aria-label', 'Текст черновика');
+  field.setAttribute('aria-label', t('Draft text', 'Текст черновика'));
   const status = element('span', 'view-status');
   status.setAttribute('role', 'status');
-  const copy = element('button', 'retry', 'Копировать черновик');
+  const copy = element('button', 'retry', t('Copy draft', 'Копировать черновик'));
   copy.type = 'button';
   copy.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(field.value);
-      status.textContent = 'Черновик скопирован';
+      status.textContent = t('Draft copied', 'Черновик скопирован');
     } catch {
       field.focus();
       field.select();
-      status.textContent = 'Текст выделен. Нажмите Ctrl+C, чтобы скопировать его.';
+      status.textContent = t('Text selected. Use your device’s copy command.',
+        'Текст выделен. Скопируйте его командой на своём устройстве.');
     }
   });
   const actions = element('div', 'draft-actions');
@@ -379,36 +456,41 @@ function draftEditor(message, language) {
 }
 
 function answerDraft(problem) {
-  const values = [`PortBridge ${problem.id}`, problem.title, '', 'Public references'];
+  const values = [`PortBridge ${problem.id}`, editorial(problem, 'title', 'en'), '', 'Public references'];
   for (const solution of list(problem.solutions)) {
     const sources = new Set(list(solution.source_refs).map((ref) => githubURL(ref.url)).filter(Boolean));
     for (const source of sources) values.push(`- ${projectName(solution.project)} — ${source}`);
   }
   values.push('', 'Would you confirm which revision and platform this applies to?');
   const details = element('details', 'draft');
-  details.append(element('summary', '', 'Черновик для обсуждения'),
-    element('p', '', 'Проверьте текст перед отправкой в нужный проект.'), draftEditor(values.join('\n')));
+  details.append(element('summary', '', t('Discussion draft', 'Черновик для обсуждения')),
+    element('p', '', t('Review the draft before sharing it with the team.',
+      'Проверьте текст перед отправкой в нужный проект.')), draftEditor(values.join('\n'), 'en'));
   return details;
 }
 
 function outreachCard(draft, problem) {
   const card = element('article', 'card outreach-card');
   const top = element('div', 'card-top');
-  const mode = draft.mode === 'reference' ? 'Поделиться результатом' : 'Сопоставить результаты';
+  const mode = draft.mode === 'reference' ? t('Share a result', 'Поделиться результатом')
+    : t('Compare results', 'Сопоставить результаты');
   top.append(internalLink(draft.problem_id, urlFor(draft.problem_id), 'identifier'), element('span', 'pill', mode));
   const source = projectName(draft.source_project);
   const target = projectName(draft.target_project);
   card.append(top, element('h3', '', `${source} → ${target}`));
-  if (problem) card.append(element('p', '', problem.title));
+  if (problem) card.append(element('p', '', editorial(problem, 'title')));
   const links = element('div', 'meta-row outreach-links');
-  links.append(githubLink(`Результат: ${source}`, draft.source_url), githubLink(`Обсуждение: ${target}`, draft.target_url));
+  links.append(githubLink(`${t('Result', 'Результат')} · ${source}`, draft.source_url),
+    githubLink(`${t('Discussion', 'Обсуждение')} · ${target}`, draft.target_url));
   const repository = repositoryURL(snapshotSite?.repository);
   const message = repository && !draft.message.includes(repository)
     ? `${draft.message.trimEnd()}\n\nPortBridge: ${repository}` : draft.message;
   const details = element('details', 'draft');
-  details.append(element('summary', '', 'Открыть черновик на английском'), draftEditor(message, 'en'));
+  details.append(element('summary', '', t('Open draft', 'Открыть черновик на английском')), draftEditor(message, 'en'));
   card.append(links);
-  if (draft.target_status === 'unobserved') card.append(element('p', '', 'Текущий статус обсуждения не проверен.'));
+  if (draft.target_status === 'unobserved') {
+    card.append(element('p', '', t('Check the current discussion status.', 'Текущий статус обсуждения не проверен.')));
+  }
   card.append(details);
   return card;
 }
@@ -418,11 +500,12 @@ function showOutreach(data, problems) {
   const drafts = list(data?.drafts).filter((draft) => known.has(draft?.problem_id) && typeof draft.message === 'string' && draft.message.trim());
   if (data && !drafts.length) return;
   const section = element('section', 'outreach');
-  section.append(element('h2', 'section-title', 'Черновики для команд'));
+  section.append(element('h2', 'section-title', t('Drafts for teams', 'Черновики для команд')));
   if (!data) {
-    section.append(element('p', 'view-status', 'Не удалось загрузить черновики.'));
+    section.append(element('p', 'view-status', t('Could not load drafts.', 'Не удалось загрузить черновики.')));
   } else {
-    section.append(element('p', 'view-status', 'Перед отправкой вручную проверьте источники и статус обсуждения.'));
+    section.append(element('p', 'view-status', t('Check the sources and discussion status before sharing.',
+      'Перед отправкой вручную проверьте источники и статус обсуждения.')));
     const wrapper = element('div', 'cards');
     for (const draft of drafts) wrapper.append(outreachCard(draft, known.get(draft.problem_id)));
     section.append(wrapper);
@@ -431,35 +514,61 @@ function showOutreach(data, problems) {
 }
 
 function drawProblem(problem) {
-  heading.textContent = problem.title;
-  byId('page-description').textContent = problem.summary || '';
+  heading.textContent = editorial(problem, 'title');
+  byId('page-description').textContent = editorial(problem, 'summary') || '';
   viewStatus.textContent = '';
   const detail = element('div', 'detail-top');
   const status = element('div', 'meta-row');
   status.append(element('span', 'identifier', problem.id), badge(problem.status, problemStates));
-  detail.append(internalLink('← Каталог проблем', '#/problems', 'detail-back'), status);
-  if (snapshotSite && /^PB-[0-9]{4,}$/.test(problem.id)) {
-    detail.append(internalLink('Страница для ссылки', `./cases/${problem.id.toLowerCase()}.html`));
+  detail.append(internalLink(`← ${labels.problems[0]}`, '#/problems', 'detail-back'), status);
+  if (/^PB-[0-9]{4,}$/.test(problem.id)) {
+    const suffix = language === 'ru' && hasEnglishCase(problem) ? '.ru.html' : '.html';
+    detail.append(internalLink(t('Linkable case page', 'Страница для ссылки'), `./cases/${problem.id.toLowerCase()}${suffix}`));
   }
-  if (list(problem.tags).length || list(problem.platforms).length) {
-    detail.append(tagRow([...list(problem.tags), ...list(problem.platforms)]));
-  }
+  const tags = [...list(editorial(problem, 'tags')), ...list(editorial(problem, 'platforms'))];
+  if (tags.length) detail.append(tagRow(tags));
   if (list(problem.dependency_ids).length) {
     const dependencies = element('div', 'meta-row');
-    dependencies.append(element('span', 'tag', 'Зависимости'));
+    dependencies.append(element('span', 'tag', t('Dependencies', 'Зависимости')));
     problem.dependency_ids.forEach((id) => dependencies.append(internalLink(id, urlFor(id), 'identifier')));
     detail.append(dependencies);
   }
   const comparison = element('div', 'comparison');
   list(problem.solutions).forEach((solution) => comparison.append(solutionCard(solution)));
-  const sectionTitle = element('h2', 'section-title', 'Решения и наблюдения по проектам');
+  const sectionTitle = element('h2', 'section-title', t('Solutions and observations by project', 'Решения и наблюдения по проектам'));
   content.replaceChildren(detail, sectionTitle, comparison, answerDraft(problem));
 }
 
+const matchReasonText = {
+  reference: ['В одном из источников есть прямая ссылка на другой проект.', 'One source links directly to the other project.'],
+  shared_revision: ['Совпадает полный идентификатор коммита.', 'The full commit SHA matches.'],
+  technical_signal: ['Совпадают технические идентификаторы.', 'Technical identifiers match.'],
+  instruction_variants: ['Совпадают семейства инструкций. Сверьте точные варианты и границы теста.',
+    'Instruction families match. Check the exact variants and test scope.'],
+  technical_terms: ['Совпадают редкие технические термины в описании или заголовке.', 'Distinctive technical terms match in the title or description.'],
+  reviewed_same: ['Связь указана в проверенной карточке каталога.', 'A reviewed catalog entry records this relationship.'],
+  reviewed_symptom: ['Совпадает симптом. Общая причина не установлена.', 'The sources report a shared symptom. Its cause is still open.'],
+};
+
+function matchReason(match) {
+  const reason = editorial(match, 'reason');
+  const translation = matchReasonText[match.basis] || matchReasonText[match.state];
+  if (language === 'ru' || !translation || typeof reason !== 'string' || !reason.startsWith(translation[0])) return reason;
+  // The existing snapshot includes matching identifiers as a suffix to the reason.
+  const difference = ' Проверьте различия между архитектурами.';
+  const details = reason.slice(translation[0].length);
+  if (details.endsWith(difference)) {
+    return `${translation[1]}${details.slice(0, -difference.length)} Compare the project architectures.`;
+  }
+  return `${translation[1]}${details}`;
+}
+
 function drawMatches(matches) {
-  viewStatus.textContent = `Пар в списке: ${matches.length}`;
+  const count = numberFormat.format(matches.length);
+  viewStatus.textContent = t(`Matches: ${count}`, `Пар в списке: ${count}`);
   if (!matches.length) {
-    stateScreen('Схожие проблемы не найдены', 'Попробуйте искать по названию проблемы или проекта.');
+    stateScreen(t('No related work found', 'Схожие проблемы не найдены'),
+      t('Try an issue title or project name.', 'Попробуйте искать по названию проблемы или проекта.'));
     return;
   }
   const wrapper = element('div', 'match-list');
@@ -469,39 +578,47 @@ function drawMatches(matches) {
     top.append(badge(match.state, matchStates));
     if (Number.isFinite(match.score)) {
       const percent = Math.round(match.score <= 1 ? match.score * 100 : match.score);
-      top.append(element('span', 'score', `Сходство ${percent}%`));
+      top.append(element('span', 'score', `${t('Similarity', 'Сходство')} ${percent}%`));
     }
     const pair = element('div', 'match-pair');
     for (const source of [match.left, match.right]) {
       const side = element('div', 'match-side');
       const title = element('h3');
-      title.append(githubLink(source.title, source.url));
+      title.append(githubLink(editorial(source, 'title'), source.url));
       side.append(projectPill(source.project), title);
       pair.append(side);
     }
     card.append(top, pair);
-    if (match.reason) card.append(element('p', '', match.reason));
-    if (match.problem_id) card.append(internalLink(`Карточка ${match.problem_id} →`, urlFor(match.problem_id)));
+    const reason = matchReason(match);
+    if (reason) card.append(element('p', '', reason));
+    if (match.problem_id) card.append(internalLink(`${t('Issue', 'Карточка')} ${match.problem_id} →`, urlFor(match.problem_id)));
     wrapper.append(card);
   }
   content.replaceChildren(wrapper);
 }
 
+const retryAdvice = t('Try again. For a local installation, check that the PortBridge server is running.',
+  'Повторите попытку. Для локальной установки проверьте, запущен ли сервер PortBridge.');
+
 function drawProjects() {
-  viewStatus.textContent = `Отслеживается проектов: ${projects.size}`;
+  const count = numberFormat.format(projects.size);
+  viewStatus.textContent = t(`Tracked projects: ${count}`, `Отслеживается проектов: ${count}`);
   if (!projects.size) {
-    stateScreen('Список проектов недоступен', 'Проверьте, запущен ли локальный сервер PortBridge.', true);
+    stateScreen(t('Project list is unavailable', 'Список проектов недоступен'), retryAdvice, true);
     return;
   }
   const wrapper = element('div', 'cards');
   for (const project of projects.values()) {
     const card = element('article', 'card');
-    const title = element('h2', '', project.name);
+    const title = element('h2', '', projectName(project.slug));
     const stats = element('dl', 'project-status');
-    stats.append(element('dt', '', 'Обновление'), element('dd', '', syncStates[project.sync_status] || 'Состояние неизвестно'),
-      element('dt', '', 'Последнее успешное получение данных'), element('dd', '', stamp(project.last_success)));
-    card.append(title, githubLink(project.repo || 'Репозиторий', project.url));
-    if (project.stack) card.append(element('p', '', project.stack));
+    stats.append(element('dt', '', t('Update status', 'Обновление')),
+      element('dd', '', syncStates[project.sync_status] || t('Unknown status', 'Состояние неизвестно')),
+      element('dt', '', t('Last successful update', 'Последнее успешное получение данных')),
+      element('dd', '', stamp(project.last_success)));
+    card.append(title, githubLink(project.repo || t('Repository', 'Репозиторий'), project.url));
+    const stack = editorial(project, 'stack');
+    if (stack) card.append(element('p', '', stack));
     if (project.license) card.append(element('p', '', project.license));
     card.append(stats);
     wrapper.append(card);
@@ -527,7 +644,7 @@ async function loadView(current, focus = false) {
     else link.removeAttribute('aria-current');
   });
   content.setAttribute('aria-busy', 'true');
-  viewStatus.textContent = 'Загрузка…';
+  viewStatus.textContent = t('Loading…', 'Загрузка…');
   try {
     if (current.view === 'projects') {
       await loadProjects(active.signal);
@@ -557,8 +674,10 @@ async function loadView(current, focus = false) {
   } catch (err) {
     if (active.signal.aborted) return;
     viewStatus.textContent = '';
-    if (err.status === 404 && current.id) stateScreen('Карточка не найдена', 'Откройте другую проблему из каталога.');
-    else stateScreen('Не удалось загрузить данные', 'Проверьте, запущен ли локальный сервер PortBridge.', true);
+    if (err.status === 404 && current.id) {
+      stateScreen(t('Issue not found', 'Карточка не найдена'),
+        t('Choose another issue from the catalog.', 'Откройте другую проблему из каталога.'));
+    } else stateScreen(t('Could not load data', 'Не удалось загрузить данные'), retryAdvice, true);
   } finally {
     if (request === active) content.setAttribute('aria-busy', 'false');
   }
@@ -568,10 +687,10 @@ async function loadProjects(signal) {
   const result = await fetchJSON('/projects', signal);
   if (signal?.aborted) return;
   projects.clear();
-  const options = [new Option('Все проекты', '')];
+  const options = [new Option(t('All projects', 'Все проекты'), '')];
   list(result.projects).forEach((project) => {
     projects.set(project.slug, project);
-    options.push(new Option(project.name, project.slug));
+    options.push(new Option(projectName(project.slug), project.slug));
   });
   projectField.replaceChildren(...options);
   projectField.value = route().params.get('project') || '';
@@ -583,9 +702,7 @@ function restoreFields(current) {
   statusField.value = current.params.get('status') || '';
 }
 
-function applyFilters() {
-  clearTimeout(debounce);
-  const current = route();
+function filterHash(current) {
   const params = new URLSearchParams();
   if (searchField.value.trim()) params.set('q', searchField.value.trim());
   if (current.view !== 'matches') {
@@ -593,10 +710,18 @@ function applyFilters() {
     if (statusField.value) params.set('status', statusField.value);
   }
   const suffix = params.size ? `?${params}` : '';
-  history.replaceState(null, '', `#/${current.view}${suffix}`);
+  return `#/${current.view}${suffix}`;
+}
+
+function applyFilters() {
+  clearTimeout(debounce);
+  history.replaceState(null, '', filterHash(route()));
+  updateLanguageLinks();
   loadView(route());
 }
 
+applyPageLanguage();
+updateLanguageLinks();
 for (const [id, name] of Object.entries(problemStates)) statusField.add(new Option(name, id));
 filters.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -604,6 +729,7 @@ filters.addEventListener('submit', (event) => {
 });
 searchField.addEventListener('input', () => {
   clearTimeout(debounce);
+  updateLanguageLinks(filterHash(route()));
   debounce = setTimeout(applyFilters, 200);
 });
 projectField.addEventListener('change', applyFilters);
@@ -620,6 +746,7 @@ document.querySelector('.skip-link').addEventListener('click', (event) => {
 });
 window.addEventListener('hashchange', () => {
   clearTimeout(debounce);
+  updateLanguageLinks();
   const current = route();
   restoreFields(current);
   loadView(current, true);

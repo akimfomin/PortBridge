@@ -13,7 +13,7 @@ from xml.etree import ElementTree
 
 from portbridge.__main__ import DEFAULT_SEED, make_server
 from portbridge.backup import backup_database
-from portbridge.case_pages import case_path
+from portbridge.case_pages import case_languages, case_path
 from portbridge.catalog import Catalog
 from portbridge.coordination import knowledge_graph, recommendations
 from portbridge.export import EXPORT_FILES, export
@@ -42,6 +42,32 @@ class CatalogFixture(unittest.TestCase):
 
 
 class CatalogTest(CatalogFixture):
+    def test_readable_english_overlays_preserve_curated_source_identity(self):
+        for project in self.catalog.projects():
+            with self.subTest(project=project["slug"]):
+                self.assertTrue(project["translations"]["en"]["stack"])
+        for card in self.catalog.problems():
+            with self.subTest(card=card["id"]):
+                self.assertEqual(case_languages(card), ("en", "ru"))
+                self.assertTrue(card["translations"]["en"]["tags"])
+                for solution in card["solutions"]:
+                    self.assertTrue(solution["translations"]["en"]["summary"])
+                    for reference in solution["source_refs"]:
+                        self.assertTrue(reference["translations"]["en"]["title"])
+                    for evidence in solution["evidence"]:
+                        self.assertTrue(evidence["translations"]["en"]["title"])
+                        self.assertTrue(evidence["translations"]["en"]["observed"])
+        card, = self.catalog.problems(q="require triangle conversion")
+        match, = self.catalog.matches(q="require triangle conversion")
+        self.assertEqual(card["id"], match["problem_id"])
+        original = card["solutions"][0]["source_refs"][0]
+        self.assertEqual(match["left"]["url"], original["url"])
+        self.assertEqual(match["left"]["title"], original["title"])
+        self.assertEqual(match["left"]["translations"]["en"]["title"], "PR #207 by tedin7")
+        coordination = self.catalog.coordination()
+        self.assertEqual(len(coordination["translations"]["en"]["steps"]), len(coordination["steps"]))
+        self.assertTrue(coordination["reference"]["translations"]["en"]["scope"])
+
     def test_seed_withdrawal_preserves_attribution_but_removes_active_references(self):
         seed = json.loads(DEFAULT_SEED.read_bytes())
         seed["problems"] = [card for card in seed["problems"] if card["id"] != "PB-0001"]
@@ -54,6 +80,7 @@ class CatalogTest(CatalogFixture):
             export(self.catalog, out)
             self.assertNotIn("PB-0001", (out / "data/problems.json").read_text(encoding="utf-8"))
             self.assertFalse((out / "cases/pb-0001.html").is_file())
+            self.assertFalse((out / "cases/pb-0001.ru.html").is_file())
         with self.catalog.connect() as db:
             archived, = db.execute("SELECT payload FROM withdrawn_problems WHERE id='PB-0001'").fetchall()
         self.assertIn("7122193634", archived[0])
@@ -330,7 +357,8 @@ class SnapshotTest(CatalogFixture):
         with patch.dict(os.environ, {"PORTBRIDGE_GITHUB_TOKEN": sentinel}):
             destination = export(self.catalog, self.workspace / "dist", "example/PortBridge")
         files = {path.relative_to(destination).as_posix() for path in destination.rglob("*") if path.is_file()}
-        self.assertEqual(files, EXPORT_FILES | {case_path(card) for card in self.catalog.problems()})
+        cases = {case_path(card, language) for card in self.catalog.problems() for language in case_languages(card)}
+        self.assertEqual(files, EXPORT_FILES | cases)
         for name in files:
             with self.subTest(file=name):
                 self.assertNotIn(sentinel.encode(), (destination / name).read_bytes())
@@ -339,12 +367,48 @@ class SnapshotTest(CatalogFixture):
         self.assertEqual(site["mode"], "snapshot")
         cards = json.loads((destination / "data/problems.json").read_text(encoding="utf-8"))
         self.assertEqual(cards["problems"], self.catalog.problems())
-        case = (destination / "cases/pb-0001.html").read_text(encoding="utf-8")
-        self.assertIn('rel="canonical" href="https://akimfomin.github.io/PortBridge/cases/pb-0001.html"', case)
-        self.assertIn("7120734503", case)
-        self.assertIn("Windows 11", case)
-        self.assertIn("pb-0001.html", (destination / "sitemap.xml").read_text(encoding="utf-8"))
+        base = "https://akimfomin.github.io/PortBridge/"
+        english, russian = base + "cases/pb-0001.html", base + "cases/pb-0001.ru.html"
+        for path, language, url, title in (
+                ("cases/pb-0001.html", "en", english, "Rectangle lists require triangle conversion"),
+                ("cases/pb-0001.ru.html", "ru", russian, self.catalog.problem("PB-0001")["title"])):
+            with self.subTest(language=language):
+                case = (destination / path).read_text(encoding="utf-8")
+                self.assertIn(f'<html lang="{language}">', case)
+                self.assertIn(f'rel="canonical" href="{url}"', case)
+                for alternate, target in (("en", english), ("ru", russian), ("x-default", english)):
+                    self.assertIn(f'rel="alternate" hreflang="{alternate}" href="{target}"', case)
+                self.assertIn(f"<h1>{title}</h1>", case)
+                self.assertIn("7120734503", case)
+                self.assertIn("Windows 11", case)
+                self.assertNotIn("<script", case)
+        en_case = (destination / "cases/pb-0001.html").read_text(encoding="utf-8")
+        self.assertIn("All eight rectangle cases passed in each environment.", en_case)
+        self.assertIn("Independent verification · Passed", en_case)
+        self.assertIn('href="pb-0001.ru.html" lang="ru" hreflang="ru"', en_case)
+        ru_case = (destination / "cases/pb-0001.ru.html").read_text(encoding="utf-8")
+        self.assertIn('href="../?lang=ru#/problems/PB-0001"', ru_case)
+        self.assertIn('href="pb-0001.html" lang="en" hreflang="en"', ru_case)
+        sitemap = ElementTree.parse(destination / "sitemap.xml")
+        self.assertEqual({node.text for node in sitemap.iter("{http://www.sitemaps.org/schemas/sitemap/0.9}loc")},
+                         {base, *(base + path for path in cases)})
         self.assertEqual(export(self.catalog, destination), destination)
+
+    def test_export_keeps_one_default_case_for_an_untranslated_custom_card(self):
+        destination = export(self.catalog, self.workspace / "dist")
+        seed = json.loads(DEFAULT_SEED.read_bytes())
+        card = seed["problems"][0]
+        del card["translations"]
+        custom_seed = self.workspace / "custom-seed.json"
+        custom_seed.write_text(json.dumps(seed), encoding="utf-8")
+        self.catalog = Catalog(self.db_path, custom_seed)
+        export(self.catalog, destination)
+        document = (destination / "cases/pb-0001.html").read_text(encoding="utf-8")
+        self.assertIn('<html lang="ru">', document)
+        self.assertIn(card["title"], document)
+        self.assertNotIn("hreflang", document)
+        self.assertFalse((destination / "cases/pb-0001.ru.html").exists())
+        self.assertNotIn("pb-0001.ru.html", (destination / "sitemap.xml").read_text(encoding="utf-8"))
 
     def test_export_refuses_unrelated_directory_contents(self):
         destination = self.workspace / "occupied"
