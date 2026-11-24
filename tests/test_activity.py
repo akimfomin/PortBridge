@@ -86,17 +86,18 @@ class ActivityTest(CatalogFixture):
         summary = build_activity(self.catalog, now=NOW)
         handoffs = summary["handoffs"]
         self.assertEqual(summary["counts"]["merged"], 1)
-        self.assertEqual(handoffs["counts"], {"delivered": 6, "independently_reproduced": 4,
+        self.assertEqual(handoffs["counts"], {"delivered": 7, "independently_reproduced": 4,
                                              "formally_reviewed": 1, "adopted": 1})
-        continued, xcl, anyxboxx, rounding, division, warp = handoffs["items"]
+        continued, xcl, anyxboxx, rounding, division, warp, texture = handoffs["items"]
         self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
         self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
         self.assertTrue(xcl["independent_url"].endswith("#issuecomment-7133929789"))
         self.assertTrue(rounding["independent_url"].endswith("#issuecomment-7133315650"))
         self.assertTrue(division["independent_url"].endswith("#issuecomment-7133823866"))
         self.assertNotIn("review_url", xcl)
-        self.assertTrue(all("adopted_url" not in item for item in (continued, xcl, rounding, division, warp)))
-        self.assertTrue(warp["delivered_url"].endswith("/issues/142"))
+        self.assertTrue(all("adopted_url" not in item for item in (continued, xcl, rounding, division, warp, texture)))
+        self.assertTrue(warp["delivered_url"].endswith("/pull/144"))
+        self.assertTrue(texture["delivered_url"].endswith("/issues/145"))
         self.assertNotIn("independent_url", warp)
         self.assertTrue(anyxboxx["adopted_url"].endswith("b15d8821bffcd8fbc98e56f41daf07fc91118192"))
         self.assertEqual(build_activity(self.catalog, now=NOW, cards=[])["handoffs"]["items"], [])

@@ -539,6 +539,25 @@
                   "observed": "Three tests passed in an isolated module build. At 1,100 µs the pending event is 200 µs away."
                 }
               }
+            },
+            {
+              "kind": "automated_test",
+              "outcome": "passed",
+              "url": "https://github.com/Marvisak/VIctory/pull/321#issuecomment-7130689676",
+              "title": "Совмещённое расписание и резервирование событий",
+              "revision": "d674d9e2bbaa3220565b75070be62e6b968012a2",
+              "reported_at": "2026-11-24T14:40:08Z",
+              "platforms": [
+                "Windows 11",
+                "Rust 1.100.0 (CPU)"
+              ],
+              "observed": "Локальное совмещение #321 и #174 прошло все пять тестов модуля в 60 прогонах. Без любой из двух частей новый тест падает. Предложение передано в #321.",
+              "translations": {
+                "en": {
+                  "title": "Combined event timing and reservation",
+                  "observed": "The local integration of #321 and #174 passed all five module tests across 60 runs. Dropping either half breaks the new regression. The proposal was shared in #321."
+                }
+              }
             }
           ]
         },
@@ -782,7 +801,8 @@
           "evidence": [
             {"kind": "independent", "outcome": "mixed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458", "title": "Сравнение функции XCL на WARP", "revision": "2aa8211b9d72243dbe521cb0e0fbea9352dcf0dd", "reported_at": "2026-11-24T13:47:21Z", "platforms": ["Windows 11", "Microsoft WARP", "DXC 1.9.2602.17"], "observed": "При −151 ожидаемый результат 0x00000000, а исходная функция XCL вернула 0x40000000. Контроль при −150 прошёл. Проверка относится к изолированной функции.", "translations": {"en": {"title": "XCL helper comparison on WARP", "observed": "At −151 the expected result was 0x00000000 and the original helper returned 0x40000000. The −150 control passed. This was an isolated helper check."}}},
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458", "title": "Независимая проверка исправления b3IKK", "revision": "eac652c3d11927169ea46739249ebcc188ad800e", "reported_at": "2026-11-24T13:59:17Z", "platforms": ["Windows 11", "Microsoft WARP", "DXC 1.9.2602.17"], "observed": "В изолированной проверке прошло 14 из 14 исходных входов и 17 из 17 входов нового теста. На старой версии прошли соответственно 9 и 13. Сверены биты результата NaN и оба знаковых нуля.", "translations": {"en": {"title": "Independent run of b3IKK's fix", "observed": "The isolated helper passed all 14 original inputs and all 17 updated fixture inputs. The old helper passed 9 and 13 respectively. The comparison included exact NaN payloads and both signed zero cases."}}},
-            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133823866", "title": "JoaoPauluu подтвердил исправление XCL на RTX 3060", "revision": "eac652c3d11927169ea46739249ebcc188ad800e", "reported_at": "2026-11-24T14:05:27Z", "platforms": ["NVIDIA RTX 3060", "CachyOS Linux", "Vulkan (vkd3d-proton)", "DXC 1.9.2609.5"], "observed": "Оба целевых GPU-теста XCL прошли без пропусков. Исходную версию в этом прогоне не проверяли.", "translations": {"en": {"title": "JoaoPauluu confirmed the XCL fix on RTX 3060", "observed": "Both focused XCL GPU tests passed without skips. The baseline was not part of this run."}}}
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133823866", "title": "JoaoPauluu подтвердил исправление XCL на RTX 3060", "revision": "eac652c3d11927169ea46739249ebcc188ad800e", "reported_at": "2026-11-24T14:05:27Z", "platforms": ["NVIDIA RTX 3060", "CachyOS Linux", "Vulkan (vkd3d-proton)", "DXC 1.9.2609.5"], "observed": "Оба целевых GPU-теста XCL прошли без пропусков. Исходную версию в этом прогоне не проверяли.", "translations": {"en": {"title": "JoaoPauluu confirmed the XCL fix on RTX 3060", "observed": "Both focused XCL GPU tests passed without skips. The baseline was not part of this run."}}},
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133989053", "title": "TobiasFornell подтвердил исправление на RX 9070 XT", "revision": "eac652c3d11927169ea46739249ebcc188ad800e", "reported_at": "2026-11-24T14:11:48Z", "platforms": ["AMD Radeon RX 9070 XT", "Linux", "RADV 26.3.1", "vkd3d-proton 3.1", "Native Wave64"], "observed": "После пробного слияния исправления с основной веткой 47efa2e прошли все три целевых теста. Нативный Wave64 покрывал случаи −151/−150, порядок NaN, DIV_FMAS и расхождение EXEC.", "translations": {"en": {"title": "TobiasFornell confirmed the fix on RX 9070 XT", "observed": "The local merge of the corrected head onto 47efa2e passed all three focused tests. Native Wave64 covered the −151/−150 boundary, NaN order, DIV_FMAS and EXEC divergence."}}}
           ]
         }
       ]
@@ -791,7 +811,7 @@
       "id": "PB-0013",
       "recorded_at": "2026-11-24T14:16:35Z",
       "title": "Сбой оптимизированного теста XNOR на WARP в AnyXboxX",
-      "summary": "На локальной копии основной ветки AnyXboxX разворачивание одного цикла исправило результат синтетического ALU-теста на WARP. Проверенный обход передан в #142. Решение команды пока ожидается.",
+      "summary": "На локальной копии основной ветки AnyXboxX разворачивание одного цикла исправило результат синтетического ALU-теста на WARP. Проверенный обход передан на ревью в #144. Решение команды пока ожидается.",
       "status": "verified",
       "tags": [
         "WARP",
@@ -802,7 +822,7 @@
       "translations": {
         "en": {
           "title": "Optimized XNOR test fails on WARP in AnyXboxX",
-          "summary": "Unrolling one compute shader initialization loop fixed the synthetic ALU test on WARP. The tested workaround was shared in #142 and is awaiting the team's decision.",
+          "summary": "Unrolling one compute shader initialization loop fixed the synthetic ALU test on WARP. The tested workaround was submitted for review in #144.",
           "tags": [
             "WARP",
             "DXIL",
@@ -846,6 +866,15 @@
                   "title": "AnyXboxX baseline revision"
                 }
               }
+            },
+            {
+              "title": "Правка передана в AnyXboxX #144",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/144",
+              "translations": {
+                "en": {
+                  "title": "Workaround submitted in AnyXboxX #144"
+                }
+              }
             }
           ],
           "evidence": [
@@ -885,6 +914,26 @@
                 "en": {
                   "title": "Local compute shader workaround",
                   "observed": "Adding [unroll] on this baseline made the ALU test pass on WARP. All 300 executed tests passed on RTX. The four WARP texture failures also occurred on baseline."
+                }
+              }
+            },
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/144",
+              "title": "Полный доступный прогон PR на WARP и RTX",
+              "revision": "a56090a935fb2ba508beeaa0458ea168bf00c16c",
+              "reported_at": "2026-11-24T14:34:38Z",
+              "platforms": [
+                "Microsoft WARP",
+                "NVIDIA RTX 4070 Ti SUPER",
+                "DXC 1.9.2609.5"
+              ],
+              "observed": "На WARP прошло 481 из 485 выполненных тестов. Остались четыре прежних расхождения текстур. На RTX прошли 485 из 485. В обоих прогонах пропущены 162 теста.",
+              "translations": {
+                "en": {
+                  "title": "Available full-suite run on WARP and RTX",
+                  "observed": "WARP passed 481 of 485 executed tests. The same four texture cases failed. RTX passed all 485. Both runs skipped 162 tests."
                 }
               }
             }
@@ -972,6 +1021,26 @@
                   "observed": "LLVM encodes −100 and 0xffffff9c identically. Baseline Continued yielded (32, 0, 0, 0) for the hexadecimal input. With sign extension, it yielded (57, ffffffff, ffffffff, 1), matching both signed controls."
                 }
               }
+            },
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/ubiquitarianism/leonida/issues/14#issuecomment-7134206089",
+              "title": "Тот же знаковый литерал при арифметическом сдвиге",
+              "revision": "d0da7dade8b688f2e0f7f23f4155d6cbb438809e",
+              "reported_at": "2026-11-24T14:37:59Z",
+              "platforms": [
+                "LLVM 23.1.6",
+                "SPIR-V CPU interpreter",
+                "XCL HLSL emitter"
+              ],
+              "observed": "Одинаковые входные байты для −100 и 0xffffff9c давали разные результаты. После локального исправления шестнадцатеричная запись дала ожидаемые (ffffffff, ffffffff, 1). Прошли 97 проверок сдвига.",
+              "translations": {
+                "en": {
+                  "title": "The same signed literal in arithmetic shift",
+                  "observed": "The same input bytes for −100 and 0xffffff9c led to different results. The local patch corrected the hexadecimal spelling to (ffffffff, ffffffff, 1). All 97 shift checks passed."
+                }
+              }
             }
           ]
         },
@@ -1012,6 +1081,92 @@
                 "en": {
                   "title": "XCL's HLSL emitter check",
                   "observed": "The actual XCL recompiler processed the same instruction bytes. The emitted high word was 0xffffffff in both signed operations."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0015",
+      "recorded_at": "2026-11-24T14:36:17Z",
+      "title": "Разное округление текстурного расчёта на WARP и RTX",
+      "summary": "Четыре текстурных теста AnyXboxX расходятся на WARP на один или два младших шага округления. Один синтетический шейдер воспроизводит разницу без текстур. Результаты переданы в #145.",
+      "status": "verified",
+      "tags": [
+        "WARP",
+        "bilinear",
+        "precise",
+        "FMA"
+      ],
+      "translations": {
+        "en": {
+          "title": "WARP and RTX round a texture calculation differently",
+          "summary": "Four AnyXboxX bilinear tests differ by one or two units in the last place on WARP. A synthetic shader reproduces the difference without textures. The results were shared in #145.",
+          "tags": [
+            "WARP",
+            "bilinear",
+            "precise",
+            "FMA"
+          ]
+        }
+      },
+      "platforms": [
+        "Windows 11",
+        "Microsoft WARP",
+        "NVIDIA RTX 4070 Ti SUPER",
+        "DXC 1.9.2609.5"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "anyxboxx",
+          "status": "partial",
+          "summary": "Один и тот же DXIL дал 0x3e59d9da на WARP и 0x3e59d9d8 на RTX. RTX совпала с интерпретатором. Где возникает расхождение WARP, ещё предстоит установить.",
+          "translations": {
+            "en": {
+              "summary": "The same DXIL gave 0x3e59d9da on WARP and 0x3e59d9d8 on RTX. RTX matched the interpreter. The exact stage that produces the WARP difference is still unverified."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Минимальный тест в AnyXboxX #145",
+              "url": "https://github.com/LooperSalty/AnyXboxX/issues/145",
+              "translations": {
+                "en": {
+                  "title": "AnyXboxX #145 minimal reproducer"
+                }
+              }
+            },
+            {
+              "title": "Правило HLSL precise",
+              "url": "https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/direct3dhlsl/dx-graphics-hlsl-variable-syntax.md",
+              "translations": {
+                "en": {
+                  "title": "HLSL precise documentation"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/LooperSalty/AnyXboxX/issues/145",
+              "title": "Сравнение одинакового DXIL на WARP и RTX",
+              "revision": "95f669fde988efe8e9c074b454dade40b54c8ed4",
+              "reported_at": "2026-11-24T14:36:17Z",
+              "platforms": [
+                "Microsoft WARP",
+                "NVIDIA RTX 4070 Ti SUPER",
+                "DXC 1.9.2609.5"
+              ],
+              "observed": "Разница сохранилась в режимах -O3, -Od и -Gis. Вывод DXIL содержит три отдельные операции. Контрольные тесты точечной фильтрации проходят.",
+              "translations": {
+                "en": {
+                  "title": "Same DXIL compared on WARP and RTX",
+                  "observed": "The difference persisted with -O3, -Od and -Gis. The DXIL output has three separate operations. Point-sampling controls pass."
                 }
               }
             }

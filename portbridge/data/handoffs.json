@@ -38,7 +38,13 @@
   {
     "problem_id": "PB-0013",
     "project": "anyxboxx",
+    "revision": "a56090a935fb2ba508beeaa0458ea168bf00c16c",
+    "delivered_url": "https://github.com/LooperSalty/AnyXboxX/pull/144"
+  },
+  {
+    "problem_id": "PB-0015",
+    "project": "anyxboxx",
     "revision": "95f669fde988efe8e9c074b454dade40b54c8ed4",
-    "delivered_url": "https://github.com/LooperSalty/AnyXboxX/issues/142"
+    "delivered_url": "https://github.com/LooperSalty/AnyXboxX/issues/145"
   }
 ]
