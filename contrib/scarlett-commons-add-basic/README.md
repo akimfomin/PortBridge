@@ -2,7 +2,7 @@
 
 This source-only comparison uses the original Scarlett Commons `valu-f32/add-basic` case at `ba9549c254647b9f6ef3b4e47684e69a668b9ec1` and Continued's translator and CPU test helpers at `5496f79f93c41f1134ce4c9e1d2674aa00c6bb55`. [Original case](https://github.com/scarlett-commons/scarlett-commons/blob/ba9549c254647b9f6ef3b4e47684e69a668b9ec1/cases/valu-f32/add-basic.json) · [Continued helpers](https://github.com/ubiquitarianism/leonida/blob/5496f79f93c41f1134ce4c9e1d2674aa00c6bb55/tests/semantic/support.py#L38-L64)
 
-Use Git, Python 3.12, and two local checkouts at those revisions. From the PortBridge root, run the following command with your checkout paths.
+Use Git, Python 3.12, and two clean local checkouts at those revisions. From the PortBridge root, run the following command with your checkout paths.
 
 ```text
 python -B -I contrib/scarlett-commons-add-basic/compare.py /path/to/scarlett-commons /path/to/continued

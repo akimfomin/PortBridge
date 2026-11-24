@@ -2020,6 +2020,15 @@
               "translations": {"en": {"title": "PortBridge checked a late wait after shutdown", "observed": "In five runs the fix rejected the late wait before reading the clock. The parent and the head with its early guard removed each read the clock once per run. All three variants returned the same status. The object stayed alive throughout the test."}}
             },
             {
+              "kind": "maintainer_claim", "outcome": "observed",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7140296627",
+              "title": "madhyn добавил контроль в Continued #1042",
+              "revision": "79a8f595cb15bb95adcaf248cc2d337e9b025905", "reported_at": "2026-11-24T18:11:49Z",
+              "platforms": ["Wine 11.22", "clang-cl", "CPU"],
+              "observed": "Автор PR добавил проверку позднего запроса и числа обращений к часам, указав вклад fin-github и akimfomin. По отчёту автора штатный тест прошёл 1 из 1 под Wine. PR открыт.",
+              "translations": {"en": {"title": "madhyn added the regression check to Continued #1042", "observed": "The PR author added a late-wait check and counted clock reads, crediting fin-github and akimfomin. The author reported the registered test passing 1 of 1 under Wine. The PR is open."}}
+            },
+            {
               "kind": "automated_test",
               "outcome": "mixed",
               "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e",

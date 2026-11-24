@@ -151,8 +151,8 @@
   },
   {
     "project": "five-star-recomp", "area": "shaders", "kind": "source",
-    "scope": "Тесты WARP сравнивают результаты отдельных потоков с эталоном на CPU для групп разного размера.",
-    "translations": {"en": {"scope": "WARP tests compare each lane against a CPU reference across several group sizes."}},
+    "scope": "Тесты WARP сравнивают результаты отдельных потоков с эталоном на CPU для эмулируемых волн разной ширины.",
+    "translations": {"en": {"scope": "WARP tests compare each lane against a CPU reference across several emulated wave sizes."}},
     "evidence": "https://github.com/ThatRecompDev/five-star-recomp/blob/2d1aee93adccd6b2c5e34ab0427c33daa008dce8/tests/FiveStar.Shaders.Tests/WaveEmulationTests.cs#L34-L59"
   }
 ]
