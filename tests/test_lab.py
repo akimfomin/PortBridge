@@ -23,9 +23,11 @@ class LabTest(CatalogFixture):
         self.assertEqual(tasks["pb-9-reforge-present"]["evidence_stage"], "reviewed_gpu")
         self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "author_gpu")
         native = tasks["anyxboxx-133-native-carry"]
-        self.assertEqual((native["status"], native["evidence_stage"]), ("needs_run", "assembled_offline"))
-        self.assertEqual(native["revisions"][0]["sha"], "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d")
-        self.assertEqual(native["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/133")
+        self.assertEqual((native["status"], native["evidence_stage"]), ("awaiting_review", "reviewed_gpu"))
+        self.assertEqual(native["revisions"][0]["sha"], "948339d70d5cdffafef16885c76181c38c53d97e")
+        self.assertEqual(native["revisions"][1]["sha"], "9923c3bba74f4a7f3249e0c820f2e6821327c1f4")
+        self.assertEqual(native["evidence_url"], "https://github.com/akimfomin/PortBridge/issues/19#issuecomment-7136020663")
+        self.assertEqual(native["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136428842")
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")
             self.assertTrue(task["steps"] and task["expected"] and task["report"])
@@ -41,7 +43,7 @@ class LabTest(CatalogFixture):
         payload = build_lab()
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
-                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma", "anyxboxx-133-native-carry"])
+                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
         self.assertEqual(len(payload["tasks"]), 6)
         self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)

@@ -27,6 +27,16 @@ The host checks that all 32 lanes started enabled, lane 0 produced zero in both 
 | `ffffffff` | Inactive carry bits preserve the preload |
 | Any other value | Report the exact value for follow-up |
 
-A mixed pair distinguishes the two instruction forms. The AMD RDNA2 ISA guide §§2 and 3.9 supports clearing the inactive bits for the e32 VCC destination. §12.7 p.134 also describes the e64 carry to a selectable SGPR pair. The probe records both forms on the same device. [AMD RDNA2 ISA guide](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna2-shader-instruction-set-architecture.pdf) · [Receiving review](https://github.com/LooperSalty/AnyXboxX/pull/133#pullrequestreview-6041873843) The assembly was checked offline with LLVM 23.1.6. HIP launch and silicon behavior still need a hardware run.
+A mixed pair distinguishes the two instruction forms. The AMD RDNA2 ISA guide §§2 and 3.9 supports clearing the inactive bits for the e32 VCC destination. §12.7 p.134 also describes the e64 carry to a selectable SGPR pair. The probe records both forms on the same device. [AMD RDNA2 ISA guide](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna2-shader-instruction-set-architecture.pdf) · [Receiving review](https://github.com/LooperSalty/AnyXboxX/pull/133#pullrequestreview-6041873843)
+
+## Independent hardware result
+
+Lyrnc ran the probe's instruction sequence in a separate HIP harness using the AMD driver's `amd_comgr`. On the Ryzen 7 9800X3D Radeon iGPU (gfx1036, Wave32, Windows 11 Pro 26200, AMD driver 32.0.21042.62), all three runs produced the same result.
+
+```text
+initial_exec=ffffffff sum_e32=00000000 sum_e64=00000000 carry_e32=00000001 carry_e64=00000001 compare_vcc=00000001
+```
+
+The report covers both forms of `v_add_co_ci_u32` at the tested mask and input. The contributor documented the register renumbering, wait instructions and readback differences. The repository's assembly was checked offline with LLVM 23.1.6. Its `launch.cpp` remains available for a separate runtime check. [Lyrnc's report](https://github.com/akimfomin/PortBridge/issues/19#issuecomment-7136020663) · [Result in AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136428842)
 
 [LLVM AMDGPU ABI](https://llvm.org/docs/AMDGPUUsage.html) · [AMD HIP module API](https://rocm.docs.amd.com/projects/HIP/en/latest/doxygen/html/group___module.html) · [AMD HIP Windows compiler](https://rocmdocs.amd.com/projects/HIP/en/latest/faq.html)

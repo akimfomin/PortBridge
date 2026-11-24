@@ -3,7 +3,7 @@
 from copy import deepcopy
 
 
-CHECKED_AT = "2026-11-24T15:10:46Z"
+CHECKED_AT = "2026-11-24T15:40:43Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review")
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
@@ -20,9 +20,11 @@ FMA = f"{XCL}/pull/1100"
 FMA_HEAD = "1b3fbc4bc8c3088e69d78f85a2e73f1cccf4df51"
 XCL_SETUP = "https://github.com/akimfomin/xcl/blob"
 CARRY = "https://github.com/LooperSalty/AnyXboxX/pull/133"
-CARRY_HEAD = "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d"
-CARRY_REVIEW = f"{CARRY}#pullrequestreview-6041873843"
+CARRY_HEAD = "948339d70d5cdffafef16885c76181c38c53d97e"
 CARRY_PROBE = f"{PORTBRIDGE}/blob/main/contrib/rdna2-carry-mask/README.md"
+CARRY_PROBE_REVISION = "9923c3bba74f4a7f3249e0c820f2e6821327c1f4"
+CARRY_REPORT = f"{PORTBRIDGE}/issues/19#issuecomment-7136020663"
+CARRY_HANDOFF = f"{CARRY}#issuecomment-7136428842"
 
 
 def revision(label, label_ru, repository, sha):
@@ -227,33 +229,36 @@ TASKS = (
     {
         "id": "anyxboxx-133-native-carry",
         "priority": 6,
-        "title": "Measure AnyXboxX carry masks on native AMD RDNA2",
+        "title": "Review the AnyXboxX carry-mask result on native AMD RDNA2",
         "projects": ["anyxboxx"],
         "equipment": ["amd"],
         "os": ["Windows", "Linux"],
         "requirements": ["Physical AMD RDNA2 with Wave32", "HIP setup that launches native AMDGPU code objects"],
-        "status": "needs_run", "evidence_stage": "assembled_offline", "adoption": "pending",
+        "status": "awaiting_review", "evidence_stage": "reviewed_gpu", "adoption": "pending",
         "source_url": CARRY, "procedure_url": CARRY_PROBE,
-        "evidence_url": CARRY_REVIEW, "result_url": CARRY,
-        "revisions": [revision("AnyXboxX #133", "Версия AnyXboxX #133", "LooperSalty/AnyXboxX", CARRY_HEAD)],
-        "why": "The maintainer is holding #133 and four dependent changes pending carry-mask confirmation on RDNA2.",
-        "evidence": "PortBridge assembled the synthetic gfx1036 probe with LLVM. The receiving PR models cleared bits. A native run is still needed to measure the hardware behavior.",
+        "evidence_url": CARRY_REPORT, "result_url": CARRY_HANDOFF,
+        "revisions": [
+            revision("AnyXboxX #133 follow-up", "Версия AnyXboxX #133", "LooperSalty/AnyXboxX", CARRY_HEAD),
+            revision("Probe used as the reference", "Исходная проба", "akimfomin/PortBridge", CARRY_PROBE_REVISION),
+        ],
+        "why": "The receiving team's decision will show whether the native measurement resolves the review question in #133.",
+        "evidence": "Lyrnc ran the PortBridge instruction sequence in a separate HIP harness on a physical gfx1036 Wave32 device. Both carry masks and the comparison control were 00000001 in all three runs.",
         "steps": [
-            "Check that AnyXboxX #133 is open at the listed revision and the team still needs the result.",
-            "Build the source-only HIP probe and run one native Wave32 on physical AMD RDNA2.",
-            "Report both carry masks and the control values in AnyXboxX #133.",
+            "Read Lyrnc's hardware report and the result shared with AnyXboxX #133.",
+            "Check the receiving team's decision and report a link to it in PortBridge #19.",
+            "If the team needs a second hardware run, repeat the pinned probe on physical RDNA2 in Wave32.",
         ],
         "expected": "Controls expect initial EXEC ffffffff, zero sums, and compare_vcc 00000001. For each carry mask, 00000001 means inactive bits clear and ffffffff means they are preserved. Report mixed or other outputs as observed.",
         "report": ["PR revision, GPU target, driver, OS and assembler version", "Full output including the e32 and e64 carry masks"],
         "translations": {"ru": {
-            "title": "Измерить маски переноса AnyXboxX на AMD RDNA2",
+            "title": "Рассмотреть результат AnyXboxX по маскам переноса на AMD RDNA2",
             "requirements": ["Физическая видеокарта AMD RDNA2 с Wave32", "HIP с запуском кода AMDGPU напрямую на видеокарте"],
-            "why": "Сопровождающий ждёт подтверждения масок переноса на RDNA2 перед принятием #133 и четырёх зависимых изменений.",
-            "evidence": "PortBridge собрал синтетическую пробу для gfx1036 через LLVM. Код в PR очищает биты. Поведение физической видеокарты ещё нужно измерить.",
+            "why": "Решение AnyXboxX покажет, достаточно ли аппаратного замера для ответа на вопрос ревью в #133.",
+            "evidence": "Lyrnc запустил последовательность инструкций PortBridge в своём стенде HIP на физической gfx1036 в Wave32. Обе маски переноса и контроль сравнения дали 00000001 во всех трёх прогонах.",
             "steps": [
-                "Убедитесь, что AnyXboxX #133 открыт на указанной версии и результат ещё нужен.",
-                "Соберите HIP-пробу из исходников и запустите одну волну Wave32 на физической AMD RDNA2.",
-                "Отправьте обе маски переноса и контрольные значения в AnyXboxX #133.",
+                "Прочитайте аппаратный отчёт Lyrnc и результат, переданный в AnyXboxX #133.",
+                "Проверьте решение команды и добавьте ссылку на него в PortBridge #19.",
+                "Если команде понадобится второй прогон, повторите указанную пробу на физической RDNA2 в Wave32.",
             ],
             "expected": "Контроль ожидает начальную EXEC ffffffff, обе суммы ноль и compare_vcc 00000001. Маска переноса 00000001 означает очистку неактивных битов, ffffffff означает сохранение. Укажите и любые другие значения.",
             "report": ["Версия PR, видеокарта, драйвер, ОС и версия ассемблера", "Полный вывод с масками переноса e32 и e64"],

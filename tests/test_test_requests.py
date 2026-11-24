@@ -2,7 +2,7 @@ from copy import deepcopy
 from datetime import datetime, timezone
 from io import BytesIO
 from unittest import TestCase
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from portbridge.lab import build_lab
 from portbridge.test_requests import APPROVAL, BOT, REPO_PATH, GitHub, dispatch, load_testers, parse_request
@@ -197,9 +197,14 @@ class TestRequestTests(TestCase):
         self.assertIn("Posted one", self.run_dispatch([candidate]))
         self.github.comment.assert_called_once()
 
-    def test_native_carry_invites_only_the_qualified_reporter_at_the_open_head(self):
+    @patch("portbridge.test_requests.build_lab")
+    def test_native_carry_invites_only_the_qualified_reporter_at_the_open_head(self, lab):
         task = next(row for row in build_lab()["tasks"] if row["id"] == "anyxboxx-133-native-carry")
-        self.issue["body"] = self.current["body"] = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
+        head = "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d"
+        revision_url = f"https://github.com/LooperSalty/AnyXboxX/commit/{head}"
+        lab.return_value = {"tasks": [{**task, "status": "needs_run", "result_url": task["source_url"],
+                                      "revisions": [{"sha": head, "url": revision_url}]}]}
+        self.issue["body"] = self.current["body"] = issue_body(task=task["id"], revision=revision_url)
         roster = load_testers()
         generic = [row for row in roster if row["login"] != "Lyrnc"]
         discovery = Mock(return_value=[tester("GenericAMD", "d3d12-native-wave64")])
@@ -207,7 +212,6 @@ class TestRequestTests(TestCase):
         discovery.assert_called_once_with("amd", ("amd-rdna2-native-isa-hip",))
         self.github.comment.assert_not_called()
 
-        head = task["revisions"][0]["sha"]
         receiving = {"state": "open", "head": {"sha": "f" * 40}}
 
         def get(path, *, public=False):
@@ -228,7 +232,15 @@ class TestRequestTests(TestCase):
         self.assertIn("@Lyrnc", body)
         self.assertIn("native AMD RDNA2 instructions through HIP", body)
         self.assertIn("https://github.com/Marvisak/VIctory/pull/605#issuecomment-7123302580", body)
-        self.assertIn(task["result_url"], body)
+        self.assertIn(task["source_url"], body)
+        lab.assert_called_with(equipment="amd", status="needs_run")
+
+    def test_native_carry_with_report_no_longer_invites_a_tester(self):
+        revision_url = "https://github.com/LooperSalty/AnyXboxX/commit/e2af2d38e48b5a0019dae5c78aa398cc71c42c8d"
+        self.issue["body"] = self.current["body"] = issue_body(task="anyxboxx-133-native-carry", revision=revision_url)
+        with self.assertRaisesRegex(ValueError, "does not match the open test"):
+            self.run_dispatch(load_testers())
+        self.github.comment.assert_not_called()
 
     def test_prior_public_handoffs_count_towards_the_same_cooldown(self):
         roster = [tester("Invited", "d3d12-native-wave64"), tester("Volunteer", "d3d12-native-wave64")]

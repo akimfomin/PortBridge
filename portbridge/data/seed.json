@@ -1217,7 +1217,7 @@
       "id": "PB-0016",
       "recorded_at": "2026-11-24T15:10:46Z",
       "title": "Маска переноса неактивных потоков AMD RDNA2",
-      "summary": "Сопровождающий AnyXboxX ждёт подтверждения, как две формы инструкции обрабатывают старые биты переноса. PortBridge подготовил тест для обеих форм и контроль с известным ответом.",
+      "summary": "По приглашению PortBridge Lyrnc проверил обе формы инструкции на AMD gfx1036 в Wave32. Во всех трёх прогонах обе формы очистили биты переноса неактивных потоков. Результат передан AnyXboxX для ревью.",
       "status": "investigating",
       "tags": [
         "RDNA2",
@@ -1230,7 +1230,7 @@
       "translations": {
         "en": {
           "title": "RDNA2 carry masks for inactive lanes",
-          "summary": "The AnyXboxX maintainer is waiting for carry-mask confirmation for two instruction forms. PortBridge prepared one native probe for both with a known comparison control.",
+          "summary": "PortBridge invited Lyrnc to test both instruction forms on AMD gfx1036 in Wave32. Both forms cleared inactive carry bits in all three runs. The result was shared with AnyXboxX for review.",
           "tags": [
             "RDNA2",
             "Wave32",
@@ -1242,18 +1242,18 @@
         }
       },
       "platforms": [
-        "AMD RDNA2 Wave32",
-        "LLVM 23.1.6"
+        "AMD RDNA2 gfx1036 Wave32",
+        "Windows 11 and AMD HIP"
       ],
       "dependency_ids": [],
       "solutions": [
         {
           "project": "anyxboxx",
           "status": "open",
-          "summary": "Руководство AMD поддерживает очистку VCC для e32. Псевдокод e64 указывает регистр назначения. Точный ответ по обоим вариантам ждёт замера на карте.",
+          "summary": "Аппаратный замер Lyrnc подтверждает результат 00000001 для обеих форм v_add_co_ci_u32 при EXEC = 1 и начальной маске 0xfffffffe. Решение AnyXboxX по PR #133 ожидается.",
           "translations": {
             "en": {
-              "summary": "The AMD guide supports clearing the e32 VCC mask. The e64 pseudocode identifies the destination register. The paired hardware measurement is pending."
+              "summary": "Lyrnc measured 00000001 for both forms of v_add_co_ci_u32 with EXEC = 1 and the 0xfffffffe preload. AnyXboxX's decision on PR #133 is pending."
             }
           },
           "source_refs": [
@@ -1268,7 +1268,7 @@
             },
             {
               "title": "Исходники пробы PortBridge",
-              "url": "https://github.com/akimfomin/PortBridge/blob/main/contrib/rdna2-carry-mask/README.md",
+              "url": "https://github.com/akimfomin/PortBridge/blob/9923c3bba74f4a7f3249e0c820f2e6821327c1f4/contrib/rdna2-carry-mask/carry_probe.s",
               "translations": {
                 "en": {
                   "title": "PortBridge probe source"
@@ -1276,11 +1276,20 @@
               }
             },
             {
-              "title": "Запрос на аппаратный замер",
-              "url": "https://github.com/akimfomin/PortBridge/issues/19",
+              "title": "Аппаратный замер Lyrnc",
+              "url": "https://github.com/akimfomin/PortBridge/issues/19#issuecomment-7136020663",
               "translations": {
                 "en": {
-                  "title": "Hardware run request"
+                  "title": "Lyrnc's hardware measurement"
+                }
+              }
+            },
+            {
+              "title": "Результат передан в AnyXboxX #133",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136428842",
+              "translations": {
+                "en": {
+                  "title": "Measurement relayed to AnyXboxX #133"
                 }
               }
             }
@@ -1321,6 +1330,42 @@
                 "en": {
                   "title": "AMD documentation and offline probe build",
                   "observed": "Chapter 2 and §3.9 support a full VCC write. §12.7 identifies the e64 destination. LLVM assembled the probe with both raw masks and the compare_vcc control."
+                }
+              }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/akimfomin/PortBridge/issues/19#issuecomment-7136020663",
+              "title": "Lyrnc измерил обе маски на физической AMD RDNA2",
+              "revision": "9923c3bba74f4a7f3249e0c820f2e6821327c1f4",
+              "reported_at": "2026-11-24T15:26:06Z",
+              "platforms": [
+                "AMD Radeon iGPU, Ryzen 7 9800X3D, gfx1036 Wave32",
+                "Windows 11 Pro 26200, AMD 32.0.21042.62",
+                "Lyrnc's HIP harness with AMD amd_comgr"
+              ],
+              "observed": "Во всех 3 прогонах получено: initial_exec=ffffffff sum_e32=00000000 sum_e64=00000000 carry_e32=00000001 carry_e64=00000001 compare_vcc=00000001. Lyrnc использовал инструкции, операнды и порядок пробы PortBridge в своём HIP-стенде.",
+              "translations": {
+                "en": {
+                  "title": "Lyrnc measured both carry masks on physical AMD RDNA2",
+                  "observed": "All three runs returned initial_exec=ffffffff sum_e32=00000000 sum_e64=00000000 carry_e32=00000001 carry_e64=00000001 compare_vcc=00000001. Lyrnc used the probe's instructions, operands and order in a separate HIP harness."
+                }
+              }
+            },
+            {
+              "kind": "source_observation",
+              "outcome": "observed",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136368058",
+              "title": "KainanP уточнил ссылки на руководство AMD в AnyXboxX",
+              "revision": "948339d70d5cdffafef16885c76181c38c53d97e",
+              "reported_at": "2026-11-24T15:38:31Z",
+              "platforms": ["AnyXboxX source"],
+              "observed": "Автор сослался на разделы 3.9 и 6.2 RDNA2 ISA и обозначил ожидание для e64 как вывод из документации. Изменены только пояснения к коду и тесту.",
+              "translations": {
+                "en": {
+                  "title": "KainanP updated the AMD guide references in AnyXboxX",
+                  "observed": "The author cited RDNA2 ISA sections 3.9 and 6.2 and described the e64 expectation as an inference. The commit changes the code and test docstrings."
                 }
               }
             }
