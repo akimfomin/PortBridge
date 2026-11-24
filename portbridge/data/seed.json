@@ -2038,6 +2038,15 @@
               "translations": {"en": {"title": "PortBridge retested the added regression check", "observed": "The exact head passed 5 of 5 runs. With the early guard removed, all five runs detected the failure and hung. After a local test-only cleanup the stock variant passed 5 of 5 again, and the control exited with the expected failure in about 1.3 seconds."}}
             },
             {
+              "kind": "maintainer_claim", "outcome": "observed",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7140737395",
+              "title": "madhyn применил правку завершения теста в Continued",
+              "revision": "0b65330e0efca116777f2fd1b91fb9e4b40df320", "reported_at": "2026-11-24T18:30:17Z",
+              "platforms": ["Wine 11.22", "clang-cl", "CPU"],
+              "observed": "Автор перенёс проверку результата за освобождение и завершение ожидающих потоков по предложению PortBridge. Штатный тест на этой версии прошёл под Wine. PR открыт.",
+              "translations": {"en": {"title": "madhyn applied the Continued test cleanup", "observed": "The author moved the result assertions after releasing and joining the blocked threads, as proposed by PortBridge. The registered test passed under Wine at this revision. The PR is open."}}
+            },
+            {
               "kind": "automated_test",
               "outcome": "mixed",
               "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e",

@@ -2,6 +2,8 @@
 
 AnyXboxX #147 compares translated HLSL with its interpreter. A reviewer reported that the native behavior of `ds_bpermute_b32` in Wave64 remained to be measured. AMD documents a separate 32-lane gather in each half of that wave. This synthetic probe reads the same five-bit lane index twice while changing address bit 7. [AnyXboxX report](https://github.com/LooperSalty/AnyXboxX/pull/147#issuecomment-7140576454) · [AMD RDNA2 ISA, §10.4.4](https://docs.amd.com/api/khub/documents/Et~wpu9g~Ffl7d9q0QZ~Og/content)
 
+The same guide's opcode pseudocode in §12.13 calculates the source lane modulo 64 and omits the half-wave offset. The two address controls distinguish those readings on this target. [Opcode listing, page 206](https://docs.amd.com/api/khub/documents/Et~wpu9g~Ffl7d9q0QZ~Og/content#page=214)
+
 ## Assemble and inspect
 
 ```text
