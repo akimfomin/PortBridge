@@ -15,7 +15,7 @@ class LabTest(CatalogFixture):
     def test_tasks_pin_public_sources_and_track_evidence_separately(self):
         payload = build_lab()
         tasks = {task["id"]: task for task in payload["tasks"]}
-        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 10)))
+        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 11)))
         combined = tasks["pb-9-continued-first-frame"]
         self.assertEqual((combined["status"], combined["evidence_stage"], combined["adoption"]),
                          ("awaiting_review", "reviewed_gpu", "pending"))
@@ -43,6 +43,15 @@ class LabTest(CatalogFixture):
                          (["amd"], "needs_run", "assembled_offline"))
         self.assertEqual(gather["revisions"][0]["sha"], "28524547b9f0751581257279a329b8cae2f1dc1e")
         self.assertEqual(gather["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/147")
+        handoff = tasks["framelab-12-vulkan-handoff"]
+        self.assertEqual((handoff["equipment"], handoff["status"], handoff["evidence_stage"]),
+                         (["amd"], "needs_run", "reviewed_gpu"))
+        head = "82f069e82197e61b97f60bbcbcb7a3af7d3f8e77"
+        repository = "https://github.com/5headsmartbtw/leonida-framelab"
+        self.assertEqual(handoff["revisions"][0]["sha"], head)
+        self.assertEqual(handoff["procedure_url"], f"{repository}/blob/{head}/tests/vulkan-handoff/README.md")
+        self.assertEqual(handoff["result_url"], f"{repository}/pull/12")
+        self.assertEqual(handoff["evidence_url"], f"{repository}/pull/12#issuecomment-7142089405")
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")
             self.assertTrue(task["steps"] and task["expected"] and task["report"])
@@ -59,10 +68,10 @@ class LabTest(CatalogFixture):
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
                          ["pb-5-xcl-wave64", "xcl-1100-fma", "continued-511-repeated-draw",
-                          "anyxboxx-147-native-wave64-gather"])
+                          "anyxboxx-147-native-wave64-gather", "framelab-12-vulkan-handoff"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
         self.assertEqual([task["id"] for task in build_lab(status="blocked")["tasks"]], ["pb-9-reforge-present"])
-        self.assertEqual(len(payload["tasks"]), 9)
+        self.assertEqual(len(payload["tasks"]), 10)
         self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)
         self.assertEqual([task["id"] for task in build_lab(equipment="cpu", status="needs_run")["tasks"]],
                          ["scarlett-commons-continued-add-basic"])
@@ -74,6 +83,7 @@ class LabTest(CatalogFixture):
         self.assertEqual([task["id"] for task in selected["tasks"]], ["xcl-1100-fma"])
         self.assertEqual(build_lab(task="unknown-check")["tasks"], [])
         self.assertEqual(build_lab(task="xcl-1100-fma", equipment="cpu")["tasks"], [])
+        self.assertEqual(build_lab(task="framelab-12-vulkan-handoff", equipment="nvidia")["tasks"], [])
         with self.assertRaises(ValueError):
             build_lab(task="../xcl-1100-fma")
 

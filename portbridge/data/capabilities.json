@@ -154,5 +154,11 @@
     "scope": "Тесты WARP сравнивают результаты отдельных потоков с эталоном на CPU для эмулируемых волн разной ширины.",
     "translations": {"en": {"scope": "WARP tests compare each lane against a CPU reference across several emulated wave sizes."}},
     "evidence": "https://github.com/ThatRecompDev/five-star-recomp/blob/2d1aee93adccd6b2c5e34ab0427c33daa008dce8/tests/FiveStar.Shaders.Tests/WaveEmulationTests.cs#L34-L59"
+  },
+  {
+    "project": "framelab", "area": "graphics", "kind": "tested",
+    "scope": "В четырёх синтетических сценариях передачи кадров через Vulkan совпали все 64 пикселя на RTX 4070 Ti SUPER. Проверены обе разновидности семафоров внутри одной семьи очередей и между семьями.",
+    "translations": {"en": {"scope": "All 64 pixels matched in each of four Vulkan handoff cases on RTX 4070 Ti SUPER. Both semaphore kinds were checked within and across queue families."}},
+    "evidence": "https://github.com/5headsmartbtw/leonida-framelab/pull/12#issuecomment-7142089405"
   }
 ]

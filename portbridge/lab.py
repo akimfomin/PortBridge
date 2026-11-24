@@ -34,6 +34,9 @@ SCARLETT_ADAPTER = "https://github.com/scarlett-commons/scarlett-commons/issues/
 SCARLETT_GUIDE = f"{PORTBRIDGE}/tree/de376382b79d75d635c1c04b31e030ebba979036/contrib/scarlett-commons-add-basic"
 WAVE64_CASE = "https://github.com/LooperSalty/AnyXboxX/pull/147"
 WAVE64_GUIDE = f"{PORTBRIDGE}/tree/main/contrib/rdna2-wave64-bpermute"
+FRAMELAB = "https://github.com/5headsmartbtw/leonida-framelab"
+FRAMELAB_HANDOFF = f"{FRAMELAB}/pull/12"
+FRAMELAB_HANDOFF_HEAD = "82f069e82197e61b97f60bbcbcb7a3af7d3f8e77"
 
 
 def revision(label, label_ru, repository, sha):
@@ -380,6 +383,55 @@ TASKS = (
             ],
             "expected": "Все 64 потока и обе половины маски EXEC проходят контроль. Для потока i оба адреса дают 0xa5000000 OR (i XOR 1), если чтение остаётся внутри своей половины.",
             "report": ["Модель AMD, драйвер, ОС, ассемблер и параметры модуля", "Контроль номера потока и EXEC, оба значения для потоков 0, 31, 32 и 63 либо результаты всех 64"],
+        }},
+    },
+    {
+        "id": "framelab-12-vulkan-handoff",
+        "priority": 10,
+        "title": "Repeat the FrameLab Vulkan queue handoff on AMD",
+        "projects": ["framelab"],
+        "equipment": ["amd"],
+        "os": ["Windows", "Linux"],
+        "requirements": ["Physical AMD GPU with Vulkan 1.2", "Khronos validation layer",
+                         "CMake 3.20 or later and a C++20 compiler"],
+        "status": "needs_run", "evidence_stage": "reviewed_gpu", "adoption": "pending",
+        "source_url": FRAMELAB_HANDOFF,
+        "procedure_url": f"{FRAMELAB}/blob/{FRAMELAB_HANDOFF_HEAD}/tests/vulkan-handoff/README.md",
+        "evidence_url": f"{FRAMELAB_HANDOFF}#issuecomment-7142089405", "result_url": FRAMELAB_HANDOFF,
+        "revisions": [revision("FrameLab #12 standalone Vulkan test", "Отдельный тест Vulkan FrameLab #12",
+                               "5headsmartbtw/leonida-framelab", FRAMELAB_HANDOFF_HEAD)],
+        "why": "An independent AMD run checks the same synthetic image and synchronization across another GPU vendor.",
+        "evidence": ("The author's RTX 2050 and PortBridge's RTX 4070 Ti SUPER passed all four standalone cases. "
+                     "The AMD check covers this fixture only."),
+        "steps": [
+            "Check FrameLab #12 for existing AMD evidence and use the pinned revision in a separate checkout.",
+            "Build and run the unchanged tests/vulkan-handoff fixture with the pinned README and verbose CTest output.",
+            "Confirm that the Adapter line associated with the results identifies a physical AMD GPU.",
+            "Report the four case outcomes in #12. Record unsupported queue configurations or timeline semaphores as skips.",
+        ],
+        "expected": ("Binary and timeline waits pass for each supported same-family and cross-family queue setup, "
+                     "with 64 matching pixels, a completed consumer fence and no validation diagnostics. "
+                     "A run with no usable two-queue configuration is skipped."),
+        "report": ["Commit, Adapter line, driver, OS, Vulkan SDK and validation layer versions",
+                   "Queue family pairs, all four outcomes or skip reasons, pixel readback and validation diagnostics"],
+        "translations": {"ru": {
+            "title": "Повторить передачу изображения между очередями Vulkan в FrameLab на AMD",
+            "requirements": ["Физическая видеокарта AMD с Vulkan 1.2", "Слой проверки Khronos",
+                             "CMake 3.20 или новее и компилятор C++20"],
+            "why": "Независимый прогон проверит синхронизацию и пиксели на видеокарте другого производителя.",
+            "evidence": ("У автора на RTX 2050 и у PortBridge на RTX 4070 Ti SUPER прошли все четыре сценария. "
+                         "Задача AMD охватывает этот отдельный тест."),
+            "steps": [
+                "Проверьте, есть ли уже результат AMD в FrameLab #12, и откройте указанную версию в отдельной копии.",
+                "Соберите и запустите tests/vulkan-handoff без изменений по инструкции с подробным выводом CTest.",
+                "Убедитесь, что строка Adapter, к которой относятся результаты, указывает на физическую видеокарту AMD.",
+                "Оставьте результаты четырёх сценариев в #12. Недоступные сочетания очередей и виды семафоров отметьте как пропуски.",
+            ],
+            "expected": ("Оба вида семафоров проходят для каждого поддерживаемого сочетания очередей внутри одного семейства и между разными. "
+                         "Все 64 пикселя совпадают, очередь-получатель завершает работу, проверка синхронизации не выдаёт сообщений. "
+                         "При отсутствии подходящей пары очередей прогон пропускается."),
+            "report": ["Коммит, строка Adapter, драйвер, ОС, версии Vulkan SDK и слоя проверки",
+                       "Номера семейств очередей, итоги четырёх сценариев или причины пропуска, пиксели и диагностика"],
         }},
     },
 )

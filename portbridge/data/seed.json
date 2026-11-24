@@ -197,6 +197,15 @@
       "stack": "C#, D3D12, тесты трансляции шейдеров",
       "license": "GPL-3.0-or-later",
       "translations": {"en": {"stack": "C#, D3D12, shader translation tests"}}
+    },
+    {
+      "slug": "framelab",
+      "name": "Leonida FrameLab",
+      "repo": "5headsmartbtw/leonida-framelab",
+      "url": "https://github.com/5headsmartbtw/leonida-framelab",
+      "stack": "C++20, Vulkan, синтетические тесты передачи кадров между очередями",
+      "license": "MIT",
+      "translations": {"en": {"stack": "C++20, Vulkan, synthetic frame handoff tests across queues"}}
     }
   ],
   "coordination": {
@@ -2059,6 +2068,15 @@
               "translations": {"en": {"title": "PortBridge checked the waiter count after a thrown wait", "observed": "The waiter count returned to zero after a normal call. It stayed at one when the synthetic clock threw before releasing the lock. The probe reset the counter before object destruction. This check covered waiter bookkeeping."}}
             },
             {
+              "kind": "automated_test", "outcome": "mixed",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7142646056",
+              "title": "PortBridge проверил правку завершения после исключения",
+              "revision": "0b65330e0efca116777f2fd1b91fb9e4b40df320", "reported_at": "2026-11-24T19:49:43Z",
+              "platforms": ["Windows", "LLVM-MinGW Clang 23.1.6", "Synthetic CPU test"],
+              "observed": "Исходная версия прошла 3 обычных прогона. При исключении из каждого из двух методов тестовых часов завершение зависло в обоих прогонах. Локальная правка прошла 9 обычных проверок и проверок с исключениями и 10 проверок с начатым завершением. Штатный тест прошёл 3 из 3 на каждой версии. Результат передан на ревью.",
+              "translations": {"en": {"title": "PortBridge tested a waiter cleanup after injected exceptions", "observed": "The original passed three ordinary runs. When either of two test clock methods threw, teardown stalled in both runs for each method. The local change passed nine ordinary and exception checks and ten checks with shutdown already underway. The registered test passed three of three on each version. The candidate was shared for review."}}
+            },
+            {
               "kind": "automated_test",
               "outcome": "mixed",
               "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e",
@@ -2193,6 +2211,15 @@
               "platforms": ["Windows 11 build 26300", "NVIDIA RTX 3080 Ti Laptop", "Vulkan 1.4.357"],
               "observed": "Прошли 15 целевых CPU-тестов и два набора графических проверок Wave64, 9 из 9 и 8 из 8. Набор C пропущен. Два сбоя TFE в полном прогоне совпали с основной веткой на том же стенде.",
               "translations": {"en": {"title": "Sangonapou's RTX 3080 Ti Laptop run", "observed": "All 15 focused CPU checks passed, along with Wave64 graphics tiers A (9/9) and B (8/8). Tier C was skipped. Two TFE failures in the full run matched main on the same setup."}}
+            },
+            {
+              "kind": "automated_test", "outcome": "passed",
+              "url": "https://github.com/akimfomin/PortBridge/issues/4#issuecomment-7142090936",
+              "title": "PortBridge выполнил прямое чтение результата D16 на RTX",
+              "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T19:50:33Z",
+              "platforms": ["Windows", "NVIDIA RTX 4070 Ti SUPER", "Vulkan fragment subgroup 32"],
+              "observed": "Исходный шейдер MUBUF и вариант MTBUF с заменой одной инструкции прошли по три прогона. В каждом совпали все четыре канала каждого из 4096 пикселей. Смена XY изменила результат, смена ZW сохранила его. Проверка на аппаратной группе из 64 потоков остаётся открытой.",
+              "translations": {"en": {"title": "PortBridge read back the exact D16 result on RTX", "observed": "The original MUBUF shader and one-instruction MTBUF variant passed three runs each. All four channels of all 4,096 pixels matched in each run. Swapping XY changed the output. Changing ZW preserved it. A hardware run with a subgroup size of 64 is still open."}}
             }
           ]
         }
