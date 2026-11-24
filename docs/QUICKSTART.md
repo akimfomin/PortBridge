@@ -6,6 +6,10 @@
 
 The home dashboard shows the last seven days by team. Open an event to read its original PR or test report. To help, choose a shared check and record the revision, platform, and outcome in the linked discussion. [Open the dashboard](https://akimfomin.github.io/PortBridge/)
 
+## Run one test
+
+Choose AMD, NVIDIA, or CPU in the Test Lab. Check the linked discussion, run the pinned test in an isolated checkout, and report the result in the same discussion. A pass, failure, or skipped run is useful when it names the exact revision and setup. [Choose a check](https://akimfomin.github.io/PortBridge/#/lab) · [Test Lab guide](TEST-LAB.md)
+
 ## Check one issue
 
 1. Search for the exact error, instruction, PR number, or PortBridge ID. [Issue catalog](https://akimfomin.github.io/PortBridge/#/problems)
@@ -48,7 +52,7 @@ Open Claude Code in the same folder and check `/mcp`. Update Claude Code if the 
 
 ### Try the tools
 
-Ask the agent to call `portbridge_activity` without arguments for progress and shared checks. For a single case, call `portbridge_problem` for `PB-0001` and `portbridge_preflight` for `https://github.com/ubiquitarianism/leonida/pull/207`. Check the linked sources before acting.
+Ask the agent to call `portbridge_lab` with your equipment, for example `amd`, to find volunteer checks. Call `portbridge_activity` without arguments for progress. For a single case, call `portbridge_problem` for `PB-0001` and `portbridge_preflight` for `https://github.com/ubiquitarianism/leonida/pull/207`. Check the linked sources before acting.
 
 ## Run a two-team pilot
 

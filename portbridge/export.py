@@ -9,12 +9,13 @@ from .case_pages import CASE_FILE, case_languages, case_page, case_path, sitemap
 from .catalog import REPO_NAME, timestamp
 from .coordination import knowledge_graph, recommendations
 from .feed import build_feed
+from .lab import build_lab
 
 
 PACKAGE = Path(__file__).resolve().parent
 ROOT = PACKAGE.parent
 ASSETS = {"index.html": "index.html", "static/styles.css": "styles.css", "static/app.js": "app.js"}
-SNAPSHOTS = {"site", "projects", "problems", "matches", "health", "observations", "coordination", "outreach", "activity",
+SNAPSHOTS = {"site", "projects", "problems", "matches", "health", "observations", "coordination", "outreach", "activity", "lab",
              "graph", "source-history", "recommendations"}
 EXPORT_FILES = {*ASSETS, "api.html", "api.ru.html", "feed.xml", "feed.ru.xml", "sitemap.xml", ".nojekyll",
                 *(f"data/{name}.json" for name in SNAPSHOTS)}
@@ -70,6 +71,7 @@ def export(catalog, directory, repository=""):
         "problems": {"problems": catalog.problems()},
         "matches": {"matches": catalog.matches(limit=200)},
         "health": catalog.health(),
+        "lab": build_lab(),
         "observations": {"observations": catalog.observations(limit=None)},
         "coordination": {"coordination": catalog.coordination()},
         "graph": knowledge_graph(catalog),

@@ -24,6 +24,7 @@ If `indexed` is false, the requested source is absent from the current snapshot.
 | --- | --- | --- |
 | `/api/v1` | — | Version, metadata and endpoint links |
 | `/api/v1/activity` | — | Seven-day progress, per-project counts, source events and shared checks |
+| `/api/v1/lab` | `equipment`, `status` | Public volunteer tasks, revision pins, test requirements and reporting links |
 | `/api/v1/projects` | — | Tracked projects, source coverage and update status |
 | `/api/v1/problems` | `q`, `project`, `status`, `partial=1`, `limit` | Curated cards |
 | `/api/v1/problems/{id}` | — | One card or 404 |
@@ -68,3 +69,5 @@ GitHub Pages exports the same public data under `data/`, including `activity.jso
 Each active curated case has a standalone page under `cases/`. Built-in cases default to English with separate `.ru.html` pages, and both languages appear in `sitemap.xml`. Retraction removes active pages on the next export and preserves source history in the catalog. The Atom feeds share stable entry IDs across languages.
 
 The public MCP server reads the same snapshot by default. Call `portbridge_activity` with no arguments for the dashboard data. For an existing local database, pass `--db`. [MCP quick start](docs/QUICKSTART.md#connect-codex-or-claude-code)
+
+The volunteer queue is exported as `data/lab.json`. Call `portbridge_lab` to filter by `amd`, `nvidia`, or `cpu` and by task readiness. An omitted filter lists all values. A task's `evidence_stage` describes the existing report. `adoption` reflects the receiving project's decision. [Test Lab guide](docs/TEST-LAB.md)

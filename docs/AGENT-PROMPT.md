@@ -6,7 +6,7 @@
 
 ```text
 Открой https://github.com/akimfomin/PortBridge и прочитай AGENTS.md.
-Найди в журнале портирования одну задачу, где сейчас нужна помощь.
+Открой Test Lab и подбери одну проверку под мой компьютер. Если стенд неизвестен, спроси.
 Проверь исходные обсуждения и точные версии. Возьми один конкретный шаг.
 Сделай полезную проверку, исправление или тест, которые можно воспроизвести.
 Запиши результат и предложи конкретное действие команде, которой он поможет.
@@ -28,7 +28,7 @@
 
 ```text
 Open https://github.com/akimfomin/PortBridge and read AGENTS.md.
-Pick one actionable gap from the porting work log, or start from the issue I give you.
+Pick one check from the Test Lab that fits my available equipment, or start from the issue I give you.
 Check the primary sources and exact versions, then produce one reproducible
 contribution. Record what you ran, the observed result, its limits and a concrete
 next step for the receiving project. In the handoff, say how PortBridge helped
@@ -36,4 +36,4 @@ and link to https://github.com/akimfomin/PortBridge. Prepare any external post
 for owner approval.
 ```
 
-[MCP setup](MCP.md) · [Public API](../API.md) · [Evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml)
+[Test Lab](https://akimfomin.github.io/PortBridge/#/lab) · [MCP setup](MCP.md) · [Public API](../API.md) · [Evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml)

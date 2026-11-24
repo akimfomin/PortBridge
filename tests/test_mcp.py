@@ -11,6 +11,7 @@ from unittest.mock import Mock, patch
 
 from portbridge.__main__ import DEFAULT_SEED, ROOT
 from portbridge.catalog import Catalog
+from portbridge.lab import build_lab
 from portbridge.mcp import ReadOnlyCatalog, main
 from portbridge.preflight import PUBLIC_BASE
 
@@ -68,7 +69,7 @@ class MCPTests(unittest.TestCase):
         self.assertEqual(discover["result"]["_meta"]["io.modelcontextprotocol/serverInfo"]["name"], "portbridge")
         definitions = tools["result"]["tools"]
         self.assertEqual({tool["name"] for tool in definitions},
-                         {"portbridge_activity", "portbridge_problem", "portbridge_preflight"})
+                         {"portbridge_activity", "portbridge_lab", "portbridge_problem", "portbridge_preflight"})
         self.assertTrue(all(tool["annotations"]["readOnlyHint"] for tool in definitions))
         self.assertEqual([item["result"]["resultType"] for item in (discover, tools, result)], ["complete"] * 3)
         payload = result["result"]["structuredContent"]
@@ -95,6 +96,7 @@ class MCPTests(unittest.TestCase):
         local = ReadOnlyCatalog(self.db)
         files = {
             "activity": {"window_days": 7, "events": [], "opportunities": []},
+            "lab": build_lab(),
             "health": local.health(),
             "problems": {"problems": local.problems()},
             "projects": {"projects": local.projects()},
@@ -111,12 +113,14 @@ class MCPTests(unittest.TestCase):
             return BytesIO(json.dumps(expected[request.full_url]).encode("utf-8"))
 
         with patch("portbridge.preflight.build_opener", return_value=Mock(open=open_fixture)):
-            preflight, problem, activity = self.public_replies(
+            preflight, problem, activity, lab = self.public_replies(
                 message(1, "tools/call", {**MODERN_META, "name": "portbridge_preflight",
                                           "arguments": {"q": "rectlist", "url": "https://github.com/Marvisak/VIctory/pull/346"}}),
                 message(2, "tools/call", {**MODERN_META, "name": "portbridge_problem",
                                           "arguments": {"id": "PB-0001"}}),
                 message(3, "tools/call", {**MODERN_META, "name": "portbridge_activity"}),
+                message(4, "tools/call", {**MODERN_META, "name": "portbridge_lab",
+                                          "arguments": {"equipment": "amd", "status": "needs_run"}}),
             )
         self.assertEqual(set(requested), {f"{PUBLIC_BASE}data/{name}.json" for name in files})
         result = preflight["result"]["structuredContent"]
@@ -126,6 +130,9 @@ class MCPTests(unittest.TestCase):
         self.assertTrue(result["next_step"])
         self.assertEqual(problem["result"]["structuredContent"]["problem"]["id"], "PB-0001")
         self.assertEqual(activity["result"]["structuredContent"]["window_days"], 7)
+        tasks = lab["result"]["structuredContent"]["tasks"]
+        self.assertTrue(tasks)
+        self.assertTrue(all("amd" in task["equipment"] and task["status"] == "needs_run" for task in tasks))
 
     def test_unavailable_public_snapshot_returns_actionable_error(self):
         with patch("portbridge.preflight.build_opener", side_effect=OSError("synthetic network error")):

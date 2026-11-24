@@ -14,6 +14,7 @@ from .catalog import Catalog, OBSERVATION_KIND, PROBLEM_ID, PROBLEM_STATUS
 from .coordination import knowledge_graph, recommendations
 from .exchange_api import ExchangeHandlerMixin
 from .feed import build_feed
+from .lab import build_lab
 
 
 PACKAGE = Path(__file__).resolve().parent
@@ -31,7 +32,7 @@ OFFICE_STATIC = {
     "/static/office.css": (PACKAGE / "static" / "office.css", "text/css; charset=utf-8"),
     "/static/office.js": (PACKAGE / "static" / "office.js", "text/javascript; charset=utf-8"),
 }
-COLLECTIONS = ("projects", "problems", "observations", "matches", "related", "preflight", "coordination", "activity",
+COLLECTIONS = ("projects", "problems", "observations", "matches", "related", "preflight", "coordination", "activity", "lab",
                "graph", "source-history", "recommendations", "outreach", "health")
 
 
@@ -199,6 +200,10 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
             return 200, catalog.health()
         if name == "activity":
             return 200, build_activity(catalog)
+        if name == "lab":
+            if params.keys() - {"equipment", "status"} or any(len(values) != 1 for values in params.values()):
+                raise ValueError("use at most one equipment and one status filter")
+            return 200, build_lab(equipment=params.get("equipment", [""])[0], status=params.get("status", [""])[0])
         if name == "coordination":
             return 200, {"coordination": catalog.coordination()}
         if name == "graph":

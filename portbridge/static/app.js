@@ -53,6 +53,8 @@ const syncStates = {
 const labels = {
   activity: [t('Project activity', 'Обновления проектов'), t('Recent changes on GitHub, reviewed test results, and work you can help with.',
     'Свежие изменения на GitHub, проверенные результаты и задачи, где можно помочь.')],
+  lab: [t('Test Lab', 'Лаборатория тестов'), t('Pick a synthetic check you can run. The instructions and the discussion for sharing results are on GitHub.',
+    'Выберите синтетический тест для своего стенда. Инструкция и обсуждение для отчёта находятся на GitHub.')],
   problems: [t('Issue catalog', 'Каталог проблем'), t('Fixes and test results from open Xbox Series compatibility projects.',
     'Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.')],
   partial: [t('Cross-project leads', 'Где есть задел'), t('Issues where another team has tested a fix or made progress toward one.',
@@ -218,8 +220,8 @@ async function readSnapshot(name) {
 }
 
 async function fetchJSON(path, signal) {
-  if (path === '/activity') {
-    return getJSON(snapshotSite ? './data/activity.json' : `${apiRoot}/activity`, signal, 'no-cache');
+  if (path === '/activity' || path === '/lab') {
+    return getJSON(snapshotSite ? `./data${path}.json` : `${apiRoot}${path}`, signal, 'no-cache');
   }
   if (!snapshotSite) return getJSON(`${apiRoot}${path}`, signal);
   const [endpoint, query] = path.split('?', 2);
@@ -761,6 +763,7 @@ function showActivity(data, quiet = false) {
   const suggestions = list(data.opportunities).slice(0, 3);
   if (suggestions.length) opportunities.append(...suggestions.map(activityOpportunity));
   else opportunities.append(element('p', 'activity-note', t('No open work linked to a reviewed test in this snapshot.', 'В этом снимке нет открытых задач, связанных с проверенным тестом.')));
+  opportunities.append(internalLink(t('Find a test for your setup', 'Подобрать тест для своего стенда'), '#/lab', 'activity-more'));
   const repository = repositoryURL(snapshotSite?.repository);
   if (repository) {
     const queue = new URL(`${repository}/issues`);
@@ -808,14 +811,131 @@ function drawProjects() {
   content.replaceChildren(wrapper);
 }
 
+const labEquipment = {
+  amd: t('AMD graphics', 'Видеокарта AMD'), cpu: t('CPU only', 'Только процессор'), nvidia: t('NVIDIA graphics', 'Видеокарта NVIDIA'),
+};
+const labStatus = {
+  needs_run: t('A test run is needed', 'Нужен прогон'),
+  needs_revision: t('Awaiting combined revision', 'Ждём объединённую версию'),
+  awaiting_review: t('Awaiting team review', 'Ждём ответа команды'),
+};
+const labEvidence = {
+  author_gpu: t('GPU run by the author', 'Тест автора на видеокарте'),
+  reviewed_gpu: t('Independent GPU result', 'Независимый тест на видеокарте'),
+  reviewed_cpu: t('Independent CPU result', 'Независимый тест на процессоре'),
+};
+const labAdoption = {
+  pending: t('Adoption pending', 'Решение о переносе ожидается'),
+  adopted: t('Adopted by the team', 'Принято командой'),
+  declined: t('Declined by the team', 'Отклонено командой'),
+};
+
+function labChecklist(title, items, ordered = false) {
+  const section = element('section', 'lab-checklist');
+  const rows = element(ordered ? 'ol' : 'ul');
+  rows.append(...list(items).map((item) => element('li', '', item)));
+  section.append(element('h3', '', title), rows);
+  return section;
+}
+
+function labTask(task) {
+  const card = element('article', 'card lab-task');
+  const status = element('div', 'meta-row lab-status');
+  status.append(badge(task.status, labStatus), badge(task.evidence_stage, labEvidence), badge(task.adoption, labAdoption));
+  const projects = element('div', 'meta-row');
+  projects.append(...list(task.projects).map(projectPill));
+  card.append(status, element('h2', '', editorial(task, 'title')), projects);
+  const why = editorial(task, 'why');
+  if (why) card.append(element('p', '', why));
+  const setup = [...list(editorial(task, 'os')), ...list(editorial(task, 'requirements'))];
+  if (setup.length) card.append(element('p', '', setup.join(' · ')));
+  const evidence = editorial(task, 'evidence');
+  if (evidence) card.append(element('p', 'lab-evidence', evidence));
+
+  const details = element('details', 'lab-details');
+  details.append(element('summary', '', t('Versions, steps and what to report', 'Версии, шаги и что указать в отчёте')));
+  const versions = element('section', 'lab-checklist');
+  const commits = element('ul', 'lab-commits');
+  for (const revision of list(task.revisions)) {
+    const entry = element('li');
+    const sha = githubLink(revision.sha, revision.url);
+    sha.classList.add('identifier');
+    entry.append(element('span', '', editorial(revision, 'label')), sha);
+    commits.append(entry);
+  }
+  if (commits.childElementCount) {
+    versions.append(element('h3', '', t('Exact versions', 'Точные версии')), commits);
+    details.append(versions);
+  }
+  details.append(labChecklist(t('Steps', 'Шаги'), editorial(task, 'steps'), true));
+  const expected = element('section', 'lab-checklist');
+  expected.append(element('h3', '', t('Expected result', 'Ожидаемый результат')), element('p', '', editorial(task, 'expected')));
+  details.append(expected, labChecklist(t('Include in the report', 'Укажите в отчёте'), editorial(task, 'report')));
+
+  const links = element('div', 'lab-links');
+  links.append(githubLink(t('Open instructions', 'Открыть инструкцию'), task.procedure_url),
+    githubLink(t('Share result in the discussion', 'Оставить результат в обсуждении'), task.result_url));
+  if (task.evidence_url) links.append(githubLink(t('Existing evidence', 'Что уже проверили'), task.evidence_url));
+  if (task.source_url && ![task.procedure_url, task.result_url, task.evidence_url].includes(task.source_url)) {
+    links.append(githubLink(t('Coordination issue', 'Задача координации'), task.source_url));
+  }
+  card.append(links, details);
+  return card;
+}
+
+function drawLab(data, params) {
+  const lab = element('div', 'lab');
+  const bar = element('div', 'lab-bar');
+  const group = element('div', 'filter-group');
+  const equipment = element('select');
+  equipment.id = 'lab-equipment';
+  const label = element('label', '', t('Equipment available', 'Доступное оборудование'));
+  label.htmlFor = equipment.id;
+  equipment.append(new Option(t('All equipment', 'Любое оборудование'), ''));
+  for (const kind of list(data.filters?.equipment)) {
+    if (Object.hasOwn(labEquipment, kind)) equipment.append(new Option(labEquipment[kind], kind));
+  }
+  equipment.value = params.get('equipment') || '';
+  if (equipment.selectedIndex === -1) equipment.selectedIndex = 0;
+  group.append(label, equipment);
+  bar.append(group);
+  if (data.checked_at) {
+    const checked = element('p', 'lab-checked', t('Task status checked', 'Статусы сверены'));
+    checked.append(activityTime(data.checked_at));
+    bar.append(checked);
+  }
+  const count = element('p', 'view-status lab-count');
+  count.setAttribute('role', 'status');
+  const tasks = element('div', 'cards lab-tasks');
+  const all = list(data.tasks);
+  function renderTasks() {
+    const chosen = all.filter((task) => !equipment.value || list(task.equipment).includes(equipment.value));
+    count.textContent = t(`Tasks shown: ${numberFormat.format(chosen.length)}`, `Задач показано: ${numberFormat.format(chosen.length)}`);
+    tasks.replaceChildren(...chosen.map(labTask));
+    if (!chosen.length) tasks.append(element('p', 'empty', t('No tasks for this equipment in the current snapshot.', 'В этом снимке нет задач для выбранного оборудования.')));
+  }
+  equipment.addEventListener('change', () => {
+    const next = new URLSearchParams();
+    if (equipment.value) next.set('equipment', equipment.value);
+    history.replaceState(null, '', `#/lab${next.size ? `?${next}` : ''}`);
+    updateLanguageLinks();
+    renderTasks();
+  });
+  lab.append(bar, count, tasks);
+  renderTasks();
+  viewStatus.textContent = '';
+  content.replaceChildren(lab);
+}
+
 async function loadView(current, focus = false) {
   request?.abort();
   request = new AbortController();
   const active = request;
   const [title, description] = labels[current.view];
   const isActivity = current.view === 'activity';
+  const isLab = current.view === 'lab';
   const onlySearch = isActivity || current.view === 'matches';
-  filters.hidden = current.id !== null || current.view === 'projects';
+  filters.hidden = current.id !== null || current.view === 'projects' || isLab;
   filters.classList.toggle('filters-only-search', onlySearch);
   byId('project-group').hidden = onlySearch;
   byId('status-group').hidden = onlySearch;
@@ -838,6 +958,9 @@ async function loadView(current, focus = false) {
     if (isActivity) {
       const result = await fetchJSON('/activity', active.signal);
       if (!active.signal.aborted) showActivity(result);
+    } else if (isLab) {
+      const result = await fetchJSON('/lab', active.signal);
+      if (!active.signal.aborted) drawLab(result, current.params);
     } else if (current.view === 'projects') {
       await loadProjects(active.signal);
       if (!active.signal.aborted) drawProjects();

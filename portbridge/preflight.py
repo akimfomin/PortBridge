@@ -25,7 +25,7 @@ GENERAL_CARD_TERMS = {"d3d12", "vulkan", "shader", "spirv", "wave32", "wave64", 
 def snapshot(resource, *, base_url=PUBLIC_BASE):
     if base_url.rstrip("/") != PUBLIC_BASE.rstrip("/"):
         raise ValueError("Unrecognized PortBridge public catalog")
-    if resource not in {"activity", "health", "problems", "projects", "observations"}:
+    if resource not in {"activity", "health", "lab", "problems", "projects", "observations"}:
         raise ValueError("Unknown PortBridge snapshot")
     url = f"{PUBLIC_BASE}data/{resource}.json"
     request = Request(url, headers={"Accept": "application/json", "User-Agent": "PortBridge/1"})
