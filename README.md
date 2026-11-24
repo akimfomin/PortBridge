@@ -20,7 +20,7 @@ PortBridge connects public issues, pull requests, and test results across projec
 
 ## Recent cross-project work
 
-- **Wave64 in XCL.** Published RDNA2 measurements pointed to a missing byte-carry test. The XCL author requested a follow-up, and PortBridge submitted a one-file test PR. The reported run on an RTX 4070 Ti SUPER covered Wave32 and split Wave64. [Author response](https://github.com/ivall/xcl/pull/925#issuecomment-7128723618) · [Test PR](https://github.com/maximecmb/xcl/pull/1)
+- **Wave64 in XCL.** Published RDNA2 measurements pointed to a missing byte-carry test. The XCL author requested a follow-up, and PortBridge submitted a one-file test PR. The reported run on an RTX 4070 Ti SUPER covered Wave32 and split Wave64. [Author response](https://github.com/ivall/xcl/pull/925#issuecomment-7128723618) · [Pinned test](https://github.com/akimfomin/xcl/commit/3858abc46e4c9c3b9db5e4ae648d6636c37bfb51)
 - **Shader memory reads in VIctory.** Related work from XCL and Continued guided two synthetic tests. Both passed on an RTX 4070 Ti SUPER and WARP. The earlier translator failed the controls. The patch and the proposed comparison are available in the original discussions. [VIctory test patch](https://github.com/Marvisak/VIctory/pull/571#issuecomment-7128201680) · [XCL comparison](https://github.com/ivall/xcl/pull/544#issuecomment-7128210080)
 - **Wave64 in Reforge and Continued.** PortBridge submitted a Reforge D16 fix in Continued. A contributor independently passed 15 CPU checks on macOS and another approved the same revision. [Independent run](https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7131731339) · [Contributor approval](https://github.com/ubiquitarianism/leonida/pull/701#pullrequestreview-6039203797)
 

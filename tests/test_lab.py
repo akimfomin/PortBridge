@@ -18,8 +18,8 @@ class LabTest(CatalogFixture):
         self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 6)))
         combined = tasks["pb-9-continued-first-frame"]
         self.assertEqual((combined["status"], combined["evidence_stage"], combined["adoption"]),
-                         ("needs_revision", "reviewed_cpu", "pending"))
-        self.assertEqual([row["sha"][:8] for row in combined["revisions"]], ["88658f1b", "21dc3889"])
+                         ("awaiting_review", "reviewed_gpu", "pending"))
+        self.assertEqual([row["sha"][:8] for row in combined["revisions"]], ["88658f1b", "21dc3889", "b8572d92"])
         self.assertEqual(tasks["pb-9-reforge-present"]["evidence_stage"], "reviewed_gpu")
         self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "reviewed_gpu")
         for task in tasks.values():
@@ -40,7 +40,7 @@ class LabTest(CatalogFixture):
                          ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
         self.assertEqual(len(payload["tasks"]), 5)
-        self.assertEqual(len(build_lab(equipment="nvidia", status="needs_revision")["tasks"]), 1)
+        self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)
         self.assertEqual(build_lab(equipment="cpu", status="needs_run")["tasks"], [])
         with self.assertRaises(ValueError):
             build_lab(status="merged")

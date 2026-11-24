@@ -80,6 +80,15 @@
       "stack": "C++, Windows D3D12 и WARP",
       "license": "Apache-2.0",
       "translations": {"en": {"stack": "C++, Windows D3D12 and WARP"}}
+    },
+    {
+      "slug": "anyxboxx",
+      "name": "AnyXboxX",
+      "repo": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX",
+      "stack": "C++ / Python, интерпретатор RDNA2 и HLSL",
+      "license": "GPL-3.0-or-later",
+      "translations": {"en": {"stack": "C++ / Python, RDNA2 interpreter and HLSL"}}
     }
   ],
   "coordination": {
@@ -320,11 +329,11 @@
           "source_refs": [
             {"title": "Исходный PR XCL #925", "url": "https://github.com/ivall/xcl/pull/925", "translations": {"en": {"title": "Original XCL PR #925"}}},
             {"title": "Запрос автора на отдельную правку", "url": "https://github.com/ivall/xcl/pull/925#issuecomment-7128723618", "translations": {"en": {"title": "Author's request for the follow-up"}}},
-            {"title": "Черновой PR с тестом", "url": "https://github.com/maximecmb/xcl/pull/1", "translations": {"en": {"title": "Draft test PR"}}},
+            {"title": "Точная версия теста", "url": "https://github.com/akimfomin/xcl/commit/3858abc46e4c9c3b9db5e4ae648d6636c37bfb51", "translations": {"en": {"title": "Exact test revision"}}},
             {"title": "Задача для участника с AMD Wave64", "url": "https://github.com/akimfomin/PortBridge/issues/5", "translations": {"en": {"title": "Help wanted for an AMD Wave64 run"}}}
           ],
           "evidence": [
-            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/maximecmb/xcl/pull/1", "title": "PortBridge передал тест XCL", "revision": "3858abc46e4c9c3b9db5e4ae648d6636c37bfb51", "reported_at": "2026-11-24T10:39:56Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "Два теста прошли на RTX 4070 Ti SUPER. Новый случай выявил намеренно внесённую ошибку в порядке сдвига и сложения. Для аппаратного Wave64 нужен отдельный прогон.",
+            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/925#issuecomment-7129094971", "title": "PortBridge передал тест XCL", "revision": "3858abc46e4c9c3b9db5e4ae648d6636c37bfb51", "reported_at": "2026-11-24T10:40:31Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "Два теста прошли на RTX 4070 Ti SUPER. Новый случай выявил намеренно внесённую ошибку в порядке сдвига и сложения. Для аппаратного Wave64 нужен отдельный прогон.",
               "translations": {"en": {"title": "PortBridge delivered a regression test to XCL", "observed": "Two tests passed on an RTX 4070 Ti SUPER. The added case caught a deliberate shift-before-add error. Native Wave64 still needs a separate run."}}}
           ]
         }
@@ -370,7 +379,8 @@
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "PortBridge повторил тест Scarlett Layer в XCL", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T11:34:40Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "64 из 64 выходов и 64 из 64 контрольных значений совпали в Wave32 и разделённом Wave64.",
               "translations": {"en": {"title": "PortBridge replayed the Scarlett Layer check in XCL", "observed": "All 64 outputs and 64 plain controls matched in Wave32 and split Wave64."}}},
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100#issuecomment-7131880483", "title": "bjarngard подтвердил аппаратный Wave64 на RDNA2", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T12:45:36Z", "platforms": ["Windows 11", "AMD RDNA2", "D3D12"], "observed": "Отчёт на встроенной графике Ryzen 9 9950X: 742 проверки прошли, отказов 0, 41 исключена. Тест FMA прошёл с обязательным аппаратным Wave64. RDNA3 и RDNA4 не проверялись.",
-              "translations": {"en": {"title": "bjarngard confirmed native Wave64 on RDNA2", "observed": "On Ryzen 9 9950X integrated graphics, 742 tests passed, 0 failed, and 41 were ignored. The FMA test passed with native Wave64 required. RDNA3 and RDNA4 remain untested."}}}
+              "translations": {"en": {"title": "bjarngard confirmed native Wave64 on RDNA2", "observed": "On Ryzen 9 9950X integrated graphics, 742 tests passed, 0 failed, and 41 were ignored. The FMA test passed with native Wave64 required. RDNA3 and RDNA4 remain untested."}}},
+            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "PortBridge проверил чувствительность теста FMA", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T13:24:17Z", "platforms": ["Windows 11", "RTX 4070 Ti SUPER", "D3D12"], "observed": "На точной версии тест прошёл без пропуска в Wave32 и разделённом Wave64. Тот же тест выявил три ошибки, при которых abs, neg или clamp отключались по отдельности. После восстановления исходной версии тест снова прошёл.", "translations": {"en": {"title": "PortBridge verified that the FMA regression detects each modifier", "observed": "The exact head passed without skips in Wave32 and split Wave64. The unchanged test caught three controls that individually removed abs, neg, or clamp. The restored head passed again."}}}
           ]
         }
       ]
@@ -379,7 +389,7 @@
       "id": "PB-0007",
       "recorded_at": "2026-11-24T11:52:59Z",
       "title": "Подготовка прямоугольников при отложенной сборке в Continued",
-      "summary": "Подтвердили на синтетическом шейдере причину отказа, замеченного при объединении двух веток Continued. Проверка реальных пикселей в объединённой сборке остаётся открытой.",
+      "summary": "PortBridge подтвердил причину отказа на синтетическом шейдере. BadgersMC повторил проверку на RTX 3060 Ti. С правкой LloydNicholson пиксели совпали с ожидаемыми в обоих режимах отложенной сборки.",
       "status": "verified",
       "tags": [
         "rect_list_geometry",
@@ -389,7 +399,7 @@
       "translations": {
         "en": {
           "title": "Continued rectangle geometry with deferred pipeline creation",
-          "summary": "A synthetic shader confirmed the cause of an integration failure reported when two Continued branches were combined. Pixel readback on the combined build remains open.",
+          "summary": "PortBridge confirmed the failure on a synthetic shader. BadgersMC repeated the check on an RTX 3060 Ti. LloydNicholson's fix passed pixel readback with deferred pipeline creation both on and off.",
           "tags": [
             "rect_list_geometry",
             "deferred pipelines",
@@ -431,7 +441,8 @@
                   "title": "First-frame checks"
                 }
               }
-            }
+            },
+            {"title": "Интеграция LloydNicholson с защитой данных вершин", "url": "https://github.com/ubiquitarianism/leonida/commit/b8572d92dba043bad5507a11931bcb4add7aa568", "translations": {"en": {"title": "LloydNicholson's vertex-word lifetime guard"}}}
           ],
           "evidence": [
             {
@@ -453,7 +464,8 @@
                   "observed": "The generator rejected empty input after early release. Generating first produced the same 511 words as the retained control and passed Vulkan 1.1 validation."
                 }
               }
-            }
+            },
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/511#issuecomment-7131186456", "title": "BadgersMC проверил пиксели на RTX 3060 Ti", "revision": null, "reported_at": "2026-11-24T12:15:32Z", "platforms": ["Windows 11", "RTX 3060 Ti", "Vulkan"], "observed": "На базе 21625bca с #207 21dc3889 и #511 88658f1b создание графического конвейера падало в обоих режимах. С защитой из b8572d92 все ожидаемые пиксели совпали в обоих режимах. В отчёте указаны составляющие локальной сборки.", "translations": {"en": {"title": "BadgersMC verified pixel readback on an RTX 3060 Ti", "observed": "On base 21625bca with #207 21dc3889 and #511 88658f1b, graphics pipeline creation failed in both modes. With the guard from b8572d92, the expected pixels matched in both modes. The report identifies the component revisions of its local merge."}}}
           ]
         }
       ]
@@ -656,6 +668,74 @@
       ]
     },
     {
+      "id": "PB-0010",
+      "recorded_at": "2026-11-24T11:41:25Z",
+      "title": "Чтение D16 из LDS на границе двух слов",
+      "summary": "PortBridge проверил в VIctory синтетическую загрузку полуслова на границе двух слов. Skyfrye использовал измеренное значение в тесте AnyXboxX, и этот тест вошёл в основную ветку.",
+      "status": "verified",
+      "tags": ["LDS", "ds_read_u16_d16_hi", "D16", "RDNA2"],
+      "translations": {"en": {"title": "D16 LDS reads across a word boundary", "summary": "PortBridge measured a synthetic cross-word halfword load in VIctory. Skyfrye used the measured value in an AnyXboxX regression that merged into main.", "tags": ["LDS", "ds_read_u16_d16_hi", "D16", "RDNA2"]}},
+      "platforms": ["Windows 11", "RTX 4070 Ti SUPER", "WARP", "AnyXboxX CPU interpreter"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "victory",
+          "status": "verified",
+          "summary": "При чтении с байта 3 результат стал 0xBEAB1357, а младшая половина исходного регистра сохранилась.",
+          "translations": {"en": {"summary": "Reading at byte 3 produced 0xBEAB1357 and preserved the register's original low half."}},
+          "source_refs": [
+            {"title": "Первоначальная правка SAitken91 в VIctory #571", "url": "https://github.com/Marvisak/VIctory/pull/571", "translations": {"en": {"title": "SAitken91's original change in VIctory #571"}}},
+            {"title": "Проверка смежного случая от Dathinel", "url": "https://github.com/Marvisak/VIctory/pull/571#issuecomment-7125376868", "translations": {"en": {"title": "Dathinel's adjacent-case check"}}}
+          ],
+          "evidence": [
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/Marvisak/VIctory/pull/571#issuecomment-7128201680", "title": "Измерение PortBridge на NVIDIA и WARP", "revision": "d27cb78960ed495fccb85e0ef1aa497f2cc57c1f", "reported_at": "2026-11-24T10:01:11Z", "platforms": ["Windows 11", "RTX 4070 Ti SUPER", "WARP"], "observed": "Проверка дала 0xBEAB1357. На предыдущем переводчике она завершалась ошибкой.", "translations": {"en": {"title": "PortBridge test on NVIDIA and WARP", "observed": "The test returned 0xBEAB1357 and failed on the previous emitter."}}}
+          ]
+        },
+        {
+          "project": "anyxboxx",
+          "status": "merged",
+          "summary": "Skyfrye использовал те же слова LDS, начальное значение регистра и ожидаемый результат в тесте интерпретатора. PR #129 слит в main.",
+          "translations": {"en": {"summary": "Skyfrye used the same LDS words, initial register value and expected output in the interpreter test. PR #129 merged into main."}},
+          "source_refs": [
+            {"title": "AnyXboxX #129 с описанием переиспользованного теста", "url": "https://github.com/LooperSalty/AnyXboxX/pull/129", "translations": {"en": {"title": "AnyXboxX #129 explains the reused test case"}}},
+            {"title": "Слияние в основную ветку AnyXboxX", "url": "https://github.com/LooperSalty/AnyXboxX/commit/b15d8821bffcd8fbc98e56f41daf07fc91118192", "translations": {"en": {"title": "Merge into AnyXboxX main"}}}
+          ],
+          "evidence": [
+            {"kind": "source_observation", "outcome": "observed", "url": "https://github.com/LooperSalty/AnyXboxX/pull/129/files", "title": "Совпадает точный синтетический вход и выход", "revision": "1bc9e47b13a96bf39a21109700b003eacdc86240", "reported_at": "2026-11-24T11:41:25Z", "platforms": ["AnyXboxX CPU interpreter"], "observed": "В PR указан тот же вход 0xAB123456, 0xDEADCDBE, 0xCAFE1357 и выход 0xBEAB1357 со ссылкой на обсуждение VIctory.", "translations": {"en": {"title": "The synthetic input and output match", "observed": "The PR cites the VIctory discussion and uses the same inputs 0xAB123456, 0xDEADCDBE and 0xCAFE1357 with expected output 0xBEAB1357."}}}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0011",
+      "recorded_at": "2026-11-24T13:27:47Z",
+      "title": "Округление и NaN при переводе RDNA2 в AnyXboxX",
+      "summary": "PortBridge нашёл измерения RDNA2 в VIctory и перенёс 16 входов в проверку AnyXboxX #133. Исходная версия расходилась с железом в RPI и FLR. С локальной правкой прошли 93 проверки на WARP.",
+      "status": "verified",
+      "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"],
+      "translations": {"en": {"title": "RDNA2 rounding and NaN conversion in AnyXboxX", "summary": "PortBridge found the VIctory RDNA2 measurements and replayed 16 inputs in AnyXboxX #133. The original head differed on RPI and FLR. The local fix passed 93 checks with WARP.", "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"]}},
+      "platforms": ["RDNA2 hardware reference", "Windows 11", "AnyXboxX CPU interpreter", "Microsoft WARP"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "victory",
+          "status": "verified",
+          "summary": "Lyrnc опубликовал численные результаты RDNA2 для округления и NaN по обеим инструкциям.",
+          "translations": {"en": {"summary": "Lyrnc published RDNA2 output values for rounding and NaNs for both instructions."}},
+          "source_refs": [{"title": "Измерения Lyrnc на RDNA2 в VIctory #605", "url": "https://github.com/Marvisak/VIctory/pull/605#issuecomment-7123302580", "translations": {"en": {"title": "Lyrnc's RDNA2 measurements in VIctory #605"}}}],
+          "evidence": [{"kind": "source_observation", "outcome": "observed", "url": "https://github.com/Marvisak/VIctory/pull/605#issuecomment-7123302580", "title": "Аппаратный эталон RDNA2", "revision": null, "platforms": ["RDNA2"], "observed": "Опубликованы синтетические входы и аппаратные результаты RPI, FLR и обычного преобразования.", "translations": {"en": {"title": "RDNA2 hardware reference", "observed": "The report publishes synthetic inputs and hardware output values for RPI, FLR and ordinary conversion."}}}]
+        },
+        {
+          "project": "anyxboxx",
+          "status": "verified",
+          "summary": "На версии 4a67f676 у каждой формы инструкции 9 из 16 расхождений для RPI и 4 из 16 для FLR. Обычное преобразование совпало во всех 16 случаях. Локальная правка интерпретатора и HLSL прошла 93 проверки на WARP без пропусков.",
+          "translations": {"en": {"summary": "On head 4a67f676 each instruction form had 9 of 16 RPI mismatches and 4 of 16 FLR mismatches. The plain conversion matched all 16. The local interpreter and HLSL fix passed all 93 checks on WARP."}},
+          "source_refs": [{"title": "Проверенная версия AnyXboxX #133", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133", "translations": {"en": {"title": "Tested AnyXboxX #133"}}}],
+          "evidence": [{"kind": "independent", "outcome": "failed", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7132864418", "title": "Воспроизведение расхождений с измерениями RDNA2", "revision": "4a67f67619b10c5fabc2a60de986fdd02f8ee457", "reported_at": "2026-11-24T13:27:47Z", "platforms": ["Windows 11", "AnyXboxX CPU interpreter"], "observed": "В RPI вход 0x3effffff дал 1 при ожидаемом 0. FLR для 0xffc00000 дал 0 при ожидаемом 0x80000000. Результат повторяется в VOP1 и VOP3.", "translations": {"en": {"title": "Reproduction against RDNA2 values", "observed": "RPI of 0x3effffff returned 1 instead of 0. FLR of 0xffc00000 returned 0 instead of 0x80000000. Both discrepancies reproduced in VOP1 and VOP3."}}}]
+        }
+      ]
+    },
+    {
       "id": "PB-044801754884724660835754613454516035131",
       "recorded_at": "2026-11-24T11:13:37Z",
       "title": "Проверка классификации загрузок D16 в Reforge и Continued",
@@ -700,7 +780,8 @@
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/265#issuecomment-7128554846", "title": "PortBridge проверил правку Reforge на Continued", "revision": "21625bca8c675c62f9dbffc318ce6a59d57faf31", "reported_at": "2026-11-24T11:13:37Z", "platforms": ["Windows 11", "Python 3.12.14 (CPU)"], "observed": "База Continued прошла 13 исходных тестов. Два новых теста без исправления выявили семь ошибок классификации. С кодом и тестами из коммита a300ba63 прошли все 15 тестов на CPU.",
               "translations": {"en": {"title": "PortBridge rechecked the Reforge fix on Continued", "observed": "Continued main passed the original 13 tests. The added tests alone exposed seven misclassifications. With the code and tests from a300ba63 applied, all 15 focused CPU tests passed."}}},
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7131731339", "title": "GeorgiyDemo подтвердил результат на Apple M5 Pro", "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T12:38:58Z", "platforms": ["macOS 26.7.3", "Apple M5 Pro", "Python 3.15.2 (CPU)"], "observed": "На версии PR прошли 15 из 15 целевых тестов. На базовой d42773d07 с теми же тестами 11 из 15 завершились ошибкой. Проверка ограничена синтетическими тестами на процессоре.",
-              "translations": {"en": {"title": "GeorgiyDemo reproduced the result on an Apple M5 Pro", "observed": "All 15 focused tests passed on the PR head. The same tests failed 11 of 15 cases on baseline d42773d07. The run covered synthetic CPU tests."}}}
+              "translations": {"en": {"title": "GeorgiyDemo reproduced the result on an Apple M5 Pro", "observed": "All 15 focused tests passed on the PR head. The same tests failed 11 of 15 cases on baseline d42773d07. The run covered synthetic CPU tests."}}},
+            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/ubiquitarianism/leonida/pull/701#issuecomment-7132758424", "title": "PortBridge сверил текущую базу и сбои в Linux CI", "revision": "66dbbf3e176880487617609547b02c98add60297", "reported_at": "2026-11-24T13:23:20Z", "platforms": ["Windows 11", "CPU"], "observed": "После локального объединения с основной веткой 2d73c242 прошли 267 целевых CPU-тестов. Два сбоя TFE в Linux CI совпали на исходной версии PR и на PR, включая число ошибок.", "translations": {"en": {"title": "PortBridge compared the current base and Linux CI failures", "observed": "The local merge into main 2d73c242 passed 267 focused CPU tests. The two Linux TFE CI failures also occurred on the original PR base, with identical mismatch counts."}}}
           ]
         }
       ]

@@ -9,6 +9,7 @@ PortBridge читает открытые задачи, изменения и с�
 | [Leonida CE](https://github.com/IAmNotSiob/leonida-ce) | Изменения в прямом продолжении Leonida, которые могут пригодиться другим веткам |
 | [VIctory](https://github.com/Marvisak/VIctory) | Реализация графики через D3D12 и тесты перевода RDNA2 в DXIL |
 | [XCL](https://github.com/ivall/xcl) | Проверки GPU, перевод шейдеров и отдельные сценарии Wave32/Wave64 |
+| [AnyXboxX](https://github.com/LooperSalty/AnyXboxX) | Синтетические проверки эталонного интерпретатора RDNA2 и генерации HLSL. [Принятый тест LDS](https://github.com/LooperSalty/AnyXboxX/pull/129) |
 | [KestrelX](https://github.com/Batushn/KestrelX) | Синтетические проверки шейдеров и локальной памяти на AMD и NVIDIA |
 | [XPortPC](https://github.com/Its3rr0rsWRLD/XPortPC) | Компактные тесты D3D12 и чтения данных между потоками |
 | [Rebox](https://github.com/idvwork/rebox) | Отдельный Linux/Vulkan-путь для сравнения результата вычислительных шейдеров |

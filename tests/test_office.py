@@ -21,7 +21,7 @@ from portbridge.mcp import PortBridgeMCP
 from portbridge.office_engine import refresh_external_sources
 
 
-ORIGIN = "https://github.com/Marvisak/VIctory/pull/571"
+ORIGIN = "https://github.com/Marvisak/VIctory/pull/91001"
 COMPARISON = "https://github.com/ivall/xcl/pull/544"
 CONTINUED = "https://github.com/ubiquitarianism/leonida/pull/207"
 RECTANGLES = "https://github.com/Marvisak/VIctory/pull/346"

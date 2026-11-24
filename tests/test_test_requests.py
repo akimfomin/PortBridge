@@ -114,7 +114,7 @@ class TestRequestTests(TestCase):
         self.assertIn("native Wave64 on D3D12", message)
         self.assertIn("take the check or decline here", message)
         self.assertIn(REPORT, message)
-        self.assertIn("https://github.com/maximecmb/xcl/pull/1", message)
+        self.assertIn("https://github.com/akimfomin/PortBridge/issues/5", message)
         self.assertNotIn("Compare both synthetic cases", message)
         self.request_comments.append({"user": {"login": BOT}, "body": message})
         self.assertIn("already", self.run_dispatch(roster))

@@ -50,7 +50,7 @@ class ActivityTest(CatalogFixture):
         self.save_pr("xcl", 71, at=at(3), revision="b" * 40)
         self.save_pr("xcl", 71, at=at(2), status="closed", revision="b" * 40)
         self.save_pr("xcl", 71, at=at(1), status="closed", revision="b" * 40)
-        summary = build_activity(self.catalog, now=NOW)
+        summary = build_activity(self.catalog, now=NOW, cards=[self.catalog.problem("PB-0001")])
         self.assertEqual(summary["counts"]["changed"], 2)
         self.assertEqual(summary["counts"]["open"], 0)
         events = {e["kind"]: e for e in summary["events"] if e["project"] == "xcl"}
@@ -86,14 +86,15 @@ class ActivityTest(CatalogFixture):
         summary = build_activity(self.catalog, now=NOW)
         handoffs = summary["handoffs"]
         self.assertEqual(summary["counts"]["merged"], 1)
-        self.assertEqual(handoffs["counts"], {"delivered": 2, "independently_reproduced": 2,
-                                             "formally_reviewed": 1, "adopted": 0})
-        continued, xcl = handoffs["items"]
+        self.assertEqual(handoffs["counts"], {"delivered": 3, "independently_reproduced": 2,
+                                             "formally_reviewed": 1, "adopted": 1})
+        continued, xcl, anyxboxx = handoffs["items"]
         self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
         self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
         self.assertTrue(xcl["independent_url"].endswith("#issuecomment-7131880483"))
         self.assertNotIn("review_url", xcl)
-        self.assertTrue(all("adopted_url" not in item for item in handoffs["items"]))
+        self.assertTrue(all("adopted_url" not in item for item in (continued, xcl)))
+        self.assertTrue(anyxboxx["adopted_url"].endswith("b15d8821bffcd8fbc98e56f41daf07fc91118192"))
         self.assertEqual(build_activity(self.catalog, now=NOW, cards=[])["handoffs"]["items"], [])
 
     def test_handoffs_automatically_count_only_the_reviewed_head_on_merge(self):
@@ -102,8 +103,8 @@ class ActivityTest(CatalogFixture):
         self.save_pr("continued", 701, at=date, status="merged", merged_at=date, revision=fix)
         self.save_pr("xcl", 1100, at=date, status="merged", merged_at=date, revision="a" * 40)
         handoffs = build_activity(self.catalog, now=NOW)["handoffs"]
-        self.assertEqual(handoffs["counts"]["adopted"], 1)
-        continued, xcl = handoffs["items"]
+        self.assertEqual(handoffs["counts"]["adopted"], 2)
+        continued, xcl, _ = handoffs["items"]
         self.assertEqual(continued["adopted_url"], continued["delivered_url"])
         self.assertNotIn("adopted_url", xcl)
 
