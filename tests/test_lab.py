@@ -15,13 +15,17 @@ class LabTest(CatalogFixture):
     def test_tasks_pin_public_sources_and_track_evidence_separately(self):
         payload = build_lab()
         tasks = {task["id"]: task for task in payload["tasks"]}
-        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 6)))
+        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 7)))
         combined = tasks["pb-9-continued-first-frame"]
         self.assertEqual((combined["status"], combined["evidence_stage"], combined["adoption"]),
                          ("awaiting_review", "reviewed_gpu", "pending"))
         self.assertEqual([row["sha"][:8] for row in combined["revisions"]], ["88658f1b", "21dc3889", "b8572d92"])
         self.assertEqual(tasks["pb-9-reforge-present"]["evidence_stage"], "reviewed_gpu")
         self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "author_gpu")
+        native = tasks["anyxboxx-133-native-carry"]
+        self.assertEqual((native["status"], native["evidence_stage"]), ("needs_run", "assembled_offline"))
+        self.assertEqual(native["revisions"][0]["sha"], "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d")
+        self.assertEqual(native["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/133")
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")
             self.assertTrue(task["steps"] and task["expected"] and task["report"])
@@ -37,9 +41,9 @@ class LabTest(CatalogFixture):
         payload = build_lab()
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
-                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma"])
+                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma", "anyxboxx-133-native-carry"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
-        self.assertEqual(len(payload["tasks"]), 5)
+        self.assertEqual(len(payload["tasks"]), 6)
         self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)
         self.assertEqual(build_lab(equipment="cpu", status="needs_run")["tasks"], [])
         with self.assertRaises(ValueError):

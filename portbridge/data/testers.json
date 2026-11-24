@@ -1,5 +1,15 @@
 [
   {
+    "login": "Lyrnc",
+    "equipment": "amd",
+    "hardware": "AMD Radeon gfx1036 iGPU (Ryzen 7 9800X3D)",
+    "capabilities": [
+      "amd-rdna2-native-isa-hip"
+    ],
+    "evidence_url": "https://github.com/Marvisak/VIctory/pull/605#issuecomment-7123302580",
+    "reported_at": "2026-11-24T05:49:03Z"
+  },
+  {
     "login": "eizispark",
     "equipment": "amd",
     "hardware": "AMD Radeon RX 9070 XT",

@@ -5,7 +5,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from portbridge.lab import build_lab
-from portbridge.test_requests import APPROVAL, BOT, REPO_PATH, GitHub, dispatch, parse_request
+from portbridge.test_requests import APPROVAL, BOT, REPO_PATH, GitHub, dispatch, load_testers, parse_request
 
 
 NOW = datetime(2026, 11, 24, 12, tzinfo=timezone.utc)
@@ -196,6 +196,39 @@ class TestRequestTests(TestCase):
         receiving["state"] = "open"
         self.assertIn("Posted one", self.run_dispatch([candidate]))
         self.github.comment.assert_called_once()
+
+    def test_native_carry_invites_only_the_qualified_reporter_at_the_open_head(self):
+        task = next(row for row in build_lab()["tasks"] if row["id"] == "anyxboxx-133-native-carry")
+        self.issue["body"] = self.current["body"] = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
+        roster = load_testers()
+        generic = [row for row in roster if row["login"] != "Lyrnc"]
+        discovery = Mock(return_value=[tester("GenericAMD", "d3d12-native-wave64")])
+        self.assertIn("No matching tester", dispatch(self.event, generic, self.github, now=NOW, discover=discovery))
+        discovery.assert_called_once_with("amd", ("amd-rdna2-native-isa-hip",))
+        self.github.comment.assert_not_called()
+
+        head = task["revisions"][0]["sha"]
+        receiving = {"state": "open", "head": {"sha": "f" * 40}}
+
+        def get(path, *, public=False):
+            if path == "/repos/LooperSalty/AnyXboxX/pulls/133":
+                self.assertTrue(public)
+                return receiving
+            return self.github_get(path, public=public)
+
+        self.github.get.side_effect = get
+        self.assertIn("changed or closed", self.run_dispatch(roster))
+        receiving.update(state="closed", head={"sha": head})
+        self.assertIn("changed or closed", self.run_dispatch(roster))
+        self.github.comment.assert_not_called()
+        receiving["state"] = "open"
+        self.assertIn("Posted one", self.run_dispatch(roster))
+        self.github.comment.assert_called_once()
+        body = self.github.comment.call_args.args[1]
+        self.assertIn("@Lyrnc", body)
+        self.assertIn("native AMD RDNA2 instructions through HIP", body)
+        self.assertIn("https://github.com/Marvisak/VIctory/pull/605#issuecomment-7123302580", body)
+        self.assertIn(task["result_url"], body)
 
     def test_prior_public_handoffs_count_towards_the_same_cooldown(self):
         roster = [tester("Invited", "d3d12-native-wave64"), tester("Volunteer", "d3d12-native-wave64")]

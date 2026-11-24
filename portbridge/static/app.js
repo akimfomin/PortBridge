@@ -859,6 +859,7 @@ const labStatus = {
   awaiting_review: t('Awaiting team review', 'Ждём ответа команды'),
 };
 const labEvidence = {
+  assembled_offline: t('Assembled offline', 'Собрано без запуска'),
   author_gpu: t('GPU run by the author', 'Тест автора на видеокарте'),
   reviewed_gpu: t('Independent GPU result', 'Независимый тест на видеокарте'),
   reviewed_cpu: t('Independent CPU result', 'Независимый тест на процессоре'),

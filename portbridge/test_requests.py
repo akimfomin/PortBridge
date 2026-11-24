@@ -47,6 +47,7 @@ FIELDS = re.compile(
     r"### Requested check\n+(?P<check>[\s\S]+)"
 )
 CAPABILITIES = {
+    "amd-rdna2-native-isa-hip": "native AMD RDNA2 instructions through HIP",
     "d3d12-native-wave64": "native Wave64 on D3D12",
     "d3d12-native-wave64-rdna4": "native Wave64 on D3D12 and RDNA4",
     "win32-vulkan-1.3": "Vulkan 1.3 presentation on Windows",
@@ -54,6 +55,7 @@ CAPABILITIES = {
     "python-cpu": "CPU testing with Python",
 }
 TASK_CAPABILITIES = {
+    "anyxboxx-133-native-carry": "amd-rdna2-native-isa-hip",
     "pb-5-xcl-wave64": "d3d12-native-wave64",
     "pb-9-reforge-present": "win32-vulkan-1.3",
     "xcl-1100-fma": "d3d12-native-wave64-rdna4",

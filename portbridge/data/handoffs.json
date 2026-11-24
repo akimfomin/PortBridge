@@ -32,6 +32,12 @@
     "project": "xcl",
     "revision": "eac652c3d11927169ea46739249ebcc188ad800e",
     "delivered_url": "https://github.com/ivall/xcl/pull/1144",
-    "independent_url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133338458"
+    "independent_url": "https://github.com/ivall/xcl/pull/1144#issuecomment-7133823866"
+  },
+  {
+    "problem_id": "PB-0013",
+    "project": "anyxboxx",
+    "revision": "95f669fde988efe8e9c074b454dade40b54c8ed4",
+    "delivered_url": "https://github.com/LooperSalty/AnyXboxX/issues/142"
   }
 ]
