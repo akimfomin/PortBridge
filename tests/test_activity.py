@@ -87,7 +87,7 @@ class ActivityTest(CatalogFixture):
         handoffs = summary["handoffs"]
         self.assertEqual(summary["counts"]["merged"], 1)
         self.assertEqual(handoffs["counts"], {"delivered": 7, "independently_reproduced": 4,
-                                             "formally_reviewed": 2, "adopted": 1})
+                                             "formally_reviewed": 2, "adopted": 2})
         continued, xcl, anyxboxx, rounding, division, warp, texture = handoffs["items"]
         self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
         self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
@@ -96,10 +96,11 @@ class ActivityTest(CatalogFixture):
         self.assertTrue(rounding["review_url"].endswith("#pullrequestreview-6041873843"))
         self.assertTrue(division["independent_url"].endswith("#issuecomment-7133823866"))
         self.assertNotIn("review_url", xcl)
-        self.assertTrue(all("adopted_url" not in item for item in (continued, xcl, rounding, division, warp, texture)))
+        self.assertTrue(all("adopted_url" not in item for item in (continued, xcl, rounding, division, texture)))
         self.assertTrue(warp["delivered_url"].endswith("/pull/144"))
         self.assertTrue(texture["delivered_url"].endswith("/issues/145"))
         self.assertNotIn("independent_url", warp)
+        self.assertTrue(warp["adopted_url"].endswith("becaf7829d2aa03c293e0b52125fc740c5590ea1"))
         self.assertTrue(anyxboxx["adopted_url"].endswith("b15d8821bffcd8fbc98e56f41daf07fc91118192"))
         self.assertEqual(build_activity(self.catalog, now=NOW, cards=[])["handoffs"]["items"], [])
 
@@ -109,7 +110,7 @@ class ActivityTest(CatalogFixture):
         self.save_pr("continued", 701, at=date, status="merged", merged_at=date, revision=fix)
         self.save_pr("xcl", 1100, at=date, status="merged", merged_at=date, revision="a" * 40)
         handoffs = build_activity(self.catalog, now=NOW)["handoffs"]
-        self.assertEqual(handoffs["counts"]["adopted"], 2)
+        self.assertEqual(handoffs["counts"]["adopted"], 3)
         continued, xcl, *_ = handoffs["items"]
         self.assertEqual(continued["adopted_url"], continued["delivered_url"])
         self.assertNotIn("adopted_url", xcl)

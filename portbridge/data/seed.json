@@ -832,8 +832,8 @@
       "id": "PB-0013",
       "recorded_at": "2026-11-24T14:16:35Z",
       "title": "Сбой оптимизированного теста XNOR на WARP в AnyXboxX",
-      "summary": "На локальной копии основной ветки AnyXboxX разворачивание одного цикла исправило результат синтетического ALU-теста на WARP. Проверенный обход передан на ревью в #144. Решение команды пока ожидается.",
-      "status": "verified",
+      "summary": "На локальной копии основной ветки AnyXboxX разворачивание одного цикла исправило результат синтетического ALU-теста на WARP. LooperSalty принял исправление в #144. Оно вошло в основную ветку.",
+      "status": "resolved",
       "tags": [
         "WARP",
         "DXIL",
@@ -843,7 +843,7 @@
       "translations": {
         "en": {
           "title": "Optimized XNOR test fails on WARP in AnyXboxX",
-          "summary": "Unrolling one compute shader initialization loop fixed the synthetic ALU test on WARP. The tested workaround was submitted for review in #144.",
+          "summary": "Unrolling one compute shader initialization loop fixed the synthetic ALU test on WARP. LooperSalty merged the tested workaround in #144.",
           "tags": [
             "WARP",
             "DXIL",
@@ -862,7 +862,7 @@
       "solutions": [
         {
           "project": "anyxboxx",
-          "status": "verified",
+          "status": "merged",
           "summary": "С правкой WARP прошёл 296 тестов вместо 295. Четыре исходных сбоя текстур сохранились. На RTX прошли все 300 выполненных тестов. В каждом прогоне два теста пропущены.",
           "translations": {
             "en": {
@@ -955,6 +955,24 @@
                 "en": {
                   "title": "Available full-suite run on WARP and RTX",
                   "observed": "WARP passed 481 of 485 executed tests. The same four texture cases failed. RTX passed all 485. Both runs skipped 162 tests."
+                }
+              }
+            },
+            {
+              "kind": "source_observation",
+              "outcome": "observed",
+              "url": "https://github.com/LooperSalty/AnyXboxX/commit/becaf7829d2aa03c293e0b52125fc740c5590ea1",
+              "title": "LooperSalty принял исправление WARP",
+              "revision": "becaf7829d2aa03c293e0b52125fc740c5590ea1",
+              "reported_at": "2026-11-24T15:14:24Z",
+              "platforms": [
+                "AnyXboxX main"
+              ],
+              "observed": "AnyXboxX #144 слит с точной проверенной версии. Коммит основной ветки содержит исправленную инициализацию скалярных регистров.",
+              "translations": {
+                "en": {
+                  "title": "LooperSalty merged the WARP correction",
+                  "observed": "AnyXboxX #144 merged from the exact tested head. The main-branch commit contains the corrected scalar-register initialization."
                 }
               }
             }
