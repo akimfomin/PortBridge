@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 static void check(hipError_t status, const char* operation) {
     if (status != hipSuccess) {
@@ -29,8 +30,8 @@ int main(int argc, char** argv) {
     check(hipDriverGetVersion(&driver), "get driver API version");
     std::printf("device=%s arch=%s warp=%d HIP-runtime=%d HIP-driver=%d\n",
                 properties.name, properties.gcnArchName, properties.warpSize, runtime, driver);
-    if (properties.warpSize != 32) {
-        std::fprintf(stderr, "Wave32 is required\n");
+    if (properties.warpSize != 32 || std::strncmp(properties.gcnArchName, "gfx103", 6) != 0) {
+        std::fprintf(stderr, "An RDNA2 gfx103x device in Wave32 mode is required\n");
         return 2;
     }
 
@@ -39,7 +40,7 @@ int main(int argc, char** argv) {
     check(hipModuleLoad(&module, argv[1]), "load assembled module");
     check(hipModuleGetFunction(&kernel, module, "carry_probe"), "get carry_probe");
 
-    std::array<std::uint32_t, 5> result{};
+    std::array<std::uint32_t, 6> result{};
     void* device_result = nullptr;
     check(hipMalloc(&device_result, sizeof(result)), "allocate output");
     check(hipMemset(device_result, 0xaa, sizeof(result)), "initialize output");
@@ -52,10 +53,10 @@ int main(int argc, char** argv) {
     check(hipModuleUnload(module), "unload module");
 
     std::printf("initial_exec=%08" PRIx32 " sum_e32=%08" PRIx32 " sum_e64=%08" PRIx32
-                " carry_e32=%08" PRIx32 " carry_e64=%08" PRIx32 "\n",
-                result[0], result[1], result[2], result[3], result[4]);
+                " carry_e32=%08" PRIx32 " carry_e64=%08" PRIx32 " compare_vcc=%08" PRIx32 "\n",
+                result[0], result[1], result[2], result[3], result[4], result[5]);
     if (result[0] != UINT32_MAX || result[1] != 0 || result[2] != 0 ||
-        (result[3] & 1) == 0 || (result[4] & 1) == 0) {
+        (result[3] & 1) == 0 || (result[4] & 1) == 0 || result[5] != 1) {
         std::fprintf(stderr, "Probe controls failed\n");
         return 1;
     }

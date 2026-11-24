@@ -3,7 +3,7 @@
 from copy import deepcopy
 
 
-CHECKED_AT = "2026-11-24T14:16:39Z"
+CHECKED_AT = "2026-11-24T15:10:46Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review")
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
@@ -21,7 +21,7 @@ FMA_HEAD = "1b3fbc4bc8c3088e69d78f85a2e73f1cccf4df51"
 XCL_SETUP = "https://github.com/akimfomin/xcl/blob"
 CARRY = "https://github.com/LooperSalty/AnyXboxX/pull/133"
 CARRY_HEAD = "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d"
-CARRY_DISCUSSION = f"{CARRY}#issuecomment-7133362035"
+CARRY_REVIEW = f"{CARRY}#pullrequestreview-6041873843"
 CARRY_PROBE = f"{PORTBRIDGE}/blob/main/contrib/rdna2-carry-mask/README.md"
 
 
@@ -234,28 +234,28 @@ TASKS = (
         "requirements": ["Physical AMD RDNA2 with Wave32", "HIP setup that launches native AMDGPU code objects"],
         "status": "needs_run", "evidence_stage": "assembled_offline", "adoption": "pending",
         "source_url": CARRY, "procedure_url": CARRY_PROBE,
-        "evidence_url": CARRY_DISCUSSION, "result_url": CARRY,
+        "evidence_url": CARRY_REVIEW, "result_url": CARRY,
         "revisions": [revision("AnyXboxX #133", "Версия AnyXboxX #133", "LooperSalty/AnyXboxX", CARRY_HEAD)],
-        "why": "The receiving team asked whether a partial EXEC mask clears or preserves carry bits on inactive lanes.",
+        "why": "The maintainer is holding #133 and four dependent changes pending carry-mask confirmation on RDNA2.",
         "evidence": "PortBridge assembled the synthetic gfx1036 probe with LLVM. The receiving PR models cleared bits. A native run is still needed to measure the hardware behavior.",
         "steps": [
             "Check that AnyXboxX #133 is open at the listed revision and the team still needs the result.",
             "Build the source-only HIP probe and run one native Wave32 on physical AMD RDNA2.",
             "Report both carry masks and the control values in AnyXboxX #133.",
         ],
-        "expected": "The control values are initial EXEC ffffffff and zero sums. For each carry mask, 00000001 means inactive bits clear and ffffffff means they are preserved. Report mixed or other outputs as observed.",
+        "expected": "Controls expect initial EXEC ffffffff, zero sums, and compare_vcc 00000001. For each carry mask, 00000001 means inactive bits clear and ffffffff means they are preserved. Report mixed or other outputs as observed.",
         "report": ["PR revision, GPU target, driver, OS and assembler version", "Full output including the e32 and e64 carry masks"],
         "translations": {"ru": {
             "title": "Измерить маски переноса AnyXboxX на AMD RDNA2",
             "requirements": ["Физическая видеокарта AMD RDNA2 с Wave32", "HIP с запуском кода AMDGPU напрямую на видеокарте"],
-            "why": "Команда хочет узнать, сохраняются ли биты переноса для неактивных потоков при неполной маске EXEC.",
+            "why": "Сопровождающий ждёт подтверждения масок переноса на RDNA2 перед принятием #133 и четырёх зависимых изменений.",
             "evidence": "PortBridge собрал синтетическую пробу для gfx1036 через LLVM. Код в PR очищает биты. Поведение физической видеокарты ещё нужно измерить.",
             "steps": [
                 "Убедитесь, что AnyXboxX #133 открыт на указанной версии и результат ещё нужен.",
                 "Соберите HIP-пробу из исходников и запустите одну волну Wave32 на физической AMD RDNA2.",
                 "Отправьте обе маски переноса и контрольные значения в AnyXboxX #133.",
             ],
-            "expected": "Начальная маска EXEC равна ffffffff, обе суммы равны нулю. Маска переноса 00000001 означает очистку неактивных битов, ffffffff означает сохранение. Укажите и любые другие значения.",
+            "expected": "Контроль ожидает начальную EXEC ffffffff, обе суммы ноль и compare_vcc 00000001. Маска переноса 00000001 означает очистку неактивных битов, ffffffff означает сохранение. Укажите и любые другие значения.",
             "report": ["Версия PR, видеокарта, драйвер, ОС и версия ассемблера", "Полный вывод с масками переноса e32 и e64"],
         }},
     },

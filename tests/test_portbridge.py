@@ -193,8 +193,8 @@ class CatalogTest(CatalogFixture):
         self.assertEqual([p["id"] for p in self.catalog.problems(q="PR #20")], ["PB-0002"])
         self.assertEqual([p["id"] for p in self.catalog.problems(q="ПРЯМОУГОЛЬНИКОВ", project="continued")],
                          ["PB-0001", "PB-0007"])
-        self.assertEqual([p["id"] for p in self.catalog.problems(project="xcl")], ["PB-0004", "PB-0005", "PB-0006", "PB-0012", "PB-0014"])
-        self.assertEqual([p["id"] for p in self.catalog.problems(status="investigating")], ["PB-0004"])
+        self.assertEqual([p["id"] for p in self.catalog.problems(project="xcl")], ["PB-0004", "PB-0005", "PB-0006", "PB-0012", "PB-0014", "PB-0017"])
+        self.assertEqual([p["id"] for p in self.catalog.problems(status="investigating")], ["PB-0004", "PB-0016"])
         opportunities = {p["id"] for p in self.catalog.problems(partial=True)}
         self.assertTrue({"PB-0001", "PB-0002"} <= opportunities)
         self.assertNotIn("PB-0004", opportunities)

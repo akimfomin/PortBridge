@@ -20,6 +20,13 @@ carry_probe:
     s_waitcnt_depctr depctr_va_sdst(0)
     s_mov_b32 s14, s40
 
+    // Known comparison result with the same EXEC and VCC preload.
+    s_mov_b32 vcc_lo, 0xfffffffe
+    s_waitcnt_depctr depctr_sa_sdst(0)
+    v_cmp_eq_u32_e32 vcc_lo, 1, v0
+    s_waitcnt_depctr depctr_va_sdst(0) depctr_va_vcc(0)
+    s_mov_b32 s15, vcc_lo
+
     // Only lane 0 writes the result, before restoring the initial EXEC.
     v_mov_b32_e32 v5, 0
     v_mov_b32_e32 v8, s12
@@ -28,7 +35,8 @@ carry_probe:
     v_mov_b32_e32 v11, s13
     v_mov_b32_e32 v12, s14
     global_store_dwordx4 v5, v[8:11], s[4:5]
-    global_store_dword v5, v12, s[4:5] offset:16
+    v_mov_b32_e32 v13, s15
+    global_store_dwordx2 v5, v[12:13], s[4:5] offset:16
     s_waitcnt_vscnt null, 0
     s_mov_b32 exec_lo, s12
     s_endpgm
@@ -39,7 +47,7 @@ carry_probe:
 .p2align 6
 .amdhsa_kernel carry_probe
     .amdhsa_user_sgpr_kernarg_segment_ptr 1
-    .amdhsa_next_free_vgpr 13
+    .amdhsa_next_free_vgpr 14
     .amdhsa_next_free_sgpr 41
     .amdhsa_group_segment_fixed_size 0
     .amdhsa_private_segment_fixed_size 0
@@ -60,7 +68,7 @@ amdhsa.kernels:
     .private_segment_fixed_size: 0
     .wavefront_size: 32
     .sgpr_count: 41
-    .vgpr_count: 13
+    .vgpr_count: 14
     .max_flat_workgroup_size: 32
     .args:
       - .name: out

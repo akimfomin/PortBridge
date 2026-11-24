@@ -1,6 +1,6 @@
 # AnyXboxX #133 native RDNA2 carry probe
 
-This synthetic probe reproduces the Wave32 carry-mask inputs in [AnyXboxX at e2af2d38](https://github.com/LooperSalty/AnyXboxX/blob/e2af2d38e48b5a0019dae5c78aa398cc71c42c8d/tests/test_rdna2_exec_vop12.py#L120-L130). It uses five output integers and a single GPU workgroup.
+This synthetic probe reproduces the Wave32 carry-mask inputs in [AnyXboxX at e2af2d38](https://github.com/LooperSalty/AnyXboxX/blob/e2af2d38e48b5a0019dae5c78aa398cc71c42c8d/tests/test_rdna2_exec_vop12.py#L120-L130). It uses six output integers and a single GPU workgroup.
 
 ## Offline assembler check
 
@@ -19,7 +19,7 @@ hipcc -std=c++17 launch.cpp -o launch
 ./launch carry_probe.hsaco
 ```
 
-The host checks that all 32 lanes started enabled, lane 0 produced zero in both sums, and bit 0 is set in each carry output. Report the full output line, driver version, OS, and the exact target. The two carry masks distinguish these cases.
+The host checks that all 32 lanes started enabled, lane 0 produced zero in both sums, and bit 0 is set in each carry output. A separate integer comparison uses the same EXEC and VCC preload and must return `compare_vcc=00000001`. Report the full output line, driver version, OS, and the exact target. The two carry masks distinguish these cases.
 
 | `carry_e32` or `carry_e64` | Interpretation for that instruction |
 | --- | --- |
@@ -27,6 +27,6 @@ The host checks that all 32 lanes started enabled, lane 0 produced zero in both 
 | `ffffffff` | Inactive carry bits preserve the preload |
 | Any other value | Report the exact value for follow-up |
 
-A mixed pair distinguishes the two instruction forms. The assembly was checked offline with LLVM 23.1.6. HIP launch and silicon behavior still need a hardware run.
+A mixed pair distinguishes the two instruction forms. The AMD RDNA2 ISA guide §§2 and 3.9 supports clearing the inactive bits for the e32 VCC destination. §12.7 p.134 also describes the e64 carry to a selectable SGPR pair. The probe records both forms on the same device. [AMD RDNA2 ISA guide](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna2-shader-instruction-set-architecture.pdf) · [Receiving review](https://github.com/LooperSalty/AnyXboxX/pull/133#pullrequestreview-6041873843) The assembly was checked offline with LLVM 23.1.6. HIP launch and silicon behavior still need a hardware run.
 
 [LLVM AMDGPU ABI](https://llvm.org/docs/AMDGPUUsage.html) · [AMD HIP module API](https://rocm.docs.amd.com/projects/HIP/en/latest/doxygen/html/group___module.html) · [AMD HIP Windows compiler](https://rocmdocs.amd.com/projects/HIP/en/latest/faq.html)

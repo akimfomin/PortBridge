@@ -684,6 +684,26 @@
                   "observed": "Six checks passed twice. The same fixture failed the canceled ninth frame with base runtime 2ebde81ec07e."
                 }
               }
+            },
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/LeonidaReforge/Leonida/pull/86#issuecomment-7130696664",
+              "title": "Два потока и одно место в очереди кадров",
+              "revision": "b84739e39aee69d2611dfc3982cc2ef35f876916",
+              "reported_at": "2026-11-24T15:18:47Z",
+              "platforms": [
+                "Windows 11",
+                "NVIDIA RTX 4070 Ti SUPER",
+                "Vulkan"
+              ],
+              "observed": "В шести прогонах исправление пропускало ровно одного из двух претендентов и выводило восемь кадров. Исходная версия в трёх прогонах принимала обоих и выводила девять кадров.",
+              "translations": {
+                "en": {
+                  "title": "Two callers competing for one presenter slot",
+                  "observed": "In six runs the correction admitted exactly one of the two contenders and drained eight frames. In three baseline runs both callers were admitted and nine frames drained."
+                }
+              }
             }
           ]
         }
@@ -1168,6 +1188,204 @@
                 "en": {
                   "title": "Same DXIL compared on WARP and RTX",
                   "observed": "The difference persisted with -O3, -Od and -Gis. The DXIL output has three separate operations. Point-sampling controls pass."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0016",
+      "recorded_at": "2026-11-24T15:10:46Z",
+      "title": "Маска переноса неактивных потоков AMD RDNA2",
+      "summary": "Сопровождающий AnyXboxX ждёт подтверждения, как две формы инструкции обрабатывают старые биты переноса. PortBridge подготовил тест для обеих форм и контроль с известным ответом.",
+      "status": "investigating",
+      "tags": [
+        "RDNA2",
+        "Wave32",
+        "EXEC",
+        "VCC",
+        "SDST",
+        "v_add_co_ci_u32"
+      ],
+      "translations": {
+        "en": {
+          "title": "RDNA2 carry masks for inactive lanes",
+          "summary": "The AnyXboxX maintainer is waiting for carry-mask confirmation for two instruction forms. PortBridge prepared one native probe for both with a known comparison control.",
+          "tags": [
+            "RDNA2",
+            "Wave32",
+            "EXEC",
+            "VCC",
+            "SDST",
+            "v_add_co_ci_u32"
+          ]
+        }
+      },
+      "platforms": [
+        "AMD RDNA2 Wave32",
+        "LLVM 23.1.6"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "anyxboxx",
+          "status": "open",
+          "summary": "Руководство AMD поддерживает очистку VCC для e32. Псевдокод e64 указывает регистр назначения. Точный ответ по обоим вариантам ждёт замера на карте.",
+          "translations": {
+            "en": {
+              "summary": "The AMD guide supports clearing the e32 VCC mask. The e64 pseudocode identifies the destination register. The paired hardware measurement is pending."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Ревью LooperSalty в AnyXboxX #133",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#pullrequestreview-6041873843",
+              "translations": {
+                "en": {
+                  "title": "LooperSalty's AnyXboxX #133 review"
+                }
+              }
+            },
+            {
+              "title": "Исходники пробы PortBridge",
+              "url": "https://github.com/akimfomin/PortBridge/blob/main/contrib/rdna2-carry-mask/README.md",
+              "translations": {
+                "en": {
+                  "title": "PortBridge probe source"
+                }
+              }
+            },
+            {
+              "title": "Запрос на аппаратный замер",
+              "url": "https://github.com/akimfomin/PortBridge/issues/19",
+              "translations": {
+                "en": {
+                  "title": "Hardware run request"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "maintainer_claim",
+              "outcome": "observed",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#pullrequestreview-6041873843",
+              "title": "Сопровождающий подтвердил 639 тестов и указал блокер",
+              "revision": "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d",
+              "reported_at": "2026-11-24T15:10:46Z",
+              "platforms": [
+                "Compiled AnyXboxX runtime",
+                "GPU and WARP"
+              ],
+              "observed": "Прогон дал 639 успешных тестов и 12 пропусков. Для слияния он запросил источник AMD или замер битов переноса e32 и e64 на физическом RDNA2.",
+              "translations": {
+                "en": {
+                  "title": "Maintainer confirmed 639 passing tests and named the blocker",
+                  "observed": "The full run had 639 passes and 12 skips. The maintainer asked for a source or a physical RDNA2 measurement of inactive-lane carry bits before merging."
+                }
+              }
+            },
+            {
+              "kind": "source_observation",
+              "outcome": "observed",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7133315650",
+              "title": "Документация AMD и проверка сборки пробы",
+              "revision": "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d",
+              "reported_at": "2026-11-24T15:18:33Z",
+              "platforms": [
+                "LLVM 23.1.6",
+                "gfx1036"
+              ],
+              "observed": "В главе 2 и разделе 3.9 описан полный результат VCC. Раздел 12.7 называет регистр e64, а проба фиксирует необработанные значения обоих вариантов. LLVM собрал пробу с контролем compare_vcc.",
+              "translations": {
+                "en": {
+                  "title": "AMD documentation and offline probe build",
+                  "observed": "Chapter 2 and §3.9 support a full VCC write. §12.7 identifies the e64 destination. LLVM assembled the probe with both raw masks and the compare_vcc control."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0017",
+      "recorded_at": "2026-11-24T15:19:55Z",
+      "title": "Пропущенное уведомление наблюдателя очередей XCL",
+      "summary": "PortBridge воспроизвёл замечание upipibi на текущем XCL. В синтетическом тесте наблюдающий поток мог пропустить уведомление и остаться в ожидании. Локальное исправление передано команде.",
+      "status": "partial",
+      "tags": [
+        "Wait64",
+        "GPU watchdog",
+        "Condvar",
+        "GPU synchronization"
+      ],
+      "translations": {
+        "en": {
+          "title": "Missed XCL queue watchdog notification",
+          "summary": "PortBridge reproduced upipibi's observation on current XCL. In a synthetic test the watchdog could miss a notification and keep waiting. The local fix was shared with XCL.",
+          "tags": [
+            "Wait64",
+            "GPU watchdog",
+            "Condvar",
+            "GPU synchronization"
+          ]
+        }
+      },
+      "platforms": [
+        "Windows 11",
+        "Rust CPU test"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "xcl",
+          "status": "partial",
+          "summary": "Старая версия теряла уведомление в трёх из трёх целевых прогонов. С локальной правкой прошли три из трёх, как и контроль с уже ожидающим потоком. Проверка полной сборки ещё нужна.",
+          "translations": {
+            "en": {
+              "summary": "The baseline missed the notification in all three focused runs. The local patch passed all three and preserved the waiting-worker control. Integrated runtime validation remains open."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Наблюдение upipibi",
+              "url": "https://github.com/ivall/xcl/pull/795#issuecomment-7123347491",
+              "translations": {
+                "en": {
+                  "title": "upipibi's original observation"
+                }
+              }
+            },
+            {
+              "title": "Воспроизведение и правка",
+              "url": "https://github.com/ivall/xcl/pull/795#issuecomment-7135844594",
+              "translations": {
+                "en": {
+                  "title": "Reproduction and proposed fix"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "url": "https://github.com/ivall/xcl/pull/795#issuecomment-7135844594",
+              "title": "CPU-тест порядка уведомления",
+              "revision": "930e8b49c1c2ec683d22c724a398b39111cd0e56",
+              "reported_at": "2026-11-24T15:19:55Z",
+              "platforms": [
+                "Windows 11",
+                "Rust CPU harness"
+              ],
+              "observed": "При фиксированном порядке потоков исходный тест трижды упёрся в лимит ожидания. Правка под существующей блокировкой прошла трижды. Локальная библиотека прошла cargo check.",
+              "translations": {
+                "en": {
+                  "title": "CPU notification-order check",
+                  "observed": "The controlled interleaving produced three timeouts. Holding the existing mutex around notification passed all three. The XCL library passed cargo check."
                 }
               }
             }
