@@ -96,10 +96,10 @@
     "evidence": "https://github.com/fablinoo/palmwave/blob/fc216a5bd1e2cc5caf215d82faa3422c6bfd9e52/crates/xcl/tests/sparse_readback_fence.rs#L45-L101"
   },
   {
-    "project": "tuxbox", "area": "performance", "kind": "source",
-    "scope": "Тест отличает суммарную работу Vulkan-команд от времени кадра при перекрытии.",
-    "translations": {"en": {"scope": "Fixture separates total Vulkan command work from elapsed frame time when work overlaps."}},
-    "evidence": "https://github.com/brcly/TuxBox/blob/336655183ba85a6caa1cb98db92fe1b567d826a7/tests/test_vulkan_frames.py#L10-L35"
+    "project": "tuxbox", "area": "performance", "kind": "tested",
+    "scope": "Синтетический тест различает полный интервал кадра и перекрывающуюся работу очередей Vulkan.",
+    "translations": {"en": {"scope": "Synthetic test distinguishes elapsed frame time from overlapping Vulkan queue work."}},
+    "evidence": "https://github.com/akimfomin/PortBridge/blob/main/docs/PORTING-WORK.en.md#compare-vulkan-frame-timing"
   },
   {
     "project": "openscarlett", "area": "frames", "kind": "source",
