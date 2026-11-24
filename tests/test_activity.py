@@ -87,7 +87,7 @@ class ActivityTest(CatalogFixture):
         handoffs = summary["handoffs"]
         self.assertEqual(summary["counts"]["merged"], 1)
         self.assertEqual(handoffs["counts"], {"delivered": 8, "independently_reproduced": 4,
-                                             "formally_reviewed": 2, "adopted": 2})
+                                             "formally_reviewed": 3, "adopted": 2})
         continued, xcl, anyxboxx, rounding, division, warp, texture, paired_lds = handoffs["items"]
         self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
         self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
@@ -102,6 +102,7 @@ class ActivityTest(CatalogFixture):
         self.assertTrue(texture["delivered_url"].endswith("/issues/145"))
         self.assertEqual(paired_lds["problem_id"], "PB-0018")
         self.assertTrue(paired_lds["delivered_url"].endswith("/pull/966"))
+        self.assertTrue(paired_lds["review_url"].endswith("#pullrequestreview-6042837366"))
         self.assertNotIn("independent_url", warp)
         self.assertTrue(warp["adopted_url"].endswith("becaf7829d2aa03c293e0b52125fc740c5590ea1"))
         self.assertTrue(anyxboxx["adopted_url"].endswith("b15d8821bffcd8fbc98e56f41daf07fc91118192"))
