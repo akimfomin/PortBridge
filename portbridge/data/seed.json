@@ -38,9 +38,9 @@
     },
     {
       "slug": "victory-gta6",
-      "name": "victory-gta6",
-      "repo": "fxceless/victory-gta6",
-      "url": "https://github.com/fxceless/victory-gta6",
+      "name": "victory-fork",
+      "repo": "fxceless/victory-fork",
+      "url": "https://github.com/fxceless/victory-fork",
       "stack": "Форк VIctory, Rust и Windows D3D12",
       "license": "GPL-3.0-or-later",
       "translations": {"en": {"stack": "VIctory fork, Rust and Windows D3D12"}}

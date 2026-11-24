@@ -106,6 +106,20 @@ class GitHubSyncTest(unittest.TestCase):
         self.assertEqual(result["history"][0]["status"], "complete")
         self.assertEqual(github.backfill_status(self.db_path)[0]["repo"], "xcl-dev/xcl")
 
+    def test_targeted_refresh_uses_renamed_victory_fork_once(self):
+        catalog = Catalog(self.db_path, DEFAULT_SEED)
+        original = "https://github.com/fxceless/victory-gta6/pull/23"
+        current = "https://github.com/fxceless/victory-fork/pull/23"
+        pr = {"number": 23, "title": "Keep more controller readings", "state": "open", "head": {"sha": self.sha}}
+
+        with patch.object(github._Sync, "_request", return_value=(pr, {})) as network:
+            result = sync_catalog(catalog, sources=[original, current])["targeted_refresh"]
+        network.assert_called_once_with("https://api.github.com/repos/fxceless/victory-fork/pulls/23", "core", None)
+        self.assertEqual(result["observations_saved"], 1)
+        self.assertEqual(result["warnings"], [])
+        self.assertEqual(catalog.observed_revisions([original, current]), {original: self.sha})
+        self.assertEqual(catalog.observed_revisions([current]), {original: self.sha})
+
     def test_collect_normalized_metadata_and_reuse_fresh_cache(self):
         with patch.object(github._Sync, "_request", side_effect=self.fake_request) as network:
             first = github.collect([self.project], self.db_path)

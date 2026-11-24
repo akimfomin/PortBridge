@@ -38,9 +38,11 @@ GENERAL_SOURCE_TERMS = {"d3d12", "dxgi", "vulkan", "shader", "spirv", "wave32", 
                         "gpu", "runtime", "console", "host", "pipeline", "slot", "slots", "multi",
                         "proton", "vkd3d", "wine", "x86"}
 
-# GitHub repository 1465852099 moved to xcl-dev. Keep its established keys for
-# saved plans and topics while addressing GitHub at the verified current name.
-REPOSITORY_MOVES = {"ivall/xcl": "xcl-dev/xcl"}
+# Keep established keys for saved plans and topics while using verified current API names.
+REPOSITORY_MOVES = {
+    "ivall/xcl": "xcl-dev/xcl",  # GitHub repository 1465852099
+    "fxceless/victory-gta6": "fxceless/victory-fork",  # GitHub repository 1470579726
+}
 REPOSITORY_IDENTITIES = {current: previous for previous, current in REPOSITORY_MOVES.items()}
 
 

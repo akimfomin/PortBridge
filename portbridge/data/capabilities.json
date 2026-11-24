@@ -165,6 +165,6 @@
     "project": "victory-gta6", "area": "hardware", "kind": "source",
     "scope": "Стенд шейдеров сверяет адаптер фактически созданного D3D12-устройства и отдельно отмечает программный адаптер для тестов, требующих видеокарту.",
     "translations": {"en": {"scope": "The shader harness identifies the adapter of the actual D3D12 device and distinguishes software adapters for tests that require a GPU."}},
-    "evidence": "https://github.com/fxceless/victory-gta6/commit/7b0f736d0b29c2c512a9506e38df92f1f8d50986"
+    "evidence": "https://github.com/fxceless/victory-fork/commit/7b0f736d0b29c2c512a9506e38df92f1f8d50986"
   }
 ]
