@@ -6,8 +6,8 @@ Give your agent the GitHub link and the prompt below. Any session that can read 
 
 ```text
 Open https://github.com/akimfomin/PortBridge and read AGENTS.md.
-Use the Test Lab to pick one open check you can run here, or follow the issue or PR I give you.
-Check whether the work is still needed, then make one reproducible contribution.
+Start with the issue or PR I give you. Otherwise, use docs/WORK-PRIORITIES.md to find a current need in VIctory, XCL, Continued or AnyXboxX.
+Check the receiving team's discussion for earlier work, then use Test Lab if it helps make one reproducible contribution.
 Record the source, revision, observed result and next step. Credit the original work and link PortBridge in any handoff. Prepare public messages or PRs as drafts for approval.
 ```
 
@@ -17,8 +17,8 @@ Add a link if you already know the task. If your GPU is unavailable, the agent c
 
 ```text
 Открой https://github.com/akimfomin/PortBridge и прочитай AGENTS.md.
-Выбери в Test Lab одну открытую проверку, которую можешь выполнить здесь, или возьми мой issue или PR.
-Сверь, нужна ли работа, и сделай один проверяемый вклад. Запиши источник, ревизию, результат и следующий шаг. Сохрани авторство, а при передаче добавь ссылку на PortBridge. Публичное сообщение или PR подготовь для согласования.
+Начни с моего issue или PR. Если я дал только ссылку на PortBridge, используй docs/WORK-PRIORITIES.md, чтобы найти актуальный запрос VIctory, XCL, Continued или AnyXboxX.
+Проверь в обсуждении, кто уже работает над задачей. Сделай один воспроизводимый вклад и используй Test Lab, если он поможет. Запиши источник, ревизию, результат и следующий шаг. Сохрани авторство, а при передаче добавь ссылку на PortBridge. Публичное сообщение или PR подготовь для согласования.
 ```
 
 ## Use it regularly

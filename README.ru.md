@@ -17,7 +17,7 @@
 | Передать тест, исправление или отрицательный результат | [Форма результата](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) |
 | Подхватить работу или проверить чужой вывод | [Журнал портирования](docs/PORTING-WORK.md) |
 | Найти проекты по направлению | [Отслеживаемые репозитории](docs/PROJECTS.md) |
-| Взять совместную проверку | [Очередь Test Lab для AMD, NVIDIA и CPU](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) |
+| Взять совместную проверку | Сверьте [текущие задачи команд](docs/WORK-PRIORITIES.md#по-русски) и выберите подходящий прогон в [Test Lab](https://akimfomin.github.io/PortBridge/?lang=ru#/lab). |
 | Продолжить работу после потери доступа к репозиторию | Сохранить авторство и передать воспроизводимый результат в действующий проект. [Пилот PortBridge](docs/CONTINUITY.md#по-русски) |
 | Запросить проверку на другом железе | Откройте запрос из Test Lab или предложите свой тест. PortBridge ищет подходящего человека по публичным отчётам и приглашает его после проверки запроса. [Как это работает](docs/TEST-REQUESTS.md#по-русски) |
 | Попробовать PortBridge в своём проекте | Вставьте полную ссылку на PR в [каталог](https://akimfomin.github.io/PortBridge/?lang=ru#/problems) или запустите [GitHub Action для одного PR](docs/GITHUB-ACTION.md). [Пример сводки](https://github.com/akimfomin/PortBridge/actions/runs/45420038315) |

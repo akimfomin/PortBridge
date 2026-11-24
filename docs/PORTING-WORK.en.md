@@ -1,6 +1,6 @@
 # Cross-project work log
 
-[Русский](PORTING-WORK.md) · [Verified interactions](COMMUNITY-COORDINATION.md) · [First-frame work queue](https://github.com/akimfomin/PortBridge/issues/9) · [Try a two-team check](QUICKSTART.md#run-a-two-team-pilot)
+[Русский](PORTING-WORK.md) · [Current work priorities](WORK-PRIORITIES.md) · [Verified interactions](COMMUNITY-COORDINATION.md) · [First-frame work queue](https://github.com/akimfomin/PortBridge/issues/9) · [Try a two-team check](QUICKSTART.md#run-a-two-team-pilot)
 
 PortBridge records the original work, the tested revision, and the next useful check. A published handoff marks delivery. A team's reply, test report, or merged patch records what happened next.
 

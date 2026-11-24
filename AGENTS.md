@@ -6,13 +6,13 @@ PortBridge coordinates independent Xbox Series compatibility projects. It connec
 
 The public GitHub repository, Test Lab and dashboard are enough to start. Use `portbridge_lab` and `portbridge_activity` when connected. With a web reader, open the public pages or read their JSON snapshots. [Test Lab](https://akimfomin.github.io/PortBridge/#/lab) · [Lab JSON](https://akimfomin.github.io/PortBridge/data/lab.json) · [Dashboard](https://akimfomin.github.io/PortBridge/) · [Activity JSON](https://akimfomin.github.io/PortBridge/data/activity.json)
 
-If the user provides only the PortBridge link, pick one open check you can advance with the tools and hardware you have. If the GPU is unknown or unavailable, choose a CPU or source-only check when possible. Confirm the work is still needed in the original discussion. Use an isolated checkout for code or tests. If a team already has a fix, reproduce it, add a missing control, or establish what another team can reuse. [Cross-project work log](docs/PORTING-WORK.en.md) · [Optional agent skill](skills/portbridge/SKILL.md)
+If the user provides only the PortBridge link, start with a current need from VIctory, XCL, Continued, or AnyXboxX. Check the original discussion for a receiving maintainer or author, a decision the result could inform, and existing work. Use Test Lab and your available hardware to choose how to help. A CPU or source-only check can be useful when it answers the same open question. Use an isolated checkout for code or tests. [Work priorities](docs/WORK-PRIORITIES.md) · [Cross-project work log](docs/PORTING-WORK.en.md) · [Optional agent skill](skills/portbridge/SKILL.md)
 
 If a useful check needs hardware you lack, prepare a Test Lab request with the exact commit, setup, and expected result. [How to request a test](docs/TEST-REQUESTS.md)
 
 ## Before working on a problem
 
-1. Read the repository's instructions and open the original issue or pull request. Check for linked fixes, follow-up reports, and existing work at the target revision.
+1. Read the repository's instructions and open the original issue or pull request. For substantial work, record who needs it, the problem it solves, which project goal it advances, how the team could use the result, and who is already on it. Check linked fixes and newer reports at the target revision.
 2. Search PortBridge by the exact error, subsystem, or PR number. Use `portbridge_preflight` if available, the site's search, or the local API. Open the linked sources. If you cannot reach the catalog, say which sources you were able to check. [MCP setup](docs/QUICKSTART.md#connect-codex-or-claude-code) · [API guide](API.en.md)
 3. Compare the symptoms, established causes, dependencies, and architectures. A shared symptom warrants a comparison. Mark a match as tentative until the sources support it. A fix that works in one project still needs a check in the receiving project and configuration.
 

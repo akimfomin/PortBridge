@@ -1,6 +1,6 @@
 # Работа по портированию
 
-[English](PORTING-WORK.en.md) · [Журнал взаимодействий](COMMUNITY-COORDINATION.md) · [Очередь проверок первого кадра](https://github.com/akimfomin/PortBridge/issues/9)
+[English](PORTING-WORK.en.md) · [Текущие приоритеты](WORK-PRIORITIES.md) · [Журнал взаимодействий](COMMUNITY-COORDINATION.md) · [Очередь проверок первого кадра](https://github.com/akimfomin/PortBridge/issues/9)
 
 В журнале сохраняем первоисточники, точные версии, результат и следующий шаг. Дата первого прогона PortBridge — 24 ноября 2026 года.
 

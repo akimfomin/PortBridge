@@ -1,0 +1,45 @@
+# Work priorities
+
+[Русский](#по-русски) · [Cross-project evidence](PORTING-WORK.en.md) · [Verified interactions](COMMUNITY-COORDINATION.md) · [Test Lab](https://akimfomin.github.io/PortBridge/#/lab)
+
+Spend about **70%** of engineering time on current needs in VIctory, XCL, Continued and AnyXboxX, **20%** on finding transferable results and coordinating checks, and **10%** on PortBridge maintenance and outreach. Monitor smaller projects for a fixture, tool or contributor that addresses a receiving team's open need. Keep earlier findings available for reuse.
+
+## Choose a task
+
+Before starting substantial work, open the receiving issue, PR or maintainer note and record five answers:
+
+1. Who asked for the result or can act on it? Link their request or explain the evidence of demand.
+2. What exact failure, missing comparison, or decision is open?
+3. Which current technical goal does the result advance?
+4. Where could the result be accepted or reused? Name the review, test, fix, or decision it could change.
+5. Who has claimed related work? Compare current revisions, open changes and reported coverage before starting.
+
+Start with one bounded check. Use PortBridge search to find shared evidence and Test Lab to fill a named gap. Pause if the receiver's decision is already supported, a parallel effort covers the same case, or the available public evidence cannot support a useful check.
+
+## Receiving teams
+
+Evidence checked on 24 November 2026. Recheck the linked discussions and revisions before starting.
+
+| Team and goal | Demand, overlap and next useful result |
+| --- | --- |
+| **VIctory · structured buffers used in rendering** | Rezwo asked for a two-descriptor check on #984. The missing case selects descriptors with different strides, 56 and 32 bytes. Single-stride results already exist, and AnyXboxX #164 has evaluated this work. Help the existing review with a mixed-stride control. Marvisak paused new outside PRs to review the queue. [Review request](https://github.com/Marvisak/VIctory/pull/984#discussion_r4685537007) · [Receiver](https://github.com/LooperSalty/AnyXboxX/issues/164) · [Contribution status](https://github.com/Marvisak/VIctory/issues/712#issuecomment-7125173767) |
+| **XCL · shader compiler performance and stability** | ivall requested direct DXIL and shader performance work in #1269. Itsmetibo took the Windows/NVIDIA DXC optimization comparison for #1426. #1727 reports parallel hangs on an RTX 5070. PortBridge shared two distinctions for isolating the shader emitter and group size per submission. On FMA #1100, follow the existing review and check the outstanding hardware comparison before inviting anyone again. [Maintainer request](https://github.com/xcl-dev/xcl/issues/1269) · [Claimed benchmark](https://github.com/xcl-dev/xcl/issues/1269#issuecomment-7142799886) · [Source check](https://github.com/xcl-dev/xcl/issues/1727#issuecomment-7143052716) · [FMA review](https://github.com/xcl-dev/xcl/pull/1100) |
+| **Continued · first-frame rendering and shader paths** | #511 and #682 already have independent pixel comparisons. #1060 has native Wave64 results on Radeon. Revisit #1191 for a remaining Tier C output check if the two PRs leave a concrete gap. The #701 and #1042 submissions already have evidence for review. Reopen a check when the contributor or reviewer identifies a gap or the target revision changes materially. [First-frame comparison](https://github.com/ubiquitarianism/leonida/pull/682#issuecomment-7136308990) · [Radeon result](https://github.com/ubiquitarianism/leonida/pull/1060#issuecomment-7141131001) · [Tier C checks](https://github.com/ubiquitarianism/leonida/pull/1191) |
+| **AnyXboxX · final composition and shader correctness** | LooperSalty reports richer G-buffer output while composition is still uniform. Indexed-rectangle work is already underway. The Continued 32-SGPR change is a lead to check against a specific missing input. Continued #1087 attributes its last case to a separate `buffer_store_short` change. For the immediate NVIDIA request on #169, PortBridge verified that the focused regression fails on the base and that the patched version passes on RTX. [Maintainer update](https://github.com/LooperSalty/AnyXboxX/issues/140#issuecomment-7140464399) · [Continued source](https://github.com/ubiquitarianism/leonida/pull/1087) · [NVIDIA request](https://github.com/LooperSalty/AnyXboxX/pull/169) · [Result](https://github.com/LooperSalty/AnyXboxX/pull/169#issuecomment-7143022441) |
+
+## What the audit found
+
+| Evidence | Decision |
+| --- | --- |
+| **Merged reuse in a leading project.** AnyXboxX #129 used a value from the independent VIctory D16 measurement in an interpreter regression. #144 fixed an ALU test on WARP. | Keep solving precise receiving-project questions. Track WARP test reliability within its scope. [D16 regression](https://github.com/LooperSalty/AnyXboxX/pull/129) · [WARP fix](https://github.com/LooperSalty/AnyXboxX/pull/144) |
+| **Requested evidence used before merge.** An AnyXboxX reviewer flagged dependent work in #133. Lyrnc took the Test Lab request, ran the ADD case in his own HIP harness on native AMD Wave32, and KainanP applied the result to #133. The author of XCL #1144 used a boundary comparison and added controls. Continued #1042 incorporated a test cleanup. | Give this kind of work first claim on testing time. Track the pending merge or uncovered case at its receiving PR. [AnyXboxX review](https://github.com/LooperSalty/AnyXboxX/pull/133#pullrequestreview-6041873843) · [Test Lab result](https://github.com/akimfomin/PortBridge/issues/19#issuecomment-7136020663) · [Use in #133](https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136721736) · [XCL](https://github.com/xcl-dev/xcl/pull/1144#issuecomment-7133518162) · [Continued](https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7140737395) |
+| **Independent use by a smaller project.** FrameLab documented the NVIDIA comparison, opened its own AMD validation issue and added a direct Test Lab task link to its main-branch documentation. The AMD run is open. | Keep that volunteer route available. Use the fixture for leading-team work when a receiver needs the same queue comparison. [Merged validation doc](https://github.com/5headsmartbtw/leonida-framelab/blob/1b1c3cfc371225cd020bf4bfbba50e8c696a86f1/docs/evidence/independent-vulkan-handoff.md) · [FrameLab's request](https://github.com/5headsmartbtw/leonida-framelab/issues/15) |
+| **Standalone evidence without a current receiver.** The TuxBox timing probe and XValkyrie rectangle readback answer local synthetic questions. SceneGate has a reusable pixel control. Reforge's public source is unavailable, and the XCL #925 receiving PR closed. | Keep these as reference material. Reserve further engineering time for a current receiving task with a matching gap. Preserve Reforge attribution and published measurements. [Existing fixtures](PORTING-WORK.en.md) · [Reforge continuity](CONTINUITY.md) · [XCL #925](https://github.com/xcl-dev/xcl/pull/925) |
+
+Record whether a result changed a technical decision, was applied or merged, or was independently adopted by a participant. Include the public link and exact scope. Use those outcomes to adjust the next round of work.
+
+## По-русски
+
+Около 70% усилий направляем на текущие задачи VIctory, XCL, Continued и AnyXboxX, 20% на поиск готовых решений и организацию совместных проверок, 10% на поддержку и распространение самого PortBridge. Перед работой проверяем, кому нужен результат, какую проблему он решает, к какой цели приближает, где его смогут применить и кто уже занимается тем же.
+
+В [очереди выше](#receiving-teams) указаны запросы команд, известные результаты и конкретный следующий шаг. Подтверждённую пользу отмечаем по решениям, принятым правкам и самостоятельному использованию PortBridge. [Журнал работ](PORTING-WORK.md) · [Журнал взаимодействий](COMMUNITY-COORDINATION.md)
