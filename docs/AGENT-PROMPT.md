@@ -38,7 +38,7 @@ If you want the agent to call search and catalog tools directly, use the optiona
 
 ## Try PortBridge in your repository
 
-Pick one public issue or pull request where a second project may already have useful evidence. Give the agent the original link and ask it to look for a verified test or fix. A session that opens public links can do this with no account setup. [Public catalog](https://akimfomin.github.io/PortBridge/) · [Test Lab](https://akimfomin.github.io/PortBridge/#/lab)
+Paste a full GitHub PR link into the public Issue catalog, or give your agent the PR link and ask it to open the catalog's sources. For example, XCL #1100 finds the original Scarlett Layer FMA test and the independent XCL reports. This works without a PortBridge account or installation. [Try XCL #1100 in the catalog](https://akimfomin.github.io/PortBridge/#/problems?q=https%3A%2F%2Fgithub.com%2Fivall%2Fxcl%2Fpull%2F1100) · [FMA case](https://akimfomin.github.io/PortBridge/cases/pb-0006.html)
 
 If the trial helps, maintainers can add this optional paragraph to their existing `AGENTS.md` or `CLAUDE.md`. Keep your normal contribution and review rules. Remove the paragraph to stop using the integration.
 
@@ -48,4 +48,4 @@ For public compatibility work, look for related tests and fixes in [PortBridge](
 
 If a result is useful, record what the receiving team actually did in that same issue or PR, with a link to its test, adopted change, or maintainer decision. For example, a reviewer may report that they ran the shared test at a pinned revision and got the expected result. Count an adopted result only when the receiving team's public evidence confirms it. [Pilot record](PILOT.md#что-записать-после-проверки)
 
-Teams that prefer a job summary for each pull request can add the optional GitHub Action after maintainer approval. [Action setup](GITHUB-ACTION.md)
+Maintainers can also run the read-only Action for one existing PR. If it helps, they can run it for incoming PRs. [Action setup](GITHUB-ACTION.md) · [Successful XCL pilot](https://github.com/akimfomin/PortBridge/actions/runs/45420038315)

@@ -42,4 +42,4 @@ The [public catalog](https://akimfomin.github.io/PortBridge/) works without an a
 
 [Contribute](CONTRIBUTING.md) · [Tracked projects](https://akimfomin.github.io/PortBridge/#/projects) · [API reference](API.en.md) · [MIT license](LICENSE)
 
-Add an optional prior-work summary to pull requests in your own repository. [GitHub Action](https://github.com/marketplace/actions/portbridge-prior-work-summary) · [Setup guide](docs/GITHUB-ACTION.md)
+Try PortBridge's GitHub Action on one existing public PR. [Setup guide](docs/GITHUB-ACTION.md) · [Successful XCL pilot](https://github.com/akimfomin/PortBridge/actions/runs/45420038315) · [GitHub Marketplace](https://github.com/marketplace/actions/portbridge-prior-work-summary)

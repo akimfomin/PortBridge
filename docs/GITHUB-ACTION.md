@@ -1,15 +1,21 @@
 # Optional PortBridge pull request summary
 
-Maintainers can add a job that searches for prior work when someone opens or updates a pull request. It lists relevant catalog cards, possible matches, and a first check when one is available. Open the workflow run under **Actions** to read the job summary. The result is advisory and can be incomplete.
+Maintainers can open a prior-work summary for one existing public pull request. The job lists reviewed cards, cross-project matches and a scoped first check when available. [Successful pilot on XCL #1100](https://github.com/akimfomin/PortBridge/actions/runs/45420038315)
 
-If the maintainers want to try the Action, add the following workflow as `.github/workflows/portbridge-summary.yml`. This example pins the tested v0.1.1 commit. Keep the job optional in branch protection. [v0.1.1 release](https://github.com/akimfomin/PortBridge/releases/tag/v0.1.1) · [GitHub Marketplace listing](https://github.com/marketplace/actions/portbridge-prior-work-summary) · [Pinning actions to a commit](https://docs.github.com/en/actions/reference/security/secure-use#using-third-party-actions)
+## Try it on one pull request
+
+Add this workflow as `.github/workflows/portbridge-summary.yml` in the repository's default branch. Open **Actions → PortBridge prior work → Run workflow**, enter the full public pull request URL and open the job summary. The example pins the commit used in the XCL pilot. [GitHub manual run guide](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow) · [Tested PortBridge revision](https://github.com/akimfomin/PortBridge/commit/156fa43fe9a65f9111123a4c110599e837c35d24)
 
 ```yaml
 name: PortBridge prior work
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, edited]
+  workflow_dispatch:
+    inputs:
+      pull_request_url:
+        description: Public GitHub pull request URL
+        required: true
+        type: string
 
 permissions: {}
 
@@ -20,16 +26,21 @@ jobs:
     steps:
       - name: Add prior-work links to Job Summary
         continue-on-error: true
-        uses: akimfomin/PortBridge@7b1dbdedccccdf75b257c130e970344e3434d0e4 # v0.1.1
+        uses: akimfomin/PortBridge@156fa43fe9a65f9111123a4c110599e837c35d24
 ```
 
-The action reads the title and GitHub PR URL from `GITHUB_EVENT_PATH`. It uses those values locally against PortBridge's public JSON snapshot. The snapshot fetch does not include the title or PR URL. The job uses the runner's Python 3.10 or newer and needs no secrets, repository checkout, or installed Python packages. It writes only to `GITHUB_STEP_SUMMARY`. If the snapshot cannot be read, the summary tells the reviewer to continue the usual review. [Composite action metadata](https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax#runs-for-composite-actions) · [GitHub job summaries](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#adding-a-job-summary)
+A manual run uses the URL entered in the form. Pull request events use the title and URL from the event. PortBridge matches the values locally against its public JSON snapshot. The job needs Python 3.10 or later on the runner and writes to `GITHUB_STEP_SUMMARY`. A catalog outage leaves the usual review available. [GitHub job summaries](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#adding-a-job-summary)
 
-Use `pull_request` as shown. The action works with a public GitHub PR URL and declines other event types. Keep any unrelated workflow that runs contributor code separate from this job. For external contributions, GitHub may require a maintainer to approve running the workflow. [GitHub pull request events and forks](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request)
+## Use it on incoming pull requests
 
-The summary distinguishes confirmed catalog sources from possible matches. The first check includes the reported outcome and scope. Separate history indicators show whether the source repository's older records and recent changes were indexed.
+If the one-PR trial helps, add this trigger under `on:` alongside `workflow_dispatch:`. Keep the job optional in branch protection. GitHub may require approval to run jobs from external forks. [GitHub pull request events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request)
 
-For a pilot, open the summary for one public pull request. If a source helped the review, link it in that PR and state what changed, such as a test the team ran or work it chose to reuse. Credit the source author and link PortBridge when it helped find the source. The job summary records that the Action ran. The receiving team's linked decision or test report records that the result was useful. [One-PR pilot and setup-free alternative](AGENT-PROMPT.md#try-portbridge-in-your-repository)
+```yaml
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+```
+
+Use the original revisions and sources before repeating a test. If a result helps, link it in the receiving PR and say what it changed. Credit the source author and PortBridge when it helped you find the source. The workflow run records that the Action ran. A receiving team's test, commit or decision records reuse. [Try it without installing anything](AGENT-PROMPT.md#try-portbridge-in-your-repository)
 
 ## Verify a release candidate
 

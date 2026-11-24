@@ -19,7 +19,7 @@
 | Найти проекты по направлению | [Отслеживаемые репозитории](docs/PROJECTS.md) |
 | Взять совместную проверку | [Очередь Test Lab для AMD, NVIDIA и CPU](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) |
 | Запросить проверку на другом железе | Откройте запрос из Test Lab или предложите свой тест. PortBridge ищет подходящего человека по публичным отчётам и приглашает его после проверки запроса. [Как это работает](docs/TEST-REQUESTS.md#по-русски) |
-| Попробовать PortBridge в своём проекте | Сверьте один открытый PR с уже проверенными результатами. [Порядок для сопровождающих](docs/AGENT-PROMPT.md#try-portbridge-in-your-repository) |
+| Попробовать PortBridge в своём проекте | Вставьте полную ссылку на PR в [каталог](https://akimfomin.github.io/PortBridge/?lang=ru#/problems) или запустите [GitHub Action для одного PR](docs/GITHUB-ACTION.md). [Пример сводки](https://github.com/akimfomin/PortBridge/actions/runs/45420038315) |
 | Подключить помощника к поиску | [Codex и Claude Code через MCP](docs/MCP.md) |
 | Попросить агента взять задачу и довести её до результата | [Готовый запрос и порядок работы](docs/AGENT-PROMPT.md) |
 | Попробовать совместную проверку с другой командой | [Один тест на два проекта](docs/PILOT.md) |
