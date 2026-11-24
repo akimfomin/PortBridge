@@ -374,6 +374,286 @@
       ]
     },
     {
+      "id": "PB-0007",
+      "recorded_at": "2026-11-24T11:52:59Z",
+      "title": "Подготовка прямоугольников при отложенной сборке в Continued",
+      "summary": "Подтвердили на синтетическом шейдере причину отказа, замеченного при объединении двух веток Continued. Проверка реальных пикселей в объединённой сборке остаётся открытой.",
+      "status": "verified",
+      "tags": [
+        "rect_list_geometry",
+        "deferred pipelines",
+        "first frame"
+      ],
+      "translations": {
+        "en": {
+          "title": "Continued rectangle geometry with deferred pipeline creation",
+          "summary": "A synthetic shader confirmed the cause of an integration failure reported when two Continued branches were combined. Pixel readback on the combined build remains open.",
+          "tags": [
+            "rect_list_geometry",
+            "deferred pipelines",
+            "first frame"
+          ]
+        }
+      },
+      "platforms": [
+        "Windows 11",
+        "SPIR-V",
+        "Vulkan 1.1 validation"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "continued",
+          "status": "verified",
+          "summary": "Геометрию нужно построить до освобождения данных вершинного шейдера. Этот порядок уже применил LloydNicholson в своей сборке.",
+          "translations": {
+            "en": {
+              "summary": "Rectangle geometry needs the vertex words before they are released. LloydNicholson already used that order in an integration branch."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Отложенная сборка Continued #511",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/511",
+              "translations": {
+                "en": {
+                  "title": "Deferred pipelines in Continued #511"
+                }
+              }
+            },
+            {
+              "title": "Очередь проверок первого кадра",
+              "url": "https://github.com/akimfomin/PortBridge/issues/9",
+              "translations": {
+                "en": {
+                  "title": "First-frame checks"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/511#issuecomment-7130673446",
+              "title": "PortBridge подтвердил причину отказа в Continued",
+              "revision": "21dc3889280dba49916f63342dab72750d3ee4b9",
+              "reported_at": "2026-11-24T11:52:59Z",
+              "platforms": [
+                "Windows 11",
+                "LLVM-MinGW",
+                "spirv-val"
+              ],
+              "observed": "Генератор отклонил пустой вход после ранней очистки. При правильном порядке 511 слов совпали с контролем побайтно и прошли проверку Vulkan 1.1.",
+              "translations": {
+                "en": {
+                  "title": "PortBridge reproduced the Continued geometry failure",
+                  "observed": "The generator rejected empty input after early release. Generating first produced the same 511 words as the retained control and passed Vulkan 1.1 validation."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0008",
+      "recorded_at": "2026-11-24T11:53:45Z",
+      "title": "Одинаковое ожидание события кадра в Continued и VIctory",
+      "summary": "PortBridge связал две открытые правки и проверил один момент события в обеих реализациях. На границе целого периода модели расходятся.",
+      "status": "verified",
+      "tags": [
+        "frame pacing",
+        "frame event",
+        "first frame"
+      ],
+      "translations": {
+        "en": {
+          "title": "Frame event timing in Continued and VIctory",
+          "summary": "PortBridge linked two open changes and checked one pending frame event in both implementations. The models differ at a full-period offset.",
+          "tags": [
+            "frame pacing",
+            "frame event",
+            "first frame"
+          ]
+        }
+      },
+      "platforms": [
+        "Windows 11",
+        "CPU"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "victory",
+          "status": "verified",
+          "summary": "Три теста из модуля VIctory прошли на Windows. Общий случай проверяет, что уже запланированное событие внутри текущего периода не пропускается.",
+          "translations": {
+            "en": {
+              "summary": "Three VIctory module tests passed on native Windows. The shared case checks that a pending event within the current tick is kept."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Расписание событий VIctory #321",
+              "url": "https://github.com/Marvisak/VIctory/pull/321",
+              "translations": {
+                "en": {
+                  "title": "Frame events in VIctory #321"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/Marvisak/VIctory/pull/321#issuecomment-7130689676",
+              "title": "PortBridge проверил модуль событий VIctory",
+              "revision": "3ff556668001e3e76d5ef580eaa0b964f1eabaee",
+              "reported_at": "2026-11-24T11:53:45Z",
+              "platforms": [
+                "Windows 11",
+                "Rust 1.100.0 (CPU)"
+              ],
+              "observed": "Три теста прошли при отдельной сборке модуля. При входе 1100 мкс до события остаётся 200 мкс.",
+              "translations": {
+                "en": {
+                  "title": "PortBridge reran the VIctory frame event module",
+                  "observed": "Three tests passed in an isolated module build. At 1,100 µs the pending event is 200 µs away."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "project": "continued",
+          "status": "verified",
+          "summary": "Та же проверка прошла в Continued. Событие выдано на отметке 1300 мкс.",
+          "translations": {
+            "en": {
+              "summary": "The same check passed in Continued. The event was issued at 1,300 µs."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "События кадра Continued #402",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/402",
+              "translations": {
+                "en": {
+                  "title": "Frame events in Continued #402"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/Marvisak/VIctory/pull/321#issuecomment-7130689676",
+              "title": "PortBridge повторил один вход в Continued",
+              "revision": "d743662615cba6c69e125d6773fcc38f9856760c",
+              "reported_at": "2026-11-24T11:53:45Z",
+              "platforms": [
+                "Windows 11",
+                "LLVM-MinGW clang 23.1.6 (CPU)"
+              ],
+              "observed": "При отсчёте с 1100 мкс событие ещё не наступило на 1299 мкс. В 1300 мкс вернулся первый номер кадра.",
+              "translations": {
+                "en": {
+                  "title": "PortBridge replayed the same timing input in Continued",
+                  "observed": "Starting at 1,100 µs, the event was still pending at 1,299 µs and returned the first frame token at 1,300 µs."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0009",
+      "recorded_at": "2026-11-24T11:54:06Z",
+      "title": "Проверка отмены отложенного кадра в Reforge",
+      "summary": "PortBridge дважды прогнал шесть синтетических проверок очереди кадров Reforge на Windows и NVIDIA. Контрольная версия провалила отмену девятого кадра.",
+      "status": "verified",
+      "tags": [
+        "deferred Present",
+        "presentation",
+        "first frame"
+      ],
+      "translations": {
+        "en": {
+          "title": "Deferred frame cancellation in Reforge",
+          "summary": "PortBridge ran six synthetic Reforge presenter checks twice on Windows and NVIDIA. The unchanged control failed cancellation of the ninth frame.",
+          "tags": [
+            "deferred Present",
+            "presentation",
+            "first frame"
+          ]
+        }
+      },
+      "platforms": [
+        "Windows 11",
+        "NVIDIA RTX 4070 Ti SUPER",
+        "Vulkan"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "reforge",
+          "status": "verified",
+          "summary": "Версия PR пропускает восемь уже поставленных в очередь кадров и отклоняет девятый после отмены. Следующая независимая проверка нужна на AMD.",
+          "translations": {
+            "en": {
+              "summary": "The PR drains eight queued frames and refuses the canceled ninth. An independent AMD run remains open."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Проверяемая правка Reforge #86",
+              "url": "https://github.com/LeonidaReforge/Leonida/pull/86",
+              "translations": {
+                "en": {
+                  "title": "Reforge change #86"
+                }
+              }
+            },
+            {
+              "title": "Очередь проверок первого кадра",
+              "url": "https://github.com/akimfomin/PortBridge/issues/9",
+              "translations": {
+                "en": {
+                  "title": "First-frame checks"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/LeonidaReforge/Leonida/pull/86#issuecomment-7130696664",
+              "title": "PortBridge подтвердил исправление Reforge на NVIDIA",
+              "revision": "b84739e39aee69d2611dfc3982cc2ef35f876916",
+              "reported_at": "2026-11-24T11:54:06Z",
+              "platforms": [
+                "Windows 11",
+                "NVIDIA RTX 4070 Ti SUPER",
+                "Vulkan"
+              ],
+              "observed": "Шесть тестов прошли дважды. Та же проверка на базе 2ebde81ec07e завершилась ошибкой при отмене девятого кадра.",
+              "translations": {
+                "en": {
+                  "title": "PortBridge verified the Reforge fix on NVIDIA",
+                  "observed": "Six checks passed twice. The same fixture failed the canceled ninth frame with base runtime 2ebde81ec07e."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "PB-044801754884724660835754613454516035131",
       "recorded_at": "2026-11-24T11:13:37Z",
       "title": "Проверка классификации загрузок D16 в Reforge и Continued",

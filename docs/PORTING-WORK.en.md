@@ -1,11 +1,14 @@
 # Cross-project work log
 
-[Русский](PORTING-WORK.md) · [Try a two-team check](QUICKSTART.md#run-a-two-team-pilot)
+[Русский](PORTING-WORK.md) · [First-frame work queue](https://github.com/akimfomin/PortBridge/issues/9) · [Try a two-team check](QUICKSTART.md#run-a-two-team-pilot)
 
 PortBridge records the original work, the tested revision, and the next useful check. A published handoff marks delivery. A team's reply, test report, or merged patch records what happened next.
 
 | Topic | Verified result and next action |
 | --- | --- |
+| **Continued first-frame pipeline integration** | A synthetic test confirmed that rectangle geometry must use the vertex words before deferred pipeline creation releases them. The resulting geometry matched the control and passed SPIR-V validation. The combined build still needs a rectangle pixel check in both modes. [Continued report](https://github.com/ubiquitarianism/leonida/pull/511#issuecomment-7130673446) |
+| **Reforge presenter cancellation** | The six focused NVIDIA checks passed twice on native Windows. The same fixture rejected the old runtime at the ninth-frame assertion. An AMD run is open. [Reforge report](https://github.com/LeonidaReforge/Leonida/pull/86#issuecomment-7130696664) |
+| **Frame events in VIctory and Continued** | On the same timing input, both implementations kept the pending event due at 1,300 µs. The full-period offset policies differ. VIctory can repeat the shared check after it combines the offsets and tick-reservation work. [VIctory report](https://github.com/Marvisak/VIctory/pull/321#issuecomment-7130689676) |
 | **FMA modifiers in Scarlett Layer and XCL** | A published Scarlett Layer check passed on WARP. PortBridge repeated its 64 inputs in XCL on an RTX 4070 Ti SUPER. The modified and plain controls agreed in Wave32 and split Wave64, and the test was submitted in XCL #1100. Review and native Wave64 confirmation remain open. [Scarlett Layer run](https://github.com/jadeowaowa/scarlett-layer/actions/runs/45297729955/job/138122279475) · [XCL test PR](https://github.com/ivall/xcl/pull/1100) |
 | **LDS reads in VIctory, XCL and Continued** | XCL's destination-half checks and Continued's single-writer fix informed two VIctory tests. Both passed on RTX 4070 Ti SUPER and WARP at `d27cb78960ed`. The previous translator failed both controls. VIctory received the patch, and XCL received the same boundary input and result. A matching XCL run would close the comparison. [VIctory test patch](https://github.com/Marvisak/VIctory/pull/571#issuecomment-7128201680) · [XCL handoff](https://github.com/ivall/xcl/pull/544#issuecomment-7128210080) |
 | **Wave64 byte carry in XCL** | The XCL author confirmed the case and requested a follow-up. PortBridge submitted a one-file test PR stacked on `c3e3442`. Both focused tests passed on RTX 4070 Ti SUPER, including Wave32 and split Wave64. The new case detected a deliberate shift-before-add error that the previous fixture missed. A native AMD Wave64 run of the added case remains open. [Author response](https://github.com/ivall/xcl/pull/925#issuecomment-7128723618) · [Test PR](https://github.com/maximecmb/xcl/pull/1) |

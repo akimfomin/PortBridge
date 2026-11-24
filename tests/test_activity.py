@@ -72,7 +72,7 @@ class ActivityTest(CatalogFixture):
         for number in range(EVENTS_PER_KIND + 4):
             self.save_pr("xcl", number + 100, at=recent)
         older_open = self.save_pr("victory", 99, at=older)
-        summary = build_activity(self.catalog, now=NOW)
+        summary = build_activity(self.catalog, now=NOW, cards=[])
         visible = [event for event in summary["events"] if event["kind"] == "open_pr"]
         self.assertEqual(len(visible), EVENTS_PER_KIND)
         self.assertEqual(summary["counts"]["open"], EVENTS_PER_KIND + 5)
