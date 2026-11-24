@@ -1643,10 +1643,10 @@
         {
           "project": "continued",
           "status": "verified",
-          "summary": "PortBridge подтвердил ту же ошибку в Continued и предложил правку в #966. Пять сценариев с равными смещениями, включая нулевые, подтвердили на процессоре. Синтетический шейдер на RTX через Vulkan вернул все восемь ожидаемых слов DATA0. PR открыт.",
+          "summary": "PortBridge подтвердил ту же ошибку в Continued и предложил правку в #966. Синтетический шейдер на RTX через Vulkan вернул все восемь ожидаемых слов DATA0. KernelSmoker независимо повторил восемь тестов на Linux и одобрил эту версию. PR открыт.",
           "translations": {
             "en": {
-              "summary": "PortBridge confirmed the same mismatch in Continued and proposed a fix in #966. Five equal-offset cases, including zero, passed on the CPU. A synthetic shader on RTX through Vulkan returned all eight expected DATA0 words. The PR remains open."
+              "summary": "PortBridge confirmed the same mismatch in Continued and proposed a fix in #966. A synthetic shader on RTX through Vulkan returned all eight expected DATA0 words. KernelSmoker independently repeated eight tests on Linux and approved the tested revision. The PR remains open."
             }
           },
           "source_refs": [
@@ -1665,6 +1665,15 @@
               "translations": {
                 "en": {
                   "title": "Fix and results in Continued #966"
+                }
+              }
+            },
+            {
+              "title": "Проверка и одобрение KernelSmoker",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/966#pullrequestreview-6042837366",
+              "translations": {
+                "en": {
+                  "title": "KernelSmoker's independent test and approval"
                 }
               }
             }
@@ -1706,6 +1715,25 @@
                 "en": {
                   "title": "Continued correction checked on CPU and RTX",
                   "observed": "All 379 LDS tests passed without skips. In the Vulkan fixture, the baseline returned eight DATA1 words and the patch returned the eight expected DATA0 words. Equal offsets emitted eight LDS stores instead of 16. AMD and retail smoke were outside the check."
+                }
+              }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/966#pullrequestreview-6042837366",
+              "title": "KernelSmoker подтвердил восемь тестов на Linux и одобрил PR",
+              "revision": "9ae6f1253ffc45cc1ebf774dcaa630959111ccb0",
+              "reported_at": "2026-11-24T16:02:58Z",
+              "platforms": [
+                "Linux",
+                "SPIR-V semantic interpreter"
+              ],
+              "observed": "KernelSmoker подтвердил два новых теста и шесть существующих проверок парных инструкций LDS b64. Проверки отсутствия игровых данных и git diff --check прошли. Прогона на видеокарте у этого участника не было.",
+              "translations": {
+                "en": {
+                  "title": "KernelSmoker confirmed eight Linux tests and approved the PR",
+                  "observed": "KernelSmoker passed both new tests and all six existing b64 paired LDS checks. The no-game-data guard and git diff --check passed. The reviewer did not run a GPU test."
                 }
               }
             }
