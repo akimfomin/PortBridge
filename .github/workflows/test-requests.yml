@@ -1,0 +1,39 @@
+name: PortBridge test invitations
+
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Number of the open PortBridge issue with the notify-testers label
+        required: true
+        type: number
+
+permissions: {}
+
+jobs:
+  invite:
+    if: >-
+      github.repository == 'akimfomin/PortBridge' && github.ref == 'refs/heads/main'
+      && (github.event_name == 'workflow_dispatch' || github.event.label.name == 'notify-testers')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    concurrency:
+      group: portbridge-test-invitations
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - name: Check out the trusted default branch revision
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Invite one matching tester
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m portbridge.test_requests

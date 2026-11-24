@@ -1,0 +1,39 @@
+name: Request a compatibility test
+description: Ask PortBridge to find a tester for a public, repeatable hardware check.
+title: 'Test request: '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request one synthetic check at an exact public commit. After review PortBridge can invite someone who has reported using suitable hardware. They decide whether to take it.
+
+        Keep game data, credentials, and private logs out of this public issue.
+  - type: input
+    id: task
+    attributes:
+      label: Lab task
+      description: Use the ID from the Test Lab. Leave blank for a new test.
+      placeholder: xcl-1100-fma
+  - type: input
+    id: equipment
+    attributes:
+      label: Equipment
+      description: 'Enter amd, nvidia, or cpu. For a specific GPU in a new check, enter a model such as amd: RX 9070 XT.'
+      placeholder: amd
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Source commit
+      description: Use the public GitHub commit URL with all 40 characters of the revision.
+      placeholder: https://github.com/owner/repository/commit/0123456789012345678901234567890123456789
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: Requested check
+      description: Name the test, required setup, and expected result. Describe any known gaps or skips.
+    validations:
+      required: true

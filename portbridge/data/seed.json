@@ -334,15 +334,15 @@
       "id": "PB-0006",
       "recorded_at": "2026-11-24T11:34:40Z",
       "title": "Сравнение модификаторов FMA в Scarlett Layer и XCL",
-      "summary": "Один синтетический вход проверили в Scarlett Layer и XCL. PortBridge добавил в XCL отдельный тест сочетания abs, neg и clamp и передал его в черновом PR.",
+      "summary": "Один синтетический вход проверили в Scarlett Layer и XCL. Тест PortBridge в XCL прошёл на NVIDIA и независимо подтверждён на AMD RDNA2 с аппаратным Wave64.",
       "status": "verified",
       "tags": ["v_fma_f32", "abs", "neg", "clamp", "D3D12"],
       "translations": {"en": {
         "title": "FMA modifiers in Scarlett Layer and XCL",
-        "summary": "The same synthetic input was checked in Scarlett Layer and XCL. PortBridge added an XCL test for the combined abs, neg and clamp modifiers and submitted it in a draft PR.",
+        "summary": "The same synthetic input was checked in Scarlett Layer and XCL. PortBridge's XCL test passed on NVIDIA and received an independent native Wave64 pass on AMD RDNA2.",
         "tags": ["v_fma_f32", "abs", "neg", "clamp", "D3D12"]
       }},
-      "platforms": ["Windows", "D3D12", "WARP", "NVIDIA RTX 4070 Ti SUPER"],
+      "platforms": ["Windows", "D3D12", "WARP", "NVIDIA RTX 4070 Ti SUPER", "AMD RDNA2"],
       "dependency_ids": [],
       "solutions": [
         {
@@ -361,14 +361,16 @@
         {
           "project": "xcl",
           "status": "verified",
-          "summary": "В XCL совпали все 64 результата и все 64 контрольных значения в каждом из двух режимов. Черновик XCL #1100 доступен для ревью и повторного прогона.",
-          "translations": {"en": {"summary": "All 64 outputs and 64 plain controls matched in each of two XCL modes. XCL #1100 is available as a draft for review and retesting."}},
+          "summary": "В XCL совпали все 64 результата и все 64 контрольных значения в обоих режимах на NVIDIA. Независимый прогон на AMD RDNA2 подтвердил аппаратный Wave64. XCL #1100 открыт для ревью.",
+          "translations": {"en": {"summary": "All 64 outputs and 64 plain controls matched in both NVIDIA modes. An independent AMD RDNA2 run passed native Wave64. XCL #1100 is open for review."}},
           "source_refs": [
             {"title": "Тестовый PR XCL #1100", "url": "https://github.com/ivall/xcl/pull/1100", "translations": {"en": {"title": "XCL test PR #1100"}}}
           ],
           "evidence": [
-            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "PortBridge повторил тест Scarlett Layer в XCL", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T11:34:40Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "64 из 64 выходов и 64 из 64 контрольных значений совпали в Wave32 и разделённом Wave64. Для аппаратного Wave64 нужен отдельный прогон.",
-              "translations": {"en": {"title": "PortBridge replayed the Scarlett Layer check in XCL", "observed": "All 64 outputs and 64 plain controls matched in Wave32 and split Wave64. Native Wave64 still needs a separate run."}}}
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "PortBridge повторил тест Scarlett Layer в XCL", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T11:34:40Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "64 из 64 выходов и 64 из 64 контрольных значений совпали в Wave32 и разделённом Wave64.",
+              "translations": {"en": {"title": "PortBridge replayed the Scarlett Layer check in XCL", "observed": "All 64 outputs and 64 plain controls matched in Wave32 and split Wave64."}}},
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100#issuecomment-7131880483", "title": "bjarngard подтвердил аппаратный Wave64 на RDNA2", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T12:45:36Z", "platforms": ["Windows 11", "AMD RDNA2", "D3D12"], "observed": "Отчёт на встроенной графике Ryzen 9 9950X: 742 проверки прошли, отказов 0, 41 исключена. Тест FMA прошёл с обязательным аппаратным Wave64. RDNA3 и RDNA4 не проверялись.",
+              "translations": {"en": {"title": "bjarngard confirmed native Wave64 on RDNA2", "observed": "On Ryzen 9 9950X integrated graphics, 742 tests passed, 0 failed, and 41 were ignored. The FMA test passed with native Wave64 required. RDNA3 and RDNA4 remain untested."}}}
           ]
         }
       ]

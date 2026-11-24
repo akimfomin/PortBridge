@@ -1,0 +1,53 @@
+[
+  {
+    "login": "eizispark",
+    "equipment": "amd",
+    "hardware": "AMD Radeon RX 9070 XT",
+    "capabilities": [
+      "d3d12-native-wave64",
+      "d3d12-native-wave64-rdna4"
+    ],
+    "evidence_url": "https://github.com/ivall/xcl/pull/925#issuecomment-7127015847",
+    "reported_at": "2026-11-24T09:08:40Z"
+  },
+  {
+    "login": "SlopTart",
+    "equipment": "amd",
+    "hardware": "AMD Radeon RX 7900 XT",
+    "capabilities": [],
+    "evidence_url": "https://github.com/ivall/xcl/pull/925#issuecomment-7129029215",
+    "reported_at": "2026-11-24T10:37:33Z"
+  },
+  {
+    "login": "Catskan",
+    "equipment": "amd",
+    "hardware": "AMD Radeon RX 9070 XT",
+    "capabilities": [],
+    "evidence_url": "https://github.com/LeonidaReforge/Leonida/issues/99#issuecomment-7130010722",
+    "reported_at": "2026-11-24T11:22:20Z"
+  },
+  {
+    "login": "Cecerw",
+    "equipment": "nvidia",
+    "hardware": "NVIDIA GeForce RTX 3060 Ti",
+    "capabilities": [],
+    "evidence_url": "https://github.com/ivall/xcl/issues/42#issuecomment-7131552200",
+    "reported_at": "2026-11-24T12:31:11Z"
+  },
+  {
+    "login": "FormaxPL",
+    "equipment": "nvidia",
+    "hardware": "NVIDIA GeForce RTX 2070 SUPER",
+    "capabilities": [],
+    "evidence_url": "https://github.com/Marvisak/VIctory/issues/49#issuecomment-7129668912",
+    "reported_at": "2026-11-24T11:06:39Z"
+  },
+  {
+    "login": "DaviTostes",
+    "equipment": "amd",
+    "hardware": "AMD Radeon RX 9060 XT",
+    "capabilities": [],
+    "evidence_url": "https://github.com/Marvisak/VIctory/issues/49#issuecomment-7129505586",
+    "reported_at": "2026-11-24T10:59:17Z"
+  }
+]

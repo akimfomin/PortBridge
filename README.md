@@ -2,7 +2,7 @@
 
 **Find and reuse verified compatibility work across independent Xbox Series projects.**
 
-[See team progress](https://akimfomin.github.io/PortBridge/) · [Find a test for your PC](https://akimfomin.github.io/PortBridge/#/lab) · [Share evidence](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) · [Connect an agent](docs/QUICKSTART.md#connect-codex-or-claude-code) · [Русский](README.ru.md)
+[See team progress](https://akimfomin.github.io/PortBridge/) · [Find a test for your PC](https://akimfomin.github.io/PortBridge/#/lab) · [Request a test](https://github.com/akimfomin/PortBridge/issues/new?template=test-request.yml) · [Start with an agent](docs/AGENT-PROMPT.md) · [Русский](README.ru.md)
 
 PortBridge connects public issues, pull requests, and test results across projects bringing Xbox Series software to PC. Look up an error or shader instruction, see what another team already tested, and share a reproducible result in the repository where it can help. Each team keeps its own tools, priorities, and review process.
 
@@ -12,8 +12,9 @@ PortBridge connects public issues, pull requests, and test results across projec
 | --- | --- |
 | See what changed or find a shared check | Open the home dashboard for the last seven days of activity, progress by team, and tests that can help an open PR or issue. |
 | Check existing work before investigating an issue | Search by an exact error, instruction, PR number, or GitHub URL. Open the original sources before using a suggested match. [Issue catalog](https://akimfomin.github.io/PortBridge/#/problems) |
-| Share a test, a fix, or a result that ruled something out | Use the evidence form. Include the original source, exact commit, platform, and observed result. |
+| Share a test, a fix, or a result that ruled something out | Include the original source, exact commit, platform, and observed result. [Evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) |
 | Take a shared check or see where a result was delivered | Choose a task by hardware in the [Test Lab](https://akimfomin.github.io/PortBridge/#/lab). See prior runs in the [cross-project work log](docs/PORTING-WORK.en.md). |
+| Get a test run on hardware you lack | Open a request from the Test Lab or submit your own check. PortBridge uses public hardware reports to find someone to invite. [Test requests](docs/TEST-REQUESTS.md) |
 | Suggest a project, a missing link, or a search improvement | Open the [feedback form](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml). |
 
 ## Recent cross-project work

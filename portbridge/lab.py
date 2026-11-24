@@ -3,7 +3,7 @@
 from copy import deepcopy
 
 
-CHECKED_AT = "2026-11-24T12:24:51Z"
+CHECKED_AT = "2026-11-24T12:47:42Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review")
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
@@ -15,6 +15,7 @@ RECT_REPORT = f"{CONTINUED}/pull/511#issuecomment-7130673446"
 BYTE_CARRY = "https://github.com/maximecmb/xcl/pull/1"
 PRESENTER_REPORT = f"{REFORGE}/pull/86#issuecomment-7130696664"
 FMA = f"{XCL}/pull/1100"
+FMA_RDNA2 = f"{FMA}#issuecomment-7131880483"
 XCL_SETUP = "https://github.com/akimfomin/xcl/blob"
 
 
@@ -141,31 +142,31 @@ TASKS = (
     {
         "id": "xcl-1100-fma",
         "priority": 4,
-        "title": "Compare the XCL FMA test with Scarlett Layer on native Wave64",
+        "title": "Repeat the XCL FMA test on AMD RDNA4",
         "projects": ["xcl", "scarlett-layer"],
         "equipment": ["amd"],
         "os": ["Windows"],
-        "requirements": ["AMD D3D12 adapter with native Wave64", "Rust", "DXC"],
-        "status": "needs_run", "evidence_stage": "author_gpu", "adoption": "pending",
+        "requirements": ["AMD RDNA4 D3D12 adapter with native Wave64", "Rust", "DXC"],
+        "status": "needs_run", "evidence_stage": "reviewed_gpu", "adoption": "pending",
         "source_url": FMA, "procedure_url": f"{XCL_SETUP}/c612b62656fb30eca308fd461209339f6a7c7d32/README.md#tests",
-        "evidence_url": FMA, "result_url": FMA,
+        "evidence_url": FMA_RDNA2, "result_url": FMA,
         "revisions": [revision("Test PR", "PR с тестом", "akimfomin/xcl", "c612b62656fb30eca308fd461209339f6a7c7d32")],
-        "why": "The same Scarlett Layer inputs let XCL check its FMA modifier behavior on another GPU.",
-        "evidence": "The PR author matched all 64 modified and 64 control results in Wave32 and split Wave64 on NVIDIA.",
+        "why": "The Scarlett Layer inputs already passed on AMD RDNA2. RDNA4 is a separate hardware check.",
+        "evidence": "The author passed Wave32 and split Wave64 on NVIDIA. An independent tester passed native Wave64 at the exact PR head on an AMD RDNA2 iGPU.",
         "steps": [
-            "Check out the pinned draft PR. Select the AMD adapter and set XCL_REQUIRE_GPU=wave64.",
+            "Check out the pinned PR. Select the AMD RDNA4 adapter and set XCL_REQUIRE_GPU=wave64.",
             "Run gpu_wave32_program_in_wave64_hardware to confirm native Wave64 is available.",
             "Run gpu_fma_f32_abs_neg_clamp_oracle with the XCL GPU test setup.",
         ],
         "expected": "Both tests pass without skips. The FMA output includes wave64 split=false and 64/64 matching values.",
         "report": ["Commit, GPU, driver, Windows build and DXC version", "Adapter check, FMA result and any skipped case"],
         "translations": {"ru": {
-            "title": "Сверить тест FMA из Scarlett Layer в XCL на аппаратном Wave64",
-            "requirements": ["Видеокарта AMD с D3D12 и аппаратным Wave64", "Rust", "DXC"],
-            "why": "На тех же данных Scarlett Layer можно сверить модификаторы FMA в XCL на другой видеокарте.",
-            "evidence": "У автора PR на NVIDIA совпали все 64 результата с модификаторами и 64 контрольных в обоих режимах.",
+            "title": "Повторить тест FMA в XCL на AMD RDNA4",
+            "requirements": ["Видеокарта AMD RDNA4 с D3D12 и аппаратным Wave64", "Rust", "DXC"],
+            "why": "Тест с входами из Scarlett Layer уже прошёл на AMD RDNA2. Теперь нужна проверка на RDNA4.",
+            "evidence": "Автор проверил Wave32 и разделённый Wave64 на NVIDIA. Независимый участник подтвердил аппаратный Wave64 на AMD RDNA2 на той же версии PR.",
             "steps": [
-                "Перейдите на указанную версию чернового PR, выберите AMD и задайте XCL_REQUIRE_GPU=wave64.",
+                "Перейдите на указанную версию PR, выберите AMD RDNA4 и задайте XCL_REQUIRE_GPU=wave64.",
                 "Убедитесь, что доступен аппаратный Wave64, тестом gpu_wave32_program_in_wave64_hardware.",
                 "Запустите gpu_fma_f32_abs_neg_clamp_oracle по инструкции XCL для GPU-тестов.",
             ],

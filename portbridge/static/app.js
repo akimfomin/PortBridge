@@ -438,6 +438,22 @@ function solutionCard(solution) {
   return card;
 }
 
+function bindCopyText(button, field, status, copiedMessage) {
+  button.type = 'button';
+  button.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(field.value);
+      status.textContent = copiedMessage;
+    } catch {
+      field.hidden = false;
+      field.focus();
+      field.select();
+      status.textContent = t('Text selected. Use your device’s copy command.',
+        'Текст выделен. Скопируйте его командой на своём устройстве.');
+    }
+  });
+}
+
 function draftEditor(message, language) {
   const field = element('textarea');
   field.value = message;
@@ -447,18 +463,7 @@ function draftEditor(message, language) {
   const status = element('span', 'view-status');
   status.setAttribute('role', 'status');
   const copy = element('button', 'retry', t('Copy draft', 'Копировать черновик'));
-  copy.type = 'button';
-  copy.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(field.value);
-      status.textContent = t('Draft copied', 'Черновик скопирован');
-    } catch {
-      field.focus();
-      field.select();
-      status.textContent = t('Text selected. Use your device’s copy command.',
-        'Текст выделен. Скопируйте его командой на своём устройстве.');
-    }
-  });
+  bindCopyText(copy, field, status, t('Draft copied', 'Черновик скопирован'));
   const actions = element('div', 'draft-actions');
   actions.append(copy, status);
   const fragment = document.createDocumentFragment();
@@ -814,6 +819,7 @@ function drawProjects() {
 const labEquipment = {
   amd: t('AMD graphics', 'Видеокарта AMD'), cpu: t('CPU only', 'Только процессор'), nvidia: t('NVIDIA graphics', 'Видеокарта NVIDIA'),
 };
+const portbridgeRepository = 'https://github.com/akimfomin/PortBridge';
 const labStatus = {
   needs_run: t('A test run is needed', 'Нужен прогон'),
   needs_revision: t('Awaiting combined revision', 'Ждём объединённую версию'),
@@ -829,6 +835,73 @@ const labAdoption = {
   adopted: t('Adopted by the team', 'Принято командой'),
   declined: t('Declined by the team', 'Отклонено командой'),
 };
+
+const labAgentPrompt = t(
+  `Open ${portbridgeRepository} and read AGENTS.md. Choose one open Test Lab check that fits my equipment. `
+  + 'Check the original discussion, the exact revision and whether anyone is already running it. '
+  + 'Use synthetic inputs in a separate checkout. Record the expected and observed result, the hardware and the revision. '
+  + 'Prepare a short handoff that says how PortBridge helped and links to it. Ask before posting it.',
+  `Открой ${portbridgeRepository} и прочитай AGENTS.md. Подбери одну открытую проверку из лаборатории под мой компьютер. `
+  + 'Сверь исходное обсуждение, точную версию и не взялся ли кто-то за эту проверку. '
+  + 'Используй синтетические данные и отдельную копию проекта. Запиши ожидаемый и фактический результат, стенд и версию. '
+  + 'Подготовь короткое сообщение о том, чем помог PortBridge, со ссылкой на него. Спроси перед публикацией.',
+);
+
+function labAgentEntry() {
+  const section = element('section', 'lab-agent');
+  const actions = element('div', 'lab-agent-actions');
+  const copy = element('button', 'lab-primary', t('Copy agent instructions', 'Копировать задание для агента'));
+  const prompt = element('textarea');
+  prompt.value = labAgentPrompt;
+  prompt.readOnly = true;
+  prompt.hidden = true;
+  prompt.setAttribute('aria-label', t('Agent instructions', 'Задание для агента'));
+  const status = element('span', 'view-status');
+  status.setAttribute('role', 'status');
+  bindCopyText(copy, prompt, status, t('Copied. Paste into your agent chat.', 'Скопировано. Вставьте в чат с агентом.'));
+  actions.append(copy, status);
+  section.append(element('h2', '', t('Work with an agent', 'Работа с агентом')),
+    element('p', '', t('Paste the instructions into your agent chat to get started.', 'Вставьте задание в чат с агентом, чтобы начать.')),
+    actions, prompt);
+  return section;
+}
+
+function labRequestURL(task, equipment) {
+  const form = new URL(`${portbridgeRepository}/issues/new`);
+  form.searchParams.set('template', 'test-request.yml');
+  form.searchParams.set('title', 'Test request: ');
+  if (!task) return form.href;
+  if (task.status !== 'needs_run' || typeof task.id !== 'string' || !/^[a-z0-9-]{1,80}$/.test(task.id)
+      || !Object.hasOwn(labEquipment, equipment) || !list(task.equipment).includes(equipment)
+      || typeof task.expected !== 'string' || !task.expected.trim()) return null;
+
+  // The first test revision is the primary checkout. Controls stay in the task details.
+  const pin = list(task.revisions)[0];
+  const revision = githubURL(pin?.url);
+  if (!revision || !/^[a-f0-9]{40}$/.test(pin?.sha)
+      || !new URL(revision).pathname.endsWith(`/commit/${pin.sha}`)) return null;
+  form.searchParams.set('title', `Test request: ${task.id} (${equipment})`);
+  form.searchParams.set('task', task.id);
+  form.searchParams.set('equipment', equipment);
+  form.searchParams.set('revision', revision);
+  form.searchParams.set('check', task.expected);
+  return form.href;
+}
+
+function labRequestEntry() {
+  const section = element('section', 'lab-agent');
+  const actions = element('div', 'lab-agent-actions');
+  const newRequest = githubLink(t('Request a test', 'Запросить тест'), labRequestURL());
+  newRequest.classList.add('lab-primary');
+  const queue = new URL(`${portbridgeRepository}/issues`);
+  queue.searchParams.set('q', 'is:issue "Test request:" in:title');
+  actions.append(newRequest, githubLink(t('View test requests', 'Смотреть запросы'), queue.href));
+  section.append(element('h2', '', t('Find a tester', 'Найти тестировщика')),
+    element('p', '', t('PortBridge matches a tester from public hardware reports and posts the invitation in your request after review.',
+      'PortBridge подбирает тестировщика по публичным отчётам о стендах и после проверки оставляет приглашение в вашем запросе.')),
+    actions, githubLink(t('How test requests work', 'Как работают запросы'), `${portbridgeRepository}/blob/main/docs/TEST-REQUESTS.md`));
+  return section;
+}
 
 function labChecklist(title, items, ordered = false) {
   const section = element('section', 'lab-checklist');
@@ -879,12 +952,22 @@ function labTask(task) {
   if (task.source_url && ![task.procedure_url, task.result_url, task.evidence_url].includes(task.source_url)) {
     links.append(githubLink(t('Coordination issue', 'Задача координации'), task.source_url));
   }
+  const equipment = list(task.equipment);
+  for (const kind of equipment) {
+    const request = labRequestURL(task, kind);
+    if (!request) continue;
+    const label = equipment.length > 1 ? t(`Request a test · ${labEquipment[kind]}`, `Запросить тест · ${labEquipment[kind]}`)
+      : t('Request a test', 'Запросить тест');
+    links.append(githubLink(label, request));
+  }
   card.append(links, details);
   return card;
 }
 
 function drawLab(data, params) {
   const lab = element('div', 'lab');
+  const entrypoints = element('div', 'lab-entrypoints');
+  entrypoints.append(labAgentEntry(), labRequestEntry());
   const bar = element('div', 'lab-bar');
   const group = element('div', 'filter-group');
   const equipment = element('select');
@@ -921,7 +1004,7 @@ function drawLab(data, params) {
     updateLanguageLinks();
     renderTasks();
   });
-  lab.append(bar, count, tasks);
+  lab.append(entrypoints, bar, count, tasks);
   renderTasks();
   viewStatus.textContent = '';
   content.replaceChildren(lab);
