@@ -34,8 +34,10 @@ class ActionSummaryTests(TestCase):
             ]}],
             "matches": [{"right": {"title": "<img src=x>\n## Other @everyone", "url":
                                     "https://github.com/example/reforge/issues/21#issuecomment-2"}}],
-            "observations": [{"title": "Host build", "url": "https://github.com/example/port/issues/4"},
-                             {"title": "Private external link", "url": "https://example.invalid/hidden"}],
+            "observations": [
+                {"title": "Unrelated D3D12 adapter selection", "url": "https://github.com/LeonidaReforge/Leonida/pull/135"},
+                {"title": "Unrelated multi-warp barrier", "url": "https://github.com/ivall/xcl/commit/0c02b87b267142801e6843563988bf7ac5f6a2e7"},
+            ],
             "first_check": {"revision": "b077ec9", "platforms": ["Windows 11"],
                             "url": "https://github.com/example/reforge/actions/runs/34/job/56"},
             "next_step": "Reproduce the reported test in the target configuration.",
@@ -49,7 +51,9 @@ class ActionSummaryTests(TestCase):
         self.assertIn("#/problems/PB-0001", markdown)
         self.assertIn("https://github.com/example/continued/pull/20", markdown)
         self.assertIn("https://github.com/example/reforge/issues/21#issuecomment-2", markdown)
-        self.assertIn("https://github.com/example/port/issues/4", markdown)
+        self.assertNotIn("Other public observations", markdown)
+        for observation in response["observations"]:
+            self.assertNotIn(observation["url"], markdown)
         self.assertIn("https://github.com/example/reforge/actions/runs/34/job/56", markdown)
         self.assertIn("revision `b077ec9`, Windows 11", markdown)
         self.assertIn("The public snapshot may be incomplete", markdown)
@@ -57,7 +61,32 @@ class ActionSummaryTests(TestCase):
         self.assertNotIn("@everyone", markdown)
         self.assertNotIn(self.title, markdown)
         self.assertNotIn("Secret body", markdown)
-        self.assertNotIn("example.invalid", markdown)
+
+    def test_manual_run_uses_the_selected_public_pull_request(self):
+        self.event.write_text(json.dumps({"inputs": {"pull_request_url": " " + self.source + " "}}), encoding="utf-8")
+        env = {**self.env, "GITHUB_EVENT_NAME": "workflow_dispatch"}
+        response = {"problems": [], "matches": [], "catalog_status": "ok"}
+        with mock.patch.object(action_summary, "public_preflight", return_value=response) as preflight:
+            self.assertEqual(action_summary.main(env), 0)
+        preflight.assert_called_once_with(q="", url=self.source, limit=5)
+        self.assertIn("No related work was found", self.report.read_text(encoding="utf-8"))
+
+    def test_manual_run_rejects_invalid_and_missing_inputs_without_a_scan(self):
+        env = {**self.env, "GITHUB_EVENT_NAME": "workflow_dispatch"}
+        with mock.patch.object(action_summary, "public_preflight") as preflight:
+            for event in ({}, {"inputs": {"pull_request_url": "https://github.com.invalid/example/port/pull/42"}},
+                          {"inputs": {"pull_request_url": 42}}):
+                self.event.write_text(json.dumps(event), encoding="utf-8")
+                self.assertIn("Enter a public GitHub pull request URL", action_summary.summary(env))
+        preflight.assert_not_called()
+
+    def test_only_unscoped_observations_do_not_suggest_a_next_step(self):
+        response = {"problems": [], "matches": [], "observations": [
+            {"title": "Unrelated D3D12 adapter selection", "url": "https://github.com/LeonidaReforge/Leonida/pull/135"},
+        ], "next_step": "Investigate the result"}
+        markdown = action_summary.render_report(response)
+        self.assertIn("No related work was found", markdown)
+        self.assertNotIn("Investigate the result", markdown)
 
     def test_unavailable_catalog_is_advisory(self):
         with mock.patch.object(action_summary, "public_preflight", side_effect=URLError("private error")):

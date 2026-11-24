@@ -18,14 +18,21 @@ HEADER = "## PortBridge prior-work summary\n\n"
 UNAVAILABLE = "The public catalog is unavailable. Continue the usual review.\n"
 
 
-def pull_request(event_path):
+def pull_request(event_name, event_path):
     with Path(event_path).open("rb") as stream:
         data = stream.read(EVENT_LIMIT + 1)
     if len(data) > EVENT_LIMIT:
         raise ValueError("GitHub event exceeds size limit")
-    request = json.loads(data)["pull_request"]
-    title, source = request["title"], request["html_url"]
-    if not isinstance(title, str) or not isinstance(source, str) or not PR_URL.fullmatch(source):
+    event = json.loads(data)
+    if event_name == "workflow_dispatch":
+        title, source = "", event["inputs"]["pull_request_url"]
+        if isinstance(source, str):
+            source = source.strip()
+    else:
+        request = event["pull_request"]
+        title, source = request["title"], request["html_url"]
+    if (not isinstance(title, str) or not isinstance(source, str)
+            or len(source) > 500 or not PR_URL.fullmatch(source)):
         raise ValueError("Invalid pull request data")
     return {"q": " ".join(title.split())[:400], "url": source}
 
@@ -92,7 +99,6 @@ def render_report(result):
     groups.extend(source_group("Same revision in another project", [
         match["right"] for match in result["matches"] if match.get("relationship") == "same_revision"
     ]))
-    groups.extend(source_group("Other public observations", result["observations"]))
     if groups:
         lines.extend(groups)
     else:
@@ -119,11 +125,14 @@ def render_report(result):
 
 
 def summary(environ):
-    if environ.get("GITHUB_EVENT_NAME") != "pull_request":
-        return "This summary runs on GitHub pull request events.\n"
+    event_name = environ.get("GITHUB_EVENT_NAME")
+    if event_name not in {"pull_request", "workflow_dispatch"}:
+        return "This summary runs on GitHub pull request events and manual workflow runs.\n"
     try:
-        request = pull_request(environ["GITHUB_EVENT_PATH"])
+        request = pull_request(event_name, environ["GITHUB_EVENT_PATH"])
     except (KeyError, OSError, TypeError, ValueError):
+        if event_name == "workflow_dispatch":
+            return "Enter a public GitHub pull request URL in pull_request_url.\n"
         return "The pull request event could not be read. Continue the usual review.\n"
     try:
         return render_report(public_preflight(**request, limit=5))
