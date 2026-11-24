@@ -2029,6 +2029,15 @@
               "translations": {"en": {"title": "madhyn added the regression check to Continued #1042", "observed": "The PR author added a late-wait check and counted clock reads, crediting fin-github and akimfomin. The author reported the registered test passing 1 of 1 under Wine. The PR is open."}}
             },
             {
+              "kind": "automated_test", "outcome": "mixed",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7140485965",
+              "title": "PortBridge перепроверил добавленный тест",
+              "revision": "79a8f595cb15bb95adcaf248cc2d337e9b025905", "reported_at": "2026-11-24T18:19:38Z",
+              "platforms": ["Windows 11 build 28000", "LLVM-MinGW Clang 23.1.6", "CPU"],
+              "observed": "Штатный вариант прошёл 5 из 5. Без ранней проверки все 5 прогонов обнаружили ошибку и зависли. После локального изменения только теста штатный вариант снова прошёл 5 из 5, а контроль завершался с ожидаемой ошибкой примерно за 1,3 секунды.",
+              "translations": {"en": {"title": "PortBridge retested the added regression check", "observed": "The exact head passed 5 of 5 runs. With the early guard removed, all five runs detected the failure and hung. After a local test-only cleanup the stock variant passed 5 of 5 again, and the control exited with the expected failure in about 1.3 seconds."}}
+            },
+            {
               "kind": "automated_test",
               "outcome": "mixed",
               "url": "https://github.com/ubiquitarianism/leonida/commit/82a2aabcc33bf296b5c2e3e4e7021fa506f8570e",
