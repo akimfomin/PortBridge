@@ -1795,9 +1795,9 @@
               "title": "Сравнение исходной и исправленной версий на AMD от yawn-animals",
               "revision": "9ad7b4f7949ea1d442b96f23bb8c9adff32cfb5f",
               "reported_at": "2026-11-24T16:18:38Z",
-              "platforms": ["AMD Radeon RX 6800 XT (gfx1030)", "Arch Linux 7.3.4", "Mesa 26.3.1", "Native RDNA2 ISA"],
-              "observed": "В трёх нативных прогонах база 45ad349e вернула устаревшее значение 0x064aabcf в слове 7. Правка вернула 0x3579badc и совпала по всем восьми словам в трёх прогонах. Тот же тест через Vulkan прошёл до и после правки.",
-              "translations": {"en": {"title": "yawn-animals' AMD baseline and fix runs", "observed": "Across three native runs, base 45ad349e returned the stale word 7 value 0x064aabcf. The fix returned 0x3579badc and matched all eight words in three runs. The translated Vulkan fixture passed before and after the fix."}}
+              "platforms": ["AMD Radeon RX 6800 XT (gfx1030)", "Arch Linux, kernel 7.3.4", "Mesa 26.3.1", "Native RDNA2 ISA"],
+              "observed": "В трёх нативных прогонах база 45ad349e вернула устаревшее значение 0x064aabcf в слове 7. Правка вернула 0x3579badc и совпала по всем восьми словам в трёх прогонах. Запись результата адаптирована к ABI стенда DRM. Тест через Vulkan прошёл до и после правки.",
+              "translations": {"en": {"title": "yawn-animals' AMD baseline and fix runs", "observed": "Across three native runs, base 45ad349e returned the stale word 7 value 0x064aabcf. The fix returned 0x3579badc and matched all eight words in three runs. The output store was adapted to the DRM harness ABI. The translated Vulkan fixture passed before and after the fix."}}
             }
           ]
         },
