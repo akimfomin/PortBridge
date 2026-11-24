@@ -48,5 +48,11 @@
     "project": "anyxboxx",
     "revision": "95f669fde988efe8e9c074b454dade40b54c8ed4",
     "delivered_url": "https://github.com/LooperSalty/AnyXboxX/issues/145"
+  },
+  {
+    "problem_id": "PB-0018",
+    "project": "continued",
+    "revision": "9ae6f1253ffc45cc1ebf774dcaa630959111ccb0",
+    "delivered_url": "https://github.com/ubiquitarianism/leonida/pull/966"
   }
 ]

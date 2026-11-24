@@ -24,10 +24,10 @@ class LabTest(CatalogFixture):
         self.assertEqual(tasks["xcl-1100-fma"]["evidence_stage"], "author_gpu")
         native = tasks["anyxboxx-133-native-carry"]
         self.assertEqual((native["status"], native["evidence_stage"]), ("awaiting_review", "reviewed_gpu"))
-        self.assertEqual(native["revisions"][0]["sha"], "948339d70d5cdffafef16885c76181c38c53d97e")
+        self.assertEqual(native["revisions"][0]["sha"], "9736508b0d201c641b119d2e4a18fb72f28bdde4")
         self.assertEqual(native["revisions"][1]["sha"], "9923c3bba74f4a7f3249e0c820f2e6821327c1f4")
         self.assertEqual(native["evidence_url"], "https://github.com/akimfomin/PortBridge/issues/19#issuecomment-7136020663")
-        self.assertEqual(native["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136428842")
+        self.assertEqual(native["result_url"], "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7136721736")
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")
             self.assertTrue(task["steps"] and task["expected"] and task["report"])

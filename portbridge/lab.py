@@ -20,11 +20,11 @@ FMA = f"{XCL}/pull/1100"
 FMA_HEAD = "1b3fbc4bc8c3088e69d78f85a2e73f1cccf4df51"
 XCL_SETUP = "https://github.com/akimfomin/xcl/blob"
 CARRY = "https://github.com/LooperSalty/AnyXboxX/pull/133"
-CARRY_HEAD = "948339d70d5cdffafef16885c76181c38c53d97e"
+CARRY_HEAD = "9736508b0d201c641b119d2e4a18fb72f28bdde4"
 CARRY_PROBE = f"{PORTBRIDGE}/blob/main/contrib/rdna2-carry-mask/README.md"
 CARRY_PROBE_REVISION = "9923c3bba74f4a7f3249e0c820f2e6821327c1f4"
 CARRY_REPORT = f"{PORTBRIDGE}/issues/19#issuecomment-7136020663"
-CARRY_HANDOFF = f"{CARRY}#issuecomment-7136428842"
+CARRY_REPLY = f"{CARRY}#issuecomment-7136721736"
 
 
 def revision(label, label_ru, repository, sha):
@@ -236,15 +236,15 @@ TASKS = (
         "requirements": ["Physical AMD RDNA2 with Wave32", "HIP setup that launches native AMDGPU code objects"],
         "status": "awaiting_review", "evidence_stage": "reviewed_gpu", "adoption": "pending",
         "source_url": CARRY, "procedure_url": CARRY_PROBE,
-        "evidence_url": CARRY_REPORT, "result_url": CARRY_HANDOFF,
+        "evidence_url": CARRY_REPORT, "result_url": CARRY_REPLY,
         "revisions": [
             revision("AnyXboxX #133 follow-up", "Версия AnyXboxX #133", "LooperSalty/AnyXboxX", CARRY_HEAD),
             revision("Probe used as the reference", "Исходная проба", "akimfomin/PortBridge", CARRY_PROBE_REVISION),
         ],
-        "why": "The receiving team's decision will show whether the native measurement resolves the review question in #133.",
+        "why": "KainanP cited the native measurement in three docstrings in the open PR. The maintainer's merge decision is pending.",
         "evidence": "Lyrnc ran the PortBridge instruction sequence in a separate HIP harness on a physical gfx1036 Wave32 device. Both carry masks and the comparison control were 00000001 in all three runs.",
         "steps": [
-            "Read Lyrnc's hardware report and the result shared with AnyXboxX #133.",
+            "Read Lyrnc's hardware report and KainanP's reply in AnyXboxX #133.",
             "Check the receiving team's decision and report a link to it in PortBridge #19.",
             "If the team needs a second hardware run, repeat the pinned probe on physical RDNA2 in Wave32.",
         ],
@@ -253,10 +253,10 @@ TASKS = (
         "translations": {"ru": {
             "title": "Рассмотреть результат AnyXboxX по маскам переноса на AMD RDNA2",
             "requirements": ["Физическая видеокарта AMD RDNA2 с Wave32", "HIP с запуском кода AMDGPU напрямую на видеокарте"],
-            "why": "Решение AnyXboxX покажет, достаточно ли аппаратного замера для ответа на вопрос ревью в #133.",
+            "why": "KainanP сослался на аппаратный замер в трёх пояснениях в открытом PR. Решение о слиянии ожидается.",
             "evidence": "Lyrnc запустил последовательность инструкций PortBridge в своём стенде HIP на физической gfx1036 в Wave32. Обе маски переноса и контроль сравнения дали 00000001 во всех трёх прогонах.",
             "steps": [
-                "Прочитайте аппаратный отчёт Lyrnc и результат, переданный в AnyXboxX #133.",
+                "Прочитайте аппаратный отчёт Lyrnc и ответ KainanP в AnyXboxX #133.",
                 "Проверьте решение команды и добавьте ссылку на него в PortBridge #19.",
                 "Если команде понадобится второй прогон, повторите указанную пробу на физической RDNA2 в Wave32.",
             ],
