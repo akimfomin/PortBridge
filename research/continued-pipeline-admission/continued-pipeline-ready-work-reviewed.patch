@@ -1,0 +1,282 @@
+diff --git a/docs/pipeline_check.md b/docs/pipeline_check.md
+index 0de55d4..0d6e649 100644
+--- a/docs/pipeline_check.md
++++ b/docs/pipeline_check.md
+@@ -257,9 +257,11 @@ showed why that matters: several compiles that each needed gigabytes of host RAM
+ modules now share a memory budget (`runtime/test/large_module_gate.h`): each one reserves 512 bytes of RAM per
+ SPIR-V byte, and they enter the driver while their reservations fit three quarters of the memory available when
+ the run starts, up to `--jobs` of them. One large module always gets in when none is compiling, so a module
+-bigger than the whole budget still compiles, alone among the large ones. Small modules are never held back. On
+-Linux the budget is the smaller of `MemAvailable` and the room under the cgroup v2 `memory.max` of the process and
+-every cgroup above it (a container, or `systemd-run -p MemoryMax=...`); on Windows it is `ullAvailPhys`. Where
++bigger than the whole budget still compiles, alone among the large ones. If a large module cannot enter yet, the
++workers defer it and continue looking for small modules. Once a permit is available, the oldest deferred module
++gets first claim on it. On Linux the budget is the smaller of `MemAvailable` and the room under the cgroup v2
++`memory.max` of the process and every cgroup above it (a container, or `systemd-run -p MemoryMax=...`); on Windows
++it is `ullAvailPhys`. Where
+ neither can be read, every large module compiles alone, as before. After each large module, glibc builds call
+ `malloc_trim(0)`: the driver's compiler frees its memory into the arena of the thread it ran on, and glibc kept it
+ there.
+diff --git a/runtime/test/large_module_gate.h b/runtime/test/large_module_gate.h
+index ea805c9..465a150 100644
+--- a/runtime/test/large_module_gate.h
++++ b/runtime/test/large_module_gate.h
+@@ -15,8 +15,11 @@
+ #include <condition_variable>
+ #include <cstdint>
+ #include <cstdio>
++#include <deque>
+ #include <mutex>
++#include <optional>
+ #include <string>
++#include <utility>
+ 
+ #ifdef _WIN32
+ #ifndef NOMINMAX
+@@ -32,7 +35,9 @@ namespace leonida {
+ 
+ inline constexpr uint64_t kBytesPerSpirvByte = 512;
+ 
+-inline uint64_t large_module_estimate(uint64_t spirv_bytes) { return spirv_bytes * kBytesPerSpirvByte; }
++inline uint64_t large_module_estimate(uint64_t spirv_bytes) {
++    return spirv_bytes > UINT64_MAX / kBytesPerSpirvByte ? UINT64_MAX : spirv_bytes * kBytesPerSpirvByte;
++}
+ 
+ #if defined(__linux__)
+ // The first unsigned number in a file ("max" and unreadable files give no value).
+@@ -122,8 +127,7 @@ public:
+     void enter(uint64_t estimate) {
+         std::unique_lock<std::mutex> l(mu_);
+         cv_.wait(l, [&] { return admits_locked(estimate); });
+-        used_ += estimate;
+-        ++inflight_;
++        reserve_locked(estimate);
+     }
+     void leave(uint64_t estimate) {
+         {
+@@ -153,6 +157,17 @@ public:
+         Ticket(const Ticket&) = delete;
+         Ticket& operator=(const Ticket&) = delete;
+         ~Ticket() { release(); }
++        static Ticket try_acquire(LargeModuleGate& gate, uint64_t estimate) {
++            std::lock_guard<std::mutex> lock(gate.mu_);
++            Ticket ticket;
++            if (gate.admits_locked(estimate)) {
++                gate.reserve_locked(estimate);
++                ticket.gate_ = &gate;
++                ticket.estimate_ = estimate;
++            }
++            return ticket;
++        }
++        explicit operator bool() const { return gate_ != nullptr; }
+         void release() {
+             if (!gate_) return;
+             gate_->leave(estimate_);
+@@ -167,7 +182,11 @@ public:
+ private:
+     bool admits_locked(uint64_t estimate) const {
+         if (inflight_ == 0) return true;
+-        return inflight_ < max_inflight_ && used_ + estimate <= budget_;
++        return inflight_ < max_inflight_ && used_ <= budget_ && estimate <= budget_ - used_;
++    }
++    void reserve_locked(uint64_t estimate) {
++        used_ += estimate;
++        ++inflight_;
+     }
+ 
+     const uint64_t budget_;
+@@ -178,4 +197,55 @@ private:
+     unsigned inflight_ = 0;
+ };
+ 
++// Workers classify each new item after opening it. If a large item cannot enter, leave it here and
++// take further work. The oldest deferred module gets first claim on a permit when it fits.
++class LargeModuleWorkQueue {
++public:
++    struct Claim {
++        std::size_t index;
++        uint64_t estimate = 0;
++        LargeModuleGate::Ticket ticket{};
++    };
++
++    LargeModuleWorkQueue(LargeModuleGate& gate, std::size_t size) : gate_(gate), size_(size) {}
++
++    bool admit_or_defer(Claim& claim, uint64_t estimate) {
++        if (claim.estimate != estimate) claim.ticket.release();  // the file size may change after deferral
++        claim.estimate = estimate;
++        if (!estimate || claim.ticket) return true;
++        std::lock_guard<std::mutex> lock(mu_);
++        if (deferred_.empty()) claim.ticket = LargeModuleGate::Ticket::try_acquire(gate_, estimate);
++        if (claim.ticket) return true;
++        deferred_.emplace_back(claim.index, estimate);
++        return false;
++    }
++
++    std::optional<Claim> take() {
++        std::lock_guard<std::mutex> lock(mu_);
++        if (!deferred_.empty()) {
++            const auto [index, estimate] = deferred_.front();
++            auto ticket = LargeModuleGate::Ticket::try_acquire(gate_, estimate);
++            if (ticket) {
++                deferred_.pop_front();
++                return Claim{index, estimate, std::move(ticket)};
++            }
++        }
++        if (next_ < size_) return Claim{next_++};
++        if (deferred_.empty()) return std::nullopt;
++        const auto [index, estimate] = deferred_.front();
++        // All fresh items have been claimed. Keep this turn with the head until its permit is available.
++        // Permit release takes only the gate lock, and a worker releases its claim before taking the next.
++        LargeModuleGate::Ticket ticket(gate_, estimate);
++        deferred_.pop_front();
++        return Claim{index, estimate, std::move(ticket)};
++    }
++
++private:
++    LargeModuleGate& gate_;
++    const std::size_t size_;
++    std::size_t next_ = 0;
++    std::mutex mu_;
++    std::deque<std::pair<std::size_t, uint64_t>> deferred_;
++};
++
+ }  // namespace leonida
+diff --git a/runtime/test/large_module_gate_test.cpp b/runtime/test/large_module_gate_test.cpp
+index d114095..3e06161 100644
+--- a/runtime/test/large_module_gate_test.cpp
++++ b/runtime/test/large_module_gate_test.cpp
+@@ -75,6 +75,71 @@ static int ticket_releases() {
+     return 0;
+ }
+ 
++static int deferred_modules_leave_workers_for_small_jobs() {
++    LargeModuleGate gate(10, 2);
++    leonida::LargeModuleWorkQueue work(gate, 5);
++    auto first = work.take();
++    CHECK(first && first->index == 0 && !first->ticket);
++    CHECK(work.admit_or_defer(*first, 9));
++    CHECK(first->ticket && gate.inflight() == 1);
++    for (std::size_t index : {1u, 2u}) {
++        auto large = work.take();
++        CHECK(large && large->index == index && !large->ticket);
++        CHECK(!work.admit_or_defer(*large, 6));
++    }
++    auto small = work.take();
++    CHECK(small && small->index == 3 && !small->ticket && gate.inflight() == 1);
++    CHECK(work.admit_or_defer(*small, 0));
++
++    first->ticket.release();
++    auto oldest = work.take();
++    CHECK(oldest && oldest->index == 1 && oldest->ticket && oldest->estimate == 6);
++    small = work.take();
++    CHECK(small && small->index == 4 && !small->ticket && gate.inflight() == 1);
++    // This fresh job would fit alongside the first, but must not jump the already deferred job.
++    CHECK(!work.admit_or_defer(*small, 3));
++    oldest->ticket.release();
++
++    auto last = work.take();
++    CHECK(last && last->index == 2 && last->ticket && last->estimate == 6);
++    auto follower = work.take();
++    CHECK(follower && follower->index == 4 && follower->ticket && follower->estimate == 3);
++    last->ticket.release();
++    follower->ticket.release();
++    CHECK(!work.take());
++    CHECK(gate.inflight() == 0);
++    return 0;
++}
++
++static int changed_estimate_releases_and_defers_again() {
++    LargeModuleGate gate(10, 3);
++    leonida::LargeModuleWorkQueue work(gate, 3);
++    auto holder = LargeModuleGate::Ticket::try_acquire(gate, 7);
++    auto first = work.take();
++    CHECK(first && first->index == 0 && !work.admit_or_defer(*first, 6));
++    auto second = work.take();
++    CHECK(second && second->index == 1 && !work.admit_or_defer(*second, 5));
++    holder.release();
++    holder = LargeModuleGate::Ticket::try_acquire(gate, 3);
++    CHECK(holder);
++    auto grown = work.take();
++    CHECK(grown && grown->index == 0 && grown->ticket && grown->estimate == 6);
++    CHECK(!work.admit_or_defer(*grown, 8));
++    CHECK(!grown->ticket && gate.inflight() == 1);
++    auto next = work.take();
++    CHECK(next && next->index == 1 && next->ticket);
++    auto small = work.take();
++    CHECK(small && small->index == 2 && work.admit_or_defer(*small, 0));
++    next->ticket.release();
++    holder.release();
++    grown = work.take();
++    CHECK(grown && grown->index == 0 && grown->ticket && grown->estimate == 8);
++    CHECK(work.admit_or_defer(*grown, 0));  // a later retry sees the same file shrink to a small module
++    CHECK(!grown->ticket && gate.inflight() == 0);
++    CHECK(!work.take());
++    return 0;
++}
++
+ static int threads_never_exceed_the_budget() {
+     constexpr uint64_t kBudget = 10;
+     LargeModuleGate gate(kBudget, 3);
+@@ -104,6 +169,10 @@ static int threads_never_exceed_the_budget() {
+ 
+ static int estimate_and_memory_query() {
+     CHECK(leonida::large_module_estimate(4u << 20) == (uint64_t(4) << 20) * leonida::kBytesPerSpirvByte);
++    CHECK(leonida::large_module_estimate(UINT64_MAX) == UINT64_MAX);
++    LargeModuleGate gate(10, 2);
++    auto oversized = LargeModuleGate::Ticket::try_acquire(gate, UINT64_MAX);
++    CHECK(oversized && !gate.admits(2));
+ #if defined(__linux__) || defined(_WIN32)
+     CHECK(leonida::available_memory_bytes() > 0);   // Linux: MemAvailable; Windows: ullAvailPhys
+ #endif
+@@ -161,6 +230,8 @@ int main() {
+     if (int r = oversized_module_still_gets_in_alone()) return r;
+     if (int r = max_inflight_zero_means_one()) return r;
+     if (int r = ticket_releases()) return r;
++    if (int r = deferred_modules_leave_workers_for_small_jobs()) return r;
++    if (int r = changed_estimate_releases_and_defers_again()) return r;
+     if (int r = threads_never_exceed_the_budget()) return r;
+     if (int r = estimate_and_memory_query()) return r;
+     std::puts("large_module_gate: ok");
+diff --git a/runtime/test/vk_pipeline_check.cpp b/runtime/test/vk_pipeline_check.cpp
+index a237f60..9888480 100644
+--- a/runtime/test/vk_pipeline_check.cpp
++++ b/runtime/test/vk_pipeline_check.cpp
+@@ -1437,6 +1437,8 @@ int main(int argc, char** argv) {
+     leonida::LargeModuleGate large_gate(
+         large_parallel == 0 ? available_memory / 4 * 3 : UINT64_MAX,
+         large_parallel == 0 ? jobs : std::min<unsigned>(large_parallel, jobs));
++    const bool budgeted_work = large_module_bytes && !large_exclusive;
++    leonida::LargeModuleWorkQueue work_queue(large_gate, work.size());
+     if (large_module_bytes) {
+         if (large_exclusive)
+             std::fprintf(stderr, "large modules (over %zu bytes): one at a time, the other threads waiting\n",
+@@ -1580,7 +1582,11 @@ int main(int argc, char** argv) {
+     };
+ 
+     auto worker = [&] {
+-        for (size_t k; (k = next++) < work.size();) {
++        for (;;) {
++            using Claim = leonida::LargeModuleWorkQueue::Claim;
++            auto claim = budgeted_work ? work_queue.take() : std::optional<Claim>{Claim{next++}};
++            if (!claim || claim->index >= work.size()) break;
++            const size_t k = claim->index;
+             const std::string& name = *work[k].first;
+             const ShaderMeta& meta = *work[k].second;
+             const std::string& stage = meta.stage;
+@@ -1631,13 +1637,12 @@ int main(int argc, char** argv) {
+             const bool isolated = large_module_bytes && std::cmp_greater(file_size, large_module_bytes);
+             std::unique_lock exclusive(compile_gate, std::defer_lock);
+             std::shared_lock parallel(compile_gate, std::defer_lock);
+-            leonida::LargeModuleGate::Ticket large_ticket;   // left after the module and its pipeline are gone
+             if (large_exclusive) {
+                 if (isolated) exclusive.lock();
+                 else if (large_module_bytes) parallel.lock();
+-            } else if (isolated) {
+-                large_ticket = leonida::LargeModuleGate::Ticket(large_gate,
+-                                                                leonida::large_module_estimate(file_size));
++            } else {
++                const uint64_t estimate = isolated ? leonida::large_module_estimate(file_size) : 0;
++                if (!work_queue.admit_or_defer(*claim, estimate)) continue;
+             }
+             {   // in flight from here: vkCreateShaderModule can also take long or die in the driver
+                 std::lock_guard<std::mutex> g(mu);

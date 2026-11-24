@@ -1,0 +1,105 @@
+// CPU-only probe. Production worker selection and admission are inserted by production_regression.py.
+#include <atomic>
+#include <condition_variable>
+#include <cstdio>
+#include <ios>
+#include <mutex>
+#include <shared_mutex>
+#include <thread>
+#include <utility>
+#include <vector>
+
+void record_wait_for_test();
+#include "large_module_gate.h"
+
+enum class First { unset, waited_for_permit, small, large };
+
+class Observer {
+public:
+    void record(First event) {
+        std::lock_guard lock(mu_);
+        if (event_ == First::unset) event_ = event;
+        if (event == First::waited_for_permit) got_to_gate_ = true;
+        ready_.notify_one();
+    }
+
+    First wait() {
+        std::unique_lock lock(mu_);
+        ready_.wait(lock, [&] { return event_ != First::unset; });
+        return event_;
+    }
+
+    void wait_for_gate() {
+        std::unique_lock lock(mu_);
+        ready_.wait(lock, [&] { return got_to_gate_; });
+    }
+
+private:
+    std::mutex mu_;
+    std::condition_variable ready_;
+    First event_ = First::unset;
+    bool got_to_gate_ = false;
+};
+
+thread_local Observer* active_observer = nullptr;
+
+void record_wait_for_test() {
+    if (active_observer) active_observer->record(First::waited_for_permit);
+}
+
+struct Started {
+    std::size_t index;
+    bool exclusive;
+    bool shared;
+    bool operator==(const Started&) const = default;
+};
+
+bool one_case(const char* name, std::vector<std::streamoff> work, std::size_t large_module_bytes,
+              bool large_exclusive, uint64_t budget, bool hold, std::vector<Started> expected) {
+    leonida::LargeModuleGate large_gate(budget, 2);
+    leonida::LargeModuleGate::Ticket holder;
+    if (hold) holder = leonida::LargeModuleGate::Ticket(large_gate, leonida::large_module_estimate(8));
+    std::shared_mutex compile_gate;
+    std::atomic<std::size_t> next{0};
+    Observer observer;
+    std::vector<Started> started;
+@QUEUE_SETUP@
+@WORKER_LOOP@
+            const std::streamoff file_size = work[k];
+@GATE_STEP@
+            started.push_back({k, exclusive.owns_lock(), parallel.owns_lock()});
+            observer.record(isolated ? First::large : First::small);
+        }
+    };
+
+    std::thread thread([&] {
+        active_observer = &observer;
+        worker();
+        active_observer = nullptr;
+    });
+    const First first = observer.wait();
+    if (hold) observer.wait_for_gate();  // also force the candidate through the exhausted-queue waiter
+    holder.release();
+    thread.join();
+    const bool order_ok = started == expected;
+    const bool event_ok = !hold || first == First::small;
+    const bool empty = large_gate.inflight() == 0;
+    const bool ok = order_ok && event_ok && empty;
+    const char* event = first == First::waited_for_permit ? "waited" : first == First::small ? "small" : "large";
+    std::printf("%s: %s, first=%s, order=", name, ok ? "PASS" : "FAIL", event);
+    for (const Started& job : started) std::printf(" %zu", job.index);
+    std::printf(", tickets returned=%s\n", empty ? "yes" : "no");
+    return ok;
+}
+
+int main() {
+    const bool budgeted = one_case("saturated", {6, 1}, 4, false, leonida::large_module_estimate(10), true,
+                                   {{1, false, false}, {0, false, false}});
+    const bool generous = one_case("room available", {6, 1, 8}, 4, false, UINT64_MAX, false,
+                                   {{0, false, false}, {1, false, false}, {2, false, false}});
+    const bool disabled = one_case("gate disabled", {6, 1, 8}, 0, false, UINT64_MAX, false,
+                                   {{0, false, false}, {1, false, false}, {2, false, false}});
+    const bool exclusive = one_case("exclusive", {6, 1, 8}, 4, true, UINT64_MAX, false,
+                                    {{0, true, false}, {1, false, true}, {2, true, false}});
+    return budgeted && generous && disabled && exclusive ? 0 : 1;
+}

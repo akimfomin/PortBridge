@@ -1,0 +1,24 @@
+{
+  "revision": "507029d1ea8dc65f1fabb68739605d6821843bf1",
+  "fixture": "production selection and admission statements, synthetic job classification and completion",
+  "results": {
+    "baseline": {
+      "exit": 1,
+      "report": [
+        "saturated: FAIL, first=waited, order= 0 1, tickets returned=yes",
+        "room available: PASS, first=large, order= 0 1 2, tickets returned=yes",
+        "gate disabled: PASS, first=small, order= 0 1 2, tickets returned=yes",
+        "exclusive: PASS, first=large, order= 0 1 2, tickets returned=yes"
+      ]
+    },
+    "candidate": {
+      "exit": 0,
+      "report": [
+        "saturated: PASS, first=small, order= 1 0, tickets returned=yes",
+        "room available: PASS, first=large, order= 0 1 2, tickets returned=yes",
+        "gate disabled: PASS, first=small, order= 0 1 2, tickets returned=yes",
+        "exclusive: PASS, first=large, order= 0 1 2, tickets returned=yes"
+      ]
+    }
+  }
+}

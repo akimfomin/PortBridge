@@ -1,0 +1,7 @@
+# Continued pipeline admission findings
+
+A bounded CPU experiment against Continued `507029d1ea8dc65f1fabb68739605d6821843bf1` shows the worker can leave a later small item queued while it waits for an earlier large item. The draft defers waiting work and lets small items use available workers. The [review](SOURCE-REVIEW.md) and [reproducible observations](production-regression.json) cover the original and corrected selection paths, with unchanged scheduling controls and permit lifetimes. The Windows checker builds. Vulkan/driver throughput and memory measurements remain open.
+
+Clone [Continued](https://github.com/ubiquitarianism/leonida), create an isolated checkout at the pinned commit, and apply [the reviewed patch](continued-pipeline-ready-work-reviewed.patch). Copy [the regression script](production_regression.py) and [its input template](worker_probe.cpp.in) into `local-verification/` in that checkout. Run `python -I -B local-verification/production_regression.py PATH_TO_CLANGXX`. The test uses mock sizes and jobs and the actual C++ worker selection/admission statements. It needs no GPU, game files, or Vulkan call. The patch and regression code use Continued's GPL-3.0-or-later terms.
+
+Related work concerns the original driver compilation memory investigation and child-process memory ceilings. [#636](https://github.com/ubiquitarianism/leonida/issues/636) · [#1391](https://github.com/ubiquitarianism/leonida/pull/1391) · [#1209](https://github.com/ubiquitarianism/leonida/pull/1209)
