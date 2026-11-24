@@ -705,6 +705,23 @@ function activityPanel(title, className = '') {
   return panel;
 }
 
+function activityTimeline(title, events, limit, empty) {
+  const panel = activityPanel(title);
+  function entries(items) {
+    const rows = element('ol', 'activity-timeline');
+    rows.append(...items.map(activityEntry));
+    return rows;
+  }
+  panel.append(events.length ? entries(events.slice(0, limit)) : element('p', 'activity-note', empty));
+  if (events.length > limit) {
+    const more = element('details', 'activity-expand');
+    const remaining = numberFormat.format(events.length - limit);
+    more.append(element('summary', '', t(`Show ${remaining} more`, `Показать ещё ${remaining}`)), entries(events.slice(limit)));
+    panel.append(more);
+  }
+  return panel;
+}
+
 function showActivity(data, quiet = false) {
   const {as_of, window_start, ...observed} = data;
   const signature = JSON.stringify(observed);
@@ -733,20 +750,13 @@ function showActivity(data, quiet = false) {
   stats.append(metrics, element('p', 'activity-note', t('Counts cover indexed public sources. Reviewed results include failed tests.',
     'Подсчёт по открытым источникам в индексе. Проверенные результаты включают неудачные прогоны.')));
   const columns = element('div', 'activity-columns');
-  const feed = activityPanel(t('Recent changes', 'Свежие изменения'));
   const events = list(data.events);
-  function timeline(items) {
-    const entries = element('ol', 'activity-timeline');
-    entries.append(...items.map(activityEntry));
-    return entries;
-  }
-  feed.append(events.length ? timeline(events.slice(0, 8)) : element('p', 'activity-note', t('No recent changes in the index.', 'В индексе нет свежих изменений.')));
-  if (events.length > 8) {
-    const more = element('details', 'activity-expand');
-    const remaining = numberFormat.format(events.length - 8);
-    more.append(element('summary', '', t(`Show ${remaining} more`, `Показать ещё ${remaining}`)), timeline(events.slice(8)));
-    feed.append(more);
-  }
+  const results = activityTimeline(t('Reviewed results', 'Проверенные результаты'),
+    events.filter((event) => event.kind === 'verified_result'), 3,
+    t('No recent reviewed tests in the catalog.', 'За этот период в каталоге нет проверенных тестов.'));
+  const feed = activityTimeline(t('Recent changes', 'Свежие изменения'),
+    events.filter((event) => event.kind !== 'verified_result'), 8,
+    t('No recent changes in the index.', 'В индексе нет свежих изменений.'));
   const opportunities = activityPanel(t('Where you can help', 'Где можно помочь'), 'activity-actions');
   const suggestions = list(data.opportunities).slice(0, 3);
   if (suggestions.length) opportunities.append(...suggestions.map(activityOpportunity));
@@ -760,13 +770,13 @@ function showActivity(data, quiet = false) {
     opportunities.append(help);
   }
   opportunities.append(internalLink(t('Browse cross-project leads', 'Смотреть задачи между командами'), '#/partial', 'activity-more'));
-  columns.append(feed, opportunities);
+  columns.append(results, opportunities);
   const teams = activityPanel(t('Across the projects', 'По проектам'), 'activity-projects');
   const teamList = element('ul', 'activity-team-list');
   teamList.append(...list(data.projects).map(activityProject));
   if (teamList.childElementCount) teams.append(teamList);
   else teams.append(element('p', 'activity-note', t('Project data is unavailable.', 'Данные о проектах недоступны.')));
-  board.append(stats, columns, teams);
+  board.append(stats, columns, feed, teams);
   viewStatus.textContent = '';
   content.replaceChildren(board);
   return true;
