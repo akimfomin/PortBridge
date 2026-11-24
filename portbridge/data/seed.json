@@ -331,6 +331,49 @@
       ]
     },
     {
+      "id": "PB-0006",
+      "recorded_at": "2026-11-24T11:34:40Z",
+      "title": "Сравнение модификаторов FMA в Scarlett Layer и XCL",
+      "summary": "Один синтетический вход проверили в Scarlett Layer и XCL. PortBridge добавил в XCL отдельный тест сочетания abs, neg и clamp и передал его в черновом PR.",
+      "status": "verified",
+      "tags": ["v_fma_f32", "abs", "neg", "clamp", "D3D12"],
+      "translations": {"en": {
+        "title": "FMA modifiers in Scarlett Layer and XCL",
+        "summary": "The same synthetic input was checked in Scarlett Layer and XCL. PortBridge added an XCL test for the combined abs, neg and clamp modifiers and submitted it in a draft PR.",
+        "tags": ["v_fma_f32", "abs", "neg", "clamp", "D3D12"]
+      }},
+      "platforms": ["Windows", "D3D12", "WARP", "NVIDIA RTX 4070 Ti SUPER"],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "scarlett-layer",
+          "status": "verified",
+          "summary": "Пример Scarlett Layer сравнивает выходы 64 потоков с эталонной формулой при допуске 1e-5.",
+          "translations": {"en": {"summary": "Scarlett Layer's original case compares 64 lane outputs with a reference formula at a tolerance of 1e-5."}},
+          "source_refs": [
+            {"title": "Исходный пример Scarlett Layer", "url": "https://github.com/jadeowaowa/scarlett-layer/blob/0e436b3e1c654765b193c1cb705918fbf101b10b/src/tests/scarlett_tests/tests_rdna2_oracle.cpp#L31-L46", "translations": {"en": {"title": "Original Scarlett Layer case"}}}
+          ],
+          "evidence": [
+            {"kind": "automated_test", "outcome": "passed", "url": "https://github.com/jadeowaowa/scarlett-layer/actions/runs/45297729955/job/138122279475", "title": "Эталон Scarlett Layer прошёл на WARP", "revision": "0e436b3e1c654765b193c1cb705918fbf101b10b", "reported_at": "2026-11-24T00:32:12Z", "platforms": ["Windows", "Microsoft WARP"], "observed": "Публичный прогон прошёл 36 проверок на WARP, включая Rdna2OracleAluAndCbvDiffE2E с исходным примером FMA.",
+              "translations": {"en": {"title": "Scarlett Layer's reference run passed on WARP", "observed": "The public run passed 36 WARP checks, including Rdna2OracleAluAndCbvDiffE2E with the original FMA case."}}}
+          ]
+        },
+        {
+          "project": "xcl",
+          "status": "verified",
+          "summary": "В XCL совпали все 64 результата и все 64 контрольных значения в каждом из двух режимов. Черновик XCL #1100 доступен для ревью и повторного прогона.",
+          "translations": {"en": {"summary": "All 64 outputs and 64 plain controls matched in each of two XCL modes. XCL #1100 is available as a draft for review and retesting."}},
+          "source_refs": [
+            {"title": "Тестовый PR XCL #1100", "url": "https://github.com/ivall/xcl/pull/1100", "translations": {"en": {"title": "XCL test PR #1100"}}}
+          ],
+          "evidence": [
+            {"kind": "independent", "outcome": "passed", "url": "https://github.com/ivall/xcl/pull/1100", "title": "PortBridge повторил тест Scarlett Layer в XCL", "revision": "c612b62656fb30eca308fd461209339f6a7c7d32", "reported_at": "2026-11-24T11:34:40Z", "platforms": ["Windows 11", "NVIDIA RTX 4070 Ti SUPER", "D3D12"], "observed": "64 из 64 выходов и 64 из 64 контрольных значений совпали в Wave32 и разделённом Wave64. Для аппаратного Wave64 нужен отдельный прогон.",
+              "translations": {"en": {"title": "PortBridge replayed the Scarlett Layer check in XCL", "observed": "All 64 outputs and 64 plain controls matched in Wave32 and split Wave64. Native Wave64 still needs a separate run."}}}
+          ]
+        }
+      ]
+    },
+    {
       "id": "PB-044801754884724660835754613454516035131",
       "recorded_at": "2026-11-24T11:13:37Z",
       "title": "Проверка классификации загрузок D16 в Reforge и Continued",

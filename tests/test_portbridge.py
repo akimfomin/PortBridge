@@ -193,7 +193,7 @@ class CatalogTest(CatalogFixture):
         self.assertEqual([p["id"] for p in self.catalog.problems(q="PR #20")], ["PB-0002"])
         self.assertEqual([p["id"] for p in self.catalog.problems(q="ПРЯМОУГОЛЬНИКОВ", project="continued")],
                          ["PB-0001"])
-        self.assertEqual([p["id"] for p in self.catalog.problems(project="xcl")], ["PB-0004", "PB-0005"])
+        self.assertEqual([p["id"] for p in self.catalog.problems(project="xcl")], ["PB-0004", "PB-0005", "PB-0006"])
         self.assertEqual([p["id"] for p in self.catalog.problems(status="investigating")], ["PB-0004"])
         opportunities = {p["id"] for p in self.catalog.problems(partial=True)}
         self.assertTrue({"PB-0001", "PB-0002"} <= opportunities)
@@ -345,7 +345,7 @@ class LocalAPITest(CatalogFixture):
         entries = feed.findall("{http://www.w3.org/2005/Atom}entry")
         ids = {entry.findtext("{http://www.w3.org/2005/Atom}id") for entry in entries}
         self.assertEqual(ids, {
-            "urn:portbridge:PB-0001", "urn:portbridge:PB-0002", "urn:portbridge:PB-0005",
+            "urn:portbridge:PB-0001", "urn:portbridge:PB-0002", "urn:portbridge:PB-0005", "urn:portbridge:PB-0006",
             "urn:portbridge:PB-044801754884724660835754613454516035131",
         })
         _, _, body = self.request("GET", "/api/v1/outreach")
