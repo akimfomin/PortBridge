@@ -6,6 +6,7 @@ import time
 
 from .exchange_fields import Conflict, OWNER, PermissionDenied, REPOSITORY, _source, _text, _timestamp
 from .github import find_public_projects
+from .matching import current_repository
 from .office import source_repo
 
 
@@ -38,11 +39,11 @@ def repository(value):
     owner, _, name = value.partition("/")
     if not OWNER.fullmatch(owner) or not REPOSITORY.fullmatch(name) or name in {".", ".."}:
         raise ValueError("use a GitHub owner/repository name")
-    return value.casefold()
+    return current_repository(value).casefold()
 
 
 def mentions(projects, records):
-    connected = {project["repo"].casefold() for project in projects}
+    connected = {current_repository(project["repo"]).casefold() for project in projects}
     cues = defaultdict(dict)
     for record in records:
         if record["kind"] not in {"issue", "pr", "commit"}:
@@ -125,7 +126,7 @@ class DiscoveryStore:
         connected = catalog.projects()
         suggestions = [entry for entry in mentions(connected, catalog.observations(limit=None))
                        if entry["repo"] not in known]
-        excluded = known | {entry["repo"].casefold() for entry in suggestions + connected}
+        excluded = known | {current_repository(entry["repo"]).casefold() for entry in suggestions + connected}
         candidates = searched_projects(searched, excluded)
         return {"projects": (tracked + suggestions + candidates)[:60],
                 "viewer": {"name": actor["name"], "scopes": actor["scopes"]}}
@@ -134,7 +135,8 @@ class DiscoveryStore:
         if payload.keys() != {"repo", "evidence_url", "next_step"}:
             raise ValueError("invalid project nomination fields")
         repo, url = repository(payload["repo"]), _source(payload["evidence_url"])
-        if source_repo(url) != repo or repo in {project["repo"].casefold() for project in catalog.projects()}:
+        if (current_repository(source_repo(url)) != repo
+                or repo in {current_repository(project["repo"]).casefold() for project in catalog.projects()}):
             raise ValueError("provide a source in a repository outside the connected catalog")
         next_step = _text(payload["next_step"], "next_step", 400)
         with self.exchange._connect() as db:

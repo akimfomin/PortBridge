@@ -1,15 +1,17 @@
 """Reviewed volunteer checks with public procedures and pinned sources."""
 
 from copy import deepcopy
+import re
 
 
 CHECKED_AT = "2026-11-24T15:51:11Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review")
+TASK_ID_PATTERN = r"^[a-z0-9-]{1,80}$"
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
 CONTINUED = "https://github.com/ubiquitarianism/leonida"
 REFORGE = "https://github.com/LeonidaReforge/Leonida"
-XCL = "https://github.com/ivall/xcl"
+XCL = "https://github.com/xcl-dev/xcl"
 D16_REVIEW = f"{CONTINUED}/pull/701"
 D16_REPRODUCTION = f"{D16_REVIEW}#issuecomment-7131731339"
 RECT_REPORT = f"{CONTINUED}/pull/511#issuecomment-7130673446"
@@ -25,6 +27,9 @@ CARRY_PROBE = f"{PORTBRIDGE}/blob/main/contrib/rdna2-carry-mask/README.md"
 CARRY_PROBE_REVISION = "9923c3bba74f4a7f3249e0c820f2e6821327c1f4"
 CARRY_REPORT = f"{PORTBRIDGE}/issues/19#issuecomment-7136020663"
 CARRY_REPLY = f"{CARRY}#issuecomment-7136721736"
+DRAW_SEQUENCE = f"{CONTINUED}/pull/511"
+DRAW_HEAD = "88658f1b3fcdca2231358c18d09253a213dc8533"
+DRAW_GUIDE = f"{PORTBRIDGE}/tree/main/contrib/continued-repeated-draw"
 
 
 def revision(label, label_ru, repository, sha):
@@ -264,21 +269,59 @@ TASKS = (
             "report": ["Версия PR, видеокарта, драйвер, ОС и версия ассемблера", "Полный вывод с масками переноса e32 и e64"],
         }},
     },
+    {
+        "id": "continued-511-repeated-draw",
+        "priority": 7,
+        "title": "Check repeated draws in Continued on AMD",
+        "projects": ["continued", "scenegate-vi"],
+        "equipment": ["amd"],
+        "os": ["Windows"],
+        "requirements": ["AMD Vulkan adapter", "Continued C++ build tools", "Vulkan SDK"],
+        "status": "needs_run", "evidence_stage": "author_gpu", "adoption": "pending",
+        "source_url": DRAW_SEQUENCE, "procedure_url": DRAW_GUIDE,
+        "evidence_url": DRAW_GUIDE, "result_url": DRAW_SEQUENCE,
+        "revisions": [revision("Continued #511", "Continued #511", "ubiquitarianism/leonida", DRAW_HEAD)],
+        "why": "The pixel test compares 32 changing frames in both pipeline modes. A second GPU and the standard project build can verify the result.",
+        "evidence": "PortBridge ran 3/3 positive checks and 3/3 omission controls in each mode on an RTX 4070 Ti SUPER.",
+        "steps": [
+            "Check that Continued still needs the run and use the pinned revision in a separate checkout.",
+            "Inspect and apply the synthetic test patch, then build d3d12_draw_test with the official setup.",
+            "Run the normal sequence and the omitted-draw control with LEONIDA_LAZY_PSO set to 0 and to 1.",
+        ],
+        "expected": "Both modes pass 32 frames of 4,096 RGBA8 pixels. Omitting draw 8 returns 44 with a mismatch at frame 7, pixel (0,0).",
+        "report": ["Commit, AMD GPU, driver, Windows build and toolchain", "Both pipeline modes, positive output and the omission control"],
+        "translations": {"ru": {
+            "title": "Проверить последовательность кадров Continued на AMD",
+            "requirements": ["Видеокарта AMD с Vulkan", "Инструменты сборки Continued", "Vulkan SDK"],
+            "why": "Проверка сравнивает 32 кадра с меняющимся цветом в двух режимах. Нужен повтор на другой видеокарте и со штатной сборкой проекта.",
+            "evidence": "На RTX 4070 Ti SUPER в каждом режиме прошли 3 из 3 обычных прогонов и 3 из 3 намеренно пропущенных отрисовок были обнаружены.",
+            "steps": [
+                "Сверьте, нужна ли проверка, и откройте указанную версию Continued в отдельной копии.",
+                "Прочитайте и примените патч синтетического теста. Соберите d3d12_draw_test по инструкции проекта.",
+                "В каждом режиме LEONIDA_LAZY_PSO от 0 до 1 запустите обычный тест и вариант с пропущенной отрисовкой.",
+            ],
+            "expected": "В обоих режимах совпадают все пиксели 32 кадров по 4 096 пикселей. При пропуске восьмой отрисовки тест возвращает код 44 и расхождение в кадре 7, пиксель (0,0).",
+            "report": ["Коммит, видеокарта AMD, драйвер, версия Windows и инструменты сборки", "Результаты в обоих режимах и контроль с пропущенной отрисовкой"],
+        }},
+    },
 )
 
 
-def filter_lab(payload, *, equipment="", status=""):
+def filter_lab(payload, *, equipment="", status="", task=""):
     if equipment and equipment not in EQUIPMENT:
         raise ValueError(f"equipment must be one of {', '.join(EQUIPMENT)}")
     if status and status not in STATUSES:
         raise ValueError(f"status must be one of {', '.join(STATUSES)}")
+    if not isinstance(task, str) or task and not re.fullmatch(TASK_ID_PATTERN, task):
+        raise ValueError("task must be a Test Lab identifier")
     return {**payload, "tasks": [
-        task for task in payload["tasks"]
-        if (not equipment or equipment in task["equipment"]) and (not status or status == task["status"])
+        entry for entry in payload["tasks"]
+        if (not equipment or equipment in entry["equipment"]) and (not status or status == entry["status"])
+        and (not task or task == entry["id"])
     ]}
 
 
-def build_lab(*, equipment="", status=""):
+def build_lab(*, equipment="", status="", task=""):
     payload = {"checked_at": CHECKED_AT, "filters": {"equipment": list(EQUIPMENT), "status": list(STATUSES)},
                "tasks": deepcopy(TASKS)}
-    return filter_lab(payload, equipment=equipment, status=status)
+    return filter_lab(payload, equipment=equipment, status=status, task=task)

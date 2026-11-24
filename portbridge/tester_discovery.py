@@ -12,9 +12,9 @@ from .github import API, NoRedirect
 
 
 # GitHub places pull request conversation comments under its issues endpoint.
-XCL_GPU = ("ivall/xcl", "issues", 42)
-XCL_PERMUTE = ("ivall/xcl", "pull", 925)
-XCL_FMA = ("ivall/xcl", "pull", 1100)
+XCL_GPU = ("xcl-dev/xcl", "issues", 42)
+XCL_PERMUTE = ("xcl-dev/xcl", "pull", 925)
+XCL_FMA = ("xcl-dev/xcl", "pull", 1100)
 REFORGE_PRESENT = ("LeonidaReforge/Leonida", "pull", 86)
 CONTINUED_RECT = ("ubiquitarianism/leonida", "pull", 207)
 CONTINUED_LAZY = ("ubiquitarianism/leonida", "pull", 511)

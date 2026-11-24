@@ -51,24 +51,59 @@ class GitHubSyncTest(unittest.TestCase):
         catalog = Catalog(self.db_path, DEFAULT_SEED)
         pr = "https://github.com/Marvisak/VIctory/pull/571"
         issue = "https://github.com/ivall/xcl/issues/772"
+        current_issue = "https://github.com/xcl-dev/xcl/issues/772"
 
         def read_exact(url, resource, etag):
             lookup = {
                 "https://api.github.com/repos/Marvisak/VIctory/pulls/571": (571, "Implement LDS byte reads"),
-                "https://api.github.com/repos/ivall/xcl/issues/772": (772, "Check LDS on Wave64"),
+                "https://api.github.com/repos/xcl-dev/xcl/issues/772": (772, "Check LDS on Wave64"),
             }
             number, title = lookup[url]
             return {"number": number, "title": title, "state": "open", "head": {"sha": self.sha}}, {}
 
         with patch.object(github._Sync, "_request", side_effect=read_exact) as network:
-            result = sync_catalog(catalog, sources=[pr, issue, pr.lower()])["targeted_refresh"]
+            result = sync_catalog(catalog, sources=[pr, issue, pr.lower(), current_issue])["targeted_refresh"]
             self.assertEqual(network.call_count, 2)
             self.assertEqual(result["observations_saved"], 2)
             self.assertEqual(result["warnings"], [])
             with self.assertRaisesRegex(ValueError, "configured public"):
                 sync_catalog(catalog, sources=[pr, "https://github.com/other/project/issues/2"])
             self.assertEqual(network.call_count, 2)
-        self.assertEqual({record["url"] for record in catalog.observations()}, {pr, issue})
+        self.assertEqual({record["url"] for record in catalog.observations()}, {pr, current_issue})
+
+    def test_pinned_revision_and_archived_observations_accept_both_xcl_names(self):
+        catalog = Catalog(self.db_path, DEFAULT_SEED)
+        legacy = "https://github.com/ivall/xcl/pull/1100"
+        current = "https://github.com/xcl-dev/xcl/pull/1100"
+        rows = ((legacy, "open", self.sha, "2026-11-24T17:00:00Z"),
+                (current, "merged", "b" * 40, "2026-11-24T17:30:00Z"))
+        for url, status, head, updated in rows:
+            catalog.record_sync({"items": [{"project": "xcl", "source_id": "1100", "kind": "pr", "url": url,
+                                            "title": "Check FMA modifiers", "status": status, "updated_at": updated,
+                                            "metadata": {"head_sha": head}}]})
+            self.assertEqual(catalog.observed_revisions([legacy, current]), {legacy: head})
+            matching = [ref for card in catalog.problems() for solution in card["solutions"]
+                        for ref in solution["source_refs"] if ref["url"] == legacy]
+            self.assertTrue(matching)
+            self.assertEqual(matching[0]["github"]["revision"], head)
+        self.assertEqual(catalog.source_changes(url=legacy), catalog.source_changes(url=current))
+        self.assertEqual(catalog.source_changes(url=current)[0]["revision"], "b" * 40)
+        self.assertEqual(len(catalog.observations(project="xcl")), 1)
+
+        with patch.object(github._Sync, "_request", return_value=({"number": 1100, "head": {"sha": self.sha}}, {})) as network:
+            revisions = github.public_source_revisions(self.db_path, [legacy])
+        self.assertEqual(revisions, {legacy: self.sha})
+        network.assert_called_once_with("https://api.github.com/repos/xcl-dev/xcl/pulls/1100", "core", None)
+
+    def test_move_keeps_completed_xcl_backfill_checkpoint(self):
+        github.commit_backfill(self.db_path, [{"slug": "xcl", "repo": "ivall/xcl", "mode": "backfill",
+                                              "revision": 0, "next_page": 45, "complete": True,
+                                              "started_at": 220, "since": None, "updated_at": 224, "anchor": []}])
+        with patch.object(github._Sync, "_request") as network:
+            result = github.backfill([{"slug": "xcl", "repo": "xcl-dev/xcl"}], self.db_path)
+        network.assert_not_called()
+        self.assertEqual(result["history"][0]["status"], "complete")
+        self.assertEqual(github.backfill_status(self.db_path)[0]["repo"], "xcl-dev/xcl")
 
     def test_collect_normalized_metadata_and_reuse_fresh_cache(self):
         with patch.object(github._Sync, "_request", side_effect=self.fake_request) as network:

@@ -1,0 +1,66 @@
+--- a/runtime/test/d3d12_draw_test.cpp
++++ b/runtime/test/d3d12_draw_test.cpp
+@@ -470,6 +470,62 @@
+         EXPECT(rt::d3d12::last_execute_result(queue.p) == leonida::ReplayResult::success);
+         EXPECT(SUCCEEDED(queue->Signal(fence.p, 2)) && SUCCEEDED(fence->SetEventOnCompletion(2, nullptr)));
+         std::memcpy(second_pixels.data(), mapped, second_pixels.size());
++
++        if (std::getenv("PORTBRIDGE_DRAW_SEQUENCE")) {
++            // PB-0021 uses changing colors to distinguish repeated draws from a retained clear or stale prior frame.
++            // Fence before reading the buffer, as required for a D3D12 readback heap.
++            Ref<ID3D12PipelineState> sequence_pso;
++            EXPECT(SUCCEEDED(device->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&sequence_pso.p))));
++            const bool omit_control = std::getenv("PORTBRIDGE_OMIT_SEQUENCE_DRAW") != nullptr;
++            constexpr UINT sequence_frames = 32;
++            for (UINT frame = 0; frame < sequence_frames; ++frame) {
++                const auto green = static_cast<std::uint8_t>(63 + frame);
++                const float tint[3] = {1, float(green) / 255.0f, 0};
++                std::memcpy(up + 1536, tint, sizeof(tint));
++                EXPECT(SUCCEEDED(allocator->Reset()) && SUCCEEDED(list->Reset(allocator.p, sequence_pso.p)));
++                list->ResourceBarrier(1, &to_target);
++                list->ClearRenderTargetView(rtv, blue, 0, nullptr);
++                list->SetGraphicsRootSignature(root.p);
++                list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
++                list->IASetVertexBuffers(0, 1, &vbv);
++                list->IASetIndexBuffer(&ibv);
++                list->RSSetViewports(1, &viewport);
++                list->RSSetScissorRects(1, &scissor);
++                list->OMSetRenderTargets(1, &rtv, FALSE, nullptr);
++                list->SetGraphicsRoot32BitConstants(0, 2, origin, 0);
++                list->SetGraphicsRootConstantBufferView(1, upload_va + 1536);
++                if (!omit_control || frame != 7)
++                    list->DrawIndexedInstanced(6, 1, 0, 0, 0);
++                list->ResourceBarrier(1, &to_copy);
++                list->CopyTextureRegion(&dst, 0, 0, 0, &src, nullptr);
++                EXPECT(list->Close() == S_OK);
++                queue->ExecuteCommandLists(1, lists);
++                EXPECT(rt::d3d12::last_execute_result(queue.p) == leonida::ReplayResult::success);
++                const UINT64 completed = 3 + frame;
++                EXPECT(SUCCEEDED(queue->Signal(fence.p, completed)));
++                EXPECT(SUCCEEDED(fence->SetEventOnCompletion(completed, nullptr)));
++                const auto* rgba = static_cast<const std::uint8_t*>(mapped);
++                for (UINT y = 0; y < size; ++y) {
++                    for (UINT x = 0; x < size; ++x) {
++                        const bool quad = x < size / 2 && y < size / 2;
++                        const std::uint8_t expected[4] = {std::uint8_t(quad ? 255 : 0), std::uint8_t(quad ? green : 0),
++                                                          std::uint8_t(quad ? 0 : 255), 255};
++                        const auto* pixel = rgba + y * 256 + x * 4;
++                        if (std::memcmp(pixel, expected, 4) == 0) continue;
++                        std::fprintf(stderr, "sequence mismatch frame=%u x=%u y=%u expected=%u,%u,%u,%u observed=%u,%u,%u,%u\n",
++                                     frame, x, y, unsigned(expected[0]), unsigned(expected[1]), unsigned(expected[2]),
++                                     unsigned(expected[3]), unsigned(pixel[0]), unsigned(pixel[1]), unsigned(pixel[2]),
++                                     unsigned(pixel[3]));
++                        return 44;
++                    }
++                }
++            }
++            readback->Unmap(0, nullptr);
++            upload->Unmap(0, nullptr);
++            std::printf("sequence pass: %u frames x %u RGBA8 pixels, green values 63..94\n",
++                        sequence_frames, size * size);
++            return 0;
++        }
+-
++
+         // Logic-op pass on its own R8G8B8A8_UINT target: D3D12 applies logic ops to UINT formats only. Cleared to
+         // (0,0,255,255); the red quad (255,0,0,255) XORed into the top-left quadrant gives (255,0,255,0) there.

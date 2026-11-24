@@ -11,7 +11,7 @@ import sqlite3
 from urllib.parse import urlsplit
 
 from . import PROJECT_LINK
-from .matching import RelatedIndex, canonical_url, source_revision
+from .matching import RelatedIndex, canonical_url, source_revision, source_url_aliases
 
 
 PROBLEM_STATUS = {"investigating", "partial", "verified", "resolved"}
@@ -327,7 +327,7 @@ class Catalog:
         return matches[0] if len(matches) == 1 else None
 
     def observed_revisions(self, sources):
-        urls = sorted({canonical_url(source) for source in sources})
+        urls = sorted({url for source in sources for url in source_url_aliases(source)})
         result = {}
         with self.connect() as db:
             for start in range(0, len(urls), 200):
@@ -335,7 +335,7 @@ class Catalog:
                 placeholders = ", ".join("?" for _ in chunk)
                 for row in db.execute(f"""SELECT lower(url) AS url, metadata FROM observations
                     WHERE lower(url) IN ({placeholders})""", chunk):
-                    result[row["url"]] = source_revision({"metadata": json.loads(row["metadata"])})
+                    result[canonical_url(row["url"])] = source_revision({"metadata": json.loads(row["metadata"])})
         return result
 
     def annotate_sources(self, problems):
@@ -345,8 +345,9 @@ class Catalog:
                 for item in solution["source_refs"] + solution["evidence"]:
                     references[canonical_url(item["url"])].append(item)
         with self.connect() as db:
-            for chunk in range(0, len(references), 200):
-                urls = list(references)[chunk:chunk + 200]
+            lookup = [url for source in references for url in source_url_aliases(source)]
+            for chunk in range(0, len(lookup), 200):
+                urls = lookup[chunk:chunk + 200]
                 params = ",".join("?" for _ in urls)
                 rows = db.execute(f"""SELECT lower(url) AS key, kind, status, updated_at, fetched_at, metadata
                                    FROM observations WHERE lower(url) IN ({params})""", urls)
@@ -354,7 +355,7 @@ class Catalog:
                     snapshot = json.loads(row["metadata"])
                     state = {key: row[key] for key in ("kind", "status", "updated_at", "fetched_at")}
                     state["revision"] = snapshot.get("head_sha")
-                    for ref in references[row["key"]]:
+                    for ref in references[canonical_url(row["key"])]:
                         ref["github"] = state
         return problems
 
@@ -412,7 +413,8 @@ class Catalog:
     def source_changes(self, *, url="", limit=100):
         if url and not public_url(url):
             raise ValueError("use a public GitHub source URL")
-        condition, args = ("WHERE lower(url)=?", (canonical_url(url),)) if url else ("", ())
+        args = source_url_aliases(url) if url else ()
+        condition = "WHERE lower(url) IN (" + ", ".join("?" for _ in args) + ")" if args else ""
         with self.connect() as db:
             return [dict(row) for row in db.execute(
                 f"SELECT * FROM source_changes {condition} ORDER BY id DESC LIMIT ?", (*args, limit))]
@@ -432,7 +434,7 @@ class Catalog:
                 if target["status"] in {"verified", "merged"}:
                     continue
                 receiver = projects[target["project"]]
-                target_path = f"https://github.com/{receiver['repo'].lower()}"
+                target_path = canonical_url(f"https://github.com/{receiver['repo']}")
                 target_url = next((ref["url"] for ref in target["source_refs"]
                                    if re.fullmatch(re.escape(target_path) + r"/(?:issues|pull)/[0-9]+",
                                                    canonical_url(ref["url"]))

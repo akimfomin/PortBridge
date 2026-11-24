@@ -10,7 +10,8 @@ from urllib.request import Request, build_opener
 
 from .catalog import PROBLEM_ID, ReadOnlyCatalog, public_url
 from .github import NoRedirect
-from .matching import GENERAL_SOURCE_TERMS, RelatedIndex, canonical_url, source_revision, subject_kind, terms
+from .matching import (GENERAL_SOURCE_TERMS, RelatedIndex, canonical_url, current_repository, source_revision,
+                       subject_kind, terms)
 
 
 PUBLIC_BASE = "https://akimfomin.github.io/PortBridge/"
@@ -171,8 +172,9 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5):
     origin_fragment = urlsplit(url).fragment
     project_map = {project["slug"]: project for project in projects}
     stacks = {slug: project["stack"] for slug, project in project_map.items()}
-    repo_path = "/".join(urlsplit(url).path.strip("/").split("/")[:2]).casefold() if url else ""
-    origin_project = next((slug for slug, project in project_map.items() if project["repo"].casefold() == repo_path), None)
+    repo_path = current_repository("/".join(urlsplit(url).path.strip("/").split("/")[:2])).casefold()
+    origin_project = next((slug for slug, project in project_map.items()
+                           if current_repository(project["repo"]).casefold() == repo_path), None)
     problem_query = q.upper() if PROBLEM_ID.fullmatch(q.upper()) else None
     number_query = q[1:] if re.fullmatch(r"#[1-9][0-9]*", q) else None
     query = terms(q)

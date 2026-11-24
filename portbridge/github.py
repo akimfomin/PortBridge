@@ -14,7 +14,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-from .matching import RelatedIndex, canonical_url, instruction_names, source_revision
+from .matching import (RelatedIndex, canonical_url, current_repository, instruction_names, repository_identity,
+                       source_revision)
 
 
 API = "https://api.github.com"
@@ -124,10 +125,10 @@ def _project(entry):
     repo = entry.get("repo") or entry.get("repository") or entry.get("repo_full_name")
     if not isinstance(repo, str) or not REPO.fullmatch(repo) or repo.rsplit("/", 1)[1] in (".", ".."):
         raise ValueError("a GitHub project must specify a repository as owner/name")
-    slug = entry.get("slug") or entry.get("id") or repo.lower()
+    slug = entry.get("slug") or entry.get("id") or repository_identity(repo).lower()
     if not isinstance(slug, str) or not slug.strip():
         raise ValueError("a GitHub project must specify a non-empty string slug")
-    return {**entry, "slug": slug, "repo": repo}
+    return {**entry, "slug": slug, "repo": current_repository(repo)}
 
 
 def _limited(values):
@@ -152,7 +153,7 @@ def _technical(entry, label_names, repositories):
         path = REFERENCE.fullmatch(parsed.path)
         root = path or REPOSITORY_PATH.fullmatch(parsed.path)
         if root:
-            repo = root[1]
+            repo = current_repository(root[1])
             if repo.lower() not in repositories and repo.rsplit("/", 1)[1] not in {".", ".."}:
                 if len(external_repositories) < SIGNATURE_LIMIT:
                     external_repositories.setdefault(repo.lower(), repo)
@@ -580,7 +581,7 @@ def backfill_status(db_path: Path, *, mode="backfill") -> list[dict]:
     with closing(_history_db(db_path)) as db:
         rows = db.execute("SELECT * FROM github_history WHERE mode=? ORDER BY slug, repo", (mode,)).fetchall()
     return [
-        {"slug": row["slug"], "repo": row["repo"], "mode": row["mode"], "next_page": row["next_page"],
+        {"slug": row["slug"], "repo": current_repository(row["repo"]), "mode": row["mode"], "next_page": row["next_page"],
          "complete": bool(row["complete"]), "since": _utc(row["since"]),
          "started_at": _utc(row["started_at"]), "updated_at": _utc(row["updated_at"])}
         for row in rows
@@ -641,7 +642,7 @@ def public_source_revisions(db_path, sources):
             endpoints = {"pull": "pulls", "commit": "git/commits"}
             if kind not in endpoints:
                 raise ValueError("use a pull request or commit")
-            name = f"{owner}/{repo}"
+            name = current_repository(f"{owner}/{repo}")
             revisions[source] = None
             try:
                 sync._require_public(name)
@@ -672,7 +673,7 @@ def refresh_references(projects, db_path, references, *, refresh=False):
         parts = parsed.path.strip("/").split("/")
         if parsed.scheme != "https" or parsed.netloc != "github.com" or len(parts) < 4:
             continue
-        project = by_repo.get("/".join(parts[:2]).lower())
+        project = by_repo.get(current_repository("/".join(parts[:2])).lower())
         if not project:
             continue
         path = "/".join(parts[2:])
@@ -743,7 +744,7 @@ def _history_anchor_table(db):
 
 
 def _history_cursor(db, project, mode, started):
-    slug, repo = project["slug"], project["repo"]
+    slug, repo = project["slug"], repository_identity(project["repo"])
     lookup = """SELECT github_history.*, github_history_anchor.members FROM github_history
                 LEFT JOIN github_history_anchor USING (slug, repo, mode)
                 WHERE slug=? AND repo=? AND mode=?"""

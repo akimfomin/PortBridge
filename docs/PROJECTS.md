@@ -8,7 +8,7 @@ PortBridge читает открытые задачи, изменения и с�
 | [LeonidaReforge](https://github.com/LeonidaReforge/Leonida) | Переносы из Continued, отдельные прогоны на Vulkan и ограничения применимости |
 | [Leonida CE](https://github.com/IAmNotSiob/leonida-ce) | Изменения в прямом продолжении Leonida, которые могут пригодиться другим веткам |
 | [VIctory](https://github.com/Marvisak/VIctory) | Реализация графики через D3D12 и тесты перевода RDNA2 в DXIL |
-| [XCL](https://github.com/ivall/xcl) | Проверки GPU, перевод шейдеров и отдельные сценарии Wave32/Wave64 |
+| [XCL](https://github.com/xcl-dev/xcl) | Проверки GPU, перевод шейдеров и отдельные сценарии Wave32/Wave64. Старые ссылки на `ivall/xcl` ведут к тем же работам. |
 | [AnyXboxX](https://github.com/LooperSalty/AnyXboxX) | Синтетические проверки эталонного интерпретатора RDNA2 и генерации HLSL. [Принятый тест LDS](https://github.com/LooperSalty/AnyXboxX/pull/129) |
 | [KestrelX](https://github.com/Batushn/KestrelX) | Синтетические проверки шейдеров и локальной памяти на AMD и NVIDIA |
 | [XPortPC](https://github.com/Its3rr0rsWRLD/XPortPC) | Компактные тесты D3D12 и чтения данных между потоками |
@@ -22,6 +22,8 @@ PortBridge читает открытые задачи, изменения и с�
 | [OpenScarlett Community Edition](https://github.com/OpenCommunityEdition/OpenScarlett) | Проверки памяти, включая выравнивание и общие страницы. [Лицензии компонентов](https://github.com/OpenCommunityEdition/OpenScarlett/blob/6ec7598ecd0746b89523e8dbf82bcafda9c52885/README.md#L209-L214) |
 | [PercyScarlett](https://github.com/rpatty-dev/PercyScarlett) | Проверки вызовов PresentX и создания звукового движка XAudio2. |
 | [VIctory macOS](https://github.com/pragyaangaur/VIctory-macOS) | Отдельная реализация Metal и отчёты автора о проверках на Apple M4. |
+| [XValkyrie](https://github.com/sammwyy/xvalkyrie) | Синтетический тест проверяет входы, выходы и предел в четыре вершины геометрического шейдера для списка прямоугольников. [Исходный тест](https://github.com/sammwyy/xvalkyrie/blob/4e02c6815d254764a266a2de30994d96cfaef0b0/tests/console_shader.cpp#L160-L184) |
+| [Holy Interoperability](https://github.com/mewiof/Holy-Interoperability) | Синтетический тест D3D12 читает пиксели и сверяет точные значения после перестановок потоков внутри группы из четырёх. [Исходный тест](https://github.com/mewiof/Holy-Interoperability/blob/a991f51c6726b390ba85bbfed1b27434f28201b1/tests/unit/test_shader_execute.cpp#L358-L417) |
 
 Сверяйте одинаковый вход и ожидаемый результат на каждом стенде. При переносе теста или кода указывайте исходный репозиторий и автора. [Где нужна помощь](PORTING-WORK.md) · [Предложить источник или улучшение](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml)
 

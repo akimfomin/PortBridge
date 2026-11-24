@@ -179,7 +179,7 @@ class TestRequestTests(TestCase):
         self.issue["body"] = self.current["body"] = request
         candidate = tester("Volunteer", "d3d12-native-wave64-rdna4")
         current_sha = task["revisions"][0]["sha"]
-        endpoint = "/repos/ivall/xcl/pulls/1100"
+        endpoint = "/repos/xcl-dev/xcl/pulls/1100"
         receiving = {"state": "open", "head": {"sha": "f" * 40}}
 
         def get(path, *, public=False):

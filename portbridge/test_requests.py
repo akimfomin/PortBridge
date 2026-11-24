@@ -12,6 +12,7 @@ from urllib.request import Request, build_opener
 from .activity import source_time
 from .github import API, NoRedirect
 from .lab import EQUIPMENT, PORTBRIDGE, build_lab
+from .matching import canonical_url, current_repository
 
 
 REPOSITORY = "akimfomin/PortBridge"
@@ -110,11 +111,12 @@ def validate_scope(fields, github):
     if fields["task"]:
         tasks = build_lab(equipment=fields["equipment"], status="needs_run")["tasks"]
         task = next((entry for entry in tasks if entry["id"] == fields["task"]), None)
-        if task is None or not task["revisions"] or task["revisions"][0]["url"].casefold() != fields["revision"].casefold():
+        if (task is None or not task["revisions"]
+                or canonical_url(task["revisions"][0]["url"]) != canonical_url(fields["revision"])):
             raise ValueError("Lab task, equipment or revision does not match the open test")
         return TASK_CAPABILITIES.get(task["id"]), task["result_url"]
     owner, repo, sha = commit_parts(fields["revision"])
-    path = f"/repos/{owner}/{repo}"
+    path = f"/repos/{current_repository(f'{owner}/{repo}')}"
     if github.get(path, public=True).get("private") is not False:
         raise ValueError("custom check needs a public repository")
     if github.get(f"{path}/commits/{sha}", public=True).get("sha", "").casefold() != sha.casefold():
@@ -213,7 +215,8 @@ def dispatch(event, testers, github, *, event_name="issues", now=None, discover=
     receiving = PULL.fullmatch(original or "")
     if receiving:
         owner, repo, pull = receiving.groups()
-        source = github.get(f"/repos/{owner}/{repo}/pulls/{pull}", public=True)
+        receiving_repo = current_repository(f"{owner}/{repo}")
+        source = github.get(f"/repos/{receiving_repo}/pulls/{pull}", public=True)
         revision = commit_parts(fields["revision"])[2]
         head = (source.get("head") or {}).get("sha") or ""
         if source.get("state") != "open" or head.casefold() != revision.casefold():

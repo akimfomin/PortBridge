@@ -170,14 +170,14 @@ def capability_evidence(projects):
 
 def build_ecosystem(catalog, *, projects=None, observations=None):
     projects = catalog.projects() if projects is None else projects
-    tracked = {project["repo"].casefold() for project in projects}
+    tracked = {repository(project["repo"]) for project in projects}
     observations = catalog.observations(limit=None) if observations is None else observations
     source_map = defaultdict(list)
     cached = _cached(catalog)
     sources = []
     for key, (label, url) in SOURCES.items():
         row = cached.get(key)
-        names = json.loads(row["repositories"]) if row else []
+        names = {repository(name) for name in json.loads(row["repositories"])} if row else set()
         for name in names:
             source_map[name].append(key)
         sources.append({"id": key, "name": label, "url": url,

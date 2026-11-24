@@ -130,5 +130,17 @@
     "scope": "Прогоны автора на Apple M4 для отдельной реализации Metal.",
     "translations": {"en": {"scope": "Author-reported Apple M4 checks for the separate Metal implementation."}},
     "evidence": "https://github.com/pragyaangaur/VIctory-macOS/blob/f5660fdcfdd6eb5cb6495be47a23af9aa30f5617/README.md#L26-L40"
+  },
+  {
+    "project": "xvalkyrie", "area": "graphics", "kind": "source",
+    "scope": "Синтетический тест проверяет заявленный предел в четыре вершины у геометрического шейдера для списка прямоугольников.",
+    "translations": {"en": {"scope": "Synthetic check of the generated rectangle-list geometry shader's declared four-vertex output limit."}},
+    "evidence": "https://github.com/sammwyy/xvalkyrie/blob/4e02c6815d254764a266a2de30994d96cfaef0b0/tests/console_shader.cpp#L160-L184"
+  },
+  {
+    "project": "holy-interoperability", "area": "shaders", "kind": "source",
+    "scope": "Синтетический тест сверяет точные значения пикселей для горизонтальной и диагональной перестановки потоков.",
+    "translations": {"en": {"scope": "Synthetic pixel readback checks exact values after horizontal and diagonal lane permutations."}},
+    "evidence": "https://github.com/mewiof/Holy-Interoperability/blob/a991f51c6726b390ba85bbfed1b27434f28201b1/tests/unit/test_shader_execute.cpp#L358-L417"
   }
 ]

@@ -121,7 +121,7 @@ class MCPTests(unittest.TestCase):
                                           "arguments": {"id": "PB-0001"}}),
                 message(3, "tools/call", {**MODERN_META, "name": "portbridge_activity"}),
                 message(4, "tools/call", {**MODERN_META, "name": "portbridge_lab",
-                                          "arguments": {"equipment": "amd", "status": "needs_run"}}),
+                                          "arguments": {"equipment": "amd", "status": "needs_run", "task": "xcl-1100-fma"}}),
             )
         self.assertEqual(set(requested), {f"{PUBLIC_BASE}data/{name}.json" for name in files})
         result = preflight["result"]["structuredContent"]
@@ -132,7 +132,7 @@ class MCPTests(unittest.TestCase):
         self.assertEqual(problem["result"]["structuredContent"]["problem"]["id"], "PB-0001")
         self.assertEqual(activity["result"]["structuredContent"]["window_days"], 7)
         tasks = lab["result"]["structuredContent"]["tasks"]
-        self.assertTrue(tasks)
+        self.assertEqual([task["id"] for task in tasks], ["xcl-1100-fma"])
         self.assertTrue(all("amd" in task["equipment"] and task["status"] == "needs_run" for task in tasks))
 
     def test_unavailable_public_snapshot_returns_actionable_error(self):

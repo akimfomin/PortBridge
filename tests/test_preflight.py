@@ -7,6 +7,15 @@ from test_portbridge import CatalogFixture
 
 
 class PreflightTest(CatalogFixture):
+    def test_xcl_repo_move_keeps_exact_link_and_scope(self):
+        legacy = "https://github.com/ivall/xcl/pull/1100"
+        current = "https://github.com/xcl-dev/xcl/pull/1100"
+        self.catalog.record_sync({"items": [self.observation("xcl", "pr", 1100, "Check FMA modifiers", current, {})]})
+        result = preflight(self.catalog, url=current)
+        self.assertEqual(preflight(self.catalog, url=legacy), result)
+        self.assertTrue(result["indexed"])
+        self.assertEqual(result["problems"][0]["id"], "PB-0006")
+
     def test_one_url_returns_provenance_and_backend_limits(self):
         url = "https://github.com/ubiquitarianism/leonida/pull/207"
         report = preflight(self.catalog, url=url)

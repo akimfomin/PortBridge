@@ -12,7 +12,7 @@ from .catalog import PROBLEM_ID, ReadOnlyCatalog
 from .discussion import MAX_MESSAGE_CHARS, MAX_WAIT_SECONDS, MESSAGE_KEY
 from .ecosystem import build_ecosystem
 from .exchange_client import ExchangeClient, ExchangeClientError
-from .lab import EQUIPMENT, STATUSES, build_lab, filter_lab
+from .lab import EQUIPMENT, STATUSES, TASK_ID_PATTERN, build_lab, filter_lab
 from .preflight import preflight, public_preflight, public_problem, snapshot
 
 
@@ -51,10 +51,12 @@ TOOLS = [
          "for a shared check. Returns only public catalog data.", {}),
     tool("portbridge_ecosystem", "Read candidate repositories and reviewed, source-linked technical capabilities. "
          "Candidate links require review before any reuse.", {}),
-    tool("portbridge_lab", "Find public volunteer tests by equipment and readiness. Provide the equipment yourself. "
+    tool("portbridge_lab", "Find a specific public volunteer test or filter by equipment and readiness. "
+         "Provide the equipment yourself. "
          "The tool returns pinned revisions, expected results, and the discussion for reporting a run.",
          {"equipment": {"type": "string", "enum": list(EQUIPMENT)},
-          "status": {"type": "string", "enum": list(STATUSES)}}),
+          "status": {"type": "string", "enum": list(STATUSES)},
+          "task": {"type": "string", "pattern": TASK_ID_PATTERN, "maxLength": 80}}),
     tool("portbridge_preflight", "Check PortBridge for existing work before investigating a compatibility issue. "
          "Provide a search query, a public GitHub source URL, or both.",
          {"q": {"type": "string", "minLength": 1, "maxLength": MAX_QUERY_CHARS,
@@ -168,9 +170,10 @@ class PortBridgeMCP:
             payload = snapshot("ecosystem") if self.catalog is None else build_ecosystem(self.catalog)
             return tool_result(payload)
         if name == "portbridge_lab":
-            allowed = {"equipment": EQUIPMENT, "status": STATUSES}
-            if args.keys() - allowed.keys() or any(value not in allowed[key] for key, value in args.items()):
-                return tool_error("Provide an equipment or status filter from the tool schema.")
+            enums = {"equipment": EQUIPMENT, "status": STATUSES}
+            if args.keys() - {"equipment", "status", "task"} or any(
+                    key in args and args[key] not in values for key, values in enums.items()):
+                return tool_error("Provide Test Lab filters from the tool schema.")
             try:
                 lab = snapshot("lab") if self.catalog is None else build_lab()
                 return tool_result(filter_lab(lab, **args))

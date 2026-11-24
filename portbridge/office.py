@@ -7,7 +7,7 @@ from urllib.parse import urlsplit
 from . import PROJECT_LINK
 from .discussion import post_notice, require_subscription
 from .exchange_fields import Conflict, MAX_SQL_INTEGER, PermissionDenied, REVISION, _integer, _source, _text, _timestamp
-from .matching import canonical_url
+from .matching import canonical_url, repository_identity
 
 
 OFFICE_SCHEMA = """
@@ -77,7 +77,7 @@ PLAN_LIST_LIMIT = 60
 
 
 def source_repo(url):
-    return "/".join(urlsplit(url).path.split("/")[1:3]).casefold()
+    return repository_identity("/".join(urlsplit(url).path.split("/")[1:3])).casefold()
 
 
 def plan_source(value):
@@ -168,7 +168,7 @@ OVERVIEW_KEYS = ("available", "review", "working", "waiting", "verified", "adopt
 
 
 def progress_summary(plans, projects):
-    names = {project["repo"].casefold(): project["name"] for project in projects}
+    names = {repository_identity(project["repo"]).casefold(): project["name"] for project in projects}
     totals, teams = dict.fromkeys(OVERVIEW_KEYS, 0), {}
     needs, milestones = [], []
     for plan in plans:

@@ -39,14 +39,15 @@ COLLECTIONS = ("projects", "ecosystem", "problems", "observations", "matches", "
 
 def sync_catalog(catalog, *, refresh=False, pages=1, sources=()):
     from .github import PAIR_CHECK_LIMIT, WORK_URL, collect, refresh_references, revision_references
-    from .matching import canonical_url
+    from .matching import canonical_url, current_repository
 
     projects = catalog.projects()
     if sources:
-        repos = {project["repo"].casefold() for project in projects}
+        repos = {current_repository(project["repo"]).casefold() for project in projects}
         if len(sources) > PAIR_CHECK_LIMIT or any(not WORK_URL.fullmatch(source) for source in sources):
             raise ValueError("--source accepts up to eight public GitHub issue or PR URLs")
-        if any("/".join(urlsplit(source).path.split("/")[1:3]).casefold() not in repos for source in sources):
+        if any(current_repository("/".join(urlsplit(source).path.split("/")[1:3])).casefold() not in repos
+               for source in sources):
             raise ValueError("--source must belong to a configured public repository")
         requested = list(dict.fromkeys(map(canonical_url, sources)))
         checked = refresh_references(projects, catalog.path, requested, refresh=refresh)
@@ -205,9 +206,9 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
         if name == "activity":
             return 200, build_activity(catalog)
         if name == "lab":
-            if params.keys() - {"equipment", "status"} or any(len(values) != 1 for values in params.values()):
-                raise ValueError("use at most one equipment and one status filter")
-            return 200, build_lab(equipment=params.get("equipment", [""])[0], status=params.get("status", [""])[0])
+            if params.keys() - {"equipment", "status", "task"} or any(len(values) != 1 for values in params.values()):
+                raise ValueError("use each Test Lab filter at most once")
+            return 200, build_lab(**{key: values[0] for key, values in params.items()})
         if name == "coordination":
             return 200, {"coordination": catalog.coordination()}
         if name == "graph":

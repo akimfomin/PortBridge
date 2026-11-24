@@ -21,8 +21,8 @@
     {
       "slug": "xcl",
       "name": "XCL",
-      "repo": "ivall/xcl",
-      "url": "https://github.com/ivall/xcl",
+      "repo": "xcl-dev/xcl",
+      "url": "https://github.com/xcl-dev/xcl",
       "stack": "Rust, Windows D3D12 и DXIL",
       "license": "GPL-2.0-only",
       "translations": {"en": {"stack": "Rust, Windows D3D12 and DXIL"}}
@@ -161,6 +161,24 @@
       "stack": "Rust, Apple Silicon и Metal, ветка VIctory",
       "license": "GPL-3.0",
       "translations": {"en": {"stack": "Rust, Apple Silicon and Metal, VIctory fork"}}
+    },
+    {
+      "slug": "xvalkyrie",
+      "name": "XValkyrie",
+      "repo": "sammwyy/xvalkyrie",
+      "url": "https://github.com/sammwyy/xvalkyrie",
+      "stack": "C++20, Windows, D3D11 и Vulkan",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "C++20, Windows, D3D11 and Vulkan"}}
+    },
+    {
+      "slug": "holy-interoperability",
+      "name": "Holy Interoperability",
+      "repo": "mewiof/Holy-Interoperability",
+      "url": "https://github.com/mewiof/Holy-Interoperability",
+      "stack": "C++20, Windows и D3D12",
+      "license": "MIT",
+      "translations": {"en": {"stack": "C++20, Windows and D3D12"}}
     }
   ],
   "coordination": {
@@ -1984,12 +2002,12 @@
       "id": "PB-0021",
       "recorded_at": "2026-11-24T17:15:48Z",
       "title": "Проверка пикселей первого кадра в SceneGate VI",
-      "summary": "PortBridge подтвердил общую проверку очистки и чтения 851 пикселя на Vulkan, D3D12 и WARP. Отдельная проверка треугольника поймала намеренно пропущенную отрисовку на RTX и WARP.",
+      "summary": "Проверка SceneGate VI сверила 851 пиксель на RTX и WARP. PortBridge перенёс контроль меняющихся кадров в Continued #511. Синтетический тест на RTX прошёл в обоих режимах создания графического конвейера.",
       "status": "verified",
       "tags": ["first frame", "D3D12", "Vulkan", "RGBA8", "pixel readback", "WARP"],
       "translations": {"en": {
         "title": "First-frame pixel readback in SceneGate VI",
-        "summary": "PortBridge verified a shared 851-pixel clear and readback check on Vulkan, D3D12, and WARP. A separate triangle check caught an intentionally omitted draw on RTX and WARP.",
+        "summary": "SceneGate VI verified 851 pixels on RTX and WARP. PortBridge carried the changing-frame control to Continued #511. Its synthetic RTX test passed in both pipeline creation modes.",
         "tags": ["first frame", "D3D12", "Vulkan", "RGBA8", "pixel readback", "WARP"]
       }},
       "platforms": ["Windows 11 build 28000", "NVIDIA RTX 4070 Ti SUPER driver 617.14", "Microsoft Basic Render Driver (WARP)", "LLVM-MinGW Clang 23.1.6"],
@@ -2017,6 +2035,28 @@
               "check_for": ["https://github.com/7jycwjmbfn-eng/scenegate-vi/blob/804b4f81cf2ce74ee085da0783442a37dfbb0e9e/tests/guest/d3d12_guest.c"],
               "observed": "Исходные тесты очистки проверили 851 из 851 пикселя на D3D12 с RTX, D3D12 с WARP и Vulkan с RTX. Исходная проверка треугольника с прямым подключением к функциям D3D12 прошла 3/3 на RTX и 3/3 на WARP: шесть пикселей очистки и 32 кадра по 64 пикселя. С вызовом только очистки вместо треугольника каждый контроль выявил расхождение первого красного канала, код 0x100. Прогон ограничен функциями хоста и синтетическим вводом.",
               "translations": {"en": {"title": "Pixel readback and omitted-draw control", "observed": "The original clear checks verified 851 of 851 pixels on D3D12 with RTX, D3D12 with WARP, and Vulkan with RTX. The original triangle checks, connected directly to the D3D12 callbacks, passed 3/3 on RTX and 3/3 on WARP: six clear pixels and 32 frames of 64 pixels each. Substituting a clear for the triangle caused every control to report the first red-channel mismatch, code 0x100. The runs covered host graphics functions with synthetic inputs."}}
+            }
+          ]
+        },
+        {
+          "project": "continued",
+          "status": "verified",
+          "summary": "Патч добавляет отдельную проверку 32 кадров с меняющимся цветом. На RTX оба режима дали ожидаемые пиксели. Нужен повтор штатной сборкой на AMD.",
+          "translations": {"en": {"summary": "The test patch adds an opt-in 32-frame changing-color check. Both modes returned the expected pixels on RTX. An AMD run with the standard build is still open."}},
+          "source_refs": [
+            {"title": "Отложенное создание конвейера в Continued #511", "url": "https://github.com/ubiquitarianism/leonida/pull/511", "translations": {"en": {"title": "Deferred pipeline creation in Continued #511"}}},
+            {"title": "Патч и инструкция проверки", "url": "https://github.com/akimfomin/PortBridge/tree/main/contrib/continued-repeated-draw", "translations": {"en": {"title": "Test patch and reproduction guide"}}}
+          ],
+          "evidence": [
+            {
+              "kind": "independent", "outcome": "mixed",
+              "check_for": ["https://github.com/ubiquitarianism/leonida/pull/511"],
+              "url": "https://github.com/akimfomin/PortBridge/tree/main/contrib/continued-repeated-draw",
+              "title": "Последовательность отрисовки и контроль на RTX",
+              "revision": "88658f1b3fcdca2231358c18d09253a213dc8533", "reported_at": "2026-11-24T17:44:44Z",
+              "platforms": ["Windows 11 build 28000", "NVIDIA RTX 4070 Ti SUPER driver 617.14", "Vulkan", "LLVM-MinGW Clang 23.1.6"],
+              "observed": "В каждом режиме прошли три прогона по 32 кадра из 4 096 пикселей. Намеренный пропуск восьмой отрисовки во всех шести контролях дал ожидаемое расхождение с кодом 44. Проверка вне экрана, локальная сборка с временным адаптером DirectX.",
+              "translations": {"en": {"title": "Repeated draw and omission control on RTX", "observed": "Three runs in each mode checked 32 frames of 4,096 pixels. Omitting draw eight gave the expected mismatch and exit 44 in each of six controls. The local offscreen build used a temporary DirectX adapter."}}
             }
           ]
         }

@@ -38,10 +38,37 @@ GENERAL_SOURCE_TERMS = {"d3d12", "dxgi", "vulkan", "shader", "spirv", "wave32", 
                         "gpu", "runtime", "console", "host", "pipeline", "slot", "slots", "multi",
                         "proton", "vkd3d", "wine", "x86"}
 
+# GitHub repository 1465852099 moved to xcl-dev. Keep its established keys for
+# saved plans and topics while addressing GitHub at the verified current name.
+REPOSITORY_MOVES = {"ivall/xcl": "xcl-dev/xcl"}
+REPOSITORY_IDENTITIES = {current: previous for previous, current in REPOSITORY_MOVES.items()}
+
+
+def current_repository(repo):
+    return REPOSITORY_MOVES.get(repo.casefold(), repo)
+
+
+def repository_identity(repo):
+    return REPOSITORY_IDENTITIES.get(repo.casefold(), repo)
+
 
 def canonical_url(url):
     path = urlsplit(url).path.rstrip("/").lower()
+    parts = path.split("/", 3)
+    if len(parts) >= 3 and not parts[0]:
+        repo = repository_identity("/".join(parts[1:3]))
+        path = f"/{repo}" + (f"/{parts[3]}" if len(parts) == 4 else "")
     return f"https://github.com{path}"
+
+
+def source_url_aliases(url):
+    key = canonical_url(url)
+    path = key.removeprefix("https://github.com/").split("/", 2)
+    repo = "/".join(path[:2])
+    current = current_repository(repo)
+    if current == repo:
+        return (key,)
+    return key, f"https://github.com/{'/'.join([current, *path[2:]])}"
 
 
 def expand_instruction_groups(text):

@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import re
 
-from .matching import canonical_url, source_revision
+from .matching import canonical_url, source_revision, source_url_aliases
 from .preflight import english_text
 
 
@@ -161,18 +161,20 @@ def handoff_summary(cards, projects, observations, as_of):
             raise ValueError(f"Handoff project is missing from case: {case['id']}")
         delivery = row["delivered_url"]
         revision = row["revision"]
-        prefix = rf"https://github\.com/{re.escape(repo)}/"
+        repo_urls = "|".join(map(re.escape, source_url_aliases(f"https://github.com/{repo}")))
+        prefix = f"(?:{repo_urls})/"
         subject = r"(?:pull|issues)/[1-9][0-9]*"
         if not isinstance(delivery, str) or not re.fullmatch(prefix + subject, delivery, re.I):
             raise ValueError(f"Invalid handoff delivery: {case['id']}")
         if not isinstance(revision, str) or not re.fullmatch(r"[a-f0-9]{40}", revision):
             raise ValueError(f"Invalid handoff revision: {case['id']}")
-        identity = delivery.casefold()
+        identity = canonical_url(delivery)
         if identity in seen:
             raise ValueError(f"Duplicate handoff delivery: {case['id']}")
         seen.add(identity)
-        proofs = {"independent_url": re.escape(delivery) + r"#issuecomment-[1-9][0-9]*",
-                  "review_url": re.escape(delivery) + r"#pullrequestreview-[1-9][0-9]*",
+        delivery_urls = "|".join(map(re.escape, source_url_aliases(delivery)))
+        proofs = {"independent_url": f"(?:{delivery_urls})" + r"#issuecomment-[1-9][0-9]*",
+                  "review_url": f"(?:{delivery_urls})" + r"#pullrequestreview-[1-9][0-9]*",
                   "adopted_url": prefix + rf"(?:{subject}(?:#issuecomment-[1-9][0-9]*)?|commit/[0-9a-f]{{40}})"}
         item = {"problem_id": case["id"], "project": row["project"], "delivered_url": delivery, "revision": revision,
                 **public_text(case["title"], english_text(case, "title"))}

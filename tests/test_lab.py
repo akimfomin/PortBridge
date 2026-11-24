@@ -15,7 +15,7 @@ class LabTest(CatalogFixture):
     def test_tasks_pin_public_sources_and_track_evidence_separately(self):
         payload = build_lab()
         tasks = {task["id"]: task for task in payload["tasks"]}
-        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 7)))
+        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 8)))
         combined = tasks["pb-9-continued-first-frame"]
         self.assertEqual((combined["status"], combined["evidence_stage"], combined["adoption"]),
                          ("awaiting_review", "reviewed_gpu", "pending"))
@@ -43,13 +43,21 @@ class LabTest(CatalogFixture):
         payload = build_lab()
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
-                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma"])
+                         ["pb-5-xcl-wave64", "pb-9-reforge-present", "xcl-1100-fma", "continued-511-repeated-draw"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
-        self.assertEqual(len(payload["tasks"]), 6)
+        self.assertEqual(len(payload["tasks"]), 7)
         self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)
         self.assertEqual(build_lab(equipment="cpu", status="needs_run")["tasks"], [])
         with self.assertRaises(ValueError):
             build_lab(status="merged")
+
+    def test_exact_task_selection_preserves_filters_and_rejects_invalid_ids(self):
+        selected = build_lab(task="xcl-1100-fma", equipment="amd", status="needs_run")
+        self.assertEqual([task["id"] for task in selected["tasks"]], ["xcl-1100-fma"])
+        self.assertEqual(build_lab(task="unknown-check")["tasks"], [])
+        self.assertEqual(build_lab(task="xcl-1100-fma", equipment="cpu")["tasks"], [])
+        with self.assertRaises(ValueError):
+            build_lab(task="../xcl-1100-fma")
 
     def test_static_and_local_api_share_the_queue(self):
         directory = export(self.catalog, self.workspace / "lab-site")
@@ -68,6 +76,9 @@ class LabTest(CatalogFixture):
                     self.assertEqual(fetch("/api/v1/lab"), (200, data))
                     self.assertEqual(fetch("/api/v1/lab?equipment=cpu&status=awaiting_review"),
                                      (200, filter_lab(data, equipment="cpu", status="awaiting_review")))
+                    self.assertEqual(fetch("/api/v1/lab?task=xcl-1100-fma"),
+                                     (200, filter_lab(data, task="xcl-1100-fma")))
+                    self.assertEqual(fetch("/api/v1/lab?task=xcl-1100-fma&task=pb-9-reforge-present")[0], 400)
                     self.assertEqual(fetch("/api/v1")[1]["routes"]["lab"], "/api/v1/lab")
                     self.assertEqual(fetch("/api/v1/lab?equipment=unknown")[0], 400)
                     self.assertEqual(fetch("/api/v1/lab?status=needs_run&status=awaiting_review")[0], 400)
