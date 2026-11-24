@@ -536,7 +536,8 @@ def collect(projects: list[dict], db_path: Path, *, refresh=False, pages=1) -> d
     result = {"items": [], "warnings": [], "projects": []}
     try:
         sync = _Sync(db, refresh, checked)
-        for project in checked:
+        # With a shared time limit, fixed seed order can starve the same repositories on every sweep.
+        for project in sorted(checked, key=lambda entry: _timestamp(entry.get("last_success"))):
             source_data = {}
             first_pages = []
             results = []

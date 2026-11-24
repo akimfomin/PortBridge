@@ -1,5 +1,6 @@
 from contextlib import closing
 from email.message import Message
+import json
 import os
 from pathlib import Path
 import sqlite3
@@ -125,6 +126,40 @@ class GitHubSyncTest(unittest.TestCase):
             rows = db.execute("SELECT items FROM github_cache").fetchall()
         self.assertNotIn("ignored body", repr(rows))
         self.assertNotIn("ignore commit body", repr(rows))
+
+    def test_limited_sync_rotates_to_the_least_recently_updated_project(self):
+        order = ["recent", "old", "new"]
+        seed = self.db_path.with_suffix(".json")
+        seed.write_text(json.dumps({"projects": [
+            {"slug": slug, "repo": f"example/{slug}", "url": f"https://github.com/example/{slug}"}
+            for slug in order
+        ], "problems": []}), encoding="utf-8")
+        catalog = Catalog(self.db_path, seed)
+        catalog.record_sync({"items": [], "projects": [
+            {"slug": "recent", "sync_status": "ok", "last_success": "2026-11-24T20:00:00Z"},
+            {"slug": "old", "sync_status": "stale", "last_success": "2026-11-23T20:00:00+00:00"},
+        ]})
+
+        def sweep(expected, now):
+            attempted = []
+
+            def page(project, kind, number):
+                slug = project["slug"]
+                attempted.append(slug)
+                if slug == attempted[0]:
+                    return [], False, "live", now, None
+                return [], False, "error", None, github.Unavailable("GitHub request time budget exhausted")
+
+            with patch.object(github._Sync, "page", side_effect=page), \
+                    patch("portbridge.__main__.refresh_ecosystem"):
+                sync_catalog(catalog)
+            self.assertEqual(attempted[:4], [expected] * 4)
+            projects = catalog.projects()
+            self.assertEqual([project["slug"] for project in projects], order)
+            self.assertEqual(next(project["sync_status"] for project in projects if project["slug"] == expected), "ok")
+
+        sweep("new", 1800000000)
+        sweep("old", 1800000001)
 
     def test_reviewed_references_refresh_exact_pr_and_job_without_fetching_logs(self):
         base = "https://github.com/example/port"
