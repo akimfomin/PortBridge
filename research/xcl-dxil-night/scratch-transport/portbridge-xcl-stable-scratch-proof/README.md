@@ -33,3 +33,15 @@ Four regression checks compare 576 lane/case executions. For each case the figur
 For a path with `C` crossings and `W` stable DWORDs, the modeled write saving is `(C - 1) × W` when `C ≥ 1`. Add `W - R` for each entered noninitial bridge, where `R` is the number of stable words consumed by original operations in its piece. Multiply DWORD counts by four to obtain logical bytes.
 
 The counts measure logical transport requests from these fixtures. Allocation size, physical memory traffic, compiler integration, driver behavior and the workload discussed in #2080 require separate measurements. The independent model uses just Python's standard library and has no shader compilation or device dependency.
+
+## Follow-up. Reuse slots after the last consuming piece
+
+The independent allocator model in `interval_slots.py` allows stable values defined after piece zero. It gives each scalar a lifetime beginning at the defining piece's exit and ending at the latest entry on a crossing edge that still carries it. Treat the end as inclusive. A later value may reuse the earlier slots once its first exit follows that end. This exploits the existing order of entry loads before exit stores. A consumer loads an eligible value only on entry to its live edge. The model retains the original selector and falls back when the conservative stable area plus the dynamic payload exceeds the original maximum.
+
+The test covers 672 lane/case executions. Two i64 values with separate lifetimes reuse the same two slots, saving 3,072 logical bytes across 96 executions without increasing the three-dword lane stride. A crossing case keeps both i64s separate because the earlier value is read again. In a branch-exclusive control, a five-dword trial would exceed the original three-dword maximum, so the model retains the original layout. [Source](interval_slots.py) · [Results](interval-results.json)
+
+```powershell
+python -B .\interval_slots.py
+```
+
+The model supplies a layout option for the broader follow-up after the upstream census. Whole compiler and device validation remain separate work.
