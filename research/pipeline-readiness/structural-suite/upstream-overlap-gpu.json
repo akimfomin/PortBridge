@@ -1,0 +1,35 @@
+[
+  {
+    "id": "lane-local-edge",
+    "name": "gpu::dxil::lanes::ps_ballot_tests::gpu_direct_ps_masks_hold_helper_lanes_on_triangle_edges",
+    "exit_code": 0,
+    "receipt": [
+      "exit=0 peak_process_bytes=131096576 peak_job_bytes=132354048"
+    ],
+    "skipped": false,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1338 filtered out; finished in 0.44s",
+    "sha256": "f03e4867874279e4eb212d29982ab26305d75250fba7fbeb5c0c7f83ba1c2ab7"
+  },
+  {
+    "id": "2501-live-lane-edge",
+    "name": "gpu::dxil::lanes::ps_ballot_tests::gpu_direct_ps_readfirstlane_and_mask_live_on_triangle_edges",
+    "exit_code": 0,
+    "receipt": [
+      "exit=0 peak_process_bytes=127004672 peak_job_bytes=128262144"
+    ],
+    "skipped": false,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1338 filtered out; finished in 0.30s",
+    "sha256": "edab3680ca020848e20d38a8c0088d80374defacb72d54f527f77bb32bfc9658"
+  },
+  {
+    "id": "2503-bridge-exec",
+    "name": "gpu::recomp::lower_dxil::tests::a_bridged_v_cmp_clears_inactive_lanes_outside_exec",
+    "exit_code": 0,
+    "receipt": [
+      "exit=0 peak_process_bytes=107773952 peak_job_bytes=109039616"
+    ],
+    "skipped": false,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1338 filtered out; finished in 0.26s",
+    "sha256": "6142ee0b3a9554496024acf45c304c6599dd7b881f26db2440035ce332e06eb8"
+  }
+]

@@ -1,0 +1,63 @@
+{
+  "source_tree": "07622a771150d9f14278426f6402080b30f067ca",
+  "observer_sha256": "213677ad4d77624a48c68d36f71c666b51027a1b53a7a6a1d3bf56355327fa1b",
+  "dxv_sha256": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3",
+  "cases": [
+    {
+      "id": "071",
+      "mode": "whole",
+      "source_sha256": "367a4735dedfc9c2f7fd77086192cd85fdaf017d8bdda141fcc4293759f2a65b",
+      "dxil_bytes": 282712,
+      "dxil_sha256": "0ed9b5d1b1bf95945bc00f039c53b92e8cfbad410536bbc52c0604499bb46418",
+      "prior_dxil_sha256": "0ed9b5d1b1bf95945bc00f039c53b92e8cfbad410536bbc52c0604499bb46418",
+      "matches_prior_dxil": true,
+      "ballots": 1739,
+      "validation_exit": 0,
+      "validation": [
+        "Validation succeeded."
+      ]
+    },
+    {
+      "id": "071",
+      "mode": "local",
+      "source_sha256": "367a4735dedfc9c2f7fd77086192cd85fdaf017d8bdda141fcc4293759f2a65b",
+      "dxil_bytes": 118244,
+      "dxil_sha256": "7d42eb3e0991292357f24e73ad1ef19ed714201283450419f303600cdc8b2f85",
+      "prior_dxil_sha256": "7d42eb3e0991292357f24e73ad1ef19ed714201283450419f303600cdc8b2f85",
+      "matches_prior_dxil": true,
+      "ballots": 135,
+      "validation_exit": 0,
+      "validation": [
+        "Validation succeeded."
+      ]
+    },
+    {
+      "id": "073",
+      "mode": "whole",
+      "source_sha256": "23844290cd9f354b5fef5d0a863651e58b10c627ea51fba720a4c0baffdc63f5",
+      "dxil_bytes": 283204,
+      "dxil_sha256": "ee20f7b05012a493e15454d24cfdecd0bf233e21df7cde0652988d997c34f772",
+      "prior_dxil_sha256": "ee20f7b05012a493e15454d24cfdecd0bf233e21df7cde0652988d997c34f772",
+      "matches_prior_dxil": true,
+      "ballots": 1739,
+      "validation_exit": 0,
+      "validation": [
+        "Validation succeeded."
+      ]
+    },
+    {
+      "id": "073",
+      "mode": "local",
+      "source_sha256": "23844290cd9f354b5fef5d0a863651e58b10c627ea51fba720a4c0baffdc63f5",
+      "dxil_bytes": 118424,
+      "dxil_sha256": "725d01ec1e89576218b193c500f22872a1e89f5c09619a5ffca6eb016d822ec0",
+      "prior_dxil_sha256": "725d01ec1e89576218b193c500f22872a1e89f5c09619a5ffca6eb016d822ec0",
+      "matches_prior_dxil": true,
+      "ballots": 135,
+      "validation_exit": 0,
+      "validation": [
+        "Validation succeeded."
+      ]
+    }
+  ]
+}

@@ -19,6 +19,8 @@ Four targeted compiler tests and 19 existing mask-liveness tests passed. The tes
 
 A fully inactive quad can be invisible to a wave-wide ballot inside divergent control flow. If a helper in that quad subsequently reaches a derivative, whole-wave reconstruction and lane-local materialization can differ. The existing HLSL local-mask semantics inform the lane-local representation. Current evidence covers the synthetic edge and waterfall cases. It does not establish general equivalence under reconvergence. The research patch uses a separate explicit offline entry point. AMD and Intel, full scene output, GPU time and safe runtime enablement remain open.
 
+The follow-up checks this patch together with XCL's proposed live-lane and bridged EXEC fixes. [Pinned upstream comparison](UPSTREAM-OVERLAP.md)
+
 ## Reproduce without game data
 
 Apply [the matrix patch](xcl-matrix.patch) to XCL `e1d84b7d9153f86a97d2ec5d209d196046fc0bea`. Apply [the lane-mask patch](lane-local-masks.patch) on that tree. The resulting Git tree is `233a165c94a98838b7e741ee063339e65471f9fa`. This is an independent branch from the [ordinary runtime experiment](xcl-runtime.patch). Copy [the observer](observe_lane_masks.rs) to `crates/xcl/examples`. Build the observer and XCL test executable with the same DXC and GPU driver. The source inputs are entries `071` and `073` from the pinned [Khronos extraction](PROVENANCE.md).
