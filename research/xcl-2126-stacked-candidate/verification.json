@@ -1,0 +1,16 @@
+{
+  "baseline": "3283da481077c1962f13f1b4078841662f7a4ccb",
+  "patch_sha256": "a2b27987a6a9b709572fb3a97134d1f982ed59ca4a27d3f257a6e8d5c4b1d8ee",
+  "verification": {
+    "compiler": "rustc 1.100.0 Windows gnullvm",
+    "dxc": "1.9.2602.17",
+    "new_cpu_tests_passed": 2,
+    "wave32_candidate_dwords_per_group": 256,
+    "fixed_layout_negative_dwords_per_group": 288,
+    "synthetic_gpu_executed": false,
+    "author_title_workloads_executed": false,
+    "portable_harness_dxv_variants": 58,
+    "allocator_seeded_sets": 128,
+    "allocator_lifetimes": 6585
+  }
+}
