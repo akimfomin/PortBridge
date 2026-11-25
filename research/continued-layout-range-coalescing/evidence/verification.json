@@ -1,0 +1,131 @@
+{
+  "base": "3f81d46ac01021bd7517f0cce153f4283bc8dd17",
+  "source_commit": "60b139b03836a649ee7101cd786162d4fc4d4eef",
+  "source_tree": "c714a12305b7d604e90a620cb3ac3a313d49a6f6",
+  "related_head": "2c178819ff68e82ba27ce0677f84b812576ad8bb",
+  "combined_trees": {
+    "baseline": "944a90a6c07d2fb79a659c7f7ebea03045c188c6",
+    "candidate": "ddd6b97d01955f63fb15bef6e2ca45e7f5c22a07"
+  },
+  "compiler": "Clang 23.1.6, LLVM-MinGW UCRT",
+  "cpu_suite": {
+    "main": {
+      "baseline": {
+        "d3d12_state_map_test": [
+          "state map, enhanced barriers, subresource decoding, layout tracking, discard ranges, block formats, BAR detection and memory types OK"
+        ],
+        "replay_texture_barrier_test": [
+          "replay_texture_barrier_test: OK"
+        ],
+        "layout_range_oracle": [
+          "striped_pieces=256",
+          "partial_tail_pieces=174",
+          "checkerboard_pieces=256",
+          "deterministic_partial_queries=96",
+          "separate_ds_pieces=64",
+          "stencil_only_pieces=1",
+          "coupled_ds_pieces=32",
+          "ordered_replay_image_barriers=97",
+          "ordered_replay_cells=96"
+        ]
+      },
+      "v2": {
+        "d3d12_state_map_test": [
+          "state map, enhanced barriers, subresource decoding, layout tracking, discard ranges, block formats, BAR detection and memory types OK"
+        ],
+        "replay_texture_barrier_test": [
+          "replay_texture_barrier_test: OK"
+        ],
+        "layout_range_oracle": [
+          "striped_pieces=2",
+          "partial_tail_pieces=2",
+          "checkerboard_pieces=256",
+          "deterministic_partial_queries=96",
+          "separate_ds_pieces=2",
+          "stencil_only_pieces=1",
+          "coupled_ds_pieces=2",
+          "ordered_replay_image_barriers=13",
+          "ordered_replay_cells=96"
+        ]
+      }
+    },
+    "current-stack": {
+      "baseline": {
+        "d3d12_state_map_test": [
+          "state map, enhanced barriers, subresource decoding, layout tracking, discard ranges, block formats, BAR detection and memory types OK"
+        ],
+        "replay_texture_barrier_test": [
+          "replay_texture_barrier_test: OK"
+        ],
+        "layout_range_oracle": [
+          "striped_pieces=256",
+          "partial_tail_pieces=174",
+          "checkerboard_pieces=256",
+          "deterministic_partial_queries=96",
+          "separate_ds_pieces=64",
+          "stencil_only_pieces=1",
+          "coupled_ds_pieces=32",
+          "ordered_replay_image_barriers=97",
+          "ordered_replay_cells=96"
+        ],
+        "rollback_coalescing_test": [
+          "release_records=12 ordered_records=14 release_allocations=5 same_layout_allocations=0",
+          "partial coverage, rollback, commit and follow-up rollback: OK"
+        ]
+      },
+      "v2": {
+        "d3d12_state_map_test": [
+          "state map, enhanced barriers, subresource decoding, layout tracking, discard ranges, block formats, BAR detection and memory types OK"
+        ],
+        "replay_texture_barrier_test": [
+          "replay_texture_barrier_test: OK"
+        ],
+        "layout_range_oracle": [
+          "striped_pieces=2",
+          "partial_tail_pieces=2",
+          "checkerboard_pieces=256",
+          "deterministic_partial_queries=96",
+          "separate_ds_pieces=2",
+          "stencil_only_pieces=1",
+          "coupled_ds_pieces=2",
+          "ordered_replay_image_barriers=13",
+          "ordered_replay_cells=96"
+        ],
+        "rollback_coalescing_test": [
+          "release_records=3 ordered_records=5 release_allocations=4 same_layout_allocations=0",
+          "partial coverage, rollback, commit and follow-up rollback: OK"
+        ]
+      }
+    },
+    "head": {
+      "baseline": {
+        "rollback_coalescing_test": [
+          "release_records=12 ordered_records=14 release_allocations=5 same_layout_allocations=0",
+          "partial coverage, rollback, commit and follow-up rollback: OK"
+        ]
+      },
+      "v2": {
+        "rollback_coalescing_test": [
+          "release_records=3 ordered_records=5 release_allocations=4 same_layout_allocations=0",
+          "partial coverage, rollback, commit and follow-up rollback: OK"
+        ]
+      }
+    }
+  },
+  "native": {
+    "historical_base": "b4b7756e8c64e7ae8b310288d543db0e428c0796",
+    "historical_adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "historical_texels_per_arm": 699040,
+    "historical_readback": "9bb0febb05a89f85",
+    "historical_records": [
+      97,
+      13
+    ],
+    "historical_commands": 2,
+    "historical_sync_validation_errors": [
+      0,
+      0
+    ],
+    "fresh_combined_fixture": "compiled each arm, execution pending"
+  }
+}
