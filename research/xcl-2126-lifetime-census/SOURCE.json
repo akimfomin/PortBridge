@@ -1,0 +1,14 @@
+{
+  "revision": "3283da481077c1962f13f1b4078841662f7a4ccb",
+  "sha256": {
+    "LICENSE": "de124e5a899ae4074ebf5c0f790494178ab66d310606b86203d67a6f3ef45168",
+    "THIRD_PARTY.md": "745a7d266ae0116469b6f51ab5baeff8fb17d69bda52bdde8d8191680ed50249",
+    "crates/xcl/src/gpu/dxil/module.rs": "fddffdd3b4ecfefc36c5ff6f80a39a7cf9475daed95f1693249c325fae3f9fc7",
+    "crates/xcl/src/gpu/dxil/module/opt.rs": "a8cd9afaa0699058ffd723b4bc02c5d0f4dd2377e6e763a4673b974019dc102c",
+    "crates/xcl/src/gpu/dxil/module/split.rs": "102fe17be41cc1b14355927bccbb250afb48f16838d1d9760f68e71803c1e733",
+    "crates/xcl/src/gpu/dxil/shader.rs": "0a1cdaa7e43650c1bddee85ba056076d5d237c2587af879ca7b59fc61cab0a9b",
+    "crates/xcl/src/gpu/dxil/container.rs": "0225287959df216543424b059e8dc4bbb2809fbc1e0dbb7f52b38175cdb5bea8",
+    "crates/xcl/src/gpu/dxil/bitstream.rs": "e637aee6a0e2287b84ea23bcc9a7ddab2b14a6205012661c36d1abf1004f326a",
+    "crates/xcl/src/gpu/dxil/ops.rs": "38642df82a3a27240617d0514b04759610b59e1749e32075c865af83256a040c"
+  }
+}
