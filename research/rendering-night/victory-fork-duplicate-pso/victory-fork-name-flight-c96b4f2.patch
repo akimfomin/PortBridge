@@ -1,0 +1,84 @@
+diff --git a/crates/victory-gpu/src/pipeline/library.rs b/crates/victory-gpu/src/pipeline/library.rs
+index fac6f5917430f3b6ba8914b9deafce552f645d85..9763a56e994c671e1ddda36f4260f966b8a66ffc 100644
+--- a/crates/victory-gpu/src/pipeline/library.rs
++++ b/crates/victory-gpu/src/pipeline/library.rs
+@@ -47,10 +47,10 @@
+ //! 16,352 of 16,384 pages read zeros with the handle closed, none with it
+ //! open (the test below). `VICTORY_LIBRARY_HANDLE=0`: closed, as before.
+ 
+-use std::collections::HashSet;
++use std::collections::{HashMap, HashSet};
+ use std::path::PathBuf;
+ use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+-use std::sync::{Mutex, MutexGuard, OnceLock, RwLock};
++use std::sync::{Arc, Condvar, LazyLock, Mutex, MutexGuard, OnceLock, RwLock};
+ 
+ use windows::Win32::Graphics::Direct3D12::*;
+ use windows::core::{HSTRING, Interface, PCWSTR};
+@@ -405,19 +405,37 @@ struct Library {
+ 
+ // SAFETY: D3D12 objects are free-threaded, and the library synchronises
+ // its own calls (see the module's notes); what it does not, two loads of
+-// one name, is serialised by `same_name`.
++// one name, is serialised by `NameFlight`.
+ unsafe impl Send for Library {}
+ // SAFETY: as above; the other fields are an atomic and a lock.
+ unsafe impl Sync for Library {}
+ 
+-/// Held by a load of the pipeline named `name`: loads of the same name
+-/// wait for each other (the host's one exception to the library's thread
+-/// safety: such a load may change that pipeline's entry). Names share 64
+-/// locks, so two different names seldom wait.
+-fn same_name(name: &str) -> MutexGuard<'static, ()> {
+-    static LOADING: [Mutex<()>; 64] = [const { Mutex::new(()) }; 64];
+-    let at = name.bytes().fold(0usize, |h, b| h.wrapping_mul(31).wrapping_add(usize::from(b)));
+-    LOADING[at % LOADING.len()].lock().unwrap_or_else(|e| e.into_inner())
++type ActiveNames = HashMap<Box<str>, Option<Arc<Condvar>>>;
++static ACTIVE_NAMES: LazyLock<Mutex<ActiveNames>> = LazyLock::new(|| Mutex::new(HashMap::new()));
++
++/// Serialise the load, and on a miss the create and store, for one name.
++/// The admission map is unlocked during driver calls.
++struct NameFlight<'a>(&'a str);
++
++impl<'a> NameFlight<'a> {
++    fn acquire(name: &'a str) -> Self {
++        let mut active = ACTIVE_NAMES.lock().unwrap_or_else(|e| e.into_inner());
++        while let Some(waiters) = active.get_mut(name) {
++            let done = waiters.get_or_insert_with(|| Arc::new(Condvar::new())).clone();
++            active = done.wait(active).unwrap_or_else(|e| e.into_inner());
++        }
++        active.insert(name.into(), None);
++        Self(name)
++    }
++}
++
++impl Drop for NameFlight<'_> {
++    fn drop(&mut self) {
++        let done = ACTIVE_NAMES.lock().unwrap_or_else(|e| e.into_inner()).remove(self.0).flatten();
++        if let Some(done) = done {
++            done.notify_all();
++        }
++    }
+ }
+ 
+ /// With `VICTORY_LIBRARY_LOCK=1`: held by every library call, as before.
+@@ -520,9 +538,9 @@ pub(crate) fn pipeline(
+         return create();
+     };
+     let began = std::time::Instant::now();
++    let _flight = NameFlight::acquire(name);
+     let loaded = {
+         let _all = one_call();
+-        let _one = same_name(name);
+         let _call = call("load", name);
+         load(&library.library, PCWSTR(wide.as_ptr()))
+     };
+@@ -540,7 +558,7 @@ pub(crate) fn pipeline(
+         }
+         Err(e) => e,
+     };
+-    // Compiled outside any lock: compiles take up to seconds.
++    // Compiles take up to seconds. Only this exact name remains reserved.
+     let pso = {
+         let _call = call("make", name);
+         create()?

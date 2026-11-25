@@ -1,0 +1,13 @@
+
+running 6 tests
+test absent_library_retains_per_call_creation ... ok
+test normal_create_error_allows_same_name_retry ... ok
+test separate_cold_callers_compile_once_when_the_store_succeeds ... same_name_creates=4 same_name_hits=0 stores_including_control=2 independent_before_release=true
+ok
+test store_failure_returns_the_created_pso_and_retries_next_time ... ok
+test warm_cache_counts_admission_allocations_without_timing ... warm_hits=12 allocator_calls=12 requested_bytes=384
+ok
+test warm_lookup_and_same_name_descriptor_mismatch_follow_original_policy ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
