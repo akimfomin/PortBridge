@@ -1,0 +1,294 @@
+{
+  "candidate_patch_sha256": "52908d083b1590ad8d79b978f411af13546c33bfd4b91cc1848500a825819b4c",
+  "earlier_interpreter": {
+    "revision": "9736508b0d201c641b119d2e4a18fb72f28bdde4",
+    "checkout_has_local_changes": false,
+    "carry_wave_programs": 33516,
+    "carry_lane_checks": 1072512,
+    "carry_samples_by_form": {
+      "VOP2/v_add_co_ci_u32/in-place": 3724,
+      "VOP3/v_add_co_ci_u32/separate": 3724,
+      "VOP3/v_add_co_ci_u32/in-place": 3724,
+      "VOP2/v_sub_co_ci_u32/in-place": 3724,
+      "VOP3/v_sub_co_ci_u32/separate": 3724,
+      "VOP3/v_sub_co_ci_u32/in-place": 3724,
+      "VOP2/v_subrev_co_ci_u32/in-place": 3724,
+      "VOP3/v_subrev_co_ci_u32/separate": 3724,
+      "VOP3/v_subrev_co_ci_u32/in-place": 3724
+    },
+    "carry_failing_checks": {},
+    "fma_samples_by_form": {
+      "VOP2/v_fmac_f32": 384,
+      "VOP3/v_fmac_f32": 384,
+      "VOP2/v_fmac_legacy_f32": 384,
+      "VOP3/v_fmac_legacy_f32": 384,
+      "VOP3/v_fma_f32": 384,
+      "VOP3/v_fma_legacy_f32": 384,
+      "VOP2/v_fmamk_f32": 384,
+      "VOP2/v_fmaak_f32": 384
+    },
+    "fma_mismatches_by_form": {
+      "VOP2/v_fmac_f32": 128,
+      "VOP3/v_fmac_f32": 128,
+      "VOP2/v_fmac_legacy_f32": 128,
+      "VOP3/v_fmac_legacy_f32": 128,
+      "VOP3/v_fma_f32": 128,
+      "VOP3/v_fma_legacy_f32": 128,
+      "VOP2/v_fmamk_f32": 128,
+      "VOP2/v_fmaak_f32": 128
+    },
+    "fma_unperturbed_ties_passed": {
+      "VOP2/v_fmac_f32": 128,
+      "VOP3/v_fmac_f32": 128,
+      "VOP2/v_fmac_legacy_f32": 128,
+      "VOP3/v_fmac_legacy_f32": 128,
+      "VOP3/v_fma_f32": 128,
+      "VOP3/v_fma_legacy_f32": 128,
+      "VOP2/v_fmamk_f32": 128,
+      "VOP2/v_fmaak_f32": 128
+    },
+    "fma_first_mismatch_by_form": {
+      "VOP2/v_fmac_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fmac_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP2/v_fmac_legacy_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fmac_legacy_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fma_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fma_legacy_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP2/v_fmamk_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP2/v_fmaak_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      }
+    }
+  },
+  "current_interpreter": {
+    "revision": "c4e76abac687e55c00cb005ad3de9132a7cbacf3",
+    "checkout_has_local_changes": false,
+    "carry_wave_programs": 33516,
+    "carry_lane_checks": 1072512,
+    "carry_samples_by_form": {
+      "VOP2/v_add_co_ci_u32/in-place": 3724,
+      "VOP3/v_add_co_ci_u32/separate": 3724,
+      "VOP3/v_add_co_ci_u32/in-place": 3724,
+      "VOP2/v_sub_co_ci_u32/in-place": 3724,
+      "VOP3/v_sub_co_ci_u32/separate": 3724,
+      "VOP3/v_sub_co_ci_u32/in-place": 3724,
+      "VOP2/v_subrev_co_ci_u32/in-place": 3724,
+      "VOP3/v_subrev_co_ci_u32/separate": 3724,
+      "VOP3/v_subrev_co_ci_u32/in-place": 3724
+    },
+    "carry_failing_checks": {},
+    "fma_samples_by_form": {
+      "VOP2/v_fmac_f32": 384,
+      "VOP3/v_fmac_f32": 384,
+      "VOP2/v_fmac_legacy_f32": 384,
+      "VOP3/v_fmac_legacy_f32": 384,
+      "VOP3/v_fma_f32": 384,
+      "VOP3/v_fma_legacy_f32": 384,
+      "VOP2/v_fmamk_f32": 384,
+      "VOP2/v_fmaak_f32": 384
+    },
+    "fma_mismatches_by_form": {
+      "VOP2/v_fmac_f32": 128,
+      "VOP3/v_fmac_f32": 128,
+      "VOP2/v_fmac_legacy_f32": 128,
+      "VOP3/v_fmac_legacy_f32": 128,
+      "VOP3/v_fma_f32": 128,
+      "VOP3/v_fma_legacy_f32": 128,
+      "VOP2/v_fmamk_f32": 128,
+      "VOP2/v_fmaak_f32": 128
+    },
+    "fma_unperturbed_ties_passed": {
+      "VOP2/v_fmac_f32": 128,
+      "VOP3/v_fmac_f32": 128,
+      "VOP2/v_fmac_legacy_f32": 128,
+      "VOP3/v_fmac_legacy_f32": 128,
+      "VOP3/v_fma_f32": 128,
+      "VOP3/v_fma_legacy_f32": 128,
+      "VOP2/v_fmamk_f32": 128,
+      "VOP2/v_fmaak_f32": 128
+    },
+    "fma_first_mismatch_by_form": {
+      "VOP2/v_fmac_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fmac_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP2/v_fmac_legacy_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fmac_legacy_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fma_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP3/v_fma_legacy_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP2/v_fmamk_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      },
+      "VOP2/v_fmaak_f32": {
+        "a": "0x3FC00000",
+        "b": "0x3F800001",
+        "c": "0x99800000",
+        "interpreter": "0x3FC00002",
+        "exact": "0x3FC00001"
+      }
+    }
+  },
+  "candidate_interpreter": {
+    "revision": "c4e76abac687e55c00cb005ad3de9132a7cbacf3",
+    "checkout_has_local_changes": true,
+    "carry_wave_programs": 33516,
+    "carry_lane_checks": 1072512,
+    "carry_samples_by_form": {
+      "VOP2/v_add_co_ci_u32/in-place": 3724,
+      "VOP3/v_add_co_ci_u32/separate": 3724,
+      "VOP3/v_add_co_ci_u32/in-place": 3724,
+      "VOP2/v_sub_co_ci_u32/in-place": 3724,
+      "VOP3/v_sub_co_ci_u32/separate": 3724,
+      "VOP3/v_sub_co_ci_u32/in-place": 3724,
+      "VOP2/v_subrev_co_ci_u32/in-place": 3724,
+      "VOP3/v_subrev_co_ci_u32/separate": 3724,
+      "VOP3/v_subrev_co_ci_u32/in-place": 3724
+    },
+    "carry_failing_checks": {},
+    "fma_samples_by_form": {
+      "VOP2/v_fmac_f32": 384,
+      "VOP3/v_fmac_f32": 384,
+      "VOP2/v_fmac_legacy_f32": 384,
+      "VOP3/v_fmac_legacy_f32": 384,
+      "VOP3/v_fma_f32": 384,
+      "VOP3/v_fma_legacy_f32": 384,
+      "VOP2/v_fmamk_f32": 384,
+      "VOP2/v_fmaak_f32": 384
+    },
+    "fma_mismatches_by_form": {},
+    "fma_unperturbed_ties_passed": {
+      "VOP2/v_fmac_f32": 128,
+      "VOP3/v_fmac_f32": 128,
+      "VOP2/v_fmac_legacy_f32": 128,
+      "VOP3/v_fmac_legacy_f32": 128,
+      "VOP3/v_fma_f32": 128,
+      "VOP3/v_fma_legacy_f32": 128,
+      "VOP2/v_fmamk_f32": 128,
+      "VOP2/v_fmaak_f32": 128
+    },
+    "fma_first_mismatch_by_form": {}
+  },
+  "win_ucrt_fmaf": {
+    "current": {
+      "targeted": {
+        "tested": 14976,
+        "mismatches": 264
+      },
+      "random": {
+        "tested": 100000,
+        "mismatches": 0
+      }
+    },
+    "candidate": {
+      "targeted": {
+        "tested": 14976,
+        "mismatches": 0
+      },
+      "random": {
+        "tested": 100000,
+        "mismatches": 0
+      }
+    }
+  },
+  "pytest": {
+    "current": {
+      "pass": 486,
+      "skip": 207
+    },
+    "candidate": {
+      "pass": 490,
+      "skip": 207
+    }
+  },
+  "native_probe": {
+    "assembled": true,
+    "llvm": "23.1.6",
+    "arch": "gfx1036",
+    "wave_size": 32,
+    "executed_on_device": false
+  }
+}
