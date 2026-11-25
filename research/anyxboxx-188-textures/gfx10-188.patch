@@ -1,0 +1,217 @@
+diff --git a/rust/anyxboxx-texture/src/gfx10.rs b/rust/anyxboxx-texture/src/gfx10.rs
+index 0136c11..9fb7303 100644
+--- a/rust/anyxboxx-texture/src/gfx10.rs
++++ b/rust/anyxboxx-texture/src/gfx10.rs
+@@ -307,6 +307,58 @@ impl SurfaceLayout {
+         Ok(addr as usize)
+     }
+ 
++    fn for_each_copy_span(&self, m: &MipLayout, slice: u32, mut copy: impl FnMut(usize, usize, usize)) {
++        let bpe = self.desc.element_bytes as usize;
++        let mip_base = self.slice_size * u64::from(slice) + m.offset;
++        if self.desc.swizzle == SwizzleMode::Linear {
++            let row_bytes = m.width_elements as usize * bpe;
++            let pitch_bytes = u64::from(m.pitch_elements) * bpe as u64;
++            for y in 0..m.height_elements {
++                copy((mip_base + u64::from(y) * pitch_bytes) as usize, y as usize * row_bytes, row_bytes);
++            }
++            return;
++        }
++
++        let block_log2 = self.desc.swizzle.block_log2();
++        let in_tail = m.tail.is_some();
++        let (origin_x, origin_y) = m.tail.map_or((0, 0), |tail| (tail.x, tail.y));
++        if m.width_elements <= 2 && m.height_elements <= 2
++            && (in_tail || (m.width_elements <= self.block_width && m.height_elements <= self.block_height))
++        {
++            // Quelques éléments dans un bloc : le calcul direct évite la table des colonnes.
++            let mut linear_offset = 0;
++            for y in 0..m.height_elements {
++                for x in 0..m.width_elements {
++                    let offset = self.equation.eval_byte_offset(x + origin_x, y + origin_y, slice) ^ self.effective_xor;
++                    copy((mip_base + offset as u64) as usize, linear_offset, bpe);
++                    linear_offset += bpe;
++                }
++            }
++            return;
++        }
++        let pitch_blocks = if in_tail { 0 } else { m.pitch_elements / self.block_width };
++        // L'équation GFX10 est linéaire sur GF(2). X, Y et la tranche se combinent par XOR,
++        // avec les coordonnées entières pour conserver les bits d'entrelacement des pipes.
++        let columns: Vec<_> = (0..m.width_elements)
++            .map(|x| {
++                let block = if in_tail { 0 } else { u64::from(x / self.block_width) << block_log2 };
++                (block, self.equation.eval_byte_offset(x + origin_x, 0, 0))
++            })
++            .collect();
++        let slice_xor = self.equation.eval_byte_offset(0, 0, slice) ^ self.effective_xor;
++        let mut linear_offset = 0;
++        for y in 0..m.height_elements {
++            let block = if in_tail { 0 } else { u64::from(y / self.block_height) * u64::from(pitch_blocks) };
++            let row_base = mip_base + (block << block_log2);
++            let row_xor = self.equation.eval_byte_offset(0, y + origin_y, 0) ^ slice_xor;
++            for &(column_block, column_xor) in &columns {
++                let tiled_offset = row_base + column_block + (column_xor ^ row_xor) as u64;
++                copy(tiled_offset as usize, linear_offset, bpe);
++                linear_offset += bpe;
++            }
++        }
++    }
++
+     /// Désentrelace une sous-ressource `(mip, slice)` vers un tampon linéaire contigu.
+     pub fn detile_subresource(&self, tiled: &[u8], mip: u32, slice: u32) -> Result<Vec<u8>, String> {
+         if (tiled.len() as u64) < self.total_size {
+@@ -323,13 +375,9 @@ impl SurfaceLayout {
+         let bpe = self.desc.element_bytes as usize;
+         let (w, h) = (m.width_elements as usize, m.height_elements as usize);
+         let mut linear = vec![0u8; w * h * bpe];
+-        for y in 0..m.height_elements {
+-            for x in 0..m.width_elements {
+-                let src = self.element_offset(mip, slice, x, y)?;
+-                let dst = (y as usize * w + x as usize) * bpe;
+-                linear[dst..dst + bpe].copy_from_slice(&tiled[src..src + bpe]);
+-            }
+-        }
++        self.for_each_copy_span(m, slice, |src, dst, bytes| {
++            linear[dst..dst + bytes].copy_from_slice(&tiled[src..src + bytes]);
++        });
+         Ok(linear)
+     }
+ 
+@@ -355,13 +403,9 @@ impl SurfaceLayout {
+                 linear.len()
+             ));
+         }
+-        for y in 0..m.height_elements {
+-            for x in 0..m.width_elements {
+-                let dst = self.element_offset(mip, slice, x, y)?;
+-                let src = (y as usize * w + x as usize) * bpe;
+-                tiled[dst..dst + bpe].copy_from_slice(&linear[src..src + bpe]);
+-            }
+-        }
++        self.for_each_copy_span(m, slice, |dst, src, bytes| {
++            tiled[dst..dst + bytes].copy_from_slice(&linear[src..src + bytes]);
++        });
+         Ok(())
+     }
+ }
+diff --git a/rust/anyxboxx-texture/tests/gfx10_copy_oracle.rs b/rust/anyxboxx-texture/tests/gfx10_copy_oracle.rs
+new file mode 100644
+index 0000000..d400310
+--- /dev/null
++++ b/rust/anyxboxx-texture/tests/gfx10_copy_oracle.rs
+@@ -0,0 +1,114 @@
++use anyxboxx_texture::gfx10::{PipeConfig, SurfaceDesc, SurfaceLayout, SwizzleMode};
++
++const MODES: [SwizzleMode; 15] = [
++    SwizzleMode::Linear, SwizzleMode::Sw256BS, SwizzleMode::Sw256BD,
++    SwizzleMode::Sw4KS, SwizzleMode::Sw4KD, SwizzleMode::Sw64KS, SwizzleMode::Sw64KD,
++    SwizzleMode::Sw64KST, SwizzleMode::Sw64KDT, SwizzleMode::Sw4KSX, SwizzleMode::Sw4KDX,
++    SwizzleMode::Sw64KZX, SwizzleMode::Sw64KSX, SwizzleMode::Sw64KDX, SwizzleMode::Sw64KRX,
++];
++
++fn next(state: &mut u32) -> u32 {
++    *state ^= *state << 13;
++    *state ^= *state >> 17;
++    *state ^= *state << 5;
++    *state
++}
++
++fn patterned_bytes(len: usize, state: &mut u32) -> Vec<u8> {
++    (0..len).map(|_| next(state) as u8).collect()
++}
++
++fn assert_bytes(actual: &[u8], expected: &[u8], desc: SurfaceDesc, mip: u32, slice: u32) {
++    assert_eq!(actual.len(), expected.len());
++    if actual != expected {
++        let i = actual.iter().zip(expected).position(|(a, b)| a != b).unwrap();
++        panic!("{desc:?}, mip {mip}, tranche {slice}, octet {i}: {} != {}", actual[i], expected[i]);
++    }
++}
++
++fn check_copies(desc: SurfaceDesc, state: &mut u32) {
++    let layout = SurfaceLayout::compute(desc).unwrap();
++    let bpe = desc.element_bytes as usize;
++    // Inclut des octets hors disposition et des données distinctes dans tout le remplissage.
++    let mut expected_tiled = patterned_bytes(layout.total_size as usize + 23, state);
++    let mut actual_tiled = expected_tiled.clone();
++    for slice in 0..desc.array_size {
++        for mip in 0..desc.mip_levels {
++            let m = &layout.mips[mip as usize];
++            let offsets: Vec<_> = (0..m.height_elements)
++                .flat_map(|y| (0..m.width_elements).map(move |x| (x, y)))
++                .map(|(x, y)| layout.element_offset(mip, slice, x, y).unwrap())
++                .collect();
++            let expected_linear: Vec<_> = offsets.iter()
++                .flat_map(|&offset| expected_tiled[offset..offset + bpe].iter().copied())
++                .collect();
++            assert_bytes(&layout.detile_subresource(&actual_tiled, mip, slice).unwrap(), &expected_linear, desc, mip, slice);
++
++            let input = patterned_bytes(expected_linear.len(), state);
++            for (&offset, bytes) in offsets.iter().zip(input.chunks_exact(bpe)) {
++                expected_tiled[offset..offset + bpe].copy_from_slice(bytes);
++            }
++            layout.tile_subresource(&input, &mut actual_tiled, mip, slice).unwrap();
++            assert_bytes(&actual_tiled, &expected_tiled, desc, mip, slice);
++        }
++    }
++}
++
++#[test]
++fn copies_match_element_oracle_across_modes_and_sizes() {
++    let mut state = 0x4606_5d2f;
++    for (i, &mode) in MODES.iter().enumerate() {
++        for log_bpe in 0..5 {
++            let (width, height) = [(1, 273), (261, 1), (27, 39), (135, 97), (259, 265)][(i + log_bpe) % 5];
++            let desc = SurfaceDesc {
++                width, height, mip_levels: 8, array_size: 2, element_bytes: 1 << log_bpe,
++                block_side: if log_bpe == 4 && i % 2 == 0 { 4 } else { 1 },
++                swizzle: mode, pipes: PipeConfig::SCARLETT, pipe_bank_xor: 0x7f,
++            };
++            check_copies(desc, &mut state);
++        }
++    }
++}
++
++#[test]
++fn copies_match_element_oracle_with_shape_and_pipe_variation() {
++    let mut state = 0xdb23_4eaf;
++    // Les deux équations profondeur/couleur R_X et Z_X ont leur propre configuration fixe.
++    let modes = [SwizzleMode::Sw64KST, SwizzleMode::Sw64KDT, SwizzleMode::Sw64KSX,
++        SwizzleMode::Sw64KDX, SwizzleMode::Sw4KSX, SwizzleMode::Sw4KDX, SwizzleMode::Linear];
++    for &mode in &modes {
++        for &(num_pipes, num_pkrs) in &[(1, 1), (8, 4), (64, 32), (64, 8)] {
++            let desc = SurfaceDesc {
++                width: 1 + next(&mut state) % 389,
++                height: 1 + next(&mut state) % 325,
++                mip_levels: 3 + next(&mut state) % 7,
++                array_size: 3,
++                element_bytes: 1 << (next(&mut state) % 5),
++                block_side: 1,
++                swizzle: mode,
++                pipes: PipeConfig::new(num_pipes, num_pkrs).unwrap(),
++                pipe_bank_xor: next(&mut state),
++            };
++            check_copies(desc, &mut state);
++        }
++    }
++    let bc = SurfaceDesc { mip_levels: 10, array_size: 3, pipe_bank_xor: 0xa7,
++        ..SurfaceDesc::bc7(773, 531, SwizzleMode::Sw64KSX) };
++    check_copies(bc, &mut state);
++}
++
++#[test]
++fn invalid_subresource_copy_keeps_the_backing_bytes() {
++    let desc = SurfaceDesc::bc7(17, 9, SwizzleMode::Sw64KSX);
++    let layout = SurfaceLayout::compute(desc).unwrap();
++    let original = vec![0xa5; layout.total_size as usize];
++    let mut tiled = original.clone();
++    assert_eq!(layout.tile_subresource(&[], &mut tiled, 1, 1).unwrap_err(), "mip 1 hors limites");
++    assert_eq!(layout.tile_subresource(&[], &mut tiled, 0, 1).unwrap_err(), "tranche 1 hors limites");
++    assert_eq!(layout.tile_subresource(&[], &mut tiled, 0, 0).unwrap_err(), "tampon linéaire invalide : 0 octets reçus, 240 attendus");
++    assert!(layout.tile_subresource(&[], &mut tiled[..20], 1, 1).unwrap_err().starts_with("tampon tuilé trop court"));
++    assert_eq!(layout.detile_subresource(&tiled, 1, 1).unwrap_err(), "mip 1 hors limites");
++    assert_eq!(layout.detile_subresource(&tiled, 0, 1).unwrap_err(), "tranche 1 hors limites");
++    assert!(layout.detile_subresource(&tiled[..20], 0, 0).unwrap_err().starts_with("tampon tuilé trop court"));
++    assert_eq!(tiled, original);
++}
