@@ -1,0 +1,4 @@
+Separate reset calls returned 155 requested pages.
+A later query still found 135 dirty pages in the gaps.
+The union reset returned 290 pages, including 135 in gaps.
+Later gap queries after union reset found 0 pages.
