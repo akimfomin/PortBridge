@@ -1,0 +1,10 @@
+{
+  "targeted": {
+    "tested": 14976,
+    "mismatches": 0
+  },
+  "random": {
+    "tested": 100000,
+    "mismatches": 0
+  }
+}

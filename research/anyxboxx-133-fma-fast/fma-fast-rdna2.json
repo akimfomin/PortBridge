@@ -1,0 +1,41 @@
+{
+  "revision": "c4e76abac687e55c00cb005ad3de9132a7cbacf3",
+  "checkout_has_local_changes": true,
+  "carry_wave_programs": 33516,
+  "carry_lane_checks": 1072512,
+  "carry_samples_by_form": {
+    "VOP2/v_add_co_ci_u32/in-place": 3724,
+    "VOP3/v_add_co_ci_u32/separate": 3724,
+    "VOP3/v_add_co_ci_u32/in-place": 3724,
+    "VOP2/v_sub_co_ci_u32/in-place": 3724,
+    "VOP3/v_sub_co_ci_u32/separate": 3724,
+    "VOP3/v_sub_co_ci_u32/in-place": 3724,
+    "VOP2/v_subrev_co_ci_u32/in-place": 3724,
+    "VOP3/v_subrev_co_ci_u32/separate": 3724,
+    "VOP3/v_subrev_co_ci_u32/in-place": 3724
+  },
+  "carry_failing_checks": {},
+  "fma_samples_by_form": {
+    "VOP2/v_fmac_f32": 384,
+    "VOP3/v_fmac_f32": 384,
+    "VOP2/v_fmac_legacy_f32": 384,
+    "VOP3/v_fmac_legacy_f32": 384,
+    "VOP3/v_fma_f32": 384,
+    "VOP3/v_fma_legacy_f32": 384,
+    "VOP2/v_fmamk_f32": 384,
+    "VOP2/v_fmaak_f32": 384
+  },
+  "fma_mismatches_by_form": {},
+  "fma_unperturbed_ties_passed": {
+    "VOP2/v_fmac_f32": 128,
+    "VOP3/v_fmac_f32": 128,
+    "VOP2/v_fmac_legacy_f32": 128,
+    "VOP3/v_fmac_legacy_f32": 128,
+    "VOP3/v_fma_f32": 128,
+    "VOP3/v_fma_legacy_f32": 128,
+    "VOP2/v_fmamk_f32": 128,
+    "VOP2/v_fmaak_f32": 128
+  },
+  "fma_first_mismatch_by_form": {},
+  "tested_candidate": "e7ca3a716c949ae519f61bfa96c0446c7bc99c87"
+}

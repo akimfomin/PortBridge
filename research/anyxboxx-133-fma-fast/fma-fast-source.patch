@@ -1,0 +1,136 @@
+diff --git a/PrototypeScarlett/emu/rdna2_exec_ops.py b/PrototypeScarlett/emu/rdna2_exec_ops.py
+index bd92301..31d949b 100644
+--- a/PrototypeScarlett/emu/rdna2_exec_ops.py
++++ b/PrototypeScarlett/emu/rdna2_exec_ops.py
+@@ -2,7 +2,7 @@
+ 
+ Les tables associent un mnémonique à sa fonction, d'après la documentation publique d'AMD
+ (« RDNA 2 Instruction Set Architecture »). Les flottants sont calculés en double précision
+-puis arrondis en simple précision ; les dénormaux ne sont pas traités à part.
++puis arrondis en simple précision. Les FMA f32 évitent le double arrondi.
+ """
+ import math
+ import struct
+@@ -230,12 +230,38 @@ def _binary_float(function):
+     return lambda a, b, d, k, c: operation(F(a), F(b))
+ 
+ 
+-def _fma(a, b, c):
++def _mul_add(a, b, c):
+     return a * b + c
+ 
+ 
++# 53 bits en f64, 24 en f32 ; le facteur convertit une ULP f64 en une demi-ULP f32.
++_F32_HALF_ULP_SCALE = 2.0 ** (53 - 24 - 1)
++_F32_HALF_MIN_SUBNORMAL = 2.0 ** -150
++_F32_OUT_OF_RANGE = 2.0 ** 128
++
++
++def _fma(a, b, c):
++    """Prépare l'arrondi unique d'un produit-somme de trois entrées f32."""
++    product = a * b                       # au plus 48 bits significatifs, exact en f64
++    total = product + c
++    # FastTwoSum : on place la plus grande magnitude en premier pour retrouver
++    # l'erreur exacte de la somme. Si elle est nulle, un seul arrondi reste à faire.
++    if abs(product) < abs(c):
++        product, c = c, product
++    error = c - (total - product)
++    if not error or not _F32_HALF_MIN_SUBNORMAL <= abs(total) <= _F32_OUT_OF_RANGE:
++        return total
++
++    half_ulp = math.ulp(total) * _F32_HALF_ULP_SCALE
++    if half_ulp < _F32_HALF_MIN_SUBNORMAL:
++        half_ulp = _F32_HALF_MIN_SUBNORMAL
++    if total % (half_ulp + half_ulp) != half_ulp:
++        return total
++    return math.nextafter(total, math.copysign(math.inf, error))
++
++
+ def _legacy_fma(x, y, z):
+-    return z if x == 0 or y == 0 else x * y + z          # « legacy » : 0 × n'importe quoi = 0
++    return z if x == 0 or y == 0 else _fma(x, y, z)       # « legacy » : 0 × n'importe quoi = 0
+ 
+ 
+ def _round_even(x):
+@@ -304,7 +330,7 @@ VECTOR = {
+     "v_min_f32": _binary_float(min),
+     "v_max_f32": _binary_float(max),
+     "v_fmac_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(b), F(d)),
+-    "v_mac_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(b), F(d)),
++    "v_mac_f32": lambda a, b, d, k, c: _float_op(_mul_add)(F(a), F(b), F(d)),
+     "v_fmamk_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(k), F(b)),
+     "v_fmaak_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(b), F(k)),
+     "v_cndmask_b32": lambda a, b, d, k, c: b if c else a,
+@@ -334,8 +360,8 @@ VECTOR = {
+     "v_frexp_exp_i32_f32": lambda a, b, d, k, c: _frexp_exponent(F(a)),
+     "v_frexp_mant_f32": lambda a, b, d, k, c: _frexp_mantissa(a),
+     "v_fmac_legacy_f32": lambda a, b, d, k, c: _float_op(_legacy_fma)(F(a), F(b), F(d)),
+-    "v_madmk_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(k), F(b)),
+-    "v_madak_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(b), F(k)),
++    "v_madmk_f32": lambda a, b, d, k, c: _float_op(_mul_add)(F(a), F(k), F(b)),
++    "v_madak_f32": lambda a, b, d, k, c: _float_op(_mul_add)(F(a), F(b), F(k)),
+ }
+ VECTOR_NO_OPERATION = frozenset({"v_nop", "v_pipeflush", "v_clrexcp"})
+ 
+diff --git a/PrototypeScarlett/emu/rdna2_exec_vop3.py b/PrototypeScarlett/emu/rdna2_exec_vop3.py
+index f54d664..03375e7 100644
+--- a/PrototypeScarlett/emu/rdna2_exec_vop3.py
++++ b/PrototypeScarlett/emu/rdna2_exec_vop3.py
+@@ -7,8 +7,8 @@ Sémantique d'après la documentation publique d'AMD (« RDNA 2 Instruction Set
+ """
+ import math
+ 
+-from emu.rdna2_exec_ops import (MASK32, VECTOR, VECTOR_COMPARE, _float_op, _fma, _legacy_fma, bits_float,
+-                                float_bits, ldexp, signed)
++from emu.rdna2_exec_ops import (MASK32, VECTOR, VECTOR_COMPARE, _float_op, _fma, _legacy_fma, _mul_add,
++                                bits_float, float_bits, ldexp, signed)
+ 
+ SIGN = 0x8000_0000
+ EXEC_LO = 126
+@@ -70,7 +70,7 @@ def _perm_b32(src0, src1, src2):
+ # Instructions propres à VOP3 : fonction(a, b, c) des trois sources.
+ VECTOR3 = {
+     "v_fma_f32": _float3(_fma),
+-    "v_mad_f32": _float3(_fma),
++    "v_mad_f32": _float3(_mul_add),
+     "v_fma_legacy_f32": _float3(_legacy_fma),
+     "v_mad_u32_u24": lambda a, b, c: (a & 0xFFFFFF) * (b & 0xFFFFFF) + c,
+     "v_mad_i32_i24": lambda a, b, c: signed(a, 24) * signed(b, 24) + signed(c),
+diff --git a/tests/test_rdna2_fma_rounding.py b/tests/test_rdna2_fma_rounding.py
+new file mode 100644
+index 0000000..ec64bf8
+--- /dev/null
++++ b/tests/test_rdna2_fma_rounding.py
+@@ -0,0 +1,32 @@
++"""Arrondi unique des FMA f32, y compris lorsque la somme double tombe à mi-chemin."""
++
++import pytest
++
++from emu import rdna2_exec
++from test_rdna2_exec import V, program, vop2, vop3
++from test_rdna2_exec_vop12 import mov
++
++
++@pytest.mark.parametrize("a,b,c,expected", [
++    (0x3FC0_0000, 0x3F80_0001, 0x9980_0000, 0x3FC0_0001),
++    (0x3FC0_0000, 0x3F80_0003, 0x1980_0000, 0x3FC0_0005),
++    (0xBFC0_0000, 0x3F80_0001, 0x1980_0000, 0xBFC0_0001),
++    (0x3FC0_0000, 0x3F80_0001, 0x0000_0000, 0x3FC0_0002),
++    (0x0080_0000, 0x3F7F_FFFF, 0x0000_0000, 0x0080_0000),  # milieu normal/sous-normal
++    (0x5B78_0000, 0x6384_2108, 0x8D80_0000, 0x7F7F_FFFF),  # milieu de débordement
++])
++def test_fma_f32_rounds_the_exact_sum(a, b, c, expected):
++    # 1,5 × (1 + 2^-23) = 1,5 + 3 × 2^-24, au milieu de deux f32.
++    # L'addition de ±2^-76 déplace la somme exacte de part et d'autre de ce milieu.
++    wave = rdna2_exec.run(program(
++        *mov(1, a), *mov(2, b), *mov(3, c),
++        *mov(4, c), vop2("v_fmac_f32", 4, V + 1, 2),
++        *mov(5, c), *vop3("v_fmac_f32", 5, V + 1, V + 2),
++        *mov(6, c), vop2("v_fmac_legacy_f32", 6, V + 1, 2),
++        *mov(7, c), *vop3("v_fmac_legacy_f32", 7, V + 1, V + 2),
++        *vop3("v_fma_f32", 8, V + 1, V + 2, V + 3),
++        vop2("v_fmamk_f32", 9, V + 1, 3), b,
++        vop2("v_fmaak_f32", 10, V + 1, 2), c,
++        *vop3("v_fma_legacy_f32", 11, V + 1, V + 2, V + 3),
++    ))
++    assert [wave.v[reg] for reg in range(4, 12)] == [[expected] * 32] * 8
