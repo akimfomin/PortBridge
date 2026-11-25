@@ -38,10 +38,10 @@ The counts measure logical transport requests from these fixtures. Allocation si
 
 The independent allocator model in `interval_slots.py` allows stable values defined after piece zero. It gives each scalar a lifetime beginning at the defining piece's exit and ending at the latest entry on a crossing edge that still carries it. Treat the end as inclusive. A later value may reuse the earlier slots once its first exit follows that end. This exploits the existing order of entry loads before exit stores. A consumer loads an eligible value only on entry to its live edge. The model retains the original selector and falls back when the conservative stable area plus the dynamic payload exceeds the original maximum.
 
-The test covers 672 lane/case executions. Two i64 values with separate lifetimes reuse the same two slots, saving 3,072 logical bytes across 96 executions without increasing the three-dword lane stride. A crossing case keeps both i64s separate because the earlier value is read again. In a branch-exclusive control, a five-dword trial would exceed the original three-dword maximum, so the model retains the original layout. [Source](interval_slots.py) · [Results](interval-results.json)
+The test covers 864 lane/case executions. Two i64s with disjoint dispatch lifetimes reuse two slots, reducing 9,984 to 6,912 logical bytes across 96 lanes and keeping the three-dword stride. A stricter policy that requires the separating dispatch barrier gives up same-dispatch reuse and falls back in the narrow overlapping case until read-before-write ordering within one piece is independently established. A crossing case keeps both i64s separate because the earlier value is read again. In a branch-exclusive control, a five-dword trial would exceed the original three-dword maximum, so the model retains the original layout. [Source](interval_slots.py) · [Results](interval-results.json)
 
 ```powershell
 python -B .\interval_slots.py
 ```
 
-The model supplies a layout option for the broader follow-up after the upstream census. Whole compiler and device validation remain separate work.
+Kalmarv's census found no words eligible for the original first-piece intersection in the 25 actual split programs. His own broader static count estimates 39% fewer total loads and stores over all crossing edges. The allocator above addresses one layout constraint for the broader follow-up. The load during each actual path and the benefit on the device still need measurement. [Upstream census](https://github.com/xcl-dev/xcl/pull/2080#issuecomment-7152849712)

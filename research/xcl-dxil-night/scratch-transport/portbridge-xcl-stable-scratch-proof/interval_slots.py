@@ -17,7 +17,7 @@ class Interval:
     words: int
 
 
-def choose_intervals(program):
+def choose_intervals(program, allow_same_piece):
     """Use only values actually leaving their defining piece and forwarded later."""
     intervals = []
     for v in program.values:
@@ -26,7 +26,7 @@ def choose_intervals(program):
                 and any(e.origin > v.piece for e in crossing)
                 and all(e.origin >= v.piece for e in crossing)):
             # A piece loads its inputs at entry and writes successors at exit.
-            intervals.append(Interval(v.name, 2 * v.piece + 1,
+            intervals.append(Interval(v.name, 2 * v.piece + int(allow_same_piece),
                                       2 * max(e.target for e in crossing), v.words))
     return sorted(intervals, key=lambda i: (i.first, i.value))
 
@@ -51,9 +51,9 @@ def place(intervals):
     return slots, high
 
 
-def make_layout(program):
+def make_layout(program, allow_same_piece=True):
     baseline, original = layout_fields(program)
-    candidates = choose_intervals(program)
+    candidates = choose_intervals(program, allow_same_piece)
     stable, dynamic_start = place(candidates)
     specs = program.specs
     widest = max((dynamic_start + sum(specs[n].words for n in e.live if n not in stable)
@@ -159,15 +159,31 @@ def crossed_lifetimes():
     return Program(earlier.values, edges, tuple(pieces))
 
 
+def separated_dispatches():
+    values = (Value("a", 0, "i64"), Value("b", 3, "i64"))
+    pieces = (
+        Piece(frozenset(), lambda d, lane, tag: Result(1, {"a": 0x0123456789ABCDEF ^ (lane << 33)})),
+        Piece(frozenset(), lambda d, lane, tag: Result(2, {})),
+        Piece(frozenset({"a"}), lambda d, lane, tag: Result(3, {}, (d["a"],))),
+        Piece(frozenset(), lambda d, lane, tag: Result(4, {"b": 0xF0EDCAB987654321 ^ (lane << 35)})),
+        Piece(frozenset(), lambda d, lane, tag: Result(5, {})),
+        Piece(frozenset({"b"}), lambda d, lane, tag: Result(0, {}, (d["b"],))),
+    )
+    edges = (Edge(1, 0, 1, ("a",)), Edge(2, 1, 2, ("a",)), Edge(3, 2, 3, ()),
+             Edge(4, 3, 4, ("b",)), Edge(5, 4, 5, ("b",)))
+    return Program(values, edges, pieces)
+
+
 def bench_cases():
     result = {}
-    for name, program in (
-        ("phased_i64", phased()), ("mixed_skipping", mixed_program()),
-        ("linear_common", linear_program(5)), ("linear_transient", linear_program(5, anchors=False)),
-        ("distinct_edges", incompatible_program()), ("branch_budget", branch_budget()),
-        ("crossed_lifetimes", crossed_lifetimes()),
+    for name, program, allow_same_piece in (
+        ("phased_i64", phased(), True), ("phased_strict_fallback", phased(), False),
+        ("separated_dispatches", separated_dispatches(), False), ("mixed_skipping", mixed_program(), True),
+        ("linear_common", linear_program(5), True), ("linear_transient", linear_program(5, anchors=False), True),
+        ("distinct_edges", incompatible_program(), True), ("branch_budget", branch_budget(), True),
+        ("crossed_lifetimes", crossed_lifetimes(), True),
     ):
-        layout = make_layout(program)
+        layout = make_layout(program, allow_same_piece)
         slots, stride, _, planned, naive = layout
         logical = [0, 0]
         for lane in range(96):
@@ -178,7 +194,8 @@ def bench_cases():
             logical[1] += 4 * sum(after.values())
         result[name] = {"lanes": 96, "stable_slots": slots, "baseline_dwords_per_lane": stride,
                         "uncapped_reused_dwords": planned, "uncapped_naive_dwords": naive,
-                        "bytes": logical, "budget_fallback": planned > stride}
+                        "bytes": logical, "budget_fallback": planned > stride,
+                        "allow_same_piece": allow_same_piece}
     phase = result["phased_i64"]
     assert phase["stable_slots"] == {"a": (1, 2), "b": (1, 2)}
     assert phase["baseline_dwords_per_lane"] == phase["uncapped_reused_dwords"] == 3
@@ -192,6 +209,12 @@ def bench_cases():
     crossing = result["crossed_lifetimes"]
     assert crossing["stable_slots"] == {"a": (1, 2), "b": (3, 4)}
     assert crossing["baseline_dwords_per_lane"] == crossing["uncapped_reused_dwords"] == 5
+    strict = result["phased_strict_fallback"]
+    assert strict["budget_fallback"] and strict["bytes"][0] == strict["bytes"][1]
+    separated = result["separated_dispatches"]
+    assert separated["stable_slots"] == {"a": (1, 2), "b": (1, 2)}
+    assert separated["baseline_dwords_per_lane"] == separated["uncapped_reused_dwords"] == 3
+    assert separated["bytes"][0] > separated["bytes"][1]
     return result
 
 

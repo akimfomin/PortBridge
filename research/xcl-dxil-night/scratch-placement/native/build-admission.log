@@ -1,0 +1,3 @@
+CPU build preflight available_commit=3074531328 physical_bytes=10815107072
+Admission refused: build requires at least 3 GiB available commit and 6 GiB available physical RAM.
+No compiler or GPU worker was started.

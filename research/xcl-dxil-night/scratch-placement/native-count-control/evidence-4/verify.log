@@ -1,0 +1,5 @@
+guard=returned reaped=1 child_exit=0 win_error=0 job_peak_bytes=102440960
+mode=verify adapter=NVIDIA GeForce RTX 4070 Ti SUPER debug=0 debug_status=887a002d diagnostics=0 first_debug_id=0 hresult=00000000 failure= complete=2 started=2 qpc_hz=10000000 size=65536 alignment=65536 buffers=4 heap_capacity=1048576
+trial,arm,create_heap_ticks,create_buffers_ticks,create_total_ticks,buffers_created,bytes_checked,mismatched_words,first_bad_word,actual_word,expected_word
+1,committed,0,8256,8256,4,262144,0,0,00000000,00000000
+1,placed,2871,406,3277,4,262144,0,0,00000000,00000000

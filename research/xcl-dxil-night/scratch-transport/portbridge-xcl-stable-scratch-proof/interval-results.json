@@ -18,7 +18,43 @@
       9216,
       6144
     ],
-    "budget_fallback": false
+    "budget_fallback": false,
+    "allow_same_piece": true
+  },
+  "phased_strict_fallback": {
+    "lanes": 96,
+    "stable_slots": {},
+    "baseline_dwords_per_lane": 3,
+    "uncapped_reused_dwords": 5,
+    "uncapped_naive_dwords": 5,
+    "bytes": [
+      9216,
+      9216
+    ],
+    "budget_fallback": true,
+    "allow_same_piece": false
+  },
+  "separated_dispatches": {
+    "lanes": 96,
+    "stable_slots": {
+      "a": [
+        1,
+        2
+      ],
+      "b": [
+        1,
+        2
+      ]
+    },
+    "baseline_dwords_per_lane": 3,
+    "uncapped_reused_dwords": 3,
+    "uncapped_naive_dwords": 5,
+    "bytes": [
+      9984,
+      6912
+    ],
+    "budget_fallback": false,
+    "allow_same_piece": false
   },
   "mixed_skipping": {
     "lanes": 96,
@@ -38,7 +74,8 @@
       9644,
       7448
     ],
-    "budget_fallback": false
+    "budget_fallback": false,
+    "allow_same_piece": true
   },
   "linear_common": {
     "lanes": 96,
@@ -58,7 +95,8 @@
       15360,
       8448
     ],
-    "budget_fallback": false
+    "budget_fallback": false,
+    "allow_same_piece": true
   },
   "linear_transient": {
     "lanes": 96,
@@ -70,7 +108,8 @@
       6144,
       6144
     ],
-    "budget_fallback": false
+    "budget_fallback": false,
+    "allow_same_piece": true
   },
   "distinct_edges": {
     "lanes": 96,
@@ -82,7 +121,8 @@
       2880,
       2880
     ],
-    "budget_fallback": false
+    "budget_fallback": false,
+    "allow_same_piece": true
   },
   "branch_budget": {
     "lanes": 96,
@@ -94,7 +134,8 @@
       4992,
       4992
     ],
-    "budget_fallback": true
+    "budget_fallback": true,
+    "allow_same_piece": true
   },
   "crossed_lifetimes": {
     "lanes": 96,
@@ -115,6 +156,7 @@
       12288,
       6912
     ],
-    "budget_fallback": false
+    "budget_fallback": false,
+    "allow_same_piece": true
   }
 }

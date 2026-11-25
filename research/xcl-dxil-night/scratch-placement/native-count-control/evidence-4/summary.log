@@ -1,0 +1,12 @@
+mode,trial,committed_us,placed_us,placed_heap_us,saved_us
+measure-ab,1,815.500,392.100,345.800,423.400
+measure-ab,2,884.000,269.900,250.800,614.100
+measure-ab,3,656.300,230.200,210.200,426.100
+measure-ab,4,876.300,244.000,224.900,632.300
+measure-ba,1,740.900,431.400,326.800,309.500
+measure-ba,2,585.600,258.800,236.100,326.800
+measure-ba,3,594.300,334.700,312.800,259.600
+measure-ba,4,590.300,448.000,423.200,142.300
+paired_medians group=all pairs=8 committed_us=698.600 placed_us=302.300 heap_us=281.800 saved_us=375.100 saved_percent=53.863
+paired_medians group=first_pair pairs=2 committed_us=778.200 placed_us=411.750 heap_us=336.300 saved_us=366.450 saved_percent=46.846
+paired_medians group=later_pairs pairs=6 committed_us=625.300 placed_us=264.350 heap_us=243.450 saved_us=376.450 saved_percent=60.365
