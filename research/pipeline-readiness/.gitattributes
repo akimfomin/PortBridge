@@ -1,1 +1,3 @@
 xcl-read-guards.patch -text whitespace=-blank-at-eol
+xcl-read-guard-validation.patch -text whitespace=-blank-at-eol
+xcl-root-read-switch.patch -text whitespace=-blank-at-eol

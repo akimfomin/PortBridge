@@ -1,0 +1,452 @@
+diff --git a/crates/xcl/src/gpu/dxil/core_tests.rs b/crates/xcl/src/gpu/dxil/core_tests.rs
+index 24aed53..67fb443 100644
+--- a/crates/xcl/src/gpu/dxil/core_tests.rs
++++ b/crates/xcl/src/gpu/dxil/core_tests.rs
+@@ -252,6 +252,35 @@ fn graphics_read_guards_merge_only_equal_window_conditions() {
+     println!("same-window and changed-window conditional branches: {branches:?}");
+ }
+ 
++#[test]
++fn graphics_read_switches_merge_only_identical_window_selectors() {
++    use crate::gpu::recomp::{dxc, runner};
++    if dxc::location().is_err() {
++        return runner::skip_test("no DXC");
++    }
++    let mut switches = Vec::new();
++    let mut reads = Vec::new();
++    for shared_high in [true, false] {
++        let dxil = read_guards_pixel(shared_high, 4, 1, 1, false);
++        super::validate::validate(&dxil).expect("root-window read shader validates");
++        let disassembly = super::validate::disassemble(&dxil).unwrap();
++        let body = disassembly.split("define void @main()").nth(1).and_then(|s| s.split("\n}\n").next())
++            .expect("main body");
++        switches.push(body.matches("switch i32").count());
++        reads.push(body.matches("call %dx.types.ResRet.i32 @dx.op.rawBufferLoad.i32").count());
++    }
++    let disabled = std::env::var("XCL_DXIL_NO_OPT").unwrap_or_default();
++    let switch_fusion = std::env::var("XCL_DXIL_SWITCH_READ_FUSION").as_deref() == Ok("1")
++        && !disabled.split(',').any(|pass| matches!(pass.trim(), "read-switches" | "cse" | "all"));
++    if switch_fusion {
++        assert!(switches[0] < switches[1], "only identical root-window selectors can fuse: {switches:?}");
++    } else {
++        assert_eq!(switches[0], switches[1], "without switch fusion both shaders retain their dispatches");
++    }
++    assert_eq!(reads[0] + 3, reads[1], "four per-window load sites per read plus differently used SGPRs");
++    println!("root switches with same and changed selectors: {switches:?}; raw reads: {reads:?}");
++}
++
+ #[test]
+ fn graphics_read_guards_match_cpu_pixels() {
+     use crate::gpu::recomp::{dxc, runner, HEAP_WINDOWS, IO_UMA_BASE_HI};
+diff --git a/crates/xcl/src/gpu/dxil/module/guard.rs b/crates/xcl/src/gpu/dxil/module/guard.rs
+index d1c9ee1..93d5bdc 100644
+--- a/crates/xcl/src/gpu/dxil/module/guard.rs
++++ b/crates/xcl/src/gpu/dxil/module/guard.rs
+@@ -4,6 +4,9 @@ use std::collections::{HashMap, HashSet};
+ 
+ use super::{BinOp, Block, CastOp, FnAttrs, Module, Op, Pred, Value};
+ 
++#[path = "guard_switch.rs"]
++mod switch;
++
+ impl Module {
+     pub(super) fn fuse_read_guards(&mut self, order: &[u32]) -> bool {
+         let mut incoming = vec![0; self.blocks.len()];
+diff --git a/crates/xcl/src/gpu/dxil/module/guard_differential_tests.rs b/crates/xcl/src/gpu/dxil/module/guard_differential_tests.rs
+index 2937022..c25112f 100644
+--- a/crates/xcl/src/gpu/dxil/module/guard_differential_tests.rs
++++ b/crates/xcl/src/gpu/dxil/module/guard_differential_tests.rs
+@@ -211,6 +211,13 @@ fn interpret(m: &Module, input: u32) -> Vec<Event> {
+                     next = Some(if value(*c) == 0 { *no } else { *yes });
+                     break;
+                 }
++                Op::Switch(selector, default, cases) => {
++                    let selector = value(*selector);
++                    next = Some(cases.iter().find_map(|&(key, target)| {
++                        (value(key) == selector).then_some(target)
++                    }).unwrap_or(*default));
++                    break;
++                }
+                 Op::Ret => return events,
+                 op => panic!("unexpected instruction: {op:?}"),
+             };
+@@ -290,3 +297,171 @@ fn generated_read_guard_chains_preserve_events_at_fusion_boundary() {
+         assert!(interpret(&m, u32::MAX).is_empty());
+     }
+ }
++
++#[derive(Clone, Copy, Debug)]
++enum SwitchControl {
++    Fuse,
++    DifferentSelector,
++    DifferentKey,
++    ReorderedKeys,
++    EffectInArm,
++    EffectInMiddle,
++    DependentAddress,
++    DependentJoinValue,
++}
++
++fn randomized_phi(m: &mut Module, rng: &mut Random, mut inputs: Vec<(Value, Block)>) -> Value {
++    let i32 = m.i32();
++    let phi = m.phi(i32);
++    for i in (1..inputs.len()).rev() {
++        inputs.swap(i, rng.next() as usize % (i + 1));
++    }
++    for (value, label) in inputs {
++        m.add_incoming(phi, value, label);
++    }
++    phi
++}
++
++fn generate_switch_pair(rng: &mut Random, arms: usize, control: SwitchControl) -> Module {
++    let mut m = Module::new();
++    m.define_entry("main");
++    let i32 = m.i32();
++    let input_ty = m.func_ty(i32, &[]);
++    let unary_ty = m.func_ty(i32, &[i32]);
++    let read_ty = m.func_ty(i32, &[i32, i32]);
++    let input = m.declare("cfg_test_input", input_ty, FnAttrs::ReadNone);
++    let output = m.declare("cfg_test_output", unary_ty, FnAttrs::NoUnwind);
++    let read = m.declare("dx.op.rawBufferLoad.i32", read_ty, FnAttrs::ReadOnly);
++    let wave = m.declare("dx.op.waveReadLaneFirst.i32", unary_ty, FnAttrs::NoUnwind);
++    let store = m.declare("dx.op.rawBufferStore.i32", unary_ty, FnAttrs::NoUnwind);
++    let entry = m.entry_block();
++    let middle = m.new_block();
++    let join = m.new_block();
++    let keys: Vec<_> = (0..arms).map(|i| m.i32c(i as u32)).collect();
++    let first: Vec<_> = keys.iter().map(|&key| (key, m.new_block())).collect();
++    let second: Vec<_> = keys.iter().map(|&key| (key, m.new_block())).collect();
++    let input = m.call(input, &[]);
++    let mask = m.i32c(7);
++    let one = m.i32c(1);
++    let invalid_window = m.i32c(8);
++    let select = m.bin(BinOp::And, input, mask);
++    let other_select = m.bin(BinOp::Xor, select, one);
++    m.switch(select, middle, &first);
++    let mut carried = vec![(input, entry)];
++    let mut window = vec![(invalid_window, entry)];
++    for &(key, arm) in &first {
++        m.set_block(arm);
++        let offset = random_math(&mut m, rng, input);
++        let read_a = m.call(read, &[key, offset]);
++        carried.push((read_a, arm));
++        window.push((key, arm));
++        m.br(middle);
++    }
++
++    m.set_block(middle);
++    let value = randomized_phi(&mut m, rng, carried);
++    let window = randomized_phi(&mut m, rng, window);
++    let independent = random_math(&mut m, rng, input);
++    let dependent = random_math(&mut m, rng, value);
++    let selector = if matches!(control, SwitchControl::DifferentSelector) { other_select } else { select };
++    let mut cases = second.clone();
++    match control {
++        SwitchControl::DifferentKey => cases[0].0 = m.i32c(7),
++        SwitchControl::ReorderedKeys => cases.reverse(),
++        SwitchControl::EffectInMiddle => { m.call(wave, &[value]); }
++        _ => {}
++    }
++    m.switch(selector, join, &cases);
++    let skipped = if matches!(control, SwitchControl::DependentJoinValue) { dependent } else { value };
++    let mut output_inputs = vec![(skipped, middle)];
++    let mut phi_through = vec![(value, middle)];
++    for &(_, arm) in &second {
++        m.set_block(arm);
++        let offset = if matches!(control, SwitchControl::DependentAddress) { dependent } else { independent };
++        let read_b = m.call(read, &[window, offset]);
++        if matches!(control, SwitchControl::EffectInArm) {
++            m.call(store, &[read_b]);
++        }
++        let final_value = m.bin(BinOp::Xor, value, read_b);
++        output_inputs.push((final_value, arm));
++        phi_through.push((value, arm));
++        m.br(join);
++    }
++
++    m.set_block(join);
++    let final_value = randomized_phi(&mut m, rng, output_inputs);
++    let original = randomized_phi(&mut m, rng, phi_through);
++    let final_value = m.bin(BinOp::Add, final_value, original);
++    let final_value = m.bin(BinOp::Xor, final_value, dependent);
++    m.call(output, &[final_value]);
++    m.ret();
++    m
++}
++
++#[test]
++fn exact_switch_selector_fusion_preserves_window_addresses_and_phi_edges() {
++    for seed in 1..=16 {
++        let mut rng = Random(0x7f4a_7c15 ^ seed);
++        for arms in 2..=5 {
++            for control in [
++                SwitchControl::Fuse,
++                SwitchControl::DifferentSelector,
++                SwitchControl::DifferentKey,
++                SwitchControl::ReorderedKeys,
++                SwitchControl::EffectInArm,
++                SwitchControl::EffectInMiddle,
++                SwitchControl::DependentAddress,
++                SwitchControl::DependentJoinValue,
++            ] {
++                let mut m = generate_switch_pair(&mut rng, arms, control);
++                let inputs: Vec<_> = (0..64).map(|low| rng.next() & !63 | low).collect();
++                let before: Vec<_> = inputs.iter().map(|&input| interpret(&m, input)).collect();
++                let order: Vec<_> = m.block_layout().0.into_iter().map(|b| b as u32).collect();
++                let changed = m.fuse_read_switches(&order);
++                assert_eq!(changed, arms <= 4 && matches!(control, SwitchControl::Fuse), "seed={seed} arms={arms} {control:?}");
++                assert_eq!(m.block_layout().0.len(), order.len() - (arms + 1) * usize::from(changed));
++                for (&input, expected) in inputs.iter().zip(before) {
++                    assert_eq!(interpret(&m, input), expected, "seed={seed} arms={arms} {control:?} {input:#x}");
++                }
++            }
++        }
++    }
++}
++
++#[test]
++fn exact_switch_selector_fusion_respects_group_bound() {
++    let mut rng = Random(0xa7c1_59d3);
++    for count in [1usize, 2, 7, 8, 9, 16, 17] {
++        let mut m = Module::new();
++        m.define_entry("main");
++        let i32 = m.i32();
++        let input_ty = m.func_ty(i32, &[]);
++        let read_ty = m.func_ty(i32, &[i32, i32]);
++        let input = m.declare("cfg_test_input", input_ty, FnAttrs::ReadNone);
++        let read = m.declare("dx.op.rawBufferLoad.i32", read_ty, FnAttrs::ReadOnly);
++        let selector = m.call(input, &[]);
++        let keys: Vec<_> = (0..4).map(|key| m.i32c(key)).collect();
++        for _ in 0..count {
++            let join = m.new_block();
++            let cases: Vec<_> = keys.iter().map(|&key| (key, m.new_block())).collect();
++            m.switch(selector, join, &cases);
++            for (window, arm) in cases {
++                m.set_block(arm);
++                let address = random_math(&mut m, &mut rng, selector);
++                m.call(read, &[window, address]);
++                m.br(join);
++            }
++            m.set_block(join);
++        }
++        m.ret();
++        let before: Vec<_> = (0..5).map(|i| interpret(&m, i)).collect();
++        assert!(before[..4].iter().all(|reads| reads.len() == count));
++        assert!(before[4].is_empty());
++        let order: Vec<_> = m.block_layout().0.into_iter().map(|b| b as u32).collect();
++        assert_eq!(m.fuse_read_switches(&order), count > 1);
++        assert_eq!(m.block_layout().0.len(), 1 + 5 * count.div_ceil(8));
++        for (i, expected) in before.into_iter().enumerate() {
++            assert_eq!(interpret(&m, i as u32), expected, "switches={count} selector={i}");
++        }
++    }
++}
+diff --git a/crates/xcl/src/gpu/dxil/module/guard_switch.rs b/crates/xcl/src/gpu/dxil/module/guard_switch.rs
+new file mode 100644
+index 0000000..8bf6940
+--- /dev/null
++++ b/crates/xcl/src/gpu/dxil/module/guard_switch.rs
+@@ -0,0 +1,162 @@
++//! Fuse consecutive root-UAV read switches with identical selectors and cases.
++
++use std::collections::{HashMap, HashSet};
++
++use super::{Block, Module, Op, Value};
++
++impl Module {
++    pub(in super::super) fn fuse_read_switches(&mut self, order: &[u32]) -> bool {
++        let mut incoming = vec![0; self.blocks.len()];
++        for &source in order {
++            for target in self.successors(source as usize) {
++                incoming[target.0 as usize] += 1;
++            }
++        }
++
++        let mut changed = false;
++        for &source in order {
++            // A fused region contains at most eight original read switches.
++            for _ in 1..8 {
++                if !self.fuse_read_switch_pair(Block(source), &incoming) {
++                    break;
++                }
++                changed = true;
++            }
++        }
++        changed
++    }
++
++    fn fuse_read_switch_pair(&mut self, source: Block, incoming: &[usize]) -> bool {
++        let Some(head) = self.last_inst(source) else { return false };
++        let Op::Switch(selector, middle, first_cases) = &self.insts[head].op else { return false };
++        let middle = *middle;
++        let Some(middle_end) = self.last_inst(middle) else { return false };
++        let Op::Switch(again, join, second_cases) = &self.insts[middle_end].op else { return false };
++        let join = *join;
++        let arm_count = first_cases.len();
++        if selector != again || !(2..=4).contains(&arm_count) || arm_count != second_cases.len()
++            || incoming[middle.0 as usize] != arm_count + 1
++            || incoming[join.0 as usize] != arm_count + 1
++        {
++            return false;
++        }
++        let arms: Option<Vec<_>> = first_cases.iter().zip(second_cases).map(|(&(key, first), &(again, second))| {
++            (key == again).then_some((first, second))
++        }).collect();
++        let Some(arms) = arms else { return false };
++        let mut distinct = HashSet::from([source, middle, join]);
++        if distinct.len() != 3 || !arms.iter().all(|&(first, second)| {
++            distinct.insert(first) && distinct.insert(second)
++                && self.is_read_switch_arm(first, middle, incoming)
++                && self.is_read_switch_arm(second, join, incoming)
++        }) {
++            return false;
++        }
++
++        // Row zero in the PHI mappings is the default edge. Each subsequent
++        // row maps the same switch key from the first region to the second.
++        let first_preds: Vec<_> = std::iter::once(source).chain(arms.iter().map(|&(first, _)| first)).collect();
++        let second_preds: Vec<_> = std::iter::once(middle).chain(arms.iter().map(|&(_, second)| second)).collect();
++        let mid = &self.blocks[middle.0 as usize];
++        let mut mid_inputs = HashMap::new();
++        for &i in mid {
++            let Op::Phi(inputs) = &self.insts[i as usize].op else { break };
++            let Some(mapped) = switch_phi_inputs(inputs, &first_preds) else { return false };
++            mid_inputs.insert(Value::Inst(i), mapped);
++        }
++
++        // Results derived from a middle PHI can move after the join PHIs only
++        // if no second arm or incoming join PHI value needs them.
++        let mut sinks = HashSet::new();
++        for &i in &mid[mid_inputs.len()..mid.len() - 1] {
++            if !self.guard_math(i) {
++                return false;
++            }
++            let mut depends_on_phi = false;
++            self.insts[i as usize].op.for_each_operand(|v| {
++                depends_on_phi |= mid_inputs.contains_key(&v) || sinks.contains(&v);
++            });
++            if depends_on_phi {
++                sinks.insert(Value::Inst(i));
++            }
++        }
++        for &(_, second) in &arms {
++            for &i in &self.blocks[second.0 as usize] {
++                let mut uses_sink = false;
++                self.insts[i as usize].op.for_each_operand(|v| uses_sink |= sinks.contains(&v));
++                if uses_sink {
++                    return false;
++                }
++            }
++        }
++
++        let mut join_phis = Vec::new();
++        for &i in &self.blocks[join.0 as usize] {
++            let Op::Phi(inputs) = &self.insts[i as usize].op else { break };
++            let Some(mapped) = switch_phi_inputs(inputs, &second_preds) else { return false };
++            if mapped.iter().any(|v| sinks.contains(v)) {
++                return false;
++            }
++            let rewritten = mapped.into_iter().zip(&first_preds).enumerate()
++                .map(|(row, (v, &label))| (mid_inputs.get(&v).map_or(v, |values| values[row]), label))
++                .collect();
++            join_phis.push((i, rewritten));
++        }
++
++        let mut middle_phis = std::mem::take(&mut self.blocks[middle.0 as usize]);
++        middle_phis.pop();
++        let source_body = &mut self.blocks[source.0 as usize];
++        source_body.pop();
++        let mut sink_insts = Vec::new();
++        for i in middle_phis.drain(mid_inputs.len()..) {
++            if sinks.contains(&Value::Inst(i)) {
++                self.def_block[i as usize] = join;
++                sink_insts.push(i);
++            } else {
++                self.def_block[i as usize] = source;
++                source_body.push(i);
++            }
++        }
++        let Op::Switch(_, default, _) = &mut self.insts[head].op else { unreachable!() };
++        *default = join;
++        source_body.push(head as u32);
++
++        for (arm, &(first, second)) in arms.iter().enumerate() {
++            let second_body = std::mem::take(&mut self.blocks[second.0 as usize]);
++            let first_body = &mut self.blocks[first.0 as usize];
++            first_body.pop();
++            for i in second_body {
++                self.insts[i as usize].op.map_operands(|v| mid_inputs.get(&v).map_or(v, |values| values[arm + 1]));
++                self.def_block[i as usize] = first;
++                first_body.push(i);
++            }
++        }
++
++        let join_phi_count = join_phis.len();
++        for (i, rewritten) in join_phis {
++            self.insts[i as usize].op = Op::Phi(rewritten);
++        }
++        for &i in &middle_phis {
++            self.def_block[i as usize] = join;
++        }
++        let join_body = &mut self.blocks[join.0 as usize];
++        join_body.splice(join_phi_count..join_phi_count, sink_insts);
++        join_body.splice(..0, middle_phis);
++        true
++    }
++
++    fn is_read_switch_arm(&self, arm: Block, join: Block, incoming: &[usize]) -> bool {
++        incoming[arm.0 as usize] == 1
++            && self.last_inst(arm).is_some_and(|i| matches!(self.insts[i].op, Op::Br(b) if b == join))
++            && self.readonly_arm(arm)
++    }
++}
++
++fn switch_phi_inputs(inputs: &[(Value, Block)], labels: &[Block]) -> Option<Vec<Value>> {
++    if inputs.len() != labels.len() {
++        return None;
++    }
++    labels.iter().map(|label| {
++        inputs.iter().find_map(|&(value, block)| (block == *label).then_some(value))
++    }).collect()
++}
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index f1b1fd7..18a9db1 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -643,6 +643,15 @@ impl Module {
+             debug_assert!(self.uses_well_formed(&self.block_layout().0
+                 .into_iter().map(|b| b as u32).collect::<Vec<_>>()));
+         }
++        if pixel && !skip("read-switches") && std::env::var("XCL_DXIL_SWITCH_READ_FUSION").as_deref() == Ok("1")
++            && !self.has_rov_handle()
++        {
++            let order = self.block_layout().0.into_iter().map(|b| b as u32).collect::<Vec<_>>();
++            if self.fuse_read_switches(&order) {
++                debug_assert!(self.uses_well_formed(&self.block_layout().0
++                    .into_iter().map(|b| b as u32).collect::<Vec<_>>()));
++            }
++        }
+         if !skip("merge") && self.simplify_cfg() {
+             let order: Vec<u32> = self.block_layout().0.into_iter().map(|b| b as u32).collect();
+             let mut repl2: Vec<Option<Value>> = vec![None; self.insts.len()];
+diff --git a/crates/xcl/src/gpu/recomp/pso.rs b/crates/xcl/src/gpu/recomp/pso.rs
+index da4b25e..54ae5dc 100644
+--- a/crates/xcl/src/gpu/recomp/pso.rs
++++ b/crates/xcl/src/gpu/recomp/pso.rs
+@@ -911,6 +911,7 @@ fn cache_allowed(stage: Stage, present: impl Fn(&str) -> bool) -> bool {
+                 "XCL_DEBUG_LOD0",
+                 "XCL_DEBUG_PS_SUB",
+                 "XCL_DEBUG_PS_EXPR",
++                "XCL_DXIL_SWITCH_READ_FUSION",
+             ]
+             .iter()
+             .any(|name| present(name)))
+@@ -2004,6 +2005,7 @@ mod shader_cache_tests {
+             "XCL_DEBUG_LOD0",
+             "XCL_DEBUG_PS_SUB",
+             "XCL_DEBUG_PS_EXPR",
++            "XCL_DXIL_SWITCH_READ_FUSION",
+         ] {
+             assert!(!cache_allowed(Stage::Pixel, |v| v == name));
+             assert!(cache_allowed(Stage::Compute, |v| v == name));

@@ -32,6 +32,8 @@ Fusion won each of the five pairs. The median paired native gain was 3.726 s. Th
 
 This measures the full create-and-observe operation in an XCL synthetic graphics test. A native driver speedup from a small byte reduction is possible when the compiler avoids many conditional regions. The input intentionally repeats the eligible shape. Its prevalence, complete application startup benefit, independent AMD behavior and performance on other shader graphs remain unmeasured. XCL #2446 acts on scalar reloads and stays relevant in programs where that is the larger source of redundant work. The timed program uses distinct vector-addressed loads. Compatible exact warmup remains faster when a reusable native pipeline already exists.
 
+The [follow-up](XCL-READ-GUARD-VALIDATION.md) records broader applicability, exact output controls, GPU execution and opaque pipeline cache sizes.
+
 ## Reproduce against XCL
 
 The compiler change is `9d461646a51429d364ec03c4660a875a4b1e0c69`. The test revision is `8e4c4a63143702d5e5da79484273143e0b76eb92`, tree `288f0ecc888aa66ac515d4509266768d3a5fd3a0`. Apply the [source-only patch](xcl-read-guards.patch) in a clean checkout of XCL at `6d12f58a229bc73889878a448c64dc3af25eeba0`. The patch carries XCL's [GPL-2.0-only license](../xcl-compact-scratch-adoption/LICENSE-GPL-2.0-only).

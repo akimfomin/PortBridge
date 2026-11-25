@@ -1,0 +1,595 @@
+diff --git a/crates/xcl/src/gpu/dxil/core_tests.rs b/crates/xcl/src/gpu/dxil/core_tests.rs
+index c1b59cb..24aed53 100644
+--- a/crates/xcl/src/gpu/dxil/core_tests.rs
++++ b/crates/xcl/src/gpu/dxil/core_tests.rs
+@@ -153,23 +153,42 @@ fn direct_and_hlsl_graphics_stages_link() {
+     assert_eq!(draw(&hvs, &dps), want, "HLSL VS + direct PS");
+ }
+ 
+-fn read_guards_pixel(shared_high: bool, mem_windows: u32, groups: usize) -> Vec<u8> {
++fn read_guards_pixel(shared_high: bool, mem_windows: u32, groups: usize, columns: usize, mixed_exec: bool) -> Vec<u8> {
+     use crate::gpu::recomp::PsInterface;
+     let mut code = Vec::new();
+     let mut emit = |name, encoding, fields: &[(&str, u64)], literal| {
+         code.extend(encode(name, encoding, fields, literal).unwrap_or_else(|error| panic!("{name}: {error}")));
+     };
+-    // Different aligned low addresses. SADDR is off and OFFSET is zero, so
+-    // their upper dwords are identical at the actual memory selection.
++    if columns > 1 {
++        // SV_Position.x selects one of four windows and a distinct record within it.
++        emit("V_CVT_U32_F32", "ENC_VOP1", &[("VDST", 12), ("SRC0", 256)], None);
++        emit("V_AND_B32", "ENC_VOP2", &[("VDST", 13), ("SRC0", 131), ("VSRC1", 12)], None);
++        emit("V_LSHLREV_B32", "ENC_VOP2", &[("VDST", 12), ("SRC0", 132), ("VSRC1", 12)], None);
++    }
++    // SADDR is off and OFFSET is zero. Neighboring reads share their high dword.
+     for i in 0..4 {
+         let high_sgpr = if shared_high { 1 } else { 1 + i };
+-        emit("V_MOV_B32", "ENC_VOP1", &[("VDST", 21 + 2 * i), ("SRC0", high_sgpr)], None);
++        if columns > 1 {
++            emit("V_ADD_NC_U32", "ENC_VOP2", &[("VDST", 21 + 2 * i), ("SRC0", high_sgpr), ("VSRC1", 13)], None);
++        } else {
++            emit("V_MOV_B32", "ENC_VOP1", &[("VDST", 21 + 2 * i), ("SRC0", high_sgpr)], None);
++        }
++    }
++    if mixed_exec {
++        // Keep columns 0–2 of each four-column group, suppress column 3.
++        emit("V_CMP_NE_U32", "ENC_VOPC", &[("SRC0", 131), ("VSRC1", 13)], None);
++        emit("S_AND_B32", "ENC_SOP2", &[("SDST", 126), ("SSRC0", 6), ("SSRC1", 106)], None);
++    } else {
++        emit("S_MOV_B32", "ENC_SOP1", &[("SDST", 126), ("SSRC0", 6)], None);
+     }
+-    emit("S_MOV_B32", "ENC_SOP1", &[("SDST", 126), ("SSRC0", 6)], None);
+     for group in 0..groups {
+         for i in 0..4 {
+-            let off = 64 + 16 * group as u32 + 4 * i as u32;
+-            emit("V_MOV_B32", "ENC_VOP1", &[("VDST", 20 + 2 * i), ("SRC0", 255)], Some(off));
++            let off = (64 + 16 * group * columns + 4 * i as usize) as u32;
++            if columns > 1 {
++                emit("V_ADD_NC_U32", "ENC_VOP2", &[("VDST", 20 + 2 * i), ("SRC0", 255), ("VSRC1", 12)], Some(off));
++            } else {
++                emit("V_MOV_B32", "ENC_VOP1", &[("VDST", 20 + 2 * i), ("SRC0", 255)], Some(off));
++            }
+         }
+         let dest = if group == 0 { 4 } else { 8 };
+         for i in 0..4 {
+@@ -186,7 +205,7 @@ fn read_guards_pixel(shared_high: bool, mem_windows: u32, groups: usize) -> Vec<
+     let psi = PsInterface {
+         inputs: vec![sig("SV_Position", 0, 1, 3, 0, 0xF)],
+         outputs: vec![sig("SV_Target", 0, 64, 3, 0, 0xF)],
+-        input_ena: 0x2,
++        input_ena: if columns > 1 { 0x100 } else { 0x2 },
+         attrs: None,
+     };
+     super::kernel::translate_pixel(&code, KernelOptions { wave64: false, split: false, mem_windows, sampler_base: 0 }, &psi)
+@@ -202,7 +221,7 @@ fn graphics_read_guards_merge_only_equal_window_conditions() {
+     }
+     let mut branches = Vec::new();
+     for shared_high in [true, false] {
+-        let dxil = read_guards_pixel(shared_high, HEAP_WINDOWS | 4, 1);
++        let dxil = read_guards_pixel(shared_high, HEAP_WINDOWS | 4, 1, 1, false);
+         super::validate::validate(&dxil).expect("read guard pixel shader validates");
+         let disassembly = super::validate::disassemble(&dxil).unwrap();
+         let body = disassembly.split("define void @main()").nth(1).and_then(|s| s.split("\n}\n").next()).expect("main body");
+@@ -260,7 +279,7 @@ fn graphics_read_guards_match_cpu_pixels() {
+         *slot = value.to_bits();
+     }
+     let clear = [9.0; 4];
+-    let ps = read_guards_pixel(true, 1, 1);
++    let ps = read_guards_pixel(true, 1, 1, 1, false);
+     super::validate::validate(&ps).expect("root read guard pixel shader validates");
+     for (mask, wanted) in [(u32::MAX, expected), (0, clear)] {
+         sgprs[6] = mask;
+@@ -276,45 +295,80 @@ fn graphics_read_guards_match_cpu_pixels() {
+     ];
+     let groups = std::env::var("XCL_READ_GUARD_TEST_GROUPS").ok().map_or(1, |v|
+         v.parse::<usize>().ok().filter(|n| (1..=512).contains(n)).expect("XCL_READ_GUARD_TEST_GROUPS must be 1–512"));
+-    let window_words = (16 + groups * 4).next_multiple_of(64);
++    let size = std::env::var("XCL_READ_GUARD_TEST_GPU_SIZE").ok().map_or(8, |v|
++        v.parse::<u32>().ok().filter(|n| (8..=128).contains(n)).expect("XCL_READ_GUARD_TEST_GPU_SIZE must be 8–128"));
++    let pixel_count = (size * size) as usize;
++    let divergent = std::env::var("XCL_READ_GUARD_TEST_DIVERGENT").as_deref() == Ok("1");
++    let mixed_exec = std::env::var("XCL_READ_GUARD_TEST_MIXED_EXEC").as_deref() == Ok("1");
++    assert!(!mixed_exec || divergent, "the mixed EXEC fixture needs pixel coordinates");
++    let root_windows = std::env::var("XCL_READ_GUARD_TEST_ROOT_WINDOWS").as_deref() == Ok("1");
++    let columns = if divergent { size as usize } else { 1 };
++    let window_words = (16 + groups * columns * 4).next_multiple_of(64);
+     let mut mem = vec![0x4080_0000; window_words * colors.len()];
++    let lane_color = |color: f32, x: usize| color + (x % 8) as f32 / 16.0;
+     for (window, color) in colors.iter().enumerate() {
+         for group in 0..groups {
+-            for (i, value) in color.iter().enumerate() {
+-                mem[window * window_words + 16 + group * 4 + i] = value.to_bits();
++            for x in 0..columns {
++                for (i, &value) in color.iter().enumerate() {
++                    let record = group * columns + x;
++                    mem[window * window_words + 16 + record * 4 + i] = lane_color(value, x).to_bits();
++                }
+             }
+         }
+     }
+     let before_translation = std::time::Instant::now();
+-    let ps = read_guards_pixel(true, HEAP_WINDOWS | 4, groups);
++    let windows = if root_windows { 4 } else { HEAP_WINDOWS | 4 };
++    let ps = read_guards_pixel(true, windows, groups, columns, mixed_exec);
+     let translate_ms = before_translation.elapsed().as_secs_f64() * 1000.0;
+     assert!(ps.len() <= 320 * 1024, "unbounded graphics fixture");
+     let bytecode = crate::gpu::shader::fnv64(&ps);
+     super::validate::validate(&ps).expect("heap read guard pixel shader validates");
++    if std::env::var("XCL_READ_GUARD_TEST_STRUCTURE").as_deref() == Ok("1") {
++        let asm = super::validate::disassemble(&ps).unwrap();
++        let body = asm.split("define void @main()").nth(1).and_then(|s| s.split("\n}\n").next()).expect("main body");
++        let terminators = body.lines().map(str::trim_start)
++            .filter(|line| ["br ", "switch ", "ret ", "unreachable"].iter().any(|op| line.starts_with(op))).count();
++        println!("guard structure groups={groups} divergent={divergent} mixed_exec={mixed_exec} root_windows={root_windows} basic_blocks={terminators} conditional_branches={} switches={} phis={} dxil_bytes={}",
++            body.matches("br i1").count(), body.matches("  switch ").count(), body.matches(" = phi ").count(), ps.len());
++    }
+     let repeats = std::env::var("XCL_READ_GUARD_TEST_REPEATS").ok().map_or(1, |v|
+         v.parse::<usize>().ok().filter(|n| (1..=4).contains(n)).expect("XCL_READ_GUARD_TEST_REPEATS must be 1–4"));
+     let base = 0x400;
+     sgprs[IO_UMA_BASE_HI] = base;
+     sgprs[6] = u32::MAX;
+     let cases = [(0, colors[0]), (base + 1, colors[1]), (base + 3, colors[3]), (base + 4, [0.0; 4])];
+-    let measured = if std::env::var("XCL_READ_GUARD_TEST_FIRST_ONLY").as_deref() == Ok("1") {
++    let measured = if divergent {
++        &cases[1..2]
++    } else if std::env::var("XCL_READ_GUARD_TEST_FIRST_ONLY").as_deref() == Ok("1") {
+         &cases[..1]
+     } else {
+         &cases
+     };
+     for repetition in 0..repeats {
+         for &(high, wanted) in measured {
+-            sgprs[1] = high;
+-            let wanted = wanted.map(|color| color * groups as f32);
++            sgprs[1] = if divergent { base } else { high };
++            let wanted = if divergent {
++                (0..pixel_count).map(|i| {
++                    let x = i % columns;
++                    if mixed_exec && x % 4 == 3 { clear } else {
++                        colors[x % colors.len()].map(|color| lane_color(color, x) * groups as f32)
++                    }
++                }).collect::<Vec<_>>()
++            } else {
++                vec![wanted.map(|color| color * groups as f32); pixel_count]
++            };
+             let started = std::time::Instant::now();
+-            let pixels = runner::draw_heap_windows(&vs, &ps, &layout, &vertices, 8, &sgprs, &mem, window_words, 8, clear).unwrap();
++            let pixels = runner::draw_heap_windows(&vs, &ps, &layout, &vertices, 8, &sgprs, &mem, window_words, size, clear).unwrap();
+             let readback_ms = started.elapsed().as_secs_f64() * 1000.0;
+-            assert_eq!(pixels, vec![wanted; 64], "all 64 pixels for high address {high:#x}");
+-            println!("guard fixture groups={groups} repetition={repetition} high={high:#x} bytes={} bytecode_fnv64={bytecode:016x} translate_ms={translate_ms:.3} create_draw_readback_ms={readback_ms:.3} pixel={wanted:?}", ps.len());
++            if let Some((i, (got, expected))) = pixels.iter().zip(&wanted).enumerate().find(|(_, (got, expected))| got != expected) {
++                panic!("pixel {i}, high address {high:#x}: {got:?} != {expected:?}");
++            }
++            assert_eq!(pixels.len(), wanted.len());
++            println!("guard fixture groups={groups} repetition={repetition} high={high:#x} bytes={} bytecode_fnv64={bytecode:016x} translate_ms={translate_ms:.3} create_draw_readback_ms={readback_ms:.3} first_pixel={:?}", ps.len(), wanted[0]);
+         }
+     }
+     println!("{}: {} RGBA32F pixels match the CPU controls", runner::adapter().unwrap(),
+-             128 + 64 * measured.len() * repeats);
++             128 + pixel_count * measured.len() * repeats);
+ }
+ 
+ fn sig(name: &str, index: u32, sv: u32, ct: u32, reg: u32, mask: u8) -> crate::gpu::dxbc::SigElement {
+diff --git a/crates/xcl/src/gpu/dxil/module/guard.rs b/crates/xcl/src/gpu/dxil/module/guard.rs
+index ed5bf36..d1c9ee1 100644
+--- a/crates/xcl/src/gpu/dxil/module/guard.rs
++++ b/crates/xcl/src/gpu/dxil/module/guard.rs
+@@ -260,3 +260,7 @@ mod tests {
+         }
+     }
+ }
++
++#[cfg(test)]
++#[path = "guard_differential_tests.rs"]
++mod differential_tests;
+diff --git a/crates/xcl/src/gpu/dxil/module/guard_differential_tests.rs b/crates/xcl/src/gpu/dxil/module/guard_differential_tests.rs
+new file mode 100644
+index 0000000..2937022
+--- /dev/null
++++ b/crates/xcl/src/gpu/dxil/module/guard_differential_tests.rs
+@@ -0,0 +1,292 @@
++//! Differential tests for the read-guard CFG rewrite on a small integer IR subset.
++//! Calls stand in for deterministic memory and declared observable operations.
++
++use std::collections::BTreeMap;
++
++use super::*;
++
++#[derive(Clone, Copy, Debug)]
++enum Control {
++    Fusible,
++    ChangePredicate,
++    ExtraPredecessor,
++    UseDependentAddress,
++    UseDependentJoinValue,
++    Wave,
++    Derivative,
++    Store,
++    Atomic,
++    Barrier,
++}
++
++#[derive(Debug, PartialEq, Eq)]
++enum Event {
++    Read(u32, u32),
++    Effect(u32),
++    Output(u32),
++}
++
++struct Random(u32);
++
++impl Random {
++    fn next(&mut self) -> u32 {
++        self.0 ^= self.0 << 13;
++        self.0 ^= self.0 >> 17;
++        self.0 ^= self.0 << 5;
++        self.0
++    }
++}
++
++fn add_phi(m: &mut Module, rng: &mut Random, a: (Value, Block), b: (Value, Block)) -> Value {
++    let i32 = m.i32();
++    let phi = m.phi(i32);
++    let entries = if rng.next() & 1 == 0 { [a, b] } else { [b, a] };
++    for (value, label) in entries {
++        m.add_incoming(phi, value, label);
++    }
++    phi
++}
++
++fn random_math(m: &mut Module, rng: &mut Random, value: Value) -> Value {
++    let ops = [BinOp::Add, BinOp::Sub, BinOp::And, BinOp::Or, BinOp::Xor];
++    let op = ops[rng.next() as usize % ops.len()];
++    let rhs = m.i32c(rng.next());
++    m.bin(op, value, rhs)
++}
++
++fn generate(rng: &mut Random, control: Control) -> Module {
++    let mut m = Module::new();
++    m.define_entry("main");
++    let i32 = m.i32();
++    let input_ty = m.func_ty(i32, &[]);
++    let unary_ty = m.func_ty(i32, &[i32]);
++    let binary_ty = m.func_ty(i32, &[i32, i32]);
++    let input = m.declare("cfg_test_input", input_ty, FnAttrs::ReadNone);
++    let output = m.declare("cfg_test_output", unary_ty, FnAttrs::NoUnwind);
++    let read = m.declare("dx.op.rawBufferLoad.i32", binary_ty, FnAttrs::ReadOnly);
++    let effect = match control {
++        Control::Wave => Some(("dx.op.waveReadLaneFirst.i32", FnAttrs::NoUnwind)),
++        Control::Derivative => Some(("dx.op.derivCoarseX.f32", FnAttrs::ReadNone)),
++        Control::Store => Some(("dx.op.rawBufferStore.i32", FnAttrs::NoUnwind)),
++        Control::Atomic => Some(("dx.op.atomicBinOp.i32", FnAttrs::NoUnwind)),
++        Control::Barrier => Some(("dx.op.barrier", FnAttrs::NoDuplicate)),
++        _ => None,
++    };
++    let effect = effect.map(|(name, attrs)| m.declare(name, unary_ty, attrs));
++
++    // Exercise predecessor labels independently of physical block and PHI order.
++    let mut blocks: Vec<_> = (0..9).map(|_| m.new_block()).collect();
++    for i in (1..blocks.len()).rev() {
++        blocks.swap(i, rng.next() as usize % (i + 1));
++    }
++    let [prelude, source, first, middle, second, join, then, otherwise, exit] =
++        <[Block; 9]>::try_from(blocks).unwrap();
++
++    let zero = m.i32c(0);
++    let bit = m.i32c(1);
++    let mask = m.i32c(255);
++    let lower_limit = m.i32c(1 + rng.next() % 254);
++    let upper_limit = m.i32c(255);
++    let win_a = m.i32c(rng.next() & 15);
++    let win_b = m.i32c(rng.next() & 15);
++    let entry = m.entry_block();
++    let input = m.call(input, &[]);
++    let lsb = m.bin(BinOp::And, input, bit);
++    let shortcut = m.cmp(Pred::Eq, lsb, zero);
++    let sample = m.bin(BinOp::And, input, mask);
++    let condition = m.cmp(Pred::ULt, sample, lower_limit);
++    let alternate = m.cmp(Pred::ULt, sample, upper_limit);
++    m.cond_br(shortcut, source, prelude);
++
++    m.set_block(prelude);
++    let adjusted = random_math(&mut m, rng, input);
++    let extra_predecessor = matches!(control, Control::ExtraPredecessor);
++    if extra_predecessor {
++        m.cond_br(condition, first, source);
++    } else {
++        m.br(source);
++    }
++
++    m.set_block(source);
++    let address = add_phi(&mut m, rng, (input, entry), (adjusted, prelude));
++    m.cond_br(condition, first, middle);
++    m.set_block(first);
++    let guard_input = if extra_predecessor { input } else { address };
++    let read_a = m.call(read, &[win_a, guard_input]);
++    let read_a = random_math(&mut m, rng, read_a);
++    m.br(middle);
++
++    m.set_block(middle);
++    let running = add_phi(&mut m, rng, (address, source), (read_a, first));
++    let window = add_phi(&mut m, rng, (win_a, source), (win_b, first));
++    let independent = random_math(&mut m, rng, guard_input);
++    let masked = m.select(condition, running, independent);
++    let sank = random_math(&mut m, rng, masked);
++    let second_cond = if matches!(control, Control::ChangePredicate) { alternate } else { condition };
++    m.cond_br(second_cond, second, join);
++
++    m.set_block(second);
++    let address = if matches!(control, Control::UseDependentAddress) { sank } else { independent };
++    let read_b = m.call(read, &[window, address]);
++    if let Some(effect) = effect {
++        m.call(effect, &[read_b]);
++    }
++    let result = m.bin(BinOp::Xor, running, read_b);
++    m.br(join);
++
++    m.set_block(join);
++    let skipped = if matches!(control, Control::UseDependentJoinValue) { sank } else { running };
++    let joined = add_phi(&mut m, rng, (skipped, middle), (result, second));
++    let joined = m.bin(BinOp::Xor, joined, sank);
++    m.cond_br(shortcut, then, otherwise);
++
++    m.set_block(then);
++    let left = random_math(&mut m, rng, joined);
++    m.br(exit);
++    m.set_block(otherwise);
++    let right = random_math(&mut m, rng, joined);
++    m.br(exit);
++    m.set_block(exit);
++    let result = add_phi(&mut m, rng, (left, then), (right, otherwise));
++    m.call(output, &[result]);
++    m.ret();
++    m
++}
++
++fn interpret(m: &Module, input: u32) -> Vec<Event> {
++    let mut events = Vec::new();
++    let mut results = BTreeMap::new();
++    let mut block = m.entry_block();
++    let mut predecessor = None;
++
++    for _ in 0..m.blocks.len() {
++        let mut next = None;
++        for &id in &m.blocks[block.0 as usize] {
++            let value = |arg: Value| match arg {
++                Value::Inst(i) => results[&i],
++                Value::Const(_) => m.const_u64(arg).unwrap() as u32,
++                _ => panic!("unexpected value: {arg:?}"),
++            };
++            let result = match &m.insts[id as usize].op {
++                Op::Bin(op, a, b, 0) => {
++                    let (a, b) = (value(*a), value(*b));
++                    match op {
++                        BinOp::Add => a.wrapping_add(b),
++                        BinOp::Sub => a.wrapping_sub(b),
++                        BinOp::And => a & b,
++                        BinOp::Or => a | b,
++                        BinOp::Xor => a ^ b,
++                        _ => panic!("unexpected binary op: {op:?}"),
++                    }
++                }
++                Op::Cmp(Pred::Eq, a, b) => u32::from(value(*a) == value(*b)),
++                Op::Cmp(Pred::ULt, a, b) => u32::from(value(*a) < value(*b)),
++                Op::Select(c, a, b) => if value(*c) == 0 { value(*b) } else { value(*a) },
++                Op::Phi(inputs) => {
++                    let incoming = inputs.iter().filter(|(_, label)| Some(*label) == predecessor);
++                    assert_eq!(incoming.clone().count(), 1, "invalid PHI on executed edge");
++                    value(incoming.map(|(value, _)| *value).next().unwrap())
++                }
++                Op::Call(f, args) => match m.funcs[*f as usize].name.as_str() {
++                    "cfg_test_input" => input,
++                    "cfg_test_output" => {
++                        events.push(Event::Output(value(args[0])));
++                        0
++                    }
++                    "dx.op.rawBufferLoad.i32" => {
++                        let (window, address) = (value(args[0]), value(args[1]));
++                        events.push(Event::Read(window, address));
++                        address.wrapping_mul(0x9e37_79b9).rotate_left(window)
++                    }
++                    _ => {
++                        events.push(Event::Effect(*f));
++                        value(args[0])
++                    }
++                },
++                Op::Br(target) => {
++                    next = Some(*target);
++                    break;
++                }
++                Op::CondBr(c, yes, no) => {
++                    next = Some(if value(*c) == 0 { *no } else { *yes });
++                    break;
++                }
++                Op::Ret => return events,
++                op => panic!("unexpected instruction: {op:?}"),
++            };
++            assert!(results.insert(id, result).is_none(), "generated CFG must be acyclic");
++        }
++        predecessor = Some(block);
++        block = next.expect("every generated block must be terminated");
++    }
++    panic!("generated CFG did not return");
++}
++
++#[test]
++fn generated_read_guard_cfgs_preserve_reads_and_outputs() {
++    for seed in 1..=32 {
++        let mut rng = Random(0x9e37_79b9 ^ seed);
++        for control in [
++            Control::Fusible,
++            Control::ChangePredicate,
++            Control::ExtraPredecessor,
++            Control::UseDependentAddress,
++            Control::UseDependentJoinValue,
++            Control::Wave,
++            Control::Derivative,
++            Control::Store,
++            Control::Atomic,
++            Control::Barrier,
++        ] {
++            let mut m = generate(&mut rng, control);
++            let input: Vec<_> = (0..=255).map(|low| rng.next() & !255 | low).collect();
++            let before: Vec<_> = input.iter().map(|&x| interpret(&m, x)).collect();
++            let order: Vec<_> = m.block_layout().0.into_iter().map(|b| b as u32).collect();
++            let changed = m.fuse_read_guards(&order);
++            assert_eq!(changed, matches!(control, Control::Fusible), "seed={seed} {control:?}");
++            assert_eq!(m.block_layout().0.len(), order.len() - 2 * usize::from(changed));
++            for (&input, expected) in input.iter().zip(before) {
++                assert_eq!(interpret(&m, input), expected, "seed={seed} {control:?} {input:#x}");
++            }
++        }
++    }
++}
++
++
++#[test]
++fn generated_read_guard_chains_preserve_events_at_fusion_boundary() {
++    let mut rng = Random(0x85eb_ca6b);
++    for len in 1usize..=24 {
++        let mut m = Module::new();
++        m.define_entry("main");
++        let i32 = m.i32();
++        let input_ty = m.func_ty(i32, &[]);
++        let read_ty = m.func_ty(i32, &[i32, i32]);
++        let input = m.declare("cfg_test_input", input_ty, FnAttrs::ReadNone);
++        let read = m.declare("dx.op.rawBufferLoad.i32", read_ty, FnAttrs::ReadOnly);
++        let input = m.call(input, &[]);
++        let limit = m.i32c(rng.next().max(1));
++        let condition = m.cmp(Pred::ULt, input, limit);
++        for _ in 0..len {
++            let first = m.new_block();
++            let join = m.new_block();
++            m.cond_br(condition, first, join);
++            m.set_block(first);
++            let window = m.i32c(rng.next() & 15);
++            let address = random_math(&mut m, &mut rng, input);
++            m.call(read, &[window, address]);
++            m.br(join);
++            m.set_block(join);
++        }
++        m.ret();
++        let before = interpret(&m, 0);
++        assert_eq!(before.len(), len);
++        assert!(interpret(&m, u32::MAX).is_empty());
++
++        let order: Vec<_> = m.block_layout().0.into_iter().map(|b| b as u32).collect();
++        assert_eq!(m.fuse_read_guards(&order), len > 1, "guards={len}");
++        assert_eq!(m.block_layout().0.len(), 1 + 2 * len.div_ceil(8), "guards={len}");
++        assert_eq!(interpret(&m, 0), before, "guards={len}");
++        assert!(interpret(&m, u32::MAX).is_empty());
++    }
++}
+diff --git a/crates/xcl/src/gpu/recomp/runner.rs b/crates/xcl/src/gpu/recomp/runner.rs
+index c65146c..d9b882d 100644
+--- a/crates/xcl/src/gpu/recomp/runner.rs
++++ b/crates/xcl/src/gpu/recomp/runner.rs
+@@ -1000,7 +1000,15 @@ fn draw_gs_views(
+             println!("guard fixture native_create_ms={:.3}", started.elapsed().as_secs_f64() * 1000.0);
+         }
+         let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, size as i32, size as i32] };
+-        draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear, window_dwords)
++        let pixels = draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear, window_dwords)?;
++        #[cfg(test)]
++        if window_dwords.is_some() && std::env::var("XCL_READ_GUARD_TEST_PSO_BLOB").as_deref() == Ok("1") {
++            match pso.GetCachedBlob() {
++                Ok(blob) => println!("guard pso_cache_blob_bytes={}", blob.GetBufferSize()),
++                Err(err) => println!("guard pso_cache_blob_unavailable={err}"),
++            }
++        }
++        Ok(pixels)
+     }
+ }
+ 
+@@ -1218,7 +1226,11 @@ fn draw_indexed_on(
+         list.ClearRenderTargetView(rtv, &clear, None);
+         list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: size as f32, Height: size as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
+         list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: size as i32, bottom: size as i32 }]);
+-        let heap_windows = if let Some(words) = window_dwords {
++        #[cfg(test)]
++        let root_windows = window_dwords.filter(|_| std::env::var("XCL_READ_GUARD_TEST_ROOT_WINDOWS").as_deref() == Ok("1"));
++        #[cfg(not(test))]
++        let root_windows: Option<usize> = None;
++        let heap_windows = if let Some(words) = window_dwords.filter(|_| root_windows.is_none()) {
+             let heap: ID3D12DescriptorHeap = dev.CreateDescriptorHeap(&D3D12_DESCRIPTOR_HEAP_DESC {
+                 Type: D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+                 NumDescriptors: super::MEM_HEAP_BASE + (mem.len() / words) as u32,
+@@ -1256,6 +1268,13 @@ fn draw_indexed_on(
+         list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress());
+         list.SetGraphicsRootUnorderedAccessView(1, res_buf.GetGPUVirtualAddress());
+         list.SetGraphicsRootUnorderedAccessView(2, mem_buf.GetGPUVirtualAddress());
++        #[cfg(test)]
++        if let Some(words) = root_windows {
++            for window in 1..mem.len() / words {
++                let offset = (window * words * std::mem::size_of::<u32>()) as u64;
++                list.SetGraphicsRootUnorderedAccessView(2 + window as u32, mem_buf.GetGPUVirtualAddress() + offset);
++            }
++        }
+         list.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+         let vbv = D3D12_VERTEX_BUFFER_VIEW { BufferLocation: upload.GetGPUVirtualAddress(), SizeInBytes: vb_bytes as u32, StrideInBytes: stride };
+         list.IASetVertexBuffers(0, Some(&[vbv]));
+@@ -1271,6 +1290,26 @@ fn draw_indexed_on(
+             list.IASetIndexBuffer(Some(&D3D12_INDEX_BUFFER_VIEW { BufferLocation: b.GetGPUVirtualAddress(), SizeInBytes: bytes as u32, Format: DXGI_FORMAT_R32_UINT }));
+             Some(b)
+         };
++        #[cfg(test)]
++        let timing = if window_dwords.is_some() {
++            let count = std::env::var("XCL_READ_GUARD_TEST_GPU_DRAWS").ok().map(|value| {
++                value.parse::<u32>().ok().filter(|n| (1..=32).contains(n))
++                    .expect("XCL_READ_GUARD_TEST_GPU_DRAWS must be 1–32")
++            });
++            count.map(|count| -> Result<_, String> {
++                if draws.len() != 1 || !indices.is_empty() {
++                    return Err("read-guard timing requires one non-indexed draw".into());
++                }
++                let mut heap: Option<ID3D12QueryHeap> = None;
++                dev.CreateQueryHeap(&D3D12_QUERY_HEAP_DESC {
++                    Type: D3D12_QUERY_HEAP_TYPE_TIMESTAMP, Count: 2, NodeMask: 0,
++                }, &mut heap).map_err(e)?;
++                let out = buffer(dev, 16, D3D12_HEAP_TYPE_READBACK, D3D12_RESOURCE_STATE_COPY_DEST, false)?;
++                Ok((count, heap.ok_or("draw timestamp heap")?, out))
++            }).transpose()?
++        } else {
++            None
++        };
+         for (k, d) in draws.iter().enumerate() {
+             list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress() + (k * KERNEL_SGPRS * 4) as u64);
+             let [left, top, right, bottom] = d.scissor;
+@@ -1281,6 +1320,17 @@ fn draw_indexed_on(
+                 list.DrawIndexedInstanced(indices.len() as u32, 1, 0, 0, 0);
+             }
+         }
++        #[cfg(test)]
++        if let Some((count, heap, out)) = &timing {
++            // The ordinary draw above primes the PSO. The timestamp interval excludes
++            // setup and readback and contains exactly count full-target draws.
++            list.EndQuery(heap, D3D12_QUERY_TYPE_TIMESTAMP, 0);
++            for _ in 0..*count {
++                list.DrawInstanced((vertices.len() as u32 * 4) / stride, 1, 0, 0);
++            }
++            list.EndQuery(heap, D3D12_QUERY_TYPE_TIMESTAMP, 1);
++            list.ResolveQueryData(heap, D3D12_QUERY_TYPE_TIMESTAMP, 0, 2, out, 0);
++        }
+         list.ResourceBarrier(&[transition(&rt, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE)]);
+         let dst = D3D12_TEXTURE_COPY_LOCATION {
+             pResource: transmute_copy(&readback),
+@@ -1296,6 +1346,18 @@ fn draw_indexed_on(
+         list.Close().map_err(e)?;
+         queue.ExecuteCommandLists(&[Some(list.cast().map_err(e)?)]);
+         wait_for_submission(dev, &queue, &fence, 1, "draw")?;
++        #[cfg(test)]
++        if let Some((count, _, out)) = timing {
++            let frequency = queue.GetTimestampFrequency().map_err(e)?;
++            let mut mapped = std::ptr::null_mut();
++            out.Map(0, Some(&D3D12_RANGE { Begin: 0, End: 16 }), Some(&mut mapped)).map_err(e)?;
++            let stamps = std::slice::from_raw_parts(mapped as *const u64, 2);
++            let ticks = stamps[1].checked_sub(stamps[0]);
++            out.Unmap(0, Some(&D3D12_RANGE { Begin: 0, End: 0 }));
++            let ticks = ticks.filter(|&delta| delta != 0 && frequency != 0).ok_or("invalid draw timestamps")?;
++            let ms_per_draw = ticks as f64 * 1000.0 / (frequency as f64 * f64::from(count));
++            println!("guard runtime size={size} draws={count} ticks={ticks} frequency_hz={frequency} gpu_ms_per_draw={ms_per_draw:.6}");
++        }
+         let mut p = std::ptr::null_mut();
+         readback.Map(0, None, Some(&mut p)).map_err(e)?;
+         let pitch = layout_fp.Footprint.RowPitch as usize;

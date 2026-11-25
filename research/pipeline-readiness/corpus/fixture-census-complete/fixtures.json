@@ -1,0 +1,763 @@
+{
+  "xcl_commit": "8e4c4a63143702d5e5da79484273143e0b76eb92",
+  "fixture_origin": "XCL public, source-authored tests, GPL-2.0-only",
+  "xcl_executable_sha256": "cdd73292ebe5ecfe5c22b940262ad9212710b811f642c8a309a8bfdee0a96f83",
+  "dxc_sha256": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+  "dxv_sha256": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3",
+  "observations": [
+    {
+      "fixture": "gpu::dxil::core_tests::branchy_graphics_stages_validate",
+      "control": false,
+      "rdna_bytes": 28,
+      "rdna_sha256": "deeef7d8b6aea26f1a7f5c50239075ef784ccb6deec2e43454115c339a0c916d",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 4098, attrs: None }",
+      "off": {
+        "bytes": 2648,
+        "sha256": "75b799efba812e1ad8afedf1450510c196f9d770e85e0bf4540e27454ae7f2f8",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 2648,
+        "sha256": "75b799efba812e1ad8afedf1450510c196f9d770e85e0bf4540e27454ae7f2f8",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 1
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::core_tests::branchy_graphics_stages_validate",
+      "control": false,
+      "rdna_bytes": 28,
+      "rdna_sha256": "deeef7d8b6aea26f1a7f5c50239075ef784ccb6deec2e43454115c339a0c916d",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 4098, attrs: None }",
+      "off": {
+        "bytes": 2580,
+        "sha256": "d1be29f149fdb0acd6b509f996c72c26ceb789be33ac364cffcda18326ab95c1",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 2580,
+        "sha256": "d1be29f149fdb0acd6b509f996c72c26ceb789be33ac364cffcda18326ab95c1",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 1
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::core_tests::graphics_read_guards_merge_only_equal_window_conditions",
+      "control": true,
+      "rdna_bytes": 96,
+      "rdna_sha256": "5706e1d1a4eb1603f609efe6e159958986ef4cf47d0fc4e6016401b6d0b69736",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 260, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 2, attrs: None }",
+      "off": {
+        "bytes": 2920,
+        "sha256": "fa6e0579f984f543ed6c0efe4e39be90bd36cb7b53a18a8e2dbe07480e860b85",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 4,
+        "raw_loads": 10
+      },
+      "on": {
+        "bytes": 2920,
+        "sha256": "fa6e0579f984f543ed6c0efe4e39be90bd36cb7b53a18a8e2dbe07480e860b85",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 4,
+        "raw_loads": 10
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::core_tests::graphics_read_guards_merge_only_equal_window_conditions",
+      "control": true,
+      "rdna_bytes": 96,
+      "rdna_sha256": "eb5a31c029174f043d684c6556e2054127015474f3f380d1af05848d8de457df",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 260, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 2, attrs: None }",
+      "off": {
+        "bytes": 2756,
+        "sha256": "fc0d743caff9bb5af251a040ab4901fd6e0df57c0618816f4b2a7cbcc37fdcf2",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 4,
+        "raw_loads": 7
+      },
+      "on": {
+        "bytes": 2736,
+        "sha256": "2771fa2a047462de4278d6424f93965da0a3adeb7bd10db411ca1ae4cdd28c4e",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 4,
+        "raw_loads": 7
+      },
+      "changed": true
+    },
+    {
+      "fixture": "gpu::dxil::core_tests::long_pixel_shader_translates_fast",
+      "control": false,
+      "rdna_bytes": 18060,
+      "rdna_sha256": "e49761df5fc74e7497471d2c833a0d0fd9bd5a7e690049106e53e3ad110050ef",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 2, attrs: None }",
+      "off": {
+        "bytes": 130632,
+        "sha256": "3021897018e0f4390a9428f96a934a20dd1cd0756b8cd6ae6155e24a7f2d57a5",
+        "blocks": 3001,
+        "conditional_branches": 1500,
+        "switches": 0,
+        "phis": 1500,
+        "raw_loads": 1504
+      },
+      "on": {
+        "bytes": 130632,
+        "sha256": "3021897018e0f4390a9428f96a934a20dd1cd0756b8cd6ae6155e24a7f2d57a5",
+        "blocks": 3001,
+        "conditional_branches": 1500,
+        "switches": 0,
+        "phis": 1500,
+        "raw_loads": 1504
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::core_tests::ps_get_lod_with_a_static_sampler",
+      "control": false,
+      "rdna_bytes": 56,
+      "rdna_sha256": "c04f7196428f4f6e1cae2dd038aa358657cf1d4d4ec7a3475b2c8fba88d6fc5e",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 2, attrs: None }",
+      "off": {
+        "bytes": 2960,
+        "sha256": "4ae6e912f85f00e906a40992959ed1330db6b096478e225c1e5f9f21a27d921b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 3
+      },
+      "on": {
+        "bytes": 2960,
+        "sha256": "4ae6e912f85f00e906a40992959ed1330db6b096478e225c1e5f9f21a27d921b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 3
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::core_tests::raw_loads_in_root_windows_are_branchless",
+      "control": false,
+      "rdna_bytes": 20,
+      "rdna_sha256": "9066dd986e3d403142a596c78713ee005eb27e2db17393fb1e9870537bc10498",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 4, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 2, attrs: None }",
+      "off": {
+        "bytes": 2872,
+        "sha256": "f27f703e4b0135cf4dd926f2ccfef050e15d2cc9ba0106af0667a2fa577fed69",
+        "blocks": 6,
+        "conditional_branches": 0,
+        "switches": 1,
+        "phis": 1,
+        "raw_loads": 7
+      },
+      "on": {
+        "bytes": 2872,
+        "sha256": "f27f703e4b0135cf4dd926f2ccfef050e15d2cc9ba0106af0667a2fa577fed69",
+        "blocks": 6,
+        "conditional_branches": 0,
+        "switches": 1,
+        "phis": 1,
+        "raw_loads": 7
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only",
+      "control": false,
+      "rdna_bytes": 24,
+      "rdna_sha256": "7bbb076e2ecfe2bf6c748e46c0aaa8b6d2d5161a81d79c4181b6ed72b257c7a8",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 3104,
+        "sha256": "423f2c3d1e32def07a6189e21922a7c08c6841fd1c44db9dea75467f0b133a13",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 3104,
+        "sha256": "423f2c3d1e32def07a6189e21922a7c08c6841fd1c44db9dea75467f0b133a13",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only",
+      "control": false,
+      "rdna_bytes": 12,
+      "rdna_sha256": "2ce64b877b357689546abdc9a190479db86154497abc47af391672b588909451",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 2176,
+        "sha256": "01ad3ae022e820a7ce71a29cef6dfe15a569967e8b1797d5d97a5da9112975db",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2176,
+        "sha256": "01ad3ae022e820a7ce71a29cef6dfe15a569967e8b1797d5d97a5da9112975db",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only",
+      "control": false,
+      "rdna_bytes": 116,
+      "rdna_sha256": "6dce0a4ff0705bc12146fe2b2eadb1a57d75a6d83b63b7250472b6fcc0a8fe61",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 6012,
+        "sha256": "fe1165cad06cea5e275e75ec6ff7c4d94a8406586e6acddca8db8d35c7ae672b",
+        "blocks": 5,
+        "conditional_branches": 2,
+        "switches": 0,
+        "phis": 9,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 6012,
+        "sha256": "fe1165cad06cea5e275e75ec6ff7c4d94a8406586e6acddca8db8d35c7ae672b",
+        "blocks": 5,
+        "conditional_branches": 2,
+        "switches": 0,
+        "phis": 9,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only",
+      "control": false,
+      "rdna_bytes": 12,
+      "rdna_sha256": "2ce64b877b357689546abdc9a190479db86154497abc47af391672b588909451",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 2100,
+        "sha256": "a694a24ec5a951af5b18abbdcfeae3685c074ff4753cc6f5558921ba421e3fa7",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2100,
+        "sha256": "a694a24ec5a951af5b18abbdcfeae3685c074ff4753cc6f5558921ba421e3fa7",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only",
+      "control": false,
+      "rdna_bytes": 116,
+      "rdna_sha256": "3ca8d3ed3f2160e36969449ef39abe1f608dd2ff39b1b0103cb9d374dea26aec",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 6212,
+        "sha256": "038fca71f41e960e733f589260ca9210ce7a23cd5c767ed4ed5abfee0cfd99e0",
+        "blocks": 5,
+        "conditional_branches": 2,
+        "switches": 0,
+        "phis": 8,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 6212,
+        "sha256": "038fca71f41e960e733f589260ca9210ce7a23cd5c767ed4ed5abfee0cfd99e0",
+        "blocks": 5,
+        "conditional_branches": 2,
+        "switches": 0,
+        "phis": 8,
+        "raw_loads": 1
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only",
+      "control": false,
+      "rdna_bytes": 24,
+      "rdna_sha256": "9a8ccd484ca66617495a6e65639ac9152b9979c9021df3f4a9228377188949a0",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 3376,
+        "sha256": "81cd784150cdc70fbc6726f8bebf33ed289173e55bbeb24d1952b4ed8cbefaf2",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 3376,
+        "sha256": "81cd784150cdc70fbc6726f8bebf33ed289173e55bbeb24d1952b4ed8cbefaf2",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_constant_false_ballot_skips_quad_ops",
+      "control": false,
+      "rdna_bytes": 24,
+      "rdna_sha256": "25ef2d3f662441a732874513818b936bbd0f9c4b712aa056d95cca1dcc024874",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 2480,
+        "sha256": "d2c21d448709cc45d7e4ba52927de5edbe66198d5585fe22b3c9a1e71de80978",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 2480,
+        "sha256": "d2c21d448709cc45d7e4ba52927de5edbe66198d5585fe22b3c9a1e71de80978",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lanes::ps_ballot_tests::direct_ps_non_vopc_carry_ballot_uses_quad_op",
+      "control": false,
+      "rdna_bytes": 28,
+      "rdna_sha256": "3768a10d9afb10e6c2304beda65285a4710c85e9f846b00bf192859316ef4171",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 3020,
+        "sha256": "21986112060a42ce1cc29bc3e53de6b62d9ff95abb287da38d613e37ca4f50f3",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 3020,
+        "sha256": "21986112060a42ce1cc29bc3e53de6b62d9ff95abb287da38d613e37ca4f50f3",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::lower_image::heap_bounds_tests::ps_implicit_lod_sample_and_get_lod_validate",
+      "control": false,
+      "rdna_bytes": 20,
+      "rdna_sha256": "05253c459d2b85258f5caef0152d7de1e63041763d8a2ee734fa07c42ba6d761",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [], outputs: [], input_ena: 0, attrs: None }",
+      "off": {
+        "bytes": 2652,
+        "sha256": "a0de002aebab403638b53b4bfad7dd2bbd46b20f923320f6393e2b85f4ee1dc1",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 4
+      },
+      "on": {
+        "bytes": 2652,
+        "sha256": "a0de002aebab403638b53b4bfad7dd2bbd46b20f923320f6393e2b85f4ee1dc1",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 4
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::prelude::disable_math_refactoring_tests::dead_fmad_eliminated_by_dce_still_allows_disable_math_refactoring",
+      "control": false,
+      "rdna_bytes": 28,
+      "rdna_sha256": "dfd6c80ada6bcc271bfffbb47c4c798a157518cde69b59317f1d018d1028cee6",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 3840, attrs: None }",
+      "off": {
+        "bytes": 2200,
+        "sha256": "c7555e9072cdfb2f89a291691be2ee2e5a3d3ea6c85f7191d967ba597a196560",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2200,
+        "sha256": "c7555e9072cdfb2f89a291691be2ee2e5a3d3ea6c85f7191d967ba597a196560",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::prelude::disable_math_refactoring_tests::fmad_suppresses_disable_math_refactoring_in_compute_and_pixel",
+      "control": false,
+      "rdna_bytes": 28,
+      "rdna_sha256": "870725df30f1d4cc1650ce701debeeab184ad6702918499106da3fe58b2ca2f7",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 3840, attrs: None }",
+      "off": {
+        "bytes": 2296,
+        "sha256": "779ac8b6c00eed569dfc2c950419fe82ca007763213eb7ce4cd4cc74d16513b7",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2296,
+        "sha256": "779ac8b6c00eed569dfc2c950419fe82ca007763213eb7ce4cd4cc74d16513b7",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::prelude::disable_math_refactoring_tests::pixel_unfused_mad_sets_disable_math_refactoring",
+      "control": false,
+      "rdna_bytes": 20,
+      "rdna_sha256": "9ec1cf1f39b0a2cc1672b0590f572efa490f8e15784166add742d34ccdb9480d",
+      "abi": "KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 3840, attrs: None }",
+      "off": {
+        "bytes": 2208,
+        "sha256": "cbb1b4157f5df2b77075fa50b097ee43725fb92ef672fe7388fdedc786aa2b8a",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2208,
+        "sha256": "cbb1b4157f5df2b77075fa50b097ee43725fb92ef672fe7388fdedc786aa2b8a",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::shader::pops_rov_tests::non_pops_pixel_shader_does_not_mark_rovs",
+      "control": false,
+      "rdna_bytes": 20,
+      "rdna_sha256": "20db025fa2bc32a4ff373d5eb2085dbde7d392f86bdabefbb5f23ba9adac6332",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [], outputs: [], input_ena: 0, attrs: None }",
+      "off": {
+        "bytes": 3616,
+        "sha256": "709fcf52078704b7a305a2abfe92627c039d1a05831b01951bdefec7ece3bd51",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 3
+      },
+      "on": {
+        "bytes": 3616,
+        "sha256": "709fcf52078704b7a305a2abfe92627c039d1a05831b01951bdefec7ece3bd51",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 3
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::shader::pops_rov_tests::pops_pixel_shader_marks_uavs_as_rov_and_validates",
+      "control": false,
+      "rdna_bytes": 24,
+      "rdna_sha256": "e5d30dbe67a8abcecf427fdddc195acffcdeb22711d47d9b414fa3ca10627aa4",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [], outputs: [], input_ena: 0, attrs: None }",
+      "off": {
+        "bytes": 3736,
+        "sha256": "8660d860114bfcbd737799b92f76356308e430c19f06c9c759a6cf16ac73f6e6",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 4
+      },
+      "on": {
+        "bytes": 3736,
+        "sha256": "8660d860114bfcbd737799b92f76356308e430c19f06c9c759a6cf16ac73f6e6",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 4
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::shader::pops_rov_tests::pops_pixel_shader_marks_uavs_as_rov_and_validates",
+      "control": false,
+      "rdna_bytes": 24,
+      "rdna_sha256": "e5d30dbe67a8abcecf427fdddc195acffcdeb22711d47d9b414fa3ca10627aa4",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 260, sampler_base: 0 }\nPsInterface { inputs: [], outputs: [], input_ena: 0, attrs: None }",
+      "off": {
+        "bytes": 3616,
+        "sha256": "78256c714dafee119355b20aa92542f4c7669373c781634e1233df2614ed8fd4",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 5
+      },
+      "on": {
+        "bytes": 3616,
+        "sha256": "78256c714dafee119355b20aa92542f4c7669373c781634e1233df2614ed8fd4",
+        "blocks": 9,
+        "conditional_branches": 4,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 5
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::dxil::shader::pops_rov_tests::pops_pixel_shader_without_uavs_on_heap_windows_validates_cleanly",
+      "control": false,
+      "rdna_bytes": 8,
+      "rdna_sha256": "97ae3bc61d040dfd12d9282df0dac5829522a805ccba3272848d5a40b65ff739",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 260, sampler_base: 0 }\nPsInterface { inputs: [], outputs: [], input_ena: 0, attrs: None }",
+      "off": {
+        "bytes": 2044,
+        "sha256": "7f09971c7500694fca1a73e9da03ff22113c68f5795452e416bbc8d8a682661c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 2044,
+        "sha256": "7f09971c7500694fca1a73e9da03ff22113c68f5795452e416bbc8d8a682661c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::recomp::heap_window_tests::heap_windows_graphics_stages_validate",
+      "control": false,
+      "rdna_bytes": 20,
+      "rdna_sha256": "e5c364ab1e5e8581d6dc46369fe48b779b0203ef3ae223938bb65a17381e14d5",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 260, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 0, attrs: None }",
+      "off": {
+        "bytes": 2280,
+        "sha256": "880699772e624417c24e186f2d66c8b18f72ad07d89700740262056a2e7ef57f",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 2
+      },
+      "on": {
+        "bytes": 2280,
+        "sha256": "880699772e624417c24e186f2d66c8b18f72ad07d89700740262056a2e7ef57f",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 2
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::recomp::heap_window_tests::heap_windows_graphics_stages_validate",
+      "control": false,
+      "rdna_bytes": 20,
+      "rdna_sha256": "e5c364ab1e5e8581d6dc46369fe48b779b0203ef3ae223938bb65a17381e14d5",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 272, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 0, attrs: None }",
+      "off": {
+        "bytes": 2288,
+        "sha256": "efca7cdfe05b4f167fcdc8057eeca335adb6086a89acd01d790d0a1dc8821185",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 2
+      },
+      "on": {
+        "bytes": 2288,
+        "sha256": "efca7cdfe05b4f167fcdc8057eeca335adb6086a89acd01d790d0a1dc8821185",
+        "blocks": 3,
+        "conditional_branches": 1,
+        "switches": 0,
+        "phis": 1,
+        "raw_loads": 2
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::recomp::tests::ps_exp_vm_hlsl_and_direct_dxil_codegen",
+      "control": false,
+      "rdna_bytes": 64,
+      "rdna_sha256": "2ea3dce44786934682368c9db98c9627069e562745a8d24190b133d25bfac4f7",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 3064,
+        "sha256": "40eae748a596fa3c482204a18e95f8b0ef55c95c6ab3e1864ef9db6022792f0c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 3064,
+        "sha256": "40eae748a596fa3c482204a18e95f8b0ef55c95c6ab3e1864ef9db6022792f0c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::recomp::tests::ps_exp_vm_hlsl_and_direct_dxil_codegen",
+      "control": false,
+      "rdna_bytes": 52,
+      "rdna_sha256": "825683d7c834d548fcecf1b945a483ff69285534a499a3119f27160b26cb4489",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 3064,
+        "sha256": "41f6293ee88968661a80bc97cb52984ef55fd3adef26443b3fa34728757bd9f0",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 3064,
+        "sha256": "41f6293ee88968661a80bc97cb52984ef55fd3adef26443b3fa34728757bd9f0",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::recomp::tests::ps_exp_vm_hlsl_and_direct_dxil_codegen",
+      "control": false,
+      "rdna_bytes": 64,
+      "rdna_sha256": "f768a56b8a36ca7072b42606cf4e1cc99c40994d7ebb2af408b45302491eedfd",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 3064,
+        "sha256": "41f6293ee88968661a80bc97cb52984ef55fd3adef26443b3fa34728757bd9f0",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 3064,
+        "sha256": "41f6293ee88968661a80bc97cb52984ef55fd3adef26443b3fa34728757bd9f0",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    },
+    {
+      "fixture": "gpu::recomp::tests::ps_exp_vm_hlsl_and_direct_dxil_codegen",
+      "control": false,
+      "rdna_bytes": 72,
+      "rdna_sha256": "b4f6834665779d8ff878abc298f48e8701c1783f2083dde7b70c5f684d5a6d5a",
+      "abi": "KernelOptions { wave64: true, split: false, mem_windows: 1, sampler_base: 0 }\nPsInterface { inputs: [SigElement { name: \"SV_Position\", index: 0, system_value: 1, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], outputs: [SigElement { name: \"SV_Target\", index: 0, system_value: 64, component_type: 3, register: 0, mask: 15, rw_mask: 15, stream: 0 }], input_ena: 770, attrs: None }",
+      "off": {
+        "bytes": 3064,
+        "sha256": "5085c0da952cb54d81936f0e77266fa6e94466f1eaa2d3d9a0cb3aa22f65c9e2",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 3064,
+        "sha256": "5085c0da952cb54d81936f0e77266fa6e94466f1eaa2d3d9a0cb3aa22f65c9e2",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "changed": false
+    }
+  ]
+}
