@@ -1,0 +1,95 @@
+{
+  "revision": "3283da481077c1962f13f1b4078841662f7a4ccb",
+  "cases": {
+    "upstream-skip-middle": {
+      "before": 128,
+      "after": 128,
+      "scratch_words_per_order": 128
+    },
+    "upstream-overlap": {
+      "before": 160,
+      "after": 160,
+      "scratch_words_per_order": 160
+    },
+    "upstream-wave32-loops": {
+      "before": 288,
+      "after": 256,
+      "scratch_words_per_order": 384
+    },
+    "disjoint-control": {
+      "before": 128,
+      "after": 96,
+      "scratch_words_per_order": 160
+    },
+    "four-piece-fragmentation": {
+      "before": 192,
+      "after": 160,
+      "scratch_words_per_order": 224
+    }
+  },
+  "validated_dxil": 58,
+  "randomized": [
+    128,
+    6585
+  ],
+  "sha256": {
+    "disjoint-control-fixed-0.dxil": "1195f0160573c2dd2141e862ab9fa393cd7d63dc12e643600ce42b3d6d331346",
+    "disjoint-control-fixed-1.dxil": "e70a230cc5ef4587527f36d318dc082e23eda9208fc1be765ef8d393d9cea980",
+    "disjoint-control-fixed-2.dxil": "f83e0c3d614d6564654a59fdd5a37d59fc334410aeea6ce36832ee4e3817d9e1",
+    "disjoint-control-fixed-3.dxil": "1a3d044680e32f3450f475618519475ee047ce0551238f21e7ea6b6391500f46",
+    "disjoint-control-implementation-0.dxil": "c61c06235da13cd0df83f14c0223d17d32a6a6b54d22de0a70a2b9531626947e",
+    "disjoint-control-implementation-1.dxil": "2127024652face8c75de88b73d416d3807dd48c68b34fa74cd04df7302de541c",
+    "disjoint-control-implementation-2.dxil": "ef52411ef3571f12dd6c5f00b9d271ed091720c6a716dbbc4570a750000decda",
+    "disjoint-control-implementation-3.dxil": "1aabdf4a1f4f8d29635b34881b2f2c249bdc51fdf63256864d850ad7cb7ab12d",
+    "disjoint-control-strict-0.dxil": "c61c06235da13cd0df83f14c0223d17d32a6a6b54d22de0a70a2b9531626947e",
+    "disjoint-control-strict-1.dxil": "2127024652face8c75de88b73d416d3807dd48c68b34fa74cd04df7302de541c",
+    "disjoint-control-strict-2.dxil": "ef52411ef3571f12dd6c5f00b9d271ed091720c6a716dbbc4570a750000decda",
+    "disjoint-control-strict-3.dxil": "1aabdf4a1f4f8d29635b34881b2f2c249bdc51fdf63256864d850ad7cb7ab12d",
+    "four-piece-fragmentation-fixed-0.dxil": "9da43ee482e3b18a145e257524e9d01ce2a7a5082114bc84b0b746051f0675f6",
+    "four-piece-fragmentation-fixed-1.dxil": "fb76ad2a978ea69a4c852747939e17045e5f50c711ae7e4a7be956e0a7c07856",
+    "four-piece-fragmentation-fixed-2.dxil": "b3b6171ad65bb3dfa181588fd725c6f12b548fbabcd1e6e39b5dcbd4cf2aea47",
+    "four-piece-fragmentation-fixed-3.dxil": "d847050373b57b5a6baf32b1dd648115e309817ac5a3c767afcaed91dac566ea",
+    "four-piece-fragmentation-implementation-0.dxil": "a0e2efbf54b76d1548c519e2af01e111c130ee3050ee90dbaebf158df734920d",
+    "four-piece-fragmentation-implementation-1.dxil": "1018eb08bbecf28216a8db929277e89c50b0f8da35ab512c74d51510351650fe",
+    "four-piece-fragmentation-implementation-2.dxil": "78afab555c428606dd63b85e189ba0c42c5b5ce02889799dcaaee0655e8eb218",
+    "four-piece-fragmentation-implementation-3.dxil": "3e10a843efe91247a04c84df7ada7a543112806e168661c5b13586a88e54bbe4",
+    "four-piece-fragmentation-longer-first-0.dxil": "a0e2efbf54b76d1548c519e2af01e111c130ee3050ee90dbaebf158df734920d",
+    "four-piece-fragmentation-longer-first-1.dxil": "1018eb08bbecf28216a8db929277e89c50b0f8da35ab512c74d51510351650fe",
+    "four-piece-fragmentation-longer-first-2.dxil": "78afab555c428606dd63b85e189ba0c42c5b5ce02889799dcaaee0655e8eb218",
+    "four-piece-fragmentation-longer-first-3.dxil": "3e10a843efe91247a04c84df7ada7a543112806e168661c5b13586a88e54bbe4",
+    "four-piece-fragmentation-strict-0.dxil": "9da43ee482e3b18a145e257524e9d01ce2a7a5082114bc84b0b746051f0675f6",
+    "four-piece-fragmentation-strict-1.dxil": "fb76ad2a978ea69a4c852747939e17045e5f50c711ae7e4a7be956e0a7c07856",
+    "four-piece-fragmentation-strict-2.dxil": "b3b6171ad65bb3dfa181588fd725c6f12b548fbabcd1e6e39b5dcbd4cf2aea47",
+    "four-piece-fragmentation-strict-3.dxil": "d847050373b57b5a6baf32b1dd648115e309817ac5a3c767afcaed91dac566ea",
+    "upstream-overlap-fixed-0.dxil": "12e6c7d25813f3f681704bdeb30f8091dd767e172ae320153b08490959c3be25",
+    "upstream-overlap-fixed-1.dxil": "e988b78f77313cd8eefd54286151c4d236b16cb9ab4442760b37cdcbe7b068d3",
+    "upstream-overlap-fixed-2.dxil": "e390fccfaf4108a5c4a6569bd7961fb3731451860f2abd189a6b28a7ebd41167",
+    "upstream-overlap-implementation-0.dxil": "12e6c7d25813f3f681704bdeb30f8091dd767e172ae320153b08490959c3be25",
+    "upstream-overlap-implementation-1.dxil": "e988b78f77313cd8eefd54286151c4d236b16cb9ab4442760b37cdcbe7b068d3",
+    "upstream-overlap-implementation-2.dxil": "e390fccfaf4108a5c4a6569bd7961fb3731451860f2abd189a6b28a7ebd41167",
+    "upstream-overlap-strict-0.dxil": "12e6c7d25813f3f681704bdeb30f8091dd767e172ae320153b08490959c3be25",
+    "upstream-overlap-strict-1.dxil": "e988b78f77313cd8eefd54286151c4d236b16cb9ab4442760b37cdcbe7b068d3",
+    "upstream-overlap-strict-2.dxil": "e390fccfaf4108a5c4a6569bd7961fb3731451860f2abd189a6b28a7ebd41167",
+    "upstream-skip-middle-fixed-0.dxil": "19d05df1d1ab3843c2bf487659ae2b543726e3e3d966f3add3af5230d7546aee",
+    "upstream-skip-middle-fixed-1.dxil": "19d0ded1c2d75727089cc835701c91b5b5c28b829666bf36da741a4967e8579e",
+    "upstream-skip-middle-fixed-2.dxil": "9440a1d1d11b4e8377dd0f6454915395e496ac1efe16f4577778538d04ad2d9b",
+    "upstream-skip-middle-implementation-0.dxil": "19d05df1d1ab3843c2bf487659ae2b543726e3e3d966f3add3af5230d7546aee",
+    "upstream-skip-middle-implementation-1.dxil": "19d0ded1c2d75727089cc835701c91b5b5c28b829666bf36da741a4967e8579e",
+    "upstream-skip-middle-implementation-2.dxil": "9440a1d1d11b4e8377dd0f6454915395e496ac1efe16f4577778538d04ad2d9b",
+    "upstream-skip-middle-strict-0.dxil": "19d05df1d1ab3843c2bf487659ae2b543726e3e3d966f3add3af5230d7546aee",
+    "upstream-skip-middle-strict-1.dxil": "19d0ded1c2d75727089cc835701c91b5b5c28b829666bf36da741a4967e8579e",
+    "upstream-skip-middle-strict-2.dxil": "9440a1d1d11b4e8377dd0f6454915395e496ac1efe16f4577778538d04ad2d9b",
+    "upstream-wave32-loops-fixed-0.dxil": "4efa5fdc426d788909db700fdf6b50b47d3613927d3d6ba85ab6f9702ddc1ede",
+    "upstream-wave32-loops-fixed-1.dxil": "e316708ba35094f7133236184e2783497e2f4730688c32ef887181f99416f4eb",
+    "upstream-wave32-loops-fixed-2.dxil": "581c40a353af591503cd346820c763da0305944a1e76c131519a451fc185bed4",
+    "upstream-wave32-loops-fixed-3.dxil": "13a7941157cd72e1e86fdd7fd92c3dee56df07f1f5d41d18eb5c969c4b294931",
+    "upstream-wave32-loops-implementation-0.dxil": "00f70241376dd26d5b3198db41454caec7b883830b5bb90beabe859527d0feb2",
+    "upstream-wave32-loops-implementation-1.dxil": "819c5ac38bafb7f7cbed62340acf5ee3717c19c4e121864fead42d91d578e8ac",
+    "upstream-wave32-loops-implementation-2.dxil": "4390098292c67c9c4d772cfdcfdc6ae6c0b667a321e2bbbb6b2fdc771c960a4e",
+    "upstream-wave32-loops-implementation-3.dxil": "0de6dece1bc85e4f80b527ccea1ee7bfd7aa2103979e7d59529e54651a8b44fa",
+    "upstream-wave32-loops-strict-0.dxil": "00f70241376dd26d5b3198db41454caec7b883830b5bb90beabe859527d0feb2",
+    "upstream-wave32-loops-strict-1.dxil": "819c5ac38bafb7f7cbed62340acf5ee3717c19c4e121864fead42d91d578e8ac",
+    "upstream-wave32-loops-strict-2.dxil": "4390098292c67c9c4d772cfdcfdc6ae6c0b667a321e2bbbb6b2fdc771c960a4e",
+    "upstream-wave32-loops-strict-3.dxil": "0de6dece1bc85e4f80b527ccea1ee7bfd7aa2103979e7d59529e54651a8b44fa"
+  }
+}

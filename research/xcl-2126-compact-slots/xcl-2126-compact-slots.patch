@@ -1,0 +1,148 @@
+diff --git a/crates/xcl/src/gpu/dxil/module/split.rs b/crates/xcl/src/gpu/dxil/module/split.rs
+index 1707a80..1442779 100644
+--- a/crates/xcl/src/gpu/dxil/module/split.rs
++++ b/crates/xcl/src/gpu/dxil/module/split.rs
+@@ -1,6 +1,6 @@
+ //! Partition the optimized compute entry at CFG edges. A dispatch cannot
+ //! jump back to an earlier dispatch, so a strongly connected component is
+-//! indivisible. Each crossing edge has its own compact state layout.
++//! indivisible. Scratch payload words can be reused across disjoint piece lifetimes.
+ 
+ use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+ 
+@@ -25,6 +25,57 @@ pub struct DispatchChain {
+     pub dwords_per_group: u32,
+ }
+ 
++struct PayloadLifetime {
++    value: Value,
++    first: usize,
++    last: usize,
++    words: u32,
++}
++
++type ScratchLayout = (u32, BTreeMap<Value, u32>);
++
++fn reuse_payload_slots(mut lifetimes: Vec<PayloadLifetime>) -> Option<ScratchLayout> {
++    lifetimes.sort_unstable_by_key(|life| (life.first, std::cmp::Reverse(life.last), life.value));
++    let mut active = BTreeSet::<(usize, u32, u32)>::new();
++    let mut free = BTreeSet::<u32>::new();
++    let mut pairs = BTreeSet::<u32>::new();
++    let mut slots = BTreeMap::new();
++    let mut stride = 1; // Slot zero is always the continuation tag.
++    for life in lifetimes {
++        // No slot can be restored and overwritten in the same piece. Restores
++        // can move after a branch, so the last carrying destination is inclusive.
++        while active.first().is_some_and(|&(last, _, _)| last < life.first) {
++            let (_, start, end) = active.pop_first()?;
++            for word in start..end {
++                if free.contains(&(word - 1)) {
++                    pairs.insert(word - 1);
++                }
++                if free.contains(&(word + 1)) {
++                    pairs.insert(word);
++                }
++                free.insert(word);
++            }
++        }
++        let slot = match life.words {
++            1 => free.first().copied().unwrap_or(stride),
++            2 => pairs.first().copied().unwrap_or_else(|| {
++                if free.contains(&(stride - 1)) { stride - 1 } else { stride }
++            }),
++            _ => return None,
++        };
++        let end = slot.checked_add(life.words)?;
++        for word in slot..end {
++            free.remove(&word);
++            pairs.remove(&word);
++            pairs.remove(&(word - 1));
++        }
++        stride = stride.max(end);
++        slots.insert(life.value, slot);
++        active.insert((life.last, slot, end));
++    }
++    Some((stride, slots))
++}
++
+ struct Scratch {
+     uav: RawUav,
+     base: Value,
+@@ -105,18 +156,7 @@ impl Shader {
+             if exchange != 0 { return None; }
+         }
+         let plan = self.m.dispatch_plan(limit)?;
+-        // Slot zero is the tag. Every transported SSA value owns its payload slots
+-        // until the chain finishes. An outgoing store can never overwrite a value
+-        // restored by the same piece, even when the restore is sunk past a branch.
+-        let mut stride = 1u32;
+-        let mut slots = BTreeMap::new();
+-        for value in plan.edges.iter().flat_map(|e| e.live.iter().copied()).collect::<BTreeSet<_>>() {
+-            let words = self.m.transport_words(value)?;
+-            if words != 0 {
+-                slots.insert(value, stride);
+-                stride = stride.checked_add(words)?;
+-            }
+-        }
++        let (stride, slots) = self.m.scratch_slots(&plan)?;
+         stride.checked_mul(threads[0])?.checked_mul(4)?;
+         let pieces = (0..plan.blocks.len()).map(|i| self.make_piece(&plan, i, stride, &slots, threads, &prefix)).collect::<Option<Vec<_>>>()?;
+         Some(DispatchChain { pieces, dwords_per_group: stride.checked_mul(threads[0])? })
+@@ -218,7 +258,7 @@ impl Shader {
+             let Some(&(b, tag)) = exits.get(&(edge.from, edge.to)) else { continue };
+             dst.m.set_block(b);
+             for &v in &edge.live {
+-                // The defining piece writes a distinct slot. Later pieces can bypass
++                // The defining piece writes its assigned slot. Later pieces can bypass
+                 // it or read it without copying it at their own outgoing edges.
+                 if let Some(&slot) = slots.get(&v) {
+                     if !local.contains_key(&src.def_block[inst(v)?]) { continue; }
+@@ -427,6 +467,48 @@ impl Module {
+         None
+     }
+ 
++    fn scratch_slots(&self, plan: &Plan) -> Option<ScratchLayout> {
++        let mut stages = vec![None; self.blocks.len()];
++        for (stage, blocks) in plan.blocks.iter().enumerate() {
++            for &block in blocks {
++                stages[block.0 as usize] = Some(stage);
++            }
++        }
++        let mut lifetimes = BTreeMap::<Value, PayloadLifetime>::new();
++        for edge in &plan.edges {
++            let from = stages[edge.from.0 as usize]?;
++            let to = stages[edge.to.0 as usize]?;
++            if from >= to {
++                return None;
++            }
++            for &value in &edge.live {
++                if let Some(life) = lifetimes.get_mut(&value) {
++                    life.last = life.last.max(to);
++                    continue;
++                }
++                let words = self.transport_words(value)?;
++                if words == 0 {
++                    continue;
++                }
++                let definition = self.def_block[inst(value)?];
++                let first = stages[definition.0 as usize]?;
++                if first > from {
++                    return None;
++                }
++                lifetimes.insert(value, PayloadLifetime { value, first, last: to, words });
++            }
++        }
++
++        let mut fixed = (1u32, BTreeMap::new());
++        for life in lifetimes.values() {
++            fixed.1.insert(life.value, fixed.0);
++            fixed.0 = fixed.0.checked_add(life.words)?;
++        }
++        let compact = reuse_payload_slots(lifetimes.into_values().collect())?;
++        // Keep the original offsets and emitted DXIL if reuse saves no space.
++        Some(if compact.0 < fixed.0 { compact } else { fixed })
++    }
++
+     fn transport_words(&self, v: Value) -> Option<u32> {
+         let def = &self.insts[inst(v)?];
+         match &self.types[def.ty.0 as usize] {
