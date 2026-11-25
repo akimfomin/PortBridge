@@ -1,0 +1,6 @@
+before 2026-11-25T10:25:28.6716623Z
+name, driver_version, utilization.gpu [%], pstate, temperature.gpu, clocks.current.sm [MHz], memory.used [MiB]
+NVIDIA GeForce RTX 4070 Ti SUPER, 617.14, 44 %, P0, 57, 2805 MHz, 1364 MiB
+after 2026-11-25T10:25:31.7807338Z
+name, driver_version, utilization.gpu [%], pstate, temperature.gpu, clocks.current.sm [MHz], memory.used [MiB]
+NVIDIA GeForce RTX 4070 Ti SUPER, 617.14, 73 %, P0, 57, 2805 MHz, 1363 MiB

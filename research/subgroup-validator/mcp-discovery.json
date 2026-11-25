@@ -1,0 +1,103 @@
+{
+  "server": {
+    "name": "portbridge",
+    "title": "PortBridge",
+    "version": "1.0.0"
+  },
+  "protocol": "2025-11-25",
+  "read_at_snapshot_refreshed_at_utc": "2026-11-25T08:49:11+00:00",
+  "radar_action_count": 8,
+  "preflight": {
+    "compiler": {
+      "input": {
+        "q": "wave64 execution mask ds_bpermute_b32 subgroup",
+        "limit": 8,
+        "expand_global": true
+      },
+      "indexed": null,
+      "local_match_count": 0,
+      "external_candidate_urls": [
+        "https://github.com/Marvisak/VIctory/pull/573",
+        "https://github.com/fxceless/victory-fork/pull/615",
+        "https://github.com/0x0007b/XBVK/issues/5",
+        "https://github.com/ubiquitarianism/leonida/pull/770",
+        "https://github.com/Marvisak/VIctory/pull/2152",
+        "https://github.com/GPUOpen-Drivers/AMD-Gfx-Drivers/issues/138",
+        "https://github.com/Zettrox/ztrx/pull/43",
+        "https://github.com/R0Y00/Xbox2Windows/issues/1543"
+      ],
+      "elapsed_ms": 3212
+    },
+    "xcl772": {
+      "input": {
+        "url": "https://github.com/xcl-dev/xcl/issues/772",
+        "limit": 8
+      },
+      "indexed": true,
+      "local_match_count": 8,
+      "external_candidate_urls": [],
+      "elapsed_ms": 2077
+    },
+    "continued4300": {
+      "input": {
+        "url": "https://github.com/ubiquitarianism/leonida/pull/4300",
+        "q": "wave64 SCC explicit src_scc reads",
+        "limit": 8
+      },
+      "indexed": false,
+      "local_match_count": 0,
+      "external_candidate_urls": [],
+      "elapsed_ms": 3501
+    },
+    "cold_compile": {
+      "input": {
+        "q": "shader DXIL SPIR-V compilation stalls pipeline cache",
+        "limit": 8,
+        "expand_global": true
+      },
+      "indexed": null,
+      "local_match_count": 0,
+      "external_candidate_urls": [
+        "https://github.com/KAJARLABORATORIES/libframework/issues/64",
+        "https://github.com/rexglue/rexglue-sdk/issues/633",
+        "https://github.com/kelvynzucco/majistic-recomp/issues/4",
+        "https://github.com/JulianDr14/jadyx/issues/68",
+        "https://github.com/pablogonz12/Scarlight/pull/47",
+        "https://github.com/arcanite24/pinyon-shift-native/issues/3",
+        "https://github.com/xcl-dev/xcl/pull/2191",
+        "https://github.com/TommyRadan/AlphaEngine/issues/309",
+        "https://github.com/pablogonz12/Scarlight/pull/36",
+        "https://github.com/NastMz/MicroEngine/issues/192"
+      ],
+      "elapsed_ms": 3931
+    },
+    "synchronization": {
+      "input": {
+        "q": "Vulkan timeline pipeline barrier resource aliasing asynchronous GPU",
+        "limit": 8,
+        "expand_global": true
+      },
+      "indexed": null,
+      "local_match_count": 0,
+      "external_candidate_urls": [
+        "https://github.com/rzikydn/telemetry-metrics/issues/388",
+        "https://github.com/PixelGuys/Cubyz/issues/3595",
+        "https://github.com/scarletnx/ScarletNX/pull/2462",
+        "https://github.com/LunarG/gfxreconstruct/pull/3426",
+        "https://github.com/scarletnx/ScarletNX/pull/2553",
+        "https://github.com/Eglantine-Community/Eglantine/pull/954",
+        "https://github.com/TandooriChart70/.github-workflows-b570-hybrid.yml/issues/2",
+        "https://github.com/zortos293/Lichii/pull/2561",
+        "https://github.com/nervouna/omarchy-on-xiaomi-pad-9-pro/issues/112",
+        "https://github.com/pdparchitect/noodle/issues/333"
+      ],
+      "elapsed_ms": 3613
+    }
+  },
+  "primary_review": {
+    "official_driver_report": "https://github.com/GPUOpen-Drivers/AMD-Gfx-Drivers/issues/138",
+    "synthetic_spirv_receiver": "https://github.com/ubiquitarianism/leonida/pull/770",
+    "native_measured_contract": "https://github.com/xcl-dev/xcl/issues/772",
+    "generated_shader_cold_pipeline": "https://github.com/xcl-dev/xcl/issues/1269"
+  }
+}

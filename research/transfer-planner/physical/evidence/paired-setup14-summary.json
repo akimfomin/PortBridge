@@ -1,0 +1,1252 @@
+{
+  "cost_setup": 14,
+  "matched_epoch_and_plan_signatures": true,
+  "runs_by_backend": {
+    "Vulkan": [
+      {
+        "file": "vulkan-rtx4070tisuper-setup14-run1.csv",
+        "cases": {
+          "imgui_idle_vertices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 17.63,
+              "greedy": 15.159
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.95,
+                "chain_p95_us": 610.3,
+                "epoch_median_chain_sum_us": 1006.8,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.5,
+                "chain_p95_us": 611.1,
+                "epoch_median_chain_sum_us": 1028.4,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 42.25,
+                "chain_p95_us": 616.0,
+                "epoch_median_chain_sum_us": 1184.3,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_idle_vertices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -6.603,
+              "greedy": -4.895
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 41.25,
+                "chain_p95_us": 591.1,
+                "epoch_median_chain_sum_us": 1102.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.2,
+                "chain_p95_us": 595.6,
+                "epoch_median_chain_sum_us": 1082.7,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.8,
+                "chain_p95_us": 603.0,
+                "epoch_median_chain_sum_us": 1029.7,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_idle_indices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 6.185,
+              "greedy": 2.501
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 39.3,
+                "chain_p95_us": 418.7,
+                "epoch_median_chain_sum_us": 976.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.7,
+                "chain_p95_us": 601.0,
+                "epoch_median_chain_sum_us": 1011.7,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.2,
+                "chain_p95_us": 596.8,
+                "epoch_median_chain_sum_us": 1037.0,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_idle_indices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -28.245,
+              "greedy": -0.136
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.65,
+                "chain_p95_us": 594.2,
+                "epoch_median_chain_sum_us": 1642.4,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 41.6,
+                "chain_p95_us": 599.3,
+                "epoch_median_chain_sum_us": 1180.1,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 39.95,
+                "chain_p95_us": 627.3,
+                "epoch_median_chain_sum_us": 1178.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_scrolling_vertices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 6,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 13.923,
+              "greedy": 2.816
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 46.35,
+                "chain_p95_us": 639.9,
+                "epoch_median_chain_sum_us": 1172.9,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 12,
+                "model_score_across_selected_epochs": 4383
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 44.85,
+                "chain_p95_us": 594.7,
+                "epoch_median_chain_sum_us": 1299.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 12,
+                "model_score_across_selected_epochs": 4383
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 46.25,
+                "chain_p95_us": 611.1,
+                "epoch_median_chain_sum_us": 1336.2,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.05,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 12,
+                "model_score_across_selected_epochs": 4383
+              }
+            }
+          },
+          "imgui_scrolling_vertices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 6,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 5.459,
+              "greedy": 11.388
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 46.15,
+                "chain_p95_us": 607.9,
+                "epoch_median_chain_sum_us": 1106.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 74,
+                "model_score_across_selected_epochs": 5251
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 44.65,
+                "chain_p95_us": 609.5,
+                "epoch_median_chain_sum_us": 1047.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 74,
+                "model_score_across_selected_epochs": 5251
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 45.15,
+                "chain_p95_us": 598.0,
+                "epoch_median_chain_sum_us": 1166.8999999999999,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 74,
+                "model_score_across_selected_epochs": 5251
+              }
+            }
+          },
+          "imgui_scrolling_indices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 5,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -23.044,
+              "greedy": -16.787
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.1,
+                "chain_p95_us": 610.8,
+                "epoch_median_chain_sum_us": 1274.1000000000001,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.6,
+                "chain_p95_us": 609.3,
+                "epoch_median_chain_sum_us": 1178.3,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.3,
+                "chain_p95_us": 599.7,
+                "epoch_median_chain_sum_us": 980.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              }
+            }
+          },
+          "imgui_scrolling_indices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 5,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 13.524,
+              "greedy": 12.208
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.5,
+                "chain_p95_us": 593.1,
+                "epoch_median_chain_sum_us": 980.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 41.35,
+                "chain_p95_us": 610.7,
+                "epoch_median_chain_sum_us": 992.0,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 40.5,
+                "chain_p95_us": 594.5,
+                "epoch_median_chain_sum_us": 1113.1,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              }
+            }
+          },
+          "fox_survey_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -1.652,
+              "greedy": -0.673
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 43.55,
+                "chain_p95_us": 611.4,
+                "epoch_median_chain_sum_us": 1095.4,
+                "plan_p50_us": 0.5,
+                "stage_p50_us": 0.2,
+                "copied_bytes_across_selected_epochs": 30272,
+                "regions_across_selected_epochs": 53,
+                "model_score_across_selected_epochs": 1215
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 44.15,
+                "chain_p95_us": 611.5,
+                "epoch_median_chain_sum_us": 1084.6,
+                "plan_p50_us": 0.3,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 43.3,
+                "chain_p95_us": 600.6,
+                "epoch_median_chain_sum_us": 1077.3,
+                "plan_p50_us": 0.3,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              }
+            }
+          },
+          "fox_walk_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -4.936,
+              "greedy": -3.963
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 43.5,
+                "chain_p95_us": 613.8,
+                "epoch_median_chain_sum_us": 1075.8,
+                "plan_p50_us": 0.4,
+                "stage_p50_us": 0.2,
+                "copied_bytes_across_selected_epochs": 30720,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 1152
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 42.1,
+                "chain_p95_us": 612.6,
+                "epoch_median_chain_sum_us": 1064.9,
+                "plan_p50_us": 0.3,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 41.9,
+                "chain_p95_us": 611.9,
+                "epoch_median_chain_sum_us": 1022.7,
+                "plan_p50_us": 0.3,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              }
+            }
+          },
+          "fox_walk_replicated_64_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 8.146,
+              "greedy": -3.584
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 68.85,
+                "chain_p95_us": 615.0,
+                "epoch_median_chain_sum_us": 1701.4,
+                "plan_p50_us": 3.7,
+                "stage_p50_us": 4.0,
+                "copied_bytes_across_selected_epochs": 1966080,
+                "regions_across_selected_epochs": 3072,
+                "model_score_across_selected_epochs": 73728
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 59.6,
+                "chain_p95_us": 703.3,
+                "epoch_median_chain_sum_us": 1908.4,
+                "plan_p50_us": 2.5,
+                "stage_p50_us": 2.8,
+                "copied_bytes_across_selected_epochs": 2548224,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 40152
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 57.7,
+                "chain_p95_us": 623.3,
+                "epoch_median_chain_sum_us": 1840.0,
+                "plan_p50_us": 2.05,
+                "stage_p50_us": 2.6,
+                "copied_bytes_across_selected_epochs": 2548224,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 40152
+              }
+            }
+          },
+          "fox_walk_replicated_64_64k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -37.916,
+              "greedy": -16.543
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 77.35,
+                "chain_p95_us": 642.1,
+                "epoch_median_chain_sum_us": 2900.9,
+                "plan_p50_us": 3.8,
+                "stage_p50_us": 4.0,
+                "copied_bytes_across_selected_epochs": 1966080,
+                "regions_across_selected_epochs": 3072,
+                "model_score_across_selected_epochs": 73728
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.9,
+                "chain_p95_us": 618.8,
+                "epoch_median_chain_sum_us": 2158.0,
+                "plan_p50_us": 2.7,
+                "stage_p50_us": 3.1,
+                "copied_bytes_across_selected_epochs": 2548224,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 40488
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 67.1,
+                "chain_p95_us": 615.5,
+                "epoch_median_chain_sum_us": 1801.0,
+                "plan_p50_us": 7.9,
+                "stage_p50_us": 2.95,
+                "copied_bytes_across_selected_epochs": 2540544,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 40368
+              }
+            }
+          },
+          "fox_walk_replicated_64_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 23.561,
+              "greedy": 6.824
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 71.2,
+                "chain_p95_us": 612.1,
+                "epoch_median_chain_sum_us": 1763.5,
+                "plan_p50_us": 3.5,
+                "stage_p50_us": 3.6,
+                "copied_bytes_across_selected_epochs": 1966080,
+                "regions_across_selected_epochs": 3072,
+                "model_score_across_selected_epochs": 73728
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 65.9,
+                "chain_p95_us": 647.0,
+                "epoch_median_chain_sum_us": 2039.8,
+                "plan_p50_us": 3.3,
+                "stage_p50_us": 3.3,
+                "copied_bytes_across_selected_epochs": 2456064,
+                "regions_across_selected_epochs": 624,
+                "model_score_across_selected_epochs": 47112
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 67.95,
+                "chain_p95_us": 620.7,
+                "epoch_median_chain_sum_us": 2179.0,
+                "plan_p50_us": 7.9,
+                "stage_p50_us": 2.9,
+                "copied_bytes_across_selected_epochs": 2310144,
+                "regions_across_selected_epochs": 768,
+                "model_score_across_selected_epochs": 46848
+              }
+            }
+          },
+          "fox_run_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 25.243,
+              "greedy": 11.297
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 45.65,
+                "chain_p95_us": 596.6,
+                "epoch_median_chain_sum_us": 1153.2,
+                "plan_p50_us": 0.4,
+                "stage_p50_us": 0.2,
+                "copied_bytes_across_selected_epochs": 30720,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 1152
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 45.45,
+                "chain_p95_us": 604.4,
+                "epoch_median_chain_sum_us": 1297.7,
+                "plan_p50_us": 0.4,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 46.95,
+                "chain_p95_us": 613.6,
+                "epoch_median_chain_sum_us": 1444.3,
+                "plan_p50_us": 0.35,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              }
+            }
+          }
+        }
+      }
+    ],
+    "D3D12": [
+      {
+        "file": "d3d12-formal-setup14-r1.json",
+        "cases": {
+          "imgui_idle_vertices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -5.293,
+              "greedy": -6.254
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 62.3,
+                "chain_p95_us": 773.0,
+                "epoch_median_chain_sum_us": 1532.1,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.3,
+                "chain_p95_us": 1190.2,
+                "epoch_median_chain_sum_us": 1547.8,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 59.45,
+                "chain_p95_us": 753.0,
+                "epoch_median_chain_sum_us": 1451.0,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_idle_vertices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -5.841,
+              "greedy": -0.586
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 62.3,
+                "chain_p95_us": 1079.4,
+                "epoch_median_chain_sum_us": 1638.3,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 58.85,
+                "chain_p95_us": 364.2,
+                "epoch_median_chain_sum_us": 1551.7,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.9,
+                "chain_p95_us": 811.1,
+                "epoch_median_chain_sum_us": 1542.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_idle_indices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -9.009,
+              "greedy": 1.587
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 56.5,
+                "chain_p95_us": 1184.6,
+                "epoch_median_chain_sum_us": 1610.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 59.6,
+                "chain_p95_us": 1193.8,
+                "epoch_median_chain_sum_us": 1442.6000000000001,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 58.25,
+                "chain_p95_us": 1238.8,
+                "epoch_median_chain_sum_us": 1465.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_idle_indices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 0,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 10.66,
+              "greedy": -0.277
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 56.0,
+                "chain_p95_us": 1182.7,
+                "epoch_median_chain_sum_us": 1461.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 55.8,
+                "chain_p95_us": 758.6,
+                "epoch_median_chain_sum_us": 1621.8,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 56.9,
+                "chain_p95_us": 772.3,
+                "epoch_median_chain_sum_us": 1617.3,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 0,
+                "regions_across_selected_epochs": 0,
+                "model_score_across_selected_epochs": 0
+              }
+            }
+          },
+          "imgui_scrolling_vertices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 6,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -1.809,
+              "greedy": 7.898
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 63.7,
+                "chain_p95_us": 836.6,
+                "epoch_median_chain_sum_us": 1691.8,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 12,
+                "model_score_across_selected_epochs": 4383
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 63.75,
+                "chain_p95_us": 688.5,
+                "epoch_median_chain_sum_us": 1539.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 12,
+                "model_score_across_selected_epochs": 4383
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 66.55,
+                "chain_p95_us": 1094.4,
+                "epoch_median_chain_sum_us": 1661.2,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 12,
+                "model_score_across_selected_epochs": 4383
+              }
+            }
+          },
+          "imgui_scrolling_vertices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 6,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -9.103,
+              "greedy": -4.101
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 64.5,
+                "chain_p95_us": 1195.1,
+                "epoch_median_chain_sum_us": 1677.5,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.05,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 74,
+                "model_score_across_selected_epochs": 5251
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 63.15,
+                "chain_p95_us": 1211.3,
+                "epoch_median_chain_sum_us": 1590.0,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 74,
+                "model_score_across_selected_epochs": 5251
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 63.35,
+                "chain_p95_us": 707.4,
+                "epoch_median_chain_sum_us": 1524.8,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 269760,
+                "regions_across_selected_epochs": 74,
+                "model_score_across_selected_epochs": 5251
+              }
+            }
+          },
+          "imgui_scrolling_indices_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 5,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -3.248,
+              "greedy": -3.001
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 60.55,
+                "chain_p95_us": 783.0,
+                "epoch_median_chain_sum_us": 1530.3,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.05,
+                "chain_p95_us": 961.6,
+                "epoch_median_chain_sum_us": 1526.4,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 59.8,
+                "chain_p95_us": 791.8,
+                "epoch_median_chain_sum_us": 1480.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              }
+            }
+          },
+          "imgui_scrolling_indices_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 5,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 2.328,
+              "greedy": -6.44
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.75,
+                "chain_p95_us": 877.7,
+                "epoch_median_chain_sum_us": 1520.6,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 62.95,
+                "chain_p95_us": 1006.6,
+                "epoch_median_chain_sum_us": 1663.1,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 62.0,
+                "chain_p95_us": 1069.1,
+                "epoch_median_chain_sum_us": 1556.0,
+                "plan_p50_us": 0.1,
+                "stage_p50_us": 0.0,
+                "copied_bytes_across_selected_epochs": 704,
+                "regions_across_selected_epochs": 5,
+                "model_score_across_selected_epochs": 81
+              }
+            }
+          },
+          "fox_survey_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -5.645,
+              "greedy": -4.269
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.0,
+                "chain_p95_us": 836.5,
+                "epoch_median_chain_sum_us": 1537.6,
+                "plan_p50_us": 0.7,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 30272,
+                "regions_across_selected_epochs": 53,
+                "model_score_across_selected_epochs": 1215
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 58.5,
+                "chain_p95_us": 816.7,
+                "epoch_median_chain_sum_us": 1515.5,
+                "plan_p50_us": 0.4,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 58.85,
+                "chain_p95_us": 1020.9,
+                "epoch_median_chain_sum_us": 1450.8,
+                "plan_p50_us": 0.4,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              }
+            }
+          },
+          "fox_walk_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": 0.709,
+              "greedy": 0.669
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 59.75,
+                "chain_p95_us": 1098.2,
+                "epoch_median_chain_sum_us": 1523.9,
+                "plan_p50_us": 0.6,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 30720,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 1152
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 59.25,
+                "chain_p95_us": 764.7,
+                "epoch_median_chain_sum_us": 1524.5,
+                "plan_p50_us": 0.5,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.1,
+                "chain_p95_us": 778.6,
+                "epoch_median_chain_sum_us": 1534.7,
+                "plan_p50_us": 0.4,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              }
+            }
+          },
+          "fox_walk_replicated_64_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -11.6,
+              "greedy": 55.604
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 115.05,
+                "chain_p95_us": 1250.1,
+                "epoch_median_chain_sum_us": 3775.7,
+                "plan_p50_us": 5.3,
+                "stage_p50_us": 2.9,
+                "copied_bytes_across_selected_epochs": 1966080,
+                "regions_across_selected_epochs": 3072,
+                "model_score_across_selected_epochs": 73728
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 82.45,
+                "chain_p95_us": 1190.4,
+                "epoch_median_chain_sum_us": 2145.0,
+                "plan_p50_us": 2.9,
+                "stage_p50_us": 2.8,
+                "copied_bytes_across_selected_epochs": 2548224,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 40152
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 83.65,
+                "chain_p95_us": 1404.5,
+                "epoch_median_chain_sum_us": 3337.7000000000003,
+                "plan_p50_us": 2.2,
+                "stage_p50_us": 2.7,
+                "copied_bytes_across_selected_epochs": 2548224,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 40152
+              }
+            }
+          },
+          "fox_walk_replicated_64_64k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -34.005,
+              "greedy": 3.647
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 107.8,
+                "chain_p95_us": 1251.4,
+                "epoch_median_chain_sum_us": 3285.7,
+                "plan_p50_us": 4.9,
+                "stage_p50_us": 2.7,
+                "copied_bytes_across_selected_epochs": 1966080,
+                "regions_across_selected_epochs": 3072,
+                "model_score_across_selected_epochs": 73728
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 78.5,
+                "chain_p95_us": 788.5,
+                "epoch_median_chain_sum_us": 2092.1,
+                "plan_p50_us": 3.0,
+                "stage_p50_us": 2.8,
+                "copied_bytes_across_selected_epochs": 2548224,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 40488
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 83.25,
+                "chain_p95_us": 967.8,
+                "epoch_median_chain_sum_us": 2168.4,
+                "plan_p50_us": 8.0,
+                "stage_p50_us": 2.7,
+                "copied_bytes_across_selected_epochs": 2540544,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 40368
+              }
+            }
+          },
+          "fox_walk_replicated_64_4k": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -21.066,
+              "greedy": 14.257
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 107.3,
+                "chain_p95_us": 968.3,
+                "epoch_median_chain_sum_us": 2961.6,
+                "plan_p50_us": 4.7,
+                "stage_p50_us": 2.8,
+                "copied_bytes_across_selected_epochs": 1966080,
+                "regions_across_selected_epochs": 3072,
+                "model_score_across_selected_epochs": 73728
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 84.3,
+                "chain_p95_us": 933.2,
+                "epoch_median_chain_sum_us": 2046.0,
+                "plan_p50_us": 3.7,
+                "stage_p50_us": 2.8,
+                "copied_bytes_across_selected_epochs": 2456064,
+                "regions_across_selected_epochs": 624,
+                "model_score_across_selected_epochs": 47112
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 92.0,
+                "chain_p95_us": 791.3,
+                "epoch_median_chain_sum_us": 2337.7,
+                "plan_p50_us": 8.95,
+                "stage_p50_us": 2.7,
+                "copied_bytes_across_selected_epochs": 2310144,
+                "regions_across_selected_epochs": 768,
+                "model_score_across_selected_epochs": 46848
+              }
+            }
+          },
+          "fox_run_native": {
+            "available": 180,
+            "selected": 24,
+            "selected_active": 24,
+            "optimal_chain_pct_vs_baseline": {
+              "exact": -0.543,
+              "greedy": -2.882
+            },
+            "strategies": {
+              "exact": {
+                "timed_chains": 168,
+                "chain_p50_us": 63.8,
+                "chain_p95_us": 816.9,
+                "epoch_median_chain_sum_us": 1565.2,
+                "plan_p50_us": 0.7,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 30720,
+                "regions_across_selected_epochs": 48,
+                "model_score_across_selected_epochs": 1152
+              },
+              "greedy": {
+                "timed_chains": 168,
+                "chain_p50_us": 62.75,
+                "chain_p95_us": 1225.6,
+                "epoch_median_chain_sum_us": 1602.9,
+                "plan_p50_us": 0.5,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              },
+              "optimal": {
+                "timed_chains": 168,
+                "chain_p50_us": 61.5,
+                "chain_p95_us": 779.7,
+                "epoch_median_chain_sum_us": 1556.7,
+                "plan_p50_us": 0.5,
+                "stage_p50_us": 0.1,
+                "copied_bytes_across_selected_epochs": 32256,
+                "regions_across_selected_epochs": 24,
+                "model_score_across_selected_epochs": 840
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

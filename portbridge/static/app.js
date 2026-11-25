@@ -1064,7 +1064,9 @@ function researchHighlights(items) {
   for (const item of items) {
     const row = element('li', 'activity-entry');
     const h = element('h3');
-    h.append(internalLink(editorial(item, 'title'), urlFor(item.problem_id)));
+    const original = Boolean(item.report_url);
+    const title = editorial(item, 'title');
+    h.append(original ? githubLink(title, item.report_url) : internalLink(title, urlFor(item.problem_id)));
     const links = element('div', 'activity-handoff-proof');
     for (const [key, label] of [
       ['delivered_url', t('Upstream discussion', 'Обсуждение команды')],
@@ -1074,7 +1076,10 @@ function researchHighlights(items) {
       if (item[key]) links.append(githubLink(label, item[key]));
     }
     const stage = element('div', 'activity-meta');
-    stage.append(element('span', 'tag', t('Shared with the project', 'Передано команде')));
+    stage.append(element('span', 'tag', original
+      ? t('PortBridge research', 'Исследование PortBridge')
+      : t('Shared with the project', 'Передано команде')));
+    if (original) stage.append(activityTime(item.at));
     if (item.checked_at && sourceStates[item.source_state]) {
       stage.append(element('span', '', sourceStates[item.source_state]), activityTime(item.checked_at));
     }
@@ -1140,7 +1145,8 @@ function showActivity(data, quiet = false) {
     internalLink(t('Browse reviewed cases', 'Посмотреть проверенные карточки'), '#/problems', 'retry'));
   if (snapshotSite?.browse_index) start.append(internalLink(t('Browse public GitHub sources', 'Открыть индекс GitHub'), '#/sources', 'retry'));
   board.append(start, stats);
-  if (list(data.research).length) board.append(researchHighlights(data.research));
+  const research = [...list(data.original_research), ...list(data.research)];
+  if (research.length) board.append(researchHighlights(research));
   board.append(columns);
   if (data.radar) board.append(activityRadar(data.radar));
   board.append(feed, teams);

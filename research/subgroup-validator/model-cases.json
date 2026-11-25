@@ -1,0 +1,542 @@
+{
+  "cases": {
+    "rdna2_half_projected_to_native32": {
+      "status": "passes modeled domain",
+      "projected_probes": 16128,
+      "failing_projected_probes": 0,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "exec"
+      },
+      "witnesses": [],
+      "elapsed_ms": 27.82
+    },
+    "rdna2_half_to_native64_with_exec_contract": {
+      "status": "passes modeled domain",
+      "projected_probes": 24064,
+      "failing_projected_probes": 0,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 64,
+        "participation": "superset"
+      },
+      "witnesses": [],
+      "elapsed_ms": 40.102
+    },
+    "wrong_guest_partition": {
+      "status": "refuted",
+      "projected_probes": 24192,
+      "failing_projected_probes": 6080,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 64,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 64,
+        "participation": "full"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 32,
+          "exec": "0x1",
+          "host": "0xffffffffffffffff",
+          "expected": [
+            "source",
+            0
+          ],
+          "actual": [
+            "zero",
+            -1
+          ],
+          "reason": "target changes a defined guest value"
+        },
+        {
+          "destination": 0,
+          "selector": 32,
+          "exec": "0x100000001",
+          "host": "0xffffffffffffffff",
+          "expected": [
+            "source",
+            0
+          ],
+          "actual": [
+            "source",
+            32
+          ],
+          "reason": "target reads a different source lane"
+        }
+      ],
+      "elapsed_ms": 51.33
+    },
+    "unguarded_with_exec_mask": {
+      "status": "refuted",
+      "projected_probes": 16128,
+      "failing_projected_probes": 3968,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": false,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "exec"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 1,
+          "exec": "0x1",
+          "host": "0x1",
+          "expected": [
+            "zero",
+            -1
+          ],
+          "actual": [
+            "undefined",
+            -1
+          ],
+          "reason": "target returns undefined for a defined guest result"
+        }
+      ],
+      "elapsed_ms": 32.609
+    },
+    "unguarded_with_host_full": {
+      "status": "refuted",
+      "projected_probes": 16128,
+      "failing_projected_probes": 3968,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": false,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 64,
+        "participation": "full"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 1,
+          "exec": "0x1",
+          "host": "0xffffffffffffffff",
+          "expected": [
+            "zero",
+            -1
+          ],
+          "actual": [
+            "source",
+            1
+          ],
+          "reason": "target changes a defined guest value"
+        }
+      ],
+      "elapsed_ms": 33.638
+    },
+    "guest_guard_without_host_participation": {
+      "status": "refuted",
+      "projected_probes": 32000,
+      "failing_projected_probes": 3968,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "independent"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 1,
+          "exec": "0x3",
+          "host": "0x1",
+          "expected": [
+            "source",
+            1
+          ],
+          "actual": [
+            "undefined",
+            -1
+          ],
+          "reason": "target returns undefined for a defined guest result"
+        }
+      ],
+      "elapsed_ms": 54.417
+    },
+    "host_guard_masks_missing_live_data": {
+      "status": "refuted",
+      "projected_probes": 32000,
+      "failing_projected_probes": 3968,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": true,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "independent"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 1,
+          "exec": "0x3",
+          "host": "0x1",
+          "expected": [
+            "source",
+            1
+          ],
+          "actual": [
+            "zero",
+            -1
+          ],
+          "reason": "target changes a defined guest value"
+        }
+      ],
+      "elapsed_ms": 55.454
+    },
+    "full_guest_wave_native32_without_exchange": {
+      "status": "refuted",
+      "projected_probes": 16256,
+      "failing_projected_probes": 2048,
+      "guest": {
+        "scope": 64,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 64,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "exec"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 32,
+          "exec": "0x100000001",
+          "host": "0x100000001",
+          "expected": [
+            "source",
+            32
+          ],
+          "actual": [
+            "undefined",
+            -1
+          ],
+          "reason": "target returns undefined for a defined guest result"
+        }
+      ],
+      "elapsed_ms": 30.0
+    },
+    "full_guest_wave_native32_with_snapshot_contract": {
+      "status": "passes modeled domain",
+      "projected_probes": 16256,
+      "failing_projected_probes": 0,
+      "guest": {
+        "scope": 64,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 64,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "current",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "exec"
+      },
+      "witnesses": [],
+      "elapsed_ms": 29.684
+    },
+    "full_guest_wave_native32_stale_exchange": {
+      "status": "refuted",
+      "projected_probes": 16256,
+      "failing_projected_probes": 2048,
+      "guest": {
+        "scope": 64,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 64,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "stale",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "exec"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 32,
+          "exec": "0x100000001",
+          "host": "0x100000001",
+          "expected": [
+            "source",
+            32
+          ],
+          "actual": [
+            "prior-epoch",
+            32
+          ],
+          "reason": "exchange does not represent the current snapshot"
+        }
+      ],
+      "elapsed_ms": 29.395
+    },
+    "clobber_inactive_destination": {
+      "status": "refuted",
+      "projected_probes": 16128,
+      "failing_projected_probes": 8064,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": false,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 64,
+        "participation": "full"
+      },
+      "witnesses": [
+        {
+          "destination": 0,
+          "selector": 0,
+          "exec": "0x0",
+          "host": "0xffffffffffffffff",
+          "expected": [
+            "destination",
+            0
+          ],
+          "actual": [
+            "zero",
+            -1
+          ],
+          "reason": "target changes a defined guest value"
+        }
+      ],
+      "elapsed_ms": 35.217
+    },
+    "xor_transport": {
+      "status": "passes modeled domain",
+      "projected_probes": 6016,
+      "failing_projected_probes": 0,
+      "guest": {
+        "scope": 32,
+        "addressing": "xor",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "xor",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 32,
+        "physical": 32,
+        "participation": "superset"
+      },
+      "witnesses": [],
+      "elapsed_ms": 10.104
+    },
+    "confuse_xor_and_indexed_transport": {
+      "status": "refuted",
+      "projected_probes": 11658,
+      "failing_projected_probes": 3875,
+      "guest": {
+        "scope": 32,
+        "addressing": "xor",
+        "inactive_source": "zero"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": true,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 32,
+        "physical": 32,
+        "participation": "superset"
+      },
+      "witnesses": [
+        {
+          "destination": 1,
+          "selector": 0,
+          "exec": "0x2",
+          "host": "0x2",
+          "expected": [
+            "source",
+            1
+          ],
+          "actual": [
+            "zero",
+            -1
+          ],
+          "reason": "target changes a defined guest value"
+        },
+        {
+          "destination": 1,
+          "selector": 0,
+          "exec": "0x3",
+          "host": "0x3",
+          "expected": [
+            "source",
+            1
+          ],
+          "actual": [
+            "source",
+            0
+          ],
+          "reason": "target reads a different source lane"
+        }
+      ],
+      "elapsed_ms": 21.802
+    },
+    "guest_undefined_can_be_refined": {
+      "status": "passes modeled domain",
+      "projected_probes": 16128,
+      "failing_projected_probes": 0,
+      "guest": {
+        "scope": 32,
+        "addressing": "index",
+        "inactive_source": "undefined"
+      },
+      "target": {
+        "scope": 32,
+        "addressing": "index",
+        "guest_guard": false,
+        "host_guard": false,
+        "preserve_inactive": true,
+        "exchange": "none",
+        "lane_base": "destination-partition"
+      },
+      "domain": {
+        "wave": 64,
+        "physical": 32,
+        "participation": "exec"
+      },
+      "witnesses": [],
+      "elapsed_ms": 28.035
+    }
+  }
+}

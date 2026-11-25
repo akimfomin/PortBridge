@@ -167,6 +167,12 @@ class ActivityTest(CatalogFixture):
         self.save_pr("xcl", 111, at=(datetime.now(timezone.utc) - timedelta(hours=1)).isoformat())
         directory = export(self.catalog, self.workspace / "activity-site")
         snapshot = json.loads((directory / "data/activity.json").read_bytes())
+        self.assertTrue(snapshot["original_research"])
+        for item in snapshot["original_research"]:
+            self.assertTrue(item["report_url"].startswith("https://github.com/akimfomin/PortBridge/"))
+            self.assertNotIn("adopted_url", item)
+            self.assertNotIn("independent_url", item)
+            self.assertTrue(item["translations"]["en"]["summary"])
         with make_server(self.catalog, 0) as server:
             thread = Thread(target=server.serve_forever, daemon=True)
             thread.start()

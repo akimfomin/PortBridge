@@ -30,6 +30,11 @@ python -m portbridge.preflight --url https://github.com/LooperSalty/AnyXboxX/pul
 
 The exact AnyXboxX search links the earlier RDNA2 evidence and the new CPU correction. Connect the same tools from [Codex or Claude Code](docs/MCP.md), or start with the [Test Lab](https://akimfomin.github.io/PortBridge/#/lab) to try one check.
 
+## PortBridge research
+
+- [Shader lane-exchange validator](research/subgroup-validator) checks compiler-emitted SPIR-V against a bounded model and returns a failing input when it finds a mismatch.
+- [Buffer Transfer Planner on RTX 4070 Ti SUPER](research/transfer-planner/physical) records the D3D12 and Vulkan measurements and why we kept the planner as a reference.
+
 ## Recent cross-project work
 
 - **Wave64 in XCL.** Published RDNA2 measurements pointed to a missing byte-carry test. The XCL author requested a follow-up, and PortBridge submitted a one-file test PR. The reported run on an RTX 4070 Ti SUPER covered Wave32 and split Wave64. [Author response](https://github.com/ivall/xcl/pull/925#issuecomment-7128723618) · [Pinned test](https://github.com/akimfomin/xcl/commit/3858abc46e4c9c3b9db5e4ae648d6636c37bfb51)

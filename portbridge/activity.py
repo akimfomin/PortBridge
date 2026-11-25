@@ -19,6 +19,7 @@ COUNT_FOR = {
     "status_change": "changed", "verified_result": "verified",
 }
 HANDOFFS = Path(__file__).with_name("data") / "handoffs.json"
+ORIGINAL_RESEARCH = HANDOFFS.with_name("research.json")
 HANDOFF_STAGES = {
     "delivered_url": "delivered", "independent_url": "independently_reproduced",
     "review_url": "formally_reviewed", "adopted_url": "adopted",
@@ -270,4 +271,5 @@ def build_activity(catalog, *, now=None, projects=None, cards=None, observations
             "window_days": WINDOW_DAYS, "window_start": start.isoformat(),
             "counts": {**counts, "projects": len(per_project)}, "projects": list(per_project.values()),
             "handoffs": handoffs, "research": showcased_research(cards, observations, handoffs),
+            "original_research": json.loads(ORIGINAL_RESEARCH.read_text(encoding="utf-8")),
             "events": events, "opportunities": opportunities, "radar": radar}

@@ -36,6 +36,11 @@ python -m portbridge.preflight --url https://github.com/LooperSalty/AnyXboxX/pul
 
 Этот запрос ведёт к прежним измерениям RDNA2 и к новой правке округления на CPU. Для подключения агента откройте [руководство по MCP](docs/MCP.md). Для участия выберите одну проверку на своём оборудовании в [Test Lab](https://akimfomin.github.io/PortBridge/?lang=ru#/lab).
 
+## Исследования PortBridge
+
+- [Проверка обмена данными между потоками шейдера](research/subgroup-validator) анализирует результат компиляции и показывает конкретный вход, на котором меняется результат.
+- [Buffer Transfer Planner на RTX 4070 Ti SUPER](research/transfer-planner/physical) содержит замеры через D3D12 и Vulkan и объясняет, почему планировщик остался эталоном для сравнений.
+
 ## Работа идёт
 
 **VIctory, XCL и Continued.** Сопоставили реализацию чтения памяти шейдеров, тесты XCL и исправление гонки в Continued. По ним добавили два теста в локальную копию VIctory. Оба прошли на RTX 4070 Ti SUPER и WARP, а контроль с прежним переводчиком показал отказ в обоих случаях. [Результат и границы проверки](docs/PORTING-WORK.md#чтение-памяти-шейдеров-в-victory)

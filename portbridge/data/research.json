@@ -1,0 +1,26 @@
+[
+  {
+    "at": "2026-11-25T10:25:00Z",
+    "title": "Модель проверки обмена данными между потоками шейдера",
+    "summary": "Наш прототип проверяет обмен данными между потоками по коду SPIR-V. Модель PortBridge нашла ошибку выбора потока в контрольном модуле, который прошёл стандартную проверку. Результат получен на CPU.",
+    "report_url": "https://github.com/akimfomin/PortBridge/tree/main/research/subgroup-validator",
+    "translations": {
+      "en": {
+        "title": "Semantic checks for data exchange between shader lanes",
+        "summary": "Our prototype checks a lane-exchange pattern in emitted SPIR-V. The PortBridge model found a wrong-lane error in a control module accepted by the standard validator. This result was obtained on a CPU."
+      }
+    }
+  },
+  {
+    "at": "2026-11-25T10:26:00Z",
+    "title": "Buffer Transfer Planner на RTX 4070 Ti SUPER",
+    "summary": "Проверили полный цикл обновления буфера и его обработки через D3D12 и Vulkan. Без дополнительного лимита оптимальный план не улучшил расчётную стоимость ни в одном из 596 обновлений исходного масштаба. Устойчивого ускорения полного цикла не обнаружили.",
+    "report_url": "https://github.com/akimfomin/PortBridge/tree/main/research/transfer-planner/physical",
+    "translations": {
+      "en": {
+        "title": "Buffer Transfer Planner on an RTX 4070 Ti SUPER",
+        "summary": "We measured the buffer-update and consumer chain in D3D12 and Vulkan. Without an extra copy-size cap, the optimizer did not improve the modeled cost over greedy in any of 596 open-scale updates with changes. The full chain showed no repeatable gain."
+      }
+    }
+  }
+]
