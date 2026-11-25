@@ -1,0 +1,13 @@
+diff --git a/crates/xcl/src/gpu/dxil/module/split.rs b/crates/xcl/src/gpu/dxil/module/split.rs
+--- a/crates/xcl/src/gpu/dxil/module/split.rs
++++ b/crates/xcl/src/gpu/dxil/module/split.rs
+@@ -120,4 +120,8 @@ impl Shader {
+         stride.checked_mul(threads[0])?.checked_mul(4)?;
+         let pieces = (0..plan.blocks.len()).map(|i| self.make_piece(&plan, i, stride, &slots, threads, &prefix)).collect::<Option<Vec<_>>>()?;
+-        Some(DispatchChain { pieces, dwords_per_group: stride.checked_mul(threads[0])? })
++        let dwords_per_group = stride.checked_mul(threads[0])?;
++        if std::env::var_os("XCL_SCRATCH_AGGREGATE").as_deref() == Some(std::ffi::OsStr::new("1")) {
++            eprintln!("XCL_SCRATCH_AGGREGATE pieces={} scratch_dwords_per_group={dwords_per_group}", pieces.len());
++        }
++        Some(DispatchChain { pieces, dwords_per_group })
+     }

@@ -1,0 +1,22 @@
+{
+  "revision": "3283da481077c1962f13f1b4078841662f7a4ccb",
+  "cases": [
+    "upstream-wave32-loops",
+    "four-piece-fragmentation"
+  ],
+  "scratch_dwords_per_group": {
+    "baseline": [
+      288,
+      192
+    ],
+    "candidate": [
+      256,
+      160
+    ]
+  },
+  "diagnostic_default": "silent",
+  "comparator": {
+    "timings": "injected protocol numbers, no GPU run",
+    "checks_passed": 6
+  }
+}
