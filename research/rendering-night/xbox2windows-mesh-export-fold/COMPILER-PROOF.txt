@@ -1,0 +1,21 @@
+Xbox2Windows #1760 synthetic bounded runtime mesh differential
+Baseline: 4c1b27dd80bf921fb0ca4188d73350e8d6bfb0a1
+LLVM MC 23.1.6 (gfx1013 Wave64), DXC 1.9.2609 (ms_6_5, default optimization)
+Counts below are static compiler output.
+
+guest shader: 884 bytes, sha256 8a1b20e3945e29814e0747ee514c38340e6930b2dd8bcc25790a91b39fdb06d1
+compared dispatch counts, vertices, attributes and indices over 65 inputs
+baseline: export blocks=32, hlsl bytes=53142, dxil bytes=26556
+DXIL storeVertexOutput calls=1024, emitIndices calls=64
+
+guest shader: 884 bytes, sha256 8a1b20e3945e29814e0747ee514c38340e6930b2dd8bcc25790a91b39fdb06d1
+compared dispatch counts, vertices, attributes and indices over 65 inputs
+candidate: export blocks=2, hlsl bytes=16858, dxil bytes=5736
+DXIL storeVertexOutput calls=64, emitIndices calls=4
+
+Runtime mesh specializations matched the CPU cases and rejected unproven uses
+PASS tests/mesh_dynamic_aot_check.py
+Six mesh inputs matched the CPU allocation and export model
+PASS tests/mesh_dynamic_geometry_check.py
+mesh stage accepted; amplification and compute stages refused by name
+PASS tests/mesh_amplification_refusal_check.py

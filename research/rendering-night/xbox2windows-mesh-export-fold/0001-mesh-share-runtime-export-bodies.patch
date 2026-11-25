@@ -1,0 +1,134 @@
+diff --git a/docs/experiments.md b/docs/experiments.md
+index f3d8cbe..ed05216 100644
+--- a/docs/experiments.md
++++ b/docs/experiments.md
+@@ -3386,7 +3386,9 @@ mesh shader for a two-wave64 triangle entry. It splits runtime input cases
+ at scalar equality tests and reruns the existing wave model for each case.
+ Each case must prove its allocation, primitive indices and vertex exports.
+ The generated shader loads the geometry words from raw SRV `t0`, selects the
+-applicable case and executes one `SetMeshOutputCounts`. The caller declares
++applicable case and executes one `SetMeshOutputCounts`. Cases with identical
++vertex and primitive export code share one output block. Each case keeps its
++original input condition and allocation counts. The caller declares
+ the minimum buffer size in DWORDs and keeps its contents stable during the draw.
+ The translator refuses backward branches, unproven uses of geometry words,
+ and programs with more than 32 input cases.
+diff --git a/tests/mesh_dynamic_aot_check.py b/tests/mesh_dynamic_aot_check.py
+index 3107695..38b4861 100644
+--- a/tests/mesh_dynamic_aot_check.py
++++ b/tests/mesh_dynamic_aot_check.py
+@@ -1,5 +1,6 @@
+ """Check bounded runtime mesh specialization against the existing CPU oracle."""
+ 
++from dataclasses import replace
+ from pathlib import Path
+ import struct
+ import sys
+@@ -8,7 +9,7 @@ from unittest.mock import patch
+ from mesh_dynamic_geometry_check import CASES, CODE, MESH_LIMITS, decode, words
+ 
+ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+-from mesh_dynamic_aot import enumerate_variants, lower
++from mesh_dynamic_aot import emit_hlsl, enumerate_variants, lower
+ 
+ 
+ def select(variants, geometry):
+@@ -27,9 +28,29 @@ def expect_refusal(decoded, geometry_word_count, text, limits=MESH_LIMITS):
+         raise AssertionError(f"Expected refusal: {text}")
+ 
+ 
++def check_shared_exports(variants):
++    quad = select(variants, (0x2004, 0x300402))
++    different = select(variants, (0x2004, 0x402))
++    no_draw = select(variants, (0, 0))
++    inputs = [(1, 7), (1, 8), (1, 9)]
++    cases = [replace(case, conditions=((index, word, True),))
++             for case, (index, word) in zip((quad, quad, different), inputs)]
++    cases.append(replace(no_draw, conditions=()))
++    hlsl = emit_hlsl(cases, MESH_LIMITS)
++    assert hlsl.count("vertices[0].position =") == 2
++    assert hlsl.count("primitives[1] = uint3(2, 1, 3);") == 1
++    assert hlsl.count("primitives[1] = uint3(2, 1, 0);") == 1
++    assert "word1 == 0x00000007u) { variant = 0; vertexCount = 4; primitiveCount = 2;" in hlsl
++    assert "word1 == 0x00000008u) { variant = 0; vertexCount = 4; primitiveCount = 2;" in hlsl
++    assert "word1 == 0x00000009u) { variant = 1; vertexCount = 4; primitiveCount = 2;" in hlsl
++    assert "else { variant = 2; vertexCount = 0; primitiveCount = 0;" in hlsl
++    assert "if (variant == 2)" not in hlsl
++
++
+ def check():
+     decoded = decode(CODE)
+     variants = enumerate_variants(decoded, 2, MESH_LIMITS)
++    check_shared_exports(variants)
+     for name, packed_counts, second_index, vertex_count, triangles in CASES:
+         variant = select(variants, (packed_counts, second_index))
+         assert variant.counts == (vertex_count, len(triangles)), (name, variant.counts)
+diff --git a/tools/mesh_dynamic_aot.py b/tools/mesh_dynamic_aot.py
+index 15c6106..3666e9f 100644
+--- a/tools/mesh_dynamic_aot.py
++++ b/tools/mesh_dynamic_aot.py
+@@ -157,6 +157,22 @@ def enumerate_variants(decoded, geometry_word_count, limits):
+     return variants
+ 
+ 
++def emit_export_lines(variant, has_attributes):
++    if not variant.positions and not variant.indices:
++        return ()
++    lines = [f"    precise float {name} = {expr};" for expr, name in variant.expressions.items()]
++    for index, position in sorted(variant.positions.items()):
++        lines.append(f"    if (id == {index}) {{")
++        lines.append(f"      vertices[{index}].position = {float4(position)};")
++        if has_attributes:
++            lines.append(f"      vertices[{index}].attr = {float4(variant.attributes[index])};")
++        lines.append("    }")
++    for index, triangle in sorted(variant.indices.items()):
++        indices = ", ".join(map(str, triangle))
++        lines.append(f"    if (id == {index}) primitives[{index}] = uint3({indices});")
++    return tuple(lines)
++
++
+ def emit_hlsl(variants, limits):
+     has_attributes = any(variant.attributes for variant in variants)
+     input_words = sorted({index for variant in variants for index, _, _ in variant.conditions})
+@@ -173,6 +189,7 @@ def emit_hlsl(variants, limits):
+         *(f"  uint word{index} = geometryData.Load({index * 4});" for index in input_words),
+         "  uint variant, vertexCount, primitiveCount;",
+     ]
++    export_cases = {}
+     for i, variant in enumerate(variants):
+         if i + 1 == len(variants):
+             condition = "else"
+@@ -182,25 +199,19 @@ def emit_hlsl(variants, limits):
+                 for index, value, equal in variant.conditions
+             )
+             condition = f"{'else ' if i else ''}if ({predicate})"
++        # Preserve the partition and its counts when several paths emit the same exports.
++        exports = emit_export_lines(variant, has_attributes)
++        export_index = export_cases.setdefault(exports, len(export_cases))
+         vertices, primitives = variant.counts
+         lines.append(
+-            f"  {condition} {{ variant = {i}; vertexCount = {vertices}; primitiveCount = {primitives}; }}"
++            f"  {condition} {{ variant = {export_index}; vertexCount = {vertices}; primitiveCount = {primitives}; }}"
+         )
+     lines.append("  SetMeshOutputCounts(vertexCount, primitiveCount);")
+-    for i, variant in enumerate(variants):
+-        if not variant.positions and not variant.indices:
++    for exports, export_index in export_cases.items():
++        if not exports:
+             continue
+-        lines.append(f"  if (variant == {i}) {{")
+-        lines.extend(f"    precise float {name} = {expr};" for expr, name in variant.expressions.items())
+-        for index, position in sorted(variant.positions.items()):
+-            lines.append(f"    if (id == {index}) {{")
+-            lines.append(f"      vertices[{index}].position = {float4(position)};")
+-            if has_attributes:
+-                lines.append(f"      vertices[{index}].attr = {float4(variant.attributes[index])};")
+-            lines.append("    }")
+-        for index, triangle in sorted(variant.indices.items()):
+-            indices = ", ".join(map(str, triangle))
+-            lines.append(f"    if (id == {index}) primitives[{index}] = uint3({indices});")
++        lines.append(f"  if (variant == {export_index}) {{")
++        lines.extend(exports)
+         lines.append("  }")
+     lines.append("}")
+     return "\n".join(lines) + "\n"

@@ -1,0 +1,50 @@
+RTX 4070 Ti SUPER, driver 32.0.16.1714, Windows 11 build 28000.
+Renderer source base 84ce29421ab633eb4ec79eb29155ab16f73433d3.
+Renderer executable SHA-256 7087774a68a7f547e337b9daa011199db0503569afc76526e7da4665da59d04e.
+Relevant mesh draw, command dispatch and shared GPU runner sources match at the tested translator baseline.
+Four matched native readbacks and one stale-pixels-only negative control.
+Selected output omits host memory samples and pipeline timing lines.
+
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER job_limit_bytes=536870912 guard_timeout_ms=3000 total_seconds=40.0
+start baseline-triangle
+guard_status=returned worker_reaped=1 worker_exit=0 win_error=0 process_peak=100388864 job_peak=104783872
+renderer_exit=0 renderer_reaped=1 renderer_error=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=0
+PASS baseline-triangle
+start candidate-triangle
+guard_status=returned worker_reaped=1 worker_exit=0 win_error=0 process_peak=112492544 job_peak=116887552
+renderer_exit=0 renderer_reaped=1 renderer_error=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=0
+PASS candidate-triangle
+start baseline-quad
+guard_status=returned worker_reaped=1 worker_exit=0 win_error=0 process_peak=100491264 job_peak=104882176
+renderer_exit=0 renderer_reaped=1 renderer_error=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=0
+PASS baseline-quad
+start candidate-quad
+guard_status=returned worker_reaped=1 worker_exit=0 win_error=0 process_peak=97140736 job_peak=101933056
+renderer_exit=0 renderer_reaped=1 renderer_error=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=0
+PASS candidate-quad
+start candidate-stale-pixels
+guard_status=returned worker_reaped=1 worker_exit=0 win_error=0 process_peak=97427456 job_peak=101810176
+renderer_exit=1 renderer_reaped=1 renderer_error=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+Draw reference mismatch
+pixels=1024 mismatches=528
+PASS candidate-stale-pixels
+PASS all four matched readbacks and the stale pixel control
