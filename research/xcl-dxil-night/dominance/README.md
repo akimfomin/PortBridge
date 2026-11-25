@@ -20,3 +20,7 @@ The nine complete outputs were byte-identical and passed DXC validation. On an i
 An independent vertex-removal oracle matched the graph trees for 65,536 exhaustive four-vertex graphs and 10,000 seeded graphs, including repeated edges and unreachable vertices. The exact candidate library passed 923 ordinary tests, with 25 ignored and platform-specific runtime skips. The separate fuzz groups validated all 2,000 generated shader containers and compared 1,232 results with the CPU oracle on RTX 4070 Ti SUPER. Native Wave64/AMD and runtime game workloads remain open.
 
 The candidate changes compiler cost while preserving shader bytes in the checked arms. To prioritize integration, profiles with the number of CFG vertices, join depth and CPU translation time would show whether the synthetic tail occurs in other workloads. [Compact patch](xcl-dominance-compact.patch) · [Reproduction](REPRODUCE.md)
+
+## Confirmatory rerun
+
+The same 24 fixed fixtures were rerun in 40 matched process rounds. The compact patch used 1.78% less translation time on the fixed corpus. Resampling process pairs gave a 95% interval of 1.33–2.22% improvement for these repeats. All output bytes remained exact. [Data and method](CONFIRMATORY.md)

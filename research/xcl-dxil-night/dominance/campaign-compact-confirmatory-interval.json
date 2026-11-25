@@ -1,0 +1,113 @@
+{
+  "rounds": 40,
+  "cases": 24,
+  "fixed_corpus_geometric_percent": -1.7845171772717001,
+  "paired_process_bootstrap_95_percent": [
+    -2.2208517685173397,
+    -1.3335280232269768
+  ],
+  "median_case_percent": -2.0185700897514565,
+  "case_percent": [
+    {
+      "case": "small/3/switch",
+      "paired_median_percent": -1.993499941807699
+    },
+    {
+      "case": "small/3/heap_split",
+      "paired_median_percent": -0.8577348099265929
+    },
+    {
+      "case": "small/41/switch",
+      "paired_median_percent": -3.521830204169506
+    },
+    {
+      "case": "small/41/heap_split",
+      "paired_median_percent": -0.8957844542672705
+    },
+    {
+      "case": "small/826/switch",
+      "paired_median_percent": -2.3427811329601043
+    },
+    {
+      "case": "small/826/heap_split",
+      "paired_median_percent": 0.17333785114719058
+    },
+    {
+      "case": "divergent/3/switch",
+      "paired_median_percent": -2.600676995648641
+    },
+    {
+      "case": "divergent/3/heap_split",
+      "paired_median_percent": -2.6540200307782236
+    },
+    {
+      "case": "divergent/41/switch",
+      "paired_median_percent": -1.5274948910225035
+    },
+    {
+      "case": "divergent/41/heap_split",
+      "paired_median_percent": -2.2737443359619545
+    },
+    {
+      "case": "divergent/826/switch",
+      "paired_median_percent": -3.03003781836382
+    },
+    {
+      "case": "divergent/826/heap_split",
+      "paired_median_percent": -3.0654069361177596
+    },
+    {
+      "case": "memory/3/switch",
+      "paired_median_percent": -2.5169072937716095
+    },
+    {
+      "case": "memory/3/heap_split",
+      "paired_median_percent": -1.9622838582682698
+    },
+    {
+      "case": "memory/41/switch",
+      "paired_median_percent": -2.4450276277991563
+    },
+    {
+      "case": "memory/41/heap_split",
+      "paired_median_percent": -3.3266192342163916
+    },
+    {
+      "case": "memory/826/switch",
+      "paired_median_percent": -3.014227418609985
+    },
+    {
+      "case": "memory/826/heap_split",
+      "paired_median_percent": -1.6344052584914017
+    },
+    {
+      "case": "mixed/3/switch",
+      "paired_median_percent": -1.6412919628558804
+    },
+    {
+      "case": "mixed/3/heap_split",
+      "paired_median_percent": -0.4429508738928083
+    },
+    {
+      "case": "mixed/41/switch",
+      "paired_median_percent": -2.043640237695214
+    },
+    {
+      "case": "mixed/41/heap_split",
+      "paired_median_percent": -1.698733755948631
+    },
+    {
+      "case": "mixed/826/switch",
+      "paired_median_percent": -1.772545401305065
+    },
+    {
+      "case": "mixed/826/heap_split",
+      "paired_median_percent": -1.8535831462918955
+    }
+  ],
+  "output_sha256": "f1378fb07ea55d5c282a2ed0c20b77e3ba390440421838d47d90bf26e124415a",
+  "binary_sha256": {
+    "baseline": "a661201a33fd8e848c8b4f15707740e750b9d1b2b8131c2cef52b2bc5b94276d",
+    "compact": "d7e50d65bd7764772cbdfa7426aa43657135aa03bcbd7c7cbda03e0c85f32f70"
+  }
+}
