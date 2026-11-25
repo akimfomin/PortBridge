@@ -1,0 +1,1839 @@
+{
+  "logical_cpu": 2,
+  "rounds_requested": 8,
+  "candidate_version": 2,
+  "headers": {
+    "baseline": "9e6cc93a97ece86b1d74bc6072cd018dcee812abd386bae422f74eb63a303037",
+    "candidate": "8c0d27aa13e1bcfaf520a3f708f6c692109de0174a9db6f47d4f5642e36e2d70"
+  },
+  "executables": {
+    "baseline": "4bfdf28ac6900b830f9225898e36d1ca1e162010c24a36b2e3ed7f892d554551",
+    "candidate": "da3389858fa179b793e01072b602dfbd78fac69b2bd7baeb4b164debd69f0b56"
+  },
+  "rounds": [
+    {
+      "order": [
+        "baseline",
+        "candidate"
+      ],
+      "samples": {
+        "baseline": {
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2473200
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2476900
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5592400
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1482900
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 674800
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 776800
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 12963400
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6722800
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7610700
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14620200
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5728900
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7044900
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5877600
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 6816200
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 12712800
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 7331600
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7638800
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5813500
+          }
+        },
+        "candidate": {
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2380000
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2672700
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 4250300
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1343600
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 627900
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 758100
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4333600
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3334600
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 3856300
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4119400
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3454700
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4064900
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4384200
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 4620900
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13611500
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6221700
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7475300
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5935100
+          }
+        }
+      }
+    },
+    {
+      "order": [
+        "candidate",
+        "baseline"
+      ],
+      "samples": {
+        "candidate": {
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3243500
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 3803200
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4112000
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3226300
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4120100
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4107900
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 4300300
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 12859200
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6305800
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7390800
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6157000
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2534400
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3080500
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 4886900
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1411800
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 680300
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 688900
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4577500
+          }
+        },
+        "baseline": {
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6202100
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7663100
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 12839500
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5814200
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7441900
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6335100
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 6980300
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13436300
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6244500
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 8547800
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6567800
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 4282200
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3123400
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 6430500
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 2015500
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 700700
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 776200
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 15537500
+          }
+        }
+      }
+    },
+    {
+      "order": [
+        "baseline",
+        "candidate"
+      ],
+      "samples": {
+        "baseline": {
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14858000
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6261300
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 9005700
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6402900
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2871000
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2880100
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 6789300
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1802100
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 700900
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 891700
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 15075700
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6450700
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7426900
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14228000
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5785500
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7801000
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5912900
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7128700
+          }
+        },
+        "candidate": {
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13473600
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6372300
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 9021800
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6309200
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2595900
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2848100
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5055500
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1355800
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 681500
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 665900
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4661900
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3397400
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 3944100
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4228600
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 4057900
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4358200
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4208500
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 4565500
+          }
+        }
+      }
+    },
+    {
+      "order": [
+        "candidate",
+        "baseline"
+      ],
+      "samples": {
+        "candidate": {
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1344800
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 692700
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 685800
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4525500
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3805200
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 3964000
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4276900
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3973000
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4181800
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4416600
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 5654200
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13165400
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6581800
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 8083700
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 7141500
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2839500
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2706100
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5688100
+          }
+        },
+        "baseline": {
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1732500
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 704700
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 794800
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14378100
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6760600
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 8062900
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13733000
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6226600
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7327900
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6311300
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7158500
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13321300
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 7816900
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 8394900
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5849000
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3055900
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 4278400
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5725200
+          }
+        }
+      }
+    },
+    {
+      "order": [
+        "baseline",
+        "candidate"
+      ],
+      "samples": {
+        "baseline": {
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6107300
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7049300
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5622900
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 6833800
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 12734800
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5968100
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7383600
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5765700
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3074900
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2913500
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5335300
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1710500
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 993200
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 982500
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13033800
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5712000
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7833200
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14962700
+          }
+        },
+        "candidate": {
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3469000
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4263000
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4151400
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 4936900
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13179800
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6694000
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 9893900
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 7023300
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2619600
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2764800
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 4968400
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1281400
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 652600
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 682400
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4650400
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3228300
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4872100
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 5005100
+          }
+        }
+      }
+    },
+    {
+      "order": [
+        "candidate",
+        "baseline"
+      ],
+      "samples": {
+        "candidate": {
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6954800
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2454500
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2967000
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 4381600
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1246900
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 729800
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 671900
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4500600
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3169100
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 3910400
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4176800
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3444100
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4699300
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4130400
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 4589300
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14744400
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6203000
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 9365300
+          }
+        },
+        "baseline": {
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6733300
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3448900
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3494500
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5383200
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1765900
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 827100
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 814200
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13963600
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6286300
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 9020000
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13721200
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6161000
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7715500
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6148700
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7429900
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14658200
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6557600
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 8241200
+          }
+        }
+      }
+    },
+    {
+      "order": [
+        "baseline",
+        "candidate"
+      ],
+      "samples": {
+        "baseline": {
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14881300
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6584700
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7797300
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14187800
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6198500
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7769700
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6683900
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7675400
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 14120600
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6852500
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 9718500
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5865900
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3279100
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 3505100
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5725800
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 2014300
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 720500
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 846700
+          }
+        },
+        "candidate": {
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4623500
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3395200
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4026100
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4288100
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3481200
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4101100
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4698800
+          },
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 4653800
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 12849500
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6314300
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 10086400
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6933000
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2675400
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2628800
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 4529600
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1314000
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 631700
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 682000
+          }
+        }
+      }
+    },
+    {
+      "order": [
+        "candidate",
+        "baseline"
+      ],
+      "samples": {
+        "candidate": {
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 5,
+            "iterations": 4096,
+            "total_ns": 4841800
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13015500
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6452700
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 8634800
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6751700
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2835300
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2699500
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 4428900
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1523400
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 705400
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 737300
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 5321000
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 3391100
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 4001500
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 2,
+            "iterations": 62500,
+            "total_ns": 4273100
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 2,
+            "iterations": 7812,
+            "total_ns": 4605300
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 2,
+            "iterations": 4096,
+            "total_ns": 5406600
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 5,
+            "iterations": 7812,
+            "total_ns": 4113900
+          }
+        },
+        "baseline": {
+          "sparse_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 9075300
+          },
+          "checkerboard_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13232500
+          },
+          "checkerboard_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6209500
+          },
+          "checkerboard_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 8118500
+          },
+          "mostly_unused_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5705100
+          },
+          "single_image": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2871700
+          },
+          "single_view": {
+            "cells": 1,
+            "records": 1,
+            "iterations": 400000,
+            "total_ns": 2858800
+          },
+          "mixed_inline": {
+            "cells": 2,
+            "records": 2,
+            "iterations": 400000,
+            "total_ns": 5671500
+          },
+          "uniform_4x8": {
+            "cells": 32,
+            "records": 1,
+            "iterations": 62500,
+            "total_ns": 1682000
+          },
+          "uniform_8x32": {
+            "cells": 256,
+            "records": 1,
+            "iterations": 7812,
+            "total_ns": 965700
+          },
+          "uniform_10x64": {
+            "cells": 640,
+            "records": 1,
+            "iterations": 4096,
+            "total_ns": 811800
+          },
+          "mip_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13087600
+          },
+          "mip_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6072100
+          },
+          "mip_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7734700
+          },
+          "layer_stripe_4x8": {
+            "cells": 32,
+            "records": 32,
+            "iterations": 62500,
+            "total_ns": 13336300
+          },
+          "layer_stripe_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 6173300
+          },
+          "layer_stripe_10x64": {
+            "cells": 640,
+            "records": 640,
+            "iterations": 4096,
+            "total_ns": 7898900
+          },
+          "sparse_8x32": {
+            "cells": 256,
+            "records": 256,
+            "iterations": 7812,
+            "total_ns": 5934000
+          }
+        }
+      }
+    }
+  ]
+}

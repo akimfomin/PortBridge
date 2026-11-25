@@ -1,0 +1,9 @@
+striped_pieces=256
+partial_tail_pieces=174
+checkerboard_pieces=256
+deterministic_partial_queries=96
+separate_ds_pieces=64
+stencil_only_pieces=1
+coupled_ds_pieces=32
+ordered_replay_image_barriers=97
+ordered_replay_cells=96

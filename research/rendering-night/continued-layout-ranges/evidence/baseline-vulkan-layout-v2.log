@@ -1,0 +1,6 @@
+device: NVIDIA GeForce RTX 4070 Ti SUPER (validation on)
+subgroup sizes: 32..32 (default 32), requirable in stages 0x3fff, subgroupSizeControl on, computeFullSubgroups on
+texels=699040 readback_fnv1a64=9bb0febb05a89f85 enhanced_calls=2 image_barriers=97 legacy=16 zero_clears=8
+validation_errors=0
+
+[stderr]

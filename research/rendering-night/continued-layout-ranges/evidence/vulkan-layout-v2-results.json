@@ -1,0 +1,24 @@
+{
+  "validation_layer": "1.3.285",
+  "validation_library_sha256": "6ed2c98c3811b7814aa4c9ad0a664f9b326aa5ee381b2f7229f40eeab585823e",
+  "baseline": {
+    "readback_fnv1a64": "9bb0febb05a89f85",
+    "image_barriers": 97,
+    "memory_before": {
+      "commit": 4933726208,
+      "physical": 11490783232
+    },
+    "header_sha256": "9e6cc93a97ece86b1d74bc6072cd018dcee812abd386bae422f74eb63a303037",
+    "exe_sha256": "96fe33a81115e31722e670f7de2b2494429d11901b6674f0ec04014a48e18daa"
+  },
+  "candidate": {
+    "readback_fnv1a64": "9bb0febb05a89f85",
+    "image_barriers": 13,
+    "memory_before": {
+      "commit": 4967784448,
+      "physical": 11499724800
+    },
+    "header_sha256": "8c0d27aa13e1bcfaf520a3f708f6c692109de0174a9db6f47d4f5642e36e2d70",
+    "exe_sha256": "10b7933e8a026040cae171c1cfd1b129c46d27b539a6a5b00dc4d11af39e269f"
+  }
+}
