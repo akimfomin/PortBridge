@@ -1,0 +1,18 @@
+positive gfx1013 bytes 340 SHA-256 f6025dcb5c0b739bb8be8c4031fafb0331a96e23b3ca6d18eea3e956820ab184
+positive EXEC words (1, 256) CPU depth 0.5
+drop-low gfx1013 bytes 340 SHA-256 9cfe35ef107b15c1d95fe8ba0a7e03243b3f20a7f0b71c2a0615b924a2a2b6ae
+drop-low EXEC words (0, 256) CPU depth -0.5
+drop-high gfx1013 bytes 340 SHA-256 455f5af697467ea14df46ddd1acfb35dbd4993b9a0e95e097d545222aaf81c75
+drop-high EXEC words (1, 0) CPU depth -0.5
+wrapped-selectors gfx1013 bytes 348 SHA-256 1bdfaf235e58951f414e44d49a75065dd95192ca97e0ee8d4f2d2e3e4c3c3c75
+wrapped-selectors: same HLSL as selector words 8 and 40
+dynamic-selector gfx1013 bytes 340 SHA-256 ca0add2d06199f8bd7f7536bda40adff13511c7afd2eae69e39246e16aad89d9
+dynamic-selector refused: v_writelane_b32 requires a statically known SGPR lane: s30
+color.dxil matches previously verified inline RTX input fb5731f6ec589f5162c68f0e61982233ca92e706d944032cddb2163cc5053091
+positive-trace.dxil matches previously verified inline RTX input 74619726e977334c480fb2b84620dd61b428b0af2c2097798b3fbbe1399e529a
+drop-low-trace.dxil matches previously verified inline RTX input 41e5760d022419d77de76ac7a5075a588f290b80415ff28920722b6d589aec58
+drop-high-trace.dxil matches previously verified inline RTX input 41e5760d022419d77de76ac7a5075a588f290b80415ff28920722b6d589aec58
+positive-trace-reference.bin matches previously verified inline RTX input 64e66d6ff5994934beae27402b5aaa7751c40bc2f28027b12380fdfb62d07fbe
+drop-low-trace-reference.bin matches previously verified inline RTX input a492e9511e752af3f4a42fc1b104a0ec1c81099f5610a159826192683cce36a2
+drop-high-trace-reference.bin matches previously verified inline RTX input a492e9511e752af3f4a42fc1b104a0ec1c81099f5610a159826192683cce36a2
+stale-pixels-only-reference.bin matches previously verified inline RTX input 90fcd4e0f1f60ce590716dc1dc9ddcbb6c669d91225129d8f028e80a9d673035

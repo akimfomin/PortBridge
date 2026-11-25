@@ -38,3 +38,7 @@ python -B path/to/mesh_spill_readback.py --repo . --binary llvm-mc-15 llvm-objco
 ```
 
 [Pull request](https://github.com/R0Y00/Xbox2Windows/pull/2127) · [Previous contributor’s report](https://github.com/R0Y00/Xbox2Windows/issues/1998#issuecomment-7147147674) · [Maintainer’s remaining check](https://github.com/R0Y00/Xbox2Windows/issues/1998#issuecomment-7147403030) · [AMD RDNA 2 ISA](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna2-shader-instruction-set-architecture.pdf)
+
+## Optional known-register selector follow-up
+
+An isolated add-on on this exact PR head accepts a selector only when the existing scalar model proves its value. The scalar-encoded source reproduced all eight shader/reference hashes from the RTX-verified inline controls. A dynamic selector still refuses. [Optional patch, encoding and proof](known-sgpr/REVIEW.md)

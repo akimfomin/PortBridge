@@ -1,0 +1,7 @@
+PASS tests/mesh_lane_spill_check.py
+Runtime mesh specializations matched the CPU cases and rejected unproven uses
+PASS tests/mesh_dynamic_aot_check.py
+Six mesh inputs matched the CPU allocation and export model
+PASS tests/mesh_dynamic_geometry_check.py
+mesh stage accepted; amplification and compute stages refused by name
+PASS tests/mesh_amplification_refusal_check.py

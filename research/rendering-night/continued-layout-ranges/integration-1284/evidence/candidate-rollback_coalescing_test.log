@@ -1,0 +1,2 @@
+release_records=3 ordered_records=5 release_allocations=4 same_layout_allocations=0
+partial coverage, rollback, commit and follow-up rollback: OK

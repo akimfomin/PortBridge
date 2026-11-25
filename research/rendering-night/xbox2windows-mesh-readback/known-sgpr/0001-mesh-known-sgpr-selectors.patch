@@ -1,0 +1,101 @@
+diff --git a/docs/experiments.md b/docs/experiments.md
+index e87aa97..69c1551 100644
+--- a/docs/experiments.md
++++ b/docs/experiments.md
+@@ -3425,7 +3425,10 @@ python -B tests/mesh_lane_spill_check.py
+ ctest --preset dev --no-tests=error -R '^mesh_lane_spill_cpu$' -V
+ ```
+ 
+-The profile rejects register-selected and out-of-range lanes, unwritten slots,
++The profile accepts literal lanes 0 through 63 and SGPR selectors whose values
++are known on the modeled path. SGPR selectors use the bottom six bits, as in the
++[RDNA 2 ISA](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna2-shader-instruction-set-architecture.pdf).
++It rejects unknown SGPR selectors, out-of-range literals, unwritten slots,
+ and mixed VGPR use within the spill interval, including a register range that
+ covers the spill VGPR. Before this change the two instructions went through the
+ per-lane vector path: they were refused when a lane was live, but under EXEC = 0
+diff --git a/tests/mesh_lane_spill_check.py b/tests/mesh_lane_spill_check.py
+index 4ed3d0e..5a019f5 100644
+--- a/tests/mesh_lane_spill_check.py
++++ b/tests/mesh_lane_spill_check.py
+@@ -56,8 +56,26 @@ def refuses(lines, message):
+         raise AssertionError(f"Expected refusal: {message}")
+ 
+ 
++def check_proven_lane_selectors():
++    selectors = {"3": "s27", "63": "s28"}
++    program = [
++        "s_mov_b32 s27, 67",
++        "s_mov_b32 s28, 63",
++        "s_add_u32 s28, s28, 64",
++    ]
++    for line in PREFIX + READS + SUFFIX:
++        if line.startswith(("v_writelane_b32", "v_readlane_b32")):
++            operands, comma, selector = line.rpartition(", ")
++            line = operands + comma + selectors[selector]
++        program.append(line)
++    wave = run(program)
++    assert (wave.s[12], wave.s[13], wave.s[23]) == (17, 29, 0xFFFFFFFF)
++    assert wave.positions == {lane: [17, 29, 17, 29] for lane in range(32, 64)}
++
++
+ def main():
+     check_values(READS)
++    check_proven_lane_selectors()
+     try:
+         check_values([
+             "v_readlane_b32 s12, v10, 63",
+@@ -68,7 +86,7 @@ def main():
+     else:
+         raise AssertionError("Swapped spill slots passed the value check")
+ 
+-    refuses(PREFIX + ["v_readlane_b32 s12, v10, s8"], "constant integer lane")
++    refuses(PREFIX + ["v_readlane_b32 s12, v10, s29"], "statically known SGPR lane: s29")
+     refuses(PREFIX + ["v_writelane_b32 v10, s8, 64"], "out of range for wave64")
+     refuses(PREFIX + ["v_readlane_b32 s12, v10, 4"], "unwritten lane spill slot v10[4]")
+     refuses(
+@@ -102,13 +120,19 @@ def main():
+     else:
+         raise AssertionError("RuntimeWave accepted a lane spill")
+ 
+-    wave = run([
++    uniform_load = [
+         "s_mov_b32 s10, s17",
+         "s_mov_b32 s11, 0",
+         "s_load_dwordx4 s[16:19], s[10:11], 0x60",
+         "s_waitcnt lgkmcnt(0)",
+         "s_buffer_load_dword s30, s[16:19], 0x4",
+         "s_waitcnt lgkmcnt(0)",
++    ]
++    for instruction in ("v_writelane_b32 v10, s17, s30", "v_readlane_b32 s12, v10, s30"):
++        refuses(uniform_load + [instruction], "statically known SGPR lane: s30")
++        refuses(uniform_load[:-1] + [instruction], "Scalar load used before wait")
++
++    wave = run(uniform_load + [
+         "v_writelane_b32 v10, s30, 63",
+         "v_readlane_b32 s12, v10, 63",
+         "s_mov_b32 s22, 0",
+diff --git a/tools/mesh_entry_aot.py b/tools/mesh_entry_aot.py
+index e174adb..fe61a60 100644
+--- a/tools/mesh_entry_aot.py
++++ b/tools/mesh_entry_aot.py
+@@ -254,9 +254,17 @@ class Wave:
+         if len(args) != 3:
+             raise ValueError(f"Expected three operands for {op}")
+         dest, source, lane_token = args
+-        if not re.fullmatch(r"-?(?:[0-9]+|0x[0-9a-fA-F]+)", lane_token):
++        if re.fullmatch(r"s\d+", lane_token):
++            register = int(lane_token[1:])
++            lane = self.scalar(lane_token) if register in self.s else None
++            if type(lane) is not int:
++                raise ValueError(f"{op} requires a statically known SGPR lane: {lane_token}")
++            # RDNA 2 selects a wave64 lane using the bottom six bits.
++            lane %= len(self.v)
++        elif re.fullmatch(r"-?(?:[0-9]+|0x[0-9a-fA-F]+)", lane_token):
++            lane = int(lane_token, 16 if "0x" in lane_token else 10)
++        else:
+             raise ValueError(f"{op} requires a constant integer lane: {lane_token}")
+-        lane = int(lane_token, 16 if "0x" in lane_token else 10)
+         if not 0 <= lane < len(self.v):
+             raise ValueError(f"{op} lane {lane} out of range for wave{len(self.v)}")
+         writing = op == "v_writelane_b32"

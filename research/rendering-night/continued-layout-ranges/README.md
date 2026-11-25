@@ -63,3 +63,7 @@ The timing executable takes `baseline|candidate`, a logical processor index and 
 For the GPU fixture, use an installed Khronos validation layer and a native Vulkan 1.3 device. Set `LEONIDA_VK_VALIDATION=1` and `LEONIDA_VK_DEVICE` to the desired adapter name for the test process. Continued's helper enables synchronization validation. If the loader cannot locate the installed layer, `VK_LAYER_PATH` can point to its manifest directory for that process. Run each executable with its corresponding `baseline` or `candidate` argument, sequentially with a timeout. Stop on any validation message, readback mismatch or device error. The fixture omits the helper's optional shader FMA extension, which the recorded validator predates. It still forwards the enhanced barriers to core `vkCmdPipelineBarrier2`. [Khronos validation overview](https://docs.vulkan.org/guide/latest/validation_overview.html)
 
 The patch and fixture sources are GPL-3.0-or-later.
+
+## Compatibility with Continued #1284
+
+A context refresh preserves the exact PR's undo journal, release behavior and accepted same-layout guard. The controlled partial release used 3 records instead of 12 with identical coverage and stages. The CPU test covered cancellation, commit and a second rollback. [Exact-head compatibility bundle](integration-1284/README.md)
