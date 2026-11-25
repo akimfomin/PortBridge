@@ -1,0 +1,18 @@
+{
+  "source_pin": "80d58f8fe2769d6c857eb27abc159b6cf64530a3",
+  "fixture": "synthetic manifests and source",
+  "initial_build": "354d4bc17a2a3c9d4961f9615f76b8e9c731a1439622c8e413285f39568cbf96",
+  "app_only": "354d4bc17a2a3c9d4961f9615f76b8e9c731a1439622c8e413285f39568cbf96",
+  "relocated_checkout": "354d4bc17a2a3c9d4961f9615f76b8e9c731a1439622c8e413285f39568cbf96",
+  "translator_edit": "a8c951954e2b04d09484e2c673ba0b9d3c5d6d0f83edde4131ae4a20fbf03487",
+  "workspace_lock_edit": "55cf5acb1d24b4626f325c631b9a3e8bcc4f41a64717157b458512767b292b6b",
+  "translator_feature": "ae79c6a73e18a5ea878d1faa67fdaa315434fe4f2fc7cdabb20c052da2008a18",
+  "target_feature": "6cd0825d8444d1b181abd497ac55484d7218391e1b7a20a7f79b1c6299d73c28",
+  "restored_source": "354d4bc17a2a3c9d4961f9615f76b8e9c731a1439622c8e413285f39568cbf96",
+  "keys": {
+    "initial_shader_key": "a362d72f6f691d2303745a0360c9ad7f2511c03c694a73f8e4717cb07aeaaf1d",
+    "updated_shader_key": "eb7ea72ee74839e3b99b78652a0087f152e562cf151e6538c58ef6ae12827ae1",
+    "initial_pipeline_name": "a7a04ba978d4182c43f3f164a16af0ee",
+    "updated_pipeline_name": "682c24fb535bdf69e66250ccfe25ab64"
+  }
+}

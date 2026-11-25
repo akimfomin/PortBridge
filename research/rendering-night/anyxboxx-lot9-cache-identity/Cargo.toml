@@ -1,0 +1,16 @@
+[package]
+name = "portbridge-anyxboxx-cache-identity"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+blake3 = "1.8.7"
+
+[[bin]]
+name = "translator-identity"
+path = "translator_identity.rs"
+
+[[bin]]
+name = "translated-cache-keys"
+path = "cache_keys.rs"
