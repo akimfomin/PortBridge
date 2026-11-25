@@ -1,0 +1,279 @@
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index d852d8a..0fd4e94 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -344,10 +344,91 @@ impl Module {
+         idom
+     }
+ 
++    /// Collapse a mutually recursive group of phis with one outside value. The
++    /// SCC criterion is from Braun et al., Compiler Construction 2013, §3.2.
++    /// Retain groups with zero or multiple outside values; instruction seeds
++    /// must also strictly dominate each phi block.
++    fn fold_phi_cycles(&self, order: &[u32], idom: &[Option<usize>], repl: &mut [Option<Value>]) {
++        let phis: Vec<usize> = order.iter().flat_map(|&b| self.blocks[b as usize].iter().copied()
++            .take_while(|&i| matches!(self.insts[i as usize].op, Op::Phi(_))))
++            .map(|i| i as usize).filter(|&i| repl[i].is_none()).collect();
++        if phis.len() < 2 {
++            return;
++        }
++        let mut phi_index = vec![usize::MAX; self.insts.len()];
++        for (node, &i) in phis.iter().enumerate() {
++            phi_index[i] = node;
++        }
++        let mut forward = vec![Vec::new(); phis.len()];
++        let mut reverse = vec![Vec::new(); phis.len()];
++        for (node, &i) in phis.iter().enumerate() {
++            let Op::Phi(inc) = &self.insts[i].op else { unreachable!() };
++            for &(v, _) in inc {
++                if let Value::Inst(other) = resolve(repl, v) {
++                    let dependency = phi_index[other as usize];
++                    if dependency != usize::MAX && dependency != node {
++                        forward[node].push(dependency);
++                        reverse[dependency].push(node);
++                    }
++                }
++            }
++        }
++        let components = phi_components(&forward, &reverse);
++        let mut owner = vec![usize::MAX; phis.len()];
++        for (group, members) in components.iter().enumerate() {
++            for &node in members {
++                owner[node] = group;
++            }
++        }
++        'groups: for (group, members) in components.iter().enumerate() {
++            if members.len() < 2 {
++                continue;
++            }
++            let mut seed = None;
++            for &node in members {
++                let Op::Phi(inc) = &self.insts[phis[node]].op else { unreachable!() };
++                for &(v, _) in inc {
++                    let v = resolve(repl, v);
++                    if let Value::Inst(i) = v {
++                        let other = phi_index[i as usize];
++                        if other != usize::MAX && owner[other] == group {
++                            continue;
++                        }
++                    }
++                    if seed.is_some_and(|s| s != v) {
++                        continue 'groups;
++                    }
++                    seed = Some(v);
++                }
++            }
++            let Some(seed) = seed else { continue };
++            let seed_block = match seed {
++                Value::Inst(_) => match self.def_block(seed) {
++                    Some(b) => Some(b.0 as usize),
++                    None => continue,
++                },
++                Value::Const(c) if matches!(self.consts[c as usize],
++                    super::ConstDef::Int(..) | super::ConstDef::Float(..) | super::ConstDef::Null(..)) => None,
++                _ => continue,
++            };
++            if !members.iter().all(|&node| {
++                let i = phis[node];
++                self.insts[i].ty == self.value_ty(seed) && seed_block.is_none_or(|def| {
++                    strictly_dominates(idom, def, self.def_block[i].0 as usize)
++                })
++            }) {
++                continue;
++            }
++            for &node in members {
++                repl[phis[node]] = Some(seed);
++            }
++        }
++    }
++
+     /// Cleans up the entry function (see the module docs of `opt`). Values
+     /// keep their identities; replaced ones simply lose their uses.
+     ///
+-    /// `XCL_DXIL_NO_OPT=phi,cse,dce` (any subset, or `all`) skips passes, for bisecting.
++    /// `XCL_DXIL_NO_OPT=phi,phi-scc,cse,dce` (any subset, or `all`) skips passes, for bisecting.
+     pub fn optimize(&mut self) {
+         let off = std::env::var("XCL_DXIL_NO_OPT").unwrap_or_default();
+         let skip = |p: &str| off.split(',').any(|x| x.trim() == p || x.trim() == "all");
+@@ -513,6 +594,9 @@ impl Module {
+                 }
+             }
+         }
++        if !skip("phi") && !skip("phi-scc") {
++            self.fold_phi_cycles(&order, &idom, &mut repl);
++        }
+         // phis may name values defined later (back edges): resolve once more
+         for &b in &order {
+             for k in 0..self.blocks[b as usize].len() {
+@@ -550,6 +634,171 @@ impl Module {
+     }
+ }
+ 
++/// Kosaraju's two passes use explicit stacks. Visiting the reverse edges first
++/// orders the resulting components with each group's dependencies first.
++fn phi_components(forward: &[Vec<usize>], reverse: &[Vec<usize>]) -> Vec<Vec<usize>> {
++    let count = forward.len();
++    let mut seen = vec![false; count];
++    let mut done = Vec::with_capacity(count);
++    let mut walk = Vec::new();
++    for root in 0..count {
++        walk.push((root, false));
++        while let Some((node, exit)) = walk.pop() {
++            if exit {
++                done.push(node);
++            } else if !std::mem::replace(&mut seen[node], true) {
++                walk.push((node, true));
++                walk.extend(reverse[node].iter().map(|&p| (p, false)));
++            }
++        }
++    }
++    seen.fill(false);
++    let mut groups = Vec::new();
++    let mut work = Vec::new();
++    for root in done.into_iter().rev() {
++        if seen[root] {
++            continue;
++        }
++        let mut members = Vec::new();
++        work.push(root);
++        while let Some(node) = work.pop() {
++            if !std::mem::replace(&mut seen[node], true) {
++                members.push(node);
++                work.extend_from_slice(&forward[node]);
++            }
++        }
++        groups.push(members);
++    }
++    groups
++}
++
++fn strictly_dominates(idom: &[Option<usize>], def: usize, mut block: usize) -> bool {
++    if def == block {
++        return false;
++    }
++    while let Some(parent) = idom[block] {
++        if parent == def {
++            return true;
++        }
++        if parent == block {
++            break;
++        }
++        block = parent;
++    }
++    false
++}
++
++#[cfg(test)]
++mod phi_scc_tests {
++    use super::*;
++    use super::super::Block;
++
++    #[derive(Clone, Copy)]
++    enum Seed { Constant, Dominating, SameBlock, Two, Missing, Undef }
++
++    fn fold(m: &Module) -> Vec<Option<Value>> {
++        let order: Vec<u32> = m.block_layout().0.into_iter().map(|b| b as u32).collect();
++        let idom = m.idoms(&order);
++        let mut repl = vec![None; m.insts.len()];
++        m.fold_phi_cycles(&order, &idom, &mut repl);
++        repl
++    }
++
++    fn check(width: usize, kind: Seed, should_fold: bool) {
++        let mut m = Module::new();
++        let ty = m.i32();
++        let a = m.i32c(17);
++        let b = m.i32c(37);
++        let mut seed = match kind {
++            Seed::Dominating => m.bin(BinOp::Add, a, b),
++            Seed::Undef => m.undef(ty),
++            _ => a,
++        };
++        let head = m.new_block();
++        m.br(head);
++        m.set_block(head);
++        let phis: Vec<_> = (0..width).map(|_| m.phi(ty)).collect();
++        // SameBlock and Missing deliberately isolate guards on malformed phi input.
++        if matches!(kind, Seed::SameBlock) {
++            seed = m.bin(BinOp::Add, a, b);
++        }
++        m.br(head);
++        for (i, &phi) in phis.iter().enumerate() {
++            if !matches!(kind, Seed::Missing) {
++                m.add_incoming(phi, if matches!(kind, Seed::Two) && i == 0 { b } else { seed }, Block(0));
++            }
++            m.add_incoming(phi, phis[(i + 1) % width], head);
++        }
++        let repl = fold(&m);
++        for phi in phis {
++            let Value::Inst(i) = phi else { unreachable!() };
++            assert_eq!(repl[i as usize], should_fold.then_some(seed));
++        }
++    }
++
++    #[test]
++    fn unique_constant_and_strictly_dominating_instruction_fold() {
++        check(2, Seed::Constant, true);
++        check(2, Seed::Dominating, true);
++    }
++
++    #[test]
++    fn two_or_no_seeds_same_block_and_undef_are_preserved() {
++        check(2, Seed::Two, false);
++        check(2, Seed::Missing, false);
++        check(2, Seed::SameBlock, false);
++        check(2, Seed::Undef, false);
++    }
++
++    #[test]
++    fn long_cycle_is_walked_without_recursion() {
++        check(4096, Seed::Constant, true);
++    }
++
++    #[test]
++    fn dependencies_collapse_before_their_users() {
++        let mut m = Module::new();
++        let ty = m.i32();
++        let seed = m.i32c(17);
++        let choose = m.i1c(true);
++        let first = m.new_block();
++        let detour = m.new_block();
++        let join = m.new_block();
++        let second = m.new_block();
++        let exit = m.new_block();
++        m.br(first);
++        m.set_block(first);
++        let x = m.phi(ty);
++        m.cond_br(choose, join, detour);
++        m.set_block(detour);
++        m.br(join);
++        m.set_block(join);
++        let y = m.phi(ty);
++        m.cond_br(choose, second, first);
++        m.set_block(second);
++        let a = m.phi(ty);
++        let b = m.phi(ty);
++        m.cond_br(choose, exit, second);
++        m.set_block(exit);
++        m.ret();
++
++        m.add_incoming(x, seed, Block(0));
++        m.add_incoming(x, y, join);
++        m.add_incoming(y, x, first);
++        m.add_incoming(y, seed, detour);
++        m.add_incoming(a, seed, join);
++        m.add_incoming(a, b, second);
++        m.add_incoming(b, y, join);
++        m.add_incoming(b, a, second);
++
++        let repl = fold(&m);
++        for phi in [a, b, x, y] {
++            let Value::Inst(i) = phi else { unreachable!() };
++            assert_eq!(repl[i as usize], Some(seed));
++        }
++    }
++}
++
+ /// The value `v` stands for after replacements (path-compressing the chain).
+ fn resolve(repl: &mut [Option<Value>], v: Value) -> Value {
+     let mut r = v;

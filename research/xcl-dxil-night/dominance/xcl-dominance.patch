@@ -1,0 +1,313 @@
+diff --git a/crates/xcl/src/gpu/dxil/cfg.rs b/crates/xcl/src/gpu/dxil/cfg.rs
+index 31b3dce..4ba6b7b 100644
+--- a/crates/xcl/src/gpu/dxil/cfg.rs
++++ b/crates/xcl/src/gpu/dxil/cfg.rs
+@@ -153,6 +153,9 @@ fn make_reducible(blocks: &mut Vec<CfgBlock>) -> Result<(Vec<usize>, BTreeSet<us
+     let limit = 4 * blocks.len() + 256;
+     loop {
+         let (post, headers) = order(blocks);
++        if headers.is_empty() {
++            return Ok((post, headers));
++        }
+         let Some((_, t)) = irreducible_edge(blocks, &post) else { return Ok((post, headers)) };
+         let n = blocks.len();
+         let mut pos = vec![usize::MAX; n];
+@@ -272,56 +275,21 @@ fn order(blocks: &[CfgBlock]) -> (Vec<usize>, BTreeSet<usize>) {
+ /// A retreating edge (a, t) of the reverse post-order `rpo` whose target does not dominate
+ /// its source (the CFG is irreducible), if any.
+ fn irreducible_edge(blocks: &[CfgBlock], rpo: &[usize]) -> Option<(usize, usize)> {
++    let entry = *rpo.first()?;
+     let mut pos = vec![usize::MAX; blocks.len()];
+     for (i, &b) in rpo.iter().enumerate() {
+         pos[b] = i;
+     }
+-    let mut preds = vec![Vec::new(); blocks.len()];
+-    for &b in rpo {
+-        for t in succ_of(&blocks[b]) {
+-            preds[t].push(b);
+-        }
+-    }
+-    // Cooper–Harvey–Kennedy dominators over the RPO
+-    let mut idom = vec![usize::MAX; blocks.len()];
+-    let entry = *rpo.first()?;
+-    idom[entry] = entry;
+-    let mut changed = true;
+-    while changed {
+-        changed = false;
+-        for &b in &rpo[1..] {
+-            let mut nd = usize::MAX;
+-            for &p in preds[b].iter().filter(|&&p| idom[p] != usize::MAX) {
+-                nd = if nd == usize::MAX {
+-                    p
+-                } else {
+-                    let (mut x, mut y) = (p, nd);
+-                    while x != y {
+-                        while pos[x] > pos[y] {
+-                            x = idom[x];
+-                        }
+-                        while pos[y] > pos[x] {
+-                            y = idom[y];
+-                        }
+-                    }
+-                    x
+-                };
+-            }
+-            if idom[b] != nd {
+-                idom[b] = nd;
+-                changed = true;
+-            }
+-        }
+-    }
+-    let dominates = |a: usize, mut b: usize| loop {
+-        if a == b {
+-            return true;
+-        }
+-        if b == entry {
+-            return false;
+-        }
+-        b = idom[b];
+-    };
++    let idom = super::dom::immediate_dominators(blocks.len(), entry, |b| {
++        let (targets, count) = match blocks[b].term {
++            Term::Jump(t) => ([t, 0], 1),
++            Term::Cond(_, t, f) => ([t, f], 2),
++            Term::End => ([0, 0], 0),
++        };
++        targets.into_iter().take(count)
++    });
++    let intervals = super::dom::subtree_intervals(&idom, entry);
++    let dominates = |a: usize, b: usize| intervals[a].contains(&intervals[b].start);
+     rpo.iter().find_map(|&a| succ_of(&blocks[a]).into_iter().find(|&t| pos[t] <= pos[a] && !dominates(t, a)).map(|t| (a, t)))
+ }
+ 
+diff --git a/crates/xcl/src/gpu/dxil/dom.rs b/crates/xcl/src/gpu/dxil/dom.rs
+new file mode 100644
+index 0000000..1249156
+--- /dev/null
++++ b/crates/xcl/src/gpu/dxil/dom.rs
+@@ -0,0 +1,140 @@
++//! Immediate dominators by the simple Lengauer–Tarjan algorithm.
++
++const NONE: usize = usize::MAX;
++
++struct DfsNode {
++    block: usize,
++    parent: usize,
++    ancestor: usize,
++    semi: usize,
++    label: usize,
++    dominator: usize,
++    bucket_head: usize,
++    bucket_next: usize,
++}
++
++struct Edge {
++    from: usize,
++    next: usize,
++}
++
++/// A dominator for each reachable block. The entry dominates itself.
++pub(super) fn immediate_dominators<I>(
++    block_count: usize,
++    entry: usize,
++    mut successors: impl FnMut(usize) -> I,
++) -> Vec<Option<usize>>
++where
++    I: IntoIterator<Item = usize>,
++    I::IntoIter: DoubleEndedIterator,
++{
++    let mut numbers = vec![NONE; block_count];
++    let mut nodes = Vec::new();
++    let mut incoming = vec![NONE; block_count];
++    let mut edges = Vec::new();
++    let mut pending = vec![(entry, 0)];
++    while let Some((block, parent)) = pending.pop() {
++        if numbers[block] != NONE {
++            continue;
++        }
++        let number = nodes.len();
++        numbers[block] = number;
++        nodes.push(DfsNode {
++            block, parent, ancestor: NONE, semi: number, label: number, dominator: 0,
++            bucket_head: NONE, bucket_next: NONE,
++        });
++        for target in successors(block).into_iter().rev() {
++            edges.push(Edge { from: number, next: incoming[target] });
++            incoming[target] = edges.len() - 1;
++            pending.push((target, number));
++        }
++    }
++
++    let mut path = Vec::new();
++    for w in (1..nodes.len()).rev() {
++        let mut edge = incoming[nodes[w].block];
++        let mut semi = w;
++        while edge != NONE {
++            let label = evaluate(&mut nodes, edges[edge].from, &mut path);
++            semi = semi.min(nodes[label].semi);
++            edge = edges[edge].next;
++        }
++        nodes[w].semi = semi;
++        nodes[w].bucket_next = nodes[semi].bucket_head;
++        nodes[semi].bucket_head = w;
++
++        let parent = nodes[w].parent;
++        nodes[w].ancestor = parent;
++        let mut member = std::mem::replace(&mut nodes[parent].bucket_head, NONE);
++        while member != NONE {
++            let label = evaluate(&mut nodes, member, &mut path);
++            nodes[member].dominator = if nodes[label].semi < nodes[member].semi { label } else { parent };
++            member = nodes[member].bucket_next;
++        }
++    }
++    for w in 1..nodes.len() {
++        let candidate = nodes[w].dominator;
++        if candidate != nodes[w].semi {
++            nodes[w].dominator = nodes[candidate].dominator;
++        }
++    }
++
++    let mut dominators = vec![None; block_count];
++    for node in &nodes {
++        dominators[node.block] = Some(nodes[node.dominator].block);
++    }
++    dominators
++}
++
++/// Return the best semidominator label along the linked path. Compress the
++/// path iteratively so very deep shader graphs cannot exhaust the host stack.
++fn evaluate(nodes: &mut [DfsNode], vertex: usize, path: &mut Vec<usize>) -> usize {
++    let mut node = vertex;
++    while nodes[node].ancestor != NONE && nodes[nodes[node].ancestor].ancestor != NONE {
++        path.push(node);
++        node = nodes[node].ancestor;
++    }
++    while let Some(node) = path.pop() {
++        let ancestor = nodes[node].ancestor;
++        let label = nodes[ancestor].label;
++        if nodes[label].semi < nodes[nodes[node].label].semi {
++            nodes[node].label = label;
++        }
++        nodes[node].ancestor = nodes[ancestor].ancestor;
++    }
++    nodes[vertex].label
++}
++
++/// Entry-order ranges for constant-time dominance queries. Each subtree
++/// contains all and only the reachable blocks dominated by its root.
++pub(super) fn subtree_intervals(
++    parents: &[Option<usize>],
++    entry: usize,
++) -> Vec<std::ops::Range<usize>> {
++    let mut children = vec![NONE; parents.len()];
++    let mut siblings = vec![NONE; parents.len()];
++    for (block, parent) in parents.iter().copied().enumerate() {
++        if let Some(parent) = parent.filter(|_| block != entry) {
++            siblings[block] = children[parent];
++            children[parent] = block;
++        }
++    }
++    let mut intervals = vec![0..0; parents.len()];
++    let mut entered = 0;
++    let mut pending = vec![(entry, false)];
++    while let Some((block, exit)) = pending.pop() {
++        if exit {
++            intervals[block].end = entered;
++            continue;
++        }
++        intervals[block].start = entered;
++        entered += 1;
++        pending.push((block, true));
++        let mut child = children[block];
++        while child != NONE {
++            pending.push((child, false));
++            child = siblings[child];
++        }
++    }
++    intervals
++}
+diff --git a/crates/xcl/src/gpu/dxil/mod.rs b/crates/xcl/src/gpu/dxil/mod.rs
+index 6fe75d5..2544796 100644
+--- a/crates/xcl/src/gpu/dxil/mod.rs
++++ b/crates/xcl/src/gpu/dxil/mod.rs
+@@ -13,6 +13,7 @@
+ 
+ pub mod bitstream;
+ pub mod cfg;
++mod dom;
+ pub mod container;
+ pub mod coverage;
+ pub mod graphics;
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index d852d8a..16b56fe 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -293,57 +293,6 @@ impl Module {
+         ok
+     }
+ 
+-    /// Immediate dominators of the blocks in `order` (reverse postorder), by
+-    /// Cooper, Harvey and Kennedy's iteration ("A Simple, Fast Dominance Algorithm").
+-    fn idoms(&self, order: &[u32]) -> Vec<Option<usize>> {
+-        let n = self.blocks.len();
+-        let mut rpo = vec![usize::MAX; n];
+-        for (k, &b) in order.iter().enumerate() {
+-            rpo[b as usize] = k;
+-        }
+-        let mut preds: Vec<Vec<usize>> = vec![Vec::new(); n];
+-        for &b in order {
+-            for s in self.successors(b as usize) {
+-                preds[s.0 as usize].push(b as usize);
+-            }
+-        }
+-        let mut idom: Vec<Option<usize>> = vec![None; n];
+-        idom[0] = Some(0);
+-        let mut changed = true;
+-        while changed {
+-            changed = false;
+-            for &b in order.iter().skip(1) {
+-                let b = b as usize;
+-                let mut new: Option<usize> = None;
+-                for &p in &preds[b] {
+-                    if idom[p].is_none() {
+-                        continue;
+-                    }
+-                    new = Some(match new {
+-                        None => p,
+-                        Some(mut x) => {
+-                            let mut y = p;
+-                            while x != y {
+-                                while rpo[x] > rpo[y] {
+-                                    x = idom[x].unwrap();
+-                                }
+-                                while rpo[y] > rpo[x] {
+-                                    y = idom[y].unwrap();
+-                                }
+-                            }
+-                            x
+-                        }
+-                    });
+-                }
+-                if new.is_some() && idom[b] != new {
+-                    idom[b] = new;
+-                    changed = true;
+-                }
+-            }
+-        }
+-        idom
+-    }
+-
+     /// Cleans up the entry function (see the module docs of `opt`). Values
+     /// keep their identities; replaced ones simply lose their uses.
+     ///
+@@ -414,7 +363,9 @@ impl Module {
+         }
+ 
+         // CSE along the dominator tree (preorder walk with a scoped table)
+-        let idom = self.idoms(&order);
++        let idom = super::super::dom::immediate_dominators(self.blocks.len(), 0, |b| {
++            self.successors(b).into_iter().map(|s| s.0 as usize)
++        });
+         let mut kids: Vec<Vec<usize>> = vec![Vec::new(); self.blocks.len()];
+         for &b in order.iter().skip(1) {
+             if let Some(d) = idom[b as usize] {

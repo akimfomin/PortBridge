@@ -1,0 +1,4 @@
+comb 1537 nodes: baseline (173617, 1561) candidate (165473, 24) (peak bytes, allocation calls)
+comb 24577 nodes: baseline (2777137, 24609) candidate (2646113, 32) (peak bytes, allocation calls)
+diamonds 24577 nodes: baseline (2777137, 24609) candidate (2646113, 21) (peak bytes, allocation calls)
+loop-chain 16385 nodes: baseline (1851473, 16417) candidate (1589409, 8) (peak bytes, allocation calls)
