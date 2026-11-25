@@ -1,0 +1,22 @@
+PB_HOLD_BEGIN large_0
+PB_HOLD_BEGIN large_1
+PB_PIPE_OK large_0
+PB_PIPE_OK large_1
+PB_HOLD_END large_0
+PB_HOLD_END large_1
+PB_PIPE_OK small_0
+PB_PIPE_OK small_1
+PB_PIPE_OK large_3
+PB_PIPE_OK large_2
+cs: 6 modules ok, 0 failed
+cs pipelines: 6 ok, 0 failed, 0 skipped
+  cs wave32: 6 ok, 0 failed; wave64: 0 ok, 0 failed
+  cs compile time: 0.01s total, 0.002s mean, slowest large_1 (0.00s)
+large modules checked within the memory budget: 4 (over 300 bytes)
+wall time: 1.0s on 4 threads
+
+[stderr]
+6 shaders in index
+device: NVIDIA GeForce RTX 4070 Ti SUPER (subgroup 32..32)
+checking 6 shaders [0, 6) (stage=cs) on 4 threads
+large modules (over 300 bytes): up to 2 at once

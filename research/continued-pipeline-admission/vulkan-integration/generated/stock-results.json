@@ -1,0 +1,38 @@
+{
+  "baseline": {
+    "command": [
+      "generated/baseline-stock/vk_pipeline_check.exe",
+      "generated/spirv",
+      "--jobs",
+      "4",
+      "--large-parallel",
+      "2",
+      "--large-module-bytes",
+      "300",
+      "--max-bytes",
+      "1024",
+      "--stage",
+      "cs"
+    ],
+    "exe_sha256": "cf8b29049a5a935f124c6b3af7c304f2803995606e6d896ebfcc91e896c1de15",
+    "pipeline_count": 6
+  },
+  "candidate": {
+    "command": [
+      "generated/candidate-stock/vk_pipeline_check.exe",
+      "generated/spirv",
+      "--jobs",
+      "4",
+      "--large-parallel",
+      "2",
+      "--large-module-bytes",
+      "300",
+      "--max-bytes",
+      "1024",
+      "--stage",
+      "cs"
+    ],
+    "exe_sha256": "7c1cfc8ee7c37f5367fe5a088505cb5ac3f2c4d5927a2c8796911d4c98cebf81",
+    "pipeline_count": 6
+  }
+}

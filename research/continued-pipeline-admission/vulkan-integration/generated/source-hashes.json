@@ -1,0 +1,21 @@
+{
+  "baseline": "507029d1ea8dc65f1fabb68739605d6821843bf1",
+  "sources": {
+    "baseline-stock": {
+      "vk_pipeline_check.cpp": "89f452720df1187256c135ebf60e721587bd27c328b0411bf142b4888148ce57",
+      "large_module_gate.h": "f4586d43be884c89fa08f15d2f5708b7d35bdcabfd987acfdbee9094251339a2"
+    },
+    "baseline-observed": {
+      "vk_pipeline_check.cpp": "cc2f6fc29239a4375fc63fa35f8bf2a37f991e7a09fc13b68abc24aa4a2ec424",
+      "large_module_gate.h": "f4586d43be884c89fa08f15d2f5708b7d35bdcabfd987acfdbee9094251339a2"
+    },
+    "candidate-stock": {
+      "vk_pipeline_check.cpp": "1bd7fa648922ddcce580702254ca8eeb4913008888f52959733a812e2432b662",
+      "large_module_gate.h": "7e7a60c9b6cfc828596598e761900a88f70948c37ba9086e32f4db60b39da870"
+    },
+    "candidate-observed": {
+      "vk_pipeline_check.cpp": "a7ddbc97c4a21a84d559bdfb4d684ca14ecec1e6b305b7b7f093afc75b598b20",
+      "large_module_gate.h": "7e7a60c9b6cfc828596598e761900a88f70948c37ba9086e32f4db60b39da870"
+    }
+  }
+}
