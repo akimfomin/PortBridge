@@ -1,0 +1,117 @@
+{
+  "runs": {
+    "a": {
+      "frequency": 1000000000,
+      "peak_job_bytes": 167333888,
+      "cases": {
+        "dense": {
+          "pairs": 8,
+          "baseline_cpu_ns": 4300.0,
+          "packed_cpu_ns": 300.0,
+          "paired_cpu_ns": 3950.0,
+          "baseline_gpu_us": 54.768,
+          "packed_gpu_us": 54.464,
+          "paired_gpu_us": 0.30400000000000205,
+          "cpu_packed_faster": 8,
+          "gpu_packed_faster": 7
+        },
+        "overlap": {
+          "pairs": 8,
+          "baseline_cpu_ns": 800.0,
+          "packed_cpu_ns": 300.0,
+          "paired_cpu_ns": 500.0,
+          "baseline_gpu_us": 5.232,
+          "packed_gpu_us": 4.352,
+          "paired_gpu_us": 0.8479999999999999,
+          "cpu_packed_faster": 8,
+          "gpu_packed_faster": 8
+        },
+        "sparse": {
+          "pairs": 8,
+          "baseline_cpu_ns": 4200.0,
+          "packed_cpu_ns": 4200.0,
+          "paired_cpu_ns": -50.0,
+          "baseline_gpu_us": 56.992,
+          "packed_gpu_us": 57.6,
+          "paired_gpu_us": -0.03200000000000358,
+          "cpu_packed_faster": 1,
+          "gpu_packed_faster": 4
+        }
+      }
+    },
+    "b": {
+      "frequency": 1000000000,
+      "peak_job_bytes": 162840576,
+      "cases": {
+        "dense": {
+          "pairs": 8,
+          "baseline_cpu_ns": 4200.0,
+          "packed_cpu_ns": 300.0,
+          "paired_cpu_ns": 3900.0,
+          "baseline_gpu_us": 55.888000000000005,
+          "packed_gpu_us": 54.816,
+          "paired_gpu_us": 1.0080000000000027,
+          "cpu_packed_faster": 8,
+          "gpu_packed_faster": 5
+        },
+        "overlap": {
+          "pairs": 8,
+          "baseline_cpu_ns": 800.0,
+          "packed_cpu_ns": 300.0,
+          "paired_cpu_ns": 500.0,
+          "baseline_gpu_us": 5.328,
+          "packed_gpu_us": 4.352,
+          "paired_gpu_us": 0.976,
+          "cpu_packed_faster": 8,
+          "gpu_packed_faster": 8
+        },
+        "sparse": {
+          "pairs": 8,
+          "baseline_cpu_ns": 4150.0,
+          "packed_cpu_ns": 4200.0,
+          "paired_cpu_ns": 50.0,
+          "baseline_gpu_us": 57.744,
+          "packed_gpu_us": 56.879999999999995,
+          "paired_gpu_us": 0.815999999999999,
+          "cpu_packed_faster": 4,
+          "gpu_packed_faster": 5
+        }
+      }
+    }
+  },
+  "pooled": {
+    "dense": {
+      "pairs": 16,
+      "baseline_cpu_ns": 4200.0,
+      "packed_cpu_ns": 300.0,
+      "paired_cpu_ns": 3900.0,
+      "baseline_gpu_us": 55.472,
+      "packed_gpu_us": 54.496,
+      "paired_gpu_us": 0.6080000000000041,
+      "cpu_packed_faster": 16,
+      "gpu_packed_faster": 12
+    },
+    "overlap": {
+      "pairs": 16,
+      "baseline_cpu_ns": 800.0,
+      "packed_cpu_ns": 300.0,
+      "paired_cpu_ns": 500.0,
+      "baseline_gpu_us": 5.28,
+      "packed_gpu_us": 4.352,
+      "paired_gpu_us": 0.944,
+      "cpu_packed_faster": 16,
+      "gpu_packed_faster": 16
+    },
+    "sparse": {
+      "pairs": 16,
+      "baseline_cpu_ns": 4200.0,
+      "packed_cpu_ns": 4200.0,
+      "paired_cpu_ns": 0.0,
+      "baseline_gpu_us": 57.488,
+      "packed_gpu_us": 57.168,
+      "paired_gpu_us": 0.0799999999999983,
+      "cpu_packed_faster": 5,
+      "gpu_packed_faster": 9
+    }
+  }
+}

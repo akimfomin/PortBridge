@@ -1,0 +1,7 @@
+# Draft follow-up for victory-fork #470
+
+KretliJ, your stable window helped us put the compiler-overlap experiment in context. I checked a narrower part of the remaining relay path with PortBridge, the calls that record the readback from the card. This is an independent synthetic check of `CopyBufferRegion` on one DIRECT queue. It keeps the original logical byte ranges and CPU merge order. [Your stable-window report](https://github.com/fxceless/victory-fork/issues/470#issuecomment-7152241891) · [PortBridge](https://github.com/akimfomin/PortBridge)
+
+Two opposed-order RTX 4070 Ti SUPER workers verified 54 full readback windows each, including the untouched padding. For 16 adjacent 64 KiB ranges, grouping them into one command kept the transfer at 1 MiB. Median CPU command recording was 4.20 → 0.30 µs across 16 measured pairs. GPU intervals moved only slightly, from 55.472 to 54.496 µs, with a paired median saving of 0.608 µs. The sparse control recorded the same 16 commands in both arms and showed no CPU median difference. An overlapping sequence reduced 112 to 96 KiB and its paired GPU median saved 0.944 µs.
+
+The timing starts after packing and excludes queue contention and CPU merge. I would use this as a conditional optimization if the live relay logs show many adjacent or overlapping commands. PR #71 already addresses a different part of the same path using a separate COPY queue and a parallel compare. The proposed packing keeps the existing queue and fence sequence. [Existing #71](https://github.com/fxceless/victory-fork/pull/71)

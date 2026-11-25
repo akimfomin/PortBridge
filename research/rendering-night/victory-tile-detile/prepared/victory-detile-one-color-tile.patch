@@ -1,0 +1,85 @@
+diff --git a/crates/victory-formats/src/texture.rs b/crates/victory-formats/src/texture.rs
+--- a/crates/victory-formats/src/texture.rs
++++ b/crates/victory-formats/src/texture.rs
+@@ -616,6 +616,81 @@
+             linear[l..][..len].copy_from_slice(&tiled[t..][..len]);
+         })
+     }
++
++    /// Refresh one complete non-tail, non-XOR 64 KiB color tile in an
++    /// already initialized linear staging image. Coordinates are tile indices.
++    pub fn detile_color_tile(
++        &self,
++        tiled: &[u8],
++        linear: &mut [u8],
++        row_pitch: usize,
++        tile_x: u32,
++        tile_y: u32,
++    ) -> Result<(), Error> {
++        if self.desc.dimension != Dimension::Tex2d
++            || self.desc.samples != 1
++            || self.slices != 1
++            || self.mips.len() != 1
++            || !matches!((self.desc.block, self.desc.element_bytes), (1, 4) | (4, 16))
++            || !matches!(self.desc.swizzle, Swizzle::SW_64KB_D | Swizzle::SW_64KB_S)
++            || self.alignment != 65536
++            || !self.addressable()
++        {
++            return Err(Error::Unsupported);
++        }
++        let m = &self.mips[0];
++        let [columns, rows, _] = self.block;
++        let by = self.desc.element_bytes as usize;
++        if m.tail.is_some() || !m.width.is_multiple_of(columns) || !m.height.is_multiple_of(rows) {
++            return Err(Error::Unsupported);
++        }
++        let x = tile_x.checked_mul(columns).ok_or(Error::Invalid)?;
++        let y = tile_y.checked_mul(rows).ok_or(Error::Invalid)?;
++        if x >= m.width || y >= m.height {
++            return Err(Error::Invalid);
++        }
++        let width_bytes = m.width as usize * by;
++        let required = (m.height as usize - 1)
++            .checked_mul(row_pitch)
++            .and_then(|last| last.checked_add(width_bytes))
++            .ok_or(Error::TooSmall)?;
++        if row_pitch < width_bytes || linear.len() < required || (tiled.len() as u64) < self.size {
++            return Err(Error::TooSmall);
++        }
++
++        // As in walk(), columns and rows contribute disjoint address bits.
++        // Reuse one column-run description across the tile's visible rows.
++        let first = self.column(m, x) as usize;
++        let mut runs = Vec::new();
++        let mut tl = first;
++        let mut ll = x as usize * by;
++        for xx in x + 1..x + columns {
++            let later = self.column(m, xx) as usize;
++            let linear_x = xx as usize * by;
++            if later != tl + linear_x - ll {
++                runs.push((tl, ll, linear_x - ll));
++                tl = later;
++                ll = linear_x;
++            }
++        }
++        runs.push((tl, ll, (x + columns) as usize * by - ll));
++        let fixed = runs.first().map(|run| run.2).filter(|len| runs.iter().all(|run| run.2 == *len));
++        let mut copy = |t: usize, l: usize, length: usize| {
++            linear[l..][..length].copy_from_slice(&tiled[t..][..length]);
++        };
++        for yy in y..y + rows {
++            let tr = (m.offset + self.row(m, yy, 0)) as usize;
++            let lr = yy as usize * row_pitch;
++            match fixed {
++                Some(8) => copy_runs::<8>(&runs, tr, lr, &mut copy),
++                Some(16) => copy_runs::<16>(&runs, tr, lr, &mut copy),
++                Some(32) => copy_runs::<32>(&runs, tr, lr, &mut copy),
++                _ => copy_runs::<0>(&runs, tr, lr, &mut copy),
++            }
++        }
++        Ok(())
++    }
++
+ 
+     /// The reverse of [`Layout::detile`]: linear rows into tiled memory.
+     pub fn tile(

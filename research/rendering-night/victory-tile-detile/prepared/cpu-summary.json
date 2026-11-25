@@ -1,0 +1,158 @@
+{
+  "main": {
+    "raw_sha256": {
+      "cpu-a.csv": "977fe5e7c35b5f9b48bd33c0523d6455255688ea39769172e012f913eb8ea3b0",
+      "cpu-b.csv": "c1f0601afaf79eb4de1bef95e2f51c6268085331b22db2933628ba81467f29e1",
+      "cpu-c.csv": "57c153d5f58c90533b82414baf946f1863f74f2edb1f108a5042b2f8bdfe4ed0",
+      "cpu-d.csv": "bcd1cb5b516a761a0c90700a7fea77eddbe33c712bbd81b9ba9f829f13ce1f8a"
+    },
+    "cases": {
+      "rgba8-512-S": {
+        "pairs": 48,
+        "orders": {
+          "tile-full-checked": 8,
+          "checked-full-tile": 8,
+          "full-checked-tile": 8,
+          "tile-checked-full": 8,
+          "checked-tile-full": 8,
+          "full-tile-checked": 8
+        },
+        "median_us": [
+          71.7,
+          4.2,
+          40.0
+        ],
+        "checked_faster": 48
+      },
+      "rgba8-1024-D": {
+        "pairs": 48,
+        "orders": {
+          "checked-tile-full": 8,
+          "full-tile-checked": 8,
+          "tile-full-checked": 8,
+          "checked-full-tile": 8,
+          "full-checked-tile": 8,
+          "tile-checked-full": 8
+        },
+        "median_us": [
+          372.5,
+          7.55,
+          273.6
+        ],
+        "checked_faster": 46
+      },
+      "bc7-1024-D": {
+        "pairs": 48,
+        "orders": {
+          "full-checked-tile": 8,
+          "tile-checked-full": 8,
+          "checked-tile-full": 8,
+          "full-tile-checked": 8,
+          "tile-full-checked": 8,
+          "checked-full-tile": 8
+        },
+        "median_us": [
+          44.6,
+          2.7,
+          39.35
+        ],
+        "checked_faster": 41
+      },
+      "bc7-2048-S": {
+        "pairs": 48,
+        "orders": {
+          "tile-full-checked": 8,
+          "checked-full-tile": 8,
+          "full-checked-tile": 8,
+          "tile-checked-full": 8,
+          "checked-tile-full": 8,
+          "full-tile-checked": 8
+        },
+        "median_us": [
+          373.05,
+          7.1,
+          277.75
+        ],
+        "checked_faster": 45
+      }
+    }
+  },
+  "pr_2026": {
+    "raw_sha256": {
+      "next-a.csv": "986cfa646a414643195b8815b577eb491ca8a3a456fdcf6174cd803aaba07db3",
+      "next-b.csv": "fe8c810204f32094a3d46c6113b9109115e5e30d0a3ff70b91ba9e466b2ea091",
+      "next-c.csv": "4c9b60a3a43d7fa7a9a30bddfc2100074e5178cea750c09298fb7fbebd12da5a",
+      "next-d.csv": "6d391aafa5a95761ae5d2056da909b95dd5433ef8770dd2d853a9dab278da502"
+    },
+    "cases": {
+      "rgba8-512-S": {
+        "pairs": 48,
+        "orders": {
+          "tile-full-checked": 8,
+          "checked-full-tile": 8,
+          "full-checked-tile": 8,
+          "tile-checked-full": 8,
+          "checked-tile-full": 8,
+          "full-tile-checked": 8
+        },
+        "median_us": [
+          63.75,
+          4.4,
+          40.2
+        ],
+        "checked_faster": 48
+      },
+      "rgba8-1024-D": {
+        "pairs": 48,
+        "orders": {
+          "checked-tile-full": 8,
+          "full-tile-checked": 8,
+          "tile-full-checked": 8,
+          "checked-full-tile": 8,
+          "full-checked-tile": 8,
+          "tile-checked-full": 8
+        },
+        "median_us": [
+          320.0,
+          7.1,
+          279.55
+        ],
+        "checked_faster": 48
+      },
+      "bc7-1024-D": {
+        "pairs": 48,
+        "orders": {
+          "full-checked-tile": 8,
+          "tile-checked-full": 8,
+          "checked-tile-full": 8,
+          "full-tile-checked": 8,
+          "tile-full-checked": 8,
+          "checked-full-tile": 8
+        },
+        "median_us": [
+          41.8,
+          2.8,
+          39.3
+        ],
+        "checked_faster": 40
+      },
+      "bc7-2048-S": {
+        "pairs": 48,
+        "orders": {
+          "tile-full-checked": 8,
+          "checked-full-tile": 8,
+          "full-checked-tile": 8,
+          "tile-checked-full": 8,
+          "checked-tile-full": 8,
+          "full-tile-checked": 8
+        },
+        "median_us": [
+          324.8,
+          7.1,
+          276.15
+        ],
+        "checked_faster": 45
+      }
+    }
+  }
+}
