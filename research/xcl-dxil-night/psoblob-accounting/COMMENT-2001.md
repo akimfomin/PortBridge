@@ -1,0 +1,5 @@
+raylitebull, PortBridge’s review of [victory-fork #470](https://github.com/fxceless/victory-fork/issues/470#issuecomment-7149854468) led me to check XCL’s driver blob cache. The compute and graphics insertion and removal bodies are identical at your `1f1d6814` head and main `cbc296ab`.
+
+I forced four publishers of one 16-byte key through those exact XCL routines with a CPU mock. Both caches charged 64 bytes with 16 present, then retained 48 bytes of charge after removing the key. The patch charges the bytes only on a vacant entry under the existing map lock. Both caches then report 16 bytes before removal and zero afterward, and all four separate 16-byte entries fit under a 64-byte test budget.
+
+The check covers cache insertion and accounting. The driver call and disk persistence are outside the patch. The fixture uses synthetic bytes, so the results say nothing about native compilation or startup time. I’m sharing the patch, exact source pin and reproducible check in case this helps with the cache work here.
