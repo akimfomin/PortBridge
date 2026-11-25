@@ -1,0 +1,56 @@
+{
+  "scope": "Same 512\u00d7512 input and Gaussian semantics via CPU Halide Wasm SIMD; sigma change to canvas bitmap",
+  "exclusions": "Initial image decode, CPU reference checks, hashing, browser compositor and display scanout",
+  "prepared_samples": 160,
+  "verified_values": 41943040,
+  "max_absolute_error": 3.305346294446565e-07,
+  "sample_count": 16,
+  "frames_per_repetition": 10,
+  "image_file_sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+  "decoded_luma_sha256": "e2b5224b845fb38f3b865d458637a1dc208134db741cbf677c03daec11d7a19e",
+  "browser_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+  "input_to_bitmap": {
+    "median_ms_per_preview": 0.8850000001490117,
+    "mean_ms_per_repetition": [
+      1.4,
+      1.219999998807907,
+      1.1200000002980233,
+      0.8099999986588955,
+      0.8399999998509884,
+      1.0200000010430812,
+      0.8100000001490116,
+      0.8299999989569187,
+      0.8599999986588955,
+      0.8500000014901161,
+      0.8800000004470349,
+      0.8599999994039536,
+      0.8899999998509884,
+      0.8999999992549419,
+      0.8899999998509884,
+      0.9900000005960464
+    ]
+  },
+  "input_to_cpu_result": {
+    "median_ms_per_preview": 0.3799999993294477,
+    "mean_ms_per_repetition": [
+      0.4,
+      0.40999999865889547,
+      0.37000000178813935,
+      0.34999999925494196,
+      0.3799999997019768,
+      0.3799999997019768,
+      0.3299999989569187,
+      0.35999999940395355,
+      0.3599999986588955,
+      0.3600000023841858,
+      0.3799999997019768,
+      0.3899999991059303,
+      0.39000000059604645,
+      0.3799999989569187,
+      0.35999999940395355,
+      0.38000000044703486
+    ]
+  },
+  "wasm_file_sha256": "dd999de60d1f2077c1b403bfc1bea87c46e29c61fa8945d4999271e7a5782308",
+  "collected_utc": "2026-11-25T18:27:18.514366+00:00"
+}

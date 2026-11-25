@@ -1,0 +1,151 @@
+{
+  "adapter_attestation": {
+    "inventory_reference": {
+      "name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "pci": "0x270510DE",
+      "driver": "617.14"
+    },
+    "browser": {
+      "vendor": "nvidia",
+      "architecture": "lovelace",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "evidence": "single NVIDIA card and matching Ada architecture"
+  },
+  "browser_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+  "scope": "Sigma change through Halide/WebGPU to synchronized float readback and canvas bitmap",
+  "pairs": 4,
+  "frames_per_variant_per_pair": 3,
+  "verified_values": 12582912,
+  "max_absolute_error": 2.611916953831894e-07,
+  "image_file_sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+  "input_luma_sha256": "e2b5224b845fb38f3b865d458637a1dc208134db741cbf677c03daec11d7a19e",
+  "bitmap_ms": {
+    "stock": 30.90000000099341,
+    "reuse": 30.083333334575094,
+    "park": 6.033333332588276,
+    "reuse-park": 5.666666665424904
+  },
+  "bitmap_ms_per_round": {
+    "stock": [
+      31.43333333482345,
+      29.999999997516472,
+      35.03333333134651,
+      30.366666667163372
+    ],
+    "reuse": [
+      33.93333333482345,
+      28.366666667163372,
+      30.333333333333332,
+      29.83333333581686
+    ],
+    "park": [
+      6.0,
+      6.099999996523063,
+      5.799999997019768,
+      6.066666665176551
+    ],
+    "reuse-park": [
+      6.166666666666667,
+      5.400000000993411,
+      5.066666665176551,
+      5.933333329856396
+    ]
+  },
+  "readback_ms": {
+    "stock": 30.08333333209157,
+    "reuse": 29.33333333209157,
+    "park": 5.316666665176551,
+    "reuse-park": 4.966666666169961
+  },
+  "reuse_to_reuse_park_paired_ratio": 5.377894560911514,
+  "webgpu_calls_per_preview": {
+    "stock": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 2.0
+    },
+    "reuse": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 0.0
+    },
+    "park": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 2.0
+    },
+    "reuse-park": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 0.0
+    }
+  },
+  "poll_sleeps_per_preview": {
+    "stock": {
+      "scope": 6.0,
+      "map": 1.3333333333333333,
+      "other": 0.0
+    },
+    "reuse": {
+      "scope": 6.0,
+      "map": 1.3333333333333333,
+      "other": 0.0
+    },
+    "park": {
+      "scope": 0.0,
+      "map": 0.0,
+      "other": 0.0
+    },
+    "reuse-park": {
+      "scope": 0.0,
+      "map": 0.0,
+      "other": 0.0
+    }
+  },
+  "error_controls": [
+    {
+      "variant": "stock",
+      "status": -1,
+      "log": [
+        "WGPU: validation error: Entry point \"\"portbridge_missing_test_entry\"\" doesn't exist in the shader module [ShaderModule (unlabeled)].",
+        " - While validating compute stage ([ShaderModule (unlabeled)], entryPoint: \"portbridge_missing_test_entry\").",
+        " - While calling [Device].CreateComputePipeline([ComputePipelineDescriptor]).",
+        "",
+        ""
+      ],
+      "recoveryHash": "3daccbe5acd0060326889e9a2b81689e0c461bda84009d118b76dd06f5c16f82",
+      "errorPops": 8
+    },
+    {
+      "variant": "park",
+      "status": -1,
+      "log": [
+        "WGPU: validation error: Entry point \"\"portbridge_missing_test_entry\"\" doesn't exist in the shader module [ShaderModule (unlabeled)].",
+        " - While validating compute stage ([ShaderModule (unlabeled)], entryPoint: \"portbridge_missing_test_entry\").",
+        " - While calling [Device].CreateComputePipeline([ComputePipelineDescriptor]).",
+        "",
+        ""
+      ],
+      "recoveryHash": "3daccbe5acd0060326889e9a2b81689e0c461bda84009d118b76dd06f5c16f82",
+      "errorPops": 8
+    }
+  ],
+  "wasm_file_sha256": "59030a8d9fc31903f623c972713939684774242070149cf476f0f9eae15dc92a",
+  "collected_utc": "2026-11-25T18:25:42.325067+00:00",
+  "evidence_note": "Corrected the runner's stock Wasm label against the served failure-specific asset. Browser measurements and statuses are unchanged."
+}
