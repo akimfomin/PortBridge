@@ -1,0 +1,6 @@
+3328 MiB cross-lane window: legacy admitted both (1536 + 2048 MiB); candidate waited for release
+5120 MiB same-lane window: legacy held slot for 7168 MiB job; candidate admitted 2048 MiB job
+#1996 wanted-cap branch: the same cross-lane over-admission remains; shared reservation closes it
+#1996-style wanted bypass and its two-work cap remain intact
+exact #1996 patch preserves wanted capacity and closes the cross-lane admission window
+ample budget overlap, wanted bypass, unknown monitor, and panic-release controls passed

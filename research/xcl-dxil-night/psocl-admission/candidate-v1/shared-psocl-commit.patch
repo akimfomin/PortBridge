@@ -1,0 +1,83 @@
+diff --git a/crates/xcl/src/hle/d3d12x/real.rs b/crates/xcl/src/hle/d3d12x/real.rs
+--- a/crates/xcl/src/hle/d3d12x/real.rs
++++ b/crates/xcl/src/hle/d3d12x/real.rs
+@@ -3615,7 +3615,7 @@
+ fn driver_compile_identified<R>(kind: &str, bytes: usize, gate: bool, record: Option<(u64, bool)>, build: impl FnOnce() -> R) -> (R, std::time::Duration) {
+     let huge = gate && bytes >= huge_pso_bytes() && std::thread::current().name().is_some_and(|n| n.starts_with("xcl-pso"));
+     let waited = std::time::Instant::now();
+-    let _slot = huge.then(|| big_compile_turn(compile_slots(bytes), || big_compile_commit_free(big_compile_headroom(bytes)), super::pso_async::build_is_wanted));
++    let _slot = huge.then(|| shared_driver_turn(compile_slots(bytes), bytes, driver_free_commit, super::pso_async::build_is_wanted));
+     let waited = waited.elapsed();
+     static SEQUENCE: AtomicU64 = AtomicU64::new(0);
+     let sequence = SEQUENCE.fetch_add(1, Ordering::Relaxed) + 1;
+@@ -3677,15 +3677,55 @@
+ /// (#1269), and programs of ~1 MB took several GB each on an 8 GB card (same issue). The floor
+ /// leaves every program up to 6 MiB of DXIL waiting for exactly what it waited for before.
+ fn big_compile_headroom(dxil_len: usize) -> u64 {
+-    (3u64 << 30).max(dxil_len as u64 * 512)
+-}
+-
+-/// That much commit is free (true when that is not known).
+-fn big_compile_commit_free(need: u64) -> bool {
++    (3u64 << 30).max((dxil_len as u64).saturating_mul(512))
++}
++
++/// Maximum additional commit available to this process right now.
++fn driver_free_commit() -> Option<u64> {
+     use windows_sys::Win32::System::SystemInformation::{GlobalMemoryStatusEx, MEMORYSTATUSEX};
+     let mut m: MEMORYSTATUSEX = unsafe { std::mem::zeroed() };
+     m.dwLength = std::mem::size_of::<MEMORYSTATUSEX>() as u32;
+-    unsafe { GlobalMemoryStatusEx(&mut m) == 0 || m.ullAvailPageFile >= need }
++    (unsafe { GlobalMemoryStatusEx(&mut m) } != 0).then_some(m.ullAvailPageFile)
++}
++
++// Both size lanes share this admission estimate. The actual driver can use
++// more or less memory. The running estimate is deliberately conservative.
++static DRIVER_COMMIT_RESERVED: Mutex<u64> = Mutex::new(0);
++
++struct DriverReservation(u64);
++
++impl Drop for DriverReservation {
++    fn drop(&mut self) {
++        *DRIVER_COMMIT_RESERVED.lock().unwrap() -= self.0;
++        BIG_COMPILES.cv.notify_all();
++        GIANT_COMPILES.cv.notify_all();
++    }
++}
++
++fn reserve_driver_commit(bytes: usize, free: impl FnOnce() -> Option<u64>) -> Option<DriverReservation> {
++    let use_bytes = (bytes as u64).saturating_mul(512).max(1536 << 20);
++    let mut reserved = DRIVER_COMMIT_RESERVED.lock().unwrap();
++    let after = reserved.checked_add(use_bytes)?;
++    if free().is_some_and(|free| free < big_compile_headroom(bytes).max(after)) {
++        return None;
++    }
++    *reserved = after;
++    Some(DriverReservation(use_bytes))
++}
++
++/// Preserve the lane limits and wanted priority while sharing a commit budget.
++fn shared_driver_turn(slots: &'static Slots, bytes: usize, free: impl Fn() -> Option<u64>, wanted: impl Fn() -> bool)
++    -> (Option<DriverReservation>, SlotGuard) {
++    let reservation = std::cell::Cell::new(None);
++    let slot = big_compile_turn(slots, || {
++        let held = reserve_driver_commit(bytes, &free);
++        let available = held.is_some();
++        reservation.set(held);
++        available
++    }, wanted);
++    // A wanted build keeps the existing commit bypass but contributes to
++    // the estimate considered for later background builds.
++    (reservation.into_inner().or_else(|| reserve_driver_commit(bytes, || None)), slot)
+ }
+ 
+ #[cfg(test)]
+@@ -5201,7 +5241,7 @@
+     let bytes = stream.shader_bytes() + tp.cs.len();
+     let gate = bytes >= huge_pso_bytes() && std::thread::current().name().is_some_and(|n| n.starts_with("xcl-pso"));
+     let waited = std::time::Instant::now();
+-    let _slot = gate.then(|| big_compile_turn(compile_slots(bytes), || big_compile_commit_free(big_compile_headroom(bytes)), super::pso_async::build_is_wanted));
++    let _slot = gate.then(|| shared_driver_turn(compile_slots(bytes), bytes, driver_free_commit, super::pso_async::build_is_wanted));
+     if gate {
+         crate::xlog_info!("D3D12.X: two-pass {kind} PSO ({bytes} B DXIL) gated, waited {} ms", waited.elapsed().as_millis());
+     }
