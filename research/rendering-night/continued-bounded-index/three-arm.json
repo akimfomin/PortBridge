@@ -1,0 +1,867 @@
+{
+  "binaries": {
+    "stock": "affbee210740779064266770afd4c84b57ed280bef775a3424342a402a3381c5",
+    "bounded": "83c3c7970cbda2fe3825584c1b6bcd9140996d82c2e58f99fbe1a7e1126d7451",
+    "composed": "16335cb6d2626260d803dc52a39151617526dbd34e7cad96f42516ef021f907c"
+  },
+  "headers": {
+    "stock": "3726dc0725575f2eb4cf2275f4bcb83f878fe4ac124d76925be3eccb97a7c876",
+    "bounded": "413310380a4a05d330dac7863e4b8eab30cc0b2e8204a636b7c03e9c84827376",
+    "composed": "2d009b6aeb073815858370babd890ca497b15f0616d1058504e1996b8f096ad3"
+  },
+  "fixtures": [
+    {
+      "name": "small",
+      "entries": 64,
+      "bytes": 42264,
+      "richness": 1,
+      "sha256": "12b2c7b428efafa1800c12bfa17a3bda7aa2fed579fb45f8dfeacca589195a7f",
+      "warmup": {
+        "stock": {
+          "verified": 64,
+          "load_ms": 0.983,
+          "peak_working_set": 10317824,
+          "peak_commit": 2359296,
+          "admission_commit_gib": 4.594879150390625,
+          "admission_physical_gib": 10.614425659179688
+        },
+        "bounded": {
+          "verified": 64,
+          "load_ms": 0.6866,
+          "peak_working_set": 9883648,
+          "peak_commit": 1900544,
+          "admission_commit_gib": 4.594470977783203,
+          "admission_physical_gib": 10.614265441894531
+        },
+        "composed": {
+          "verified": 64,
+          "load_ms": 0.6992,
+          "peak_working_set": 9850880,
+          "peak_commit": 1880064,
+          "admission_commit_gib": 4.593467712402344,
+          "admission_physical_gib": 10.614299774169922
+        }
+      },
+      "pairs": [
+        {
+          "order": [
+            "stock",
+            "bounded",
+            "composed"
+          ],
+          "samples": {
+            "stock": {
+              "verified": 64,
+              "load_ms": 0.9371,
+              "peak_working_set": 10317824,
+              "peak_commit": 2351104,
+              "admission_commit_gib": 4.593986511230469,
+              "admission_physical_gib": 10.614082336425781
+            },
+            "bounded": {
+              "verified": 64,
+              "load_ms": 0.7408,
+              "peak_working_set": 9867264,
+              "peak_commit": 1875968,
+              "admission_commit_gib": 4.5935516357421875,
+              "admission_physical_gib": 10.61383056640625
+            },
+            "composed": {
+              "verified": 64,
+              "load_ms": 0.7516,
+              "peak_working_set": 9850880,
+              "peak_commit": 1880064,
+              "admission_commit_gib": 4.5890350341796875,
+              "admission_physical_gib": 10.61050033569336
+            }
+          }
+        },
+        {
+          "order": [
+            "stock",
+            "composed",
+            "bounded"
+          ],
+          "samples": {
+            "stock": {
+              "verified": 64,
+              "load_ms": 0.9739,
+              "peak_working_set": 10305536,
+              "peak_commit": 2342912,
+              "admission_commit_gib": 4.593738555908203,
+              "admission_physical_gib": 10.613456726074219
+            },
+            "composed": {
+              "verified": 64,
+              "load_ms": 0.6959,
+              "peak_working_set": 9867264,
+              "peak_commit": 1892352,
+              "admission_commit_gib": 4.5943603515625,
+              "admission_physical_gib": 10.614646911621094
+            },
+            "bounded": {
+              "verified": 64,
+              "load_ms": 0.7742,
+              "peak_working_set": 9867264,
+              "peak_commit": 1875968,
+              "admission_commit_gib": 4.593635559082031,
+              "admission_physical_gib": 10.613487243652344
+            }
+          }
+        },
+        {
+          "order": [
+            "bounded",
+            "stock",
+            "composed"
+          ],
+          "samples": {
+            "bounded": {
+              "verified": 64,
+              "load_ms": 0.8657,
+              "peak_working_set": 9867264,
+              "peak_commit": 1880064,
+              "admission_commit_gib": 4.592922210693359,
+              "admission_physical_gib": 10.613410949707031
+            },
+            "stock": {
+              "verified": 64,
+              "load_ms": 1.1602,
+              "peak_working_set": 10358784,
+              "peak_commit": 2396160,
+              "admission_commit_gib": 4.594291687011719,
+              "admission_physical_gib": 10.613422393798828
+            },
+            "composed": {
+              "verified": 64,
+              "load_ms": 0.7045,
+              "peak_working_set": 9850880,
+              "peak_commit": 1880064,
+              "admission_commit_gib": 4.592872619628906,
+              "admission_physical_gib": 10.612663269042969
+            }
+          }
+        },
+        {
+          "order": [
+            "bounded",
+            "composed",
+            "stock"
+          ],
+          "samples": {
+            "bounded": {
+              "verified": 64,
+              "load_ms": 0.7805,
+              "peak_working_set": 9867264,
+              "peak_commit": 1880064,
+              "admission_commit_gib": 4.592006683349609,
+              "admission_physical_gib": 10.612659454345703
+            },
+            "composed": {
+              "verified": 64,
+              "load_ms": 0.7466,
+              "peak_working_set": 9867264,
+              "peak_commit": 1892352,
+              "admission_commit_gib": 4.591831207275391,
+              "admission_physical_gib": 10.61285400390625
+            },
+            "stock": {
+              "verified": 64,
+              "load_ms": 0.9476,
+              "peak_working_set": 10313728,
+              "peak_commit": 2351104,
+              "admission_commit_gib": 4.592803955078125,
+              "admission_physical_gib": 10.613330841064453
+            }
+          }
+        },
+        {
+          "order": [
+            "composed",
+            "stock",
+            "bounded"
+          ],
+          "samples": {
+            "composed": {
+              "verified": 64,
+              "load_ms": 0.6956,
+              "peak_working_set": 9850880,
+              "peak_commit": 1880064,
+              "admission_commit_gib": 4.5924835205078125,
+              "admission_physical_gib": 10.613483428955078
+            },
+            "stock": {
+              "verified": 64,
+              "load_ms": 1.0285,
+              "peak_working_set": 10317824,
+              "peak_commit": 2355200,
+              "admission_commit_gib": 4.59246826171875,
+              "admission_physical_gib": 10.614021301269531
+            },
+            "bounded": {
+              "verified": 64,
+              "load_ms": 0.755,
+              "peak_working_set": 9871360,
+              "peak_commit": 1884160,
+              "admission_commit_gib": 4.592628479003906,
+              "admission_physical_gib": 10.614429473876953
+            }
+          }
+        },
+        {
+          "order": [
+            "composed",
+            "bounded",
+            "stock"
+          ],
+          "samples": {
+            "composed": {
+              "verified": 64,
+              "load_ms": 0.695,
+              "peak_working_set": 9871360,
+              "peak_commit": 1900544,
+              "admission_commit_gib": 4.592494964599609,
+              "admission_physical_gib": 10.6134033203125
+            },
+            "bounded": {
+              "verified": 64,
+              "load_ms": 0.7846,
+              "peak_working_set": 9867264,
+              "peak_commit": 1880064,
+              "admission_commit_gib": 4.5926513671875,
+              "admission_physical_gib": 10.613929748535156
+            },
+            "stock": {
+              "verified": 64,
+              "load_ms": 0.9799,
+              "peak_working_set": 10317824,
+              "peak_commit": 2351104,
+              "admission_commit_gib": 4.592567443847656,
+              "admission_physical_gib": 10.613861083984375
+            }
+          }
+        }
+      ],
+      "bounded_over_stock": {
+        "load_ms": {
+          "original": 0.9769,
+          "candidate": 0.77735,
+          "paired_candidate_over_original": 0.7927360517576181
+        },
+        "peak_working_set": {
+          "original": 10317824.0,
+          "candidate": 9867264.0,
+          "paired_candidate_over_original": 0.956521776831269
+        },
+        "peak_commit": {
+          "original": 2351104.0,
+          "candidate": 1880064.0,
+          "paired_candidate_over_original": 0.7996515679442509
+        }
+      },
+      "composed_over_bounded": {
+        "load_ms": {
+          "original": 0.77735,
+          "candidate": 0.7001999999999999,
+          "paired_candidate_over_original": 0.9100939230583673
+        },
+        "peak_working_set": {
+          "original": 9867264.0,
+          "candidate": 9859072.0,
+          "paired_candidate_over_original": 0.9991697799916979
+        },
+        "peak_commit": {
+          "original": 1880064.0,
+          "candidate": 1886208.0,
+          "paired_candidate_over_original": 1.0043596769129777
+        }
+      },
+      "composed_over_stock": {
+        "load_ms": {
+          "original": 0.9769,
+          "candidate": 0.7001999999999999,
+          "paired_candidate_over_original": 0.7119028974847457
+        },
+        "peak_working_set": {
+          "original": 10317824.0,
+          "candidate": 9859072.0,
+          "paired_candidate_over_original": 0.955727810971801
+        },
+        "peak_commit": {
+          "original": 2351104.0,
+          "candidate": 1886208.0,
+          "paired_candidate_over_original": 0.8022648083623694
+        }
+      }
+    },
+    {
+      "name": "medium",
+      "entries": 8000,
+      "bytes": 10425351,
+      "richness": 3,
+      "sha256": "b5e059c7783c78f4b987b8f26927091ad433080e43657037f234ab133cc8943c",
+      "warmup": {
+        "stock": {
+          "verified": 8000,
+          "load_ms": 147.761,
+          "peak_working_set": 85753856,
+          "peak_commit": 81530880,
+          "admission_commit_gib": 4.59295654296875,
+          "admission_physical_gib": 10.612762451171875
+        },
+        "bounded": {
+          "verified": 8000,
+          "load_ms": 87.4262,
+          "peak_working_set": 18026496,
+          "peak_commit": 10240000,
+          "admission_commit_gib": 4.591251373291016,
+          "admission_physical_gib": 10.61220932006836
+        },
+        "composed": {
+          "verified": 8000,
+          "load_ms": 83.3344,
+          "peak_working_set": 18227200,
+          "peak_commit": 10436608,
+          "admission_commit_gib": 4.589427947998047,
+          "admission_physical_gib": 10.611114501953125
+        }
+      },
+      "pairs": [
+        {
+          "order": [
+            "stock",
+            "bounded",
+            "composed"
+          ],
+          "samples": {
+            "stock": {
+              "verified": 8000,
+              "load_ms": 152.71,
+              "peak_working_set": 85786624,
+              "peak_commit": 81547264,
+              "admission_commit_gib": 4.589954376220703,
+              "admission_physical_gib": 10.611793518066406
+            },
+            "bounded": {
+              "verified": 8000,
+              "load_ms": 87.492,
+              "peak_working_set": 17956864,
+              "peak_commit": 10158080,
+              "admission_commit_gib": 3.589099884033203,
+              "admission_physical_gib": 10.570182800292969
+            },
+            "composed": {
+              "verified": 8000,
+              "load_ms": 81.2706,
+              "peak_working_set": 18219008,
+              "peak_commit": 10436608,
+              "admission_commit_gib": 3.5907058715820312,
+              "admission_physical_gib": 10.411819458007812
+            }
+          }
+        },
+        {
+          "order": [
+            "stock",
+            "composed",
+            "bounded"
+          ],
+          "samples": {
+            "stock": {
+              "verified": 8000,
+              "load_ms": 151.575,
+              "peak_working_set": 85700608,
+              "peak_commit": 81375232,
+              "admission_commit_gib": 3.5888710021972656,
+              "admission_physical_gib": 10.2574462890625
+            },
+            "composed": {
+              "verified": 8000,
+              "load_ms": 81.1552,
+              "peak_working_set": 18010112,
+              "peak_commit": 10207232,
+              "admission_commit_gib": 3.588634490966797,
+              "admission_physical_gib": 9.99737548828125
+            },
+            "bounded": {
+              "verified": 8000,
+              "load_ms": 84.978,
+              "peak_working_set": 18046976,
+              "peak_commit": 10240000,
+              "admission_commit_gib": 3.5894317626953125,
+              "admission_physical_gib": 9.841140747070312
+            }
+          }
+        },
+        {
+          "order": [
+            "bounded",
+            "stock",
+            "composed"
+          ],
+          "samples": {
+            "bounded": {
+              "verified": 8000,
+              "load_ms": 97.6535,
+              "peak_working_set": 18030592,
+              "peak_commit": 10211328,
+              "admission_commit_gib": 3.5867843627929688,
+              "admission_physical_gib": 9.682891845703125
+            },
+            "stock": {
+              "verified": 8000,
+              "load_ms": 155.926,
+              "peak_working_set": 85749760,
+              "peak_commit": 81461248,
+              "admission_commit_gib": 3.5809593200683594,
+              "admission_physical_gib": 9.600387573242188
+            },
+            "composed": {
+              "verified": 8000,
+              "load_ms": 82.418,
+              "peak_working_set": 18227200,
+              "peak_commit": 10436608,
+              "admission_commit_gib": 3.579120635986328,
+              "admission_physical_gib": 9.598201751708984
+            }
+          }
+        },
+        {
+          "order": [
+            "bounded",
+            "composed",
+            "stock"
+          ],
+          "samples": {
+            "bounded": {
+              "verified": 8000,
+              "load_ms": 89.2245,
+              "peak_working_set": 18038784,
+              "peak_commit": 10231808,
+              "admission_commit_gib": 3.580554962158203,
+              "admission_physical_gib": 9.60540771484375
+            },
+            "composed": {
+              "verified": 8000,
+              "load_ms": 80.9,
+              "peak_working_set": 18010112,
+              "peak_commit": 10207232,
+              "admission_commit_gib": 3.5806617736816406,
+              "admission_physical_gib": 9.606136322021484
+            },
+            "stock": {
+              "verified": 8000,
+              "load_ms": 143.117,
+              "peak_working_set": 85651456,
+              "peak_commit": 81367040,
+              "admission_commit_gib": 3.581798553466797,
+              "admission_physical_gib": 9.606437683105469
+            }
+          }
+        },
+        {
+          "order": [
+            "composed",
+            "stock",
+            "bounded"
+          ],
+          "samples": {
+            "composed": {
+              "verified": 8000,
+              "load_ms": 80.789,
+              "peak_working_set": 18010112,
+              "peak_commit": 10211328,
+              "admission_commit_gib": 3.58135986328125,
+              "admission_physical_gib": 9.599517822265625
+            },
+            "stock": {
+              "verified": 8000,
+              "load_ms": 145.452,
+              "peak_working_set": 85700608,
+              "peak_commit": 81375232,
+              "admission_commit_gib": 3.5769309997558594,
+              "admission_physical_gib": 9.690319061279297
+            },
+            "bounded": {
+              "verified": 8000,
+              "load_ms": 85.572,
+              "peak_working_set": 17956864,
+              "peak_commit": 10158080,
+              "admission_commit_gib": 4.575733184814453,
+              "admission_physical_gib": 10.597095489501953
+            }
+          }
+        },
+        {
+          "order": [
+            "composed",
+            "bounded",
+            "stock"
+          ],
+          "samples": {
+            "composed": {
+              "verified": 8000,
+              "load_ms": 83.1886,
+              "peak_working_set": 17960960,
+              "peak_commit": 10170368,
+              "admission_commit_gib": 4.575855255126953,
+              "admission_physical_gib": 10.599411010742188
+            },
+            "bounded": {
+              "verified": 8000,
+              "load_ms": 89.594,
+              "peak_working_set": 18186240,
+              "peak_commit": 10362880,
+              "admission_commit_gib": 4.575439453125,
+              "admission_physical_gib": 10.602916717529297
+            },
+            "stock": {
+              "verified": 8000,
+              "load_ms": 145.361,
+              "peak_working_set": 85700608,
+              "peak_commit": 81379328,
+              "admission_commit_gib": 4.573333740234375,
+              "admission_physical_gib": 10.600299835205078
+            }
+          }
+        }
+      ],
+      "bounded_over_stock": {
+        "load_ms": {
+          "original": 148.5135,
+          "candidate": 88.35825,
+          "paired_candidate_over_original": 0.6023364694815112
+        },
+        "peak_working_set": {
+          "original": 85700608.0,
+          "candidate": 18034688.0,
+          "paired_candidate_over_original": 0.21042576976065447
+        },
+        "peak_commit": {
+          "original": 81377280.0,
+          "candidate": 10221568.0,
+          "paired_candidate_over_original": 0.1255503877338568
+        }
+      },
+      "composed_over_bounded": {
+        "load_ms": {
+          "original": 88.35825,
+          "candidate": 81.21289999999999,
+          "paired_candidate_over_original": 0.9286990787931747
+        },
+        "peak_working_set": {
+          "original": 18034688.0,
+          "candidate": 18010112.0,
+          "paired_candidate_over_original": 1.0006879321718145
+        },
+        "peak_commit": {
+          "original": 10221568.0,
+          "candidate": 10209280.0,
+          "paired_candidate_over_original": 1.0014200069733206
+        }
+      },
+      "composed_over_stock": {
+        "load_ms": {
+          "original": 148.5135,
+          "candidate": 81.21289999999999,
+          "paired_candidate_over_original": 0.5454234635140256
+        },
+        "peak_working_set": {
+          "original": 85700608.0,
+          "candidate": 18010112.0,
+          "paired_candidate_over_original": 0.21021180675015733
+        },
+        "peak_commit": {
+          "original": 81377280.0,
+          "candidate": 10209280.0,
+          "paired_candidate_over_original": 0.12546561870265607
+        }
+      }
+    },
+    {
+      "name": "large",
+      "entries": 29187,
+      "bytes": 57357214,
+      "richness": 7,
+      "sha256": "5979a6d33558bd65a7c93125c0cb9f5644fee792774448be6502d7740dc785ad",
+      "warmup": {
+        "stock": {
+          "verified": 29187,
+          "load_ms": 806.898,
+          "peak_working_set": 412545024,
+          "peak_commit": 458452992,
+          "admission_commit_gib": 4.575855255126953,
+          "admission_physical_gib": 10.596271514892578
+        },
+        "bounded": {
+          "verified": 29187,
+          "load_ms": 480.219,
+          "peak_working_set": 41795584,
+          "peak_commit": 34664448,
+          "admission_commit_gib": 4.574733734130859,
+          "admission_physical_gib": 10.59530258178711
+        },
+        "composed": {
+          "verified": 29187,
+          "load_ms": 443.958,
+          "peak_working_set": 41824256,
+          "peak_commit": 34779136,
+          "admission_commit_gib": 4.584747314453125,
+          "admission_physical_gib": 10.604743957519531
+        }
+      },
+      "pairs": [
+        {
+          "order": [
+            "stock",
+            "bounded",
+            "composed"
+          ],
+          "samples": {
+            "stock": {
+              "verified": 29187,
+              "load_ms": 803.104,
+              "peak_working_set": 412778496,
+              "peak_commit": 459788288,
+              "admission_commit_gib": 3.57440185546875,
+              "admission_physical_gib": 10.400726318359375
+            },
+            "bounded": {
+              "verified": 29187,
+              "load_ms": 474.387,
+              "peak_working_set": 41824256,
+              "peak_commit": 34676736,
+              "admission_commit_gib": 3.5727882385253906,
+              "admission_physical_gib": 9.593734741210938
+            },
+            "composed": {
+              "verified": 29187,
+              "load_ms": 439.801,
+              "peak_working_set": 41844736,
+              "peak_commit": 34684928,
+              "admission_commit_gib": 4.572914123535156,
+              "admission_physical_gib": 10.593280792236328
+            }
+          }
+        },
+        {
+          "order": [
+            "stock",
+            "composed",
+            "bounded"
+          ],
+          "samples": {
+            "stock": {
+              "verified": 29187,
+              "load_ms": 804.422,
+              "peak_working_set": 412475392,
+              "peak_commit": 458108928,
+              "admission_commit_gib": 3.5583343505859375,
+              "admission_physical_gib": 9.856639862060547
+            },
+            "composed": {
+              "verified": 29187,
+              "load_ms": 444.25,
+              "peak_working_set": 41877504,
+              "peak_commit": 34779136,
+              "admission_commit_gib": 3.4999656677246094,
+              "admission_physical_gib": 9.578010559082031
+            },
+            "bounded": {
+              "verified": 29187,
+              "load_ms": 466.971,
+              "peak_working_set": 41852928,
+              "peak_commit": 34742272,
+              "admission_commit_gib": 3.5025558471679688,
+              "admission_physical_gib": 10.033584594726562
+            }
+          }
+        },
+        {
+          "order": [
+            "bounded",
+            "stock",
+            "composed"
+          ],
+          "samples": {
+            "bounded": {
+              "verified": 29187,
+              "load_ms": 463.785,
+              "peak_working_set": 41734144,
+              "peak_commit": 34639872,
+              "admission_commit_gib": 3.518798828125,
+              "admission_physical_gib": 9.594329833984375
+            },
+            "stock": {
+              "verified": 29187,
+              "load_ms": 802.793,
+              "peak_working_set": 412692480,
+              "peak_commit": 459079680,
+              "admission_commit_gib": 3.5214576721191406,
+              "admission_physical_gib": 9.595626831054688
+            },
+            "composed": {
+              "verified": 29187,
+              "load_ms": 439.527,
+              "peak_working_set": 41795584,
+              "peak_commit": 34664448,
+              "admission_commit_gib": 3.5168609619140625,
+              "admission_physical_gib": 9.589836120605469
+            }
+          }
+        },
+        {
+          "order": [
+            "bounded",
+            "composed",
+            "stock"
+          ],
+          "samples": {
+            "bounded": {
+              "verified": 29187,
+              "load_ms": 475.989,
+              "peak_working_set": 41742336,
+              "peak_commit": 34594816,
+              "admission_commit_gib": 3.5233421325683594,
+              "admission_physical_gib": 9.594635009765625
+            },
+            "composed": {
+              "verified": 29187,
+              "load_ms": 441.558,
+              "peak_working_set": 41787392,
+              "peak_commit": 34672640,
+              "admission_commit_gib": 3.515735626220703,
+              "admission_physical_gib": 10.071880340576172
+            },
+            "stock": {
+              "verified": 29187,
+              "load_ms": 802.767,
+              "peak_working_set": 412938240,
+              "peak_commit": 459223040,
+              "admission_commit_gib": 3.5398635864257812,
+              "admission_physical_gib": 9.601387023925781
+            }
+          }
+        },
+        {
+          "order": [
+            "composed",
+            "stock",
+            "bounded"
+          ],
+          "samples": {
+            "composed": {
+              "verified": 29187,
+              "load_ms": 443.482,
+              "peak_working_set": 41787392,
+              "peak_commit": 34656256,
+              "admission_commit_gib": 3.5769729614257812,
+              "admission_physical_gib": 10.255538940429688
+            },
+            "stock": {
+              "verified": 29187,
+              "load_ms": 795.768,
+              "peak_working_set": 413601792,
+              "peak_commit": 459681792,
+              "admission_commit_gib": 3.580341339111328,
+              "admission_physical_gib": 9.599807739257812
+            },
+            "bounded": {
+              "verified": 29187,
+              "load_ms": 467.535,
+              "peak_working_set": 41717760,
+              "peak_commit": 34586624,
+              "admission_commit_gib": 4.581081390380859,
+              "admission_physical_gib": 10.595184326171875
+            }
+          }
+        },
+        {
+          "order": [
+            "composed",
+            "bounded",
+            "stock"
+          ],
+          "samples": {
+            "composed": {
+              "verified": 29187,
+              "load_ms": 457.415,
+              "peak_working_set": 41807872,
+              "peak_commit": 34664448,
+              "admission_commit_gib": 4.5779266357421875,
+              "admission_physical_gib": 10.591793060302734
+            },
+            "bounded": {
+              "verified": 29187,
+              "load_ms": 473.323,
+              "peak_working_set": 41799680,
+              "peak_commit": 34631680,
+              "admission_commit_gib": 4.575569152832031,
+              "admission_physical_gib": 10.591167449951172
+            },
+            "stock": {
+              "verified": 29187,
+              "load_ms": 790.147,
+              "peak_working_set": 412581888,
+              "peak_commit": 458711040,
+              "admission_commit_gib": 3.5819358825683594,
+              "admission_physical_gib": 10.152389526367188
+            }
+          }
+        }
+      ],
+      "bounded_over_stock": {
+        "load_ms": {
+          "original": 802.78,
+          "candidate": 470.429,
+          "paired_candidate_over_original": 0.5891093160784551
+        },
+        "peak_working_set": {
+          "original": 412735488.0,
+          "candidate": 41771008.0,
+          "paired_candidate_over_original": 0.10121947018026764
+        },
+        "peak_commit": {
+          "original": 459151360.0,
+          "candidate": 34635776.0,
+          "paired_candidate_over_original": 0.07543697594076214
+        }
+      },
+      "composed_over_bounded": {
+        "load_ms": {
+          "original": 470.429,
+          "candidate": 442.52,
+          "paired_candidate_over_original": 0.9481245879655027
+        },
+        "peak_working_set": {
+          "original": 41771008.0,
+          "candidate": 41801728.0,
+          "paired_candidate_over_original": 1.0008332914152374
+        },
+        "peak_commit": {
+          "original": 34635776.0,
+          "candidate": 34668544.0,
+          "paired_candidate_over_original": 1.0010036280955907
+        }
+      },
+      "composed_over_stock": {
+        "load_ms": {
+          "original": 802.78,
+          "candidate": 442.52,
+          "paired_candidate_over_original": 0.5511524576202169
+        },
+        "peak_working_set": {
+          "original": 412735488.0,
+          "candidate": 41801728.0,
+          "paired_candidate_over_original": 0.10130383589957295
+        },
+        "peak_commit": {
+          "original": 459151360.0,
+          "candidate": 34668544.0,
+          "paired_candidate_over_original": 0.07550569861207629
+        }
+      }
+    }
+  ],
+  "status": "complete"
+}

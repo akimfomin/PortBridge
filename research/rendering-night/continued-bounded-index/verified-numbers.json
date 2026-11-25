@@ -1,0 +1,8 @@
+{
+  "parser_cases": 111211,
+  "input": "f65db12eb3f82d7adbddbc5079c7dca8f34ed1062ebb3a35ae9fc62187b2fe57",
+  "result_by_variant": {
+    "bounded": "e1a545a9615190bbd647506343f44247154e0c4643c1ba270634b725622b9911",
+    "composed": "e1a545a9615190bbd647506343f44247154e0c4643c1ba270634b725622b9911"
+  }
+}

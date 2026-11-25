@@ -1,0 +1,4 @@
+BOM, duplicate order and split integer/escape/exponent/literal tokens: OK
+late malformed suffix retained previously loaded main index: OK
+nested arrays at and beyond the original hard depth limit: OK
+late read failure retained previously loaded main index: OK

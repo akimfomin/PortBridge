@@ -1,0 +1,324 @@
+--- a/runtime/src/shader_library.h
++++ b/runtime/src/shader_library.h
+@@ -15,6 +15,7 @@
+ #include <array>
+ #include <bit>
+ #include <cerrno>
++#include <cstdio>
+ #include <cstdint>
+ #include <cstdlib>
+ #include <cstring>
+@@ -22,12 +23,17 @@
+ #include <fstream>
+ #include <iterator>
+ #include <map>
++#include <memory>
+ #include <span>
+ #include <string>
+ #include <string_view>
+ #include <tuple>
+ #include <utility>
+ #include <vector>
++
++#ifdef _WIN32
++#include <share.h>
++#endif
+ 
+ namespace leonida {
+ 
+@@ -478,93 +484,136 @@
+     return nullptr;
+ }
+ 
+-class JsonReader {
++struct JsonViewInput {
++    using Source = std::string_view;
++    explicit JsonViewInput(Source source) : pending(source) {}
++    bool need(std::size_t count) const { return pending.size() >= count; }
++    bool failed() const { return false; }
++    std::string_view pending;
++};
++
++// One fixed read block plus the parser's current value. No view is held across a refill.
++class JsonFileInput {
+ public:
+-    explicit JsonReader(std::string_view text) : text_(text) {}
++    using Source = std::FILE*;
++    static constexpr std::size_t chunk_size = 16 * 1024;
++    explicit JsonFileInput(Source source) : file_(source) {
++        constexpr std::string_view bom = "\xef\xbb\xbf";
++        if (need(bom.size()) && pending.starts_with(bom)) pending.remove_prefix(bom.size());
++    }
++    JsonFileInput(const JsonFileInput&) = delete;
++    JsonFileInput& operator=(const JsonFileInput&) = delete;
++
++    bool need(std::size_t count) {
++        if (pending.size() >= count) return true;
++        if (ended_) return false;
++        const auto keep = pending.size();
++        if (keep) std::memmove(buffer_.data(), pending.data(), keep);
++        const auto request = buffer_.size() - keep;
++        const auto read = std::fread(buffer_.data() + keep, 1, request, file_);
++        failed_ = std::ferror(file_) != 0;
++        ended_ = read != request || failed_;
++        pending = {buffer_.data(), keep + read};
++        return pending.size() >= count;
++    }
++
++    bool failed() const { return failed_; }
++    std::string_view pending;
++
++private:
++    std::FILE* file_;
++    std::array<char, chunk_size> buffer_;
++    bool ended_ = false;
++    bool failed_ = false;
++};
++
++template<typename Input>
++class BasicJsonReader {
++public:
++    explicit BasicJsonReader(typename Input::Source source) : input_(source) {}
+ 
+     bool parse(Json& out) {
+         if (!value(out, 0)) return false;
+         space();
+-        return pos_ == text_.size();
++        return !input_.need(1) && !input_.failed();
+     }
+ 
+     // Parse the same root object without retaining its completed members.
+     template<typename Member>
+     bool parse_members(Member&& member) {
+         space();
+-        if (pos_ >= text_.size() || text_[pos_++] != '{') return false;
++        if (!input_.need(1) || take() != '{') return false;
+         if (!object_members(member, 0)) return false;
+         space();
+-        return pos_ == text_.size();
+-    }
++        return !input_.need(1) && !input_.failed();
++    }
++
++    bool read_failed() const { return input_.failed(); }
+ 
+ private:
++    char take() {
++        const char value = input_.pending.front();
++        input_.pending.remove_prefix(1);
++        return value;
++    }
++
+     void space() {
+-        while (pos_ < text_.size() && (text_[pos_] == ' ' || text_[pos_] == '\n' || text_[pos_] == '\r' ||
+-                                       text_[pos_] == '\t'))
+-            ++pos_;
++        while (input_.need(1)) {
++            const char c = input_.pending.front();
++            if (c != ' ' && c != '\n' && c != '\r' && c != '\t') return;
++            input_.pending.remove_prefix(1);
++        }
+     }
+ 
+     bool literal(std::string_view word) {
+-        if (text_.substr(pos_, word.size()) != word) return false;
+-        pos_ += word.size();
++        if (!input_.need(word.size()) || !input_.pending.starts_with(word)) return false;
++        input_.pending.remove_prefix(word.size());
+         return true;
+     }
+ 
+     template<typename Member>
+     bool object_members(Member&& member, int depth) {
+         space();
+-        if (pos_ < text_.size() && text_[pos_] == '}') return ++pos_, true;
++        if (literal("}")) return true;
+         for (;;) {
+             space();
+             std::string key;
+             if (!string(key)) return false;
+             space();
+-            if (pos_ >= text_.size() || text_[pos_++] != ':') return false;
++            if (!input_.need(1) || take() != ':') return false;
+             Json item;
+             if (!value(item, depth + 1)) return false;
+             member(std::move(key), std::move(item));
+             space();
+-            if (pos_ >= text_.size()) return false;
+-            if (text_[pos_] == ',') {
+-                ++pos_;
+-                continue;
+-            }
+-            return text_[pos_++] == '}';
++            if (literal(",")) continue;
++            return literal("}");
+         }
+     }
+ 
+     bool value(Json& out, int depth) {
+         if (depth > 64) return false;
+         space();
+-        if (pos_ >= text_.size()) return false;
+-        const char c = text_[pos_];
+-        if (c == '{') {
++        if (!input_.need(1)) return false;
++        if (literal("{")) {
+             out.kind = Json::Kind::object;
+-            ++pos_;
+             return object_members([&](std::string&& key, Json&& item) {
+                 out.object.emplace_back(std::move(key), std::move(item));
+             }, depth);
+         }
+-        if (c == '[') {
++        if (literal("[")) {
+             out.kind = Json::Kind::array;
+-            ++pos_;
+             space();
+-            if (pos_ < text_.size() && text_[pos_] == ']') return ++pos_, true;
++            if (literal("]")) return true;
+             for (;;) {
+                 Json item;
+                 if (!value(item, depth + 1)) return false;
+                 out.array.push_back(std::move(item));
+                 space();
+-                if (pos_ >= text_.size()) return false;
+-                if (text_[pos_] == ',') {
+-                    ++pos_;
+-                    continue;
+-                }
+-                return text_[pos_++] == ']';
+-            }
+-        }
+-        if (c == '"') {
++                if (literal(",")) continue;
++                return literal("]");
++            }
++        }
++        if (input_.pending.front() == '"') {
+             out.kind = Json::Kind::string;
+             return string(out.string);
+         }
+@@ -573,11 +622,17 @@
+         if (literal("null")) return out.kind = Json::Kind::null, true;
+         // Numbers through strtod: Apple's libc++ does not provide the floating-point from_chars overload. The
+         // token is already limited to JSON number characters, and the end check requires all of it to be consumed.
+-        const std::size_t start = pos_;
+-        while (pos_ < text_.size() && std::strchr("+-0123456789.eE", text_[pos_])) ++pos_;
+-        if (pos_ == start) return false;
++        std::string token;
++        while (input_.need(1)) {
++            const auto chunk = input_.pending;
++            std::size_t length = 0;
++            while (length < chunk.size() && std::strchr("+-0123456789.eE", chunk[length])) ++length;
++            token.append(chunk.data(), length);
++            input_.pending.remove_prefix(length);
++            if (length != chunk.size()) break;
++        }
++        if (token.empty()) return false;
+         out.kind = Json::Kind::number;
+-        const std::string token(text_.substr(start, pos_ - start));
+         char* end = nullptr;
+         errno = 0;
+         out.number = std::strtod(token.c_str(), &end);
+@@ -592,16 +647,16 @@
+     }
+ 
+     bool string(std::string& out) {
+-        if (pos_ >= text_.size() || text_[pos_++] != '"') return false;
+-        while (pos_ < text_.size()) {
+-            const char c = text_[pos_++];
++        if (!input_.need(1) || take() != '"') return false;
++        while (input_.need(1)) {
++            const char c = take();
+             if (c == '"') return true;
+             if (c != '\\') {
+                 out.push_back(c);
+                 continue;
+             }
+-            if (pos_ >= text_.size()) return false;
+-            const char e = text_[pos_++];
++            if (!input_.need(1)) return false;
++            const char e = take();
+             switch (e) {
+             case '"': case '\\': case '/': out.push_back(e); break;
+             case 'b': out.push_back('\b'); break;
+@@ -610,10 +665,10 @@
+             case 'r': out.push_back('\r'); break;
+             case 't': out.push_back('\t'); break;
+             case 'u': {
+-                if (pos_ + 4 > text_.size()) return false;
++                if (!input_.need(4)) return false;
+                 unsigned code = 0;
+                 for (int i = 0; i < 4; ++i) {  // exactly four hex digits
+-                    const int digit = hex_digit(text_[pos_++]);
++                    const int digit = hex_digit(take());
+                     if (digit < 0) return false;
+                     code = code << 4 | unsigned(digit);
+                 }
+@@ -635,9 +690,11 @@
+         return false;
+     }
+ 
+-    std::string_view text_;
+-    std::size_t pos_ = 0;
++    Input input_;
+ };
++
++using JsonReader = BasicJsonReader<JsonViewInput>;
++using JsonFileReader = BasicJsonReader<JsonFileInput>;
+ 
+ // ---------------------------------------------------------------------------------------------------------------
+ // DXBC containers and the FSSM program
+@@ -1138,15 +1195,10 @@
+     template<typename Fail>
+     bool load_index(const std::filesystem::path& dir, const std::string& prefix, Fail&& fail) {
+         const auto index = dir / "index.json";
+-        std::ifstream file(index, std::ios::binary);
+-        if (!file) {
++        const auto cannot_open = [&] {
+             const auto path = index.u8string();
+             return fail("cannot open " + std::string(path.begin(), path.end()));
+-        }
+-        const std::string text((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+-        constexpr std::string_view utf8_bom = "\xef\xbb\xbf";
+-        std::string_view json(text);
+-        if (json.starts_with(utf8_bom)) json.remove_prefix(utf8_bom.size());
++        };
+         const auto add_entry = [&](ShaderLibrary& target, const std::string& name, const Json& meta) {
+             const Json* hash = meta.find("fssm_sha256");
+             const Json* code_hash = meta.find("fspx_code_sha256");
+@@ -1245,6 +1297,12 @@
+             ++target.count_;
+         };
+         if (!prefix.empty()) {
++            std::ifstream file(index, std::ios::binary);
++            if (!file) return cannot_open();
++            const std::string text((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
++            constexpr std::string_view utf8_bom = "\xef\xbb\xbf";
++            std::string_view json(text);
++            if (json.starts_with(utf8_bom)) json.remove_prefix(utf8_bom.size());
+             Json root;
+             if (!JsonReader(json).parse(root) || root.kind != Json::Kind::object)
+                 return fail("index.json is not a JSON object");
+@@ -1253,10 +1311,19 @@
+         }
+ 
+         // Publish the new main index only after the complete document has parsed.
++#ifdef _WIN32
++        auto* handle = _wfsopen(index.c_str(), L"rb", _SH_DENYNO);
++#else
++        auto* handle = std::fopen(index.c_str(), "rb");
++#endif
++        const auto close = [](std::FILE* file) { std::fclose(file); };
++        std::unique_ptr<std::FILE, decltype(close)> file(handle, close);
++        if (!file) return cannot_open();
+         ShaderLibrary staged;
+-        if (!JsonReader(json).parse_members([&](const std::string& name, const Json& meta) {
++        JsonFileReader reader(file.get());
++        if (!reader.parse_members([&](const std::string& name, const Json& meta) {
+                 add_entry(staged, name, meta);
+-            })) return fail("index.json is not a JSON object");
++            })) return fail(reader.read_failed() ? "index.json could not be read" : "index.json is not a JSON object");
+         staged.dir_ = dir;
+         dir_.swap(staged.dir_);
+         entries_.swap(staged.entries_);

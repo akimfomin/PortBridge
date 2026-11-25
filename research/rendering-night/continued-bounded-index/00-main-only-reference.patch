@@ -1,0 +1,186 @@
+--- a/runtime/src/shader_library.h
++++ b/runtime/src/shader_library.h
+@@ -488,6 +488,16 @@
+         return pos_ == text_.size();
+     }
+ 
++    // Parse the same root object without retaining its completed members.
++    template<typename Member>
++    bool parse_members(Member&& member) {
++        space();
++        if (pos_ >= text_.size() || text_[pos_++] != '{') return false;
++        if (!object_members(member, 0)) return false;
++        space();
++        return pos_ == text_.size();
++    }
++
+ private:
+     void space() {
+         while (pos_ < text_.size() && (text_[pos_] == ' ' || text_[pos_] == '\n' || text_[pos_] == '\r' ||
+@@ -499,6 +509,29 @@
+         if (text_.substr(pos_, word.size()) != word) return false;
+         pos_ += word.size();
+         return true;
++    }
++
++    template<typename Member>
++    bool object_members(Member&& member, int depth) {
++        space();
++        if (pos_ < text_.size() && text_[pos_] == '}') return ++pos_, true;
++        for (;;) {
++            space();
++            std::string key;
++            if (!string(key)) return false;
++            space();
++            if (pos_ >= text_.size() || text_[pos_++] != ':') return false;
++            Json item;
++            if (!value(item, depth + 1)) return false;
++            member(std::move(key), std::move(item));
++            space();
++            if (pos_ >= text_.size()) return false;
++            if (text_[pos_] == ',') {
++                ++pos_;
++                continue;
++            }
++            return text_[pos_++] == '}';
++        }
+     }
+ 
+     bool value(Json& out, int depth) {
+@@ -509,25 +542,9 @@
+         if (c == '{') {
+             out.kind = Json::Kind::object;
+             ++pos_;
+-            space();
+-            if (pos_ < text_.size() && text_[pos_] == '}') return ++pos_, true;
+-            for (;;) {
+-                space();
+-                std::string key;
+-                if (!string(key)) return false;
+-                space();
+-                if (pos_ >= text_.size() || text_[pos_++] != ':') return false;
+-                Json item;
+-                if (!value(item, depth + 1)) return false;
++            return object_members([&](std::string&& key, Json&& item) {
+                 out.object.emplace_back(std::move(key), std::move(item));
+-                space();
+-                if (pos_ >= text_.size()) return false;
+-                if (text_[pos_] == ',') {
+-                    ++pos_;
+-                    continue;
+-                }
+-                return text_[pos_++] == '}';
+-            }
++            }, depth);
+         }
+         if (c == '[') {
+             out.kind = Json::Kind::array;
+@@ -1130,27 +1147,13 @@
+         constexpr std::string_view utf8_bom = "\xef\xbb\xbf";
+         std::string_view json(text);
+         if (json.starts_with(utf8_bom)) json.remove_prefix(utf8_bom.size());
+-        Json root;
+-        if (!JsonReader(json).parse(root) || root.kind != Json::Kind::object) return fail("index.json is not a JSON object");
+-        if (prefix.empty()) {
+-            dir_ = dir;
+-            entries_.clear();
+-            fspx_entries_.clear();
+-            count_ = 0;
+-            fspx_count_ = 0;
+-            fspx_compute_count_ = 0;
+-            fspx_gfx_count_ = 0;
+-            bvh_count_ = 0;
+-            exe_count_ = 0;
+-            descriptor_hash_census_ = {};
+-        }
+-        for (const auto& [name, meta] : root.object) {
++        const auto add_entry = [&](ShaderLibrary& target, const std::string& name, const Json& meta) {
+             const Json* hash = meta.find("fssm_sha256");
+             const Json* code_hash = meta.find("fspx_code_sha256");
+             const Json* stage = meta.find("stage");
+             const bool by_fssm = hash && hash->kind == Json::Kind::string;
+             const bool by_fspx = code_hash && code_hash->kind == Json::Kind::string;
+-            if ((!by_fssm && !by_fspx) || !stage || stage->kind != Json::Kind::string) continue;
++            if ((!by_fssm && !by_fspx) || !stage || stage->kind != Json::Kind::string) return;
+             ShaderEntry e;
+             e.name = prefix + name;
+             if (const Json* spv = meta.find("spv"); spv && spv->kind == Json::Kind::string && !spv->string.empty())
+@@ -1229,18 +1232,38 @@
+             // a kind this runtime knows, is the old bare FNV-1a.
+             if (const Json* dh = meta.find("descriptor_hash");
+                 dh && dh->kind == Json::Kind::string && dh->string == "fnv1a_fmix32")
+-                ++descriptor_hash_census_.fnv1a_fmix32;
++                ++target.descriptor_hash_census_.fnv1a_fmix32;
+             else
+-                ++descriptor_hash_census_.fnv1a;
+-            if (by_fspx) fspx_entries_[{e.stage, e.fspx_code_sha256}].push_back(e);
+-            if (by_fssm) entries_[{e.stage, e.fssm_sha256}].push_back(std::move(e));
+-            if (by_fspx && (prefix == "fspx/" || prefix == "library/")) ++fspx_count_;
+-            if (by_fspx && prefix == "fspx_compute/") ++fspx_compute_count_;
+-            if (by_fspx && prefix == "fspx_gfx/") ++fspx_gfx_count_;
+-            if (prefix == "bvh/") ++bvh_count_;
+-            if (prefix == "exe/") ++exe_count_;
+-            ++count_;
+-        }
++                ++target.descriptor_hash_census_.fnv1a;
++            if (by_fspx) target.fspx_entries_[{e.stage, e.fspx_code_sha256}].push_back(e);
++            if (by_fssm) target.entries_[{e.stage, e.fssm_sha256}].push_back(std::move(e));
++            if (by_fspx && (prefix == "fspx/" || prefix == "library/")) ++target.fspx_count_;
++            if (by_fspx && prefix == "fspx_compute/") ++target.fspx_compute_count_;
++            if (by_fspx && prefix == "fspx_gfx/") ++target.fspx_gfx_count_;
++            if (prefix == "bvh/") ++target.bvh_count_;
++            if (prefix == "exe/") ++target.exe_count_;
++            ++target.count_;
++        };
++        if (!prefix.empty()) {
++            Json root;
++            if (!JsonReader(json).parse(root) || root.kind != Json::Kind::object)
++                return fail("index.json is not a JSON object");
++            for (const auto& [name, meta] : root.object) add_entry(*this, name, meta);
++            return true;
++        }
++
++        // Publish the new main index only after the complete document has parsed.
++        ShaderLibrary staged;
++        if (!JsonReader(json).parse_members([&](const std::string& name, const Json& meta) {
++                add_entry(staged, name, meta);
++            })) return fail("index.json is not a JSON object");
++        staged.dir_ = dir;
++        dir_.swap(staged.dir_);
++        entries_.swap(staged.entries_);
++        fspx_entries_.swap(staged.fspx_entries_);
++        count_ = staged.count_;
++        fspx_count_ = fspx_compute_count_ = fspx_gfx_count_ = bvh_count_ = exe_count_ = 0;
++        descriptor_hash_census_ = staged.descriptor_hash_census_;
+         return true;
+     }
+ 
+--- a/runtime/test/shader_library_test.cpp
++++ b/runtime/test/shader_library_test.cpp
+@@ -1153,6 +1153,26 @@
+         CHECK(build({{0, state.data(), 28}, {6, code.data(), code.size()}, {99, kind7.data(), 24}}).empty());
+     }
+ 
++    // A bad tail must not publish any of the entries accepted earlier in the same document.
++    {
++        std::filesystem::create_directories(dir);
++        const auto write_index = [&](std::string_view text) {
++            std::ofstream index(dir / "index.json", std::ios::binary | std::ios::trunc);
++            index << text;
++        };
++        write_index(R"({"first":{"stage":"cs","fssm_sha256":"same"},"second":{"stage":"cs","fssm_sha256":"same"}})");
++        ShaderLibrary stable;
++        CHECK(stable.load(dir, &error));
++        auto matches = stable.candidates("cs", "same");
++        CHECK(matches.size() == 2 && matches[0]->name == "first" && matches[1]->name == "second");
++        write_index(R"({"partial":{"stage":"cs","fssm_sha256":"other"}} trailing)");
++        CHECK(!stable.load(dir, &error));
++        CHECK(stable.size() == 2 && !stable.find("cs", "other"));
++        matches = stable.candidates("cs", "same");
++        CHECK(matches.size() == 2 && matches[0]->name == "first" && matches[1]->name == "second");
++        std::filesystem::remove_all(dir);
++    }
++
+     CHECK(huffman_lut_checks() == 0);
+ 
+     std::printf("SHA-256, inflate (stored/fixed/dynamic), JSON, FSSM extraction, FSPX programs and index lookup OK\n");
