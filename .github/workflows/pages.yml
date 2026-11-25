@@ -22,6 +22,8 @@ jobs:
     timeout-minutes: 8
     permissions:
       contents: read
+      issues: read
+      pull-requests: read
     outputs:
       previous_status: ${{ steps.previous.outputs.previous_status }}
       previous_generation: ${{ steps.previous.outputs.previous_generation }}
@@ -55,7 +57,9 @@ jobs:
           restore-keys: ${{ runner.os }}-portbridge-db-v1-
 
       - name: Refresh Test Lab reports
-        run: python -m portbridge refresh-lab
+        env:
+          PORTBRIDGE_GITHUB_TOKEN: ${{ github.token }}
+        run: python -m portbridge refresh-lab --authenticated
 
       - name: Refresh public GitHub metadata
         if: github.ref == 'refs/heads/main'

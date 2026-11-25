@@ -401,12 +401,12 @@ class _Sync:
             time.sleep(0.25)
         raise Unavailable("GitHub request failed")
 
-    def _require_public(self, repo, *, verify_anonymous=False):
+    def _require_public(self, repo, *, verify_anonymous=False, recheck=False):
         # Authenticated reads check visibility before listing metadata. Anonymous
         # callers may also need an explicit repository check for retained evidence.
         if not self.token and not verify_anonymous:
             return
-        if repo not in self.public_checks:
+        if recheck or repo not in self.public_checks:
             try:
                 data, _ = self._request(f"{API}/repos/{repo}", "core", None)
                 private = _object(data).get("private")

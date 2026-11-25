@@ -1,6 +1,7 @@
 from datetime import datetime
 from hashlib import sha256
 import json
+import os
 from unittest.mock import patch
 
 from portbridge.catalog import ReadOnlyCatalog
@@ -92,6 +93,37 @@ class LabReportsTest(CatalogFixture):
         response = tool.run_tool({"name": "portbridge_lab", "arguments": {"task": FRAMELAB_TASK}})
         self.assertIn(self.card(), snapshot["tasks"])
         self.assertEqual(response["structuredContent"]["tasks"], [self.card()])
+
+    def test_authenticated_scan_rechecks_visibility_and_falls_back_on_scope_errors(self):
+        frame = next(task for task in TASKS if task["id"] == FRAMELAB_TASK)
+        repo_url = f"{API}/repos/{REPO}"
+        visits = []
+
+        def request(sync, url, *_):
+            visits.append((sync.context, url))
+            if url == repo_url:
+                if sync.token and any("/comments?" in path for _, path in visits):
+                    return {"private": True, "visibility": "private"}, {}
+                return {"private": False, "visibility": "public"}, {}
+            return ([comment(1)] if url.startswith(ISSUE + "/comments?") else []), {}
+
+        with patch.dict(os.environ, {"PORTBRIDGE_GITHUB_TOKEN": "test-token"}), \
+                patch("portbridge.lab_reports._Sync._request", request):
+            states = refresh_reports(self.catalog, [frame], authenticated=True)
+        self.assertGreaterEqual(visits.count(("authenticated", repo_url)), 2)
+        self.assertEqual(states[frame["id"]]["reports"], [])
+
+        def denied(sync, url, *_):
+            if sync.token:
+                raise Unavailable("not in token scope", http_status=404)
+            if url == repo_url:
+                return {"private": False, "visibility": "public"}, {}
+            return ([comment(1)] if url.startswith(ISSUE + "/comments?") else []), {}
+
+        with patch.dict(os.environ, {"PORTBRIDGE_GITHUB_TOKEN": "test-token"}), \
+                patch("portbridge.lab_reports._Sync._request", denied):
+            states = refresh_reports(self.catalog, [frame], authenticated=True)
+        self.assertEqual([row["outcome"] for row in states[frame["id"]]["reports"]], ["pass"])
 
     def test_bad_source_incomplete_scope_and_failed_result_do_not_advance(self):
         quoted = comment(4)

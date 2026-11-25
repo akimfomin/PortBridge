@@ -321,7 +321,19 @@ def fetch_comments(sync, source, task):
         data, headers = sync._request(url, "core", None)
         return data, 'rel="next"' in headers.get("Link", "")
 
-    return list(scan_comments(issue, request_page))
+    comments = list(scan_comments(issue, request_page))
+    if sync.token:
+        sync._require_public(repo, recheck=True)
+    return comments
+
+
+def fetch_public_comments(sync, anonymous, source, task):
+    try:
+        return fetch_comments(sync, source, task)
+    except Unavailable as exc:
+        if not sync.token or isinstance(exc, RepositoryNotPublic) or exc.http_status not in {401, 403, 404}:
+            raise
+    return fetch_comments(anonymous, source, task)
 
 
 def coverage_cells(task, reports):
@@ -426,7 +438,7 @@ def save_scan(db, task, record_scope, attempted, *, state, checked, reports, rep
         (task["id"], record_scope, attempted, checked, state, json.dumps(reports), replace, replace))
 
 
-def refresh_reports(catalog, tasks):
+def refresh_reports(catalog, tasks, *, authenticated=False):
     """Scan each reviewed discussion once and retain last complete results per source."""
     sources = {}
     for task in tasks:
@@ -436,7 +448,8 @@ def refresh_reports(catalog, tasks):
     with catalog.connect() as db:
         db.execute(TABLE)
         previous = read_rows(db)
-        sync = _Sync(db, refresh=True, anonymous=True)
+        sync = _Sync(db, refresh=True, anonymous=not authenticated)
+        anonymous = _Sync(db, refresh=True, anonymous=True) if sync.token else sync
         # Oldest scans first so an unavailable or crowded thread cannot
         # continuously starve lower-priority work within GitHub's time budget.
         ordered = sorted(sources, key=lambda source: min(
@@ -448,7 +461,7 @@ def refresh_reports(catalog, tasks):
             attempted = datetime.now(timezone.utc).isoformat()
             # _Sync enforces both the rate-limit pause and the shared deadline.
             try:
-                comments = fetch_comments(sync, source, sources[source][0])
+                comments = fetch_public_comments(sync, anonymous, source, sources[source][0])
             except Unavailable as exc:
                 with db:
                     for task in sources[source]:
@@ -467,7 +480,7 @@ def refresh_reports(catalog, tasks):
                         if clear and source == report_sources(task)[0]:
                             save_scan(db, task, review_scope(report_scope), attempted, state="unavailable",
                                       checked=None, reports=[], replace=True)
-                if exc.http_status == 429 or "rate limit" in str(exc).lower():
+                if not sync.token and (exc.http_status == 429 or "rate limit" in str(exc).lower()):
                     break
             else:
                 checked = datetime.now(timezone.utc).isoformat()

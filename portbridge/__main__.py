@@ -320,7 +320,8 @@ def main(argv=None):
     update = commands.add_parser("incremental", help="index issues and pull requests updated since the last sweep")
     update.add_argument("--pages", type=int, choices=range(1, 11), default=3)
     commands.add_parser("status", help="show cached synchronization status")
-    commands.add_parser("refresh-lab", help="refresh reports for monitored Test Lab checks")
+    lab_refresh = commands.add_parser("refresh-lab", help="refresh reports for monitored Test Lab checks")
+    lab_refresh.add_argument("--authenticated", action="store_true", help="use the configured read token for public reports")
     backup = commands.add_parser("backup", help="write a separate verified SQLite backup of --db")
     backup.add_argument("--out", type=Path, required=True)
     principal = commands.add_parser("exchange-key", help="create a scoped local exchange key")
@@ -372,7 +373,7 @@ def main(argv=None):
         from .lab import TASKS
         from .lab_reports import refresh_reports
 
-        print(json.dumps({"tasks": refresh_reports(catalog, TASKS)}, indent=2, ensure_ascii=True))
+        print(json.dumps({"tasks": refresh_reports(catalog, TASKS, authenticated=args.authenticated)}, indent=2, ensure_ascii=True))
         return 0
     if args.command == "serve":
         serve(catalog, args)
