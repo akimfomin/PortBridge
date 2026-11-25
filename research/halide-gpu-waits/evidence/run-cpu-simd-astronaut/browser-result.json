@@ -1,0 +1,728 @@
+{
+  "ok": true,
+  "report": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+    "imageSha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+    "inputSha256": "e2b5224b845fb38f3b865d458637a1dc208134db741cbf677c03daec11d7a19e",
+    "pairs": 8,
+    "frames": 10,
+    "size": 512,
+    "results": [
+      [
+        {
+          "inputToBitmapMs": 1.2999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1.3999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.3999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.6000000014901161,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 1.5,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 1.3999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.3000000044703484,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 1.5,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 1.2999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.3000000044703484,
+          "inputToResultMs": 0.3999999985098839
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 1.6000000014901161,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 1.2999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1.1999999955296516,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.2999999970197678,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.7999999970197678,
+          "inputToResultMs": 0.6999999955296516
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.6999999955296516,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.30000000447034836
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 1.5,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 1.2000000029802322,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 1.2999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1.2000000029802322,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.1999999955296516,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.4000000059604645
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.6999999955296516,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.6999999955296516,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.29999999701976776
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.3000000044703484,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1.2000000029802322,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 1.4000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.6999999955296516,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.20000000298023224
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.29999999701976776
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.20000000298023224
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.20000000298023224
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.20000000298023224
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.20000000298023224
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.6999999955296516,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.30000000447034836
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.1999999955296516,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.19999999552965164
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 0.7000000029802322,
+          "inputToResultMs": 0.29999999701976776
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.8000000044703484,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.7999999970197678,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.5
+        }
+      ],
+      [
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.30000000447034836
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 0.8999999985098839,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1.1000000014901161,
+          "inputToResultMs": 0.5
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.29999999701976776
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 1,
+          "inputToResultMs": 0.4000000059604645
+        },
+        {
+          "inputToBitmapMs": 1.0999999940395355,
+          "inputToResultMs": 0.3999999985098839
+        },
+        {
+          "inputToBitmapMs": 0.9000000059604645,
+          "inputToResultMs": 0.30000000447034836
+        }
+      ]
+    ],
+    "maxAbsoluteError": 3.305346294446565e-07,
+    "hashes": [
+      [
+        0.550000011920929,
+        "5b315396dae1d31c8378e4faa190b8f38eb66a06b259da78bf17950f71b1f5a1"
+      ],
+      [
+        0.75,
+        "107654259ecb501d9755ecba46242242ced8743671626563568944480fc2093b"
+      ],
+      [
+        1,
+        "7a2d71105ea1410c089367fe72ebb838fa40475f4e26a360ca61b7332dc95581"
+      ],
+      [
+        1.4500000476837158,
+        "7d733dac0ee7fecd83a12aa109e0871733d9cdf7e5bd4f7e540891efc01a9a8d"
+      ],
+      [
+        2.1500000953674316,
+        "e3606c4a16436f1c2796be97ccd91fe00d84f8668472cf5d0f36ff79b6733fcc"
+      ],
+      [
+        2.950000047683716,
+        "6e4d19bde367aec2d571b80e3d98532fa7e971be6bdd69e08dece14ac57725d8"
+      ],
+      [
+        2.549999952316284,
+        "e1d7f21ad385858ede241e424fb9bf412e34d362bbd40461cf9842d084781a4a"
+      ],
+      [
+        1.7999999523162842,
+        "41a158b49e5b616a919db04bc1287e3c68624058cb23f3d25de5b41c2b2b6818"
+      ],
+      [
+        1.25,
+        "a099093ff5aad0590e2fd04c2b07f07f4ef210c48fcd74ed3c4aaa48097e1928"
+      ],
+      [
+        0.6200000047683716,
+        "f2b3e229093c988d9825b7dd47fc0a66b3b4e3ec06750ab8e55b0eededfd21f1"
+      ]
+    ]
+  }
+}

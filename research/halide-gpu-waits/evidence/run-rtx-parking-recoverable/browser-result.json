@@ -1,0 +1,835 @@
+{
+  "ok": true,
+  "report": {
+    "adapter": {
+      "vendor": "nvidia",
+      "architecture": "lovelace",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+    "imageSha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+    "inputSha256": "e2b5224b845fb38f3b865d458637a1dc208134db741cbf677c03daec11d7a19e",
+    "initializeAndUploadMs": 234.5,
+    "pairs": 4,
+    "frames": 3,
+    "size": 512,
+    "trace": true,
+    "sigmas": [
+      0.550000011920929,
+      0.75,
+      1
+    ],
+    "warmup": [
+      {
+        "mode": "stock",
+        "inputToBitmapMs": 74.80000000447035,
+        "inputToReadbackMs": 72.60000000149012,
+        "shaderCreates": 1,
+        "pipelineRequests": 2,
+        "nativePipelineCreates": 2,
+        "errorPops": 16,
+        "submissions": 3,
+        "bufferCopies": 1,
+        "bufferMaps": 1,
+        "pipelineCreateMs": 0.10000000149011612,
+        "errorCallbackMs": 66.60000001639128,
+        "mapCallbackMs": 3.5999999940395355,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 13,
+          "map": 1,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 62.399999998509884,
+          "map": 5.0999999940395355,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse",
+        "inputToBitmapMs": 39.899999998509884,
+        "inputToReadbackMs": 39.099999994039536,
+        "shaderCreates": 0,
+        "pipelineRequests": 2,
+        "nativePipelineCreates": 2,
+        "errorPops": 12,
+        "submissions": 3,
+        "bufferCopies": 1,
+        "bufferMaps": 1,
+        "pipelineCreateMs": 0.20000000298023224,
+        "errorCallbackMs": 17.100000001490116,
+        "mapCallbackMs": 2.600000001490116,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 7,
+          "map": 1,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 33.30000000447035,
+          "map": 4.399999998509884,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "park",
+        "inputToBitmapMs": 6.299999997019768,
+        "inputToReadbackMs": 5.600000001490116,
+        "shaderCreates": 0,
+        "pipelineRequests": 2,
+        "nativePipelineCreates": 2,
+        "errorPops": 12,
+        "submissions": 3,
+        "bufferCopies": 1,
+        "bufferMaps": 1,
+        "pipelineCreateMs": 0.10000000149011612,
+        "errorCallbackMs": 4.699999995529652,
+        "mapCallbackMs": 2.7999999970197678,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse-park",
+        "inputToBitmapMs": 4,
+        "inputToReadbackMs": 3.399999998509884,
+        "shaderCreates": 0,
+        "pipelineRequests": 2,
+        "nativePipelineCreates": 0,
+        "errorPops": 12,
+        "submissions": 3,
+        "bufferCopies": 1,
+        "bufferMaps": 1,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 4.299999989569187,
+        "mapCallbackMs": 0.8999999985098839,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      }
+    ],
+    "results": [
+      {
+        "mode": "stock",
+        "pair": 0,
+        "times": [
+          {
+            "inputToBitmapMs": 22.200000002980232,
+            "inputToReadbackMs": 21.399999998509884
+          },
+          {
+            "inputToBitmapMs": 35.5,
+            "inputToReadbackMs": 34.29999999701977
+          },
+          {
+            "inputToBitmapMs": 36.600000001490116,
+            "inputToReadbackMs": 35.899999998509884
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0.10000000149011612,
+        "errorCallbackMs": 16.000000044703484,
+        "mapCallbackMs": 9.5,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 4,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 71.2999999821186,
+          "map": 16.600000001490116,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse",
+        "pair": 0,
+        "times": [
+          {
+            "inputToBitmapMs": 33.400000005960464,
+            "inputToReadbackMs": 32.600000001490116
+          },
+          {
+            "inputToBitmapMs": 34.79999999701977,
+            "inputToReadbackMs": 34.20000000298023
+          },
+          {
+            "inputToBitmapMs": 33.600000001490116,
+            "inputToReadbackMs": 33
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 12.100000061094761,
+        "mapCallbackMs": 8.5,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 3,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 83.19999998062849,
+          "map": 13.399999998509884,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse-park",
+        "pair": 0,
+        "times": [
+          {
+            "inputToBitmapMs": 6.399999998509884,
+            "inputToReadbackMs": 5.5
+          },
+          {
+            "inputToBitmapMs": 6.100000001490116,
+            "inputToReadbackMs": 5.399999998509884
+          },
+          {
+            "inputToBitmapMs": 6,
+            "inputToReadbackMs": 5.299999997019768
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 10.099999979138374,
+        "mapCallbackMs": 9.399999998509884,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "park",
+        "pair": 0,
+        "times": [
+          {
+            "inputToBitmapMs": 6.399999998509884,
+            "inputToReadbackMs": 5.600000001490116
+          },
+          {
+            "inputToBitmapMs": 5.5,
+            "inputToReadbackMs": 4.899999998509884
+          },
+          {
+            "inputToBitmapMs": 6.100000001490116,
+            "inputToReadbackMs": 5.399999998509884
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0.19999999552965164,
+        "errorCallbackMs": 12.900000013411045,
+        "mapCallbackMs": 7.299999997019768,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse",
+        "pair": 1,
+        "times": [
+          {
+            "inputToBitmapMs": 19.100000001490116,
+            "inputToReadbackMs": 18.399999998509884
+          },
+          {
+            "inputToBitmapMs": 33.70000000298023,
+            "inputToReadbackMs": 33
+          },
+          {
+            "inputToBitmapMs": 32.29999999701977,
+            "inputToReadbackMs": 31.600000001490116
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 11.999999955296516,
+        "mapCallbackMs": 10.300000004470348,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 4,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 65.0999999716878,
+          "map": 14.800000004470348,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "park",
+        "pair": 1,
+        "times": [
+          {
+            "inputToBitmapMs": 5.299999997019768,
+            "inputToReadbackMs": 4.699999995529652
+          },
+          {
+            "inputToBitmapMs": 6.0999999940395355,
+            "inputToReadbackMs": 5.299999997019768
+          },
+          {
+            "inputToBitmapMs": 6.899999998509884,
+            "inputToReadbackMs": 6
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 12,
+        "mapCallbackMs": 8.400000005960464,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "stock",
+        "pair": 1,
+        "times": [
+          {
+            "inputToBitmapMs": 21.69999999552965,
+            "inputToReadbackMs": 20.600000001490116
+          },
+          {
+            "inputToBitmapMs": 33.5,
+            "inputToReadbackMs": 32.899999998509884
+          },
+          {
+            "inputToBitmapMs": 34.79999999701977,
+            "inputToReadbackMs": 34
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0.19999999552965164,
+        "errorCallbackMs": 13.400000005960464,
+        "mapCallbackMs": 8.699999995529652,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 4,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 68.30000003427267,
+          "map": 15.900000005960464,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse-park",
+        "pair": 1,
+        "times": [
+          {
+            "inputToBitmapMs": 5.100000001490116,
+            "inputToReadbackMs": 4.5
+          },
+          {
+            "inputToBitmapMs": 5.200000002980232,
+            "inputToReadbackMs": 4.600000001490116
+          },
+          {
+            "inputToBitmapMs": 5.899999998509884,
+            "inputToReadbackMs": 5
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 10,
+        "mapCallbackMs": 7.5,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "park",
+        "pair": 2,
+        "times": [
+          {
+            "inputToBitmapMs": 6.299999997019768,
+            "inputToReadbackMs": 5.600000001490116
+          },
+          {
+            "inputToBitmapMs": 5.399999998509884,
+            "inputToReadbackMs": 4.700000002980232
+          },
+          {
+            "inputToBitmapMs": 5.699999995529652,
+            "inputToReadbackMs": 5.100000001490116
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0.30000000447034836,
+        "errorCallbackMs": 12.400000013411045,
+        "mapCallbackMs": 7.699999995529652,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse-park",
+        "pair": 2,
+        "times": [
+          {
+            "inputToBitmapMs": 5.200000002980232,
+            "inputToReadbackMs": 4.700000002980232
+          },
+          {
+            "inputToBitmapMs": 5.199999995529652,
+            "inputToReadbackMs": 4.699999995529652
+          },
+          {
+            "inputToBitmapMs": 4.799999997019768,
+            "inputToReadbackMs": 4.100000001490116
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 8.19999998062849,
+        "mapCallbackMs": 7.800000004470348,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse",
+        "pair": 2,
+        "times": [
+          {
+            "inputToBitmapMs": 22.600000001490116,
+            "inputToReadbackMs": 21.80000000447035
+          },
+          {
+            "inputToBitmapMs": 34,
+            "inputToReadbackMs": 33.29999999701977
+          },
+          {
+            "inputToBitmapMs": 34.399999998509884,
+            "inputToReadbackMs": 33.69999999552965
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 10.299999959766865,
+        "mapCallbackMs": 7.700000002980232,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 4,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 69.49999998509884,
+          "map": 16.299999997019768,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "stock",
+        "pair": 2,
+        "times": [
+          {
+            "inputToBitmapMs": 36.599999994039536,
+            "inputToReadbackMs": 35.79999999701977
+          },
+          {
+            "inputToBitmapMs": 33.5,
+            "inputToReadbackMs": 32.899999998509884
+          },
+          {
+            "inputToBitmapMs": 35,
+            "inputToReadbackMs": 34.399999998509884
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0.10000000149011612,
+        "errorCallbackMs": 14.400000020861626,
+        "mapCallbackMs": 9.700000002980232,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 3,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 87.39999997615814,
+          "map": 13.199999995529652,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse-park",
+        "pair": 3,
+        "times": [
+          {
+            "inputToBitmapMs": 5.699999995529652,
+            "inputToReadbackMs": 4.899999998509884
+          },
+          {
+            "inputToBitmapMs": 6.699999995529652,
+            "inputToReadbackMs": 6.0999999940395355
+          },
+          {
+            "inputToBitmapMs": 5.399999998509884,
+            "inputToReadbackMs": 4.700000002980232
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 7.700000010430813,
+        "mapCallbackMs": 10.799999997019768,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "stock",
+        "pair": 3,
+        "times": [
+          {
+            "inputToBitmapMs": 21.399999998509884,
+            "inputToReadbackMs": 20.69999999552965
+          },
+          {
+            "inputToBitmapMs": 34.600000001490116,
+            "inputToReadbackMs": 33.900000005960464
+          },
+          {
+            "inputToBitmapMs": 35.100000001490116,
+            "inputToReadbackMs": 34.29999999701977
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 14.000000037252903,
+        "mapCallbackMs": 9.100000001490116,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 4,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 69.60000001639128,
+          "map": 15.50000000745058,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "park",
+        "pair": 3,
+        "times": [
+          {
+            "inputToBitmapMs": 6.399999998509884,
+            "inputToReadbackMs": 5.700000002980232
+          },
+          {
+            "inputToBitmapMs": 6.199999995529652,
+            "inputToReadbackMs": 5.5
+          },
+          {
+            "inputToBitmapMs": 5.600000001490116,
+            "inputToReadbackMs": 4.9000000059604645
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 6,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0.10000000149011612,
+        "errorCallbackMs": 10.699999995529652,
+        "mapCallbackMs": 9.399999998509884,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 0,
+          "map": 0,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      },
+      {
+        "mode": "reuse",
+        "pair": 3,
+        "times": [
+          {
+            "inputToBitmapMs": 21.30000000447035,
+            "inputToReadbackMs": 20.5
+          },
+          {
+            "inputToBitmapMs": 34.20000000298023,
+            "inputToReadbackMs": 33.5
+          },
+          {
+            "inputToBitmapMs": 34,
+            "inputToReadbackMs": 33.19999999552965
+          }
+        ],
+        "maxAbsoluteError": 2.611916953831894e-07,
+        "shaderCreates": 0,
+        "pipelineRequests": 6,
+        "nativePipelineCreates": 0,
+        "errorPops": 36,
+        "submissions": 9,
+        "bufferCopies": 3,
+        "bufferMaps": 3,
+        "pipelineCreateMs": 0,
+        "errorCallbackMs": 11.200000084936619,
+        "mapCallbackMs": 7.800000004470348,
+        "gpuErrors": 0,
+        "pollCounts": {
+          "scope": 18,
+          "map": 4,
+          "other": 0
+        },
+        "pollMs": {
+          "scope": 68.59999998658895,
+          "map": 15.799999997019768,
+          "other": 0
+        },
+        "distinctDescriptors": 2
+      }
+    ],
+    "errors": [
+      {
+        "variant": "stock",
+        "status": -1,
+        "log": [
+          "WGPU: validation error: Entry point \"\"portbridge_missing_test_entry\"\" doesn't exist in the shader module [ShaderModule (unlabeled)].",
+          " - While validating compute stage ([ShaderModule (unlabeled)], entryPoint: \"portbridge_missing_test_entry\").",
+          " - While calling [Device].CreateComputePipeline([ComputePipelineDescriptor]).",
+          "",
+          ""
+        ],
+        "recoveryHash": "3daccbe5acd0060326889e9a2b81689e0c461bda84009d118b76dd06f5c16f82",
+        "errorPops": 8
+      },
+      {
+        "variant": "park",
+        "status": -1,
+        "log": [
+          "WGPU: validation error: Entry point \"\"portbridge_missing_test_entry\"\" doesn't exist in the shader module [ShaderModule (unlabeled)].",
+          " - While validating compute stage ([ShaderModule (unlabeled)], entryPoint: \"portbridge_missing_test_entry\").",
+          " - While calling [Device].CreateComputePipeline([ComputePipelineDescriptor]).",
+          "",
+          ""
+        ],
+        "recoveryHash": "3daccbe5acd0060326889e9a2b81689e0c461bda84009d118b76dd06f5c16f82",
+        "errorPops": 8
+      }
+    ],
+    "hashes": [
+      [
+        0.550000011920929,
+        "3daccbe5acd0060326889e9a2b81689e0c461bda84009d118b76dd06f5c16f82"
+      ],
+      [
+        0.75,
+        "98b21a864fd5ffb8d54957c61ba0b8aeba5407f49e5044234f1c6c8907cf2490"
+      ],
+      [
+        1,
+        "3de1ac1825ee3d5afcecb068bb9b3a6e9446b7b64652880a7a7b20f66019095d"
+      ]
+    ]
+  }
+}

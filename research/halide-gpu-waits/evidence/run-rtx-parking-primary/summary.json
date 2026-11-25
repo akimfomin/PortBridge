@@ -1,0 +1,116 @@
+{
+  "adapter_attestation": {
+    "inventory_reference": {
+      "name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "pci": "0x270510DE",
+      "driver": "617.14"
+    },
+    "browser": {
+      "vendor": "nvidia",
+      "architecture": "lovelace",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "evidence": "single NVIDIA card and matching Ada architecture"
+  },
+  "browser_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+  "scope": "Sigma change through Halide/WebGPU to synchronized float readback and canvas bitmap",
+  "pairs": 8,
+  "frames_per_variant_per_pair": 10,
+  "verified_values": 83886080,
+  "max_absolute_error": 3.158112169554528e-07,
+  "image_file_sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+  "input_luma_sha256": "e2b5224b845fb38f3b865d458637a1dc208134db741cbf677c03daec11d7a19e",
+  "bitmap_ms": {
+    "stock": 33.69000000022352,
+    "reuse": 33.080000000074506,
+    "park": 5.70000000037253,
+    "reuse-park": 5.505000000819564
+  },
+  "bitmap_ms_per_round": {
+    "stock": [
+      34.020000000298026,
+      33.269999999552965,
+      34.42000000104308,
+      33.22000000029802,
+      34.46999999955297,
+      33.360000000149014,
+      34.53999999985099,
+      33.12999999970198
+    ],
+    "reuse": [
+      34.770000000298026,
+      33.46999999955297,
+      33.08999999910593,
+      33.070000001043084,
+      33.169999999552964,
+      32.9,
+      32.97000000029802,
+      32.830000000447036
+    ],
+    "park": [
+      5.5,
+      6.020000001788139,
+      6.099999999254942,
+      5.850000000745058,
+      5.58999999910593,
+      5.3699999988079075,
+      5.789999999850989,
+      5.61000000089407
+    ],
+    "reuse-park": [
+      5.66000000089407,
+      5.820000000298023,
+      5.550000001490116,
+      5.910000000149012,
+      5.460000000149011,
+      5.249999999254942,
+      5.439999999105931,
+      5.3300000004470345
+    ]
+  },
+  "readback_ms": {
+    "stock": 33.09500000029803,
+    "reuse": 32.53999999910593,
+    "park": 5.175000000372529,
+    "reuse-park": 4.919999999180437
+  },
+  "reuse_to_reuse_park_paired_ratio": 6.067876670300322,
+  "webgpu_calls_per_preview": {
+    "stock": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 2.0
+    },
+    "reuse": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 0.0
+    },
+    "park": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 2.0
+    },
+    "reuse-park": {
+      "pipelineRequests": 2.0,
+      "errorPops": 12.0,
+      "submissions": 3.0,
+      "bufferCopies": 1.0,
+      "bufferMaps": 1.0,
+      "nativePipelineCreates": 0.0
+    }
+  },
+  "wasm_file_sha256": "d7c2d3f620568ae48d25c365c35678bd80ded6ecb0195680d5117697fa65514d",
+  "collected_utc": "2026-11-25T18:22:55.164606+00:00"
+}
