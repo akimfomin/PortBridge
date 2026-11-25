@@ -59,6 +59,8 @@ python -B native_experiment.py run inputs-821 build-821/native_probe.exe timing-
 
 ## Acceptance boundary
 
+The [full open-scene replay](full-scene/README.md) extends this fixture to 49 real indexed draws and a measured process-memory boundary. It includes stronger comparators with both the first-frame requirements known and an application cache already populated.
+
 Use the same cache state, workers, key identities and resource envelope across comparisons. Confirm every required dispatch or draw by observing its output. Keep first-use latency, compile-queue time, pipeline creation and GPU completion separate. Record peak measured process commit separately from the estimate accounting. Vulkan pipeline creation feedback can attest an application-cache hit when its valid bit is present. The driver may have additional internal caches. [Khronos creation feedback](https://docs.vulkan.org/refpages/latest/refpages/source/VkPipelineCreationFeedbackCreateInfo.html) · [Khronos cache sample](https://docs.vulkan.org/samples/latest/samples/performance/pipeline_cache/README.html)
 
 Next within this track is a matching open full workload with observed required-pipeline timing and measured memory. Compare fixed headroom with an externally triggered reserve and with the strongest existing warming policy. Hold the candidate at research-stage until the output matches, first-output tail improves, and warmup and completion costs are recorded on the same workload.
