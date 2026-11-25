@@ -1,0 +1,3 @@
+case,baseline_ns,candidate_ns,speedup
+rgba4k,273925250,226421550,1.21
+rgba1080_odd,72327400,60443000,1.20

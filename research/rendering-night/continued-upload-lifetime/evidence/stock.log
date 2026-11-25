@@ -1,0 +1,3 @@
+failed_wait_grow=0 overwrite_while_pending=1 destroy_while_pending=0 queries=0
+failed_wait_grow=1 overwrite_while_pending=1 destroy_while_pending=2 queries=0
+healthy_reuse_no_query=ok queue_reject_reuse=ok completed_unpublished_reuse=ok

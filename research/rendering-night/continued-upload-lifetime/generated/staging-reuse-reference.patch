@@ -1,0 +1,66 @@
+--- a/runtime/shims/d3d12_title_image_upload.h
++++ b/runtime/shims/d3d12_title_image_upload.h
+@@ -11,6 +11,14 @@
+ class TitleImageUpload {
+ public:
+     VkDeviceSize capacity() const { return capacity_; }
++
++    // Access under the existing title-texture registry lock.
++    struct Progress {
++        std::uint64_t accepted = 0;
++        std::uint64_t completed = 0;
++        std::uint64_t published = 0;
++    };
++    Progress progress() const { return progress_; }
+ 
+     template<class Device>
+     void release(Device& d) {
+@@ -107,6 +115,17 @@
+ 
+     template<class Device>
+     bool prepare(Device& d, VkDeviceSize size) {
++        if (d.context->is_device_lost()) return false;
++        if (progress_.accepted != progress_.completed) {
++            // A failed host wait can leave the old buffer and command pending.
++            // Query that exact submission before mapping, overwriting or growing staging.
++            std::uint64_t observed = 0;
++            const auto r = d.context->observe_result(
++                d.context->vk.vkGetSemaphoreCounterValue(d.info.device, ready_, &observed),
++                "vkGetSemaphoreCounterValue (title staging reuse)");
++            if (r != VK_SUCCESS || observed < progress_.accepted) return false;
++            progress_.completed = progress_.accepted;
++        }
+         auto& vk = d.context->vk;
+         const auto dev = d.info.device;
+         if (!pool_) {
+@@ -166,12 +185,14 @@
+         transfer.pSignalSemaphores = &ready_;
+         auto r = vk.vkQueueSubmit(d.info.queue, 1, &transfer, VK_NULL_HANDLE);
+         if (r != VK_SUCCESS) return r;
++        progress_.accepted = value_;
+         // The registry may reuse these mapped bytes or retire the image as soon as write() returns.
+         VkSemaphoreWaitInfo done{VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO};
+         done.semaphoreCount = 1;
+         done.pSemaphores = &ready_;
+         done.pValues = &value_;
+         if ((r = vk.vkWaitSemaphores(d.info.device, &done, UINT64_MAX)) != VK_SUCCESS) return r;
++        progress_.completed = value_;
+         // GPU writes become visible to later submissions on every other queue. The primary queue has the image barrier.
+         VkTimelineSemaphoreSubmitInfo acquire{VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO};
+         acquire.waitSemaphoreValueCount = 1;
+@@ -183,6 +204,7 @@
+         wait.pWaitDstStageMask = &stages;
+         for (auto q : consumers_)
+             if ((r = vk.vkQueueSubmit(q, 1, &wait, VK_NULL_HANDLE)) != VK_SUCCESS) return r;
++        progress_.published = value_;
+         return VK_SUCCESS;
+     }
+ 
+@@ -194,6 +216,7 @@
+     VkCommandBuffer command_{};
+     VkSemaphore ready_{};
+     std::uint64_t value_ = 0;
++    Progress progress_;
+     std::vector<VkQueue> consumers_;
+     std::vector<VkBufferImageCopy> regions_;
+ };

@@ -1,0 +1,11 @@
+Fixture: exact AnyXboxX BC7 CLI build and fresh-process A/B / B/A exports.
+Minimum admission: 3 GiB free system commit, 6144 MiB available physical RAM.
+
+Before CLI build: free commit 4.00 GiB, available physical 10341 MiB. Both CLI executables built.
+Immediately after build: free commit 2.97 GiB, available physical 9753 MiB. Measurement declined before launching any export child.
+Fresh check after compiler exit: free commit 3.98 GiB, available physical 10323 MiB. One complete timed run launched.
+Run result: 16 successful export children, all output hashes matched within each case. Both reference PNG files passed independent structural, CRC, and decompression checks.
+
+Exact Windows executables (SHA-256, not included):
+df5b08c7498aee93df98ebedcc76b3308d41cc85a9903a84a3a80a91c81a143c  cli-baseline.exe
+f6e4bd546912b53f6822c0f1eea2eda454d306865f3a7d5d1698fab9799cba1b  cli-candidate.exe
