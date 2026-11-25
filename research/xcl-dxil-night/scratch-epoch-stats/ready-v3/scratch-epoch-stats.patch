@@ -1,0 +1,116 @@
+diff --git a/crates/xcl/src/hle/d3d12x/real/dispatch_chain.rs b/crates/xcl/src/hle/d3d12x/real/dispatch_chain.rs
+--- a/crates/xcl/src/hle/d3d12x/real/dispatch_chain.rs
++++ b/crates/xcl/src/hle/d3d12x/real/dispatch_chain.rs
+@@ -7,10 +7,23 @@
+ static PROGRAMS: AtomicU64 = AtomicU64::new(0);
+ static PIECES: AtomicU64 = AtomicU64::new(0);
+ static DISPATCHES: AtomicU64 = AtomicU64::new(0);
++static SCRATCH_ALLOCATION_FAILURES: AtomicU64 = AtomicU64::new(0);
++
++fn scratch_stats_enabled() -> bool {
++    static ENABLED: OnceLock<bool> = OnceLock::new();
++    *ENABLED.get_or_init(|| matches!(std::env::var("XCL_SCRATCH_ALLOCATION_STATS").as_deref(), Ok("1")))
++}
+ 
+ pub(crate) fn log_counts() {
+     crate::xlog_info!("compute split: {} programs split, {} pieces built, {} chained dispatches issued",
+         PROGRAMS.load(Ordering::Relaxed), PIECES.load(Ordering::Relaxed), DISPATCHES.load(Ordering::Relaxed));
++    if scratch_stats_enabled() {
++        let active: Vec<_> = RECORDINGS.lock().unwrap().values()
++            .map(|batch| scratch_epoch(batch.iter().filter_map(|record| record.allocation)))
++            .collect();
++        for epoch in active { log_scratch_epoch("active", epoch); }
++        crate::xlog_info!("compute scratch failed creates={}", SCRATCH_ALLOCATION_FAILURES.load(Ordering::Relaxed));
++    }
+ }
+ 
+ struct PipelineBuilder {
+@@ -93,17 +106,57 @@
+     chain.map(|c| c.whole()).transpose()
+ }
+ 
++#[derive(Clone, Copy)]
++struct ScratchAllocation {
++    requested_bytes: u64,
++    create_ns: u64,
++}
++
++#[derive(Default)]
++struct ScratchEpoch {
++    counts: [u64; 4],
++    requested_bytes: u64,
++    create_ns: u64,
++}
++
++fn scratch_epoch(samples: impl Iterator<Item = ScratchAllocation>) -> ScratchEpoch {
++    let mut epoch = ScratchEpoch::default();
++    for allocation in samples {
++        let bucket = match allocation.requested_bytes {
++            0..=65_536 => 0,
++            65_537..=262_144 => 1,
++            262_145..=1_048_576 => 2,
++            _ => 3,
++        };
++        epoch.counts[bucket] = epoch.counts[bucket].saturating_add(1);
++        epoch.requested_bytes = epoch.requested_bytes.saturating_add(allocation.requested_bytes);
++        epoch.create_ns = epoch.create_ns.saturating_add(allocation.create_ns);
++    }
++    epoch
++}
++
++fn log_scratch_epoch(kind: &str, epoch: ScratchEpoch) {
++    if epoch.counts == [0; 4] { return; }
++    crate::xlog_info!("compute scratch {kind}: <=64KiB={} <=256KiB={} <=1MiB={} >1MiB={} requested_bytes={} create_ns={}",
++        epoch.counts[0], epoch.counts[1], epoch.counts[2], epoch.counts[3],
++        epoch.requested_bytes, epoch.create_ns);
++}
++
+ struct Recording {
+     scratch: ID3D12Resource,
+     first: ID3D12PipelineState,
+     chain: Arc<Chain>,
++    allocation: Option<ScratchAllocation>,
+ }
+ 
+ static RECORDINGS: LazyLock<Mutex<HashMap<usize, Vec<Arc<Recording>>>>> = LazyLock::new(Default::default);
+ 
+ pub(in crate::hle::d3d12x) fn allocator_reset(allocator: usize) {
+     let recordings = RECORDINGS.lock().unwrap().remove(&allocator);
++    let epoch = recordings.as_ref().filter(|_| scratch_stats_enabled())
++        .map(|batch| scratch_epoch(batch.iter().filter_map(|record| record.allocation)));
+     drop(recordings);
++    if let Some(epoch) = epoch { log_scratch_epoch("retired", epoch); }
+ }
+ 
+ unsafe fn scratch_buffer(dev: &ID3D12Device, bytes: u64) -> Option<ID3D12Resource> {
+@@ -133,14 +186,27 @@
+     } else { allocator };
+     let size = grid.into_iter().try_fold(u64::from(chain.words) * 4, |s, n| s.checked_mul(n as u64));
+     let scratch = size.filter(|&n| n <= u32::MAX as u64 + 1 && allocator != 0 && list.GetType() != D3D12_COMMAND_LIST_TYPE_BUNDLE)
+-        .and_then(|n| scratch_buffer(&chain.builder.device, n));
+-    let Some(scratch) = scratch else {
++        .and_then(|n| {
++            let started = scratch_stats_enabled().then(std::time::Instant::now);
++            let resource = scratch_buffer(&chain.builder.device, n);
++            let allocation = started.map(|start| {
++                if resource.is_none() {
++                    SCRATCH_ALLOCATION_FAILURES.fetch_add(1, Ordering::Relaxed);
++                }
++                ScratchAllocation {
++                    requested_bytes: n,
++                    create_ns: start.elapsed().as_nanos().min(u64::MAX as u128) as u64,
++                }
++            });
++            resource.map(|scratch| (scratch, allocation))
++        });
++    let Some((scratch, allocation)) = scratch else {
+         list.SetPipelineState(&chain.whole()?);
+         list.Dispatch(x, y, z);
+         return Ok(());
+     };
+     let first = ID3D12PipelineState::from_raw_borrowed(&(pso as *mut c_void)).ok_or("first compute piece")?.clone();
+-    let held = Arc::new(Recording { scratch, first, chain });
++    let held = Arc::new(Recording { scratch, first, chain, allocation });
+     RECORDINGS.lock().unwrap().entry(allocator).or_default().push(held.clone());
+     DISPATCHES.fetch_add(1, Ordering::Relaxed);
+     pso::record_dispatch_chain(list, grid, &held.scratch, std::iter::once(&held.first).chain(&held.chain.tail));
