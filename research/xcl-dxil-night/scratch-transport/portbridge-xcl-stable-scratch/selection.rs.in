@@ -1,0 +1,98 @@
+// SPDX-License-Identifier: GPL-2.0-only
+use std::collections::HashSet;
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+enum Value {
+    Inst(u32),
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+struct Block(u32);
+
+struct Edge {
+    live: Vec<Value>,
+}
+
+struct Plan {
+    blocks: Vec<Vec<Block>>,
+    edges: Vec<Edge>,
+}
+
+#[derive(Clone, Copy)]
+struct Ty(u32);
+enum TypeDef {
+    Int(u32),
+    Float,
+    Struct,
+}
+
+struct Inst {
+    ty: Ty,
+}
+
+struct Module {
+    insts: Vec<Inst>,
+    def_block: Vec<Block>,
+    types: Vec<TypeDef>,
+}
+
+fn inst(v: Value) -> Option<usize> {
+    let Value::Inst(id) = v;
+    Some(id as usize)
+}
+
+/*STABLE_SCRATCH*/
+
+impl Module {
+    fn transport_words(&self, v: Value) -> Option<u32> {
+        match self.types[self.insts[inst(v)?].ty.0 as usize] {
+            TypeDef::Int(1..=32) | TypeDef::Float => Some(1),
+            TypeDef::Int(64) => Some(2),
+            _ => None,
+        }
+    }
+
+/*SELECT*/
+}
+
+fn module() -> Module {
+    Module {
+        def_block: [0, 0, 0, 1, 0, 0].into_iter().map(Block).collect(),
+        insts: [0, 1, 2, 0, 3, 0].into_iter().map(|i| Inst { ty: Ty(i) }).collect(),
+        types: vec![TypeDef::Int(32), TypeDef::Int(64), TypeDef::Float, TypeDef::Struct],
+    }
+}
+
+fn edge(ids: &[u32]) -> Edge {
+    Edge { live: ids.iter().copied().map(Value::Inst).collect() }
+}
+
+fn plan(edges: Vec<Edge>) -> Plan {
+    Plan { blocks: vec![vec![Block(0)], vec![Block(1)], vec![Block(2)]], edges }
+}
+
+#[test]
+fn first_piece_common_scalars_share_prefix_without_growth() {
+    let module = module();
+    let graph = plan(vec![edge(&[0, 1, 2, 3, 4, 5]), edge(&[0, 1, 2, 3, 4]), edge(&[0, 1, 2, 3, 4])]);
+    let stable = module.stable_scratch(&graph).unwrap();
+    assert_eq!(stable.offsets, [(Value::Inst(0), 1), (Value::Inst(1), 2), (Value::Inst(2), 4)]);
+    assert_eq!(stable.dynamic_start, 5);
+    assert_eq!(stable.offset(Value::Inst(5)), None);
+    assert_eq!(stable.offset(Value::Inst(1)), Some(2));
+    for edge in graph.edges {
+        let all: u32 = edge.live.iter().filter_map(|&v| module.transport_words(v)).sum();
+        let var: u32 = edge.live.iter().filter(|&&v| stable.offset(v).is_none())
+            .filter_map(|&v| module.transport_words(v)).sum();
+        assert_eq!(1 + all, stable.dynamic_start + var);
+    }
+}
+
+#[test]
+fn bail_out_to_original_layout_without_universal_word() {
+    let module = module();
+    let mut graph = plan(vec![edge(&[0]), edge(&[1])]);
+    assert_eq!(module.stable_scratch(&graph).unwrap().dynamic_start, 1);
+    graph.blocks.pop();
+    assert_eq!(module.stable_scratch(&graph).unwrap().dynamic_start, 1);
+}

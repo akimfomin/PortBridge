@@ -1,0 +1,141 @@
+diff --git a/crates/xcl/src/gpu/dxil/module/split.rs b/crates/xcl/src/gpu/dxil/module/split.rs
+--- a/crates/xcl/src/gpu/dxil/module/split.rs
++++ b/crates/xcl/src/gpu/dxil/module/split.rs
+@@ -23,6 +23,19 @@
+ pub struct DispatchChain {
+     pub pieces: Vec<Vec<u8>>,
+     pub dwords_per_group: u32,
++}
++
++struct StableScratch {
++    // Sorted by Value, in the same order as Edge::live.
++    offsets: Vec<(Value, u32)>,
++    dynamic_start: u32,
++}
++
++impl StableScratch {
++    fn offset(&self, value: Value) -> Option<u32> {
++        let index = self.offsets.binary_search_by_key(&value, |&(v, _)| v).ok()?;
++        Some(self.offsets[index].1)
++    }
+ }
+ 
+ struct Scratch {
+@@ -113,11 +126,14 @@
+             }
+             stride = stride.max(words);
+         }
+-        let pieces = (0..plan.blocks.len()).map(|i| self.make_piece(&plan, i, stride, threads, &prefix)).collect::<Option<Vec<_>>>()?;
++        let stable = self.m.stable_scratch(&plan)?;
++        let pieces = (0..plan.blocks.len())
++            .map(|i| self.make_piece(&plan, &stable, i, stride, threads, &prefix))
++            .collect::<Option<Vec<_>>>()?;
+         Some(DispatchChain { pieces, dwords_per_group: stride.checked_mul(threads[0])? })
+     }
+ 
+-    fn make_piece(&self, plan: &Plan, stage: usize, stride: u32, threads: [u32; 3], prefix: &[u32]) -> Option<Vec<u8>> {
++    fn make_piece(&self, plan: &Plan, stable: &StableScratch, stage: usize, stride: u32, threads: [u32; 3], prefix: &[u32]) -> Option<Vec<u8>> {
+         let src = &self.m;
+         let mut dst = self.dispatch_piece();
+         let mut values = HashMap::new();
+@@ -147,8 +163,9 @@
+             if let Some(&target) = local.get(&edge.to) {
+                 let bridge = dst.m.new_block();
+                 dst.m.set_block(bridge);
+-                let mut slot = 1;
++                let mut slot = stable.dynamic_start;
+                 for &v in &edge.live {
++                    if stable.offset(v).is_some() { continue; }
+                     let n = src.transport_words(v)?;
+                     if n == 0 {
+                         statics.insert(v);
+@@ -193,6 +210,26 @@
+             }
+             for handle in statics {
+                 src.rebuild_static(handle, &mut dst.m, &mut values)?;
++            }
++
++            if !stable.offsets.is_empty() {
++                let mut used = HashSet::new();
++                for b in &plan.blocks[stage] {
++                    for &id in &src.blocks[b.0 as usize] {
++                        src.insts[id as usize].op.for_each_operand(|v| {
++                            if stable.offset(v).is_some() { used.insert(v); }
++                        });
++                    }
++                }
++                for &(original, slot) in &stable.offsets {
++                    if !used.contains(&original) { continue; }
++                    let n = src.transport_words(original)?;
++                    let words: Vec<_> = (slot..slot + n).map(|word| {
++                        let at = scratch.at(&mut dst.m, word);
++                        dst.raw_load(scratch.uav, at, 1)[0]
++                    }).collect();
++                    values.insert(original, src.unpack(original, &words, &mut dst.m));
++                }
+             }
+             let routes: Vec<_> = paths.iter().map(|&(_, tag, hop)| (tag, hop)).collect();
+             dst.m.switch(sel, done, &routes);
+@@ -244,16 +281,22 @@
+         for edge in &plan.edges {
+             let Some(&(b, tag)) = exits.get(&(edge.from, edge.to)) else { continue };
+             dst.m.set_block(b);
+-            let mut slot = 1;
++            let mut dynamic_slot = stable.dynamic_start;
+             for &v in &edge.live {
+                 let n = src.transport_words(v)?;
+-                if n != 0 {
+-                    let words = src.pack(v, *values.get(&v)?, &mut dst.m);
+-                    for (k, word) in words.into_iter().enumerate() {
+-                        let at = scratch.at(&mut dst.m, slot + k as u32);
+-                        dst.raw_store(scratch.uav, at, &[word]);
+-                    }
+-                    slot += n;
++                if n == 0 { continue; }
++                let slot = if let Some(slot) = stable.offset(v) {
++                    if stage != 0 { continue; }
++                    slot
++                } else {
++                    let slot = dynamic_slot;
++                    dynamic_slot += n;
++                    slot
++                };
++                let words = src.pack(v, *values.get(&v)?, &mut dst.m);
++                for (k, word) in words.into_iter().enumerate() {
++                    let at = scratch.at(&mut dst.m, slot + k as u32);
++                    dst.raw_store(scratch.uav, at, &[word]);
+                 }
+             }
+             dst.raw_store(scratch.uav, scratch.base, &[tag]);
+@@ -328,6 +371,31 @@
+             _ if self.indexed(v).is_some() => Some(1),
+             _ => None,
+         }
++    }
++
++    fn stable_scratch(&self, plan: &Plan) -> Option<StableScratch> {
++        let mut stable = StableScratch { offsets: Vec::new(), dynamic_start: 1 };
++        // Two pieces cannot reuse a value over several crossings.
++        if plan.blocks.len() < 3 { return Some(stable); }
++        let (first, remaining) = plan.edges.split_first()?;
++        let entry_blocks: HashSet<_> = plan.blocks[0].iter().copied().collect();
++        for &value in &first.live {
++            let id = inst(value)?;
++            let ty = self.insts[id].ty;
++            if !entry_blocks.contains(&self.def_block[id]) ||
++                !matches!(self.types[ty.0 as usize], TypeDef::Int(1..=32) | TypeDef::Int(64) | TypeDef::Float)
++            {
++                continue;
++            }
++            // Every lane reaching a later piece carried this value out of
++            // piece zero. Later stores start after these common slots.
++            if remaining.iter().any(|edge| edge.live.binary_search(&value).is_err()) {
++                continue;
++            }
++            stable.offsets.push((value, stable.dynamic_start));
++            stable.dynamic_start = stable.dynamic_start.checked_add(self.transport_words(value)?)?;
++        }
++        Some(stable)
+     }
+ 
+     fn static_handle(&self, v: Value) -> bool {

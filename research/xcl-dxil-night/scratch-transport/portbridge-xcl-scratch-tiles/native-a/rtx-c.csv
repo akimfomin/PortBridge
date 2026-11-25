@@ -1,0 +1,23 @@
+guard=returned reaped=1 peak_job=162787328 exit=0 error=0
+status=1 debug=0 result=00000000 step= frequency=1000000000
+lanes=32 grid=32x4x3 matched_words_per_arm=110592
+lanes=64 grid=64x4x8 matched_words_per_arm=1179648
+lanes,pair,order,scalar_ticks,tiled_ticks
+32,0,ST,9216,5120
+32,1,TS,4096,4096
+32,2,ST,4096,4096
+32,3,TS,4096,4096
+32,4,ST,4096,4096
+32,5,TS,4096,4096
+32,6,ST,4096,4096
+32,7,TS,5120,4096
+32,8,ST,4096,4096
+64,0,TS,56320,31744
+64,1,ST,24576,28672
+64,2,TS,24576,24576
+64,3,ST,24576,23552
+64,4,TS,24576,23552
+64,5,ST,24576,24576
+64,6,TS,24576,24576
+64,7,ST,23552,24576
+64,8,TS,24576,23552

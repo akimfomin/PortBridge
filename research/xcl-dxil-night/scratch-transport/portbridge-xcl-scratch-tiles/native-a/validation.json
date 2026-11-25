@@ -1,0 +1,61 @@
+{
+  "compiler": "dxcompiler.dll: 1.9(5184-21d28f72)(1.9.2602.17) - 1.9.2602.17 (21d28f727)",
+  "shaders": {
+    "send_32_scalar": {
+      "bytes": 7060,
+      "sha256": "1a7a7f77e48596f0174bab999cb7a5c22b40df5bced93a737d3947d757a34e7f",
+      "operation": "rawBufferStore",
+      "calls": 39,
+      "validation": "Validation succeeded."
+    },
+    "receive_32_scalar": {
+      "bytes": 5476,
+      "sha256": "bc7f24c51297670e9eb5ddc6dd25e718e7e633799e5e18c5515e9bfdd77653cd",
+      "operation": "rawBufferLoad",
+      "calls": 39,
+      "validation": "Validation succeeded."
+    },
+    "send_32_tiled": {
+      "bytes": 5336,
+      "sha256": "80b7cb437dd6876f826e77c8bd4a5b0c642dd8ce3f72fd7260ae9fb1b9a91b84",
+      "operation": "rawBufferStore",
+      "calls": 11,
+      "validation": "Validation succeeded."
+    },
+    "receive_32_tiled": {
+      "bytes": 4728,
+      "sha256": "910ab09599b3b165789a2ef98e588a5ab5bb1276c3f1df805363eeb618719346",
+      "operation": "rawBufferLoad",
+      "calls": 11,
+      "validation": "Validation succeeded."
+    },
+    "send_64_scalar": {
+      "bytes": 7076,
+      "sha256": "5802cd4c26f205cd69b8d961b449aaeb38b470393e9a1aa0a8a71417a9fab2ec",
+      "operation": "rawBufferStore",
+      "calls": 39,
+      "validation": "Validation succeeded."
+    },
+    "receive_64_scalar": {
+      "bytes": 5496,
+      "sha256": "288d6b59ee99526357280e00bd405e3ed316940879b988ace1c330fbfdebe22e",
+      "operation": "rawBufferLoad",
+      "calls": 39,
+      "validation": "Validation succeeded."
+    },
+    "send_64_tiled": {
+      "bytes": 5344,
+      "sha256": "d8fea186191ae5fec3dbaaded3f708fb5bf32371d8b1d09e99c32aabb2463a0e",
+      "operation": "rawBufferStore",
+      "calls": 11,
+      "validation": "Validation succeeded."
+    },
+    "receive_64_tiled": {
+      "bytes": 4740,
+      "sha256": "be844f493aa6084f3493296fba806300b2817d1f02bdb50311836b2f27664f21",
+      "operation": "rawBufferLoad",
+      "calls": 11,
+      "validation": "Validation succeeded."
+    }
+  }
+}

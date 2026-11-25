@@ -1,0 +1,231 @@
+{
+  "cohorts": [
+    {
+      "name": "rtx-a.csv",
+      "sha256": "6995c4e05e9189f813c8ba2f49fa5587b2cc54ac57417cda5c981c92bc6e258e",
+      "peak_job_bytes": 175398912,
+      "debug_layer": false,
+      "cases": {
+        "32": {
+          "pairs": 8,
+          "scalar_us_median": 4.6080000000000005,
+          "tiled_us_median": 4.096,
+          "tiled_over_scalar_median": 0.9,
+          "tiled_faster_equal_slower": [
+            4,
+            4,
+            0
+          ],
+          "scalar_us_range": [
+            4.096,
+            5.12
+          ],
+          "tiled_us_range": [
+            3.072,
+            4.096
+          ]
+        },
+        "64": {
+          "pairs": 8,
+          "scalar_us_median": 24.576,
+          "tiled_us_median": 24.576,
+          "tiled_over_scalar_median": 1.0,
+          "tiled_faster_equal_slower": [
+            3,
+            3,
+            2
+          ],
+          "scalar_us_range": [
+            23.552,
+            882.688
+          ],
+          "tiled_us_range": [
+            23.552,
+            45.056
+          ]
+        }
+      }
+    },
+    {
+      "name": "rtx-c.csv",
+      "sha256": "88e8b77012e67c8faf62cbb570874e813f39b764acaf3f7c652e57db554b32fc",
+      "peak_job_bytes": 162787328,
+      "debug_layer": false,
+      "cases": {
+        "32": {
+          "pairs": 8,
+          "scalar_us_median": 4.096,
+          "tiled_us_median": 4.096,
+          "tiled_over_scalar_median": 1.0,
+          "tiled_faster_equal_slower": [
+            1,
+            7,
+            0
+          ],
+          "scalar_us_range": [
+            4.096,
+            5.12
+          ],
+          "tiled_us_range": [
+            4.096,
+            4.096
+          ]
+        },
+        "64": {
+          "pairs": 8,
+          "scalar_us_median": 24.576,
+          "tiled_us_median": 24.576,
+          "tiled_over_scalar_median": 1.0,
+          "tiled_faster_equal_slower": [
+            3,
+            3,
+            2
+          ],
+          "scalar_us_range": [
+            23.552,
+            24.576
+          ],
+          "tiled_us_range": [
+            23.552,
+            28.672
+          ]
+        }
+      }
+    },
+    {
+      "name": "rtx-d.csv",
+      "sha256": "bd133a7ffc539532782ac001345c0f286e203c0c5c99465663cdcd64d2d49bf4",
+      "peak_job_bytes": 162910208,
+      "debug_layer": false,
+      "cases": {
+        "32": {
+          "pairs": 8,
+          "scalar_us_median": 4.096,
+          "tiled_us_median": 4.096,
+          "tiled_over_scalar_median": 1.0,
+          "tiled_faster_equal_slower": [
+            3,
+            4,
+            1
+          ],
+          "scalar_us_range": [
+            4.096,
+            5.12
+          ],
+          "tiled_us_range": [
+            3.072,
+            5.12
+          ]
+        },
+        "64": {
+          "pairs": 8,
+          "scalar_us_median": 24.576,
+          "tiled_us_median": 24.064,
+          "tiled_over_scalar_median": 1.0,
+          "tiled_faster_equal_slower": [
+            2,
+            5,
+            1
+          ],
+          "scalar_us_range": [
+            23.552,
+            24.576
+          ],
+          "tiled_us_range": [
+            23.552,
+            29.696
+          ]
+        }
+      }
+    },
+    {
+      "name": "rtx-e.csv",
+      "sha256": "2a95b697971d36619f3806eb77156fb3f0e237e225b8315f3e7ff822d40d7f20",
+      "peak_job_bytes": 162922496,
+      "debug_layer": false,
+      "cases": {
+        "32": {
+          "pairs": 8,
+          "scalar_us_median": 4.096,
+          "tiled_us_median": 4.096,
+          "tiled_over_scalar_median": 1.0,
+          "tiled_faster_equal_slower": [
+            3,
+            5,
+            0
+          ],
+          "scalar_us_range": [
+            4.096,
+            5.12
+          ],
+          "tiled_us_range": [
+            3.072,
+            4.096
+          ]
+        },
+        "64": {
+          "pairs": 8,
+          "scalar_us_median": 24.576,
+          "tiled_us_median": 23.552,
+          "tiled_over_scalar_median": 0.9791666666666666,
+          "tiled_faster_equal_slower": [
+            4,
+            2,
+            2
+          ],
+          "scalar_us_range": [
+            23.552,
+            24.576
+          ],
+          "tiled_us_range": [
+            23.552,
+            28.672
+          ]
+        }
+      }
+    }
+  ],
+  "refusals": [
+    "commit/phys MiB 4014 10277; not launched"
+  ],
+  "overall": {
+    "32": {
+      "pairs": 32,
+      "scalar_us_median": 4.096,
+      "tiled_us_median": 4.096,
+      "tiled_over_scalar_median": 1.0,
+      "tiled_faster_equal_slower": [
+        11,
+        20,
+        1
+      ],
+      "scalar_us_range": [
+        4.096,
+        5.12
+      ],
+      "tiled_us_range": [
+        3.072,
+        5.12
+      ]
+    },
+    "64": {
+      "pairs": 32,
+      "scalar_us_median": 24.576,
+      "tiled_us_median": 24.576,
+      "tiled_over_scalar_median": 1.0,
+      "tiled_faster_equal_slower": [
+        12,
+        13,
+        7
+      ],
+      "scalar_us_range": [
+        23.552,
+        882.688
+      ],
+      "tiled_us_range": [
+        23.552,
+        45.056
+      ]
+    }
+  }
+}

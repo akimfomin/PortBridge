@@ -1,0 +1,186 @@
+diff --git a/crates/xcl/src/gpu/dxil/module/split.rs b/crates/xcl/src/gpu/dxil/module/split.rs
+--- a/crates/xcl/src/gpu/dxil/module/split.rs
++++ b/crates/xcl/src/gpu/dxil/module/split.rs
+@@ -27,12 +27,15 @@
+ 
+ struct Scratch {
+     uav: RawUav,
+-    base: Value,
+-    bytes_per_slot: u32,
++    group_base: Value,
++    lane_bytes: Value,
++    tag: Value,
++    threads: u32,
++    payload_capacity: u32,
+ }
+ 
+ impl Scratch {
+-    fn new(s: &mut Shader, stride: u32, threads: u32, lane: Value) -> Self {
++    fn new(s: &mut Shader, group_bytes: u32, threads: u32, lane: Value) -> Self {
+         let uav = s.raw_uav(0, 2);
+         let cb = s.cbv(0, 2, 16);
+         let zero = s.m.i32c(0);
+@@ -43,18 +46,28 @@
+         let row = s.m.bin(BinOp::Add, row, y);
+         let first = s.m.bin(BinOp::Mul, row, width);
+         let group = s.m.bin(BinOp::Add, first, x);
+-        // Give consecutive logical lanes consecutive words for a slot, including
+-        // the continuation tag in slot zero. A workgroup owns all its slots.
+-        let group_words = s.m.i32c(stride * threads);
+-        let first = s.m.bin(BinOp::Mul, group, group_words);
+-        let index = s.m.bin(BinOp::Add, first, lane);
++        let group_size = s.m.i32c(group_bytes);
++        let group_base = s.m.bin(BinOp::Mul, group, group_size);
+         let four = s.m.i32c(4);
+-        Self { uav, base: s.m.bin(BinOp::Mul, index, four), bytes_per_slot: threads * 4 }
+-    }
+-
+-    fn at(&self, m: &mut Module, slot: u32) -> Value {
+-        let offset = m.i32c(slot * self.bytes_per_slot);
+-        m.bin(BinOp::Add, self.base, offset)
++        let lane_bytes = s.m.bin(BinOp::Mul, lane, four);
++        let tag = s.m.bin(BinOp::Add, group_base, lane_bytes);
++        let payload_capacity = group_bytes / (threads * 4) - 1;
++        Self { uav, group_base, lane_bytes, tag, threads, payload_capacity }
++    }
++
++    fn payload_at(&self, m: &mut Module, first: u32) -> Value {
++        // Tag words remain lane-contiguous. Each payload tile is one to
++        // four adjacent words per lane. All divergent edges use the same
++        // lane spacing, even when some edges store fewer payload words.
++        let offset = m.i32c((1 + first) * self.threads * 4);
++        let width = m.i32c((self.payload_capacity - first).min(4));
++        let lane_offset = m.bin(BinOp::Mul, self.lane_bytes, width);
++        let at = m.bin(BinOp::Add, self.group_base, offset);
++        m.bin(BinOp::Add, at, lane_offset)
++    }
++
++    fn tiles(words: u32) -> impl Iterator<Item = (u32, u32)> {
++        (0..words).step_by(4).map(move |first| (first, (words - first).min(4)))
+     }
+ }
+ 
+@@ -105,19 +118,19 @@
+             if exchange != 0 { return None; }
+         }
+         let plan = self.m.dispatch_plan(limit)?;
+-        let mut stride = 1;
+-        for edge in &plan.edges {
+-            let mut words = 1;
+-            for &v in &edge.live {
+-                words += self.m.transport_words(v)?;
+-            }
+-            stride = stride.max(words);
+-        }
+-        let pieces = (0..plan.blocks.len()).map(|i| self.make_piece(&plan, i, stride, threads, &prefix)).collect::<Option<Vec<_>>>()?;
+-        Some(DispatchChain { pieces, dwords_per_group: stride.checked_mul(threads[0])? })
+-    }
+-
+-    fn make_piece(&self, plan: &Plan, stage: usize, stride: u32, threads: [u32; 3], prefix: &[u32]) -> Option<Vec<u8>> {
++        let edge_words = plan.edges.iter().map(|edge| {
++            edge.live.iter().try_fold(0u32, |words, &v| words.checked_add(self.m.transport_words(v)?))
++        }).collect::<Option<Vec<_>>>()?;
++        let stride = edge_words.iter().copied().max().unwrap_or(0).checked_add(1)?;
++        let dwords_per_group = stride.checked_mul(threads[0])?;
++        let group_bytes = dwords_per_group.checked_mul(4).filter(|bytes| *bytes != 0)?;
++        let pieces = (0..plan.blocks.len())
++            .map(|i| self.make_piece(&plan, &edge_words, i, group_bytes, threads, &prefix))
++            .collect::<Option<Vec<_>>>()?;
++        Some(DispatchChain { pieces, dwords_per_group })
++    }
++
++    fn make_piece(&self, plan: &Plan, edge_words: &[u32], stage: usize, group_bytes: u32, threads: [u32; 3], prefix: &[u32]) -> Option<Vec<u8>> {
+         let src = &self.m;
+         let mut dst = self.dispatch_piece();
+         let mut values = HashMap::new();
+@@ -128,7 +141,7 @@
+             values.insert(Value::Inst(id), dst.m.push(op, def.ty));
+         }
+         let lane = prefix.last().map(|&i| values[&Value::Inst(i)]).unwrap_or_else(|| dst.wave_lane_index());
+-        let scratch = Scratch::new(&mut dst, stride, threads[0], lane);
++        let scratch = Scratch::new(&mut dst, group_bytes, threads[0], lane);
+         let local: HashMap<_, _> = plan.blocks[stage].iter().map(|&b| (b, dst.m.new_block())).collect();
+         let mut hops = HashMap::new();
+         let mut exits = HashMap::new();
+@@ -138,7 +151,7 @@
+         let mut statics = BTreeSet::new();
+         let merge = dst.m.new_block();
+         let done = dst.m.new_block();
+-        let selector = if stage != 0 { Some(dst.raw_load(scratch.uav, scratch.base, 1)[0]) } else { None };
++        let selector = if stage != 0 { Some(dst.raw_load(scratch.uav, scratch.tag, 1)[0]) } else { None };
+         for (index, edge) in plan.edges.iter().enumerate() {
+             let tag = dst.m.i32c(index as u32 + 1);
+             if local.contains_key(&edge.from) {
+@@ -147,19 +160,21 @@
+             if let Some(&target) = local.get(&edge.to) {
+                 let bridge = dst.m.new_block();
+                 dst.m.set_block(bridge);
+-                let mut slot = 1;
++                let mut payload = Vec::new();
++                for (first, width) in Scratch::tiles(edge_words[index]) {
++                    let at = scratch.payload_at(&mut dst.m, first);
++                    payload.extend(dst.raw_load(scratch.uav, at, (1u8 << width) - 1));
++                }
++                let mut slot = 0;
+                 for &v in &edge.live {
+                     let n = src.transport_words(v)?;
+                     if n == 0 {
+                         statics.insert(v);
+                         continue;
+                     }
+-                    let words = (slot..slot + n).map(|word| {
+-                        let at = scratch.at(&mut dst.m, word);
+-                        dst.raw_load(scratch.uav, at, 1)[0]
+-                    }).collect();
+-                    incoming.entry(v).or_default().push((words, bridge));
+-                    slot += n;
++                    let end = slot + n as usize;
++                    incoming.entry(v).or_default().push((payload.get(slot..end)?.to_vec(), bridge));
++                    slot = end;
+                 }
+                 dst.m.br(merge);
+                 let hop = dst.m.new_block();
+@@ -212,7 +227,7 @@
+                 let old = &src.insts[i as usize];
+                 if matches!(old.op, Op::Ret) && stage + 1 < plan.blocks.len() {
+                     let zero = dst.m.i32c(0);
+-                    dst.raw_store(scratch.uav, scratch.base, &[zero]);
++                    dst.raw_store(scratch.uav, scratch.tag, &[zero]);
+                 }
+                 let v = dst.m.push(old.op.clone(), old.ty);
+                 values.insert(Value::Inst(i), v);
+@@ -241,22 +256,21 @@
+                 _ => {}
+             }
+         }
+-        for edge in &plan.edges {
++        for (index, edge) in plan.edges.iter().enumerate() {
+             let Some(&(b, tag)) = exits.get(&(edge.from, edge.to)) else { continue };
+             dst.m.set_block(b);
+-            let mut slot = 1;
++            let mut payload = Vec::with_capacity(edge_words[index] as usize);
+             for &v in &edge.live {
+-                let n = src.transport_words(v)?;
+-                if n != 0 {
+-                    let words = src.pack(v, *values.get(&v)?, &mut dst.m);
+-                    for (k, word) in words.into_iter().enumerate() {
+-                        let at = scratch.at(&mut dst.m, slot + k as u32);
+-                        dst.raw_store(scratch.uav, at, &[word]);
+-                    }
+-                    slot += n;
+-                }
+-            }
+-            dst.raw_store(scratch.uav, scratch.base, &[tag]);
++                if src.transport_words(v)? != 0 {
++                    payload.extend(src.pack(v, *values.get(&v)?, &mut dst.m));
++                }
++            }
++            if payload.len() != edge_words[index] as usize { return None; }
++            for (first, width) in Scratch::tiles(edge_words[index]) {
++                let at = scratch.payload_at(&mut dst.m, first);
++                dst.raw_store(scratch.uav, at, &payload[first as usize..(first + width) as usize]);
++            }
++            dst.raw_store(scratch.uav, scratch.tag, &[tag]);
+             dst.m.ret();
+         }
+         dst.infer_piece_features();

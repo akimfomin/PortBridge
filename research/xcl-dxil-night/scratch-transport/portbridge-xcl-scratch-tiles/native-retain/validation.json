@@ -1,0 +1,89 @@
+{
+  "compiler": "dxcompiler.dll: 1.9(5184-21d28f72)(1.9.2602.17) - 1.9.2602.17 (21d28f727)",
+  "shaders": {
+    "send_32_scalar": {
+      "bytes": 6912,
+      "sha256": "67dea034006203d9888ecae4afef97f001058a6fc7711c39fcc7de06ef57ca9f",
+      "loads": 0,
+      "stores": 36,
+      "validation": "Validation succeeded."
+    },
+    "forward_32_scalar": {
+      "bytes": 6424,
+      "sha256": "fb130a10efcbad32d02afa59f9524db9c5313b79e1e0944985cdc20b300db929",
+      "loads": 24,
+      "stores": 36,
+      "validation": "Validation succeeded."
+    },
+    "receive_32_scalar": {
+      "bytes": 5336,
+      "sha256": "9b6d03eafc66a80e6a66ed7536dc5169d21503dfc943c9ac44b5b4b20c978847",
+      "loads": 36,
+      "stores": 1,
+      "validation": "Validation succeeded."
+    },
+    "send_32_tiled": {
+      "bytes": 6940,
+      "sha256": "2d578033adadacc372df9ee25aff5f486295d849fe890f68d527c2a11910cb91",
+      "loads": 0,
+      "stores": 36,
+      "validation": "Validation succeeded."
+    },
+    "forward_32_tiled": {
+      "bytes": 5348,
+      "sha256": "d712b3f299dc91acde9ee4bdfd985f96e29bfa2982cb69e5e51c020899ae2e3d",
+      "loads": 8,
+      "stores": 20,
+      "validation": "Validation succeeded."
+    },
+    "receive_32_tiled": {
+      "bytes": 5340,
+      "sha256": "08d71aa08b3393a82918c0518cea6ee0e22308c5d2f8d0e306d208bc55c666c3",
+      "loads": 36,
+      "stores": 1,
+      "validation": "Validation succeeded."
+    },
+    "send_64_scalar": {
+      "bytes": 6924,
+      "sha256": "dce298a9b78c2cb8f73bfc01e389666fe3a82fbd1fd7f592ce63d2eeaa2e0645",
+      "loads": 0,
+      "stores": 36,
+      "validation": "Validation succeeded."
+    },
+    "forward_64_scalar": {
+      "bytes": 6448,
+      "sha256": "31278559c9f4b563ba0af27bce955c01fd6ec6ccee172d97bf42f97a8b3e6d04",
+      "loads": 24,
+      "stores": 36,
+      "validation": "Validation succeeded."
+    },
+    "receive_64_scalar": {
+      "bytes": 5356,
+      "sha256": "ade7f04e4c7125aea4dae5a2324d4267f1b8eb0308837ffff31479334d342ca1",
+      "loads": 36,
+      "stores": 1,
+      "validation": "Validation succeeded."
+    },
+    "send_64_tiled": {
+      "bytes": 6956,
+      "sha256": "1a3785333a220f09037bd095d08ab753978d7d30bf839620d03fd10aea110f00",
+      "loads": 0,
+      "stores": 36,
+      "validation": "Validation succeeded."
+    },
+    "forward_64_tiled": {
+      "bytes": 5360,
+      "sha256": "c8f7844f2acd6e5ba387ed03c66c636677d5a8b961102848230c8f1940005286",
+      "loads": 8,
+      "stores": 20,
+      "validation": "Validation succeeded."
+    },
+    "receive_64_tiled": {
+      "bytes": 5360,
+      "sha256": "3993bd5f95ec4b657d71d627cb8c7dc1d117f519f415597aa5b0fd364e63430c",
+      "loads": 36,
+      "stores": 1,
+      "validation": "Validation succeeded."
+    }
+  }
+}

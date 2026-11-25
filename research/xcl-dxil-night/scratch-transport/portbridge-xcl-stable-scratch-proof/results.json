@@ -1,0 +1,217 @@
+[
+  {
+    "case": "mixed_5_pieces",
+    "pieces": 5,
+    "crossing_edges": 8,
+    "lanes": 96,
+    "visits_per_piece": {
+      "0": 96,
+      "1": 28,
+      "2": 43,
+      "3": 46,
+      "4": 78
+    },
+    "stable_values": [
+      "anchor32",
+      "anchor64"
+    ],
+    "stable_dwords": 3,
+    "stride_dwords_each": 7,
+    "baseline_dwords": {
+      "write": 1120,
+      "write_tag": 213,
+      "read": 1291,
+      "read_tag": 384,
+      "write_eligible": 585,
+      "read_eligible": 585
+    },
+    "candidate_dwords": {
+      "write": 787,
+      "write_tag": 213,
+      "read": 1075,
+      "read_tag": 384,
+      "write_eligible": 252,
+      "read_eligible": 369
+    },
+    "baseline_bytes": 9644,
+    "candidate_bytes": 7448,
+    "saved_bytes": 2196,
+    "saved_percent": 22.7706
+  },
+  {
+    "case": "linear_3_pieces",
+    "pieces": 3,
+    "crossing_edges": 2,
+    "lanes": 96,
+    "visits_per_piece": {
+      "0": 96,
+      "1": 96,
+      "2": 96
+    },
+    "stable_values": [
+      "anchor32",
+      "anchor64"
+    ],
+    "stable_dwords": 3,
+    "stride_dwords_each": 5,
+    "baseline_dwords": {
+      "write": 960,
+      "write_eligible": 576,
+      "write_tag": 192,
+      "read": 960,
+      "read_tag": 192,
+      "read_eligible": 576
+    },
+    "candidate_dwords": {
+      "write": 672,
+      "write_eligible": 288,
+      "write_tag": 192,
+      "read": 672,
+      "read_tag": 192,
+      "read_eligible": 288
+    },
+    "baseline_bytes": 7680,
+    "candidate_bytes": 5376,
+    "saved_bytes": 2304,
+    "saved_percent": 30.0
+  },
+  {
+    "case": "linear_4_pieces",
+    "pieces": 4,
+    "crossing_edges": 3,
+    "lanes": 96,
+    "visits_per_piece": {
+      "0": 96,
+      "1": 96,
+      "2": 96,
+      "3": 96
+    },
+    "stable_values": [
+      "anchor32",
+      "anchor64"
+    ],
+    "stable_dwords": 3,
+    "stride_dwords_each": 5,
+    "baseline_dwords": {
+      "write": 1440,
+      "write_eligible": 864,
+      "write_tag": 288,
+      "read": 1440,
+      "read_tag": 288,
+      "read_eligible": 864
+    },
+    "candidate_dwords": {
+      "write": 864,
+      "write_eligible": 288,
+      "write_tag": 288,
+      "read": 864,
+      "read_tag": 288,
+      "read_eligible": 288
+    },
+    "baseline_bytes": 11520,
+    "candidate_bytes": 6912,
+    "saved_bytes": 4608,
+    "saved_percent": 40.0
+  },
+  {
+    "case": "linear_5_pieces",
+    "pieces": 5,
+    "crossing_edges": 4,
+    "lanes": 96,
+    "visits_per_piece": {
+      "0": 96,
+      "1": 96,
+      "2": 96,
+      "3": 96,
+      "4": 96
+    },
+    "stable_values": [
+      "anchor32",
+      "anchor64"
+    ],
+    "stable_dwords": 3,
+    "stride_dwords_each": 5,
+    "baseline_dwords": {
+      "write": 1920,
+      "write_eligible": 1152,
+      "write_tag": 384,
+      "read": 1920,
+      "read_tag": 384,
+      "read_eligible": 1152
+    },
+    "candidate_dwords": {
+      "write": 1056,
+      "write_eligible": 288,
+      "write_tag": 384,
+      "read": 1056,
+      "read_tag": 384,
+      "read_eligible": 288
+    },
+    "baseline_bytes": 15360,
+    "candidate_bytes": 8448,
+    "saved_bytes": 6912,
+    "saved_percent": 45.0
+  },
+  {
+    "case": "linear_5_all_transient",
+    "pieces": 5,
+    "crossing_edges": 4,
+    "lanes": 96,
+    "visits_per_piece": {
+      "0": 96,
+      "1": 96,
+      "2": 96,
+      "3": 96,
+      "4": 96
+    },
+    "stable_values": [],
+    "stable_dwords": 0,
+    "stride_dwords_each": 2,
+    "baseline_dwords": {
+      "write": 768,
+      "write_tag": 384,
+      "read": 768,
+      "read_tag": 384
+    },
+    "candidate_dwords": {
+      "write": 768,
+      "write_tag": 384,
+      "read": 768,
+      "read_tag": 384
+    },
+    "baseline_bytes": 6144,
+    "candidate_bytes": 6144,
+    "saved_bytes": 0,
+    "saved_percent": 0.0
+  },
+  {
+    "case": "different_definitions",
+    "pieces": 3,
+    "crossing_edges": 3,
+    "lanes": 96,
+    "visits_per_piece": {
+      "0": 96,
+      "1": 48,
+      "2": 96
+    },
+    "stable_values": [],
+    "stable_dwords": 0,
+    "stride_dwords_each": 3,
+    "baseline_dwords": {
+      "write": 336,
+      "write_tag": 144,
+      "read": 384,
+      "read_tag": 192
+    },
+    "candidate_dwords": {
+      "write": 336,
+      "write_tag": 144,
+      "read": 384,
+      "read_tag": 192
+    },
+    "baseline_bytes": 2880,
+    "candidate_bytes": 2880,
+    "saved_bytes": 0,
+    "saved_percent": 0.0
+  }
+]

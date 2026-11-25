@@ -1,0 +1,15 @@
+test_compares_unsplit_stock_and_prefix_and_counts_words (__main__.TransportTest.test_compares_unsplit_stock_and_prefix_and_counts_words) ... ok
+test_late_defs_changed_types_and_rematerialized_values_stay_dynamic (__main__.TransportTest.test_late_defs_changed_types_and_rematerialized_values_stay_dynamic) ... ok
+test_skip_exit_and_both_i64_words (__main__.TransportTest.test_skip_exit_and_both_i64_words) ... ok
+test_stable_slots_cannot_alias_tag_or_variable_edge_layouts (__main__.TransportTest.test_stable_slots_cannot_alias_tag_or_variable_edge_layouts) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.049s
+
+OK
+mixed_5_pieces              9644 ->   7448 bytes;  22.771%; stride 7 DWORD/lane
+linear_3_pieces             7680 ->   5376 bytes;  30.000%; stride 5 DWORD/lane
+linear_4_pieces            11520 ->   6912 bytes;  40.000%; stride 5 DWORD/lane
+linear_5_pieces            15360 ->   8448 bytes;  45.000%; stride 5 DWORD/lane
+linear_5_all_transient      6144 ->   6144 bytes;   0.000%; stride 2 DWORD/lane
+different_definitions       2880 ->   2880 bytes;   0.000%; stride 3 DWORD/lane
