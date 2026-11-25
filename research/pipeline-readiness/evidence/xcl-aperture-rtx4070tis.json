@@ -1,0 +1,1062 @@
+{
+  "platform": {
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver": "617.14",
+    "windows_build": "28000",
+    "cpu": "Intel Core i5-13600KF",
+    "dxc": "1.9.2609.5"
+  },
+  "native_pixel_instruction_bytes": null,
+  "core_revision": "6f67464c15f2b660c7a018daf6dc91aa06c4b82a",
+  "compile_harness_revision": "e7c95bca26ebcdf4e4a54d462b3753a9d356856f",
+  "warm_harness_revision": "e3bf36545189cbe2a60365d7359a5c7f67827426",
+  "compile_executable_sha256": "65dcea3f9ad3d035e185bdaa0d3eec0f6afe609b53c08a7d0bccf404558bdd41",
+  "warm_executable_sha256": "06c6e05854d5ec2beb9becd325b88e3c37db36b5d3014cb7c6df46a59babc6ae",
+  "native_scope": "Fresh minimal D3D12 graphics PSOs using translated open-source shaders. Vendor-managed cache disable is advisory. No Vulkan resource bindings or draw.",
+  "warm_scope": "Physical timer on one synthetic positive carry read with 32 timed draws after one prime. No application performance claim.",
+  "native_medians_order": [
+    "off",
+    "on"
+  ],
+  "native_medians": {
+    "khronos-034": {
+      "cold_pso_ms": [
+        28.2473,
+        26.2225
+      ],
+      "dxil_bytes": [
+        8476,
+        7960
+      ],
+      "opaque_pso_cache_bytes": [
+        10066,
+        8818
+      ],
+      "peak_private_commit_bytes": [
+        105099264,
+        105046016
+      ],
+      "paired_wins": 5
+    },
+    "khronos-071": {
+      "cold_pso_ms": [
+        1673.747,
+        1670.2427
+      ],
+      "dxil_bytes": [
+        283496,
+        282684
+      ],
+      "opaque_pso_cache_bytes": [
+        370786,
+        369650
+      ],
+      "peak_private_commit_bytes": [
+        246059008,
+        244891648
+      ],
+      "paired_wins": 3
+    },
+    "khronos-073": {
+      "cold_pso_ms": [
+        1737.0053,
+        1682.0925
+      ],
+      "dxil_bytes": [
+        283988,
+        283180
+      ],
+      "opaque_pso_cache_bytes": [
+        372114,
+        370466
+      ],
+      "peak_private_commit_bytes": [
+        246431744,
+        244588544
+      ],
+      "paired_wins": 4
+    },
+    "naga-mini-013": {
+      "cold_pso_ms": [
+        37.1014,
+        35.4899
+      ],
+      "dxil_bytes": [
+        11020,
+        10712
+      ],
+      "opaque_pso_cache_bytes": [
+        11714,
+        11218
+      ],
+      "peak_private_commit_bytes": [
+        104095744,
+        103735296
+      ],
+      "paired_wins": 4
+    },
+    "naga-mini-030": {
+      "cold_pso_ms": [
+        17.5067,
+        16.959
+      ],
+      "dxil_bytes": [
+        5224,
+        5104
+      ],
+      "opaque_pso_cache_bytes": [
+        6722,
+        6322
+      ],
+      "peak_private_commit_bytes": [
+        107155456,
+        105308160
+      ],
+      "paired_wins": 4
+    },
+    "naga-mini-057": {
+      "cold_pso_ms": [
+        15.8958,
+        12.7736
+      ],
+      "dxil_bytes": [
+        5256,
+        4536
+      ],
+      "opaque_pso_cache_bytes": [
+        5170,
+        4114
+      ],
+      "peak_private_commit_bytes": [
+        102580224,
+        102035456
+      ],
+      "paired_wins": 5
+    },
+    "naga-mini-058": {
+      "cold_pso_ms": [
+        17.4117,
+        15.116
+      ],
+      "dxil_bytes": [
+        6120,
+        5484
+      ],
+      "opaque_pso_cache_bytes": [
+        5730,
+        4498
+      ],
+      "peak_private_commit_bytes": [
+        103604224,
+        102305792
+      ],
+      "paired_wins": 5
+    }
+  },
+  "native_runs": [
+    {
+      "sample": "khronos-034",
+      "pair": 0,
+      "arm": "off",
+      "cold_pso_ms": 31.5343,
+      "dxil_bytes": 8476,
+      "opaque_pso_cache_bytes": 10066,
+      "peak_private_commit_bytes": 106037248,
+      "log_sha256": "ef39dba7bf4fd2876121473ba9a2864ddfde91439a159d3ac875611fb13e821e"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 0,
+      "arm": "on",
+      "cold_pso_ms": 26.2225,
+      "dxil_bytes": 7960,
+      "opaque_pso_cache_bytes": 8818,
+      "peak_private_commit_bytes": 104787968,
+      "log_sha256": "223e8082e086739090e4fee6354c0b1dff99b4a5ba403afb795d3f5a4c579893"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 1,
+      "arm": "off",
+      "cold_pso_ms": 27.693,
+      "dxil_bytes": 8476,
+      "opaque_pso_cache_bytes": 10066,
+      "peak_private_commit_bytes": 105099264,
+      "log_sha256": "16844330ce7835786aa51713c493eab0164c08ae6d0c8cb23734a2b13b2974c2"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 1,
+      "arm": "on",
+      "cold_pso_ms": 25.8017,
+      "dxil_bytes": 7960,
+      "opaque_pso_cache_bytes": 8818,
+      "peak_private_commit_bytes": 103780352,
+      "log_sha256": "7bc54a9a200722c2455a1cfbbe184327e123aa132e85649cadfc1a891fd8c91b"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 2,
+      "arm": "off",
+      "cold_pso_ms": 29.0162,
+      "dxil_bytes": 8476,
+      "opaque_pso_cache_bytes": 10066,
+      "peak_private_commit_bytes": 105455616,
+      "log_sha256": "bcaf2b78689806dd39889cd46fbc93052593efeef287707a8c898fc01f526b69"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 2,
+      "arm": "on",
+      "cold_pso_ms": 26.3321,
+      "dxil_bytes": 7960,
+      "opaque_pso_cache_bytes": 8818,
+      "peak_private_commit_bytes": 105586688,
+      "log_sha256": "f40fee6a13cf296ac326179c82d990acf098f3d4aa89cf421718670d722739f4"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 3,
+      "arm": "off",
+      "cold_pso_ms": 28.075,
+      "dxil_bytes": 8476,
+      "opaque_pso_cache_bytes": 10066,
+      "peak_private_commit_bytes": 104935424,
+      "log_sha256": "ea6af917ce3496ee5d377ea378f1da39f3a3387fa43b7fe60f9e1421e17ca41d"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 3,
+      "arm": "on",
+      "cold_pso_ms": 26.5294,
+      "dxil_bytes": 7960,
+      "opaque_pso_cache_bytes": 8818,
+      "peak_private_commit_bytes": 105046016,
+      "log_sha256": "6f42af90ecd50f9c0ded4e336844b43777441ddc6b63ecbae8eac8e2b506b1c8"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 4,
+      "arm": "off",
+      "cold_pso_ms": 28.2473,
+      "dxil_bytes": 8476,
+      "opaque_pso_cache_bytes": 10066,
+      "peak_private_commit_bytes": 104599552,
+      "log_sha256": "069b76650738d584d52e57955aa5fd8002d478faeabab6e3549ccaf7c6f437af"
+    },
+    {
+      "sample": "khronos-034",
+      "pair": 4,
+      "arm": "on",
+      "cold_pso_ms": 25.7034,
+      "dxil_bytes": 7960,
+      "opaque_pso_cache_bytes": 8818,
+      "peak_private_commit_bytes": 105078784,
+      "log_sha256": "19377b8e61a50855ebcec1eb67138fe06bc8685319e5caeb17e484748fa7a88e"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 0,
+      "arm": "off",
+      "cold_pso_ms": 1608.2257,
+      "dxil_bytes": 283496,
+      "opaque_pso_cache_bytes": 370786,
+      "peak_private_commit_bytes": 245645312,
+      "log_sha256": "59a9b839309a713935171c27d15f4675641dc15fd24c3943e37286bb678f0004"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 0,
+      "arm": "on",
+      "cold_pso_ms": 1725.2044,
+      "dxil_bytes": 282684,
+      "opaque_pso_cache_bytes": 369650,
+      "peak_private_commit_bytes": 244465664,
+      "log_sha256": "22e1dc0f502aab8746d2729c5c888e257457c4d6a1e00a57dea86586d3febc95"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 1,
+      "arm": "off",
+      "cold_pso_ms": 1779.1624,
+      "dxil_bytes": 283496,
+      "opaque_pso_cache_bytes": 370786,
+      "peak_private_commit_bytes": 246673408,
+      "log_sha256": "050f36c09de18364b0be0f56a068e3b4a40fbdf06baeb562bba8193abc224b02"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 1,
+      "arm": "on",
+      "cold_pso_ms": 1775.5247,
+      "dxil_bytes": 282684,
+      "opaque_pso_cache_bytes": 369650,
+      "peak_private_commit_bytes": 244891648,
+      "log_sha256": "add04f230e0993a587533ccb0d58771a1e7a1ec353d639335860e051faba5603"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 2,
+      "arm": "off",
+      "cold_pso_ms": 1630.7821,
+      "dxil_bytes": 283496,
+      "opaque_pso_cache_bytes": 370786,
+      "peak_private_commit_bytes": 246697984,
+      "log_sha256": "dc2ec1845ab667049b6720f853eae5f4ded97ae3ad3ea76657b0925b55ef3baf"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 2,
+      "arm": "on",
+      "cold_pso_ms": 1662.2137,
+      "dxil_bytes": 282684,
+      "opaque_pso_cache_bytes": 369650,
+      "peak_private_commit_bytes": 244211712,
+      "log_sha256": "102a269082ab6bc59c1ddf998646faa0b59aa8793afdf292ec9f5f8a52596027"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 3,
+      "arm": "off",
+      "cold_pso_ms": 1673.747,
+      "dxil_bytes": 283496,
+      "opaque_pso_cache_bytes": 370786,
+      "peak_private_commit_bytes": 246059008,
+      "log_sha256": "d88f67080e1559e00eae03ac10058e5463aeb2ff3f9d1b514e38e60b0f923f86"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 3,
+      "arm": "on",
+      "cold_pso_ms": 1635.6703,
+      "dxil_bytes": 282684,
+      "opaque_pso_cache_bytes": 369650,
+      "peak_private_commit_bytes": 245575680,
+      "log_sha256": "410ee27f96c26f4e6751668234ea72a55ed562edfd06e8c249b306904385db4e"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 4,
+      "arm": "off",
+      "cold_pso_ms": 1675.8586,
+      "dxil_bytes": 283496,
+      "opaque_pso_cache_bytes": 370786,
+      "peak_private_commit_bytes": 245821440,
+      "log_sha256": "c91b9eca1aedbb671750f681449e9f6e4db57041019fb3a9beb50aa4e281e36c"
+    },
+    {
+      "sample": "khronos-071",
+      "pair": 4,
+      "arm": "on",
+      "cold_pso_ms": 1670.2427,
+      "dxil_bytes": 282684,
+      "opaque_pso_cache_bytes": 369650,
+      "peak_private_commit_bytes": 245178368,
+      "log_sha256": "aabdb0b97d7012053286f5ac27ed5c2b1a7ae7910f96415e9548cb754b795fba"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 0,
+      "arm": "off",
+      "cold_pso_ms": 1634.1083,
+      "dxil_bytes": 283988,
+      "opaque_pso_cache_bytes": 372114,
+      "peak_private_commit_bytes": 246743040,
+      "log_sha256": "d73b0f5d45ba5cbc395eec8911ba472325a338d4e7601629a62a4d285b994cb1"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 0,
+      "arm": "on",
+      "cold_pso_ms": 1622.8507,
+      "dxil_bytes": 283180,
+      "opaque_pso_cache_bytes": 370466,
+      "peak_private_commit_bytes": 244588544,
+      "log_sha256": "aaa61890fea887f5f781513b5bb15fc5a2b300bdd621661279842f2687385d82"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 1,
+      "arm": "off",
+      "cold_pso_ms": 1765.7444,
+      "dxil_bytes": 283988,
+      "opaque_pso_cache_bytes": 372114,
+      "peak_private_commit_bytes": 247099392,
+      "log_sha256": "fab72be9fc8be8c408bd59d25b8ff401876a1bf44baba34cb3927bc7d81ac262"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 1,
+      "arm": "on",
+      "cold_pso_ms": 1650.1807,
+      "dxil_bytes": 283180,
+      "opaque_pso_cache_bytes": 370466,
+      "peak_private_commit_bytes": 244477952,
+      "log_sha256": "98124286555e22c57169d9a01634b9e847d4dcdb6538186f7922ddfd88751111"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 2,
+      "arm": "off",
+      "cold_pso_ms": 1669.3174,
+      "dxil_bytes": 283988,
+      "opaque_pso_cache_bytes": 372114,
+      "peak_private_commit_bytes": 246222848,
+      "log_sha256": "987591d00b1733fea39ea37bfd23cb1d3b4dc069dd4b36044827dd118831dd6f"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 2,
+      "arm": "on",
+      "cold_pso_ms": 1686.4716,
+      "dxil_bytes": 283180,
+      "opaque_pso_cache_bytes": 370466,
+      "peak_private_commit_bytes": 244465664,
+      "log_sha256": "b44acf8d6be625bf6bb43fc2d48d7074d1eb63740c8566407a3f8d136c38d117"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 3,
+      "arm": "off",
+      "cold_pso_ms": 1782.3005,
+      "dxil_bytes": 283988,
+      "opaque_pso_cache_bytes": 372114,
+      "peak_private_commit_bytes": 246431744,
+      "log_sha256": "a90bfdabe07c96d446d0e943cd2b072b2097fa4635cbf400b9fe63890af99c43"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 3,
+      "arm": "on",
+      "cold_pso_ms": 1755.1079,
+      "dxil_bytes": 283180,
+      "opaque_pso_cache_bytes": 370466,
+      "peak_private_commit_bytes": 245420032,
+      "log_sha256": "19401f277b637057a6f04ddc46c477cf030d81417d6da6197c83854208f701cf"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 4,
+      "arm": "off",
+      "cold_pso_ms": 1737.0053,
+      "dxil_bytes": 283988,
+      "opaque_pso_cache_bytes": 372114,
+      "peak_private_commit_bytes": 246018048,
+      "log_sha256": "e0c97ae0716e2aec5edfdcefc66c74ec9d09c36907ace5271c9b2b256cca9899"
+    },
+    {
+      "sample": "khronos-073",
+      "pair": 4,
+      "arm": "on",
+      "cold_pso_ms": 1682.0925,
+      "dxil_bytes": 283180,
+      "opaque_pso_cache_bytes": 370466,
+      "peak_private_commit_bytes": 245055488,
+      "log_sha256": "4a39b74fb356c1eda82df7210bd2948268fc7c4f51ee9a93fbe8522f5bce7901"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 0,
+      "arm": "off",
+      "cold_pso_ms": 47.8467,
+      "dxil_bytes": 11020,
+      "opaque_pso_cache_bytes": 11714,
+      "peak_private_commit_bytes": 104632320,
+      "log_sha256": "ab10da5f66d73c836819f0e958700737c0deda18e4dff71175dee230e91cbb4d"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 0,
+      "arm": "on",
+      "cold_pso_ms": 39.7487,
+      "dxil_bytes": 10712,
+      "opaque_pso_cache_bytes": 11218,
+      "peak_private_commit_bytes": 103735296,
+      "log_sha256": "6f04d8e666f29f7ffa535097a1cba7ff98eb10feb7e2270913698eecb5270e6f"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 1,
+      "arm": "off",
+      "cold_pso_ms": 35.1686,
+      "dxil_bytes": 11020,
+      "opaque_pso_cache_bytes": 11714,
+      "peak_private_commit_bytes": 104095744,
+      "log_sha256": "fb9e94acd5af38b977b0a474bf01c483e36beed4dc84a738364c22bf925991a8"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 1,
+      "arm": "on",
+      "cold_pso_ms": 35.4899,
+      "dxil_bytes": 10712,
+      "opaque_pso_cache_bytes": 11218,
+      "peak_private_commit_bytes": 102961152,
+      "log_sha256": "01b225064742ee06bb25d947843f237a6a8340d5d0f4258f1b3f09ec7855d830"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 2,
+      "arm": "off",
+      "cold_pso_ms": 34.7852,
+      "dxil_bytes": 11020,
+      "opaque_pso_cache_bytes": 11714,
+      "peak_private_commit_bytes": 104009728,
+      "log_sha256": "962f086faafbbb137b91f3ec4c717ac2005b1f5c82be30ed639f8c6798f1aaad"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 2,
+      "arm": "on",
+      "cold_pso_ms": 33.4779,
+      "dxil_bytes": 10712,
+      "opaque_pso_cache_bytes": 11218,
+      "peak_private_commit_bytes": 103174144,
+      "log_sha256": "c46c0b09a6851d824fdb706ad8ead460ab913f140824a0a18974fe06364f25da"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 3,
+      "arm": "off",
+      "cold_pso_ms": 38.8189,
+      "dxil_bytes": 11020,
+      "opaque_pso_cache_bytes": 11714,
+      "peak_private_commit_bytes": 104505344,
+      "log_sha256": "5fbb6d6add2a098ff7c980a355791155a5c2e0f89ab74669bca7756faf930285"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 3,
+      "arm": "on",
+      "cold_pso_ms": 33.5929,
+      "dxil_bytes": 10712,
+      "opaque_pso_cache_bytes": 11218,
+      "peak_private_commit_bytes": 103751680,
+      "log_sha256": "1f3a439ded5331abec342fd8de062814100fd78ba21e8065afab31b06be777cb"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 4,
+      "arm": "off",
+      "cold_pso_ms": 37.1014,
+      "dxil_bytes": 11020,
+      "opaque_pso_cache_bytes": 11714,
+      "peak_private_commit_bytes": 103936000,
+      "log_sha256": "b07475afb63782c4b9ac522a7f8f878e8ed8c7808f046d402d0819fce1aaa516"
+    },
+    {
+      "sample": "naga-mini-013",
+      "pair": 4,
+      "arm": "on",
+      "cold_pso_ms": 36.058,
+      "dxil_bytes": 10712,
+      "opaque_pso_cache_bytes": 11218,
+      "peak_private_commit_bytes": 104472576,
+      "log_sha256": "b26dca18f029048c5182b00a89a628f26ce3eac1664bd818bec2c07e2c53871d"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 0,
+      "arm": "off",
+      "cold_pso_ms": 20.1935,
+      "dxil_bytes": 5224,
+      "opaque_pso_cache_bytes": 6722,
+      "peak_private_commit_bytes": 107155456,
+      "log_sha256": "2a542c988be92b16c0dcd2c69d0a7d20d866039f3ef3d4cc6546a1256576a432"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 0,
+      "arm": "on",
+      "cold_pso_ms": 18.0309,
+      "dxil_bytes": 5104,
+      "opaque_pso_cache_bytes": 6322,
+      "peak_private_commit_bytes": 106377216,
+      "log_sha256": "5308ed77edc27ab6731826a0c7a46bdd4bb5fa4bb6f41707972ccfce5452becb"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 1,
+      "arm": "off",
+      "cold_pso_ms": 16.8575,
+      "dxil_bytes": 5224,
+      "opaque_pso_cache_bytes": 6722,
+      "peak_private_commit_bytes": 107569152,
+      "log_sha256": "a808c7400505d614572a7cd6e11d97a5e7d3a813cc701a9eac99435d9c9b2dea"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 1,
+      "arm": "on",
+      "cold_pso_ms": 16.959,
+      "dxil_bytes": 5104,
+      "opaque_pso_cache_bytes": 6322,
+      "peak_private_commit_bytes": 106868736,
+      "log_sha256": "0a831e4d98f48d28d3d5fd5aeaf531b004b6ec0883d18dd523b7641adddcffab"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 2,
+      "arm": "off",
+      "cold_pso_ms": 18.1308,
+      "dxil_bytes": 5224,
+      "opaque_pso_cache_bytes": 6722,
+      "peak_private_commit_bytes": 107163648,
+      "log_sha256": "622d4544f0613a87947de8e0c59b282608f5b2cbd563d67cf3cef293c7a02359"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 2,
+      "arm": "on",
+      "cold_pso_ms": 16.6608,
+      "dxil_bytes": 5104,
+      "opaque_pso_cache_bytes": 6322,
+      "peak_private_commit_bytes": 105299968,
+      "log_sha256": "d594a16b2b4fadbde4a50e9cf91018970cb92481e474c84a7efe95f8557afec7"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 3,
+      "arm": "off",
+      "cold_pso_ms": 17.5067,
+      "dxil_bytes": 5224,
+      "opaque_pso_cache_bytes": 6722,
+      "peak_private_commit_bytes": 106582016,
+      "log_sha256": "fb0c2284859c451b7486177c545ca3022b6ce574562625f03fc0d630a4e4d9b3"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 3,
+      "arm": "on",
+      "cold_pso_ms": 17.3877,
+      "dxil_bytes": 5104,
+      "opaque_pso_cache_bytes": 6322,
+      "peak_private_commit_bytes": 104996864,
+      "log_sha256": "bd88bd5b1cea33ccb775e8b570f433dcd4bedf4eb41ac4c9b7065e6c1279c608"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 4,
+      "arm": "off",
+      "cold_pso_ms": 17.3324,
+      "dxil_bytes": 5224,
+      "opaque_pso_cache_bytes": 6722,
+      "peak_private_commit_bytes": 106827776,
+      "log_sha256": "55999711827aaa52c0f2ca3547211a7d6ef7d25da97fa6548f8dc7ea63139699"
+    },
+    {
+      "sample": "naga-mini-030",
+      "pair": 4,
+      "arm": "on",
+      "cold_pso_ms": 16.3934,
+      "dxil_bytes": 5104,
+      "opaque_pso_cache_bytes": 6322,
+      "peak_private_commit_bytes": 105308160,
+      "log_sha256": "66a17825adc7610e74f3a15a8018f4e9f63f3853067910b87442dfe696b22769"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 0,
+      "arm": "off",
+      "cold_pso_ms": 17.7585,
+      "dxil_bytes": 5256,
+      "opaque_pso_cache_bytes": 5170,
+      "peak_private_commit_bytes": 101801984,
+      "log_sha256": "c8f9eaf5431829a0c7dd75d292fe527ebae4a3e4446b81e9b968d3b0749b2aa4"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 0,
+      "arm": "on",
+      "cold_pso_ms": 12.5205,
+      "dxil_bytes": 4536,
+      "opaque_pso_cache_bytes": 4114,
+      "peak_private_commit_bytes": 102469632,
+      "log_sha256": "5215d696242b469635bcb3df63f04f4cda3d5089e7456dc4f0fb6538ee38df2b"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 1,
+      "arm": "off",
+      "cold_pso_ms": 16.3241,
+      "dxil_bytes": 5256,
+      "opaque_pso_cache_bytes": 5170,
+      "peak_private_commit_bytes": 101675008,
+      "log_sha256": "63fd2ce0789a13d5a20c57eae7915c0579a2328a1d3a59b3eb9cd055705920d6"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 1,
+      "arm": "on",
+      "cold_pso_ms": 12.7736,
+      "dxil_bytes": 4536,
+      "opaque_pso_cache_bytes": 4114,
+      "peak_private_commit_bytes": 103247872,
+      "log_sha256": "34220d092fd66de13176645ea6d649d651895ca1e67f7a1cd772533966e182dd"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 2,
+      "arm": "off",
+      "cold_pso_ms": 15.4391,
+      "dxil_bytes": 5256,
+      "opaque_pso_cache_bytes": 5170,
+      "peak_private_commit_bytes": 102580224,
+      "log_sha256": "9afcc924b98e32151158a6e4a4ea69e0bda906d032e9ac8faace4d7efbb19a43"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 2,
+      "arm": "on",
+      "cold_pso_ms": 13.2782,
+      "dxil_bytes": 4536,
+      "opaque_pso_cache_bytes": 4114,
+      "peak_private_commit_bytes": 101384192,
+      "log_sha256": "ef6373c65d2dc694416c382416d8e42cb0e8b2b6650c4f0309cbde012687c8c2"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 3,
+      "arm": "off",
+      "cold_pso_ms": 15.8958,
+      "dxil_bytes": 5256,
+      "opaque_pso_cache_bytes": 5170,
+      "peak_private_commit_bytes": 103735296,
+      "log_sha256": "406d476d5973f92cf4d20edb7f3b6c6538884db5dca60eff5ce259ec27f53a82"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 3,
+      "arm": "on",
+      "cold_pso_ms": 13.6829,
+      "dxil_bytes": 4536,
+      "opaque_pso_cache_bytes": 4114,
+      "peak_private_commit_bytes": 101847040,
+      "log_sha256": "2c089e1589a5a414725cf6a34c1087912e5e98e1a1608ae5ff479757014bc417"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 4,
+      "arm": "off",
+      "cold_pso_ms": 15.5447,
+      "dxil_bytes": 5256,
+      "opaque_pso_cache_bytes": 5170,
+      "peak_private_commit_bytes": 102961152,
+      "log_sha256": "4a04277a1523a7a26e92562ac1751edd7488a39f5af85b291ca2489f9a593204"
+    },
+    {
+      "sample": "naga-mini-057",
+      "pair": 4,
+      "arm": "on",
+      "cold_pso_ms": 12.7592,
+      "dxil_bytes": 4536,
+      "opaque_pso_cache_bytes": 4114,
+      "peak_private_commit_bytes": 102035456,
+      "log_sha256": "be05d5653741740144854e60ccddd67eaa6c71b17d0cae25c72664d3c484816c"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 0,
+      "arm": "off",
+      "cold_pso_ms": 17.1302,
+      "dxil_bytes": 6120,
+      "opaque_pso_cache_bytes": 5730,
+      "peak_private_commit_bytes": 104165376,
+      "log_sha256": "7f0f8ea7124e1064eda7ce4ede9de656b5d24f52eb63720f3f5c313c48ccfbbf"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 0,
+      "arm": "on",
+      "cold_pso_ms": 16.2132,
+      "dxil_bytes": 5484,
+      "opaque_pso_cache_bytes": 4498,
+      "peak_private_commit_bytes": 101740544,
+      "log_sha256": "21573dfc92a9384ce877e41755a42c091fc64cd899bd1dc57915cbcd572a0454"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 1,
+      "arm": "off",
+      "cold_pso_ms": 17.857,
+      "dxil_bytes": 6120,
+      "opaque_pso_cache_bytes": 5730,
+      "peak_private_commit_bytes": 103452672,
+      "log_sha256": "a45aeb5412795bcee2ea7bee03c3aee5e2b2f029b3825fff6966d9b5f7aa53aa"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 1,
+      "arm": "on",
+      "cold_pso_ms": 15.116,
+      "dxil_bytes": 5484,
+      "opaque_pso_cache_bytes": 4498,
+      "peak_private_commit_bytes": 102739968,
+      "log_sha256": "aa55d2f5f7026a77d1edc3d69c49ee823ae0fec5b39f9deefa168d8760f689ab"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 2,
+      "arm": "off",
+      "cold_pso_ms": 17.4117,
+      "dxil_bytes": 6120,
+      "opaque_pso_cache_bytes": 5730,
+      "peak_private_commit_bytes": 102481920,
+      "log_sha256": "8506243b5b2c86b28c3af4d388d640f6cadfb8bff3a7bf8229e0243d9a91be3d"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 2,
+      "arm": "on",
+      "cold_pso_ms": 14.9782,
+      "dxil_bytes": 5484,
+      "opaque_pso_cache_bytes": 4498,
+      "peak_private_commit_bytes": 102395904,
+      "log_sha256": "dca36ea2c827fd2f5f11e4d6c84575afed7a8a0098ceb54e0f88c347726df5b2"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 3,
+      "arm": "off",
+      "cold_pso_ms": 17.3358,
+      "dxil_bytes": 6120,
+      "opaque_pso_cache_bytes": 5730,
+      "peak_private_commit_bytes": 103661568,
+      "log_sha256": "c606d21b7e9e9ccd2f42df29155dc6dcf918bd45c97b3e7d95c923f4beb32b69"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 3,
+      "arm": "on",
+      "cold_pso_ms": 15.3941,
+      "dxil_bytes": 5484,
+      "opaque_pso_cache_bytes": 4498,
+      "peak_private_commit_bytes": 102305792,
+      "log_sha256": "b66ce0caa30d98c2f9a71019a0a22c0786f42b17d12d21e0fc3023907455775c"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 4,
+      "arm": "off",
+      "cold_pso_ms": 17.9509,
+      "dxil_bytes": 6120,
+      "opaque_pso_cache_bytes": 5730,
+      "peak_private_commit_bytes": 103604224,
+      "log_sha256": "d09232f6c8985443e2c8060b8b30ff7fda17ad4599456f49ca52f4d6d8bdbdbd"
+    },
+    {
+      "sample": "naga-mini-058",
+      "pair": 4,
+      "arm": "on",
+      "cold_pso_ms": 14.9735,
+      "dxil_bytes": 5484,
+      "opaque_pso_cache_bytes": 4498,
+      "peak_private_commit_bytes": 102289408,
+      "log_sha256": "d662d5dd52c8662cfef160bc5035f41b735412057891440349f27e3ddbf91fda"
+    }
+  ],
+  "warm_runs": [
+    {
+      "pair": 0,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "af79db9225d2554cd6175e1228e097955ba0a549ebfbcf69c19c93e334a8e778",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 0,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "a18b36bd0c240da4b06d4ea69afc08f728b177ca74e01d0da6c35a1202369b32",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 1,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "93751422b99f899b3d12512e1f6f2a5ecef1833f268561905bf883d39165c819",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 1,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "085358c53cbfea2d8d1f82e27d9de2195a9c3ce379fc8ffa9f22f11039bbff91",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 2,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "cff5c95e097712ea0588c4621845a34be1356f564945825160223471ffaac50e",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 2,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "c4877165a3098964a9c409ada4f15551142005fad4dc50ffdc626744958c6dd8",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 3,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "a55643814b18a10b2847b75175550c38fc6374ab82ec2a2d15de7c220bc74841",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 3,
+      "arm": "on",
+      "ticks": 8192,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "1f3bd12cfc94c8fda03ba8a5f28455af8749ed275bf41bd3352377548d8b4406",
+      "per_draw_us": 0.256
+    },
+    {
+      "pair": 4,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "c2725108e8394527251809aa7f56bc9920b821f3348fac1f732de415f069ca2a",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 4,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "c304f98bffd828d3e44645c0e4a3914e1aeed4446f7eeb7d83592afcced5637a",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 5,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "dde702707bba6fb8d5c0dc04a3b3c55f60ccde18028c30d2b7d62e5352aed334",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 5,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "60d6d821f54d3cb60e63be3a97a0d2c8e273eebe18ceae2a5ee5cbcd22d3b07c",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 6,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "a54c2ad7dab42b5c1ba6a2a06cb0e808a0aa1ba1cdcab8fe2cae755d5a2b1bc8",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 6,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "996bb3ee5e8d0e4b9f386dec34309f7470fb82a86c8b595790e55ac2888e6790",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 7,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "faa2c478b825a6d86875348139a4d4a155058e16d36b347595e6a7645f83871f",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 7,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "26ddfabc90951408190791ac58bfd76810cbe5f98dd2675e7ecb8de79796cd02",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 8,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "b381b3f3174f2c0434d830121605bd5dbbe751b889d1c8c851a270af72b4e684",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 8,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "ddbf4f85277983575440e8df513a53ff640587c510959c6631a5a3ed2c5bb7ce",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 9,
+      "arm": "off",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "76053a76fb4e38548a57776a6994cf8cb839e6e57ad982130c735b01b5b2e4f4",
+      "per_draw_us": 0.288
+    },
+    {
+      "pair": 9,
+      "arm": "on",
+      "ticks": 9216,
+      "hz": 1000000000,
+      "draws": 32,
+      "verified_pixels": 16384,
+      "log_sha256": "652eae46531ecee8d92f9ae9d36f7b89fc2b444c739c48ef2d97699b2834569d",
+      "per_draw_us": 0.288
+    }
+  ],
+  "physical_controls_pixels": 1664,
+  "xcl_module_core_passed": 37
+}

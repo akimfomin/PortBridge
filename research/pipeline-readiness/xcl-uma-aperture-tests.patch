@@ -1,0 +1,410 @@
+diff --git a/crates/xcl/src/gpu/dxil/aperture_tests.rs b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+new file mode 100644
+index 0000000..74ac0f4
+--- /dev/null
++++ b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+@@ -0,0 +1,119 @@
++//! Differential GPU and native pipeline checks for proved pixel apertures.
++use super::kernel::{translate_pixel, translate_pixel_for_uma_aperture, KernelOptions};
++use crate::gpu::dxbc::SigElement;
++use crate::gpu::rdna2::encode;
++use crate::gpu::recomp::{dxc, runner, PsInterface, HEAP_WINDOWS, IO_UMA_BASE_HI};
++use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R32G32_FLOAT;
++
++fn emit(code: &mut Vec<u8>, name: &str, enc: &str, fields: &[(&str, u64)]) {
++    code.extend(encode(name, enc, fields, None).unwrap_or_else(|e| panic!("{name}: {e}")));
++}
++
++fn carry_shader(offset: u64) -> (Vec<u8>, PsInterface) {
++    let mut code = Vec::new();
++    emit(&mut code, "V_MOV_B32", "ENC_VOP1", &[("VDST", 20), ("SRC0", 0)]);
++    emit(&mut code, "V_MOV_B32", "ENC_VOP1", &[("VDST", 21), ("SRC0", 128)]);
++    emit(&mut code, "S_MOV_B32", "ENC_SOP1", &[("SDST", 126), ("SSRC0", 6)]);
++    emit(&mut code, "GLOBAL_LOAD_DWORD", "ENC_FLAT_GLBL", &[("VDST", 4), ("ADDR", 20), ("SADDR", 0x7D), ("OFFSET", offset)]);
++    emit(&mut code, "EXP", "ENC_EXP", &[("TGT", 0), ("EN", 15), ("VSRC0", 4), ("VSRC1", 4), ("VSRC2", 4), ("VSRC3", 4), ("DONE", 1), ("VM", 1)]);
++    emit(&mut code, "S_ENDPGM", "ENC_SOPP", &[]);
++    let sig = |name: &str, system_value| SigElement {
++        name: name.into(), index: 0, system_value, component_type: 3, register: 0,
++        mask: 15, rw_mask: 15, stream: 0,
++    };
++    (code, PsInterface {
++        inputs: vec![sig("SV_Position", 1)], outputs: vec![sig("SV_Target", 64)],
++        input_ena: 0x2, attrs: None,
++    })
++}
++
++#[test]
++fn aperture_carry_and_borrow_preserve_window_and_exec() {
++    if !super::graphics::tests::draw_ready() || dxc::location().is_err() {
++        return runner::skip_test("no graphics adapter or DXC");
++    }
++    let root = std::env::var("XCL_APERTURE_TEST_ROOT").as_deref() != Ok("0");
++    let opt = KernelOptions { wave64: false, split: false, mem_windows: if root { 4 } else { 4 | HEAP_WINDOWS }, sampler_base: 0 };
++    let vs = dxc::compile("float4 main(float2 p: POSITION): SV_Position {return float4(p, 0, 1);}", "main", "vs_6_6", &[]).unwrap();
++    let verts = [-1.0, -1.0, -1.0, 3.0, 3.0, -1.0];
++    let layout = [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }];
++    let mut mem = vec![9.0f32.to_bits(); 256];
++    mem[0] = 3.0f32.to_bits();
++    mem[7] = 4.0f32.to_bits();
++    mem[12] = 5.0f32.to_bits();
++    let clear = [8.0; 4];
++    if let Ok(arm) = std::env::var("XCL_APERTURE_DRAW_ARM") {
++        let (code, abi) = carry_shader(16);
++        let shader = match arm.as_str() {
++            "off" => translate_pixel(&code, opt, &abi),
++            "on" => translate_pixel_for_uma_aperture(&code, opt, &abi, 4),
++            _ => panic!("XCL_APERTURE_DRAW_ARM must be off or on"),
++        }.unwrap().dxil;
++        super::validate::validate(&shader).unwrap();
++        let mut sgprs = [0; IO_UMA_BASE_HI + 1];
++        sgprs[0] = 32;
++        sgprs[6] = u32::MAX;
++        sgprs[IO_UMA_BASE_HI] = 4;
++        let pixels = runner::draw_heap_windows(&vs, &shader, &layout, &verts, 8, &sgprs, &mem, 64, 128, clear).unwrap();
++        assert_eq!(pixels, vec![[5.0; 4]; 128 * 128]);
++        println!("aperture ready draw {arm}: {} correct pixels", pixels.len());
++        return;
++    }
++    for (offset, edge_low, normal) in [(16, 0xffff_fff0, 5.0), (0xffc, 0, 4.0)] {
++        let (code, abi) = carry_shader(offset);
++        let baseline = translate_pixel(&code, opt, &abi).unwrap().dxil;
++        let specialized = translate_pixel_for_uma_aperture(&code, opt, &abi, 4).unwrap().dxil;
++        assert_ne!(baseline, specialized);
++        for unsafe_base in [0, 1, u32::MAX - 3] {
++            let generic = translate_pixel_for_uma_aperture(&code, opt, &abi, unsafe_base).unwrap().dxil;
++            assert_eq!(baseline, generic, "unsafe aperture {unsafe_base:#x} must keep generic DXIL");
++        }
++        for shader in [&baseline, &specialized] {
++            super::validate::validate(shader).unwrap();
++        }
++        let count_switches = |shader: &[u8]| super::validate::disassemble(shader).unwrap().matches("switch i32").count();
++        if root {
++            assert_eq!((count_switches(&baseline), count_switches(&specialized)), (1, 0));
++        }
++        for (low, exec, wanted) in [(32, u32::MAX, [normal; 4]), (edge_low, u32::MAX, [0.0; 4]), (32, 0, clear)] {
++            let mut sgprs = [0; IO_UMA_BASE_HI + 1];
++            sgprs[0] = low;
++            sgprs[6] = exec;
++            sgprs[IO_UMA_BASE_HI] = 4;
++            for shader in [&baseline, &specialized] {
++                let pixels = runner::draw_heap_windows(&vs, shader, &layout, &verts, 8, &sgprs, &mem, 64, 8, clear).unwrap();
++                assert_eq!(pixels, vec![wanted; 64], "offset {offset:#x}, low {low:#x}, exec {exec:#x}");
++            }
++        }
++        if offset == 16 {
++            let mut sgprs = [0; IO_UMA_BASE_HI + 1];
++            sgprs[0] = edge_low;
++            sgprs[6] = u32::MAX;
++            sgprs[IO_UMA_BASE_HI] = 1;
++            let fallback = translate_pixel_for_uma_aperture(&code, opt, &abi, 1).unwrap().dxil;
++            let pixels = runner::draw_heap_windows(&vs, &fallback, &layout, &verts, 8, &sgprs, &mem, 64, 8, clear).unwrap();
++            assert_eq!(pixels, vec![[3.0; 4]; 64], "carry into high one is valid for the uncertified base");
++        }
++    }
++    println!("{}: 832 RGBA32F pixels matched CPU carry, borrow, EXEC and uncertified-base cases",
++        runner::adapter().unwrap());
++}
++
++#[test]
++fn aperture_open_pixel_pso() {
++    let Some(path) = std::env::var_os("XCL_APERTURE_SAMPLE_PS") else { return };
++    let varyings: u32 = std::env::var("XCL_APERTURE_SAMPLE_VARYINGS").unwrap().parse().unwrap();
++    assert!(varyings <= 16);
++    let mut vs = String::from("struct V { float4 p: SV_Position;\n");
++    for n in 0..varyings {
++        vs.push_str(&format!("float4 p{n}: TEXCOORD{n};\n"));
++    }
++    vs.push_str("}; V main(uint id:SV_VertexID) {V a=(V)0; a.p=float4(0,0,0,1); return a;}");
++    let vs = dxc::compile(&vs, "main", "vs_6_6", &[]).unwrap();
++    let ps = std::fs::read(path).unwrap();
++    super::validate::validate(&ps).expect("open shader DXIL validates");
++    runner::disable_driver_shader_cache().expect("D3D12 accepted implicit cache disable");
++    let (native_ms, cache_bytes) = runner::measure_aperture_pixel_pso(&vs, &ps).unwrap();
++    println!("aperture sample adapter={} native_ms={native_ms:.6} opaque_cache_bytes={cache_bytes} dxil_bytes={}",
++        runner::adapter().unwrap(), ps.len());
++}
+diff --git a/crates/xcl/src/gpu/dxil/mod.rs b/crates/xcl/src/gpu/dxil/mod.rs
+index a0ec945..7d3cd88 100644
+--- a/crates/xcl/src/gpu/dxil/mod.rs
++++ b/crates/xcl/src/gpu/dxil/mod.rs
+@@ -57,3 +57,6 @@ mod msaa_tests;
+ mod round_tests;
+ #[cfg(test)]
+ mod geometry_tests;
++
++#[cfg(test)]
++mod aperture_tests;
+diff --git a/crates/xcl/src/gpu/recomp/runner.rs b/crates/xcl/src/gpu/recomp/runner.rs
+index 2041690..c6b62ef 100644
+--- a/crates/xcl/src/gpu/recomp/runner.rs
++++ b/crates/xcl/src/gpu/recomp/runner.rs
+@@ -539,6 +539,16 @@ pub fn adapter() -> Result<String, String> {
+     gpu.as_ref().map(|x| x.adapter.clone()).map_err(|x| x.clone())
+ }
+ 
++#[cfg(test)]
++pub(crate) fn disable_driver_shader_cache() -> Result<(), String> {
++    let mut guard = GPU.lock().unwrap();
++    let gpu = guard.get_or_insert_with(init).as_ref().map_err(Clone::clone)?;
++    let device = gpu.dev.cast::<ID3D12Device9>().map_err(e)?;
++    let kinds = D3D12_SHADER_CACHE_KIND_FLAG_IMPLICIT_DRIVER_MANAGED
++        | D3D12_SHADER_CACHE_KIND_FLAG_IMPLICIT_D3D_CACHE_FOR_DRIVER;
++    unsafe { device.ShaderCacheControl(kinds, D3D12_SHADER_CACHE_CONTROL_FLAG_DISABLE) }.map_err(e)
++}
++
+ pub fn wave64_supported() -> Result<bool, String> {
+     let mut g = GPU.lock().unwrap();
+     let gpu = g.get_or_insert_with(init);
+@@ -871,7 +881,7 @@ pub fn draw_gs(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, None)
+ }
+ 
+ /// `draw_gs` of an indexed triangle list (`indices`).
+@@ -887,7 +897,7 @@ pub fn draw_gs_indexed(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], size, clear)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], size, clear, None)
+ }
+ 
+ /// `draw` with textures and samplers in the directly indexed heaps (see `ViewTexture`).
+@@ -905,7 +915,30 @@ pub fn draw_views(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, size, clear)
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, size, clear, None)
++}
++
++/// One packed resource with disjoint raw UAV views emulates small console heap windows.
++#[cfg(test)]
++#[allow(clippy::too_many_arguments)]
++pub(crate) fn draw_heap_windows(
++    vs: &[u8],
++    ps: &[u8],
++    layout: &[VertexElement],
++    vertices: &[f32],
++    stride: u32,
++    sgprs: &[u32],
++    mem: &[u32],
++    window_dwords: usize,
++    size: u32,
++    clear: [f32; 4],
++) -> Result<Vec<[f32; 4]>, String> {
++    if window_dwords == 0 || !window_dwords.is_multiple_of(64) || mem.is_empty() ||
++        !mem.len().is_multiple_of(window_dwords) || mem.len() / window_dwords > crate::gpu::uma::MAX_HEAP_WINDOWS
++    {
++        return Err("invalid packed draw heap windows".into());
++    }
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, Some(window_dwords))
+ }
+ 
+ #[allow(clippy::too_many_arguments)]
+@@ -923,6 +956,7 @@ fn draw_gs_views(
+     samplers: &[D3D12_SAMPLER_DESC],
+     size: u32,
+     clear: [f32; 4],
++    window_dwords: Option<usize>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     let mut g = GPU.lock().unwrap();
+     let gpu = g.get_or_insert_with(init).as_mut().map_err(|x| x.clone())?;
+@@ -960,9 +994,21 @@ fn draw_gs_views(
+         pd.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+         pd.RasterizerState.DepthClipEnable = true.into();
+         pd.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
++        let timed = window_dwords.map(|_| std::time::Instant::now());
+         let pso: ID3D12PipelineState = dev.CreateGraphicsPipelineState(&pd).map_err(|x| format!("CreateGraphicsPipelineState: {x}"))?;
++        if let Some(started) = timed {
++            println!("guard fixture native_create_ms={:.3}", started.elapsed().as_secs_f64() * 1000.0);
++        }
+         let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, size as i32, size as i32] };
+-        draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear)
++        let pixels = draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear, window_dwords)?;
++        #[cfg(test)]
++        if window_dwords.is_some() && std::env::var("XCL_READ_GUARD_TEST_PSO_BLOB").as_deref() == Ok("1") {
++            match pso.GetCachedBlob() {
++                Ok(blob) => println!("guard pso_cache_blob_bytes={}", blob.GetBufferSize()),
++                Err(err) => println!("guard pso_cache_blob_unavailable={err}"),
++            }
++        }
++        Ok(pixels)
+     }
+ }
+ 
+@@ -1083,7 +1129,7 @@ pub fn draw_on_multi(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, size, clear)
++    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, size, clear, None)
+ }
+ 
+ /// `draw_on_multi`, the draws indexed when there are `indices` (one index buffer for all).
+@@ -1101,6 +1147,7 @@ fn draw_indexed_on(
+     samplers: &[D3D12_SAMPLER_DESC],
+     size: u32,
+     clear: [f32; 4],
++    window_dwords: Option<usize>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     unsafe {
+         let queue: ID3D12CommandQueue =
+@@ -1179,11 +1226,55 @@ fn draw_indexed_on(
+         list.ClearRenderTargetView(rtv, &clear, None);
+         list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: size as f32, Height: size as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
+         list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: size as i32, bottom: size as i32 }]);
+-        let _bound = if textures.is_empty() && samplers.is_empty() { bind_resources(dev, &list, &[], &[]).map(|_| Vec::new())? } else { bind_views(dev, &list, textures, samplers)? };
++        #[cfg(test)]
++        let root_windows = window_dwords.filter(|_| std::env::var("XCL_READ_GUARD_TEST_ROOT_WINDOWS").as_deref() == Ok("1"));
++        #[cfg(not(test))]
++        let root_windows: Option<usize> = None;
++        let heap_windows = if let Some(words) = window_dwords.filter(|_| root_windows.is_none()) {
++            let heap: ID3D12DescriptorHeap = dev.CreateDescriptorHeap(&D3D12_DESCRIPTOR_HEAP_DESC {
++                Type: D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
++                NumDescriptors: super::MEM_HEAP_BASE + (mem.len() / words) as u32,
++                Flags: D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
++                NodeMask: 0,
++            }).map_err(e)?;
++            let inc = dev.GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) as usize;
++            let first = heap.GetCPUDescriptorHandleForHeapStart().ptr;
++            for window in 0..mem.len() / words {
++                let mut view = raw_window_uav((words * 4) as u64);
++                view.Anonymous.Buffer.FirstElement = (window * words) as u64;
++                dev.CreateUnorderedAccessView(&mem_buf, None::<&ID3D12Resource>, Some(&view),
++                    D3D12_CPU_DESCRIPTOR_HANDLE { ptr: first + (super::MEM_HEAP_BASE as usize + window) * inc });
++            }
++            let samplers: ID3D12DescriptorHeap = dev.CreateDescriptorHeap(&D3D12_DESCRIPTOR_HEAP_DESC {
++                Type: D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
++                NumDescriptors: 1,
++                Flags: D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
++                NodeMask: 0,
++            }).map_err(e)?;
++            list.SetDescriptorHeaps(&[Some(heap.clone()), Some(samplers.clone())]);
++            Some((heap, samplers))
++        } else {
++            None
++        };
++        let _bound = if heap_windows.is_some() {
++            Vec::new()
++        } else if textures.is_empty() && samplers.is_empty() {
++            bind_resources(dev, &list, &[], &[])?;
++            Vec::new()
++        } else {
++            bind_views(dev, &list, textures, samplers)?
++        };
+         list.SetGraphicsRootSignature(rs);
+         list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress());
+         list.SetGraphicsRootUnorderedAccessView(1, res_buf.GetGPUVirtualAddress());
+         list.SetGraphicsRootUnorderedAccessView(2, mem_buf.GetGPUVirtualAddress());
++        #[cfg(test)]
++        if let Some(words) = root_windows {
++            for window in 1..mem.len() / words {
++                let offset = (window * words * std::mem::size_of::<u32>()) as u64;
++                list.SetGraphicsRootUnorderedAccessView(2 + window as u32, mem_buf.GetGPUVirtualAddress() + offset);
++            }
++        }
+         list.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+         let vbv = D3D12_VERTEX_BUFFER_VIEW { BufferLocation: upload.GetGPUVirtualAddress(), SizeInBytes: vb_bytes as u32, StrideInBytes: stride };
+         list.IASetVertexBuffers(0, Some(&[vbv]));
+@@ -1199,6 +1290,26 @@ fn draw_indexed_on(
+             list.IASetIndexBuffer(Some(&D3D12_INDEX_BUFFER_VIEW { BufferLocation: b.GetGPUVirtualAddress(), SizeInBytes: bytes as u32, Format: DXGI_FORMAT_R32_UINT }));
+             Some(b)
+         };
++        #[cfg(test)]
++        let timing = if window_dwords.is_some() {
++            let count = std::env::var("XCL_READ_GUARD_TEST_GPU_DRAWS").ok().map(|value| {
++                value.parse::<u32>().ok().filter(|n| (1..=32).contains(n))
++                    .expect("XCL_READ_GUARD_TEST_GPU_DRAWS must be 1–32")
++            });
++            count.map(|count| -> Result<_, String> {
++                if draws.len() != 1 || !indices.is_empty() {
++                    return Err("read-guard timing requires one non-indexed draw".into());
++                }
++                let mut heap: Option<ID3D12QueryHeap> = None;
++                dev.CreateQueryHeap(&D3D12_QUERY_HEAP_DESC {
++                    Type: D3D12_QUERY_HEAP_TYPE_TIMESTAMP, Count: 2, NodeMask: 0,
++                }, &mut heap).map_err(e)?;
++                let out = buffer(dev, 16, D3D12_HEAP_TYPE_READBACK, D3D12_RESOURCE_STATE_COPY_DEST, false)?;
++                Ok((count, heap.ok_or("draw timestamp heap")?, out))
++            }).transpose()?
++        } else {
++            None
++        };
+         for (k, d) in draws.iter().enumerate() {
+             list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress() + (k * KERNEL_SGPRS * 4) as u64);
+             let [left, top, right, bottom] = d.scissor;
+@@ -1209,6 +1320,17 @@ fn draw_indexed_on(
+                 list.DrawIndexedInstanced(indices.len() as u32, 1, 0, 0, 0);
+             }
+         }
++        #[cfg(test)]
++        if let Some((count, heap, out)) = &timing {
++            // The ordinary draw above primes the PSO. The timestamp interval excludes
++            // setup and readback and contains exactly count full-target draws.
++            list.EndQuery(heap, D3D12_QUERY_TYPE_TIMESTAMP, 0);
++            for _ in 0..*count {
++                list.DrawInstanced((vertices.len() as u32 * 4) / stride, 1, 0, 0);
++            }
++            list.EndQuery(heap, D3D12_QUERY_TYPE_TIMESTAMP, 1);
++            list.ResolveQueryData(heap, D3D12_QUERY_TYPE_TIMESTAMP, 0, 2, out, 0);
++        }
+         list.ResourceBarrier(&[transition(&rt, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE)]);
+         let dst = D3D12_TEXTURE_COPY_LOCATION {
+             pResource: transmute_copy(&readback),
+@@ -1224,6 +1346,18 @@ fn draw_indexed_on(
+         list.Close().map_err(e)?;
+         queue.ExecuteCommandLists(&[Some(list.cast().map_err(e)?)]);
+         wait_for_submission(dev, &queue, &fence, 1, "draw")?;
++        #[cfg(test)]
++        if let Some((count, _, out)) = timing {
++            let frequency = queue.GetTimestampFrequency().map_err(e)?;
++            let mut mapped = std::ptr::null_mut();
++            out.Map(0, Some(&D3D12_RANGE { Begin: 0, End: 16 }), Some(&mut mapped)).map_err(e)?;
++            let stamps = std::slice::from_raw_parts(mapped as *const u64, 2);
++            let ticks = stamps[1].checked_sub(stamps[0]);
++            out.Unmap(0, Some(&D3D12_RANGE { Begin: 0, End: 0 }));
++            let ticks = ticks.filter(|&delta| delta != 0 && frequency != 0).ok_or("invalid draw timestamps")?;
++            let ms_per_draw = ticks as f64 * 1000.0 / (frequency as f64 * f64::from(count));
++            println!("guard runtime size={size} draws={count} ticks={ticks} frequency_hz={frequency} gpu_ms_per_draw={ms_per_draw:.6}");
++        }
+         let mut p = std::ptr::null_mut();
+         readback.Map(0, None, Some(&mut p)).map_err(e)?;
+         let pitch = layout_fp.Footprint.RowPitch as usize;
+@@ -1798,3 +1932,33 @@ fn dispatch_with(
+         Ok((out, ms))
+     }
+ }
++
++
++#[cfg(test)]
++pub(crate) fn measure_aperture_pixel_pso(vs: &[u8], ps: &[u8]) -> Result<(f64, usize), String> {
++    let mut g = GPU.lock().unwrap();
++    let gpu = g.get_or_insert_with(init).as_mut().map_err(|x| x.clone())?;
++    unsafe {
++        let dev = &gpu.dev;
++        let rs = root_signature(dev, true)?;
++        let mut desc = D3D12_GRAPHICS_PIPELINE_STATE_DESC {
++            pRootSignature: transmute_copy(&rs),
++            VS: D3D12_SHADER_BYTECODE { pShaderBytecode: vs.as_ptr().cast(), BytecodeLength: vs.len() },
++            PS: D3D12_SHADER_BYTECODE { pShaderBytecode: ps.as_ptr().cast(), BytecodeLength: ps.len() },
++            SampleMask: u32::MAX,
++            PrimitiveTopologyType: D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
++            NumRenderTargets: 1,
++            SampleDesc: DXGI_SAMPLE_DESC { Count: 1, Quality: 0 },
++            ..Default::default()
++        };
++        desc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL.0 as u8;
++        desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
++        desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
++        desc.RasterizerState.DepthClipEnable = true.into();
++        desc.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
++        let started = std::time::Instant::now();
++        let pso: ID3D12PipelineState = dev.CreateGraphicsPipelineState(&desc).map_err(e)?;
++        let native_ms = started.elapsed().as_secs_f64() * 1000.0;
++        Ok((native_ms, pso.GetCachedBlob().map_err(e)?.GetBufferSize()))
++    }
++}
