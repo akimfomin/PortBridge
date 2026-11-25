@@ -1,0 +1,3 @@
+{"worker_sha256": "76d5692ffd9eb081851792fd65096dfa4fdd6d2bd3813347cd1eb3230e808330", "validation_sha256": "6ed2c98c3811b7814aa4c9ad0a664f9b326aa5ee381b2f7229f40eeab585823e"}
+full status=returned reaped=1 exit=0 result_stage=6 validation_errors=0 bytes=1048576 regions=1 mismatch=0 readback_fnv1a64=528d7210085cff25 driver=2588114944 peak_job_commit=56041472
+partial status=returned reaped=1 exit=0 result_stage=6 validation_errors=0 bytes=131072 regions=2 mismatch=0 readback_fnv1a64=528d7210085cff25 driver=2588114944 peak_job_commit=56500224

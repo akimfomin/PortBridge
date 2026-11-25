@@ -1,0 +1,75 @@
+{
+  "commit": "0bc810504aa44ba7e30f3c3352ebad697b9814d6",
+  "files": [
+    {
+      "path": "LICENSE",
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "runtime/shims/xg_xs_THIRD_PARTY.md",
+      "git_blob": "12aa03f824765fca6eeef57da35c5a2821293833",
+      "sha256": "fb12d8945a85c3aac735c3b8b9d19fdb3b9460e04c006bc50db4f1d158d0d3bd"
+    },
+    {
+      "path": "runtime/shims/xg_xs_layout.h",
+      "git_blob": "57492f9337662048b4bf17f1f74bc1d44cdf3866",
+      "sha256": "2eff79cda175de6c06b0969f3788f2a476e8c8c55ac18416165bf1a8c075f0da"
+    },
+    {
+      "path": "runtime/test/vulkan_loader.h",
+      "git_blob": "a65ff2f8bfc6da1a15014ded2ca3d3bc63b585e3",
+      "sha256": "e9cfa633dc974bb6e64e6e4c9dddc66956ca9f62b1da92bec462bb359e68ff77"
+    },
+    {
+      "path": "runtime/test/vk_test_device.h",
+      "git_blob": "079707aa9023b3e58553f39f914fc35f2786f6a9",
+      "sha256": "ace2e01811c15e46e98341d0f39e295f42f5d3605071cf2be76d1a8d031dfec4"
+    },
+    {
+      "path": "runtime/test/vk_device_pick.h",
+      "git_blob": "1e1d8c502631ece233bddfbcf4240f09b6219ccd",
+      "sha256": "a1355d02b38a94d6cdfc579374d5acc1878246f29b8c901d4745420c901f3fa2"
+    },
+    {
+      "path": "runtime/src/queue_families.h",
+      "git_blob": "5682d9e543062d3064539b9690b3a905778ad7e6",
+      "sha256": "7504bb923e0c041eae0891b4d46f3ed83e844083ad57bccfaa69d4a31df10017"
+    },
+    {
+      "path": "runtime/src/vulkan_device_filter.h",
+      "git_blob": "87b02424bceead673b20d676a052c544a4dd19d9",
+      "sha256": "a8cd7aafd10774d55f8e43ea30d1ceb8a2b5e1cf436681ce316e3dbf02d8547e"
+    },
+    {
+      "path": "runtime/src/vulkan13_features.h",
+      "git_blob": "8f2dd61f836ee108f1b54e0216ae26dde5e961cf",
+      "sha256": "8164a498d72ad230f1855ff877f7c4256c8fe34f9339810db2aaec62fcbe109e"
+    },
+    {
+      "path": "runtime/src/subgroup_size.h",
+      "git_blob": "0241c4db8e04c0d4adb9fbb4fe96092a601e1052",
+      "sha256": "8079ed66ed0063dd25665d71352510ac27a0eb6903d90e87f65b750a4c418ca6"
+    },
+    {
+      "path": "runtime/src/gfx10_tiling.h",
+      "git_blob": "d869d1102cd4796ec1361c46c1574edbeb256129",
+      "sha256": "255c8c10d470e51c752f3e7c9eafc4595bf23b652ad7cc879f9f3400da97f1b8"
+    },
+    {
+      "path": "runtime/src/shader_library.h",
+      "git_blob": "a359287cb1f346d5ffa66bdcbea5bda9c4e028ff",
+      "sha256": "23d7463efe99e16265ba848d769d35745e3d0af7d91d6672ee68f47dfc7e2204"
+    },
+    {
+      "path": "runtime/src/descriptor_table.h",
+      "git_blob": "a0d80968a8a15904a4ceff8a4d16c58f5a878e2c",
+      "sha256": "9e95b88d1faa52f135ad94d13e8500b18ff7ef80d4ce8091e8df56aa5679800d"
+    },
+    {
+      "path": "runtime/src/spirv_words.h",
+      "git_blob": "e7e91fe5df9e43d24cb7c2474ab963816eb33007",
+      "sha256": "9309c1c6992cf9649432aaeaaccfd8391dc54c2b360df06e916565027fb8dc16"
+    }
+  ]
+}
