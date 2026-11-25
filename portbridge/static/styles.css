@@ -372,3 +372,14 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+.section-freshness { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 9px; margin: 0 0 12px; color: var(--muted); font-size: .84rem; }
+.section-freshness time + span { margin-inline-start: 12px; }
+.activity-start, .browse-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.activity-start a, .browse-pagination a { display: inline-flex; align-items: center; min-height: 44px; }
+.browse-pagination { justify-content: center; padding-block: 14px; }
+.source-list { display: grid; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.source-list :is(h2, a) { overflow-wrap: anywhere; }
+.content > .activity-panel { margin-bottom: 14px; }
+
+.snapshot-warning { display: block; color: var(--muted); }

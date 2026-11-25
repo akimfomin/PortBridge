@@ -26,6 +26,16 @@
 | Попробовать совместную проверку с другой командой | [Один тест на два проекта](docs/PILOT.md) |
 | Предложить проект, связь или исправление поиска | [Форма обратной связи](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml) |
 
+## Попробуйте на одной задаче
+
+Вставьте ссылку на PR в [поиск по источникам GitHub](https://akimfomin.github.io/PortBridge/?lang=ru#/sources) и откройте связанные работы. В списке видны полное число найденных записей и отметки о проверке связи. [Проверенные результаты](https://akimfomin.github.io/PortBridge/?lang=ru#/problems) · [Где можно помочь](https://akimfomin.github.io/PortBridge/?lang=ru#/partial)
+
+```powershell
+python -m portbridge.preflight --url https://github.com/LooperSalty/AnyXboxX/pull/133 --q "v_fmac_f32 rounding" --global
+```
+
+Этот запрос ведёт к прежним измерениям RDNA2 и к новой правке округления на CPU. Для подключения агента откройте [руководство по MCP](docs/MCP.md). Для участия выберите одну проверку на своём оборудовании в [Test Lab](https://akimfomin.github.io/PortBridge/?lang=ru#/lab).
+
 ## Работа идёт
 
 **VIctory, XCL и Continued.** Сопоставили реализацию чтения памяти шейдеров, тесты XCL и исправление гонки в Continued. По ним добавили два теста в локальную копию VIctory. Оба прошли на RTX 4070 Ti SUPER и WARP, а контроль с прежним переводчиком показал отказ в обоих случаях. [Результат и границы проверки](docs/PORTING-WORK.md#чтение-памяти-шейдеров-в-victory)

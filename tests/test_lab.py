@@ -76,7 +76,7 @@ class LabTest(CatalogFixture):
         payload = build_lab()
         amd = filter_lab(payload, equipment="amd", status="needs_run")
         self.assertEqual([task["id"] for task in amd["tasks"]],
-                         ["pb-5-xcl-wave64", "continued-511-repeated-draw",
+                         ["continued-511-repeated-draw",
                           "anyxboxx-147-native-wave64-gather", "framelab-12-vulkan-handoff", "xcl-2126-scratch-coverage"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
         self.assertEqual([task["id"] for task in build_lab(status="blocked")["tasks"]], ["pb-9-reforge-present"])

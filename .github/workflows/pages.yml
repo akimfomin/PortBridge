@@ -4,19 +4,33 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  issue_comment:
+    types: [created, edited, deleted]
   schedule:
     - cron: '13,43 * * * *'
 
 permissions: {}
 
 concurrency:
-  group: ${{ github.ref == 'refs/heads/main' && 'portbridge-pages' || format('portbridge-pages-preview-{0}', github.ref) }}
+  group: >-
+    ${{ github.event_name == 'issue_comment' && !(github.repository == 'akimfomin/PortBridge' && github.event.sender.id == 201861029
+        && github.event.comment.user.id == 201861029 && github.event.comment.author_association == 'OWNER'
+        && !github.event.issue.pull_request && contains(fromJSON('[4,5,9,54]'), github.event.issue.number)
+        && (contains(github.event.comment.body, 'PortBridge test review v1')
+          || contains(github.event.changes.body.from, 'PortBridge test review v1')))
+      && format('portbridge-pages-ignored-{0}', github.run_id)
+      || (github.ref == 'refs/heads/main' && 'portbridge-pages' || format('portbridge-pages-preview-{0}', github.ref)) }}
   cancel-in-progress: false
 
 jobs:
   build:
     if: >-
-      github.ref == 'refs/heads/main' ||
+      (github.ref == 'refs/heads/main' && (github.event_name != 'issue_comment'
+        || (github.repository == 'akimfomin/PortBridge' && github.event.sender.id == 201861029
+        && github.event.comment.user.id == 201861029 && github.event.comment.author_association == 'OWNER'
+        && !github.event.issue.pull_request && contains(fromJSON('[4,5,9,54]'), github.event.issue.number)
+        && (contains(github.event.comment.body, 'PortBridge test review v1')
+          || contains(github.event.changes.body.from, 'PortBridge test review v1'))))) ||
       (github.event_name == 'workflow_dispatch' && github.ref_type == 'branch')
     runs-on: ubuntu-latest
     timeout-minutes: 8

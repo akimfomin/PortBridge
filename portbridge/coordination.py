@@ -24,7 +24,7 @@ def knowledge_graph(catalog):
     return {"nodes": nodes, "edges": edges}
 
 
-def recommendations(catalog, *, project="", limit=20):
+def recommendations(catalog, *, project="", limit=20, matches=None):
     cards = {card["id"]: card for card in catalog.problems()}
     dependents = defaultdict(set)
     for card in cards.values():
@@ -68,7 +68,9 @@ def recommendations(catalog, *, project="", limit=20):
     open_discussions = {canonical_url(row["url"]) for row in catalog.observations(limit=None)
                         if row["status"] == "open"
                         and not source_sync_failed(projects.get(row["project"], {}), row["url"])}
-    for hint in catalog.matches(limit=200):
+    if matches is None:
+        matches = catalog.matches(limit=200)
+    for hint in matches:
         if hint.get("basis") != "reference":
             continue
         sources = [hint["left"], hint["right"]]

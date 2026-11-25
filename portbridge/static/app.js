@@ -10,7 +10,9 @@ const statusField = byId('status-filter');
 const filters = byId('filters');
 const viewStatus = byId('view-status');
 const summary = byId('summary');
-const coordinationSection = byId('coordination');
+const sectionFreshness = byId('section-freshness');
+const stageField = byId('stage-filter');
+const kindField = byId('kind-filter');
 const refreshActivity = byId('refresh-activity');
 const languageLinks = document.querySelectorAll('[data-language]');
 const language = new URLSearchParams(window.location.search).get('lang') === 'ru' ? 'ru' : 'en';
@@ -22,6 +24,8 @@ let request = null;
 let debounce = null;
 let summaryData = null;
 let activitySignature = '';
+let manifestChecked = 0;
+const refreshPeriod = 2 * 60 * 1000;
 
 const problemStates = {
   investigating: t('Under investigation', 'Исследуется'), partial: t('Partially resolved', 'Частично решено'),
@@ -56,10 +60,12 @@ const labels = {
     'Свежие изменения на GitHub, проверенные результаты и задачи, где можно помочь.')],
   lab: [t('Test Lab', 'Лаборатория тестов'), t('Pick a synthetic check you can run. The instructions and the discussion for sharing results are on GitHub.',
     'Выберите синтетический тест для своего стенда. Инструкция и обсуждение для отчёта находятся на GitHub.')],
-  problems: [t('Issue catalog', 'Каталог проблем'), t('Fixes and test results from open Xbox Series compatibility projects.',
-    'Исправления и результаты проверок из открытых проектов совместимости Xbox Series с ПК.')],
+  problems: [t('Issue catalog', 'Каталог проблем'), t('Reviewed cases, fixes and test results.',
+    'Проверенные карточки, исправления и результаты тестов.')],
   partial: [t('Cross-project leads', 'Где есть задел'), t('Issues where another team has tested a fix or made progress toward one.',
-    'Проблемы, по которым другая команда проверила решение или продвинулась в его поиске.')],
+    'Куда применить существующие проверки и какие новые связи стоит рассмотреть.')],
+  sources: [t('GitHub sources', 'Источники GitHub'), t('Search the indexed public issues, pull requests and checks.',
+    'Поиск по открытым задачам, PR и проверкам из индекса.')],
   matches: [t('Related work', 'Схожие проблемы'), t('Potential matches to review against each project’s platform and architecture.',
     'Кандидаты на совпадение. При проверке учитывайте платформу и устройство каждого проекта.')],
   projects: [t('Projects', 'Проекты'), t('Repositories tracked by PortBridge and the latest data from GitHub.',
@@ -220,20 +226,37 @@ function contains(record, query) {
   });
 }
 
-async function readSnapshot(name) {
-  if (!snapshots.has(name)) snapshots.set(name, await getJSON(`./data/${name}.json`));
-  return snapshots.get(name);
+async function readSnapshot(name, signal) {
+  const file = snapshotSite?.snapshots?.[name];
+  const immutable = typeof file === 'string' && new RegExp(`^${name}-[a-f0-9]{16,64}\\.json$`).test(file);
+  if (!immutable) return getJSON(`./data/${name}.json`, signal, 'no-cache');
+  if (!snapshots.has(file)) snapshots.set(file, await getJSON(`./data/${file}`, signal));
+  return snapshots.get(file);
+}
+
+async function checkManifest(signal, force = false) {
+  if (!force && Date.now() - manifestChecked < refreshPeriod) return false;
+  const settings = await getJSON('./data/site.json', signal, 'no-cache');
+  if (!settings || settings.mode !== 'snapshot' || !settings.generated_at) throw new Error('Invalid public snapshot');
+  manifestChecked = Date.now();
+  const changed = settings.generated_at !== snapshotSite?.generated_at;
+  snapshotSite = settings;
+  if (changed) summaryData = null;
+  byId('sources-link').hidden = !settings.browse_index;
+  if (settings.browse_index) {
+    byId('search-submit').textContent = t('Search GitHub sources', 'Искать по источникам');
+  }
+  return changed;
 }
 
 async function fetchJSON(path, signal) {
-  if (['/activity', '/ecosystem', '/lab'].includes(path)) {
-    return getJSON(snapshotSite ? `./data${path}.json` : `${apiRoot}${path}`, signal, 'no-cache');
-  }
-  if (!snapshotSite) return getJSON(`${apiRoot}${path}`, signal);
+  if (!snapshotSite) return getJSON(`${apiRoot}${path}`, signal, 'no-cache');
   const [endpoint, query] = path.split('?', 2);
   const [, name, id] = endpoint.split('/');
-  if (!['projects', 'problems', 'matches', 'health', 'coordination', 'outreach'].includes(name)) throw new Error('Unknown snapshot');
-  const data = await readSnapshot(name);
+  if (!['projects', 'problems', 'matches', 'health', 'outreach', 'activity', 'ecosystem', 'lab'].includes(name)) {
+    throw new Error('Unknown snapshot');
+  }
+  const data = await readSnapshot(name, signal);
   const params = new URLSearchParams(query || '');
   if (name === 'problems') {
     const problems = list(data.problems);
@@ -258,9 +281,8 @@ async function fetchJSON(path, signal) {
 async function initializeData() {
   const health = await getJSON(`${apiRoot}/health`).catch(() => null);
   if (health) return health;
-  const settings = await getJSON('./data/site.json').catch(() => null);
-  if (!settings || typeof settings !== 'object' || Array.isArray(settings)) return {};
-  snapshotSite = settings;
+  if (!await checkManifest(undefined, true).catch(() => false)) return {};
+  const settings = snapshotSite;
   byId('api-link').href = t('./api.html', './api.ru.html');
   const repository = repositoryURL(settings.repository);
   if (repository) {
@@ -302,32 +324,21 @@ function showSummary(problems) {
   summary.hidden = false;
 }
 
-function showCoordination(data) {
-  const coordination = data?.coordination;
-  const reference = coordination?.reference;
-  if (!reference) return;
-  const title = editorial(reference, 'title');
-  if (!title) return;
-  const headline = element('div', 'card-top');
-  const baseline = reference.status === 'proposed' ? t('Proposed baseline', 'Предложенный ориентир') : t('Baseline', 'Ориентир');
-  headline.append(element('h2', '', t('Shared baseline', 'Общая точка отсчёта')), element('span', 'pill', baseline));
-  const source = element('div', 'meta-row');
-  source.append(githubLink(title, reference.url));
-  if (reference.revision) source.append(element('span', 'identifier', String(reference.revision).slice(0, 12)));
-  coordinationSection.append(headline, source);
-  for (const detail of [editorial(reference, 'scope'), editorial(reference, 'observed')]) {
-    if (detail) coordinationSection.append(element('p', '', detail));
+function sectionDates(published, checked) {
+  sectionFreshness.replaceChildren();
+  if (published) {
+    sectionFreshness.append(element('span', '', t('Snapshot published', 'Снимок опубликован')), activityTime(published));
   }
-  const steps = list(editorial(coordination, 'steps'));
-  if (steps.length) {
-    const details = element('details');
-    const items = element('ol');
-    steps.forEach((step) => items.append(element('li', '', step)));
-    details.append(element('summary', '', t('How to compare builds', 'Как сравнивать сборки')), items);
-    coordinationSection.append(details);
+  if (checked) {
+    sectionFreshness.append(element('span', '', t('Latest successful source check', 'Последняя успешная проверка источника')),
+      activityTime(checked));
   }
-  const current = route();
-  coordinationSection.hidden = current.view !== 'problems' || current.id !== null;
+  sectionFreshness.hidden = !sectionFreshness.childElementCount;
+}
+
+function latestChecked(times) {
+  return times.filter((value) => typeof value === 'string' && Number.isFinite(Date.parse(value)))
+    .sort((first, second) => Date.parse(first) - Date.parse(second)).at(-1);
 }
 
 function stateScreen(title, explanation, retry = false) {
@@ -565,6 +576,164 @@ function drawProblem(problem) {
   content.replaceChildren(detail, sectionTitle, comparison, answerDraft(problem));
 }
 
+const browseFile = /^[a-f0-9]{24}$/;
+
+async function browsePosting(generation, kind, roots, key, signal) {
+  const encoded = new TextEncoder().encode(key);
+  const bytes = await crypto.subtle.digest('SHA-256', encoded);
+  const hash = Array.from(new Uint8Array(bytes), (value) => value.toString(16).padStart(2, '0')).join('');
+  let prefix = hash.slice(0, 2);
+  if (!roots.includes(prefix)) return [];
+  while (prefix.length <= hash.length) {
+    const file = `browse-${generation}-${kind}-terms-${prefix}.json`;
+    if (!snapshots.has(file)) snapshots.set(file, await getJSON(`./data/${file}`, signal));
+    const shard = snapshots.get(file);
+    if (shard.format !== 'PortBridge search shard v1') throw new Error('Invalid public posting');
+    if (shard.entries) {
+      if (!Object.hasOwn(shard.entries, key)) return [];
+      const values = shard.entries[key];
+      if (Array.isArray(values)) return values;
+      if (!Number.isInteger(values?.parts) || values.parts < 1) throw new Error('Invalid public posting length');
+      const items = [];
+      for (let start = 0; start < values.parts; start += 4) {
+        const files = Array.from({length: Math.min(4, values.parts - start)}, (_, offset) =>
+          `browse-${generation}-${kind}-post-${hash}-part-${start + offset}.json`);
+        const replies = await Promise.all(files.map((part) => getJSON(`./data/${part}`, signal)));
+        for (const reply of replies) {
+          if (!Array.isArray(reply.items)) throw new Error('Invalid public posting page');
+          items.push(...reply.items);
+        }
+      }
+      return items;
+    }
+    const digit = hash[prefix.length];
+    if (!digit || !list(shard.children).includes(digit)) return [];
+    prefix += digit;
+  }
+  return [];
+}
+
+function browseKeys(params, kind) {
+  const query = searchable((params.get('q') || '').trim().slice(0, 200));
+  const url = githubURL(query);
+  const keys = [];
+  if (/^[1-9][0-9]*$/.test(query)) keys.push('number:' + query);
+  else if (url) {
+    const parsed = new URL(url);
+    keys.push('url:' + parsed.origin + parsed.pathname.replace(/\/+$/, ''));
+  } else {
+    for (const token of query.matchAll(/#[0-9]+|[\p{L}\p{N}_]+/gu)) {
+      keys.push(token[0].startsWith('#') ? 'number:' + token[0].slice(1) : 'word:' + token[0]);
+    }
+  }
+  const fields = kind === 'matches' ? ['stage', 'project'] : ['project', 'status', 'kind'];
+  for (const field of fields) {
+    const value = params.get(field);
+    if (value && /^[a-z0-9_-]+$/.test(value)) keys.push(`${field}:${value}`);
+  }
+  return [...new Set(keys)];
+}
+
+async function browsePublic(kind, params, signal) {
+  const pointer = snapshotSite?.browse_index;
+  if (pointer?.version !== 1 || !browseFile.test(pointer.generation)) throw new Error('Unknown browsing index');
+  const generation = pointer.generation;
+  const manifestKey = `browse-index:${generation}`;
+  if (!snapshots.has(manifestKey)) {
+    const manifest = await getJSON(`./data/browse-${generation}-index.json`, signal);
+    if (manifest.generation !== generation) throw new Error('Public index is updating');
+    snapshots.set(manifestKey, manifest);
+  }
+  const manifest = snapshots.get(manifestKey);
+  const dataset = manifest.kinds[kind];
+  const size = manifest.page_size;
+  if (!dataset || !Number.isInteger(size) || size < 1 || size > 100 || !Number.isInteger(dataset.total)) {
+    throw new Error('Invalid browsing dataset');
+  }
+  const keys = browseKeys(params, kind);
+  let ids;
+  if (keys.length) {
+    // Limit parallel reads. A broad query still uses every selected term.
+    const postings = [];
+    for (let start = 0; start < keys.length; start += 4) {
+      postings.push(...await Promise.all(keys.slice(start, start + 4).map((key) =>
+        browsePosting(generation, kind, dataset.roots, key, signal))));
+      if (postings.some((posting) => !posting.length)) break;
+    }
+    postings.sort((a, b) => a.length - b.length);
+    const rest = postings.slice(1).map((set) => new Set(set));
+    ids = postings[0].filter((id) => Number.isInteger(id) && id >= 0 && id < dataset.total && rest.every((set) => set.has(id)));
+  }
+  const total = ids?.length ?? dataset.total;
+  const pages = Math.max(1, Math.ceil(total / size));
+  const page = Math.min(Math.max(1, Number.parseInt(params.get('page'), 10) || 1), pages);
+  const offset = (page - 1) * size;
+  const selected = ids?.slice(offset, offset + size)
+    ?? Array.from({length: Math.min(size, total - offset)}, (_, n) => offset + n);
+  const groups = [...new Set(selected.map((id) => Math.floor(id / size)))];
+  const rows = new Map();
+  for (let start = 0; start < groups.length; start += 4) {
+    await Promise.all(groups.slice(start, start + 4).map(async (part) => {
+      const file = `browse-${generation}-${kind}-page-${part}.json`;
+      if (!snapshots.has(file)) snapshots.set(file, await getJSON(`./data/${file}`, signal));
+      rows.set(part, snapshots.get(file).items);
+    }));
+  }
+  return {total, all: dataset.total, page, pages, offset,
+    items: selected.map((id) => rows.get(Math.floor(id / size))[id % size])};
+}
+
+function drawBrowsePages(result, current) {
+  const pagination = element('nav', 'browse-pagination');
+  pagination.setAttribute('aria-label', t('Pages of results', 'Страницы результатов'));
+  function pageLink(label, page) {
+    const params = new URLSearchParams(current.params);
+    params.set('page', page);
+    return internalLink(label, `#/${current.view}?${params}`, 'retry');
+  }
+  if (result.page > 1) pagination.append(pageLink(t('Previous', 'Назад'), result.page - 1));
+  pagination.append(element('span', '', t(`Page ${result.page} of ${result.pages}`, `Страница ${result.page} из ${result.pages}`)));
+  if (result.page < result.pages) pagination.append(pageLink(t('Next', 'Далее'), result.page + 1));
+  content.append(pagination);
+}
+
+const sourceStates = {
+  open: t('Open', 'Открыто'), closed: t('Closed', 'Закрыто'), merged: t('Merged', 'Принято в проект'),
+  draft: t('Draft', 'Черновик'), recorded: t('Recorded', 'Записано'), failure: t('Failed', 'Ошибка'),
+  success: t('Passed', 'Прошло'), pending: t('Pending', 'Ожидает'), queued: t('Queued', 'В очереди'),
+  cancelled: t('Cancelled', 'Отменено'), in_progress: t('In progress', 'В работе'),
+  action_required: t('Action required', 'Требует действия'), neutral: t('Neutral', 'Нейтрально'),
+  skipped: t('Skipped', 'Пропущено'), timed_out: t('Timed out', 'Истекло время'),
+};
+
+const sourceKinds = {pr: 'PR', issue: t('Issue', 'Задача'), commit: t('Commit', 'Коммит'), workflow: t('CI check', 'Проверка CI'),
+  test: t('CI check', 'Проверка CI')};
+
+function drawSources(result, current) {
+  const total = numberFormat.format(result.total);
+  viewStatus.textContent = t(`Sources found: ${total} of ${numberFormat.format(result.all)}`,
+    `Найдено источников: ${total} из ${numberFormat.format(result.all)}`);
+  if (!result.items.length) {
+    stateScreen(t('No GitHub sources found', 'Источники не найдены'), t('Try fewer terms or clear a filter.', 'Сократите запрос или сбросьте фильтр.'));
+    return;
+  }
+  const rows = element('ul', 'source-list');
+  for (const source of result.items) {
+    const row = element('li', 'card');
+    const title = element('h2');
+    title.append(githubLink(source.title, source.url));
+    const meta = element('div', 'meta-row');
+    meta.append(projectPill(source.project), element('span', 'tag', sourceKinds[source.kind] || source.kind),
+      badge(source.status, sourceStates));
+    if (source.updated_at) meta.append(activityTime(source.updated_at));
+    row.append(title, meta, internalLink(t('Find related work', 'Найти связанные работы'),
+      `#/matches?${new URLSearchParams({q: source.url})}`));
+    rows.append(row);
+  }
+  content.replaceChildren(rows);
+  drawBrowsePages(result, current);
+}
+
 const matchReasonText = {
   reference: ['В одном из источников есть прямая ссылка на другой проект.', 'One source links directly to the other project.'],
   shared_revision: ['Совпадает полный идентификатор коммита.', 'The full commit SHA matches.'],
@@ -589,9 +758,9 @@ function matchReason(match) {
   return `${translation[1]}${details}`;
 }
 
-function drawMatches(matches) {
-  const count = numberFormat.format(matches.length);
-  viewStatus.textContent = t(`Matches: ${count}`, `Пар в списке: ${count}`);
+function drawMatches(matches, result, current) {
+  const count = numberFormat.format(result?.total ?? matches.length);
+  viewStatus.textContent = t(`Matching pairs: ${count}`, `Найдено пар: ${count}`);
   if (!matches.length) {
     stateScreen(t('No related work found', 'Схожие проблемы не найдены'),
       t('Try an issue title or project name.', 'Попробуйте искать по названию проблемы или проекта.'));
@@ -602,9 +771,8 @@ function drawMatches(matches) {
     const card = element('article', 'card match-card');
     const top = element('div', 'card-top');
     top.append(badge(match.state, matchStates));
-    if (Number.isFinite(match.score)) {
-      const percent = Math.round(match.score <= 1 ? match.score * 100 : match.score);
-      top.append(element('span', 'score', `${t('Similarity', 'Сходство')} ${percent}%`));
+    if (match.state === 'suggested') {
+      top.append(element('span', 'score', t('Automatic candidate', 'Кандидат по данным индекса')));
     }
     const pair = element('div', 'match-pair');
     for (const source of [match.left, match.right]) {
@@ -621,6 +789,7 @@ function drawMatches(matches) {
     wrapper.append(card);
   }
   content.replaceChildren(wrapper);
+  if (result) drawBrowsePages(result, current);
 }
 
 const retryAdvice = t('Try again. For a local installation, check that the PortBridge server is running.',
@@ -871,6 +1040,51 @@ function activityRadar(radar) {
   return panel;
 }
 
+function showCurrentLeads(data, params) {
+  if (!data) return;
+  const panel = activityPanel(t('Where work can advance now', 'Где можно продвинуть работу'));
+  const items = element('ul', 'activity-opportunity-list');
+  const project = params.get('project');
+  const relevant = (row) => contains(row, params.get('q')) && (!project || list(row.projects).includes(project));
+  const opportunities = list(data.opportunities).filter(relevant);
+  for (const item of opportunities) items.append(activityOpportunity(item));
+  const actions = list(data.radar?.actions).filter(relevant);
+  for (const action of actions) items.append(radarAction(action));
+  if (!actions.length && !opportunities.length) {
+    panel.append(element('p', 'activity-note', t('No current opportunity matches these filters.', 'По этим фильтрам сейчас нет активных возможностей.')));
+  }
+  panel.append(items);
+  const history = element('h2', 'section-title', t('Reviewed cases to build on', 'Проверенные карточки и история'));
+  content.prepend(panel, history);
+}
+
+function researchHighlights(items) {
+  const panel = activityPanel(t('Engineering results', 'Инженерные результаты'));
+  const results = element('ul', 'activity-timeline');
+  for (const item of items) {
+    const row = element('li', 'activity-entry');
+    const h = element('h3');
+    h.append(internalLink(editorial(item, 'title'), urlFor(item.problem_id)));
+    const links = element('div', 'activity-handoff-proof');
+    for (const [key, label] of [
+      ['delivered_url', t('Upstream discussion', 'Обсуждение команды')],
+      ['independent_url', t('Independent check', 'Независимая проверка')],
+      ['adopted_url', t('Adoption evidence', 'Подтверждение внедрения')],
+    ]) {
+      if (item[key]) links.append(githubLink(label, item[key]));
+    }
+    const stage = element('div', 'activity-meta');
+    stage.append(element('span', 'tag', t('Shared with the project', 'Передано команде')));
+    if (item.checked_at && sourceStates[item.source_state]) {
+      stage.append(element('span', '', sourceStates[item.source_state]), activityTime(item.checked_at));
+    }
+    row.append(h, stage, element('p', '', editorial(item, 'summary')), links);
+    results.append(row);
+  }
+  panel.append(results);
+  return panel;
+}
+
 function showActivity(data, quiet = false) {
   const {as_of, window_start, ...observed} = data;
   const signature = JSON.stringify(observed);
@@ -921,11 +1135,16 @@ function showActivity(data, quiet = false) {
   teamList.append(...list(data.projects).map(activityProject));
   if (teamList.childElementCount) teams.append(teamList);
   else teams.append(element('p', 'activity-note', t('Project data is unavailable.', 'Данные о проектах недоступны.')));
-  board.append(stats);
-  if (list(data.handoffs?.items).length) board.append(activityHandoffs(data.handoffs));
+  const start = element('div', 'activity-start');
+  start.append(internalLink(t('Choose a test to run', 'Выбрать тест для своего стенда'), '#/lab', 'lab-primary'),
+    internalLink(t('Browse reviewed cases', 'Посмотреть проверенные карточки'), '#/problems', 'retry'));
+  if (snapshotSite?.browse_index) start.append(internalLink(t('Browse public GitHub sources', 'Открыть индекс GitHub'), '#/sources', 'retry'));
+  board.append(start, stats);
+  if (list(data.research).length) board.append(researchHighlights(data.research));
   board.append(columns);
   if (data.radar) board.append(activityRadar(data.radar));
   board.append(feed, teams);
+  if (list(data.handoffs?.items).length) board.append(activityHandoffs(data.handoffs));
   viewStatus.textContent = '';
   content.replaceChildren(board);
   return true;
@@ -1380,6 +1599,14 @@ function labTask(task, focused = false, queueEquipment = '', showAll = false) {
     links.append(githubLink(discussion, task.result_url));
   }
   if (task.evidence_url) links.append(githubLink(t('Existing evidence', 'Что уже проверили'), task.evidence_url));
+  if (task.source_check?.fetched_at) {
+    const check = task.source_check;
+    const note = element('p', 'lab-checked', t('Receiving source', 'Принимающая задача'));
+    note.append(githubLink(sourceStates[check.status] || t('See current status', 'Смотреть статус'), check.url),
+      activityTime(check.fetched_at));
+    if (check.revision) note.append(element('code', 'identifier', check.revision.slice(0, 12)));
+    card.append(note);
+  }
   if (task.source_url && ![task.procedure_url, task.result_url, task.evidence_url].includes(task.source_url)) {
     links.append(githubLink(t('Coordination issue', 'Задача координации'), task.source_url));
   }
@@ -1445,7 +1672,7 @@ function drawLab(data, params) {
   showAllLabel.append(showAll, t('Show all statuses', 'Показать все статусы'));
   bar.append(group, showAllLabel);
   if (data.checked_at) {
-    const checked = element('p', 'lab-checked', t('Queue reviewed', 'Очередь сверена'));
+    const checked = element('p', 'lab-checked', t('Task instructions reviewed', 'Инструкции к задачам сверены'));
     checked.append(activityTime(data.checked_at));
     bar.append(checked);
   }
@@ -1453,7 +1680,8 @@ function drawLab(data, params) {
   count.setAttribute('role', 'status');
   const tasks = element('div', 'cards lab-tasks');
   function renderTasks() {
-    const chosen = all.filter((task) => (showAll.checked || task.status === 'needs_run')
+    const chosen = all.filter((task) => (showAll.checked || (task.status === 'needs_run'
+      && !list(task.coverage).some((cell) => cell.equipment === equipment.value && cell.state === 'covered')))
       && (!equipment.value || list(task.equipment).includes(equipment.value)));
     count.textContent = t(`Tasks shown: ${numberFormat.format(chosen.length)}`, `Задач показано: ${numberFormat.format(chosen.length)}`);
     tasks.replaceChildren(...chosen.map((task) => labTask(task, false, equipment.value, showAll.checked)));
@@ -1474,25 +1702,40 @@ function drawLab(data, params) {
   content.replaceChildren(lab);
 }
 
-async function loadView(current, focus = false) {
+async function loadView(current, focus = false, recovering = false, previousSnapshot = null) {
   request?.abort();
   request = new AbortController();
   const active = request;
   const [title, description] = labels[current.view];
   const isActivity = current.view === 'activity';
   const isLab = current.view === 'lab';
-  const onlySearch = isActivity || current.view === 'matches';
+  const isSources = current.view === 'sources';
+  const browse = Boolean(snapshotSite?.browse_index);
+  const isMatches = current.view === 'matches';
+  const onlySearch = isActivity || (isMatches && !browse);
   filters.hidden = current.id !== null || current.view === 'projects' || isLab;
   filters.classList.toggle('filters-only-search', onlySearch);
   byId('project-group').hidden = onlySearch;
-  byId('status-group').hidden = onlySearch;
+  byId('status-group').hidden = onlySearch || isMatches;
+  byId('stage-group').hidden = !browse || !isMatches;
+  byId('kind-group').hidden = !browse || !isSources;
+  if (isSources) {
+    kindField.replaceChildren(new Option(t('Any source type', 'Любой тип источника'), ''),
+      ...Object.entries(sourceKinds).map(([value, label]) => new Option(label, value)));
+  }
+  kindField.value = current.params.get('kind') || '';
+  const states = isSources ? sourceStates : problemStates;
+  statusField.replaceChildren(new Option(t('Any status', 'Любой статус'), ''),
+    ...Object.entries(states).map(([value, label]) => new Option(label, value)));
+  statusField.value = current.params.get('status') || '';
+  stageField.value = current.params.get('stage') || '';
   byId('reset').hidden = isActivity;
   byId('search-submit').hidden = !isActivity;
   byId('readonly-mode').hidden = isActivity;
-  refreshActivity.hidden = !isActivity;
-  refreshActivity.disabled = isActivity;
+  refreshActivity.hidden = !isActivity && !snapshotSite;
+  refreshActivity.disabled = true;
   summary.hidden = true;
-  coordinationSection.hidden = !coordinationSection.hasChildNodes() || current.view !== 'problems' || current.id !== null;
+  sectionDates(snapshotSite?.generated_at);
   heading.textContent = current.id ? current.id : title;
   byId('page-description').textContent = current.id ? '' : description;
   document.querySelectorAll('[data-route]').forEach((link) => {
@@ -1502,29 +1745,58 @@ async function loadView(current, focus = false) {
   content.setAttribute('aria-busy', 'true');
   viewStatus.textContent = t('Loading…', 'Загрузка…');
   try {
+    const before = snapshotSite;
+    if (!recovering && snapshotSite && await checkManifest(active.signal).catch(() => false)) {
+      await loadProjects(active.signal).catch(() => {});
+      await fetchJSON('/health', active.signal).then(setHealth).catch(() => {});
+      if (!active.signal.aborted) return loadView(current, focus, true, before);
+    }
     if (isActivity) {
       const result = await fetchJSON('/activity', active.signal);
-      if (!active.signal.aborted) showActivity(result);
+      if (!active.signal.aborted) {
+        showActivity(result);
+        sectionDates(snapshotSite?.generated_at || result.as_of, latestChecked(list(result.projects).map((row) => row.last_success)));
+      }
     } else if (isLab) {
       const result = await fetchJSON('/lab', active.signal);
-      if (!active.signal.aborted) drawLab(result, current.params);
+      if (!active.signal.aborted) {
+        drawLab(result, current.params);
+        sectionDates(snapshotSite?.generated_at, latestChecked(list(result.tasks).flatMap((task) =>
+          list(task.report_sync?.sources).map((source) => source.checked_at))));
+      }
     } else if (current.view === 'projects') {
       const [, ecosystem] = await Promise.all([
         loadProjects(active.signal), fetchJSON('/ecosystem', active.signal).catch(() => null),
       ]);
-      if (!active.signal.aborted) drawProjects(ecosystem);
+      if (!active.signal.aborted) {
+        drawProjects(ecosystem);
+        sectionDates(snapshotSite?.generated_at, latestChecked([...list(ecosystem?.sources).map((source) => source.last_success),
+          ...Array.from(projects.values(), (project) => project.last_success)]));
+      }
     } else if (current.id) {
       const result = await fetchJSON(`/problems/${encodeURIComponent(current.id)}`, active.signal);
-      if (!active.signal.aborted) drawProblem(result.problem);
-    } else if (current.view === 'matches') {
+      if (!active.signal.aborted) {
+        drawProblem(result.problem);
+        sectionDates(snapshotSite?.generated_at, latestChecked(list(result.problem.solutions).flatMap((solution) =>
+          list(solution.source_refs).map((source) => source.github?.fetched_at))));
+      }
+    } else if (isSources || (isMatches && snapshotSite?.browse_index)) {
+      const result = await browsePublic(isMatches ? 'matches' : 'sources', current.params, active.signal);
+      if (!active.signal.aborted) {
+        if (isMatches) drawMatches(result.items, result, current);
+        else drawSources(result, current);
+        sectionDates(snapshotSite?.generated_at, latestChecked(Array.from(projects.values(), (project) => project.last_success)));
+      }
+    } else if (isMatches) {
       const params = new URLSearchParams({q: current.params.get('q') || ''});
       const result = await fetchJSON(`/matches?${params}`, active.signal);
       if (!active.signal.aborted) drawMatches(list(result.matches));
     } else {
       const params = new URLSearchParams(current.params);
       if (current.view === 'partial') params.set('partial', '1');
-      const [result, outreach] = await Promise.all([
+      const [result, activity, outreach] = await Promise.all([
         fetchJSON(`/problems?${params}`, active.signal),
+        current.view === 'partial' ? fetchJSON('/activity', active.signal).catch(() => null) : null,
         current.view === 'partial' ? fetchJSON('/outreach', active.signal).catch(() => null) : null,
       ]);
       if (active.signal.aborted) return;
@@ -1532,10 +1804,35 @@ async function loadView(current, focus = false) {
       if (current.view === 'problems' && !current.params.size) summaryData = problems;
       if (current.view === 'problems' && summaryData) showSummary(summaryData);
       drawProblems(problems, current.view);
-      if (current.view === 'partial') showOutreach(outreach, problems);
+      if (current.view === 'partial') {
+        showCurrentLeads(activity, current.params);
+        showOutreach(outreach, problems);
+      }
+      sectionDates(snapshotSite?.generated_at, latestChecked(Array.from(projects.values(), (project) => project.last_success)));
     }
     if (focus && !active.signal.aborted) heading.focus({preventScroll: false});
+    return !active.signal.aborted;
   } catch (err) {
+    if (active.signal.aborted) return;
+    const before = snapshotSite;
+    if (!recovering && snapshotSite && await checkManifest(active.signal, true).catch(() => false)) {
+      return loadView(current, focus, true, before);
+    }
+    if (previousSnapshot && !active.signal.aborted) {
+      snapshotSite = previousSnapshot;
+      summaryData = null;
+      // A Pages edge can see the manifest before it sees every immutable file.
+      // Restore the last usable generation and retry the update on the next tick.
+      const [health] = await Promise.all([fetchJSON('/health', active.signal).catch(() => null),
+        loadProjects(active.signal).catch(() => {})]);
+      if (active.signal.aborted) return;
+      if (health) setHealth(health);
+      const rendered = await loadView(current, focus, true);
+      if (rendered) viewStatus.append(element('span', 'snapshot-warning',
+        t('New data is still publishing. Showing the previous snapshot.',
+          'Новые данные ещё публикуются. Показан предыдущий снимок.')));
+      return rendered;
+    }
     if (active.signal.aborted) return;
     viewStatus.textContent = '';
     if (err.status === 404 && current.id) {
@@ -1570,17 +1867,24 @@ function restoreFields(current) {
   searchField.value = (current.params.get('q') || '').slice(0, 200);
   projectField.value = current.params.get('project') || '';
   statusField.value = current.params.get('status') || '';
+  stageField.value = current.params.get('stage') || '';
 }
 
 function filterHash(current) {
   const params = new URLSearchParams();
   if (searchField.value.trim()) params.set('q', searchField.value.trim());
-  if (current.view !== 'matches' && current.view !== 'activity') {
+  if (current.view !== 'activity') {
     if (projectField.value) params.set('project', projectField.value);
-    if (statusField.value) params.set('status', statusField.value);
+    if (current.view === 'matches') {
+      if (stageField.value) params.set('stage', stageField.value);
+    } else if (statusField.value) params.set('status', statusField.value);
+    if (current.view === 'sources' && kindField.value) params.set('kind', kindField.value);
   }
   const suffix = params.size ? `?${params}` : '';
-  return `#/${current.view === 'activity' ? 'problems' : current.view}${suffix}`;
+  const homeQuery = (params.get('q') || '').trim();
+  if (current.view === 'activity' && /^PB-[0-9]{4,}$/i.test(homeQuery)) return urlFor(homeQuery.toUpperCase());
+  const view = current.view === 'activity' ? (snapshotSite?.browse_index ? 'sources' : 'problems') : current.view;
+  return `#/${view}${suffix}`;
 }
 
 function applyFilters() {
@@ -1610,40 +1914,50 @@ searchField.addEventListener('input', () => {
   updateLanguageLinks(filterHash(current));
   debounce = setTimeout(applyFilters, 200);
 });
-refreshActivity.addEventListener('click', async () => {
+async function refreshVisible(manual = false) {
   const active = request;
-  if (!active || route().view !== 'activity') return;
-  refreshActivity.disabled = true;
-  viewStatus.textContent = t('Checking for updates…', 'Проверяем обновления…');
+  if (!active || refreshActivity.disabled || document.hidden
+      || (!manual && (content.contains(document.activeElement) || filters.contains(document.activeElement)))) return;
+  if (manual) {
+    refreshActivity.disabled = true;
+    viewStatus.textContent = t('Checking for updates…', 'Проверяем обновления…');
+  }
   try {
-    const data = await fetchJSON('/activity', active.signal);
-    if (request === active) {
-      viewStatus.textContent = showActivity(data, true)
-        ? t('Activity updated.', 'Данные обновлены.')
-        : t('You have the latest available snapshot.', 'Открыт последний доступный снимок.');
+    if (snapshotSite) {
+      const before = snapshotSite;
+      const changed = await checkManifest(active.signal, true);
+      if (request !== active) return;
+      if (changed) {
+        await Promise.all([loadProjects(active.signal).catch(() => {}),
+          fetchJSON('/health', active.signal).then(setHealth).catch(() => {})]);
+      }
+      if (changed || manual) await loadView(route(), false, changed, changed ? before : null);
+    } else if (route().view === 'activity') {
+      const data = await fetchJSON('/activity', active.signal);
+      if (request === active) showActivity(data, true);
     }
   } catch {
-    if (request === active) viewStatus.textContent = t('Could not check for updates. Try again.', 'Не удалось проверить обновления. Повторите попытку.');
+    if (manual && request === active) viewStatus.textContent =
+      t('Could not check for updates. Try again.', 'Не удалось проверить обновления. Повторите попытку.');
   } finally {
     if (request === active) refreshActivity.disabled = false;
   }
+}
+refreshActivity.addEventListener('click', () => refreshVisible(true));
+window.setInterval(refreshVisible, refreshPeriod);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && Date.now() - manifestChecked >= refreshPeriod) refreshVisible();
 });
-window.setInterval(async () => {
-  const active = request;
-  if (!active || document.hidden || route().view !== 'activity' || refreshActivity.disabled || content.contains(document.activeElement)) return;
-  try {
-    const data = await fetchJSON('/activity', active.signal);
-    if (request === active && !refreshActivity.disabled && !content.contains(document.activeElement)) showActivity(data, true);
-  } catch {
-    // Keep the last available snapshot when a background request fails.
-  }
-}, 5 * 60 * 1000);
 projectField.addEventListener('change', applyFilters);
 statusField.addEventListener('change', applyFilters);
+stageField.addEventListener('change', applyFilters);
+kindField.addEventListener('change', applyFilters);
 byId('reset').addEventListener('click', () => {
   searchField.value = '';
   projectField.value = '';
   statusField.value = '';
+  stageField.value = '';
+  kindField.value = '';
   applyFilters();
 });
 document.querySelector('.skip-link').addEventListener('click', (event) => {
@@ -1661,7 +1975,6 @@ window.addEventListener('hashchange', () => {
 setHealth({status: 'pending'});
 initializeData().then((health) => {
   setHealth(health);
-  fetchJSON('/coordination').then(showCoordination).catch(() => {});
   return loadProjects().catch(() => {});
 }).then(() => {
   const current = route();

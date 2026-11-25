@@ -16,8 +16,9 @@ from portbridge.backup import backup_database
 from portbridge.case_pages import case_languages, case_path
 from portbridge.catalog import Catalog
 from portbridge.coordination import knowledge_graph, recommendations
-from portbridge.export import EXPORT_FILES, export
+from portbridge.export import EXPORT_FILES, VERSIONED_ASSET, VERSIONED_SNAPSHOTS, export
 from portbridge.preflight_index import SHARD
+from portbridge.public_browse import BROWSE_INDEX, BROWSE_PAGE, BROWSE_POSTING, BROWSE_TERMS
 
 
 class CatalogFixture(unittest.TestCase):
@@ -402,11 +403,20 @@ class SnapshotTest(CatalogFixture):
         files = {path.relative_to(destination).as_posix() for path in destination.rglob("*") if path.is_file()}
         cases = {case_path(card, language) for card in self.catalog.problems() for language in case_languages(card)}
         shards = {name for name in files if name.startswith("data/") and SHARD.fullmatch(Path(name).name)}
-        self.assertEqual(files, EXPORT_FILES | cases | shards)
+        site = json.loads((destination / "data/site.json").read_text(encoding="utf-8"))
+        snapshots = {f"data/{name}" for name in site["snapshots"].values()}
+        self.assertEqual(set(site["snapshots"]), set(VERSIONED_SNAPSHOTS))
+        assets = {name for name in files if name.startswith("static/") and VERSIONED_ASSET.fullmatch(Path(name).name)}
+        browse_patterns = (BROWSE_INDEX, BROWSE_PAGE, BROWSE_POSTING, BROWSE_TERMS)
+        browse = {name for name in files if name.startswith("data/")
+                  and any(pattern.fullmatch(Path(name).name) for pattern in browse_patterns)}
+        self.assertEqual(files, EXPORT_FILES | cases | shards | snapshots | assets | browse)
+        self.assertEqual(len(assets), 2)
+        for name in assets:
+            self.assertIn(f"./{name}", (destination / "index.html").read_text(encoding="utf-8"))
         for name in files:
             with self.subTest(file=name):
                 self.assertNotIn(sentinel.encode(), (destination / name).read_bytes())
-        site = json.loads((destination / "data/site.json").read_text(encoding="utf-8"))
         self.assertEqual(site["repository"], "example/PortBridge")
         self.assertEqual(site["mode"], "snapshot")
         index = json.loads((destination / "data/preflight-index.json").read_bytes())

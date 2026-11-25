@@ -60,6 +60,12 @@ class GlobalSearchTests(unittest.TestCase):
                          [titles[index] for index in (3, 4, 1, 0, 2)])
         self.assertEqual(search_terms("D3D12 Enhanced Barrier"), ["d3d12", "enhanced barriers"])
 
+    def test_field_queries_keep_barrier_and_texture_terms(self):
+        self.assertEqual(search_terms("Vulkan image layout barrier coalescing"),
+                         ["vulkan", "image layout", "barrier coalescing"])
+        self.assertEqual(search_terms("gfx10 texture detile BC7 local ticket secret"),
+                         ["gfx10", "detile", "bc7"])
+
     def test_frozen_public_github_sample(self):
         fixture = Path(__file__).with_name("fixtures") / "global-search-holdout.json"
         frozen = json.loads(fixture.read_text(encoding="utf-8"))

@@ -2573,6 +2573,289 @@
           ]
         }
       ]
+    },
+    {
+      "id": "PB-0025",
+      "recorded_at": "2026-11-25T08:24:59Z",
+      "title": "Уменьшение временного буфера в XCL",
+      "summary": "В проверенных синтетических программах повторное использование слотов сократило буфер с 288 до 256 и с 192 до 160 слов на группу. Патч применён к точной версии в проверочном стенде. DXV принял 58 вариантов. Замер GPU открыт.",
+      "status": "verified",
+      "tags": [
+        "Wave32",
+        "DXIL",
+        "scratch buffer",
+        "liveness"
+      ],
+      "platforms": [
+        "Windows CPU and DXV"
+      ],
+      "dependency_ids": [],
+      "translations": {
+        "en": {
+          "title": "Smaller scratch buffers in XCL",
+          "summary": "Strict slot reuse reduced the two synthetic scratch layouts from 288 to 256 and 192 to 160 words per workgroup. The executable patch matched the reference layout and DXV accepted 58 variants. GPU timings remain open."
+        }
+      },
+      "solutions": [
+        {
+          "project": "xcl",
+          "status": "verified",
+          "summary": "В проверенных синтетических программах повторное использование слотов сократило буфер с 288 до 256 и с 192 до 160 слов на группу. Патч применён к точной версии в проверочном стенде. DXV принял 58 вариантов. Замер GPU открыт.",
+          "source_refs": [
+            {
+              "title": "xcl #2126",
+              "url": "https://github.com/xcl-dev/xcl/pull/2126"
+            },
+            {
+              "title": "Отчёт PortBridge / PortBridge report",
+              "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7156997647"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "passed",
+              "title": "Уменьшение временного буфера в XCL",
+              "observed": "В проверенных синтетических программах повторное использование слотов сократило буфер с 288 до 256 и с 192 до 160 слов на группу. Патч применён к точной версии в проверочном стенде. DXV принял 58 вариантов. Замер GPU открыт.",
+              "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7156997647",
+              "revision": "3283da481077c1962f13f1b4078841662f7a4ccb",
+              "reported_at": "2026-11-25T08:24:59Z",
+              "platforms": [
+                "Windows CPU and DXV"
+              ],
+              "translations": {
+                "en": {
+                  "title": "Smaller scratch buffers in XCL",
+                  "observed": "Strict slot reuse reduced the two synthetic scratch layouts from 288 to 256 and 192 to 160 words per workgroup. The executable patch matched the reference layout and DXV accepted 58 variants. GPU timings remain open."
+                }
+              }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "title": "Независимая проверка исходных тестов",
+              "observed": "Независимый RTX 3080 Ti прошёл два теста исходного PR на закреплённой версии.",
+              "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7155843337",
+              "revision": "3283da481077c1962f13f1b4078841662f7a4ccb",
+              "reported_at": "2026-11-25T07:25:26Z",
+              "platforms": [
+                "NVIDIA RTX 3080 Ti",
+                "Windows"
+              ],
+              "translations": {
+                "en": {
+                  "title": "Independent upstream test run",
+                  "observed": "RTX 3080 Ti confirmed both existing upstream scratch tests at the pinned revision."
+                }
+              }
+            }
+          ],
+          "translations": {
+            "en": {
+              "summary": "Strict slot reuse reduced the two synthetic scratch layouts from 288 to 256 and 192 to 160 words per workgroup. The executable patch matched the reference layout and DXV accepted 58 variants. GPU timings remain open."
+            }
+          }
+        }
+      ],
+      "showcase": true
+    },
+    {
+      "id": "PB-0026",
+      "recorded_at": "2026-11-25T08:16:48Z",
+      "title": "Быстрая обработка текстур в AnyXboxX",
+      "summary": "Точные правки GFX10 и BC7 вместе прошли 17 тестов. Исходная версия прошла 13. Правка BC7 применима отдельно, проверено на основной ветке, где прошло шесть тестов.",
+      "status": "verified",
+      "tags": [
+        "gfx10",
+        "detile",
+        "BC7",
+        "texture"
+      ],
+      "platforms": [
+        "Windows CPU and Rust"
+      ],
+      "dependency_ids": [],
+      "translations": {
+        "en": {
+          "title": "Faster texture conversion in AnyXboxX",
+          "summary": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main."
+        }
+      },
+      "solutions": [
+        {
+          "project": "anyxboxx",
+          "status": "verified",
+          "summary": "Точные правки GFX10 и BC7 вместе прошли 17 тестов. Исходная версия прошла 13. Правка BC7 применима отдельно, проверено на основной ветке, где прошло шесть тестов.",
+          "source_refs": [
+            {
+              "title": "anyxboxx #188",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188"
+            },
+            {
+              "title": "Отчёт PortBridge / PortBridge report",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188#issuecomment-7156830792"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "passed",
+              "title": "Быстрая обработка текстур в AnyXboxX",
+              "observed": "Точные правки GFX10 и BC7 вместе прошли 17 тестов. Исходная версия прошла 13. Правка BC7 применима отдельно, проверено на основной ветке, где прошло шесть тестов.",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188#issuecomment-7156830792",
+              "revision": "22c1cf973e7e2ad89fbec8e801d77d287c48729f",
+              "reported_at": "2026-11-25T08:16:48Z",
+              "platforms": [
+                "Windows CPU and Rust"
+              ],
+              "translations": {
+                "en": {
+                  "title": "Faster texture conversion in AnyXboxX",
+                  "observed": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main."
+                }
+              }
+            }
+          ],
+          "translations": {
+            "en": {
+              "summary": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main."
+            }
+          }
+        }
+      ],
+      "showcase": true
+    },
+    {
+      "id": "PB-0027",
+      "recorded_at": "2026-11-25T08:16:47Z",
+      "title": "Точное и более быстрое округление FMA в AnyXboxX",
+      "summary": "Обновлённая правка совпала с эталоном на 3 072 целевых программах и 114 976 входах UCRT. В тесте интерпретатора её медиана 178 мс вместо 213 мс у предыдущей правки, исходный код занял 166 мс. Проверка GPU открыта.",
+      "status": "verified",
+      "tags": [
+        "v_fmac_f32",
+        "FMA",
+        "RDNA2",
+        "rounding"
+      ],
+      "platforms": [
+        "Windows CPU and Python"
+      ],
+      "dependency_ids": [],
+      "translations": {
+        "en": {
+          "title": "Accurate, faster FMA rounding in AnyXboxX",
+          "summary": "The revised CPU patch matched the reference across 3,072 targeted programs and 114,976 UCRT inputs. Interpreter medians were 178 ms for the revised patch, 213 ms for the first fix, and 166 ms for the original. GPU measurement is still open."
+        }
+      },
+      "solutions": [
+        {
+          "project": "anyxboxx",
+          "status": "verified",
+          "summary": "Обновлённая правка совпала с эталоном на 3 072 целевых программах и 114 976 входах UCRT. В тесте интерпретатора её медиана 178 мс вместо 213 мс у предыдущей правки, исходный код занял 166 мс. Проверка GPU открыта.",
+          "source_refs": [
+            {
+              "title": "anyxboxx #133",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133"
+            },
+            {
+              "title": "Отчёт PortBridge / PortBridge report",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7156830326"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "title": "Точное и более быстрое округление FMA в AnyXboxX",
+              "observed": "Обновлённая правка совпала с эталоном на 3 072 целевых программах и 114 976 входах UCRT. В тесте интерпретатора её медиана 178 мс вместо 213 мс у предыдущей правки, исходный код занял 166 мс. Проверка GPU открыта.",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7156830326",
+              "revision": "c4e76abac687e55c00cb005ad3de9132a7cbacf3",
+              "reported_at": "2026-11-25T08:16:47Z",
+              "platforms": [
+                "Windows CPU and Python"
+              ],
+              "translations": {
+                "en": {
+                  "title": "Accurate, faster FMA rounding in AnyXboxX",
+                  "observed": "The revised CPU patch matched the reference across 3,072 targeted programs and 114,976 UCRT inputs. Interpreter medians were 178 ms for the revised patch, 213 ms for the first fix, and 166 ms for the original. GPU measurement is still open."
+                }
+              }
+            }
+          ],
+          "translations": {
+            "en": {
+              "summary": "The revised CPU patch matched the reference across 3,072 targeted programs and 114,976 UCRT inputs. Interpreter medians were 178 ms for the revised patch, 213 ms for the first fix, and 166 ms for the original. GPU measurement is still open."
+            }
+          }
+        }
+      ],
+      "showcase": true
+    },
+    {
+      "id": "PB-0028",
+      "recorded_at": "2026-11-25T08:19:16Z",
+      "title": "Объединение диапазонов графических барьеров Continued",
+      "summary": "На свежей основной ветке число записей сократилось с 12 до 3, а в трёх последовательных операциях с 14 до 5. Порядок и откат проверены. Смешанные диапазоны могут давать дополнительную нагрузку.",
+      "status": "verified",
+      "tags": [
+        "Vulkan",
+        "image layout",
+        "barrier coalescing",
+        "rollback"
+      ],
+      "platforms": [
+        "Windows CPU and Vulkan synthetic data"
+      ],
+      "dependency_ids": [],
+      "translations": {
+        "en": {
+          "title": "Coalescing Vulkan image barriers in Continued",
+          "summary": "On current main the recorded barriers went from 12 to 3 and from 14 to 5 across three ordered commands. Ordering and rollback passed. Mixed ranges can add CPU cost."
+        }
+      },
+      "solutions": [
+        {
+          "project": "continued",
+          "status": "verified",
+          "summary": "На свежей основной ветке число записей сократилось с 12 до 3, а в трёх последовательных операциях с 14 до 5. Порядок и откат проверены. Смешанные диапазоны могут давать дополнительную нагрузку.",
+          "source_refs": [
+            {
+              "title": "continued #1284",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1284"
+            },
+            {
+              "title": "Отчёт PortBridge / PortBridge report",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1284#issuecomment-7156880204"
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "mixed",
+              "title": "Объединение диапазонов графических барьеров Continued",
+              "observed": "На свежей основной ветке число записей сократилось с 12 до 3, а в трёх последовательных операциях с 14 до 5. Порядок и откат проверены. Смешанные диапазоны могут давать дополнительную нагрузку.",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1284#issuecomment-7156880204",
+              "revision": "3f81d46ac01021bd7517f0cce153f4283bc8dd17",
+              "reported_at": "2026-11-25T08:19:16Z",
+              "platforms": [
+                "Windows CPU and Vulkan synthetic data"
+              ],
+              "translations": {
+                "en": {
+                  "title": "Coalescing Vulkan image barriers in Continued",
+                  "observed": "On current main the recorded barriers went from 12 to 3 and from 14 to 5 across three ordered commands. Ordering and rollback passed. Mixed ranges can add CPU cost."
+                }
+              }
+            }
+          ],
+          "translations": {
+            "en": {
+              "summary": "On current main the recorded barriers went from 12 to 3 and from 14 to 5 across three ordered commands. Ordering and rollback passed. Mixed ranges can add CPU cost."
+            }
+          }
+        }
+      ],
+      "showcase": true
     }
   ]
 }

@@ -27,6 +27,7 @@
         <a class="nav-item" data-route="activity" href="#/activity" aria-current="page"><span class="nav-icon icon-activity" aria-hidden="true"></span><span data-ru="Обновления">Activity</span></a>
         <a class="nav-item" data-route="lab" href="#/lab"><span class="nav-icon icon-lab" aria-hidden="true"></span><span data-ru="Лаборатория">Test Lab</span></a>
         <a class="nav-item" data-route="problems" href="#/problems"><span class="nav-icon icon-grid" aria-hidden="true"></span><span data-ru="Каталог проблем">Issue catalog</span></a>
+        <a class="nav-item" id="sources-link" data-route="sources" href="#/sources" hidden><span class="nav-icon icon-grid" aria-hidden="true"></span><span data-ru="Источники GitHub">GitHub sources</span></a>
         <a class="nav-item" data-route="partial" href="#/partial"><span class="nav-icon icon-progress" aria-hidden="true"></span><span data-ru="Где есть задел">Cross-project leads</span></a>
         <a class="nav-item" data-route="matches" href="#/matches"><span class="nav-icon icon-link" aria-hidden="true"></span><span data-ru="Схожие проблемы">Related work</span></a>
         <a class="nav-item" data-route="projects" href="#/projects"><span class="nav-icon icon-projects" aria-hidden="true"></span><span data-ru="Проекты">Projects</span></a>
@@ -50,7 +51,7 @@
           <span class="readonly" id="readonly-mode" hidden><span aria-hidden="true" class="lock-icon"></span><span data-ru="Только чтение">Read only</span></span>
         </header>
 
-        <section id="coordination" class="coordination" aria-label="Shared baseline" data-ru-aria-label="Общая точка отсчёта" hidden></section>
+        <p id="section-freshness" class="section-freshness" role="status" hidden></p>
         <section id="summary" class="summary" aria-label="Catalog summary" data-ru-aria-label="Сводка каталога" hidden></section>
 
         <form id="filters" class="filters filters-only-search" role="search" aria-label="Catalog filters" data-ru-aria-label="Фильтры каталога">
@@ -66,13 +67,25 @@
             <label for="status-filter" data-ru="Статус проблемы">Issue status</label>
             <select id="status-filter" name="status"><option value="" data-ru="Любой статус">Any status</option></select>
           </div>
+          <div id="stage-group" class="filter-group" hidden>
+            <label for="stage-filter" data-ru="Уровень проверки">Evidence level</label>
+            <select id="stage-filter" name="stage">
+              <option value="" data-ru="Все уровни">All levels</option>
+              <option value="reviewed" data-ru="Проверенные связи">Reviewed relationships</option>
+              <option value="candidate" data-ru="Кандидаты">Candidates</option>
+            </select>
+          </div>
+          <div id="kind-group" class="filter-group" hidden>
+            <label for="kind-filter" data-ru="Тип источника">Source type</label>
+            <select id="kind-filter" name="kind"><option value="">Any type</option></select>
+          </div>
           <button class="filter-reset" id="reset" type="button" data-ru="Сбросить" hidden>Reset</button>
           <button class="filter-reset search-submit" id="search-submit" type="submit" data-ru="Искать в каталоге">Search catalog</button>
         </form>
 
         <p id="view-status" class="view-status" role="status" aria-live="polite"></p>
         <div id="content" class="content" aria-busy="true"></div>
-        <noscript><p class="notice">Enable JavaScript to search and open catalog entries. Data is also available through the <a href="/api/docs?lang=en">API</a>.</p></noscript>
+        <noscript><p class="notice">Enable JavaScript to search and open catalog entries. Data is also available through the <a href="./api.html">API</a>.</p></noscript>
       </div>
     </main>
   </div>

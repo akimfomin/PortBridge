@@ -1,15 +1,18 @@
 """Record publication freshness and verify that GitHub Pages serves this build."""
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from hashlib import sha256
 from http.client import HTTPException
 import json
 import os
 from pathlib import Path
+import re
 import sys
 from time import sleep
 from urllib.request import Request, urlopen
 
 from .activity import source_time
+from .export import VERSIONED_SNAPSHOTS
 
 
 PUBLIC_DATA = "https://akimfomin.github.io/PortBridge/data/"
@@ -97,6 +100,44 @@ def verify_publication(expected, request=public_snapshot, pause=sleep):
     return remaining
 
 
+def verify_linked_snapshots(site_sha256, request=public_snapshot):
+    """Verify the immutable files read by browsers for the published generation."""
+    with request("site") as response:
+        manifest = response.read(64 * 1024 + 1)
+    if len(manifest) > 64 * 1024 or sha256(manifest).hexdigest() != site_sha256:
+        return ("site",)
+    site = json.loads(manifest)
+    assets = site.get("snapshots", {})
+    pointer = site.get("browse_index", {})
+    generation = pointer.get("generation", "")
+    if (set(assets) != set(VERSIONED_SNAPSHOTS) or pointer.get("version") != 1
+            or not isinstance(generation, str) or not re.fullmatch(r"[0-9a-f]{24}", generation)):
+        return ("site manifest",)
+
+    def check(name):
+        file = assets[name]
+        match = re.fullmatch(rf"{name}-([0-9a-f]{{24}})\.json", file) if isinstance(file, str) else None
+        if match is None:
+            return name
+        try:
+            with request(file.removesuffix(".json")) as response:
+                return None if checksum(response).startswith(match[1]) else name
+        except (OSError, HTTPException):
+            return name
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        failed = [name for name in executor.map(check, VERSIONED_SNAPSHOTS) if name]
+    try:
+        with request(f"browse-{generation}-index") as response:
+            browse = json.loads(response.read(64 * 1024))
+        if (browse.get("generation") != generation or browse.get("version") != 1
+                or set(browse.get("kinds", {})) != {"matches", "sources"}):
+            failed.append("browse index")
+    except (OSError, ValueError, HTTPException):
+        failed.append("browse index")
+    return tuple(failed)
+
+
 def verify_export():
     expected = {name: os.environ[f"EXPECTED_{name.upper()}_SHA256"] for name in FILES}
     if not all(len(value) == 64 and all(char in "0123456789abcdef" for char in value)
@@ -104,11 +145,16 @@ def verify_export():
         raise SystemExit("The build did not record the expected public checksums.")
     previous = os.environ["PREVIOUS_STATUS"]
     failed = verify_publication(expected)
+    if not failed:
+        try:
+            failed = verify_linked_snapshots(expected["site"])
+        except (OSError, ValueError, AttributeError, TypeError, HTTPException):
+            failed = ("site manifest",)
     headline = "## GitHub Pages verification"
     if failed:
         write_summary(headline, "- Unverified public JSON: " + ", ".join(f"{name}.json" for name in failed))
-        raise SystemExit("GitHub Pages did not return the expected build for both public JSON files.")
-    write_summary(headline, "- Public site.json and lab.json match this build.",
+        raise SystemExit("GitHub Pages did not return a consistent public snapshot.")
+    write_summary(headline, "- Public site.json, lab.json and all linked snapshots match this build.",
                   f"- Previous public snapshot: {os.environ['PREVIOUS_GENERATION'] or 'unavailable'}")
     if previous == "stale":
         write_summary("- Publication recovered from a stale public snapshot.")

@@ -15,3 +15,11 @@ The plan includes the target link, the freshness of its report sources, each har
 If the task requires several vendors, the planner proposes the largest set of distinct volunteers it can match to those cells. Each person appears at most once in the same plan. If the hardware options are alternatives for one check, the plan proposes at most one volunteer. A proposal records the matching public report and leaves the task open for a volunteer to accept.
 
 The planner performs no network writes and sends no invitations. Confirm that the receiving discussion and the pinned task still need a run before acting on a proposal. Keep any outreach within the task's authorization and honor requests to stop.
+
+## Find compatible Intel reports for human review
+
+```sh
+python -m portbridge.tester_discovery
+```
+
+The reader checks two public XCL discussions for Intel Arc Wave32 test reports under Windows and links each original result. A compatible report shows prior hardware use. Invitation proposals still depend on the planner's explicit opt-in checks. [XCL dispatch tests](https://github.com/xcl-dev/xcl/pull/2080) · [XCL scratch tests](https://github.com/xcl-dev/xcl/pull/2126)

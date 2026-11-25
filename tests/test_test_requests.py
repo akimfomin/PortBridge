@@ -4,7 +4,7 @@ from io import BytesIO
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from portbridge.lab import build_lab
+from portbridge.lab import TASKS, build_lab
 from portbridge.lab_reports import FRAMELAB_TASK
 from portbridge.test_requests import APPROVAL, BOT, REPO_PATH, GitHub, dispatch, load_testers, parse_request
 
@@ -28,6 +28,12 @@ def tester(login, *capabilities, equipment="amd", rate="2026-11-24T10:00:00Z"):
 
 class TestRequestTests(TestCase):
     def setUp(self):
+        # Exercise the original monitored request while the real legacy card awaits a new pin.
+        active = tuple({**task, "status": "needs_run", "receiving_url": None} if task["id"] == TASK else task
+                       for task in TASKS)
+        patcher = patch("portbridge.lab.TASKS", active)
+        self.addCleanup(patcher.stop)
+        patcher.start()
         self.issue = {"number": 42, "body": issue_body(), "state": "open", "labels": [{"name": APPROVAL}],
                       "user": {"login": "requester"}}
         self.event = {"repository": {"full_name": "akimfomin/PortBridge"}, "issue": self.issue,

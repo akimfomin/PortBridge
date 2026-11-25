@@ -336,17 +336,25 @@ class Catalog:
         )]
         return matches[0] if len(matches) == 1 else None
 
-    def observed_revisions(self, sources):
+    def observed_sources(self, sources):
         urls = sorted({url for source in sources for url in source_url_aliases(source)})
         result = {}
         with self.connect() as db:
             for start in range(0, len(urls), 200):
                 chunk = urls[start:start + 200]
                 placeholders = ", ".join("?" for _ in chunk)
-                for row in db.execute(f"""SELECT lower(url) AS url, metadata FROM observations
-                    WHERE lower(url) IN ({placeholders})""", chunk):
-                    result[canonical_url(row["url"])] = source_revision({"metadata": json.loads(row["metadata"])})
+                rows = db.execute(f"""SELECT url, kind, status, updated_at, fetched_at, metadata
+                    FROM observations WHERE lower(url) IN ({placeholders})""", chunk)
+                for row in rows:
+                    metadata = json.loads(row["metadata"])
+                    state = {key: row[key] for key in ("kind", "status", "updated_at", "fetched_at")}
+                    state["revision"] = source_revision({"metadata": metadata})
+                    state["draft"] = metadata.get("draft") is True
+                    result[canonical_url(row["url"])] = state
         return result
+
+    def observed_revisions(self, sources):
+        return {url: row["revision"] for url, row in self.observed_sources(sources).items()}
 
     def annotate_sources(self, problems):
         references = defaultdict(list)
@@ -354,19 +362,9 @@ class Catalog:
             for solution in problem["solutions"]:
                 for item in solution["source_refs"] + solution["evidence"]:
                     references[canonical_url(item["url"])].append(item)
-        with self.connect() as db:
-            lookup = [url for source in references for url in source_url_aliases(source)]
-            for chunk in range(0, len(lookup), 200):
-                urls = lookup[chunk:chunk + 200]
-                params = ",".join("?" for _ in urls)
-                rows = db.execute(f"""SELECT lower(url) AS key, kind, status, updated_at, fetched_at, metadata
-                                   FROM observations WHERE lower(url) IN ({params})""", urls)
-                for row in rows:
-                    snapshot = json.loads(row["metadata"])
-                    state = {key: row[key] for key in ("kind", "status", "updated_at", "fetched_at")}
-                    state["revision"] = snapshot.get("head_sha")
-                    for ref in references[canonical_url(row["key"])]:
-                        ref["github"] = state
+        for url, state in self.observed_sources(references).items():
+            for ref in references[url]:
+                ref["github"] = state
         return problems
 
     def observations(self, *, q="", kind="", project="", limit=100):

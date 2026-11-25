@@ -20,6 +20,16 @@ PortBridge connects public issues, pull requests, and test results across projec
 | Try PortBridge in your repository | Check one open PR for prior work, then see if a collaborator can reuse a result. [Pilot for maintainers](docs/AGENT-PROMPT.md#try-portbridge-in-your-repository) |
 | Suggest a project, a missing link, or a search improvement | Open the [feedback form](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml). |
 
+## Look up one real case
+
+Paste a GitHub URL into the [public source index](https://akimfomin.github.io/PortBridge/#/sources), then open related work. The site shows how many entries match and labels automatically found candidates. Open the [reviewed catalog](https://akimfomin.github.io/PortBridge/#/problems) for recorded results and the [Research Radar](https://akimfomin.github.io/PortBridge/#/partial) for work that has a next step.
+
+```sh
+python -m portbridge.preflight --url https://github.com/LooperSalty/AnyXboxX/pull/133 --q "v_fmac_f32 rounding" --global
+```
+
+The exact AnyXboxX search links the earlier RDNA2 evidence and the new CPU correction. Connect the same tools from [Codex or Claude Code](docs/MCP.md), or start with the [Test Lab](https://akimfomin.github.io/PortBridge/#/lab) to try one check.
+
 ## Recent cross-project work
 
 - **Wave64 in XCL.** Published RDNA2 measurements pointed to a missing byte-carry test. The XCL author requested a follow-up, and PortBridge submitted a one-file test PR. The reported run on an RTX 4070 Ti SUPER covered Wave32 and split Wave64. [Author response](https://github.com/ivall/xcl/pull/925#issuecomment-7128723618) · [Pinned test](https://github.com/akimfomin/xcl/commit/3858abc46e4c9c3b9db5e4ae648d6636c37bfb51)

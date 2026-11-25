@@ -13,11 +13,16 @@ from .matching import ISA_OPCODE, canonical_url
 QUERY_PHRASES = re.compile(r"\b(?:scratch memory|scratch buffer|liveness|live ranges?|last consumer|"
                            r"last use|stack coloring|spill slots?|compute dispatch|shader compiler|"
                            r"timeline[\s-]+semaphores?|enhanced[\s-]+barriers?|"
+                           r"image layout|(?:pipeline|image)[\s-]+barriers?|barrier(?:[\s-]+coalescing)|"
+                           r"(?:texture[\s-]+)?detil(?:e|ing)|swizzl(?:e|ing)|gfx(?:10|11|12)|bc[1-7]|"
                            r"register allocation|memory aliasing|synchronization|scratch|lifetime|"
                            r"dxil|dxbc|spir-v|d3d12|vulkan)\b", re.I)
 QUERY_ALIASES = {
     "timeline semaphore": "timeline semaphore", "timeline semaphores": "timeline semaphore",
     "enhanced barrier": "enhanced barriers", "enhanced barriers": "enhanced barriers",
+    "pipeline barriers": "pipeline barrier", "image barriers": "image barrier",
+    "texture detile": "detile", "texture detiling": "detile", "detiling": "detile",
+
 }
 CONTEXT_PHRASES = frozenset({"direct3d 12", "directx 12", "spir v"})
 RESULT_PATH = re.compile(r"/[^/]+/[^/]+/(?:issues|pull)/[1-9][0-9]*")

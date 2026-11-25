@@ -10,7 +10,8 @@ from urllib.parse import parse_qs, urlsplit
 
 from portbridge.github import API
 from portbridge.tester_discovery import (
-    CONTINUED_RECT, MAX_REQUESTS, PER_PAGE, REFORGE_PRESENT, THREADS, XCL_FMA, XCL_GPU, XCL_PERMUTE,
+    CONTINUED_RECT, INTEL_WAVE32, MAX_REQUESTS, PER_PAGE, REFORGE_PRESENT, THREADS,
+    XCL_DISPATCH, XCL_FMA, XCL_GPU, XCL_PERMUTE, XCL_SCRATCH,
     discover_testers,
 )
 
@@ -25,6 +26,30 @@ AMD_REPORT = """Hardware check of commit aaaaaaa.
 - Hardware: AMD Radeon RX 9070 XT (RDNA4, driver 1.2), Windows 11.
 - `gpu::recomp::tests::gpu_ds_permute_b32` (native Wave64, Wave32 and split Wave64): **passed**.
 """
+ARC_SINGLE_REPORT = """**Tested**
+
+At 3283da481077c1962f13f1b4078841662f7a4ccb, dispatch_chain_payload_skips_middle_piece ran on Intel Arc A770 (driver 32.0.101.9175) and Windows 11.
+
+**1 passed, 0 failed, 0 ignored, 0 GPU skips**. The stock Wave32 fixture issued one whole-shader dispatch and three direct-DXIL chain dispatches.
+
+**Not tested**
+
+Reused-edge-slot stress.
+"""
+ARC_TABLE_REPORT = """# Arc dispatch-chain parity
+
+**Tested revision**
+
+The assigned checkout was clean at the checked revision.
+The original author reported the first result.
+
+**Tested**
+
+- Test station, Windows 11 25H2, Intel(R) Arc(TM) B580 driver 32.0.101.9175.
+
+| Fixture | Wave form | Output parity | Passed / failed / ignored / skips |
+| dispatch_chain_wave32_live_loops | one physical Wave32 per group | 96 of 96 words matched | 1 / 0 / 0 / 0 |
+"""
 
 
 def comment(thread, *, login="tester-one", body=AMD_REPORT, ident=17, date="2026-11-24T09:08:40Z"):
@@ -37,7 +62,7 @@ def comment(thread, *, login="tester-one", body=AMD_REPORT, ident=17, date="2026
 
 
 class DiscoveryTests(unittest.TestCase):
-    def discover(self, equipment, capability, batches):
+    def discover(self, equipment, capability, batches, *, for_review=False):
         requested = []
         def public_get(path):
             requested.append(path)
@@ -45,7 +70,38 @@ class DiscoveryTests(unittest.TestCase):
                 if urlsplit(path).path == f"/repos/{repo}/issues/{number}/comments":
                     return rows, 1
             return [], 1
-        return discover_testers(equipment, capability, public_get=public_get, now=NOW), requested
+        return discover_testers(equipment, capability, for_review=for_review, public_get=public_get, now=NOW), requested
+
+    def test_intel_wave32_reports_are_available_only_for_human_review(self):
+        single = comment(XCL_SCRATCH, body=ARC_SINGLE_REPORT)
+        table = comment(XCL_DISPATCH, login="tester-two", body=ARC_TABLE_REPORT, ident=18)
+        batches = {XCL_DISPATCH: [table], XCL_SCRATCH: [single]}
+        candidates, paths = self.discover("intel", INTEL_WAVE32, batches, for_review=True)
+        self.assertEqual({(row["login"], row["hardware"]) for row in candidates},
+                         {("tester-one", "Intel Arc A770"), ("tester-two", "Intel Arc B580")})
+        self.assertEqual(candidates[0]["capabilities"], [INTEL_WAVE32])
+        self.assertEqual({row["evidence_url"] for row in candidates}, {single["html_url"], table["html_url"]})
+        self.assertTrue(all("opt_in" not in row and "body" not in row for row in candidates))
+        self.assertEqual(len(paths), 2)
+        self.assertEqual(self.discover("intel", (), batches), ([], []))
+
+    def test_intel_reports_need_a_physical_windows_run_with_an_exact_positive_case(self):
+        variants = (
+            ARC_SINGLE_REPORT.replace("Intel Arc A770", "Intel Arc Graphics"),
+            ARC_SINGLE_REPORT.replace("Intel Arc A770", "Intel Arc A770 and NVIDIA RTX 5090"),
+            ARC_SINGLE_REPORT.replace("Windows 11", "Linux through Proton on Windows 11"),
+            ARC_SINGLE_REPORT.replace("0 GPU skips", "1 GPU skip"),
+            ARC_SINGLE_REPORT.replace("ran on", "would run on"),
+            ARC_SINGLE_REPORT.replace("Wave32 fixture issued", "Wave32 support is possible"),
+            ARC_SINGLE_REPORT.replace("dispatch_chain_payload_skips_middle_piece", "unrelated_test"),
+            "\n".join(f"> {line}" for line in ARC_SINGLE_REPORT.splitlines()),
+        )
+        for body in variants:
+            with self.subTest(body=body):
+                report = comment(XCL_SCRATCH, body=body)
+                self.assertEqual(self.discover("intel", (), {XCL_SCRATCH: [report]}, for_review=True)[0], [])
+        table_skip = comment(XCL_DISPATCH, body=ARC_TABLE_REPORT.replace("1 / 0 / 0 / 0", "1 / 0 / 0 / 1"))
+        self.assertEqual(self.discover("intel", (), {XCL_DISPATCH: [table_skip]}, for_review=True)[0], [])
 
     def test_radeon_generation_and_scope(self):
         row = comment(XCL_PERMUTE)

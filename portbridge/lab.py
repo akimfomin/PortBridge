@@ -3,6 +3,8 @@
 from copy import deepcopy
 import re
 
+from .github import WORK_URL
+from .matching import canonical_url
 from .lab_report_formats import FRAMELAB_DISCUSSION, FRAMELAB_REVISION, FRAMELAB_TESTER_ID, REPORT_POLICIES
 from .lab_reports import coverage_cells, has_passing_coverage, read_report_states
 
@@ -102,12 +104,13 @@ TASKS = (
         "equipment": ["amd"],
         "os": ["Windows"],
         "requirements": ["AMD D3D12 adapter with native Wave64", "Rust", "DXC"],
-        "status": "needs_run", "evidence_stage": "author_gpu", "adoption": "pending",
+        "status": "needs_revision", "evidence_stage": "author_gpu", "adoption": "pending",
         "source_url": f"{PORTBRIDGE}/issues/5", "procedure_url": f"{PORTBRIDGE}/issues/5",
         "evidence_url": BYTE_CARRY, "result_url": f"{PORTBRIDGE}/issues/5",
+        "receiving_url": f"{XCL}/pull/925",
         "revisions": [revision("Test PR", "PR с тестом", "akimfomin/xcl", "3858abc46e4c9c3b9db5e4ae648d6636c37bfb51")],
         "why": "A native Wave64 run checks byte carry within each 32-lane half on AMD hardware.",
-        "evidence": "Both cases passed on NVIDIA at the listed revision. The original receiving PR closed. Record an AMD result in PortBridge #5 and agree on a current XCL baseline before proposing a new PR.",
+        "evidence": "Both cases passed on NVIDIA at the listed revision. The receiving PR #925 closed unmerged. A separate draft still exists. Reconfirm a receiving branch and an exact current pin before asking for hardware.",
         "steps": [
             "Check out the pinned test PR. Select the AMD adapter and set XCL_REQUIRE_GPU=wave64.",
             "Run gpu_wave32_program_in_wave64_hardware to confirm native Wave64 is available.",
@@ -119,7 +122,7 @@ TASKS = (
             "title": "Проверить перенос байта в XCL на аппаратном Wave64",
             "requirements": ["Видеокарта AMD с D3D12 и аппаратным Wave64", "Rust", "DXC"],
             "why": "Проверка на AMD покажет, работает ли перенос байта внутри каждой половины аппаратной волны.",
-            "evidence": "На указанной версии оба теста прошли на NVIDIA. Исходный PR закрыли. Результат AMD можно оставить в PortBridge #5, а перед новым PR нужно согласовать актуальную версию XCL.",
+            "evidence": "На указанной версии оба теста прошли на NVIDIA. Принимающий PR #925 закрыли без слияния. Отдельный черновик сохранился. Перед приглашением нужно согласовать принимающую ветку и точную текущую версию.",
             "steps": [
                 "Перейдите на указанную версию PR, выберите AMD и задайте XCL_REQUIRE_GPU=wave64.",
                 "Убедитесь, что доступен аппаратный Wave64, тестом gpu_wave32_program_in_wave64_hardware.",
@@ -408,7 +411,7 @@ TASKS = (
         "status": "needs_run", "evidence_stage": "reviewed_gpu", "adoption": "pending",
         "source_url": FRAMELAB_HANDOFF,
         "procedure_url": f"{FRAMELAB}/blob/{FRAMELAB_HANDOFF_HEAD}/tests/vulkan-handoff/README.md",
-        "evidence_url": f"{FRAMELAB_HANDOFF}#issuecomment-7142089405", "result_url": FRAMELAB_RESULTS,
+        "evidence_url": f"{FRAMELAB_HANDOFF}#issuecomment-7142089405", "result_url": FRAMELAB_RESULTS, "receiving_url": FRAMELAB_RESULTS,
         "approved_testers": [FRAMELAB_TESTER_ID],
         "revisions": [revision("FrameLab #12 standalone Vulkan test", "Отдельный тест Vulkan FrameLab #12",
                                "5headsmartbtw/leonida-framelab", FRAMELAB_HANDOFF_HEAD)],
@@ -504,6 +507,32 @@ TASKS = tuple({**entry, "report_profile": REPORT_POLICIES[entry["id"]][0],
                "report_cases": list(REPORT_POLICIES[entry["id"]][1])} for entry in TASKS)
 
 
+def receiving_source(entry):
+    if receiving := entry.get("receiving_url"):
+        return receiving.split("#", 1)[0]
+    report = entry["result_url"].split("#", 1)[0]
+    source = entry["source_url"].split("#", 1)[0]
+    return report if "/pull/" in report else source
+
+
+def annotate_task_sources(tasks, catalog):
+    if catalog is None:
+        return
+    sources = {receiving_source(task) for task in tasks}
+    indexed = catalog.observed_sources(url for url in sources if WORK_URL.fullmatch(url))
+    for task in tasks:
+        url = receiving_source(task)
+        observed = indexed.get(canonical_url(url))
+        if observed is None:
+            continue
+        task["source_check"] = {"url": url, **observed}
+        if task["status"] == "needs_run" and observed["kind"] == "pr":
+            pins = {entry["sha"] for entry in task["revisions"]}
+            if observed["status"] != "open" or observed["draft"] or (observed["revision"]
+                                                                      and observed["revision"] not in pins):
+                task["status"] = "needs_revision"
+
+
 def filter_lab(payload, *, equipment="", status="", task=""):
     if equipment and equipment not in EQUIPMENT:
         raise ValueError(f"equipment must be one of {', '.join(EQUIPMENT)}")
@@ -515,11 +544,14 @@ def filter_lab(payload, *, equipment="", status="", task=""):
         entry for entry in payload["tasks"]
         if (not equipment or equipment in entry["equipment"]) and (not status or status == entry["status"])
         and (not task or task == entry["id"])
+        and (not equipment or status != "needs_run" or not any(
+            cell["equipment"] == equipment and cell["state"] == "covered" for cell in entry.get("coverage", ())))
     ]}
 
 
 def build_lab(catalog=None, *, equipment="", status="", task=""):
     tasks = deepcopy(TASKS)
+    annotate_task_sources(tasks, catalog)
     states = read_report_states(catalog, tasks)
     for entry in tasks:
         if entry["id"] not in states:

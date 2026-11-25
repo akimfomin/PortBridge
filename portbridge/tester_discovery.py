@@ -1,5 +1,6 @@
 """Find public hardware reporters in a fixed set of project test threads."""
 
+import argparse
 from datetime import datetime, timedelta, timezone
 from functools import partial
 import json
@@ -15,6 +16,13 @@ from .github import API, NoRedirect
 XCL_GPU = ("xcl-dev/xcl", "issues", 42)
 XCL_PERMUTE = ("xcl-dev/xcl", "pull", 925)
 XCL_FMA = ("xcl-dev/xcl", "pull", 1100)
+XCL_DISPATCH = ("xcl-dev/xcl", "pull", 2080)
+XCL_SCRATCH = ("xcl-dev/xcl", "pull", 2126)
+INTEL_WAVE32 = "d3d12-wave32"
+INTEL_TESTS = {
+    XCL_SCRATCH: ("dispatch_chain_payload_skips_middle_piece", "dispatch_chain_payload_survives_reused_edge_slot"),
+    XCL_DISPATCH: ("dispatch_chain_wave32_live_loops",),
+}
 REFORGE_PRESENT = ("LeonidaReforge/Leonida", "pull", 86)
 CONTINUED_RECT = ("ubiquitarianism/leonida", "pull", 207)
 CONTINUED_LAZY = ("ubiquitarianism/leonida", "pull", 511)
@@ -53,6 +61,13 @@ NVIDIA_GPU = re.compile(
 )
 # Radeon RX 9000 models use RDNA 4: https://www.amd.com/en/products/graphics/desktops/radeon.html
 RDNA4_GPU = re.compile(r"AMD Radeon RX 90\d0\b")
+INTEL_ARC = re.compile(r"\b(?:Intel\s+)?Arc(?:\s*\(TM\)|™)?\s+([AB]\d{3}M?)\b", re.I)
+WAVE32 = re.compile(r"\bwave\s*32\b|\b32[- ]lane(?:\s+wave)?\b", re.I)
+WAVE32_RUN = re.compile(
+    r"\bwave\s*32\b[^.]{0,80}\b(?:issued|ran|executed)\b"
+    r"|\b(?:ran|executed)\b[^.]{0,80}\bwave\s*32\b", re.I,
+)
+SINGLE_PASS = re.compile(r"^1 passed, 0 failed, 0 ignored, 0 (?:GPU |explicit )?skips?\b", re.I)
 WINDOWS = re.compile(r"\bWindows\s+(?:10|11)\b", re.I)
 NON_WINDOWS = re.compile(r"\b(?:Linux|Ubuntu|Fedora|Arch|Wine|Proton|WSL)\b", re.I)
 NATIVE_WAVE64 = re.compile(r"\bnative\s+(?:wave\s*64|64[- ]lane\s+waves?)\b|\bwave64\s+split\s*=\s*false\b", re.I)
@@ -117,7 +132,7 @@ def _setup_lines(lines):
             and not HYPOTHETICAL.search(line) and not FAIL.search(ZERO_FAILURES.sub("", line))]
 
 
-def _windows_gpu(lines):
+def _windows_gpu(lines, *, include_intel=False):
     # Hardware must appear in a setup line or the beginning of the report.
     setup = _setup_lines(lines)
     if not any(WINDOWS.search(line) for line in setup):
@@ -129,6 +144,8 @@ def _windows_gpu(lines):
         for model, variant in AMD_GPU.findall(line):
             hardware = f"AMD Radeon RX {model}{' ' + variant.upper() if variant else ''}"
             models.add(("amd", hardware))
+        if include_intel:
+            models.update(("intel", f"Intel Arc {model.upper()}") for model in INTEL_ARC.findall(line))
         for family, model, ti, super_model, laptop in NVIDIA_GPU.findall(line):
             hardware = " ".join(filter(None, ("NVIDIA GeForce", family.upper(), model,
                                               "Ti" if ti else "", super_model.upper(), "Laptop GPU" if laptop else "")))
@@ -151,6 +168,30 @@ def _capabilities(thread, equipment, hardware, lines):
     if thread in THREADS["win32-vulkan-geometry"] and passed:
         found.append("win32-vulkan-geometry")
     return found, bool(passed)
+
+
+def _intel_report(lines, thread):
+    # Read setup only where the report explicitly says what was tested, or in
+    # the usual opening setup fields when it has no separate Tested heading.
+    start = next((index + 1 for index, line in enumerate(lines) if line.casefold() == "tested"), 0)
+    gpu = _windows_gpu(lines[start:start + 4] if start else lines, include_intel=True)
+    if gpu is None or gpu[0] != "intel":
+        return None
+    tests = INTEL_TESTS[thread]
+    # A named result row can prove the case directly. Some single-case
+    # reports name the run above its explicit pass/fail/skip summary.
+    for line in lines:
+        cells = [part.strip() for part in line.strip("|").split("|")]
+        if (line.startswith("|") and len(cells) == 4 and cells[0] in tests and WAVE32.search(cells[1])
+                and re.fullmatch(r"1\s*/\s*0\s*/\s*0\s*/\s*0", cells[-1])):
+            return gpu[1]
+    setup = lines[start:start + 4]
+    names = [name for line in setup for name in tests
+             if re.search(rf"\b{re.escape(name)}\s+ran\s+on\b", line, re.I)
+             and not HYPOTHETICAL.search(line) and not FAIL.search(ZERO_FAILURES.sub("", line))]
+    if len(names) == 1 and any(SINGLE_PASS.match(line) and WAVE32_RUN.search(line) for line in lines):
+        return gpu[1]
+    return None
 
 
 def _candidate(comment, thread, equipment, required):
@@ -182,6 +223,11 @@ def _candidate(comment, thread, equipment, required):
         if python is None:
             return None
         hardware, capabilities = f"Python {python[1]} on CPU", ["python-cpu"]
+    elif equipment == "intel":
+        hardware = _intel_report(lines, thread)
+        if hardware is None:
+            return None
+        capabilities = [INTEL_WAVE32]
     else:
         gpu = _windows_gpu(lines)
         if gpu is None or gpu[0] != equipment:
@@ -232,15 +278,20 @@ def _report_page(get, path):
     return rows, last_page if type(last_page) is int and 1 <= last_page <= 999999 else 1
 
 
-def discover_testers(equipment, capabilities=(), *, public_get=None, now=None):
+def discover_testers(equipment, capabilities=(), *, for_review=False, public_get=None, now=None):
     """Return matching recent self-reports without storing or returning their prose."""
     required = frozenset((capabilities,)) if isinstance(capabilities, str) else frozenset(capabilities or ())
-    if equipment not in {"amd", "nvidia", "cpu"} or required.difference(THREADS):
-        return []
-    if required:
-        threads = tuple(dict.fromkeys(thread for capability in sorted(required) for thread in THREADS[capability]))
+    if equipment == "intel":
+        if not for_review or required - {INTEL_WAVE32}:
+            return []
+        threads = tuple(INTEL_TESTS)
     else:
-        threads = (CONTINUED_D16,) if equipment == "cpu" else GPU_THREADS
+        if equipment not in {"amd", "nvidia", "cpu"} or required.difference(THREADS):
+            return []
+        if required:
+            threads = tuple(dict.fromkeys(thread for capability in sorted(required) for thread in THREADS[capability]))
+        else:
+            threads = (CONTINUED_D16,) if equipment == "cpu" else GPU_THREADS
     if public_get is None:
         public_get = partial(_public_get, build_opener(NoRedirect()))
 
@@ -266,3 +317,15 @@ def discover_testers(equipment, capabilities=(), *, public_get=None, now=None):
             if key not in candidates or row["reported_at"] > candidates[key]["reported_at"]:
                 candidates[key] = row
     return sorted(candidates.values(), key=lambda row: (row["reported_at"], row["login"].casefold()), reverse=True)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Review public Intel Arc Wave32 reports from selected XCL discussions.")
+    parser.parse_args(argv)
+    candidates = discover_testers("intel", INTEL_WAVE32, for_review=True)
+    print(json.dumps({"mode": "human_review", "candidates": candidates}, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
