@@ -1,0 +1,793 @@
+{
+  "xcl_base": "6d12f58a229bc73889878a448c64dc3af25eeba0",
+  "xcl_compiler": "9d461646a51429d364ec03c4660a875a4b1e0c69",
+  "xcl_test_head": "8e4c4a63143702d5e5da79484273143e0b76eb92",
+  "xcl_test_tree": "288f0ecc888aa66ac515d4509266768d3a5fd3a0",
+  "xcl_test_exe_sha256": "943067354ffce92c5b0ac1e5f9c4929c6526bc09fe424793ced92a0b65630c96",
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "driver": "617.14",
+  "dxc": "1.9.2609.5",
+  "rust": "1.100.0 windows-gnullvm",
+  "workload": "XCL-encoded synthetic direct-DXIL pixel programs",
+  "caps": {
+    "shader_bytes": 327680,
+    "process_and_job_commit_bytes": 2147483648,
+    "initial_available_commit_bytes": 8589934592,
+    "initial_physical_bytes": 6442450944,
+    "minimum_available_commit_bytes": 6442450944,
+    "minimum_physical_bytes": 4294967296,
+    "duration_s": 20
+  },
+  "summary": {
+    "g224": {
+      "baseline": {
+        "native_ms": 4084.014,
+        "readback_ms": 4115.482,
+        "translation_ms": 128.159,
+        "peak_process_mib": 160.57421875,
+        "dxil_bytes": 118516,
+        "native_samples_ms": [
+          4088.464,
+          4084.014,
+          4107.511,
+          3861.708,
+          3894.599
+        ]
+      },
+      "fused": {
+        "native_ms": 357.557,
+        "readback_ms": 384.329,
+        "translation_ms": 127.614,
+        "peak_process_mib": 147.62109375,
+        "dxil_bytes": 110140,
+        "native_samples_ms": [
+          358.727,
+          357.557,
+          356.901,
+          356.135,
+          357.935
+        ]
+      }
+    },
+    "median_pair_gain_ms": 3726.4570000000003,
+    "range_baseline_fused_ms": {
+      "96": [
+        257.513,
+        100.01
+      ],
+      "160": [
+        2182.093,
+        206.476
+      ],
+      "288": [
+        5504.876,
+        464.209
+      ],
+      "384": [
+        10198.747,
+        649.662
+      ],
+      "512": [
+        15142.474,
+        1009.673
+      ]
+    },
+    "normal_cache_ms": {
+      "baseline": [
+        4039.651,
+        1.218,
+        0.963,
+        0.905
+      ],
+      "fused": [
+        364.697,
+        0.815,
+        0.846,
+        0.907
+      ]
+    },
+    "gpu_pixels_compared": 4608
+  },
+  "runs": [
+    {
+      "size": 224,
+      "arm": "baseline",
+      "label": "pair0",
+      "process": "exit=0 peak_process_bytes=169193472 peak_job_bytes=170655744",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 128.159,
+          "create_draw_readback_ms": 4117.672,
+          "native_create_ms": 4088.464,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 169193472,
+      "peak_job_bytes": 170655744
+    },
+    {
+      "size": 224,
+      "arm": "fused",
+      "label": "pair0",
+      "process": "exit=0 peak_process_bytes=154574848 peak_job_bytes=156028928",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 129.806,
+          "create_draw_readback_ms": 386.613,
+          "native_create_ms": 358.727,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 154574848,
+      "peak_job_bytes": 156028928
+    },
+    {
+      "size": 96,
+      "arm": "fused",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=137285632 peak_job_bytes=138743808",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 47804,
+          "bytecode_fnv64": "8bb62fe67970f3e7",
+          "translate_ms": 55.315,
+          "create_draw_readback_ms": 126.793,
+          "native_create_ms": 100.01,
+          "rgba32f": [
+            12.0,
+            24.0,
+            36.0,
+            48.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 137285632,
+      "peak_job_bytes": 138743808
+    },
+    {
+      "size": 96,
+      "arm": "baseline",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=141918208 peak_job_bytes=143179776",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 50804,
+          "bytecode_fnv64": "0b6d2d896e7a9799",
+          "translate_ms": 55.379,
+          "create_draw_readback_ms": 284.057,
+          "native_create_ms": 257.513,
+          "rgba32f": [
+            12.0,
+            24.0,
+            36.0,
+            48.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 141918208,
+      "peak_job_bytes": 143179776
+    },
+    {
+      "size": 224,
+      "arm": "fused",
+      "label": "pair1",
+      "process": "exit=0 peak_process_bytes=154791936 peak_job_bytes=156250112",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 129.762,
+          "create_draw_readback_ms": 384.681,
+          "native_create_ms": 357.557,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 154791936,
+      "peak_job_bytes": 156250112
+    },
+    {
+      "size": 224,
+      "arm": "baseline",
+      "label": "pair1",
+      "process": "exit=0 peak_process_bytes=167620608 peak_job_bytes=169078784",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 126.922,
+          "create_draw_readback_ms": 4115.482,
+          "native_create_ms": 4084.014,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 167620608,
+      "peak_job_bytes": 169078784
+    },
+    {
+      "size": 160,
+      "arm": "fused",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=143212544 peak_job_bytes=144674816",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 78980,
+          "bytecode_fnv64": "1022894ffc216135",
+          "translate_ms": 90.682,
+          "create_draw_readback_ms": 234.818,
+          "native_create_ms": 206.476,
+          "rgba32f": [
+            20.0,
+            40.0,
+            60.0,
+            80.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 143212544,
+      "peak_job_bytes": 144674816
+    },
+    {
+      "size": 160,
+      "arm": "baseline",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=152244224 peak_job_bytes=153702400",
+      "status": 0,
+      "attempts": 2,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 84428,
+          "bytecode_fnv64": "fa9fab587b5d62a4",
+          "translate_ms": 94.878,
+          "create_draw_readback_ms": 2211.049,
+          "native_create_ms": 2182.093,
+          "rgba32f": [
+            20.0,
+            40.0,
+            60.0,
+            80.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 152244224,
+      "peak_job_bytes": 153702400
+    },
+    {
+      "size": 224,
+      "arm": "baseline",
+      "label": "pair2",
+      "process": "exit=0 peak_process_bytes=168697856 peak_job_bytes=170147840",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 125.256,
+          "create_draw_readback_ms": 4137.916,
+          "native_create_ms": 4107.511,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 168697856,
+      "peak_job_bytes": 170147840
+    },
+    {
+      "size": 224,
+      "arm": "fused",
+      "label": "pair2",
+      "process": "exit=0 peak_process_bytes=155131904 peak_job_bytes=156590080",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 127.614,
+          "create_draw_readback_ms": 383.896,
+          "native_create_ms": 356.901,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 155131904,
+      "peak_job_bytes": 156590080
+    },
+    {
+      "size": 288,
+      "arm": "fused",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=161828864 peak_job_bytes=163287040",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 141296,
+          "bytecode_fnv64": "a94ae6623451bf5c",
+          "translate_ms": 162.046,
+          "create_draw_readback_ms": 489.924,
+          "native_create_ms": 464.209,
+          "rgba32f": [
+            36.0,
+            72.0,
+            108.0,
+            144.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 161828864,
+      "peak_job_bytes": 163287040
+    },
+    {
+      "size": 288,
+      "arm": "baseline",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=179920896 peak_job_bytes=181379072",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 152600,
+          "bytecode_fnv64": "45987a1060889960",
+          "translate_ms": 160.716,
+          "create_draw_readback_ms": 5535.184,
+          "native_create_ms": 5504.876,
+          "rgba32f": [
+            36.0,
+            72.0,
+            108.0,
+            144.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 179920896,
+      "peak_job_bytes": 181379072
+    },
+    {
+      "size": 224,
+      "arm": "fused",
+      "label": "pair3",
+      "process": "exit=0 peak_process_bytes=155942912 peak_job_bytes=157401088",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 124.916,
+          "create_draw_readback_ms": 382.548,
+          "native_create_ms": 356.135,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 155942912,
+      "peak_job_bytes": 157401088
+    },
+    {
+      "size": 224,
+      "arm": "baseline",
+      "label": "pair3",
+      "process": "exit=0 peak_process_bytes=168374272 peak_job_bytes=169832448",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 129.852,
+          "create_draw_readback_ms": 3892.134,
+          "native_create_ms": 3861.708,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 168374272,
+      "peak_job_bytes": 169832448
+    },
+    {
+      "size": 384,
+      "arm": "fused",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=174567424 peak_job_bytes=176033792",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 188048,
+          "bytecode_fnv64": "206df75440158cb5",
+          "translate_ms": 223.581,
+          "create_draw_readback_ms": 677.596,
+          "native_create_ms": 649.662,
+          "rgba32f": [
+            48.0,
+            96.0,
+            144.0,
+            192.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 174567424,
+      "peak_job_bytes": 176033792
+    },
+    {
+      "size": 384,
+      "arm": "baseline",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=202633216 peak_job_bytes=204095488",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 203740,
+          "bytecode_fnv64": "acc07fb8773b5849",
+          "translate_ms": 212.859,
+          "create_draw_readback_ms": 10230.425,
+          "native_create_ms": 10198.747,
+          "rgba32f": [
+            48.0,
+            96.0,
+            144.0,
+            192.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 202633216,
+      "peak_job_bytes": 204095488
+    },
+    {
+      "size": 224,
+      "arm": "baseline",
+      "label": "pair4",
+      "process": "exit=0 peak_process_bytes=167333888 peak_job_bytes=168792064",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 131.406,
+          "create_draw_readback_ms": 3925.003,
+          "native_create_ms": 3894.599,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 167333888,
+      "peak_job_bytes": 168792064
+    },
+    {
+      "size": 224,
+      "arm": "fused",
+      "label": "pair4",
+      "process": "exit=0 peak_process_bytes=153985024 peak_job_bytes=155242496",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 126.951,
+          "create_draw_readback_ms": 384.329,
+          "native_create_ms": 357.935,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 153985024,
+      "peak_job_bytes": 155242496
+    },
+    {
+      "size": 512,
+      "arm": "fused",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=184193024 peak_job_bytes=185643008",
+      "status": 0,
+      "attempts": 2,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 250376,
+          "bytecode_fnv64": "b09a2d9ba3b3d9c1",
+          "translate_ms": 301.561,
+          "create_draw_readback_ms": 1040.242,
+          "native_create_ms": 1009.673,
+          "rgba32f": [
+            64.0,
+            128.0,
+            192.0,
+            256.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 184193024,
+      "peak_job_bytes": 185643008
+    },
+    {
+      "size": 512,
+      "arm": "baseline",
+      "label": "range",
+      "process": "exit=0 peak_process_bytes=249896960 peak_job_bytes=251355136",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": true,
+      "pixels_compared": 192,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 271928,
+          "bytecode_fnv64": "a13a0347da755ec3",
+          "translate_ms": 300.97,
+          "create_draw_readback_ms": 15176.476,
+          "native_create_ms": 15142.474,
+          "rgba32f": [
+            64.0,
+            128.0,
+            192.0,
+            256.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 249896960,
+      "peak_job_bytes": 251355136
+    },
+    {
+      "size": 224,
+      "arm": "fused",
+      "label": "warm",
+      "process": "exit=0 peak_process_bytes=156508160 peak_job_bytes=157966336",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": false,
+      "pixels_compared": 384,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 125.998,
+          "create_draw_readback_ms": 394.745,
+          "native_create_ms": 364.697,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        },
+        {
+          "window_high": "0x401",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 125.998,
+          "create_draw_readback_ms": 26.64,
+          "native_create_ms": 0.815,
+          "rgba32f": [
+            168.0,
+            196.0,
+            224.0,
+            252.0
+          ]
+        },
+        {
+          "window_high": "0x403",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 125.998,
+          "create_draw_readback_ms": 27.313,
+          "native_create_ms": 0.846,
+          "rgba32f": [
+            392.0,
+            420.0,
+            448.0,
+            476.0
+          ]
+        },
+        {
+          "window_high": "0x404",
+          "bytes": 110140,
+          "bytecode_fnv64": "385440a0b702d5b7",
+          "translate_ms": 125.998,
+          "create_draw_readback_ms": 26.706,
+          "native_create_ms": 0.907,
+          "rgba32f": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 156508160,
+      "peak_job_bytes": 157966336
+    },
+    {
+      "size": 224,
+      "arm": "baseline",
+      "label": "warm",
+      "process": "exit=0 peak_process_bytes=166957056 peak_job_bytes=168411136",
+      "status": 0,
+      "attempts": 1,
+      "cache_disable_ack": false,
+      "pixels_compared": 384,
+      "cases": [
+        {
+          "window_high": "0x0",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 127.207,
+          "create_draw_readback_ms": 4066.693,
+          "native_create_ms": 4039.651,
+          "rgba32f": [
+            28.0,
+            56.0,
+            84.0,
+            112.0
+          ]
+        },
+        {
+          "window_high": "0x401",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 127.207,
+          "create_draw_readback_ms": 27.585,
+          "native_create_ms": 1.218,
+          "rgba32f": [
+            168.0,
+            196.0,
+            224.0,
+            252.0
+          ]
+        },
+        {
+          "window_high": "0x403",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 127.207,
+          "create_draw_readback_ms": 27.542,
+          "native_create_ms": 0.963,
+          "rgba32f": [
+            392.0,
+            420.0,
+            448.0,
+            476.0
+          ]
+        },
+        {
+          "window_high": "0x404",
+          "bytes": 118516,
+          "bytecode_fnv64": "1031a5f77a017b5f",
+          "translate_ms": 127.207,
+          "create_draw_readback_ms": 26.888,
+          "native_create_ms": 0.905,
+          "rgba32f": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "peak_process_bytes": 166957056,
+      "peak_job_bytes": 168411136
+    }
+  ]
+}

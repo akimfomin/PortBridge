@@ -14,6 +14,8 @@ The current [heavy graphics investigation](HEAVY-GRAPHICS.md) follows a measured
 
 The [ordered graphics implementation](ORDERED-GRAPHICS.md) starts exact native builds as their draw packets are discovered and keeps playback in order. It runs in the full open-scene renderer and is compared with blocking first use and eager compilation of exact known keys.
 
+The [XCL compiler experiment](XCL-READ-GUARDS.md) tests whether merging identical read guards shrinks the work submitted to the native compiler.
+
 ## Deterministic replay
 
 `readiness.py` takes full opaque pipeline keys, integer compile durations and memory estimates, plus the timestamp of each warmup request and first-frame use. Equal keys share one compilation. A demanded queued pipeline moves to the tail of the demand queue, ahead of speculation. A running compile can finish without duplication and keeps its original charge until completion. A failed required compile records a terminal result, releases its budget and never reports a ready frame.

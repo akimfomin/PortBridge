@@ -32,6 +32,8 @@ The exact AnyXboxX search links the earlier RDNA2 evidence and the new CPU corre
 
 ## PortBridge research
 
+- [Cold graphics pipeline readiness](research/pipeline-readiness/ORDERED-GRAPHICS.md) cut recording-to-first-image time from 11.98 to 6.31 seconds on an open Vulkan scene with identical output. The report includes the exact eager baseline, memory cost, and the related XCL findings.
+
 - [Cold pipeline readiness](research/pipeline-readiness) is the active study. It measures how compilation delays the first correct output and tests whether preserving memory headroom for required work helps.
 - [Observation-scoped GPU readbacks](research/readback-epochs) reuses already observed bytes and tests packed selective readback against bounded exact-range staging. [Ecosystem evidence](docs/READBACK-2026-11-25.md)
 - [Portable Vulkan mipmaps](research/mipmap-contract) demonstrates a lane-numbering assumption in NVIDIA's fast shader, a guarded correction, and matched physical output.

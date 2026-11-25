@@ -1,0 +1,658 @@
+diff --git a/crates/xcl/src/gpu/dxil/core_tests.rs b/crates/xcl/src/gpu/dxil/core_tests.rs
+index 7492f54..c1b59cb 100644
+--- a/crates/xcl/src/gpu/dxil/core_tests.rs
++++ b/crates/xcl/src/gpu/dxil/core_tests.rs
+@@ -153,6 +153,170 @@ fn direct_and_hlsl_graphics_stages_link() {
+     assert_eq!(draw(&hvs, &dps), want, "HLSL VS + direct PS");
+ }
+ 
++fn read_guards_pixel(shared_high: bool, mem_windows: u32, groups: usize) -> Vec<u8> {
++    use crate::gpu::recomp::PsInterface;
++    let mut code = Vec::new();
++    let mut emit = |name, encoding, fields: &[(&str, u64)], literal| {
++        code.extend(encode(name, encoding, fields, literal).unwrap_or_else(|error| panic!("{name}: {error}")));
++    };
++    // Different aligned low addresses. SADDR is off and OFFSET is zero, so
++    // their upper dwords are identical at the actual memory selection.
++    for i in 0..4 {
++        let high_sgpr = if shared_high { 1 } else { 1 + i };
++        emit("V_MOV_B32", "ENC_VOP1", &[("VDST", 21 + 2 * i), ("SRC0", high_sgpr)], None);
++    }
++    emit("S_MOV_B32", "ENC_SOP1", &[("SDST", 126), ("SSRC0", 6)], None);
++    for group in 0..groups {
++        for i in 0..4 {
++            let off = 64 + 16 * group as u32 + 4 * i as u32;
++            emit("V_MOV_B32", "ENC_VOP1", &[("VDST", 20 + 2 * i), ("SRC0", 255)], Some(off));
++        }
++        let dest = if group == 0 { 4 } else { 8 };
++        for i in 0..4 {
++            emit("GLOBAL_LOAD_DWORD", "ENC_FLAT_GLBL", &[("VDST", dest + i), ("ADDR", 20 + 2 * i), ("SADDR", 0x7D), ("OFFSET", 0)], None);
++        }
++        if group != 0 {
++            for i in 0..4 {
++                emit("V_ADD_F32", "ENC_VOP2", &[("VDST", 4 + i), ("SRC0", 256 + dest + i), ("VSRC1", 4 + i)], None);
++            }
++        }
++    }
++    emit("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 0xF), ("VSRC0", 4), ("VSRC1", 5), ("VSRC2", 6), ("VSRC3", 7), ("DONE", 1), ("VM", 1)], None);
++    emit("S_ENDPGM", "ENC_SOPP", &[], None);
++    let psi = PsInterface {
++        inputs: vec![sig("SV_Position", 0, 1, 3, 0, 0xF)],
++        outputs: vec![sig("SV_Target", 0, 64, 3, 0, 0xF)],
++        input_ena: 0x2,
++        attrs: None,
++    };
++    super::kernel::translate_pixel(&code, KernelOptions { wave64: false, split: false, mem_windows, sampler_base: 0 }, &psi)
++        .expect("read guard pixel shader translates")
++        .dxil
++}
++
++#[test]
++fn graphics_read_guards_merge_only_equal_window_conditions() {
++    use crate::gpu::recomp::{dxc, runner, HEAP_WINDOWS};
++    if dxc::location().is_err() {
++        return runner::skip_test("no DXC");
++    }
++    let mut branches = Vec::new();
++    for shared_high in [true, false] {
++        let dxil = read_guards_pixel(shared_high, HEAP_WINDOWS | 4, 1);
++        super::validate::validate(&dxil).expect("read guard pixel shader validates");
++        let disassembly = super::validate::disassemble(&dxil).unwrap();
++        let body = disassembly.split("define void @main()").nth(1).and_then(|s| s.split("\n}\n").next()).expect("main body");
++        let mut heap_handles = std::collections::HashSet::new();
++        let mut annotated_heap = std::collections::HashSet::new();
++        let mut reads = 0;
++        for line in body.lines() {
++            let Some((result, op)) = line.trim().split_once(" = ") else { continue };
++            if op.contains("@dx.op.createHandleFromHeap(") {
++                heap_handles.insert(result);
++            } else if let Some((_, operand)) = op.split_once("@dx.op.annotateHandle(i32 216, %dx.types.Handle ") {
++                if operand.split(',').next().is_some_and(|handle| heap_handles.contains(handle)) {
++                    annotated_heap.insert(result);
++                }
++            } else if let Some((_, operand)) = op.split_once("@dx.op.rawBufferLoad.i32(i32 139, %dx.types.Handle ") {
++                reads += usize::from(operand.split(',').next().is_some_and(|handle| annotated_heap.contains(handle)));
++            }
++        }
++        assert_eq!(reads, 4, "all four distinct heap reads must survive");
++        branches.push(body.matches("br i1").count());
++    }
++    let disabled = std::env::var("XCL_DXIL_NO_OPT").unwrap_or_default();
++    if disabled.split(',').any(|pass| matches!(pass.trim(), "read-guards" | "cse" | "all")) {
++        assert_eq!(branches[0], branches[1], "without equivalent-guard fusion both shaders retain every guard");
++    } else {
++        assert!(branches[0] < branches[1], "only identical window predicates can fuse: {branches:?}");
++    }
++    println!("same-window and changed-window conditional branches: {branches:?}");
++}
++
++#[test]
++fn graphics_read_guards_match_cpu_pixels() {
++    use crate::gpu::recomp::{dxc, runner, HEAP_WINDOWS, IO_UMA_BASE_HI};
++    use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R32G32_FLOAT;
++    if !super::graphics::tests::draw_ready() {
++        return;
++    }
++    if dxc::location().is_err() {
++        return runner::skip_test("no DXC");
++    }
++    if std::env::var("XCL_READ_GUARD_TEST_COLD").as_deref() == Ok("1") {
++        runner::disable_driver_shader_cache().expect("D3D12 accepted the cache-disable request");
++        println!("guard fixture implicit shader cache disable accepted");
++    }
++    let vs = dxc::compile(
++        "float4 main(float2 p : POSITION) : SV_Position { return float4(p, 0, 1); }",
++        "main", "vs_6_6", &[],
++    ).unwrap();
++    let layout = [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }];
++    let vertices = [-1.0f32, -1.0, -1.0, 3.0, 3.0, -1.0];
++    let mut sgprs = [0; IO_UMA_BASE_HI + 1];
++    let expected = [0.25f32, 0.5, 0.75, 1.0];
++    let mut mem = vec![0x3f80_0000; 24];
++    for (slot, value) in mem[16..20].iter_mut().zip(expected) {
++        *slot = value.to_bits();
++    }
++    let clear = [9.0; 4];
++    let ps = read_guards_pixel(true, 1, 1);
++    super::validate::validate(&ps).expect("root read guard pixel shader validates");
++    for (mask, wanted) in [(u32::MAX, expected), (0, clear)] {
++        sgprs[6] = mask;
++        let pixels = runner::draw(&vs, &ps, &layout, &vertices, 8, &sgprs, &mem, 8, clear).unwrap();
++        assert_eq!(pixels, vec![wanted; 64], "all 64 pixels for EXEC mask {mask:#x}");
++    }
++
++    let colors = [
++        [0.125f32, 0.25, 0.375, 0.5],
++        [0.75, 0.875, 1.0, 1.125],
++        [1.25, 1.375, 1.5, 1.625],
++        [1.75, 1.875, 2.0, 2.125],
++    ];
++    let groups = std::env::var("XCL_READ_GUARD_TEST_GROUPS").ok().map_or(1, |v|
++        v.parse::<usize>().ok().filter(|n| (1..=512).contains(n)).expect("XCL_READ_GUARD_TEST_GROUPS must be 1–512"));
++    let window_words = (16 + groups * 4).next_multiple_of(64);
++    let mut mem = vec![0x4080_0000; window_words * colors.len()];
++    for (window, color) in colors.iter().enumerate() {
++        for group in 0..groups {
++            for (i, value) in color.iter().enumerate() {
++                mem[window * window_words + 16 + group * 4 + i] = value.to_bits();
++            }
++        }
++    }
++    let before_translation = std::time::Instant::now();
++    let ps = read_guards_pixel(true, HEAP_WINDOWS | 4, groups);
++    let translate_ms = before_translation.elapsed().as_secs_f64() * 1000.0;
++    assert!(ps.len() <= 320 * 1024, "unbounded graphics fixture");
++    let bytecode = crate::gpu::shader::fnv64(&ps);
++    super::validate::validate(&ps).expect("heap read guard pixel shader validates");
++    let repeats = std::env::var("XCL_READ_GUARD_TEST_REPEATS").ok().map_or(1, |v|
++        v.parse::<usize>().ok().filter(|n| (1..=4).contains(n)).expect("XCL_READ_GUARD_TEST_REPEATS must be 1–4"));
++    let base = 0x400;
++    sgprs[IO_UMA_BASE_HI] = base;
++    sgprs[6] = u32::MAX;
++    let cases = [(0, colors[0]), (base + 1, colors[1]), (base + 3, colors[3]), (base + 4, [0.0; 4])];
++    let measured = if std::env::var("XCL_READ_GUARD_TEST_FIRST_ONLY").as_deref() == Ok("1") {
++        &cases[..1]
++    } else {
++        &cases
++    };
++    for repetition in 0..repeats {
++        for &(high, wanted) in measured {
++            sgprs[1] = high;
++            let wanted = wanted.map(|color| color * groups as f32);
++            let started = std::time::Instant::now();
++            let pixels = runner::draw_heap_windows(&vs, &ps, &layout, &vertices, 8, &sgprs, &mem, window_words, 8, clear).unwrap();
++            let readback_ms = started.elapsed().as_secs_f64() * 1000.0;
++            assert_eq!(pixels, vec![wanted; 64], "all 64 pixels for high address {high:#x}");
++            println!("guard fixture groups={groups} repetition={repetition} high={high:#x} bytes={} bytecode_fnv64={bytecode:016x} translate_ms={translate_ms:.3} create_draw_readback_ms={readback_ms:.3} pixel={wanted:?}", ps.len());
++        }
++    }
++    println!("{}: {} RGBA32F pixels match the CPU controls", runner::adapter().unwrap(),
++             128 + 64 * measured.len() * repeats);
++}
++
+ fn sig(name: &str, index: u32, sv: u32, ct: u32, reg: u32, mask: u8) -> crate::gpu::dxbc::SigElement {
+     crate::gpu::dxbc::SigElement { name: name.into(), index, system_value: sv, component_type: ct, register: reg, mask, rw_mask: mask, stream: 0 }
+ }
+diff --git a/crates/xcl/src/gpu/dxil/graphics.rs b/crates/xcl/src/gpu/dxil/graphics.rs
+index 239a923..af97fdf 100644
+--- a/crates/xcl/src/gpu/dxil/graphics.rs
++++ b/crates/xcl/src/gpu/dxil/graphics.rs
+@@ -988,7 +988,11 @@ impl Shader {
+         if !self.m.terminated() {
+             self.m.ret();
+         }
+-        self.m.optimize();
++        if self.stage == Stage::Pixel {
++            self.m.optimize_pixel();
++        } else {
++            self.m.optimize();
++        }
+         self.infer_type_features();
+         let ins = io.place(Dir::In);
+         let outs = io.place(Dir::Out);
+diff --git a/crates/xcl/src/gpu/dxil/module.rs b/crates/xcl/src/gpu/dxil/module.rs
+index d72ef6f..e2a9b63 100644
+--- a/crates/xcl/src/gpu/dxil/module.rs
++++ b/crates/xcl/src/gpu/dxil/module.rs
+@@ -15,6 +15,7 @@ use std::collections::HashMap;
+ 
+ use super::bitstream::{signed, BitWriter};
+ 
++mod guard;
+ mod opt;
+ pub(super) mod split;
+ 
+diff --git a/crates/xcl/src/gpu/dxil/module/guard.rs b/crates/xcl/src/gpu/dxil/module/guard.rs
+new file mode 100644
+index 0000000..ed5bf36
+--- /dev/null
++++ b/crates/xcl/src/gpu/dxil/module/guard.rs
+@@ -0,0 +1,262 @@
++//! Fuse repeated pixel read guards without speculating loads or moving wave operations.
++
++use std::collections::{HashMap, HashSet};
++
++use super::{BinOp, Block, CastOp, FnAttrs, Module, Op, Pred, Value};
++
++impl Module {
++    pub(super) fn fuse_read_guards(&mut self, order: &[u32]) -> bool {
++        let mut incoming = vec![0; self.blocks.len()];
++        let mut changed = false;
++        for &source in order {
++            for target in self.successors(source as usize) {
++                incoming[target.0 as usize] += 1;
++            }
++        }
++        for &source in order {
++            // Bound the size of a fused region and the work spent remapping it.
++            for _ in 1..8 {
++                if !self.fuse_guard_pair(Block(source), &incoming) {
++                    break;
++                }
++                changed = true;
++            }
++        }
++        changed
++    }
++
++    fn fuse_guard_pair(&mut self, source: Block, incoming: &[usize]) -> bool {
++        //    source - true -> first      middle - true -> second
++        //      |               |            |                 |
++        //    false ----------> middle     false ------------> join
++        let Some(head) = self.last_inst(source) else { return false };
++        let Op::CondBr(condition, first, middle) = self.insts[head].op else { return false };
++        let Some(first_end) = self.last_inst(first) else { return false };
++        let Some(middle_end) = self.last_inst(middle) else { return false };
++        let Op::CondBr(again, second, join) = self.insts[middle_end].op else { return false };
++        let Some(second_end) = self.last_inst(second) else { return false };
++        let mut distinct = [source.0, first.0, middle.0, second.0, join.0];
++        distinct.sort_unstable();
++        if condition != again || distinct.windows(2).any(|p| p[0] == p[1])
++            || !matches!(self.insts[first_end].op, Op::Br(b) if b == middle)
++            || !matches!(self.insts[second_end].op, Op::Br(b) if b == join)
++            || incoming[first.0 as usize] != 1 || incoming[middle.0 as usize] != 2
++            || incoming[second.0 as usize] != 1 || incoming[join.0 as usize] != 2
++            || !self.readonly_arm(first) || !self.readonly_arm(second)
++        {
++            return false;
++        }
++
++        let mid = &self.blocks[middle.0 as usize];
++        let phi_count = mid.iter().take_while(|&&i| matches!(self.insts[i as usize].op, Op::Phi(_))).count();
++        let mut phi_inputs = HashMap::new();
++        for &i in &mid[..phi_count] {
++            let Op::Phi(inputs) = &self.insts[i as usize].op else { unreachable!() };
++            let (Some(skip), Some(take)) = (phi_value(inputs, source), phi_value(inputs, first)) else { return false };
++            phi_inputs.insert(Value::Inst(i), (skip, take));
++        }
++        // Hoist independent integer arithmetic. Move read-dependent results,
++        // such as inactive-lane selects, after the final phis if the second
++        // region and its phi inputs do not use them.
++        let mut sinks = HashSet::new();
++        let uses_sink = |op: &Op, sinks: &HashSet<Value>| {
++            let mut uses = false;
++            op.for_each_operand(|v| uses |= sinks.contains(&v));
++            uses
++        };
++        for &i in &mid[phi_count..mid.len() - 1] {
++            if !self.guard_math(i) {
++                return false;
++            }
++            let mut depends_on_read = false;
++            self.insts[i as usize].op.for_each_operand(|value| {
++                depends_on_read |= phi_inputs.contains_key(&value) || sinks.contains(&value)
++                    || matches!(value, Value::Inst(j) if self.def_block[j as usize] == first);
++            });
++            if depends_on_read {
++                sinks.insert(Value::Inst(i));
++            }
++        }
++        if self.blocks[second.0 as usize].iter().any(|&i| uses_sink(&self.insts[i as usize].op, &sinks)) {
++            return false;
++        }
++        let mut join_phis = 0;
++        for &i in &self.blocks[join.0 as usize] {
++            let op = &self.insts[i as usize].op;
++            let Op::Phi(inputs) = op else { break };
++            if phi_value(inputs, middle).is_none() || phi_value(inputs, second).is_none()
++                || uses_sink(op, &sinks)
++            {
++                return false;
++            }
++            join_phis += 1;
++        }
++
++        let mut mid = std::mem::take(&mut self.blocks[middle.0 as usize]);
++        mid.pop();
++        let source_insts = &mut self.blocks[source.0 as usize];
++        source_insts.pop();
++        let mut sink_insts = Vec::new();
++        for i in mid.drain(phi_count..) {
++            if sinks.contains(&Value::Inst(i)) {
++                self.def_block[i as usize] = join;
++                sink_insts.push(i);
++            } else {
++                self.def_block[i as usize] = source;
++                source_insts.push(i);
++            }
++        }
++        self.insts[head].op = Op::CondBr(condition, first, join);
++        source_insts.push(head as u32);
++
++        let second_insts = std::mem::take(&mut self.blocks[second.0 as usize]);
++        let first_insts = &mut self.blocks[first.0 as usize];
++        first_insts.pop();
++        for i in second_insts {
++            self.insts[i as usize].op.map_operands(|v| phi_inputs.get(&v).map_or(v, |&(_, take)| take));
++            self.def_block[i as usize] = first;
++            first_insts.push(i);
++        }
++
++        let last = &mut self.blocks[join.0 as usize];
++        for &i in last.iter() {
++            let Op::Phi(inputs) = &mut self.insts[i as usize].op else { break };
++            for (value, label) in inputs {
++                let taken = *label == second;
++                if let Some(&(skip, take)) = phi_inputs.get(value) {
++                    *value = if taken { take } else { skip };
++                }
++                *label = if taken { first } else { source };
++            }
++        }
++        for &i in &mid {
++            self.def_block[i as usize] = join;
++        }
++        last.splice(join_phis..join_phis, sink_insts);
++        last.splice(..0, mid);
++        true
++    }
++
++    fn last_inst(&self, block: Block) -> Option<usize> {
++        self.blocks[block.0 as usize].last().map(|&i| i as usize)
++    }
++
++    fn guard_math(&self, i: u32) -> bool {
++        let inst = &self.insts[i as usize];
++        self.int_width(inst.ty).is_some() && match inst.op {
++            Op::Bin(BinOp::Add | BinOp::Sub | BinOp::And | BinOp::Or | BinOp::Xor, _, _, 0)
++            | Op::Cast(CastOp::ZExt | CastOp::SExt | CastOp::Trunc, _, _)
++            | Op::Select(..) => true,
++            Op::Cmp(predicate, _, _) => (predicate as u32) >= (Pred::Eq as u32),
++            _ => false,
++        }
++    }
++
++    fn readonly_arm(&self, block: Block) -> bool {
++        let body = &self.blocks[block.0 as usize];
++        let mut reads = false;
++        for &i in &body[..body.len() - 1] {
++            match &self.insts[i as usize].op {
++                Op::Call(f, _) => {
++                    let f = &self.funcs[*f as usize];
++                    match (f.name.as_str(), f.attrs) {
++                        ("dx.op.rawBufferLoad.i32", FnAttrs::ReadOnly) => reads = true,
++                        ("dx.op.annotateHandle" | "dx.op.createHandleFromBinding" | "dx.op.createHandleFromHeap",
++                         FnAttrs::ReadNone) => {}
++                        _ => return false,
++                    }
++                }
++                Op::Extract(..) => {}
++                _ if self.guard_math(i) => {}
++                _ => return false,
++            }
++        }
++        reads
++    }
++}
++
++fn phi_value(inputs: &[(Value, Block)], block: Block) -> Option<Value> {
++    if inputs.len() != 2 {
++        return None;
++    }
++    inputs.iter().find_map(|&(value, label)| (label == block).then_some(value))
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    fn guarded_reads(changed_condition: bool, wave: bool, dependent_read: bool) -> (Module, [Block; 5], [Value; 4]) {
++        let mut m = Module::new();
++        m.define_entry("main");
++        let [start, first, middle, second, join] = [
++            m.entry_block(), m.new_block(), m.new_block(), m.new_block(), m.new_block(),
++        ];
++        let i32 = m.i32();
++        let read_ty = m.func_ty(i32, &[i32]);
++        let read = m.declare("dx.op.rawBufferLoad.i32", read_ty, FnAttrs::ReadOnly);
++        let wave_read = m.declare("dx.op.waveReadLaneFirst.i32", read_ty, FnAttrs::NoUnwind);
++        let z = m.i32c(0);
++        let four = m.i32c(4);
++        let eight = m.i32c(8);
++        m.set_block(start);
++        let offset = m.call(read, &[z]);
++        let condition = m.cmp(Pred::ULt, offset, four);
++        let again = if changed_condition { m.cmp(Pred::ULt, offset, eight) } else { condition };
++        m.cond_br(condition, first, middle);
++        m.set_block(first);
++        let first_read = m.call(read, &[offset]);
++        m.br(middle);
++        m.set_block(middle);
++        let saved = m.phi(i32);
++        m.add_incoming(saved, z, start);
++        m.add_incoming(saved, first_read, first);
++        let masked = m.select(condition, saved, z);
++        let offset2 = m.bin(BinOp::Add, offset, four);
++        m.cond_br(again, second, join);
++        m.set_block(second);
++        let second_read = m.call(read, &[if dependent_read { masked } else { offset2 }]);
++        if wave { m.call(wave_read, &[second_read]); }
++        let sum = m.bin(BinOp::Add, saved, second_read);
++        m.br(join);
++        m.set_block(join);
++        let result = m.phi(i32);
++        m.add_incoming(result, saved, middle);
++        m.add_incoming(result, sum, second);
++        m.ret();
++        (m, [start, first, middle, second, join], [result, sum, first_read, masked])
++    }
++
++    #[test]
++    fn fuses_read_regions_and_rewrites_phis_on_both_paths() {
++        let (mut m, [start, first, middle, second, join], [result, sum, first_read, masked]) =
++            guarded_reads(false, false, false);
++        let order: Vec<_> = m.block_layout().0.iter().map(|&b| b as u32).collect();
++        assert!(m.fuse_read_guards(&order));
++        assert!(m.blocks[middle.0 as usize].is_empty() && m.blocks[second.0 as usize].is_empty());
++        assert_eq!(m.successors(start.0 as usize), [first, join]);
++        assert_eq!(m.successors(first.0 as usize), [join]);
++        let (Value::Inst(result), Value::Inst(sum)) = (result, sum) else { unreachable!() };
++        let Op::Phi(inputs) = &m.insts[result as usize].op else { unreachable!() };
++        let z = m.const_u64(phi_value(inputs, start).unwrap());
++        assert_eq!(z, Some(0));
++        assert_eq!(phi_value(inputs, first), Some(Value::Inst(sum)));
++        assert!(matches!(m.insts[sum as usize].op, Op::Bin(BinOp::Add, v, _, _) if v == first_read));
++        assert_eq!(m.def_block[sum as usize], first);
++        let Value::Inst(masked) = masked else { unreachable!() };
++        assert_eq!(m.def_block[masked as usize], join);
++        assert_eq!(m.blocks[join.0 as usize][2], masked);
++    }
++
++    #[test]
++    fn preserves_distinct_conditions_wave_operations_and_dependent_reads() {
++        for (changed_condition, wave, dependent_read) in [
++            (true, false, false), (false, true, false), (false, false, true),
++        ] {
++            let (mut m, _, _) = guarded_reads(changed_condition, wave, dependent_read);
++            let order: Vec<_> = m.block_layout().0.iter().map(|&b| b as u32).collect();
++            assert!(!m.fuse_read_guards(&order));
++            assert_eq!(m.block_layout().0.len(), 5);
++        }
++    }
++}
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index 5e867f5..f1b1fd7 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -426,8 +426,16 @@ impl Module {
+     /// Cleans up the entry function (see the module docs of `opt`). Values
+     /// keep their identities; replaced ones simply lose their uses.
+     ///
+-    /// `XCL_DXIL_NO_OPT=phi,cse,dce,merge` (any subset, or `all`) skips passes, for bisecting.
++    /// `XCL_DXIL_NO_OPT=phi,cse,dce,merge,read-guards` skips passes, for bisecting.
+     pub fn optimize(&mut self) {
++        self.optimize_entry(false);
++    }
++
++    pub(crate) fn optimize_pixel(&mut self) {
++        self.optimize_entry(true);
++    }
++
++    fn optimize_entry(&mut self, pixel: bool) {
+         let off = std::env::var("XCL_DXIL_NO_OPT").unwrap_or_default();
+         let skip = |p: &str| off.split(',').any(|x| x.trim() == p || x.trim() == "all");
+         let order: Vec<u32> = self.block_layout().0.into_iter().map(|b| b as u32).collect();
+@@ -631,6 +639,10 @@ impl Module {
+             b.retain(|&i| live[i as usize]);
+         }
+ 
++        if pixel && !skip("read-guards") && !self.has_rov_handle() && self.fuse_read_guards(&order) {
++            debug_assert!(self.uses_well_formed(&self.block_layout().0
++                .into_iter().map(|b| b as u32).collect::<Vec<_>>()));
++        }
+         if !skip("merge") && self.simplify_cfg() {
+             let order: Vec<u32> = self.block_layout().0.into_iter().map(|b| b as u32).collect();
+             let mut repl2: Vec<Option<Value>> = vec![None; self.insts.len()];
+diff --git a/crates/xcl/src/gpu/recomp/runner.rs b/crates/xcl/src/gpu/recomp/runner.rs
+index 2041690..c65146c 100644
+--- a/crates/xcl/src/gpu/recomp/runner.rs
++++ b/crates/xcl/src/gpu/recomp/runner.rs
+@@ -539,6 +539,16 @@ pub fn adapter() -> Result<String, String> {
+     gpu.as_ref().map(|x| x.adapter.clone()).map_err(|x| x.clone())
+ }
+ 
++#[cfg(test)]
++pub(crate) fn disable_driver_shader_cache() -> Result<(), String> {
++    let mut guard = GPU.lock().unwrap();
++    let gpu = guard.get_or_insert_with(init).as_ref().map_err(Clone::clone)?;
++    let device = gpu.dev.cast::<ID3D12Device9>().map_err(e)?;
++    let kinds = D3D12_SHADER_CACHE_KIND_FLAG_IMPLICIT_DRIVER_MANAGED
++        | D3D12_SHADER_CACHE_KIND_FLAG_IMPLICIT_D3D_CACHE_FOR_DRIVER;
++    unsafe { device.ShaderCacheControl(kinds, D3D12_SHADER_CACHE_CONTROL_FLAG_DISABLE) }.map_err(e)
++}
++
+ pub fn wave64_supported() -> Result<bool, String> {
+     let mut g = GPU.lock().unwrap();
+     let gpu = g.get_or_insert_with(init);
+@@ -871,7 +881,7 @@ pub fn draw_gs(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, None)
+ }
+ 
+ /// `draw_gs` of an indexed triangle list (`indices`).
+@@ -887,7 +897,7 @@ pub fn draw_gs_indexed(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], size, clear)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], size, clear, None)
+ }
+ 
+ /// `draw` with textures and samplers in the directly indexed heaps (see `ViewTexture`).
+@@ -905,7 +915,30 @@ pub fn draw_views(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, size, clear)
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, size, clear, None)
++}
++
++/// One packed resource with disjoint raw UAV views emulates small console heap windows.
++#[cfg(test)]
++#[allow(clippy::too_many_arguments)]
++pub(crate) fn draw_heap_windows(
++    vs: &[u8],
++    ps: &[u8],
++    layout: &[VertexElement],
++    vertices: &[f32],
++    stride: u32,
++    sgprs: &[u32],
++    mem: &[u32],
++    window_dwords: usize,
++    size: u32,
++    clear: [f32; 4],
++) -> Result<Vec<[f32; 4]>, String> {
++    if window_dwords == 0 || !window_dwords.is_multiple_of(64) || mem.is_empty() ||
++        !mem.len().is_multiple_of(window_dwords) || mem.len() / window_dwords > crate::gpu::uma::MAX_HEAP_WINDOWS
++    {
++        return Err("invalid packed draw heap windows".into());
++    }
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, Some(window_dwords))
+ }
+ 
+ #[allow(clippy::too_many_arguments)]
+@@ -923,6 +956,7 @@ fn draw_gs_views(
+     samplers: &[D3D12_SAMPLER_DESC],
+     size: u32,
+     clear: [f32; 4],
++    window_dwords: Option<usize>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     let mut g = GPU.lock().unwrap();
+     let gpu = g.get_or_insert_with(init).as_mut().map_err(|x| x.clone())?;
+@@ -960,9 +994,13 @@ fn draw_gs_views(
+         pd.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+         pd.RasterizerState.DepthClipEnable = true.into();
+         pd.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
++        let timed = window_dwords.map(|_| std::time::Instant::now());
+         let pso: ID3D12PipelineState = dev.CreateGraphicsPipelineState(&pd).map_err(|x| format!("CreateGraphicsPipelineState: {x}"))?;
++        if let Some(started) = timed {
++            println!("guard fixture native_create_ms={:.3}", started.elapsed().as_secs_f64() * 1000.0);
++        }
+         let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, size as i32, size as i32] };
+-        draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear)
++        draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear, window_dwords)
+     }
+ }
+ 
+@@ -1083,7 +1121,7 @@ pub fn draw_on_multi(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, size, clear)
++    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, size, clear, None)
+ }
+ 
+ /// `draw_on_multi`, the draws indexed when there are `indices` (one index buffer for all).
+@@ -1101,6 +1139,7 @@ fn draw_indexed_on(
+     samplers: &[D3D12_SAMPLER_DESC],
+     size: u32,
+     clear: [f32; 4],
++    window_dwords: Option<usize>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     unsafe {
+         let queue: ID3D12CommandQueue =
+@@ -1179,7 +1218,40 @@ fn draw_indexed_on(
+         list.ClearRenderTargetView(rtv, &clear, None);
+         list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: size as f32, Height: size as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
+         list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: size as i32, bottom: size as i32 }]);
+-        let _bound = if textures.is_empty() && samplers.is_empty() { bind_resources(dev, &list, &[], &[]).map(|_| Vec::new())? } else { bind_views(dev, &list, textures, samplers)? };
++        let heap_windows = if let Some(words) = window_dwords {
++            let heap: ID3D12DescriptorHeap = dev.CreateDescriptorHeap(&D3D12_DESCRIPTOR_HEAP_DESC {
++                Type: D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
++                NumDescriptors: super::MEM_HEAP_BASE + (mem.len() / words) as u32,
++                Flags: D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
++                NodeMask: 0,
++            }).map_err(e)?;
++            let inc = dev.GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) as usize;
++            let first = heap.GetCPUDescriptorHandleForHeapStart().ptr;
++            for window in 0..mem.len() / words {
++                let mut view = raw_window_uav((words * 4) as u64);
++                view.Anonymous.Buffer.FirstElement = (window * words) as u64;
++                dev.CreateUnorderedAccessView(&mem_buf, None::<&ID3D12Resource>, Some(&view),
++                    D3D12_CPU_DESCRIPTOR_HANDLE { ptr: first + (super::MEM_HEAP_BASE as usize + window) * inc });
++            }
++            let samplers: ID3D12DescriptorHeap = dev.CreateDescriptorHeap(&D3D12_DESCRIPTOR_HEAP_DESC {
++                Type: D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
++                NumDescriptors: 1,
++                Flags: D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
++                NodeMask: 0,
++            }).map_err(e)?;
++            list.SetDescriptorHeaps(&[Some(heap.clone()), Some(samplers.clone())]);
++            Some((heap, samplers))
++        } else {
++            None
++        };
++        let _bound = if heap_windows.is_some() {
++            Vec::new()
++        } else if textures.is_empty() && samplers.is_empty() {
++            bind_resources(dev, &list, &[], &[])?;
++            Vec::new()
++        } else {
++            bind_views(dev, &list, textures, samplers)?
++        };
+         list.SetGraphicsRootSignature(rs);
+         list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress());
+         list.SetGraphicsRootUnorderedAccessView(1, res_buf.GetGPUVirtualAddress());
