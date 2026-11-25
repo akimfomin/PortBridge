@@ -1,5 +1,6 @@
 #include <hip/hip_runtime_api.h>
 
+#include <algorithm>
 #include <array>
 #include <cinttypes>
 #include <cstdint>
@@ -14,12 +15,13 @@ static void check(hipError_t status, const char* operation) {
     }
 }
 
-// Runs one kernel of fract_f64_probe.s and prints its line. Returns false if a control fails.
-static bool run(hipModule_t module, const char* name, const char* label) {
+using Result = std::array<std::uint32_t, 22>;
+
+static Result read_probe(hipModule_t module, const char* name) {
     hipFunction_t kernel{};
     check(hipModuleGetFunction(&kernel, module, name), name);
 
-    std::array<std::uint32_t, 22> result{};
+    Result result{};
     void* device_result = nullptr;
     check(hipMalloc(&device_result, sizeof(result)), "allocate output");
     check(hipMemset(device_result, 0xaa, sizeof(result)), "initialize output");
@@ -30,20 +32,27 @@ static bool run(hipModule_t module, const char* name, const char* label) {
     check(hipMemcpy(result.data(), device_result, sizeof(result), hipMemcpyDeviceToHost), "read output");
     check(hipFree(device_result), "free output");
 
-    // d1..d10 in the order of fract_f64_probe.s, each as one 64-bit word.
-    std::uint64_t d[11]{};
-    for (int i = 1; i <= 10; ++i) {
-        d[i] = (std::uint64_t{result[2 * i + 1]} << 32) | result[2 * i];
-    }
+    return result;
+}
+
+static std::uint64_t value(const Result& result, int i) {
+    return (std::uint64_t{result[2 * i + 1]} << 32) | result[2 * i];
+}
+
+static void print_result(const Result& result, const char* label) {
     std::printf("%s initial_exec=%08" PRIx32 " d1-d10=", label, result[0]);
     for (int i = 1; i <= 10; ++i) {
-        std::printf(i == 1 ? "%016" PRIx64 : ",%016" PRIx64, d[i]);
+        std::printf(i == 1 ? "%016" PRIx64 : ",%016" PRIx64, value(result, i));
     }
     std::printf("\n");
-    // Controls, equal under every hypothesis: fract(1.25) = 0.25, fract(-1.25) = 0.75,
-    // fract(-2^-53) = 1 - 2^-53 exactly, fract(1e300) = 0.
-    return result[0] == UINT32_MAX && result[1] == 0 && d[1] == 0x3fd0000000000000 &&
-           d[2] == 0x3fe8000000000000 && d[4] == 0x3fefffffffffffff && d[10] == 0;
+}
+
+static bool valid(const Result& result) {
+    // Finite controls, equal under every hypothesis.
+    const bool complete = std::find(result.begin() + 2, result.end(), 0xaaaaaaaa) == result.end();
+    return complete && result[0] == UINT32_MAX && result[1] == 0 &&
+           value(result, 1) == 0x3fd0000000000000 && value(result, 2) == 0x3fe8000000000000 &&
+           value(result, 4) == 0x3fefffffffffffff && value(result, 10) == 0;
 }
 
 int main(int argc, char** argv) {
@@ -69,11 +78,13 @@ int main(int argc, char** argv) {
 
     hipModule_t module{};
     check(hipModuleLoad(&module, argv[1]), "load assembled module");
-    const bool ieee1 = run(module, "fract_f64_ieee1", "ieee1");
-    const bool ieee0 = run(module, "fract_f64_ieee0", "ieee0");
+    const Result ieee1 = read_probe(module, "fract_f64_ieee1");
+    const Result ieee0 = read_probe(module, "fract_f64_ieee0");
     check(hipModuleUnload(module), "unload module");
-    if (!ieee1 || !ieee0) {
-        std::fprintf(stderr, "Probe controls failed\n");
+    if (!valid(ieee1) || !valid(ieee0)) {
+        std::fprintf(stderr, "Probe controls failed or output is incomplete\n");
         return 1;
     }
+    print_result(ieee1, "ieee1");
+    print_result(ieee0, "ieee0");
 }

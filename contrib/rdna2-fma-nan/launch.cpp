@@ -1,5 +1,6 @@
 #include <hip/hip_runtime_api.h>
 
+#include <algorithm>
 #include <array>
 #include <cinttypes>
 #include <cstdint>
@@ -14,12 +15,13 @@ static void check(hipError_t status, const char* operation) {
     }
 }
 
-// Runs one kernel of fma_nan_probe.s and prints its line. Returns false if a control fails.
-static bool run(hipModule_t module, const char* name, const char* label) {
+using Result = std::array<std::uint32_t, 15>;
+
+static Result read_probe(hipModule_t module, const char* name) {
     hipFunction_t kernel{};
     check(hipModuleGetFunction(&kernel, module, name), name);
 
-    std::array<std::uint32_t, 15> result{};
+    Result result{};
     void* device_result = nullptr;
     check(hipMalloc(&device_result, sizeof(result)), "allocate output");
     check(hipMemset(device_result, 0xaa, sizeof(result)), "initialize output");
@@ -30,14 +32,22 @@ static bool run(hipModule_t module, const char* name, const char* label) {
     check(hipMemcpy(result.data(), device_result, sizeof(result), hipMemcpyDeviceToHost), "read output");
     check(hipFree(device_result), "free output");
 
+    return result;
+}
+
+static void print_result(const Result& result, const char* label) {
     // f1..f14 in the order of fma_nan_probe.s.
     std::printf("%s initial_exec=%08" PRIx32 " f1-f14=", label, result[0]);
     for (int i = 1; i <= 14; ++i) {
         std::printf(i == 1 ? "%08" PRIx32 : ",%08" PRIx32, result[i]);
     }
     std::printf("\n");
+}
+
+static bool valid(const Result& result) {
     // f1 is 2 * 3 + 1: 7.0 under every hypothesis.
-    return result[0] == UINT32_MAX && result[1] == 0x40e00000;
+    const bool complete = std::find(result.begin(), result.end(), 0xaaaaaaaa) == result.end();
+    return result[0] == UINT32_MAX && result[1] == 0x40e00000 && complete;
 }
 
 int main(int argc, char** argv) {
@@ -63,11 +73,13 @@ int main(int argc, char** argv) {
 
     hipModule_t module{};
     check(hipModuleLoad(&module, argv[1]), "load assembled module");
-    const bool ieee1 = run(module, "fma_nan_ieee1", "ieee1");
-    const bool ieee0 = run(module, "fma_nan_ieee0", "ieee0");
+    const Result ieee1 = read_probe(module, "fma_nan_ieee1");
+    const Result ieee0 = read_probe(module, "fma_nan_ieee0");
     check(hipModuleUnload(module), "unload module");
-    if (!ieee1 || !ieee0) {
-        std::fprintf(stderr, "Probe controls failed\n");
+    if (!valid(ieee1) || !valid(ieee0)) {
+        std::fprintf(stderr, "Probe controls failed or output is incomplete\n");
         return 1;
     }
+    print_result(ieee1, "ieee1");
+    print_result(ieee0, "ieee0");
 }

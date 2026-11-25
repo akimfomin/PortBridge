@@ -1,5 +1,6 @@
 #include <hip/hip_runtime_api.h>
 
+#include <algorithm>
 #include <array>
 #include <cinttypes>
 #include <cstdint>
@@ -52,6 +53,14 @@ int main(int argc, char** argv) {
     check(hipFree(device_result), "free output");
     check(hipModuleUnload(module), "unload module");
 
+    // The integer constant 1 matches lanes 0 and 2 under every hypothesis.
+    const auto printed_end = result.begin() + 13;
+    const bool complete = std::find(result.begin(), printed_end, 0xaaaaaaaa) == printed_end;
+    if (result[0] != UINT32_MAX || result[4] != 5 || !complete) {
+        std::fprintf(stderr, "Probe controls failed or output is incomplete\n");
+        return 1;
+    }
+
     // Word order of inline16_probe.s: EXEC, VOPC masks (0.5, -4.0, 1/(2pi)), the integer
     // control mask, VOP3 masks (same constants), then the five s_pack results.
     const auto list = [&](const char* name, int first, int last, bool padded) {
@@ -67,9 +76,4 @@ int main(int argc, char** argv) {
     list("vop3", 5, 7, false);
     list("pack", 8, 12, true);
     std::printf("\n");
-    // The integer constant 1 matches lanes 0 and 2 under every hypothesis.
-    if (result[0] != UINT32_MAX || result[4] != 5) {
-        std::fprintf(stderr, "Probe controls failed\n");
-        return 1;
-    }
 }

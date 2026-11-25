@@ -1,5 +1,6 @@
 #include <hip/hip_runtime_api.h>
 
+#include <algorithm>
 #include <array>
 #include <cinttypes>
 #include <cstdint>
@@ -52,6 +53,22 @@ int main(int argc, char** argv) {
     check(hipFree(device_result), "free output");
     check(hipModuleUnload(module), "unload module");
 
+    // Number-only global cases agree under every hypothesis: min(5, 3) = 3.0 and max(3, 5) = 5.0.
+    // The LDS words must match the gfx1036 measurement: a quiet NaN loses to a number either way.
+    const std::uint32_t lds[8]{0x3f800000, 0x3f800000, 0x40400000, 0x40a00000,
+                               0x3f800000, 0x3f800000, 0x40a00000, 0x40a00000};
+    bool controls = result[0] == UINT32_MAX && result[6] == 0x40400000 && result[9] == 0x40a00000;
+    for (int i = 0; i < 8; ++i) {
+        controls = controls && result[12 + i] == lds[i];
+    }
+    const auto global_end = result.begin() + 10;
+    const bool complete = std::find(result.begin() + 4, global_end, 0xaaaaaaaa) == global_end &&
+                          std::find(result.begin() + 12, result.end(), 0xaaaaaaaa) == result.end();
+    if (!controls || !complete) {
+        std::fprintf(stderr, "Probe controls failed or output is incomplete\n");
+        return 1;
+    }
+
     // Final memory words. Words 1-3 and 10-11 are padding and are not printed.
     const auto list = [&](const char* name, int first, int last) {
         std::printf(" %s=", name);
@@ -65,16 +82,4 @@ int main(int argc, char** argv) {
     list("ds_min", 12, 15);
     list("ds_max", 16, 19);
     std::printf("\n");
-    // Number-only global cases agree under every hypothesis: min(5, 3) = 3.0 and max(3, 5) = 5.0.
-    // The LDS words must match the gfx1036 measurement: a quiet NaN loses to a number either way.
-    const std::uint32_t lds[8]{0x3f800000, 0x3f800000, 0x40400000, 0x40a00000,
-                               0x3f800000, 0x3f800000, 0x40a00000, 0x40a00000};
-    bool controls = result[0] == UINT32_MAX && result[6] == 0x40400000 && result[9] == 0x40a00000;
-    for (int i = 0; i < 8; ++i) {
-        controls = controls && result[12 + i] == lds[i];
-    }
-    if (!controls) {
-        std::fprintf(stderr, "Probe controls failed\n");
-        return 1;
-    }
 }
