@@ -32,6 +32,7 @@ The exact AnyXboxX search links the earlier RDNA2 evidence and the new CPU corre
 
 ## PortBridge research
 
+- [Cold pipeline readiness](research/pipeline-readiness) is the active study. It measures how compilation delays the first correct output and tests whether preserving memory headroom for required work helps.
 - [Observation-scoped GPU readbacks](research/readback-epochs) reuses already observed bytes and tests packed selective readback against bounded exact-range staging. [Ecosystem evidence](docs/READBACK-2026-11-25.md)
 - [Portable Vulkan mipmaps](research/mipmap-contract) demonstrates a lane-numbering assumption in NVIDIA's fast shader, a guarded correction, and matched physical output.
 - [Adaptive shader dispatch](research/adaptive-switch-dispatch) partitions large sparse switches. The study compares a flat switch, a fixed-size range tree, and a table where the case bodies allow one.

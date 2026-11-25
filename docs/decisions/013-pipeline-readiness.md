@@ -1,0 +1,15 @@
+# Keep one research track on cold pipeline readiness
+
+**Status** Accepted on 25 November 2026.
+
+Cold shader and pipeline creation can stall the first correct frame. XCL contributors describe long native driver compiles and pressure from concurrent workers. XBVK reports first-frame stalls around 700 to 1,000 ms or more and tracks RAM-bounded worker scaling. These are public measurements at project configurations. They establish a common workload problem with evidence still needed for each mechanism and mitigation. [XCL #2088](https://github.com/xcl-dev/xcl/issues/2088#issuecomment-7170625467) · [XBVK #3](https://github.com/0x0007b/XBVK/issues/3#issuecomment-7156836842)
+
+The sustained PortBridge track is the time from a cold pipeline request to the first **complete, checked** GPU output under CPU and memory pressure. The first proposed policy reserves part of a cumulative estimated memory budget for required work. It is evaluated with the same pipeline identities, cache conditions, worker cap and required operations as demand-first scheduling and a worker-only reserve. This isolates the added effect of memory headroom. Estimate accounting and process-level limits are different mechanisms.
+
+XCL already has demand priority, separate pools, and per-size limits. XBVK has demand-first scheduling and a frame budget. VIctory has work on shared shader dependencies. PortBridge will use their existing approaches as baselines and keep project-specific shader lowering, cache work and draw-omission changes outside this experiment. [Pinned XCL admission](https://github.com/xcl-dev/xcl/blob/7292dca0c25edfc5e8c8b3e581d0e3f8ef196762/crates/xcl/src/hle/d3d12x/real.rs#L3882-L3915) · [Pinned XBVK scheduler](https://github.com/0x0007b/XBVK/blob/858cd6abf750af0616a29a1d3f62c564ef1f408c/crates/victory-gpu/src/pipeline/make.rs#L230-L331) · [VIctory #1898](https://github.com/Marvisak/VIctory/pull/1898)
+
+The first milestone compares policies deterministically and exercises the measurement boundary through actual Vulkan dispatch and output checks. The next milestone measures memory and queue delays in an openly reproducible workload and compares the strongest existing policy with the proposed admission policy. Integration depends on a shorter tail to the same verified output, acceptable warm and accurate-prefetch behavior, and bounded work on failure and retry. Retaining raw request, compile, result and resource timestamps makes the milestones comparable.
+
+The Halide and Blender studies are complete for active research. Their sources and results remain in [Halide #76](https://github.com/akimfomin/PortBridge/pull/76), [Geometry #75](https://github.com/akimfomin/PortBridge/pull/75), and the Blender VSE replay at `ac825f2`. The standalone Geometry package is retained at `geometry-v0.1.0`. Adoption checks for existing contributions continue independently of this research track.
+
+[Working replay and results](../../research/pipeline-readiness/README.md)

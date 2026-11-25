@@ -1,0 +1,80 @@
+{
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "campaign": 820,
+  "device_driver": [
+    4318,
+    9989,
+    2588114944,
+    4211039
+  ],
+  "timed_pipelines": 80,
+  "output_words_matched": 10240,
+  "guards_unchanged": 40,
+  "arms": {
+    "cold": {
+      "count": 4,
+      "median_demand_to_verified_ms": 14.74445,
+      "median_full_work_ms": 14.74635,
+      "median_foreground_driver_call_ms": 14.1765,
+      "median_foreground_queue_ms": 0.00010000000000000005,
+      "background_calls_active_at_demand": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "warm": {
+      "count": 4,
+      "median_demand_to_verified_ms": 0.637,
+      "median_full_work_ms": 0.6396,
+      "median_foreground_driver_call_ms": 0.01985,
+      "median_foreground_queue_ms": 9.999999999999994e-05,
+      "background_calls_active_at_demand": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "fifo": {
+      "count": 4,
+      "median_demand_to_verified_ms": 16.992449999999998,
+      "median_full_work_ms": 18.4189,
+      "median_foreground_driver_call_ms": 3.306,
+      "median_foreground_queue_ms": 12.59745,
+      "background_calls_active_at_demand": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "demand-first": {
+      "count": 4,
+      "median_demand_to_verified_ms": 14.21995,
+      "median_full_work_ms": 19.8238,
+      "median_foreground_driver_call_ms": 2.90555,
+      "median_foreground_queue_ms": 10.14265,
+      "background_calls_active_at_demand": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "reserved": {
+      "count": 4,
+      "median_demand_to_verified_ms": 11.06725,
+      "median_full_work_ms": 22.701349999999998,
+      "median_foreground_driver_call_ms": 10.436250000000001,
+      "median_foreground_queue_ms": 0.00010000000000010001,
+      "background_calls_active_at_demand": [
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  }
+}
