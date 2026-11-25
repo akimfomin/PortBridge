@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 
 
-PIN = "5b347035f16b4361fc483a4abd42ffffddca9188"
+PIN = "bfb7c39c7ba34209ea09d24d5e69f17607af3688"
 LOWER = "crates/victory-shader/src/emit/lower.rs"
 GROUP_SYNC = 1
 UAV_GLOBAL_FENCE = 2
