@@ -10,10 +10,14 @@ from urllib.parse import urlencode
 from .activity import source_time
 from .github import API, RepositoryNotPublic, Unavailable, WORK_URL, _Sync
 from .lab_report_formats import (FRAMELAB_DISCUSSION, FRAMELAB_REVISION, FRAMELAB_TASK, FRAMELAB_TESTER_ID,
-                                 REPORT_POLICIES, structured_result)
+                                 REPORT_POLICIES, case_outcome, structured_result)
 from .tester_discovery import LOGIN, MAX_BODY, report_lines
 
 
+REVIEW_HEADER = "PortBridge test review v1"
+REPORT_LINK = re.compile(rf"Report: ({WORK_URL.pattern})#issuecomment-([1-9][0-9]*)")
+REVIEW_DIGEST = re.compile(r"Body SHA-256: ([0-9a-f]{64})")
+REVIEW_DECISION = re.compile(r"Decision: (approve|revoke)")
 PAGE_SIZE = 30
 MAX_PAGES = 4
 FRAMELAB_DEVICES = {"1114": "AMD Radeon 860M", "13c0": "AMD Radeon Graphics (Ryzen 9 9950X3D)"}
@@ -110,6 +114,11 @@ def scope(task, source):
     return f"structured-v1:{digest}"
 
 
+def review_scope(report_scope):
+    # Older exporters can keep reading report rows during a rollback.
+    return f"{report_scope}:thread-reviews-v1"
+
+
 def report_source(task, source=None):
     url = source or report_sources(task)[0]
     repo, _, number = url.removeprefix("https://github.com/").rsplit("/", 2)
@@ -141,23 +150,27 @@ def legacy_framelab_result(body, task):
             "device_id": device, "outcome": outcome, "opt_in": False}
 
 
+def body_digest(body):
+    return sha256(body.replace("\r\n", "\n").encode()).hexdigest()
+
+
 def reviewed_result(body, task, url, actor_id):
     """Import a human-reviewed public report only while its exact source is unchanged."""
     record = task.get("reviewed_reports", {}).get(url)
     if not record or record["actor_id"] != actor_id:
         return None
-    body_hash = sha256(body.replace("\r\n", "\n").encode()).hexdigest()
     pins = [row["sha"] for row in task["revisions"]]
-    if (record["body_sha256"] != body_hash or record["revisions"] != pins
+    outcome = case_outcome(record["cases"], task["report_cases"])
+    if (record["body_sha256"] != body_digest(body) or record["revisions"] != pins
             or record["equipment"] not in task["equipment"] or record["os_family"] not in task["os"]
-            or set(record["cases"]) != set(task["report_cases"]) or set(record["cases"].values()) != {"pass"}):
+            or outcome is None):
         return None
     fields = ("revisions", "equipment", "hardware", "os", "os_family", "driver", "cases")
     return {**{field: record[field] for field in fields}, "revision": pins[0],
-            "device_id": record["hardware"].casefold(), "outcome": "pass", "opt_in": False}
+            "device_id": record["hardware"].casefold(), "outcome": outcome, "opt_in": False}
 
 
-def normalize_report(comment, task, source, repo, issue):
+def comment_metadata(comment, source, repo, issue):
     if not isinstance(comment, dict) or comment.get("minimized") is True:
         return None
     ident = comment.get("id")
@@ -176,20 +189,54 @@ def normalize_report(comment, task, source, repo, issue):
             or any(not isinstance(comment.get(key), str) or comment[key].casefold() != value.casefold()
                    for key, value in expected.items())):
         return None
-    reviewed = reviewed_result(body, task, url, actor["id"])
+    updated = max(reported, updated) if updated else reported
+    return {"url": url, "author": author,
+            "reported_at": reported.isoformat(timespec="seconds").replace("+00:00", "Z"),
+            "updated_at": updated.isoformat(timespec="seconds").replace("+00:00", "Z")}
+
+
+def normalize_report(comment, task, source, repo, issue):
+    metadata = comment_metadata(comment, source, repo, issue)
+    if metadata is None:
+        return None
+    actor_id = comment["user"]["id"]
+    body = comment["body"]
+    reviewed = reviewed_result(body, task, metadata["url"], actor_id)
     result = reviewed or structured_result(body, task)
-    approved = (bool(reviewed) or actor["id"] in task.get("approved_testers", ())
+    approved = (bool(reviewed) or actor_id in task.get("approved_testers", ())
                 or comment.get("author_association") == "OWNER")
     # The original reports predate the common format. Keep their narrow source
     # and author boundary; other historical prose still requires manual review.
-    if result is None and actor["id"] == FRAMELAB_TESTER_ID and legacy_framelab_scope(task, source):
+    if result is None and actor_id == FRAMELAB_TESTER_ID and legacy_framelab_scope(task, source):
         result = legacy_framelab_result(body, task)
     if result is None:
         return None
-    updated = max(reported, updated) if updated else reported
-    return {**result, "url": url, "author": author, "authority": "approved" if approved else "community",
-            "reported_at": reported.isoformat(timespec="seconds").replace("+00:00", "Z"),
-            "updated_at": updated.isoformat(timespec="seconds").replace("+00:00", "Z")}
+    return {**result, **metadata, "authority": "approved" if approved else "community",
+            "body_sha256": body_digest(body)}
+
+
+def normalize_thread_review(comment, task, source, repo, issue):
+    """Accept a review only from the owner in the task's designated result thread."""
+    sources = report_sources(task)
+    if not sources or source != sources[0]:
+        return None
+    metadata = comment_metadata(comment, source, repo, issue)
+    if metadata is None or comment.get("author_association") != "OWNER":
+        return None
+    lines = comment["body"].strip().splitlines()
+    if (len(lines) < 5 or lines[:2] != [REVIEW_HEADER, f"Task: {task['id']}"]
+            or (len(lines) > 5 and lines[5].strip())):
+        return None
+    report = REPORT_LINK.fullmatch(lines[2])
+    digest = REVIEW_DIGEST.fullmatch(lines[3])
+    decision = REVIEW_DECISION.fullmatch(lines[4])
+    if not (report and digest and decision):
+        return None
+    target = next((url for url in sources if url.casefold() == report[1].casefold()), None)
+    if target is None:
+        return None
+    return {**metadata, "report_url": f"{target}#issuecomment-{report[2]}",
+            "body_sha256": digest[1], "review_decision": decision[1]}
 
 
 def scan_comments(issue, request_page):
@@ -206,23 +253,64 @@ def scan_comments(issue, request_page):
     raise Unavailable("Test Lab comment page budget exhausted")
 
 
-def normalized_reports(comments, task, source):
+def normalized_records(comments, task, source):
     repo, issue = report_source(task, source)
-    return [report for comment in comments
-            if (report := normalize_report(comment, task, source, repo, issue)) is not None]
+    records = []
+    for comment in comments:
+        record = (normalize_thread_review(comment, task, source, repo, issue)
+                  or normalize_report(comment, task, source, repo, issue))
+        if record is not None:
+            records.append(record)
+    return records
 
 
-def sorted_reports(reports):
-    unique = {report["url"]: report for report in reports}
-    return sorted(unique.values(), key=lambda report: (report["reported_at"], int(report["url"].rsplit("-", 1)[1])))
+def comment_order(record, time_field="reported_at"):
+    return record[time_field], int(record["url"].rsplit("-", 1)[1])
+
+
+def sorted_records(records):
+    unique = {record["url"]: record for record in records}
+    return sorted(unique.values(), key=comment_order)
+
+
+def resolve_reviews(task, records, checked_sources=None):
+    """Resolve reviews against the latest observed body only after linking both sources."""
+    primary_source = next(iter(report_sources(task)), None)
+    reviews = {}
+    reports = []
+    for record in sorted_records(records):
+        if "review_decision" not in record:
+            reports.append(record)
+        elif record["url"].partition("#")[0] == primary_source:
+            reviews[(record["report_url"], record["body_sha256"])] = record
+
+    resolved = []
+    for report in reports:
+        review = reviews.get((report["url"], report.get("body_sha256")))
+        update_field = "updated_at" if report.get("updated_at") else "reported_at"
+        if review is None or comment_order(review) <= comment_order(report, update_field):
+            resolved.append(report)
+            continue
+        decision = review["review_decision"]
+        if decision == "approve" and checked_sources is not None:
+            checked = source_time(checked_sources.get(report["url"].partition("#")[0]))
+            # An approval discovered after the last successful scan cannot promote
+            # a retained body while the report's thread is still unavailable.
+            if checked is None or checked < source_time(review["updated_at"]):
+                resolved.append(report)
+                continue
+        evidence = {field: review[field] for field in ("url", "author", "reported_at", "updated_at")}
+        resolved.append({**report, "authority": "approved" if decision == "approve" else "community",
+                         "review": {**evidence, "decision": decision}})
+    return resolved
 
 
 def scan_reports(task, request_page):
-    reports = []
+    records = []
     for source in report_sources(task):
         _, issue = report_source(task, source)
-        reports.extend(normalized_reports(scan_comments(issue, request_page), task, source))
-    return sorted_reports(reports)
+        records.extend(normalized_records(scan_comments(issue, request_page), task, source))
+    return resolve_reviews(task, records)
 
 
 def fetch_comments(sync, source, task):
@@ -248,6 +336,8 @@ def coverage_cells(task, reports):
             state = "contradicted"
         elif "pass" in latest.values():
             state = "covered"
+        elif "partial" in latest.values():
+            state = "partial"
         else:
             state = "reported" if findings else "missing"
         cells.append({"equipment": equipment, "state": state})
@@ -307,9 +397,13 @@ def read_report_states(catalog, tasks):
         sources = []
         reports = []
         for source in report_sources(task):
-            row = rows.get((task["id"], scope(task, source))) or legacy_row(rows, task, source)
+            report_scope = scope(task, source)
+            row = rows.get((task["id"], report_scope)) or legacy_row(rows, task, source)
             state = report_state(row)
             reports.extend(state.pop("reports"))
+            review_row = rows.get((task["id"], review_scope(report_scope)))
+            if review_row and state["checked_at"] and review_row["checked_at"] == state["checked_at"]:
+                reports.extend(json.loads(review_row["reports"]))
             sources.append({"url": source, **state})
         kinds = {entry["state"] for entry in sources}
         state = ("fresh" if kinds == {"fresh"} else "unchecked" if kinds == {"unchecked"}
@@ -318,17 +412,18 @@ def read_report_states(catalog, tasks):
         attempts = [entry["attempted_at"] for entry in sources if entry["attempted_at"]]
         states[task["id"]] = {"state": state, "checked_at": min(checks, default=None),
                               "attempted_at": max(attempts, default=None), "sources": sources,
-                              "reports": sorted_reports(reports)}
+                              "reports": resolve_reviews(task, reports, {
+                                  entry["url"]: entry["checked_at"] for entry in sources})}
     return states
 
 
-def save_scan(db, task, source, attempted, *, state, checked, reports, replace):
+def save_scan(db, task, record_scope, attempted, *, state, checked, reports, replace):
     db.execute("""INSERT INTO lab_report_checks VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(task, scope) DO UPDATE SET attempted_at=excluded.attempted_at, state=excluded.state,
             checked_at=CASE WHEN ? THEN excluded.checked_at ELSE lab_report_checks.checked_at END,
             reports=CASE WHEN ? THEN excluded.reports ELSE lab_report_checks.reports END
         WHERE excluded.attempted_at >= lab_report_checks.attempted_at""",
-        (task["id"], scope(task, source), attempted, checked, state, json.dumps(reports), replace, replace))
+        (task["id"], record_scope, attempted, checked, state, json.dumps(reports), replace, replace))
 
 
 def refresh_reports(catalog, tasks):
@@ -357,23 +452,34 @@ def refresh_reports(catalog, tasks):
             except Unavailable as exc:
                 with db:
                     for task in sources[source]:
-                        clear = isinstance(exc, RepositoryNotPublic) or exc.http_status == 451
+                        # GitHub uses an anonymous 404 for missing and private resources.
+                        clear = isinstance(exc, RepositoryNotPublic) or exc.http_status in {404, 451}
+                        report_scope = scope(task, source)
                         retained = legacy_row(previous, task, source)
-                        if retained and (task["id"], scope(task, source)) not in previous:
+                        if retained and (task["id"], report_scope) not in previous:
                             check = report_state(retained)
-                            save_scan(db, task, source, attempted, state="unavailable",
+                            save_scan(db, task, report_scope, attempted, state="unavailable",
                                       checked=None if clear else check["checked_at"],
                                       reports=[] if clear else check["reports"], replace=True)
                         else:
-                            save_scan(db, task, source, attempted, state="unavailable",
+                            save_scan(db, task, report_scope, attempted, state="unavailable",
                                       checked=None, reports=[], replace=clear)
+                        if clear and source == report_sources(task)[0]:
+                            save_scan(db, task, review_scope(report_scope), attempted, state="unavailable",
+                                      checked=None, reports=[], replace=True)
                 if exc.http_status == 429 or "rate limit" in str(exc).lower():
                     break
             else:
                 checked = datetime.now(timezone.utc).isoformat()
                 with db:
                     for task in sources[source]:
-                        reports = normalized_reports(comments, task, source)
-                        save_scan(db, task, source, attempted, state="fresh", checked=checked,
-                                  reports=sorted_reports(reports), replace=True)
+                        records = sorted_records(normalized_records(comments, task, source))
+                        report_scope = scope(task, source)
+                        reports = [record for record in records if "review_decision" not in record]
+                        save_scan(db, task, report_scope, attempted, state="fresh", checked=checked,
+                                  reports=reports, replace=True)
+                        if source == report_sources(task)[0]:
+                            reviews = [record for record in records if "review_decision" in record]
+                            save_scan(db, task, review_scope(report_scope), attempted, state="fresh", checked=checked,
+                                      reports=reviews, replace=True)
     return read_report_states(catalog, tasks)

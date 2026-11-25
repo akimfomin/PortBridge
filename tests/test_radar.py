@@ -80,6 +80,22 @@ class RadarTest(CatalogFixture):
         self.assertEqual(self.queue([{**moved, "status": "merged"}], [task], history), [])
         self.assertIn("radar", build_activity(self.catalog))
 
+    def test_displaced_pin_stays_queued_across_multiple_observed_updates(self):
+        task = build_lab(task="continued-511-repeated-draw")["tasks"][0]
+        pinned = task["revisions"][0]["sha"]
+        middle, current = "d" * 40, "e" * 40
+        target = self.row("continued", 511, revision=current)
+        first = {"url": target["url"], "previous_revision": pinned, "revision": middle,
+                 "observed_at": (NOW - timedelta(days=9)).isoformat()}
+        second = {"url": target["url"], "previous_revision": middle, "revision": current, "observed_at": FRESH}
+        action, = self.queue([target], [task], [first, second])
+        self.assertEqual((action["kind"], action["state"]), ("recheck_revision", "recheck_revision"))
+        self.assertEqual(action["sources"][-1]["revision"], pinned)
+        unrelated = {**second, "previous_revision": "a" * 40}
+        self.assertEqual(self.queue([target], [task], [first, unrelated])[0]["kind"], "cover_hardware")
+        rolled_back = self.row("continued", 511, revision=pinned)
+        self.assertEqual(self.queue([rolled_back], [task], [first, second])[0]["kind"], "cover_hardware")
+
     def test_review_and_uncovered_cells_can_proceed_in_parallel_for_all_policy(self):
         task = build_lab(task="framelab-12-vulkan-handoff")["tasks"][0]
         report = {
@@ -94,6 +110,8 @@ class RadarTest(CatalogFixture):
         self.assertEqual([action["kind"] for action in actions], ["review_report", "cover_hardware"])
         self.assertEqual(actions[1]["equipment"], ["intel"])
         self.assertEqual(actions[0]["sources"][-1]["url"], report["url"])
+        task["coverage"][1]["state"] = "partial"
+        self.assertEqual(self.queue([], [task])[1]["equipment"], ["intel"])
         task["report_sync"]["state"] = "stale"
         self.assertEqual([action["state"] for action in self.queue([], [task])],
                          ["verify_sources", "verify_sources"])

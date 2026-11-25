@@ -221,6 +221,9 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 .lab-checklist .lab-commits { list-style: none; padding: 0; }
 .lab-commits li { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; }
 .lab-commits a { min-width: 0; overflow-wrap: anywhere; font-size: .76rem; }
+.lab-review { flex: 0 0 100%; }
+.lab-review .filter-group { display: grid; gap: 4px; width: min(18rem, 100%); }
+.lab-review textarea { width: 100%; min-height: 9rem; }
 
 .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .ecosystem-panel { display: grid; gap: 12px; margin-bottom: 16px; }

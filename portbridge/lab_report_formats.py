@@ -57,6 +57,17 @@ def structured_fields(lines):
     return fields, cases
 
 
+def case_outcome(cases, expected):
+    """Classify observed cases for one setup, leaving incomplete runs open."""
+    if not cases or cases.keys() - set(expected) or set(cases.values()) - {"pass", "fail", "skip"}:
+        return None
+    if "fail" in cases.values():
+        return "fail"
+    if cases.keys() == set(expected) and "skip" not in cases.values():
+        return "pass"
+    return "partial"
+
+
 def structured_result(body, task):
     # Preserve a real blank boundary while applying the same visible-line rules as
     # volunteer discovery. Quoted, fenced and hidden templates do not count.
@@ -85,12 +96,9 @@ def structured_result(body, task):
     elif (not pci or pci[1] != GPU_VENDORS.get(equipment) or VIRTUAL_DEVICE.search(hardware)
           or not SAFE_VALUE.fullmatch(driver) or not re.search(r"\d", driver)):
         return None
-    expected = set(task["report_cases"])
-    if not cases or cases.keys() - expected:
+    outcome = case_outcome(cases, task["report_cases"])
+    if outcome is None:
         return None
-    outcome = ("fail" if "fail" in cases.values()
-               else "pass" if cases.keys() == expected and all(result == "pass" for result in cases.values())
-               else "partial")
     return {"revision": revisions[0], "revisions": revisions, "equipment": equipment, "hardware": hardware,
             "device_id": pci[0] if pci else hardware.casefold(), "os": platform, "os_family": os_name,
             "driver": driver or None, "toolchain": toolchain, "cases": cases, "outcome": outcome, "opt_in": opt_in == "yes"}

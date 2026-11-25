@@ -1,3 +1,4 @@
+from datetime import datetime
 from hashlib import sha256
 import json
 from unittest.mock import patch
@@ -7,7 +8,7 @@ from portbridge.export import export
 from portbridge.github import API, RepositoryNotPublic, Unavailable
 from portbridge.lab import FRAMELAB_HANDOFF_HEAD, FRAMELAB_RESULTS, TASKS, build_lab
 from portbridge.lab_reports import (FRAMELAB_TASK, FRAMELAB_TESTER_ID, coverage_cells, normalize_report,
-                                    refresh_reports, report_source, report_sources)
+                                    refresh_reports, report_source, report_sources, scan_reports)
 from portbridge.mcp import PortBridgeMCP
 
 from test_portbridge import CatalogFixture
@@ -231,6 +232,10 @@ class StructuredLabReportsTest(CatalogFixture):
         reviewed = {**task, "reviewed_reports": {row["html_url"]: {**record, "actor_id": row["user"]["id"],
                     "body_sha256": sha256(row["body"].encode()).hexdigest()}}}
         self.assertEqual(normalize_report(row, reviewed, source, repo, issue)["authority"], "approved")
+        reviewed["reviewed_reports"][row["html_url"]]["cases"] = {**record["cases"], "overlapping-edges": "skip"}
+        partial = normalize_report(row, reviewed, source, repo, issue)
+        self.assertEqual((partial["authority"], partial["outcome"], partial["opt_in"]), ("approved", "partial", False))
+        self.assertEqual(coverage_cells(reviewed, [partial])[0]["state"], "partial")
         row["body"] += " An edit requires a new review."
         self.assertIsNone(normalize_report(row, reviewed, source, repo, issue))
 
@@ -244,3 +249,99 @@ class StructuredLabReportsTest(CatalogFixture):
         latest = structured_comment(task, source, 2, equipment="amd", association="OWNER")
         reports = [normalize_report(row, task, source, repo, issue) for row in (old, latest)]
         self.assertEqual(coverage_cells(task, reports)[0]["state"], "contradicted")
+
+def review_comment(task, source, report, ident, decision="approve", *, association="OWNER"):
+    comment = structured_comment(task, source, ident, equipment=task["equipment"][0],
+                                 actor_id=4321, association=association)
+    digest = sha256(report["body"].replace("\r\n", "\n").encode()).hexdigest()
+    comment["body"] = (f"PortBridge test review v1\nTask: {task['id']}\nReport: {report['html_url']}\n"
+                       f"Body SHA-256: {digest}\nDecision: {decision}\n\nReviewed the public evidence.")
+    return comment
+
+
+class ThreadReviewTest(CatalogFixture):
+    def setUp(self):
+        super().setUp()
+        self.task = next(task for task in TASKS if task["id"] == "xcl-2126-scratch-coverage")
+        self.primary, self.linked = report_sources(self.task)
+        self.report = structured_comment(self.task, self.linked, 1, equipment="intel")
+        self.approval = review_comment(self.task, self.primary, self.report, 2)
+
+    def read(self, primary, linked=None, *, cached=False):
+        sources = {report_source(self.task, self.primary)[1]: primary,
+                   report_source(self.task, self.linked)[1]: [self.report] if linked is None else linked}
+
+        def request(url):
+            data = sources[url.split("/comments?", 1)[0]]
+            if isinstance(data, Exception):
+                raise data
+            return data, False
+
+        if not cached:
+            return scan_reports(self.task, request)
+        with patch("portbridge.lab_reports._Sync._require_public"), \
+                patch("portbridge.lab_reports._Sync._request", side_effect=lambda url, *_: (request(url)[0], {})):
+            state = refresh_reports(self.catalog, [self.task])[self.task["id"]]
+        return state["reports"]
+
+    def test_latest_decision_controls_coverage_without_changing_adoption(self):
+        revoke = review_comment(self.task, self.primary, self.report, 3, "revoke")
+        older_edited = {**self.approval, "updated_at": "2026-11-25T03:00:00Z"}
+        for cached in (True, False):
+            with self.subTest(cached=cached):
+                reports = self.read([self.approval], cached=cached)
+                self.assertEqual(len(reports), 1)
+                self.assertEqual(reports[0]["review"]["url"], self.approval["html_url"])
+                self.assertEqual(reports[0]["author"], self.report["user"]["login"])
+                self.assertEqual(coverage_cells(self.task, reports)[1]["state"], "covered")
+                reports = self.read([revoke, older_edited], cached=cached)
+                self.assertEqual(reports[0]["review"]["decision"], "revoke")
+                self.assertEqual(coverage_cells(self.task, reports)[1]["state"], "reported")
+        card = build_lab(self.catalog, task=self.task["id"])["tasks"][0]
+        self.assertEqual(card["adoption"], "pending")
+        self.assertEqual(card["report_sync"]["reports"], reports)
+
+    def test_source_binding_identity_and_original_body_are_required(self):
+        for approval in (
+            {**self.approval, "author_association": "MEMBER"},
+            {**self.approval, "user": {**self.approval["user"], "type": "Bot"}},
+            {**self.approval, "minimized": True},
+            {**self.approval, "html_url": self.report["html_url"]},
+            {**self.approval, "body": self.approval["body"].replace(self.task["id"], "another-task")},
+            {**self.approval, "body": "\n".join("> " + line for line in self.approval["body"].splitlines())},
+            {**self.approval, "body": self.approval["body"].replace("Decision: approve", "Decision: approve\nDecision: revoke")},
+            {**self.approval, "body": self.approval["body"].replace(self.report["html_url"],
+                                                      "https://github.com/someone/else/issues/1#issuecomment-1")},
+        ):
+            with self.subTest(approval=approval["body"].splitlines()[1]):
+                self.assertNotIn("review", self.read([approval])[0])
+        other_thread = review_comment(self.task, self.linked, self.report, 3)
+        self.assertNotIn("review", self.read([], [self.report, other_thread])[0])
+        edited = {**self.report, "body": self.report["body"] + "\n\nOutput added."}
+        self.assertNotIn("review", self.read([self.approval], [edited])[0])
+        restored = {**self.report, "updated_at": "2026-11-25T03:00:00Z"}
+        self.assertNotIn("review", self.read([self.approval], [restored])[0])
+
+    def test_new_approval_cannot_promote_retained_evidence_until_source_is_checked(self):
+        outage = Unavailable("temporary", http_status=503)
+        with patch("portbridge.lab_reports.datetime") as clock:
+            clock.now.return_value = datetime.fromisoformat("2026-11-25T02:00:01.5+00:00")
+            self.assertNotIn("review", self.read([], cached=True)[0])
+            clock.now.return_value = datetime.fromisoformat("2026-11-25T02:00:07+00:00")
+            stale = self.read([self.approval], outage, cached=True)
+            self.assertNotIn("review", stale[0])
+            self.assertEqual(coverage_cells(self.task, stale)[1]["state"], "reported")
+            clock.now.return_value = datetime.fromisoformat("2026-11-25T02:00:08+00:00")
+            fresh = self.read([self.approval], cached=True)
+            self.assertEqual(coverage_cells(self.task, fresh)[1]["state"], "covered")
+
+    def test_cache_retains_temporarily_unavailable_review_and_clears_deleted_or_private_review(self):
+        original = self.read([self.approval], cached=True)
+        self.assertEqual(original, self.read(Unavailable("temporary", http_status=503), cached=True))
+        self.assertNotIn("review", self.read([], cached=True)[0])
+        self.assertEqual(original, self.read([self.approval], cached=True))
+        self.assertNotIn("review", self.read(RepositoryNotPublic("no longer public"), cached=True)[0])
+        self.assertEqual(original, self.read([self.approval], cached=True))
+        hidden = Unavailable("no longer publicly readable", http_status=404)
+        self.assertNotIn("review", self.read(hidden, cached=True)[0])
+        self.assertEqual(self.read([self.approval], hidden, cached=True), [])

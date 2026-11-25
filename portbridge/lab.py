@@ -462,13 +462,20 @@ TASKS = (
                 "os": "Windows 11", "os_family": "Windows", "driver": "32.0.32029.2010",
                 "cases": {"skip-middle-piece": "pass", "overlapping-edges": "pass"},
             },
+            f"{XCL_SCRATCH}#issuecomment-7155613896": {
+                "actor_id": 360899813,
+                "body_sha256": "ac448243beb87373aa2f38f4117948bd2a90ac7f8e13f2e2797c27309af3b91a",
+                "revisions": [XCL_SCRATCH_SHA], "equipment": "intel", "hardware": "Intel Arc A770",
+                "os": "Windows 11 25H2 x64 build 26200.9974", "os_family": "Windows", "driver": "32.0.101.9175",
+                "cases": {"skip-middle-piece": "pass", "overlapping-edges": "skip"},
+            },
         },
         "procedure_url": f"{XCL}/blob/{XCL_SCRATCH_SHA}/README.md#tests",
         "evidence_url": XCL_SCRATCH, "result_url": f"{PORTBRIDGE}/issues/54",
         "revisions": [revision("XCL scratch test revision", "Версия тестов памяти XCL", "xcl-dev/xcl",
                                XCL_SCRATCH_SHA)],
         "why": "The author reported the two checks on NVIDIA. Radeon and Intel Arc are separate coverage cells.",
-        "evidence": "The receiving PR describes the synthetic comparisons. The independent Radeon and Intel checks are open.",
+        "evidence": "Radeon passed both tests. Intel Arc A770 passed skip-middle-piece. The overlapping-edges stress test still needs an Intel run.",
         "steps": [
             "Check PortBridge #54 before taking a run. Use the exact revision in a clean checkout.",
             "Run the two dispatch_chain_payload_ tests following the linked setup and confirm the selected adapter.",
@@ -480,8 +487,8 @@ TASKS = (
         "translations": {"ru": {
             "title": "Повторить проверки памяти XCL на Radeon и Intel Arc",
             "requirements": ["Физический Radeon или Intel Arc с аппаратным Wave32", "D3D12, Rust и DXC"],
-            "why": "Автор сообщил о двух проверках на NVIDIA. Теперь нужны отдельные прогоны на Radeon и Intel Arc.",
-            "evidence": "В исходном PR описаны синтетические сравнения. Независимые прогоны Radeon и Intel пока открыты.",
+            "why": "Автор сообщил о двух проверках на NVIDIA. Для сравнения собираются независимые результаты на Radeon и Intel Arc.",
+            "evidence": "На Radeon прошли оба теста, на Intel Arc A770 прошёл skip-middle-piece. На Intel ещё нужен стресс-тест overlapping-edges.",
             "steps": [
                 "Сверьте статус в PortBridge #54 и откройте указанную версию в отдельной чистой копии.",
                 "По инструкции запустите два теста dispatch_chain_payload_ и убедитесь, какая видеокарта выбрана.",

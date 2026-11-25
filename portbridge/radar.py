@@ -70,6 +70,18 @@ def lab_action(task, kind, priority, confidence, check, action, criteria, *,
     }
 
 
+def previous_pin(current, pins, changes, now):
+    """Follow the observed head changes back to a revision on the task card."""
+    for change in sorted(changes, key=lambda item: (item["observed_at"], item.get("id", 0)), reverse=True):
+        observed = source_time(change["observed_at"])
+        if observed is None or observed > now or change["revision"] != current:
+            continue
+        current = change["previous_revision"]
+        if current in pins:
+            return current
+    return None
+
+
 def revision_action(task, rows, changes, projects, now):
     pins = {entry["sha"].lower(): entry["url"] for entry in task["revisions"]}
     for url in dict.fromkeys((task["source_url"], task["result_url"])):
@@ -80,10 +92,7 @@ def revision_action(task, rows, changes, projects, now):
         current = source_revision(row)
         if current is None or current in pins:
             continue
-        observed = next((change for change in changes.get(key, ())
-                         if change["previous_revision"] in pins and within(change["observed_at"], now, RECENT_CHANGE)), None)
-        if observed:
-            old = observed["previous_revision"]
+        if old := previous_pin(current, pins, changes.get(key, ()), now):
             return lab_action(task, "recheck_revision", "high", "indexed_change",
                               observation_check(row, projects, now),
                               ("Сверьте изменения после закреплённой версии и определите, нужен ли новый прогон.",
@@ -120,7 +129,7 @@ def lab_actions(tasks, rows, changes, projects, now):
                              ("Зафиксируйте, какое покрытие подтверждено и какие проверки ещё нужны.",
                               "Record the coverage accepted for review and the remaining gaps."),
                              extra_sources=evidence)
-        equipment = {vendor for vendor in task["equipment"] if coverage.get(vendor, "missing") == "missing"}
+        equipment = {vendor for vendor in task["equipment"] if coverage.get(vendor, "missing") in {"missing", "partial"}}
         pending_review = review_needed and evidence and task.get("coverage_policy", "any") != "all"
         if task["status"] == "needs_run" and equipment and not pending_review:
             yield lab_action(task, "cover_hardware", "normal", "curated_check", check,

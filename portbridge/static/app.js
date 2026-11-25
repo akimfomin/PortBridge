@@ -1057,6 +1057,7 @@ const labReportStates = {
 };
 const labCoverageStates = {
   covered: t('Covered', 'Покрыто'), reported: t('Report needs review', 'Отчёт ждёт проверки'),
+  partial: t('Some tests remain', 'Часть тестов ещё нужна'),
   missing: t('Run needed', 'Нужен прогон'), contradicted: t('Failure needs review', 'Нужен разбор сбоя'),
 };
 const labReportAuthority = {
@@ -1234,7 +1235,51 @@ function labReportsForReview(task) {
   return task.status === 'awaiting_review' && list(task.report_sync?.reports).length > 0;
 }
 
-function labSyncedReports(sync) {
+function labReviewControls(task, report) {
+  const discussion = list(task.report_sync.sources)[0]?.url;
+  if (!discussion || !/^[a-f0-9]{64}$/.test(report.body_sha256 || '')) return '';
+  const controls = element('details', 'lab-details lab-review');
+  const decision = element('select');
+  const label = element('label', 'filter-group', t('Decision', 'Решение'));
+  const field = element('textarea');
+  const status = element('span', 'view-status');
+  const copy = element('button', 'retry', t('Copy decision template', 'Копировать шаблон решения'));
+  const choices = [
+    ['approve', t('Confirm report', 'Подтвердить отчёт')],
+    ['revoke', t('Revoke confirmation', 'Отозвать подтверждение')],
+  ];
+  for (const [value, title] of choices) {
+    const option = element('option', '', title);
+    option.value = value;
+    decision.append(option);
+  }
+  function updateTemplate() {
+    field.value = [
+      'PortBridge test review v1',
+      'Task: ' + task.id,
+      'Report: ' + report.url,
+      'Body SHA-256: ' + report.body_sha256,
+      'Decision: ' + decision.value,
+    ].join('\n');
+  }
+  updateTemplate();
+  decision.addEventListener('change', updateTemplate);
+  field.readOnly = true;
+  field.hidden = true;
+  field.setAttribute('aria-label', t('Decision template', 'Шаблон решения'));
+  status.setAttribute('role', 'status');
+  label.append(decision);
+  bindCopyText(copy, field, status, t('Copied. Post it in the review discussion.',
+    'Скопировано. Опубликуйте в обсуждении для проверки.'));
+  const actions = element('div', 'lab-agent-actions');
+  actions.append(copy, githubLink(t('Open review discussion', 'Открыть обсуждение для проверки'), discussion), status);
+  controls.append(element('summary', '', t('For the discussion owner', 'Для владельца обсуждения')),
+    label, actions, field);
+  return controls;
+}
+
+function labSyncedReports(task, focused) {
+  const sync = task.report_sync;
   const section = element('section', 'lab-checklist');
   const checked = element('p', 'lab-checked', labReportStates[sync.state]);
   const date = sync.checked_at || sync.attempted_at;
@@ -1255,6 +1300,16 @@ function labSyncedReports(sync) {
       row.append(revision);
     }
     if (report.reported_at) row.append(activityTime(report.reported_at));
+    if (report.review?.decision === 'approve' || report.review?.decision === 'revoke') {
+      const title = report.review.decision === 'approve'
+        ? t('Confirmation by ', 'Подтверждение от ')
+        : t('Confirmation revoked by ', 'Подтверждение отозвал ');
+      row.append(githubLink(title + '@' + report.review.author, report.review.url));
+    }
+    if (focused) {
+      const controls = labReviewControls(task, report);
+      if (controls) row.append(controls);
+    }
     reports.append(row);
   }
   if (reports.childElementCount) section.append(reports);
@@ -1286,7 +1341,7 @@ function labTask(task, focused = false, queueEquipment = '', showAll = false) {
   }
   if (task.report_sync && Object.hasOwn(labReportStates, task.report_sync.state)
       && (focused || list(task.report_sync.reports).length)) {
-    card.append(labSyncedReports(task.report_sync));
+    card.append(labSyncedReports(task, focused));
   }
 
   const details = element('details', 'lab-details');

@@ -6,7 +6,7 @@ The Activity page, read-only activity API and MCP tool share the same queue. The
 
 The first rules cover four actions.
 
-- Review the exact Test Lab pin after an observed open pull request moves to a new revision.
+- Review the exact Test Lab pin after an observed open pull request moves to a new revision. A chain of observed head changes keeps the recheck in the queue until the task pin is updated or the pull request returns to the pin or closes.
 - Check public reports at the pinned revision. A community report starts review. Maintainer approval remains a separate decision.
 - Find the remaining eligible hardware when the task needs more coverage. An all-vendor task can have a report awaiting review and a different hardware gap at the same time.
 - Compare two public project sources when the open discussion cites the other project and both mention the same technical symbol. A closed source can be used with a known revision to examine what the discussion recorded. The target remains the open discussion. A shared revision is excluded because it does not establish a separate implementation result.

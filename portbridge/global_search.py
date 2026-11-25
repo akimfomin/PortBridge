@@ -12,8 +12,14 @@ from .matching import ISA_OPCODE, canonical_url
 
 QUERY_PHRASES = re.compile(r"\b(?:scratch memory|scratch buffer|liveness|live ranges?|last consumer|"
                            r"last use|stack coloring|spill slots?|compute dispatch|shader compiler|"
+                           r"timeline[\s-]+semaphores?|enhanced[\s-]+barriers?|"
                            r"register allocation|memory aliasing|synchronization|scratch|lifetime|"
                            r"dxil|dxbc|spir-v|d3d12|vulkan)\b", re.I)
+QUERY_ALIASES = {
+    "timeline semaphore": "timeline semaphore", "timeline semaphores": "timeline semaphore",
+    "enhanced barrier": "enhanced barriers", "enhanced barriers": "enhanced barriers",
+}
+CONTEXT_PHRASES = frozenset({"direct3d 12", "directx 12", "spir v"})
 RESULT_PATH = re.compile(r"/[^/]+/[^/]+/(?:issues|pull)/[1-9][0-9]*")
 MAX_RESULTS = 10
 SCOPE = "public_github_issues_and_pull_requests"
@@ -21,9 +27,38 @@ SCOPE = "public_github_issues_and_pull_requests"
 
 def search_terms(text):
     """Send only selected technical words and symbols to the anonymous search endpoint."""
-    ordered = list(dict.fromkeys(match.casefold() for group in (ISA_OPCODE, API_SYMBOL, QUERY_PHRASES, TECHNICAL_TERM)
-                                 for match in group.findall(text)))
-    return ordered[:4]
+    terms = {}
+    for group in (ISA_OPCODE, API_SYMBOL, QUERY_PHRASES, TECHNICAL_TERM):
+        for match in group.findall(text):
+            term = match.casefold()
+            alias = " ".join(term.replace("-", " ").split())
+            terms[QUERY_ALIASES.get(alias, term)] = None
+    return list(terms)[:4]
+
+
+def _title_pattern(term, *, topic=False):
+    if topic:
+        # Natural phrases can be hyphenated or plural in titles. Symbols stay literal.
+        phrase = r"[-_\s]+".join(re.escape(word) for word in term.removesuffix("s").split())
+        return re.compile(rf"(?<!\w){phrase}s?(?!\w)", re.I)
+    return re.compile(rf"(?<!\w){re.escape(term)}(?!\w)", re.I)
+
+
+def _rank_candidates(items, words):
+    phrases = {word for word in words if " " in word and word not in CONTEXT_PHRASES}
+    if not phrases:
+        return
+    topics = [_title_pattern(word, topic=True) for word in phrases]
+    contexts = [_title_pattern(word) for word in words if word not in phrases]
+
+    def title_score(item):
+        title = item["title"]
+        topic_count = sum(pattern.search(title) is not None for pattern in topics)
+        context_count = sum(pattern.search(title) is not None for pattern in contexts) if topic_count else 0
+        return topic_count, context_count
+
+    # Preserve GitHub's order for ties, including body-only results.
+    items.sort(key=title_score, reverse=True)
 
 
 def result_entry(entry):
@@ -63,6 +98,7 @@ def external_search(query, *, excluded=()):
         if key not in seen:
             result["matches"].append(item)
             seen.add(key)
+    _rank_candidates(result["matches"], words)
     result["state"] = "partial" if response.get("incomplete_results") else "available"
     return result
 

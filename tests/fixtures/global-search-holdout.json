@@ -1,0 +1,161 @@
+{
+  "captured_on": "2026-11-25",
+  "capture_sha256": "38fb1aab9c94a2e42c2075a3b4eb276fa68d29af309973906c355a661ffdcf0e",
+  "endpoint": "https://api.github.com/search/issues",
+  "per_page": 10,
+  "rubric": {
+    "2": "The primary change, measurement or question directly concerns the mechanism in the requested technical context.",
+    "1": "The source gives an adjacent reference or documents the mechanism as a supporting detail in broader work.",
+    "0": "The match is incidental or the source has a different primary purpose and offers no specific reference."
+  },
+  "queries": {
+    "vulkan scratch buffer": {
+      "baseline": {
+        "github_query": "\"vulkan\" \"scratch buffer\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/gfx-rs/wgpu/issues/10881", "title": "Acceleration structure builds create a new scratch buffer every time", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ggml-org/llama.cpp/pull/30665", "title": "vulkan: add scratch buffer system, use for dequant_kv", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/gogpu/wgpu/pull/451", "title": "feat(ray-query): Vulkan HAL", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/KhronosGroup/MoltenVK/pull/2892", "title": "Size tessellation scratch buffers from the shaders' reflected output sizes", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ggml-org/ggml/pull/1694", "title": "ggml-vulkan: fix VRAM fragmentation and large-buffer TTM churn in long-running inference", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/326", "title": "runtime: the index buffer view size bounds the index fetch in the Vulkan replay (reads past the view are 0)", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/gfx-rs/wgpu/pull/10155", "title": "perf(core): reuse the acceleration structure build scratch buffer", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/524", "title": "DEPTH24-SCRATCH-BOUNDS-OVERFLOW: guard integer overflows in Depth24Converter", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/anthony-chaudhary/fak/issues/14130", "title": "fix(vulkan): restore batching after GDN scratch growth", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/Eglantine-Community/Eglantine/pull/954", "title": "[TEST] NVN/Vulkan replay optimizations (ASTC GPU uploads, mirror/conditions, barriers, aliases, DCC, load-op clears)", "state": "open", "grade": 1}
+        ]
+      }
+    },
+    "d3d12 pipeline cache": {
+      "baseline": {
+        "github_query": "\"d3d12\" \"pipeline cache\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/aszecsei/cinnabar/issues/98", "title": "Persistent pipeline cache", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/218", "title": "d3d12: persist the runtime Vulkan pipeline cache across launches", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/1308", "title": "runtime: a pipeline cache from the runtime's own device (RT-RUNTIME-PIPELINE-CACHE)", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/1255", "title": "runtime: say when no pipeline_cache.bin seeds the Vulkan cache (RT-PIPELINE-CACHE-HINT)", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/323", "title": "docs: describe runtime Vulkan pipeline cache loading", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/gminustwo/red_two/issues/41", "title": "Crash: closed with code -805306369: it stopped responding and Windows closed it after 20 s", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/tangency-labs/solidcraft/issues/3433", "title": "GPU path tracer: keep compiled shaders between runs (pipeline cache)", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/sahajiscoding/VIctory/pull/3", "title": "Playability, shader coverage, D3D12 views/barriers, and multi-placeholder xmem", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/mzzvxm/plume/pull/18", "title": "feat(vulkan): a pipeline cache the application can save and load, SSCALED 16-bit formats, a depth view aspect fix (from zolaware/plume)", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/Marvisak/VIctory/issues/768", "title": "Contribution access for a tested Proton early-pipeline cache fix", "state": "open", "grade": 2}
+        ]
+      }
+    },
+    "shader compiler register allocation": {
+      "baseline": {
+        "github_query": "\"shader compiler\" \"register allocation\" \"shader\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/JPTuba9/xlaunch-vi/pull/48", "title": "Console allocation hooks, descriptor records, 4K swap chain and DXIL compute pipelines", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/aurora-silicon/mesa/pull/461", "title": "agx: derive a register cap for sampled compute from occupancy", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/fuego-ironworks/idric-x86-aggressive-backend/issues/8", "title": "Make a64-backend the single generic AArch64 codegen owner", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/sssemil/tinygrad/pull/2", "title": "MT: add native USC and META execution for the S30", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/GetLostIn/CTR-NitroFueled-PC/issues/109", "title": "the game ended with code 3221225477", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/jeel00dev/vkml/issues/35", "title": "test_invariants' RADV register model is pinned to one Mesa version, and requires_radv does not guard that", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/shader-slang/slang/issues/11169", "title": "Shader coverage: enable D3D12 coverage binding path", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/Marvisak/VIctory/issues/1242", "title": "Tracking & Static Audit: 45 New Source-Level Bugs + 150 Prioritized Backlog Items [Part 1/2]", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/astraea-emu/astraea/issues/191", "title": "AGC evidence: complete LinkShaders output and real HLE transaction", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/aurora-silicon/mesa/pull/828", "title": "asahi/compiler: report native instruction, wait and staging counts", "state": "closed", "grade": 1}
+        ]
+      }
+    },
+    "d3d12 memory aliasing": {
+      "baseline": {
+        "github_query": "\"d3d12\" \"memory aliasing\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/PlutonusDev/OpenEra/issues/28", "title": "graphics: command list and resource translation", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/fxgl/steamac/pull/43", "title": "DXMT: opt-in build of d3d12.dll (DXMT_D3D12=1, default off)", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/LunarG/gfxreconstruct/pull/3278", "title": "Add D3D12 resource rebind support", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/xcl-dev/xcl/pull/1326", "title": "D3D12.X: prepare for the unified memory copy path", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/xcl-dev/xcl/pull/1060", "title": "Tests: GPU UMA tests skip where D3D12 has no heaps over process memory", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/xcl-dev/xcl/pull/1024", "title": "Tests: the UMA import check test skips where D3D12 has no heaps over process memory", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/LunarG/gfxreconstruct/issues/3279", "title": "[replay] D3D12 Memory Rebind Translation Implementation Plan", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ParadiseEngine/ParadiseEngine/issues/372", "title": "Hardware ray tracing: research on Dawn, wgpu, C# wrappers and a Vulkan backend", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/vec715/enfusion-dxgi-fix/issues/1", "title": "D3d12.dll hook doesn't fix the vertex issue :(", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/joaosaffran/DirectXShaderCompiler/pull/10", "title": "Update submodules: DirectX-Headers to 61c77189, SPIRV-Headers to 50184103", "state": "open", "grade": 0}
+        ]
+      }
+    },
+    "vulkan timeline semaphore": {
+      "baseline": {
+        "github_query": "\"vulkan\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/openvinotoolkit/openvino/pull/40217", "title": "[GPU][Vulkan] Add the Vulkan runtime foundation", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/nullfx/distiller/pull/59", "title": "Sources: bring the Vulkan driver too (Vulkan, DXVK and -vulkan under Sikarugir)", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/zidage/AlcedoStudio/pull/1064", "title": "feat(vulkan): Add the Vulkan build option, VulkanContext, and the Vulkan backend values", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/AllenCell/agave/pull/483", "title": "[Vulkan 23/24] Wire Vulkan application controls", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/AllenCell/agave/pull/477", "title": "[Vulkan 17/24] Build Vulkan gesture pipelines", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/AllenCell/agave/pull/471", "title": "[Vulkan 11/24] Record Vulkan raymarch draws", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/AllenCell/agave/pull/468", "title": "[Vulkan 08/24] Upload Vulkan volume textures", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/AllenCell/agave/pull/467", "title": "[Vulkan 07/24] Add Vulkan utility functions", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/AllenCell/agave/pull/466", "title": "[Vulkan 06/24] Support native Vulkan surfaces", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/AllenCell/agave/pull/465", "title": "[Vulkan 05/24] Build the Vulkan swapchain", "state": "open", "grade": 0}
+        ]
+      },
+      "expanded": {
+        "github_query": "\"vulkan\" \"timeline semaphore\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15", "title": "QA-02: Independent AMD Vulkan handoff validation", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/intel/llvm/issues/23694", "title": "[SYCL][E2E] bindless_images/vulkan_interop/vulkan_sycl_buffer_timeline_semaphore.cpp: driver abort after timeline semaphore signal on Windows Arc", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/Xaymar/BlitzLLVM/pull/663", "title": "runtime: Sync the Vulkan frame slots with timeline semaphores instead of fences", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/tadeohepperle/wgpu/pull/1", "title": "don't use timeline semaphores on Arms Mali Vulkan driver", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/libretro/docs/pull/1248", "title": "Document the hakuX-lr Vulkan 1.1 requirement", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/elliotttate/OpenXR-Layer-OBSMirror/pull/29", "title": "Mirror Vulkan OpenXR applications", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/gfx-rs/wgpu/pull/10992", "title": "fix(vulkan): don't use timeline semaphores on Imagination's proprietary driver", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/intel/llvm/issues/23693", "title": "[SYCL][E2E] bindless_images/vulkan_interop/vulkan_sycl_image_unsampled_timeline_semaphore.cpp data mismatch and driver abort on Windows Arc", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/boykopovar/AnyPS5/pull/21642", "title": "test(agc): share one timeline-semaphore batch hold among the execution tests", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/KhronosGroup/MoltenVK/issues/2899", "title": "vkWaitSemaphores(WAIT_ANY) can hang after a timeline semaphore reaches its target", "state": "open", "grade": 2}
+        ]
+      }
+    },
+    "d3d12 enhanced barriers": {
+      "baseline": {
+        "github_query": "\"d3d12\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/scarlett-commons/scarlett-commons/issues/23", "title": "Console D3D12 vs desktop D3D12 and Vulkan: difference catalogue", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/xcl-dev/xcl/pull/540", "title": "Tests: verify desc::image_d3d12 and sampler_d3d12 against D3D12", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/ASEAN-Motor-Club/MTDediMod/pull/70", "title": "feat(client): D3D12 overlay backend", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/microsoft/DirectX-Specs/pull/272", "title": "D3D12 Unified spec", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/1146839821/dxmt/pull/3", "title": "experimental d3d12", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/bluesentinelsec/tenacious-badger/issues/219", "title": "RHI: the D3D12 backend", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/AmanThuL/Luminex/issues/114", "title": "Windows/D3D12 port", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/JMAN730/project-flamingo/issues/211", "title": "D3D12 Shadows - 4060 ti", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/3Shain/dxmt/pull/262", "title": "D3D12 implementation, part 11", "state": "open", "grade": 0}
+        ]
+      },
+      "expanded": {
+        "github_query": "\"d3d12\" \"enhanced barriers\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/xcl-dev/xcl/pull/1025", "title": "D3D12.X: translate list #146 Enhanced Barriers to legacy ResourceBarrier", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/bluesentinelsec/tenacious-badger/issues/219", "title": "RHI: the D3D12 backend", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/Marvisak/VIctory/pull/642", "title": "GPU: translate enhanced texture barriers in ID3D12GraphicsCommandList7::Barrier", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/microsoft/DirectX-Specs/pull/285", "title": "Clarify ASB enhanced-barrier access rules", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/600", "title": "vulkan_replay: handle UNDEFINED->UNDEFINED TextureBarrier without illegal newLayout (VK-TEXTURE-BARRIER-UNDEF-NOOP)", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ubiquitarianism/leonida/pull/778", "title": "d3d12: replay programmable sample positions (D3D-SAMPLE-POSITIONS)", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/NVIDIA-RTX/NVRHI/issues/147", "title": "D3D12 enhanced barriers: combined read states with different layouts (DepthRead | ShaderResource) produce an invalid barrier", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/Charelene/FH2MP/issues/548", "title": "Forza Horizon 3: Crash 0xc0000005 at game+0x1f22af6", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/mikeev261/godot/pull/1", "title": "D3D12: Agility SDK 1.722 preview and inline ray tracing (DXR) for RenderingDevice", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/renderbag/plume/issues/12", "title": "Implement D3D12 Enhanced Barriers.", "state": "open", "grade": 2}
+        ]
+      }
+    },
+    "vkCmdPipelineBarrier2": {
+      "baseline": {
+        "github_query": "\"vkcmdpipelinebarrier2\" in:title,body",
+        "items": [
+          {"html_url": "https://github.com/JakeGT/moba-engine/issues/367", "title": "NGX DLSS evaluate clears the output (vkCmdClearColorImage) without documenting it or recording a barrier (worked around)", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/aros-development-team/AROS/pull/2107", "title": "vulkan.hidd: give the driver the application's instance create info", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/omacom/mesa/issues/55", "title": "honeykrisp: launch-path test for dispatch-tail elision (real record path + combined #47/#6 head)", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/KhronosGroup/Vulkan-Docs/issues/2829", "title": "Foreign queue transfers are hard to use correctly", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/ValveSoftware/steam-for-linux/issues/13909", "title": "streaming_client SIGSEGV in ANV (Mesa): vkCmdPipelineBarrier2 submits a destroyed VkImage (UAF) — Remote Play client crashes on session teardown", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/KhronosGroup/Vulkan-Docs/issues/1982", "title": "Clarify VUID-vkCmdPipelineBarrier2-pDependencies-02285", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/LunarG/gfxreconstruct/issues/3444", "title": "Frame loop: command buffer still recording at the loop start is not re-begun in repetitions", "state": "open", "grade": 0},
+          {"html_url": "https://github.com/aether-lang-dev/ae3d/issues/633", "title": "Vulkan: check a 1.3 baseline, then dynamic rendering and synchronization2 in place of render passes and barrier v1", "state": "open", "grade": 1},
+          {"html_url": "https://github.com/Luminous-Dynamics/symthaea/pull/7007", "title": "feat(gpu): qualify workload-bearing Vulkan barriers", "state": "open", "grade": 2},
+          {"html_url": "https://github.com/Luminous-Dynamics/symthaea/pull/6993", "title": "feat(gpu): add per-queue Vulkan synchronization lowering plan", "state": "open", "grade": 2}
+        ]
+      }
+    }
+  }
+}

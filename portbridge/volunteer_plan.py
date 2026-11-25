@@ -87,7 +87,7 @@ def build_plan(lab, task_id, *, now=None):
     if target is None:
         raise ValueError("Task not found in this Test Lab snapshot.")
     checks = {cell["equipment"]: cell["state"] for cell in target.get("coverage", [])}
-    pending = [vendor for vendor in target["equipment"] if checks.get(vendor) == "missing"]
+    pending = [vendor for vendor in target["equipment"] if checks.get(vendor) in {"missing", "partial"}]
     freshness = report_check(target.get("report_sync", {}), now)
     ready = target["status"] == "needs_run" and freshness["state"] == "fresh" and bool(pending)
     candidates = candidates_by_equipment(tasks, target, pending, now) if ready else {}
