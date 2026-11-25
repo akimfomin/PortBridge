@@ -1,0 +1,93 @@
+// The marked routines are extracted from the pinned GPL-2.0-only XCL tree.
+use std::collections::HashMap;
+use std::ffi::c_void;
+use std::hash::Hash;
+use std::sync::atomic::{AtomicBool, Ordering::Relaxed};
+use std::sync::{Arc, Barrier, Mutex};
+
+static SYNC_READS: AtomicBool = AtomicBool::new(false);
+static READS: Barrier = Barrier::new(4);
+
+unsafe fn read_pso_cached_blob(pso: *mut c_void) -> Option<Vec<u8>> {
+    if SYNC_READS.load(Relaxed) { READS.wait(); }
+    match pso as usize {
+        10 => Some(Vec::new()),
+        11 => None,
+        id => Some(vec![id as u8; 16]),
+    }
+}
+
+@PRODUCTION_CACHE@
+
+fn snapshot<K: Eq + Hash>(cache: &Mutex<Option<(HashMap<K, Arc<Vec<u8>>>, usize)>>) -> (usize, usize, usize) {
+    let cache = cache.lock().unwrap();
+    let (entries, charged) = cache.as_ref().unwrap();
+    (entries.len(), *charged, entries.values().map(|b| b.len()).sum())
+}
+
+fn check<K: Eq + Hash + Copy + Send>(
+    label: &str,
+    key: impl Fn(usize) -> K,
+    keep: unsafe fn(K, *mut c_void, usize),
+    find: fn(K) -> Option<Arc<Vec<u8>>>,
+    forget: fn(K),
+    cache: &Mutex<Option<(HashMap<K, Arc<Vec<u8>>>, usize)>>,
+    cap: usize,
+) -> bool {
+    let same = key(0);
+    SYNC_READS.store(true, Relaxed);
+    std::thread::scope(|scope| {
+        for caller in 1..=4usize {
+            scope.spawn(move || unsafe { keep(same, caller as *mut c_void, COMPUTE_BLOB_MIN_DXIL) });
+        }
+    });
+    SYNC_READS.store(false, Relaxed);
+    let duplicate = snapshot(cache);
+    assert!(find(same).unwrap()[0] <= 4);
+
+    // A rejected cached blob is forgotten through the original production path.
+    forget(same);
+    forget(same);
+    let removed = snapshot(cache);
+    assert!(find(same).is_none());
+
+    unsafe {
+        keep(same, 7 as *mut c_void, COMPUTE_BLOB_MIN_DXIL);
+        keep(key(1), std::ptr::null_mut(), COMPUTE_BLOB_MIN_DXIL);
+        keep(key(1), 10 as *mut c_void, COMPUTE_BLOB_MIN_DXIL); // empty returned blob
+        keep(key(1), 11 as *mut c_void, COMPUTE_BLOB_MIN_DXIL); // driver get failed
+        keep(key(1), 8 as *mut c_void, COMPUTE_BLOB_MIN_DXIL - 1);
+    }
+    assert!(find(key(1)).is_none());
+    assert_eq!(find(same).unwrap().as_slice(), [7; 16]);
+    let refilled = snapshot(cache);
+
+    let mut capacity_ok = true;
+    if cap == 64 {
+        for next in 1..=4 {
+            unsafe { keep(key(next), 8 as *mut c_void, COMPUTE_BLOB_MIN_DXIL); }
+        }
+        let full = snapshot(cache);
+        assert!(find(key(4)).is_none());
+        forget(same);
+        unsafe { keep(key(4), 8 as *mut c_void, COMPUTE_BLOB_MIN_DXIL); }
+        let reallocated = snapshot(cache);
+        println!("{label} cap={cap} full={full:?} slot_reused={reallocated:?}");
+        capacity_ok = full == (4, 64, 64) && reallocated == (4, 64, 64);
+    }
+
+    println!("{label} cap={cap} duplicate={duplicate:?} removed={removed:?} refilled={refilled:?}");
+    duplicate == (1, 16, 16) && removed == (0, 0, 0) && refilled == (1, 16, 16) && capacity_ok
+}
+
+fn main() {
+    let compute_ok = check(
+        "compute", |i| compute_blob_key(&i.to_le_bytes(), 9, 0), keep_compute_blob, compute_blob,
+        forget_compute_blob, &COMPUTE_BLOBS, COMPUTE_BLOBS_MAX,
+    );
+    let graphics_ok = check(
+        "graphics", |i| (i as u64, 1 << 20), keep_graphics_blob, graphics_blob,
+        forget_graphics_blob, &GRAPHICS_BLOBS, GRAPHICS_BLOBS_MAX,
+    );
+    if !(compute_ok && graphics_ok) { std::process::exit(2); }
+}

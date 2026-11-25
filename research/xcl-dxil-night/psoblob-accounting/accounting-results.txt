@@ -1,0 +1,17 @@
+rustc 1.100.0 (0ef1bc386 2026-11-09)
+baseline budget real: exit 2
+compute cap=536870912 duplicate=(1, 64, 16) removed=(0, 48, 0) refilled=(1, 64, 16)
+graphics cap=268435456 duplicate=(1, 64, 16) removed=(0, 48, 0) refilled=(1, 64, 16)
+baseline budget 64: exit 2
+compute cap=64 full=(1, 64, 16) slot_reused=(1, 64, 16)
+compute cap=64 duplicate=(1, 64, 16) removed=(0, 48, 0) refilled=(1, 64, 16)
+graphics cap=64 full=(1, 64, 16) slot_reused=(1, 64, 16)
+graphics cap=64 duplicate=(1, 64, 16) removed=(0, 48, 0) refilled=(1, 64, 16)
+patched budget real: exit 0
+compute cap=536870912 duplicate=(1, 16, 16) removed=(0, 0, 0) refilled=(1, 16, 16)
+graphics cap=268435456 duplicate=(1, 16, 16) removed=(0, 0, 0) refilled=(1, 16, 16)
+patched budget 64: exit 0
+compute cap=64 full=(4, 64, 64) slot_reused=(4, 64, 64)
+compute cap=64 duplicate=(1, 16, 16) removed=(0, 0, 0) refilled=(1, 16, 16)
+graphics cap=64 full=(4, 64, 64) slot_reused=(4, 64, 64)
+graphics cap=64 duplicate=(1, 16, 16) removed=(0, 0, 0) refilled=(1, 16, 16)

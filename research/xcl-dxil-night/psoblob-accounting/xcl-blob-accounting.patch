@@ -1,0 +1,31 @@
+diff --git a/crates/xcl/src/hle/d3d12x/real.rs b/crates/xcl/src/hle/d3d12x/real.rs
+index 9241a3a..7f3eed3 100644
+--- a/crates/xcl/src/hle/d3d12x/real.rs
++++ b/crates/xcl/src/hle/d3d12x/real.rs
+@@ -4228,8 +4228,11 @@ unsafe fn keep_compute_blob(key: (u64, usize, i32), pso: *mut c_void, dxil_len:
+     if bytes.is_empty() || *total + bytes.len() > COMPUTE_BLOBS_MAX {
+         return;
+     }
+-    *total += bytes.len();
+-    m.insert(key, std::sync::Arc::new(bytes));
++    // Another caller may have published this key while GetCachedBlob ran.
++    if let std::collections::hash_map::Entry::Vacant(entry) = m.entry(key) {
++        *total += bytes.len();
++        entry.insert(std::sync::Arc::new(bytes));
++    }
+ }
+ 
+ /// The driver's compiled form of translated graphics pipelines (`GetCachedBlob`),
+@@ -4259,8 +4262,10 @@ unsafe fn keep_graphics_blob(key: (u64, usize), pso: *mut c_void, dxil_len: usiz
+     if bytes.is_empty() || *total + bytes.len() > GRAPHICS_BLOBS_MAX {
+         return;
+     }
+-    *total += bytes.len();
+-    m.insert(key, std::sync::Arc::new(bytes));
++    if let std::collections::hash_map::Entry::Vacant(entry) = m.entry(key) {
++        *total += bytes.len();
++        entry.insert(std::sync::Arc::new(bytes));
++    }
+ }
+ 
+ /// Deterministic FNV-1a digest of every field in a translated PC graphics PSO (shaders, static
