@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "error": null,
+  "draws": [
+    {
+      "cut": -125.0,
+      "viewport": [
+        2100,
+        1218
+      ],
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "backend": "VULKAN"
+    },
+    {
+      "cut": 125.0,
+      "viewport": [
+        2100,
+        1218
+      ],
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "backend": "VULKAN"
+    }
+  ],
+  "blender": "02f0899d78e3"
+}

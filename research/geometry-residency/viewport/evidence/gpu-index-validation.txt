@@ -1,0 +1,13 @@
+TBBmalloc: skip allocation functions replacement in ucrtbase.dll: unknown prologue for function _aligned_free
+{"renderer": "NVIDIA GeForce RTX 4070 Ti SUPER", "synthetic_checks": 44}
+{"layout": "column", "threshold": -125.0, "exact_sha256": "dba86a4b470aab12afc5f6f21d545904fbda1f02a2dbdbe89cebaf2c97beeddb", "rows": 6385097, "scratch_bytes": 27237280}
+{"layout": "column", "threshold": -25.0, "exact_sha256": "04a1689428861932dba1d07e8eafe30538fd2a12d0eeb68b42b8f2e8865182b8", "rows": 6385097, "scratch_bytes": 27237280}
+{"layout": "column", "threshold": 35.0, "exact_sha256": "95b9dbbdd9cd92763657c70e0cac6b3f42e1bf78056e0638e9cfb0114163d68b", "rows": 6385097, "scratch_bytes": 27237280}
+{"layout": "column", "threshold": 125.0, "exact_sha256": "39a0effaa5b159ae9b66aa60aa18ff7cdbe3be305a179a3419a31eb60596fbea", "rows": 6385097, "scratch_bytes": 27237280}
+{"layout": "packed", "threshold": -125.0, "exact_sha256": "dba86a4b470aab12afc5f6f21d545904fbda1f02a2dbdbe89cebaf2c97beeddb", "rows": 6385097, "scratch_bytes": 27237280}
+{"layout": "packed", "threshold": -25.0, "exact_sha256": "04a1689428861932dba1d07e8eafe30538fd2a12d0eeb68b42b8f2e8865182b8", "rows": 6385097, "scratch_bytes": 27237280}
+{"layout": "packed", "threshold": 35.0, "exact_sha256": "95b9dbbdd9cd92763657c70e0cac6b3f42e1bf78056e0638e9cfb0114163d68b", "rows": 6385097, "scratch_bytes": 27237280}
+{"layout": "packed", "threshold": 125.0, "exact_sha256": "39a0effaa5b159ae9b66aa60aa18ff7cdbe3be305a179a3419a31eb60596fbea", "rows": 6385097, "scratch_bytes": 27237280}
+Blender 5.3.0 (hash 02f0899d78e3 built 2026-11-25 01:33:29)
+
+Blender quit

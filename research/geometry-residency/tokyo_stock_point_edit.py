@@ -111,14 +111,23 @@ def create_tree():
     return tree, required_socket(spatial_compare.inputs, "B")
 
 
-def create_object(positions, classes, intensity):
+def create_cloud(positions, classes, intensity):
     cloud = bpy.data.pointclouds.new("Tokyo data 09LD1638")
-    cloud.resize(len(positions))
-    cloud.attributes["position"].data.foreach_set("vector", positions.reshape(-1))
-    cloud.attributes.new("source_id", "INT", "POINT").data.foreach_set(
-        "value", np.arange(len(positions), dtype=np.int32))
-    cloud.attributes.new("point_class", "INT", "POINT").data.foreach_set("value", classes)
-    cloud.attributes.new("intensity", "INT", "POINT").data.foreach_set("value", intensity)
+    try:
+        cloud.resize(len(positions))
+        cloud.attributes["position"].data.foreach_set("vector", positions.reshape(-1))
+        cloud.attributes.new("source_id", "INT", "POINT").data.foreach_set(
+            "value", np.arange(len(positions), dtype=np.int32))
+        cloud.attributes.new("point_class", "INT", "POINT").data.foreach_set("value", classes)
+        cloud.attributes.new("intensity", "INT", "POINT").data.foreach_set("value", intensity)
+    except Exception:
+        bpy.data.pointclouds.remove(cloud)
+        raise
+    return cloud
+
+
+def create_object(positions, classes, intensity):
+    cloud = create_cloud(positions, classes, intensity)
     obj = bpy.data.objects.new("Tokyo LiDAR", cloud)
     bpy.context.scene.collection.objects.link(obj)
     tree, threshold_socket = create_tree()

@@ -1,0 +1,47 @@
+{
+  "build": "02f0899d78e3",
+  "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "driver": "NVIDIA 617.14",
+  "results": [
+    {
+      "cut": -125.0,
+      "points": 6385097,
+      "commit_ns": 778116200,
+      "preview": {
+        "sha256": "fe800ebb701657de8ac01d969efa9509cb5f89201a782cbd1cb1903622d99bb9",
+        "cold_edit_to_frame_ns": 74923000
+      },
+      "native_sha256": "dba86a4b470aab12afc5f6f21d545904fbda1f02a2dbdbe89cebaf2c97beeddb"
+    },
+    {
+      "cut": -25.0,
+      "points": 6385097,
+      "commit_ns": 774692000,
+      "preview": {
+        "sha256": "76dc0e3bab11fdd079823e9d7e7d8265b363be17c8b78d996ace3a9fbc894613",
+        "cold_edit_to_frame_ns": 68154300
+      },
+      "native_sha256": "04a1689428861932dba1d07e8eafe30538fd2a12d0eeb68b42b8f2e8865182b8"
+    },
+    {
+      "cut": 35.0,
+      "points": 6385097,
+      "commit_ns": 778186500,
+      "preview": {
+        "sha256": "1d1e0fd0ce720165fc1e085f8b910a5a7c5aab2c2464ed43d226164bd405d062",
+        "cold_edit_to_frame_ns": 69340500
+      },
+      "native_sha256": "95b9dbbdd9cd92763657c70e0cac6b3f42e1bf78056e0638e9cfb0114163d68b"
+    },
+    {
+      "cut": 125.0,
+      "points": 6385097,
+      "commit_ns": 776304300,
+      "preview": {
+        "sha256": "ed19875d2bea0333fa18785a0efc42e3d9dc5ba1c1a098216214a665ccb18f29",
+        "cold_edit_to_frame_ns": 70973500
+      },
+      "native_sha256": "39a0effaa5b159ae9b66aa60aa18ff7cdbe3be305a179a3419a31eb60596fbea"
+    }
+  ]
+}

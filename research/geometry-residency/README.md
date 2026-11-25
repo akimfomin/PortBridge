@@ -1,5 +1,7 @@
 # GPU-resident point geometry
 
+[Blender add-on and integrated edit-to-frame measurements](viewport/README.md).
+
 ## Research decision
 
 Investigate whether existing procedural geometry graphs can keep changing point data on the device through selection, concatenation, field updates and drawing. The proposed contract preserves the ordered geometry visible at CPU checkpoints. A GPU node can consume the device view. A known CPU node can request the canonical attributes and rows it uses. An opaque node requires the complete canonical view. The first scope is point clouds. Mesh topology, cross-domain reductions and renderer integration require separate correctness evidence.
