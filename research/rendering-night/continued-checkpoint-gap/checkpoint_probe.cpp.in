@@ -1,0 +1,119 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+#include <cassert>
+#include <cstdint>
+#include <cstdio>
+#include <exception>
+#include <functional>
+#include <mutex>
+
+using VkPipeline = unsigned;
+using VkPipelineCache = unsigned;
+using VkDevice = unsigned;
+using ULONGLONG = std::uint64_t;
+constexpr int VK_SUCCESS = 0;
+constexpr int E_FAIL = -1;
+constexpr int S_OK = 0;
+constexpr VkPipeline VK_NULL_HANDLE = 0;
+
+struct VkPipelineShaderStageRequiredSubgroupSizeCreateInfo {};
+struct VkComputePipelineCreateInfo { struct { const void* pNext = nullptr; } stage; };
+
+struct Observed {
+    unsigned compile_calls = 0;
+    unsigned checkpoint_calls = 0;
+    unsigned destroys = 0;
+    unsigned delay = 0;
+    ULONGLONG tick = 0;
+    bool opt_in = false;
+    bool compile_success = true;
+};
+Observed observed;
+
+ULONGLONG GetTickCount64() { return observed.tick; }
+bool startup_cache_checkpoints_enabled() { return observed.opt_in; }
+
+struct FakeVk {
+    int vkCreateComputePipelines(VkDevice, VkPipelineCache, unsigned count,
+                                 const VkComputePipelineCreateInfo*, void*, VkPipeline* out) {
+        assert(count == 1);
+        ++observed.compile_calls;
+        observed.tick += observed.delay;
+        *out = 9;
+        return observed.compile_success ? VK_SUCCESS : E_FAIL;
+    }
+
+    void vkDestroyPipeline(VkDevice, VkPipeline pipeline, void*) {
+        assert(pipeline);
+        ++observed.destroys;
+    }
+};
+
+void save_session_pipeline_cache(const FakeVk&, VkDevice, VkPipelineCache cache) {
+    assert(cache);
+    ++observed.checkpoint_calls;
+}
+
+struct Context { FakeVk vk; };
+
+struct TestCase {
+    Context context;
+    struct {
+        struct { bool first_use_backend_pipelines = false; VkDevice device = 5; } info;
+        Context* context;
+        std::mutex startup_cache_checkpoint_mutex;
+        bool cache_available;
+        VkPipelineCache pipeline_cache() const { return cache_available ? 7 : 0; }
+    } device_;
+    struct { VkPipeline pipeline = VK_NULL_HANDLE; std::function<VkPipeline()> materialize; } pipeline_;
+    std::mutex compute_compile_mutex_;
+
+    TestCase(bool lazy, bool cache) : device_{{lazy, 5}, &context, {}, cache} {}
+
+    int setup(bool has_subgroup) {
+        VkComputePipelineCreateInfo pipeline_info{};
+        VkPipelineShaderStageRequiredSubgroupSizeCreateInfo required_size{};
+        if (has_subgroup)
+            pipeline_info.stage.pNext = &required_size;
+        auto& vk = context.vk;
+        const auto dev = device_.info.device;
+        // INSERT EXACT PUBLIC CONTROL AND MATERIALIZE BRANCHES
+        return S_OK;
+    }
+};
+
+int main() {
+    constexpr unsigned delays[] = {499, 500, 501};
+    unsigned cases = 0, emitted = 0;
+    for (const bool lazy : {false, true}) {
+        for (const bool enabled : {false, true}) {
+            for (const bool cache : {false, true}) {
+                for (const bool success : {false, true}) {
+                    for (const auto time : delays) {
+                        observed = {.delay = time, .opt_in = enabled, .compile_success = success};
+                        TestCase test(lazy, cache);
+                        const auto created = test.setup(cases % 2 == 0);
+                        if (lazy) {
+                            assert(created == S_OK && test.pipeline_.materialize && observed.compile_calls == 0);
+                            const auto first = test.pipeline_.materialize();
+                            assert((first != VK_NULL_HANDLE) == success);
+                            if (success)
+                                assert(test.pipeline_.materialize() == first);
+                        } else {
+                            assert((created == S_OK) == success && !test.pipeline_.materialize);
+                        }
+                        assert(observed.compile_calls == 1);
+                        assert(observed.destroys == (lazy && !success ? 1u : 0u));
+                        const auto expected = !lazy && enabled && cache && success && time >= 500 ? 1u : 0u;
+                        assert(observed.checkpoint_calls == expected);
+                        if (enabled && cache && success)
+                            std::printf("%s %u ms: %u checkpoints\n", lazy ? "first-use" : "eager", time,
+                                        observed.checkpoint_calls);
+                        emitted += observed.checkpoint_calls;
+                        ++cases;
+                    }
+                }
+            }
+        }
+    }
+    std::printf("%u cases, %u checkpoints\n", cases, emitted);
+}

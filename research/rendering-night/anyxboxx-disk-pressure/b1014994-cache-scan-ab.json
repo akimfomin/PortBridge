@@ -1,0 +1,128 @@
+{
+  "controls": {
+    "matching_absolute_and_relative": [
+      "aa/directory.dxil",
+      "aa/dotless.DX\u0131L",
+      "aa/dotted.DX\u0130L",
+      "aa/normal.dxil",
+      "aa/regular-link.dxil",
+      "aa/upper.DXIL",
+      "dir-link/other.dxil"
+    ],
+    "links": {
+      "regular-link.dxil": "created",
+      "dir-link": "created"
+    },
+    "missing_and_file_root_yield_empty": true,
+    "after_enumerated_regular_file_is_removed": {
+      "path_stat": "FileNotFoundError",
+      "scandir_entry_stat": "ok (4096 bytes)"
+    }
+  },
+  "paired": [
+    {
+      "resident": 64,
+      "inserts_per_sample": 16,
+      "median_ms_per_put": {
+        "base": 3.3167,
+        "one_pass": 3.0575
+      },
+      "samples_ms_per_put": {
+        "base": [
+          3.4125,
+          3.4436,
+          3.2449,
+          3.1944,
+          3.3252,
+          3.3083
+        ],
+        "one_pass": [
+          3.1803,
+          2.9544,
+          3.0362,
+          3.0696,
+          3.0454,
+          3.1819
+        ]
+      }
+    },
+    {
+      "resident": 256,
+      "inserts_per_sample": 16,
+      "median_ms_per_put": {
+        "base": 3.6474,
+        "one_pass": 2.7879
+      },
+      "samples_ms_per_put": {
+        "base": [
+          3.7057,
+          3.6019,
+          3.5906,
+          3.5623,
+          3.693,
+          3.7023
+        ],
+        "one_pass": [
+          2.7366,
+          2.7046,
+          2.8252,
+          2.7505,
+          2.947,
+          3.0308
+        ]
+      }
+    },
+    {
+      "resident": 64,
+      "inserts_per_sample": 16,
+      "median_ms_per_put": {
+        "one_pass": 3.0623,
+        "scandir": 2.7192
+      },
+      "samples_ms_per_put": {
+        "one_pass": [
+          3.1599,
+          3.0749,
+          3.0256,
+          3.5752,
+          3.0497,
+          2.9478
+        ],
+        "scandir": [
+          2.8566,
+          2.7257,
+          2.7719,
+          2.6994,
+          2.7127,
+          2.641
+        ]
+      }
+    },
+    {
+      "resident": 256,
+      "inserts_per_sample": 16,
+      "median_ms_per_put": {
+        "one_pass": 2.701,
+        "scandir": 1.5382
+      },
+      "samples_ms_per_put": {
+        "one_pass": [
+          2.7219,
+          2.7172,
+          2.7143,
+          2.6266,
+          2.5554,
+          2.6878
+        ],
+        "scandir": [
+          1.4869,
+          1.6132,
+          1.5405,
+          1.4121,
+          1.5359,
+          1.7027
+        ]
+      }
+    }
+  ]
+}

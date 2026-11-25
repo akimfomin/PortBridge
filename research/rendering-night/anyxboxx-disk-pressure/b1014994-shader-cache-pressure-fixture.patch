@@ -1,0 +1,52 @@
+diff --git a/tests/test_shader_cache.py b/tests/test_shader_cache.py
+index 549ead4..cb2f487 100644
+--- a/tests/test_shader_cache.py
++++ b/tests/test_shader_cache.py
+@@ -1,4 +1,6 @@
+ """Cache disque des shaders compilés (emu/shader_cache.py) et son usage par rdna2_gpu.compile_dxil."""
++import os
++from pathlib import Path
+ import time
+ 
+ import pytest
+@@ -50,6 +52,40 @@ def test_oldest_entries_are_pruned(tmp_path):
+     assert fresh.get(keys[0]) is None and fresh.get(keys[-1]) == DXIL
+ 
+ 
++def test_pressure_prunes_in_one_metadata_pass(tmp_path, monkeypatch):
++    cache = shader_cache.ShaderCache(tmp_path, limit_bytes=4 * len(DXIL))
++    keys = [f"{number:064x}" for number in range(5)]
++    for number, key in enumerate(keys[:-1]):
++        cache.put(key, DXIL)
++        age = 1 if number == 2 else number  # Deux fichiers de même date.
++        os.utime(cache._path(key), (1_600_000_000 + age,) * 2)
++    other_file = cache._path(keys[0]).parent / "keep.txt"
++    other_file.write_bytes(b"keep")
++    reader = shader_cache.ShaderCache(tmp_path)
++    assert reader.get(keys[0]) == DXIL
++    oldest = cache.entries()[0].stem
++    assert oldest in (keys[1], keys[2])
++
++    metadata_reads = 0
++    stat = Path.stat
++
++    def count_stat(path, *args, **kwargs):
++        nonlocal metadata_reads
++        if path.suffix == ".dxil":
++            metadata_reads += 1
++        return stat(path, *args, **kwargs)
++
++    with monkeypatch.context() as probe:
++        probe.setattr(Path, "stat", count_stat)
++        cache.put(keys[-1], DXIL)
++    # Un sondage de la destination, puis une lecture par entrée inspectée.
++    assert metadata_reads == 1 + len(keys)
++    entries = cache.entries()
++    assert sum(path.stat().st_size for path in entries) == cache.limit
++    assert {path.stem for path in entries} == set(keys) - {oldest}
++    assert other_file.read_bytes() == b"keep"
++
++
+ @pytest.mark.skipif(rdna2_gpu.find_dxc() is None, reason="dxc absent")
+ def test_second_compilation_comes_from_the_cache(tmp_path, monkeypatch):
+     cache = shader_cache.ShaderCache(tmp_path)

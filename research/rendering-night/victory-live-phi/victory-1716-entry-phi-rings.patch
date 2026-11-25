@@ -1,0 +1,168 @@
+diff --git a/crates/victory-shader/src/emit/bitcode.rs b/crates/victory-shader/src/emit/bitcode.rs
+index c82a0b0..474539e 100644
+--- a/crates/victory-shader/src/emit/bitcode.rs
++++ b/crates/victory-shader/src/emit/bitcode.rs
+@@ -5,7 +5,7 @@
+ //! it is written: functions, then constants (all at module level), then the
+ //! instructions of `main` in block order.
+ 
+-use std::collections::HashMap;
++use std::collections::{HashMap, HashSet, hash_map::Entry};
+ 
+ #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+ pub(crate) struct Ty(u32);
+@@ -539,6 +539,9 @@ impl Module {
+             }
+         }
+         let reachable = self.reachable_blocks();
++        if std::env::var_os("VICTORY_PHI_RINGS_OFF").is_none() {
++            self.fold_entry_seeded_phi_rings(&reachable, &mut repl);
++        }
+         for i in 0..n {
+             map_operands(&mut self.insts[i].op, |v| resolve(&repl, v));
+         }
+@@ -684,6 +687,103 @@ impl Module {
+         }
+     }
+ 
++    /// Braun et al. (CC 2013), §3.2: a PHI cycle with one external value is
++    /// redundant. Here we handle only i32 rings in a header with an entry
++    /// edge and a self-latch. Those edges and an entry-body seed establish
++    /// dominance without another control-flow analysis.
++    fn fold_entry_seeded_phi_rings(&self, reachable: &[bool], repl: &mut [Option<V>]) {
++        let Some(entry) = self.blocks.first() else {
++            return;
++        };
++        let entry_edges = successors(entry.term);
++        if !entry_edges
++            .iter()
++            .any(|&head| head != 0 && self.blocks[head].phis.len() >= 2)
++        {
++            return;
++        }
++        let entry_values: HashSet<_> = entry.body.iter().copied().collect();
++        for &header in entry_edges.iter() {
++            let block = &self.blocks[header];
++            if header == 0 || block.phis.len() < 2 {
++                continue;
++            }
++            let count_edges = |from: usize| {
++                successors(self.blocks[from].term)
++                    .iter()
++                    .filter(|&&to| to == header)
++                    .count()
++            };
++            if count_edges(0) != 1
++                || count_edges(header) != 1
++                || reachable.iter().enumerate().any(|(from, &live)| {
++                    live && from != 0 && from != header && count_edges(from) != 0
++                })
++            {
++                continue;
++            }
++            let mut links = HashMap::new();
++            for &i in &block.phis {
++                let inst = &self.insts[i as usize];
++                if repl[i as usize].is_some() || self.int_bits(inst.ty) != Some(32) {
++                    continue;
++                }
++                let Op::Phi(incoming) = &inst.op else {
++                    continue;
++                };
++                let (seed, back) = match incoming.as_slice() {
++                    &[(seed, 0), (back, pred)] | &[(back, pred), (seed, 0)] if pred == header => {
++                        (seed, back)
++                    }
++                    _ => continue,
++                };
++                let V::Inst(next) = resolve(repl, back) else {
++                    continue;
++                };
++                let seed = resolve(repl, seed);
++                let seed_ty = match seed {
++                    V::Const(c) => self.consts.get(c as usize).and_then(|(ty, constant)| {
++                        matches!(constant, Const::Int(_)).then_some(*ty)
++                    }),
++                    V::Inst(s) if entry_values.contains(&s) => Some(self.insts[s as usize].ty),
++                    _ => None,
++                };
++                if seed_ty == Some(inst.ty) {
++                    links.insert(i, (next, seed));
++                }
++            }
++            // Each candidate has one back operand, so following the links either
++            // reaches a previously walked path or closes one ring of this path.
++            let mut indices = HashMap::new();
++            let mut path = Vec::new();
++            for &start in links.keys() {
++                let path_start = path.len();
++                let mut node = start;
++                while let Some(&(next, seed)) = links.get(&node) {
++                    match indices.entry(node) {
++                        Entry::Occupied(first) => {
++                            let first = *first.get();
++                            if first >= path_start
++                                && path.len() - first >= 2
++                                && path[first..].iter().all(|member| links[member].1 == seed)
++                            {
++                                for &member in &path[first..] {
++                                    repl[member as usize] = Some(seed);
++                                }
++                            }
++                            break;
++                        }
++                        Entry::Vacant(position) => {
++                            position.insert(path.len());
++                            path.push(node);
++                            node = next;
++                        }
++                    }
++                }
++            }
++        }
++    }
++
+     fn int_bits(&self, ty: Ty) -> Option<u32> {
+         match self.types[ty.0 as usize] {
+             TypeDef::Int(bits) if (1..=64).contains(&bits) => Some(bits),
+@@ -1785,4 +1885,40 @@ mod tests {
+         assert!(m.blocks[0].body.is_empty());
+         assert!(matches!(m.blocks[0].term, Some(Term::Br(x)) if x == t));
+     }
++
++    #[test]
++    fn entry_seeded_phi_rings_require_a_single_available_seed_and_exact_edges() {
++        for case in ["constant", "entry", "two", "none", "non-entry", "extra-pred", "duplicate"] {
++            let mut m = Module::default();
++            let (entry, header, exit) = (m.new_block(), m.new_block(), m.new_block());
++            let ty = m.int(32);
++            let a = m.i32(7);
++            let b = m.i32(13);
++            let take_back = m.bool(true);
++            let entry_value = m.bin(entry, Bin::Add, a, b);
++            let p = m.phi(header, ty);
++            let q = m.phi(header, ty);
++            let non_entry = m.bin(header, Bin::Add, a, b);
++            m.terminate(entry, Term::Br(header));
++            m.terminate(header, Term::CondBr(take_back, header, exit));
++            m.terminate(exit, if case == "extra-pred" { Term::Br(header) } else { Term::Ret });
++            let (source, other) = match case {
++                "entry" => (entry_value, entry_value),
++                "two" => (a, b),
++                "none" => (q, p),
++                "non-entry" => (non_entry, non_entry),
++                _ => (a, a),
++            };
++            m.set_phi(p, vec![(source, entry), (q, header)]);
++            let other_edge = if case == "duplicate" { header } else { entry };
++            m.set_phi(q, vec![(p, header), (other, other_edge)]);
++            let mut repl = vec![None; m.insts.len()];
++            m.fold_entry_seeded_phi_rings(&m.reachable_blocks(), &mut repl);
++            let expected = matches!(case, "constant" | "entry").then_some(source);
++            for member in [p, q] {
++                let V::Inst(i) = member else { unreachable!() };
++                assert_eq!(repl[i as usize], expected, "{case}");
++            }
++        }
++    }
+ }

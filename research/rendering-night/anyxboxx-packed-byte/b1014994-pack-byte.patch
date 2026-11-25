@@ -1,0 +1,313 @@
+diff --git a/PrototypeScarlett/emu/rdna2_exec_vop3.py b/PrototypeScarlett/emu/rdna2_exec_vop3.py
+index 368d378..6dcdaa6 100644
+--- a/PrototypeScarlett/emu/rdna2_exec_vop3.py
++++ b/PrototypeScarlett/emu/rdna2_exec_vop3.py
+@@ -12,6 +12,7 @@ from emu.rdna2_exec_ops import (MASK32, VECTOR, VECTOR_COMPARE, _float_op, _fma,
+ 
+ SIGN = 0x8000_0000
+ EXEC_LO = 126
++PACK_U8 = "v_cvt_pk_u8_f32"
+ OUTPUT_SCALE = {1: 2.0, 2: 4.0, 3: 0.5}
+ COMPARE_END, VOP2_START, VOP2_END, VOP1_START, VOP1_END = 0x100, 0x100, 0x140, 0x180, 0x200
+ 
+@@ -106,7 +107,7 @@ CARRY = {
+ }
+ LANE_OPERATIONS = frozenset({"v_readlane_b32", "v_writelane_b32", "v_mbcnt_lo_u32_b32", "v_mbcnt_hi_u32_b32"})
+ EXECUTABLE = frozenset(set(VECTOR) - {"v_readfirstlane_b32"} | set(VECTOR_COMPARE) | set(VECTOR3) | set(CARRY)
+-                       | LANE_OPERATIONS)
++                       | LANE_OPERATIONS | {PACK_U8})
+ 
+ 
+ class Fields:
+@@ -121,6 +122,10 @@ class Fields:
+         self.omod = (word >> 59) & 0x3
+         self.neg = (word >> 61) & 0x7
+ 
++    def pack_u8_supported(self):
++        # Seuls abs et neg de la source flottante sont pris en charge ici.
++        return not ((self.abs | self.neg) & 0b110 or self.clamp or self.omod)
++
+ 
+ def _inputs(wave, fields, lane, literal, modifiers):
+     values = []
+@@ -146,6 +151,8 @@ def _output(fields, value, is_float):
+ def execute(wave, name, opcode, word, literal):
+     """Exécute une instruction VOP3 dont le nom est dans EXECUTABLE."""
+     fields = Fields(word)
++    if name == PACK_U8:
++        return _pack_u8(wave, fields, literal)
+     if name in LANE_OPERATIONS:
+         return _lane_operation(wave, name, fields, literal)
+     if opcode < COMPARE_END:
+@@ -167,6 +174,20 @@ def execute(wave, name, opcode, word, literal):
+     return None
+ 
+ 
++def _pack_u8(wave, fields, literal):
++    if not fields.pack_u8_supported():
++        from emu.rdna2_exec import Untranslated
++        raise Untranslated(f"modificateurs non traduits : {PACK_U8}")
++    destination = wave.v[fields.vdst]
++    for lane in wave.active():
++        source, index, old = _inputs(wave, fields, lane, literal, True)
++        number = bits_float(source)
++        # L'interpréteur ne change pas le mode d'arrondi (plus proche, pair en cas d'égalité).
++        byte = 0 if math.isnan(number) else round(min(255, max(0, number)))
++        shift = (index & 3) * 8
++        destination[lane] = (old & ~(0xFF << shift)) | (byte << shift)
++
++
+ def _compare(wave, name, fields, literal):
+     test, writes_exec = VECTOR_COMPARE[name]
+     mask = 0
+diff --git a/PrototypeScarlett/emu/rdna2_hlsl.py b/PrototypeScarlett/emu/rdna2_hlsl.py
+index 1afc1b0..ceca586 100644
+--- a/PrototypeScarlett/emu/rdna2_hlsl.py
++++ b/PrototypeScarlett/emu/rdna2_hlsl.py
+@@ -13,7 +13,7 @@ import sys
+ 
+ from emu import rdna2, rdna2_hlsl_ext, rdna2_hlsl_image
+ from emu.rdna2_exec_ops import signed
+-from emu.rdna2_exec_vop3 import Fields
++from emu.rdna2_exec_vop3 import Fields, PACK_U8
+ from emu.rdna2_hlsl_memory import memory_statements
+ from emu.rdna2_hlsl_ops import (BRANCHES, HELPERS as ALU_HELPERS, SCALAR, VECTOR, Untranslatable,
+                                 compare_condition, hexa, is_compare, scalar_statement, scalar_target,
+@@ -119,6 +119,12 @@ def _modified(code, index, fields, literal, is_float):
+ 
+ 
+ def _vop3(name, opcode, fields, literal):
++    if name == PACK_U8:
++        if not fields.pack_u8_supported():
++            raise Untranslatable(f"modificateurs non traduits : {name}")
++        floating = _modified(fields.sources[0], 0, fields, literal, True)
++        index, old = (source(code, literal) for code in fields.sources[1:])
++        return [f"if ({ACTIVE}) v[{fields.vdst}] = PackU8F32({floating}, {index}, {old});"]
+     is_float = "_f32" in name and not name.startswith(("v_cvt_u32", "v_cvt_i32"))
+     a, b, c = (_modified(code, i, fields, literal, is_float) for i, code in enumerate(fields.sources))
+     if opcode < 0x100 and is_compare(name):
+diff --git a/PrototypeScarlett/emu/rdna2_hlsl_ops.py b/PrototypeScarlett/emu/rdna2_hlsl_ops.py
+index 771b443..0ff8b7b 100644
+--- a/PrototypeScarlett/emu/rdna2_hlsl_ops.py
++++ b/PrototypeScarlett/emu/rdna2_hlsl_ops.py
+@@ -47,6 +47,25 @@ uint SatF32ToU32(uint a) {
+   if ((a & 0x7FFFFFFFu) > 0x7F800000u || x <= 0.0f) return 0u;
+   return x >= 4294967296.0f ? 0xFFFFFFFFu : (uint)x;
+ }
++uint PackU8F32(uint bits, uint index, uint old) {
++  uint byteValue = 0u;
++  // De 0,5 exclu à +infini inclus : les autres valeurs donnent zéro.
++  if (bits > 0x3F000000u && bits <= 0x7F800000u) {
++    if (bits >= 0x437F0000u) {
++      byteValue = 255u;
++    } else {
++      // En deçà de 255, le décalage vaut 16 à 24. L'arrondi reste entier.
++      uint drop = 150u - (bits >> 23);
++      uint significand = (bits & 0x007FFFFFu) | 0x00800000u;
++      uint whole = significand >> drop;
++      uint fraction = significand & ((1u << drop) - 1u);
++      uint halfway = 1u << (drop - 1u);
++      byteValue = whole + (fraction > halfway || (fraction == halfway && (whole & 1u) != 0u) ? 1u : 0u);
++    }
++  }
++  uint shift = (index & 3u) * 8u;
++  return (old & ~(0xFFu << shift)) | (byteValue << shift);
++}
+ uint SBfeU32(uint v, uint c) {
+   uint w = (c >> 16) & 0x7Fu;
+   if (w == 0u) return 0u;
+diff --git a/README.md b/README.md
+index ddfe60d..d6b8d96 100644
+--- a/README.md
++++ b/README.md
+@@ -85,7 +85,7 @@ Both test games run without vertical sync: about 11,700 fps for SimpleTriangle a
+ | Table of the 396 GDK functions: interface and method number, extracted from `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ done |
+ | `XTaskQueue`, `XAsync`, `XThread` served by AnyXboxX: testgdk runs without the Windows runtime | ✅ done |
+ | Other GDK interfaces: delegated to the Windows GDK runtime, named by the trace | 🟡 in progress |
+-| 658 automated tests | ✅ done |
++| 659 automated tests | ✅ done |
+ | D3D12.X: `D3D12XboxCreateDevice`, console `ID3D12*` interfaces and `DXGIXPresentArray`, served by TomBox's Rust `d3d12_xs.dll` (MIT, 48 implemented exports, built by `tools/build_tombox.py d3d12_xs`, loaded with `ANYXBOXX_D3D12_XS=<path>`); untestable here without a console executable | 🟡 in progress |
+ | Console libraries from TomBox (Rust, GPL-3.0) for what AnyXboxX lacks: `xg_xs` (texture layouts, 23 exports) and full `xmem` (38 exports), with `ANYXBOXX_TOMBOX_DIR=<folder>`; built by `tools/build_tombox.py xg_xs xmem` | 🟡 in progress |
+ | Offline `XUser`: always-signed-in local profile, configurable gamertag (`ANYXBOXX_GAMERTAG`), testgdk sign-in succeeds | ✅ done |
+diff --git a/docs/i18n/README.de.md b/docs/i18n/README.de.md
+index b77ae1e..3ab5679 100644
+--- a/docs/i18n/README.de.md
++++ b/docs/i18n/README.de.md
+@@ -85,7 +85,7 @@ Beide Testspiele laufen ohne vertikale Synchronisation: etwa 11.700 Bilder/s fü
+ | Tabelle der 396 GDK-Funktionen: Schnittstelle und Methodennummer, aus `xgameruntime.lib` extrahiert (`tools/gdk_interfaces.py`) | ✅ erledigt |
+ | `XTaskQueue`, `XAsync`, `XThread` von AnyXboxX bereitgestellt: testgdk läuft ohne die Runtime von Windows | ✅ erledigt |
+ | Übrige GDK-Schnittstellen: an die GDK-Runtime von Windows delegiert, von der Ablaufverfolgung benannt | 🟡 in Arbeit |
+-| 658 automatisierte Tests | ✅ erledigt |
++| 659 automatisierte Tests | ✅ erledigt |
+ | D3D12.X: `D3D12XboxCreateDevice`, `ID3D12*`-Schnittstellen der Konsole und `DXGIXPresentArray`, bereitgestellt von TomBox' Rust-`d3d12_xs.dll` (MIT, 48 implementierte Exporte, gebaut mit `tools/build_tombox.py d3d12_xs`, geladen mit `ANYXBOXX_D3D12_XS=<Pfad>`); ohne Konsolen-Executable hier nicht testbar | 🟡 in Arbeit |
+ | Konsolenbibliotheken von TomBox (Rust, GPL-3.0) für das, was AnyXboxX fehlt: `xg_xs` (Texturlayouts, 23 Exporte) und vollständiges `xmem` (38 Exporte), mit `ANYXBOXX_TOMBOX_DIR=<Ordner>`; gebaut mit `tools/build_tombox.py xg_xs xmem` | 🟡 in Arbeit |
+ | `XUser` offline: immer angemeldetes lokales Profil, einstellbarer Gamertag (`ANYXBOXX_GAMERTAG`), Anmeldung von testgdk erfolgreich | ✅ erledigt |
+diff --git a/docs/i18n/README.es.md b/docs/i18n/README.es.md
+index 883aff5..f3ba051 100644
+--- a/docs/i18n/README.es.md
++++ b/docs/i18n/README.es.md
+@@ -85,7 +85,7 @@ Los dos juegos de prueba funcionan sin sincronización vertical: unos 11 700 f/s
+ | Tabla de las 396 funciones GDK: interfaz y número de método, extraídos de `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ hecho |
+ | `XTaskQueue`, `XAsync`, `XThread` servidas por AnyXboxX: testgdk funciona sin el runtime de Windows | ✅ hecho |
+ | Otras interfaces GDK: delegadas al runtime GDK de Windows, nombradas por la traza | 🟡 en curso |
+-| 658 pruebas automatizadas | ✅ hecho |
++| 659 pruebas automatizadas | ✅ hecho |
+ | D3D12.X: `D3D12XboxCreateDevice`, interfaces `ID3D12*` de la consola y `DXGIXPresentArray`, servidos por la `d3d12_xs.dll` en Rust de TomBox (MIT, 48 exportaciones implementadas, compilada con `tools/build_tombox.py d3d12_xs`, cargada con `ANYXBOXX_D3D12_XS=<ruta>`); no se puede probar aquí sin un ejecutable de consola | 🟡 en curso |
+ | Bibliotecas de consola de TomBox (Rust, GPL-3.0) para lo que falta en AnyXboxX: `xg_xs` (disposición de texturas, 23 exportaciones) y `xmem` completo (38 exportaciones), con `ANYXBOXX_TOMBOX_DIR=<carpeta>`; compiladas con `tools/build_tombox.py xg_xs xmem` | 🟡 en curso |
+ | `XUser` sin conexión: perfil local siempre conectado, gamertag configurable (`ANYXBOXX_GAMERTAG`), inicio de sesión de testgdk correcto | ✅ hecho |
+diff --git a/docs/i18n/README.fr.md b/docs/i18n/README.fr.md
+index 9c70a08..4d24906 100644
+--- a/docs/i18n/README.fr.md
++++ b/docs/i18n/README.fr.md
+@@ -87,7 +87,7 @@ Les deux jeux de test tournent sans synchronisation verticale : environ 11 700 i
+ | Table des 396 fonctions GDK : interface et n° de méthode, extraits de `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ fait |
+ | `XTaskQueue`, `XAsync`, `XThread` servies par AnyXboxX : testgdk tourne sans le runtime de Windows | ✅ fait |
+ | Autres interfaces GDK : déléguées au runtime GDK de Windows, nommées par la trace | 🟡 en cours |
+-| 658 tests automatisés | ✅ fait |
++| 659 tests automatisés | ✅ fait |
+ | D3D12.X : `D3D12XboxCreateDevice`, interfaces `ID3D12*` de la console et `DXGIXPresentArray`, servis par la `d3d12_xs.dll` en Rust de TomBox (MIT, 48 exports implémentés, compilée par `tools/build_tombox.py d3d12_xs`, chargée avec `ANYXBOXX_D3D12_XS=<chemin>`) ; pas testable ici sans exécutable console | 🟡 en cours |
+ | Bibliothèques console de TomBox (Rust, GPL-3.0) pour ce qui manque à AnyXboxX : `xg_xs` (agencement des textures, 23 exports) et `xmem` complet (38 exports), avec `ANYXBOXX_TOMBOX_DIR=<dossier>` ; compilées par `tools/build_tombox.py xg_xs xmem` | 🟡 en cours |
+ | `XUser` hors ligne : profil local toujours connecté, gamertag réglable (`ANYXBOXX_GAMERTAG`), connexion de testgdk réussie | ✅ fait |
+diff --git a/docs/i18n/README.it.md b/docs/i18n/README.it.md
+index 7b7879c..4225990 100644
+--- a/docs/i18n/README.it.md
++++ b/docs/i18n/README.it.md
+@@ -85,7 +85,7 @@ I due giochi di prova girano senza sincronizzazione verticale: circa 11 700 f/s
+ | Tabella delle 396 funzioni GDK: interfaccia e numero di metodo, estratti da `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ fatto |
+ | `XTaskQueue`, `XAsync`, `XThread` servite da AnyXboxX: testgdk funziona senza il runtime di Windows | ✅ fatto |
+ | Altre interfacce GDK: delegate al runtime GDK di Windows, nominate dalla traccia | 🟡 in corso |
+-| 658 test automatizzati | ✅ fatto |
++| 659 test automatizzati | ✅ fatto |
+ | D3D12.X: `D3D12XboxCreateDevice`, interfacce `ID3D12*` della console e `DXGIXPresentArray`, forniti dalla `d3d12_xs.dll` in Rust di TomBox (MIT, 48 export implementati, compilata con `tools/build_tombox.py d3d12_xs`, caricata con `ANYXBOXX_D3D12_XS=<percorso>`); non testabile qui senza un eseguibile console | 🟡 in corso |
+ | Librerie console di TomBox (Rust, GPL-3.0) per ciò che manca ad AnyXboxX: `xg_xs` (layout delle texture, 23 export) e `xmem` completo (38 export), con `ANYXBOXX_TOMBOX_DIR=<cartella>`; compilate con `tools/build_tombox.py xg_xs xmem` | 🟡 in corso |
+ | `XUser` offline: profilo locale sempre connesso, gamertag configurabile (`ANYXBOXX_GAMERTAG`), accesso di testgdk riuscito | ✅ fatto |
+diff --git a/docs/i18n/README.ja.md b/docs/i18n/README.ja.md
+index 7b245a3..fdef0a8 100644
+--- a/docs/i18n/README.ja.md
++++ b/docs/i18n/README.ja.md
+@@ -85,7 +85,7 @@ C++ ランタイムは、ゲームの DXGI スワップチェーンの `Present`
+ | 396 個の GDK 関数の表：インターフェースとメソッド番号を `xgameruntime.lib` から抽出（`tools/gdk_interfaces.py`） | ✅ 完了 |
+ | `XTaskQueue`、`XAsync`、`XThread` を AnyXboxX が提供：testgdk が Windows のランタイムなしで動作 | ✅ 完了 |
+ | その他の GDK のインターフェース：Windows の GDK ランタイムに委譲し、トレースで名前を表示 | 🟡 進行中 |
+-| 658 件の自動テスト | ✅ 完了 |
++| 659 件の自動テスト | ✅ 完了 |
+ | D3D12.X：`D3D12XboxCreateDevice`、コンソールの `ID3D12*` インターフェース、`DXGIXPresentArray` を TomBox の Rust 製 `d3d12_xs.dll`（MIT、実装済みエクスポート 48 個、`tools/build_tombox.py d3d12_xs` でビルド、`ANYXBOXX_D3D12_XS=<パス>` で読み込み）が提供。コンソール実行ファイルがないためここでは検証不可 | 🟡 進行中 |
+ | AnyXboxX にないものを補う TomBox（Rust、GPL-3.0）のコンソールライブラリ：`xg_xs`（テクスチャレイアウト、エクスポート 23 個）と完全な `xmem`（エクスポート 38 個）、`ANYXBOXX_TOMBOX_DIR=<フォルダー>` で使用。`tools/build_tombox.py xg_xs xmem` でビルド | 🟡 進行中 |
+ | オフラインの `XUser`：常にサインイン済みのローカルプロファイル、変更可能なゲーマータグ（`ANYXBOXX_GAMERTAG`）、testgdk のサインイン成功 | ✅ 完了 |
+diff --git a/docs/i18n/README.pt-BR.md b/docs/i18n/README.pt-BR.md
+index 50d4280..b30d248 100644
+--- a/docs/i18n/README.pt-BR.md
++++ b/docs/i18n/README.pt-BR.md
+@@ -85,7 +85,7 @@ Os dois jogos de teste rodam sem sincronização vertical: cerca de 11 700 q/s n
+ | Tabela das 396 funções do GDK: interface e número do método, extraídos de `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ feito |
+ | `XTaskQueue`, `XAsync`, `XThread` fornecidas pelo AnyXboxX: o testgdk roda sem o runtime do Windows | ✅ feito |
+ | Outras interfaces do GDK: delegadas ao runtime GDK do Windows, nomeadas pelo rastreamento | 🟡 em andamento |
+-| 658 testes automatizados | ✅ feito |
++| 659 testes automatizados | ✅ feito |
+ | D3D12.X: `D3D12XboxCreateDevice`, interfaces `ID3D12*` do console e `DXGIXPresentArray`, servidos pela `d3d12_xs.dll` em Rust do TomBox (MIT, 48 exportações implementadas, compilada por `tools/build_tombox.py d3d12_xs`, carregada com `ANYXBOXX_D3D12_XS=<caminho>`); não testável aqui sem um executável de console | 🟡 em andamento |
+ | Bibliotecas de console do TomBox (Rust, GPL-3.0) para o que falta no AnyXboxX: `xg_xs` (layout de texturas, 23 exportações) e `xmem` completo (38 exportações), com `ANYXBOXX_TOMBOX_DIR=<pasta>`; compiladas por `tools/build_tombox.py xg_xs xmem` | 🟡 em andamento |
+ | `XUser` offline: perfil local sempre conectado, gamertag configurável (`ANYXBOXX_GAMERTAG`), login do testgdk bem-sucedido | ✅ feito |
+diff --git a/docs/i18n/README.ru.md b/docs/i18n/README.ru.md
+index 2271789..23ce1ff 100644
+--- a/docs/i18n/README.ru.md
++++ b/docs/i18n/README.ru.md
+@@ -85,7 +85,7 @@ C++ рантайм измеряет время каждого `Present` цепо
+ | Таблица 396 функций GDK: интерфейс и номер метода, извлечённые из `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ готово |
+ | `XTaskQueue`, `XAsync`, `XThread` обслуживаются AnyXboxX: testgdk работает без рантайма Windows | ✅ готово |
+ | Другие интерфейсы GDK: делегируются рантайму Windows GDK, называются трассировкой | 🟡 в работе |
+-| 658 автоматических тестов | ✅ готово |
++| 659 автоматических тестов | ✅ готово |
+ | D3D12.X: `D3D12XboxCreateDevice`, консольные интерфейсы `ID3D12*` и `DXGIXPresentArray`, обслуживаются Rust-библиотекой `d3d12_xs.dll` от TomBox (MIT, 48 реализованных экспортов, собирается `tools/build_tombox.py d3d12_xs`, загружается через `ANYXBOXX_D3D12_XS=<путь>`); здесь не проверить без консольного исполняемого файла | 🟡 в работе |
+ | Консольные библиотеки TomBox (Rust, GPL-3.0) для того, чего не хватает AnyXboxX: `xg_xs` (раскладки текстур, 23 экспорта) и полный `xmem` (38 экспортов), с `ANYXBOXX_TOMBOX_DIR=<папка>`; собираются `tools/build_tombox.py xg_xs xmem` | 🟡 в работе |
+ | Офлайн `XUser`: всегда авторизованный локальный профиль, настраиваемый gamertag (`ANYXBOXX_GAMERTAG`), вход в testgdk успешен | ✅ готово |
+diff --git a/docs/i18n/README.zh-CN.md b/docs/i18n/README.zh-CN.md
+index eb19396..e5ba73f 100644
+--- a/docs/i18n/README.zh-CN.md
++++ b/docs/i18n/README.zh-CN.md
+@@ -85,7 +85,7 @@ C++ 运行时会为游戏 DXGI 交换链的每次 `Present` 计时，即使 DXGI
+ | 396 个 GDK 函数的表：接口和方法编号，提取自 `xgameruntime.lib`（`tools/gdk_interfaces.py`） | ✅ 已完成 |
+ | `XTaskQueue`、`XAsync`、`XThread` 由 AnyXboxX 提供：testgdk 无需 Windows 的运行时即可运行 | ✅ 已完成 |
+ | 其他 GDK 接口：委托给 Windows 的 GDK 运行时，由跟踪列出名称 | 🟡 进行中 |
+-| 658 个自动化测试 | ✅ 已完成 |
++| 659 个自动化测试 | ✅ 已完成 |
+ | D3D12.X：`D3D12XboxCreateDevice`、主机的 `ID3D12*` 接口和 `DXGIXPresentArray`，由 TomBox 的 Rust 版 `d3d12_xs.dll` 提供（MIT，48 个已实现导出，用 `tools/build_tombox.py d3d12_xs` 构建，通过 `ANYXBOXX_D3D12_XS=<路径>` 加载）；没有主机可执行文件，此处无法测试 | 🟡 进行中 |
+ | 用 TomBox（Rust，GPL-3.0）的主机库补足 AnyXboxX 缺少的部分：`xg_xs`（纹理布局，23 个导出）和完整的 `xmem`（38 个导出），通过 `ANYXBOXX_TOMBOX_DIR=<文件夹>` 使用；由 `tools/build_tombox.py xg_xs xmem` 构建 | 🟡 进行中 |
+ | 离线 `XUser`：始终已登录的本地档案、可设置的游戏玩家标签（`ANYXBOXX_GAMERTAG`）、testgdk 登录成功 | ✅ 已完成 |
+diff --git a/tests/test_rdna2_exec.py b/tests/test_rdna2_exec.py
+index 4607888..73001c0 100644
+--- a/tests/test_rdna2_exec.py
++++ b/tests/test_rdna2_exec.py
+@@ -128,6 +128,54 @@ def test_vop3_integer_and_bitfield_operations():
+     assert [wave.v[4][lane] for lane in (0, 6, 31)] == [4, 6, 9]
+ 
+ 
++def test_vop3_packs_float_to_unsigned_byte_with_round_to_even():
++    from emu import rdna2_hlsl
++
++    opcode = "v_cvt_pk_u8_f32"
++    # Valeurs découlant des mesures gfx1030/gfx1035, mode par défaut.
++    # https://github.com/boykopovar/AnyPS5/pull/6011
++    cases = [
++        (0x0000_0000, 0), (0x8000_0000, 0), (0x0000_0001, 0),
++        (0x3EFF_FFFF, 0), (0x3F00_0000, 0), (0x3F00_0001, 1),
++        (0x3FC0_0000, 2), (0x4020_0000, 2), (0x4060_0000, 4),
++        (0x437E_8000, 254), (0x437F_8000, 255), (0x4380_0000, 255),
++        (0x7F80_0000, 255), (0xFF80_0000, 0), (0x7FC0_0011, 0), (0x7F80_0001, 0),
++    ]
++    old = 0xAABB_CCDD
++    slots = [0, 1, 2, 3, 4, 5, 6, 0xFFFF_FFFF] * 4
++    code = program(*vop3(opcode, 3, V + 1, V + 2, V + 3))
++    for value, byte in cases:
++        wave = rdna2_exec.Wave()
++        wave.s[EXEC_LO] = 0x0000_FFFF
++        wave.v[1] = [value] * rdna2_exec.LANES
++        wave.v[2] = slots.copy()
++        wave.v[3] = [old] * rdna2_exec.LANES
++        rdna2_exec.run(code, wave)
++        expected = []
++        for slot in slots[:16]:
++            start = (slot & 3) * 8
++            expected.append((old & ~(0xFF << start)) | (byte << start))
++        assert wave.v[3] == expected + [old] * 16, f"source {value:#010x}"
++
++    modifiers = program(
++        *vop3(opcode, 1, 245, const(0), LITERAL, abs_=1), old,  # abs(-2.0)
++        *vop3(opcode, 2, 244, const(1), LITERAL, neg=1), old,   # -2.0
++    )
++    wave = rdna2_exec.run(modifiers)
++    assert wave.v[1] == [0xAABB_CC02] * rdna2_exec.LANES
++    assert wave.v[2] == [0xAABB_00DD] * rdna2_exec.LANES
++    assert "v[3] = PackU8F32(v[1], v[2], v[3]);" in rdna2_hlsl.translate(code)
++    assert "PackU8F32((0xC0000000u & 0x7FFFFFFFu), 0u, 0xAABBCCDDu)" in rdna2_hlsl.translate(modifiers)
++    bad_modifiers = program(*vop3(opcode, 3, V + 1, V + 2, V + 3, neg=2))
++    mode_write = program(sopp("s_round_mode", 1), *vop3(opcode, 3, V + 1, V + 2, V + 3))
++    for execute, error in [(rdna2_exec.run, rdna2_exec.Untranslated),
++                           (rdna2_hlsl.translate, rdna2_hlsl.Untranslatable)]:
++        with pytest.raises(error, match=opcode):
++            execute(bad_modifiers)
++        with pytest.raises(error, match="s_round_mode"):
++            execute(mode_write)
++
++
+ def test_vop3_compare_writes_a_scalar_mask():
+     wave = rdna2_exec.run(program(*vop3("v_cmp_gt_u32", 4, const(16), V + 0)))
+     assert wave.s[4] == 0xFFFF and wave.vcc == 0
+diff --git a/tests/test_rdna2_hlsl.py b/tests/test_rdna2_hlsl.py
+index 1762d82..64f5ff4 100644
+--- a/tests/test_rdna2_hlsl.py
++++ b/tests/test_rdna2_hlsl.py
+@@ -132,6 +132,13 @@ def test_vop3_integer_operations_match():
+         *vop3("v_readlane_b32", 11, V + 0, const(5)),
+         vop1("v_mov_b32", 6, 11),
+         vop1("v_mov_b32", 7, 10),                                   # masque de retenue
++        vop1("v_mov_b32", 8, LITERAL), 0xAABB_CCDD,
++        vop1("v_cvt_f32_u32", 9, V + 0),
++        vop2("v_mul_f32", 9, 240, 9),                              # 0, 0.5, 1, 1.5, ...
++        *vop3("v_cvt_pk_u8_f32", 8, V + 9, V + 0, V + 8),
+         *store_lane(1, 0), *store_lane(2, 1), *store_lane(3, 2), *store_lane(4, 3),
+-        *store_lane(5, 4), *store_lane(6, 5), *store_lane(7, 6)))
++        *store_lane(5, 4), *store_lane(6, 5), *store_lane(7, 6), *store_lane(8, 7)))
+     assert actual == expected
++    assert struct.unpack_from("<4I", actual, OUTPUT + 7 * 128) == (
++        0xAABB_CC00, 0xAABB_00DD, 0xAA01_CCDD, 0x02BB_CCDD,
++    )

@@ -1,0 +1,222 @@
+diff --git a/PrototypeScarlett/emu/shader_cache.py b/PrototypeScarlett/emu/shader_cache.py
+index c781d07..1e2c82e 100644
+--- a/PrototypeScarlett/emu/shader_cache.py
++++ b/PrototypeScarlett/emu/shader_cache.py
+@@ -8,6 +8,7 @@ une entrée qui n'est pas un conteneur DXIL est écartée ; au-delà de ANYXBOXX
+ (256 par défaut), les entrées les plus anciennes sont supprimées.
+ """
+ import hashlib
++from heapq import heapify, heappop
+ import os
+ from dataclasses import dataclass
+ from pathlib import Path
+@@ -89,22 +90,31 @@ class ShaderCache:
+         os.replace(temporary, path)
+         self.memory[key] = dxil
+         if self._total is None:
+-            self._total = sum(entry.stat().st_size for entry in self.entries())
++            self._total = sum(path.stat().st_size for path in self._paths())
+         else:
+             self._total += len(dxil) - replaced
+         if self._total > self.limit:
+             self.prune()
+ 
++    def _paths(self):
++        return self.folder.glob(f"*/*{SUFFIX}")
++
+     def entries(self):
+-        return sorted(self.folder.glob(f"*/*{SUFFIX}"), key=lambda p: p.stat().st_mtime)
++        return sorted(self._paths(), key=lambda path: path.stat().st_mtime)
+ 
+     def prune(self):
+         """Supprime les entrées les plus anciennes tant que le cache dépasse sa limite."""
+-        entries = self.entries()
+-        total = sum(p.stat().st_size for p in entries)
+-        for path in entries:
+-            if total <= self.limit:
+-                break
+-            total -= path.stat().st_size
+-            path.unlink(missing_ok=True)
++        entries = []
++        total = 0
++        for order, path in enumerate(self._paths()):
++            info = path.stat()
++            # À date égale, le parcours du dossier donne l'ordre comme dans entries().
++            entries.append((info.st_mtime, order, info.st_size, path))
++            total += info.st_size
++        if total > self.limit:
++            heapify(entries)
++            while entries and total > self.limit:
++                _, _, size, path = heappop(entries)
++                path.unlink(missing_ok=True)
++                total -= size
+         self._total = total
+diff --git a/README.md b/README.md
+index ddfe60d..d6b8d96 100644
+--- a/README.md
++++ b/README.md
+@@ -85,7 +85,7 @@ Both test games run without vertical sync: about 11,700 fps for SimpleTriangle a
+ | Table of the 396 GDK functions: interface and method number, extracted from `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ done |
+ | `XTaskQueue`, `XAsync`, `XThread` served by AnyXboxX: testgdk runs without the Windows runtime | ✅ done |
+ | Other GDK interfaces: delegated to the Windows GDK runtime, named by the trace | 🟡 in progress |
+-| 658 automated tests | ✅ done |
++| 659 automated tests | ✅ done |
+ | D3D12.X: `D3D12XboxCreateDevice`, console `ID3D12*` interfaces and `DXGIXPresentArray`, served by TomBox's Rust `d3d12_xs.dll` (MIT, 48 implemented exports, built by `tools/build_tombox.py d3d12_xs`, loaded with `ANYXBOXX_D3D12_XS=<path>`); untestable here without a console executable | 🟡 in progress |
+ | Console libraries from TomBox (Rust, GPL-3.0) for what AnyXboxX lacks: `xg_xs` (texture layouts, 23 exports) and full `xmem` (38 exports), with `ANYXBOXX_TOMBOX_DIR=<folder>`; built by `tools/build_tombox.py xg_xs xmem` | 🟡 in progress |
+ | Offline `XUser`: always-signed-in local profile, configurable gamertag (`ANYXBOXX_GAMERTAG`), testgdk sign-in succeeds | ✅ done |
+diff --git a/docs/i18n/README.de.md b/docs/i18n/README.de.md
+index b77ae1e..3ab5679 100644
+--- a/docs/i18n/README.de.md
++++ b/docs/i18n/README.de.md
+@@ -85,7 +85,7 @@ Beide Testspiele laufen ohne vertikale Synchronisation: etwa 11.700 Bilder/s fü
+ | Tabelle der 396 GDK-Funktionen: Schnittstelle und Methodennummer, aus `xgameruntime.lib` extrahiert (`tools/gdk_interfaces.py`) | ✅ erledigt |
+ | `XTaskQueue`, `XAsync`, `XThread` von AnyXboxX bereitgestellt: testgdk läuft ohne die Runtime von Windows | ✅ erledigt |
+ | Übrige GDK-Schnittstellen: an die GDK-Runtime von Windows delegiert, von der Ablaufverfolgung benannt | 🟡 in Arbeit |
+-| 658 automatisierte Tests | ✅ erledigt |
++| 659 automatisierte Tests | ✅ erledigt |
+ | D3D12.X: `D3D12XboxCreateDevice`, `ID3D12*`-Schnittstellen der Konsole und `DXGIXPresentArray`, bereitgestellt von TomBox' Rust-`d3d12_xs.dll` (MIT, 48 implementierte Exporte, gebaut mit `tools/build_tombox.py d3d12_xs`, geladen mit `ANYXBOXX_D3D12_XS=<Pfad>`); ohne Konsolen-Executable hier nicht testbar | 🟡 in Arbeit |
+ | Konsolenbibliotheken von TomBox (Rust, GPL-3.0) für das, was AnyXboxX fehlt: `xg_xs` (Texturlayouts, 23 Exporte) und vollständiges `xmem` (38 Exporte), mit `ANYXBOXX_TOMBOX_DIR=<Ordner>`; gebaut mit `tools/build_tombox.py xg_xs xmem` | 🟡 in Arbeit |
+ | `XUser` offline: immer angemeldetes lokales Profil, einstellbarer Gamertag (`ANYXBOXX_GAMERTAG`), Anmeldung von testgdk erfolgreich | ✅ erledigt |
+diff --git a/docs/i18n/README.es.md b/docs/i18n/README.es.md
+index 883aff5..f3ba051 100644
+--- a/docs/i18n/README.es.md
++++ b/docs/i18n/README.es.md
+@@ -85,7 +85,7 @@ Los dos juegos de prueba funcionan sin sincronización vertical: unos 11 700 f/s
+ | Tabla de las 396 funciones GDK: interfaz y número de método, extraídos de `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ hecho |
+ | `XTaskQueue`, `XAsync`, `XThread` servidas por AnyXboxX: testgdk funciona sin el runtime de Windows | ✅ hecho |
+ | Otras interfaces GDK: delegadas al runtime GDK de Windows, nombradas por la traza | 🟡 en curso |
+-| 658 pruebas automatizadas | ✅ hecho |
++| 659 pruebas automatizadas | ✅ hecho |
+ | D3D12.X: `D3D12XboxCreateDevice`, interfaces `ID3D12*` de la consola y `DXGIXPresentArray`, servidos por la `d3d12_xs.dll` en Rust de TomBox (MIT, 48 exportaciones implementadas, compilada con `tools/build_tombox.py d3d12_xs`, cargada con `ANYXBOXX_D3D12_XS=<ruta>`); no se puede probar aquí sin un ejecutable de consola | 🟡 en curso |
+ | Bibliotecas de consola de TomBox (Rust, GPL-3.0) para lo que falta en AnyXboxX: `xg_xs` (disposición de texturas, 23 exportaciones) y `xmem` completo (38 exportaciones), con `ANYXBOXX_TOMBOX_DIR=<carpeta>`; compiladas con `tools/build_tombox.py xg_xs xmem` | 🟡 en curso |
+ | `XUser` sin conexión: perfil local siempre conectado, gamertag configurable (`ANYXBOXX_GAMERTAG`), inicio de sesión de testgdk correcto | ✅ hecho |
+diff --git a/docs/i18n/README.fr.md b/docs/i18n/README.fr.md
+index 9c70a08..4d24906 100644
+--- a/docs/i18n/README.fr.md
++++ b/docs/i18n/README.fr.md
+@@ -87,7 +87,7 @@ Les deux jeux de test tournent sans synchronisation verticale : environ 11 700 i
+ | Table des 396 fonctions GDK : interface et n° de méthode, extraits de `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ fait |
+ | `XTaskQueue`, `XAsync`, `XThread` servies par AnyXboxX : testgdk tourne sans le runtime de Windows | ✅ fait |
+ | Autres interfaces GDK : déléguées au runtime GDK de Windows, nommées par la trace | 🟡 en cours |
+-| 658 tests automatisés | ✅ fait |
++| 659 tests automatisés | ✅ fait |
+ | D3D12.X : `D3D12XboxCreateDevice`, interfaces `ID3D12*` de la console et `DXGIXPresentArray`, servis par la `d3d12_xs.dll` en Rust de TomBox (MIT, 48 exports implémentés, compilée par `tools/build_tombox.py d3d12_xs`, chargée avec `ANYXBOXX_D3D12_XS=<chemin>`) ; pas testable ici sans exécutable console | 🟡 en cours |
+ | Bibliothèques console de TomBox (Rust, GPL-3.0) pour ce qui manque à AnyXboxX : `xg_xs` (agencement des textures, 23 exports) et `xmem` complet (38 exports), avec `ANYXBOXX_TOMBOX_DIR=<dossier>` ; compilées par `tools/build_tombox.py xg_xs xmem` | 🟡 en cours |
+ | `XUser` hors ligne : profil local toujours connecté, gamertag réglable (`ANYXBOXX_GAMERTAG`), connexion de testgdk réussie | ✅ fait |
+diff --git a/docs/i18n/README.it.md b/docs/i18n/README.it.md
+index 7b7879c..4225990 100644
+--- a/docs/i18n/README.it.md
++++ b/docs/i18n/README.it.md
+@@ -85,7 +85,7 @@ I due giochi di prova girano senza sincronizzazione verticale: circa 11 700 f/s
+ | Tabella delle 396 funzioni GDK: interfaccia e numero di metodo, estratti da `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ fatto |
+ | `XTaskQueue`, `XAsync`, `XThread` servite da AnyXboxX: testgdk funziona senza il runtime di Windows | ✅ fatto |
+ | Altre interfacce GDK: delegate al runtime GDK di Windows, nominate dalla traccia | 🟡 in corso |
+-| 658 test automatizzati | ✅ fatto |
++| 659 test automatizzati | ✅ fatto |
+ | D3D12.X: `D3D12XboxCreateDevice`, interfacce `ID3D12*` della console e `DXGIXPresentArray`, forniti dalla `d3d12_xs.dll` in Rust di TomBox (MIT, 48 export implementati, compilata con `tools/build_tombox.py d3d12_xs`, caricata con `ANYXBOXX_D3D12_XS=<percorso>`); non testabile qui senza un eseguibile console | 🟡 in corso |
+ | Librerie console di TomBox (Rust, GPL-3.0) per ciò che manca ad AnyXboxX: `xg_xs` (layout delle texture, 23 export) e `xmem` completo (38 export), con `ANYXBOXX_TOMBOX_DIR=<cartella>`; compilate con `tools/build_tombox.py xg_xs xmem` | 🟡 in corso |
+ | `XUser` offline: profilo locale sempre connesso, gamertag configurabile (`ANYXBOXX_GAMERTAG`), accesso di testgdk riuscito | ✅ fatto |
+diff --git a/docs/i18n/README.ja.md b/docs/i18n/README.ja.md
+index 7b245a3..fdef0a8 100644
+--- a/docs/i18n/README.ja.md
++++ b/docs/i18n/README.ja.md
+@@ -85,7 +85,7 @@ C++ ランタイムは、ゲームの DXGI スワップチェーンの `Present`
+ | 396 個の GDK 関数の表：インターフェースとメソッド番号を `xgameruntime.lib` から抽出（`tools/gdk_interfaces.py`） | ✅ 完了 |
+ | `XTaskQueue`、`XAsync`、`XThread` を AnyXboxX が提供：testgdk が Windows のランタイムなしで動作 | ✅ 完了 |
+ | その他の GDK のインターフェース：Windows の GDK ランタイムに委譲し、トレースで名前を表示 | 🟡 進行中 |
+-| 658 件の自動テスト | ✅ 完了 |
++| 659 件の自動テスト | ✅ 完了 |
+ | D3D12.X：`D3D12XboxCreateDevice`、コンソールの `ID3D12*` インターフェース、`DXGIXPresentArray` を TomBox の Rust 製 `d3d12_xs.dll`（MIT、実装済みエクスポート 48 個、`tools/build_tombox.py d3d12_xs` でビルド、`ANYXBOXX_D3D12_XS=<パス>` で読み込み）が提供。コンソール実行ファイルがないためここでは検証不可 | 🟡 進行中 |
+ | AnyXboxX にないものを補う TomBox（Rust、GPL-3.0）のコンソールライブラリ：`xg_xs`（テクスチャレイアウト、エクスポート 23 個）と完全な `xmem`（エクスポート 38 個）、`ANYXBOXX_TOMBOX_DIR=<フォルダー>` で使用。`tools/build_tombox.py xg_xs xmem` でビルド | 🟡 進行中 |
+ | オフラインの `XUser`：常にサインイン済みのローカルプロファイル、変更可能なゲーマータグ（`ANYXBOXX_GAMERTAG`）、testgdk のサインイン成功 | ✅ 完了 |
+diff --git a/docs/i18n/README.pt-BR.md b/docs/i18n/README.pt-BR.md
+index 50d4280..b30d248 100644
+--- a/docs/i18n/README.pt-BR.md
++++ b/docs/i18n/README.pt-BR.md
+@@ -85,7 +85,7 @@ Os dois jogos de teste rodam sem sincronização vertical: cerca de 11 700 q/s n
+ | Tabela das 396 funções do GDK: interface e número do método, extraídos de `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ feito |
+ | `XTaskQueue`, `XAsync`, `XThread` fornecidas pelo AnyXboxX: o testgdk roda sem o runtime do Windows | ✅ feito |
+ | Outras interfaces do GDK: delegadas ao runtime GDK do Windows, nomeadas pelo rastreamento | 🟡 em andamento |
+-| 658 testes automatizados | ✅ feito |
++| 659 testes automatizados | ✅ feito |
+ | D3D12.X: `D3D12XboxCreateDevice`, interfaces `ID3D12*` do console e `DXGIXPresentArray`, servidos pela `d3d12_xs.dll` em Rust do TomBox (MIT, 48 exportações implementadas, compilada por `tools/build_tombox.py d3d12_xs`, carregada com `ANYXBOXX_D3D12_XS=<caminho>`); não testável aqui sem um executável de console | 🟡 em andamento |
+ | Bibliotecas de console do TomBox (Rust, GPL-3.0) para o que falta no AnyXboxX: `xg_xs` (layout de texturas, 23 exportações) e `xmem` completo (38 exportações), com `ANYXBOXX_TOMBOX_DIR=<pasta>`; compiladas por `tools/build_tombox.py xg_xs xmem` | 🟡 em andamento |
+ | `XUser` offline: perfil local sempre conectado, gamertag configurável (`ANYXBOXX_GAMERTAG`), login do testgdk bem-sucedido | ✅ feito |
+diff --git a/docs/i18n/README.ru.md b/docs/i18n/README.ru.md
+index 2271789..23ce1ff 100644
+--- a/docs/i18n/README.ru.md
++++ b/docs/i18n/README.ru.md
+@@ -85,7 +85,7 @@ C++ рантайм измеряет время каждого `Present` цепо
+ | Таблица 396 функций GDK: интерфейс и номер метода, извлечённые из `xgameruntime.lib` (`tools/gdk_interfaces.py`) | ✅ готово |
+ | `XTaskQueue`, `XAsync`, `XThread` обслуживаются AnyXboxX: testgdk работает без рантайма Windows | ✅ готово |
+ | Другие интерфейсы GDK: делегируются рантайму Windows GDK, называются трассировкой | 🟡 в работе |
+-| 658 автоматических тестов | ✅ готово |
++| 659 автоматических тестов | ✅ готово |
+ | D3D12.X: `D3D12XboxCreateDevice`, консольные интерфейсы `ID3D12*` и `DXGIXPresentArray`, обслуживаются Rust-библиотекой `d3d12_xs.dll` от TomBox (MIT, 48 реализованных экспортов, собирается `tools/build_tombox.py d3d12_xs`, загружается через `ANYXBOXX_D3D12_XS=<путь>`); здесь не проверить без консольного исполняемого файла | 🟡 в работе |
+ | Консольные библиотеки TomBox (Rust, GPL-3.0) для того, чего не хватает AnyXboxX: `xg_xs` (раскладки текстур, 23 экспорта) и полный `xmem` (38 экспортов), с `ANYXBOXX_TOMBOX_DIR=<папка>`; собираются `tools/build_tombox.py xg_xs xmem` | 🟡 в работе |
+ | Офлайн `XUser`: всегда авторизованный локальный профиль, настраиваемый gamertag (`ANYXBOXX_GAMERTAG`), вход в testgdk успешен | ✅ готово |
+diff --git a/docs/i18n/README.zh-CN.md b/docs/i18n/README.zh-CN.md
+index eb19396..e5ba73f 100644
+--- a/docs/i18n/README.zh-CN.md
++++ b/docs/i18n/README.zh-CN.md
+@@ -85,7 +85,7 @@ C++ 运行时会为游戏 DXGI 交换链的每次 `Present` 计时，即使 DXGI
+ | 396 个 GDK 函数的表：接口和方法编号，提取自 `xgameruntime.lib`（`tools/gdk_interfaces.py`） | ✅ 已完成 |
+ | `XTaskQueue`、`XAsync`、`XThread` 由 AnyXboxX 提供：testgdk 无需 Windows 的运行时即可运行 | ✅ 已完成 |
+ | 其他 GDK 接口：委托给 Windows 的 GDK 运行时，由跟踪列出名称 | 🟡 进行中 |
+-| 658 个自动化测试 | ✅ 已完成 |
++| 659 个自动化测试 | ✅ 已完成 |
+ | D3D12.X：`D3D12XboxCreateDevice`、主机的 `ID3D12*` 接口和 `DXGIXPresentArray`，由 TomBox 的 Rust 版 `d3d12_xs.dll` 提供（MIT，48 个已实现导出，用 `tools/build_tombox.py d3d12_xs` 构建，通过 `ANYXBOXX_D3D12_XS=<路径>` 加载）；没有主机可执行文件，此处无法测试 | 🟡 进行中 |
+ | 用 TomBox（Rust，GPL-3.0）的主机库补足 AnyXboxX 缺少的部分：`xg_xs`（纹理布局，23 个导出）和完整的 `xmem`（38 个导出），通过 `ANYXBOXX_TOMBOX_DIR=<文件夹>` 使用；由 `tools/build_tombox.py xg_xs xmem` 构建 | 🟡 进行中 |
+ | 离线 `XUser`：始终已登录的本地档案、可设置的游戏玩家标签（`ANYXBOXX_GAMERTAG`）、testgdk 登录成功 | ✅ 已完成 |
+diff --git a/tests/test_shader_cache.py b/tests/test_shader_cache.py
+index 549ead4..cb2f487 100644
+--- a/tests/test_shader_cache.py
++++ b/tests/test_shader_cache.py
+@@ -1,4 +1,6 @@
+ """Cache disque des shaders compilés (emu/shader_cache.py) et son usage par rdna2_gpu.compile_dxil."""
++import os
++from pathlib import Path
+ import time
+ 
+ import pytest
+@@ -50,6 +52,40 @@ def test_oldest_entries_are_pruned(tmp_path):
+     assert fresh.get(keys[0]) is None and fresh.get(keys[-1]) == DXIL
+ 
+ 
++def test_pressure_prunes_in_one_metadata_pass(tmp_path, monkeypatch):
++    cache = shader_cache.ShaderCache(tmp_path, limit_bytes=4 * len(DXIL))
++    keys = [f"{number:064x}" for number in range(5)]
++    for number, key in enumerate(keys[:-1]):
++        cache.put(key, DXIL)
++        age = 1 if number == 2 else number  # Deux fichiers de même date.
++        os.utime(cache._path(key), (1_600_000_000 + age,) * 2)
++    other_file = cache._path(keys[0]).parent / "keep.txt"
++    other_file.write_bytes(b"keep")
++    reader = shader_cache.ShaderCache(tmp_path)
++    assert reader.get(keys[0]) == DXIL
++    oldest = cache.entries()[0].stem
++    assert oldest in (keys[1], keys[2])
++
++    metadata_reads = 0
++    stat = Path.stat
++
++    def count_stat(path, *args, **kwargs):
++        nonlocal metadata_reads
++        if path.suffix == ".dxil":
++            metadata_reads += 1
++        return stat(path, *args, **kwargs)
++
++    with monkeypatch.context() as probe:
++        probe.setattr(Path, "stat", count_stat)
++        cache.put(keys[-1], DXIL)
++    # Un sondage de la destination, puis une lecture par entrée inspectée.
++    assert metadata_reads == 1 + len(keys)
++    entries = cache.entries()
++    assert sum(path.stat().st_size for path in entries) == cache.limit
++    assert {path.stem for path in entries} == set(keys) - {oldest}
++    assert other_file.read_bytes() == b"keep"
++
++
+ @pytest.mark.skipif(rdna2_gpu.find_dxc() is None, reason="dxc absent")
+ def test_second_compilation_comes_from_the_cache(tmp_path, monkeypatch):
+     cache = shader_cache.ShaderCache(tmp_path)

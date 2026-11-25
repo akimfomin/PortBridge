@@ -1,0 +1,21 @@
+{
+  "base": "758bf7fbc6a35403028c4410ec94a5738b96bc29",
+  "candidate_local_commit": "718574ed12a2294eca0489891015a8c6a086cde9",
+  "worker_sha256": "ede143f98c82c70f11293fc3ba5894c5a9383ad37483459da74121e96c7f73cd",
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "adapter_luid": "00000000:0000b416",
+  "native_cases_passed": 8,
+  "checked_dwords": 72,
+  "cases": [
+    "control-2-1",
+    "candidate-2-1",
+    "control-16-1",
+    "candidate-16-1",
+    "control-2-2",
+    "candidate-2-2",
+    "control-16-2",
+    "candidate-16-2"
+  ],
+  "initial_stop": "System commit headroom fell to 3.82 GiB, below the 4 GiB threshold",
+  "remaining_cases_completed_later": 6
+}

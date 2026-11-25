@@ -1,0 +1,9 @@
+Public head eb6a08cd359d98b5777e70d54d0ae8a75879495a
+Compute branch SHA-256 8566f8734e793e3979ab093cfe426fc1be71f915e2858ee5c07de45cff30edd5
+eager 499 ms: 0 checkpoints
+eager 500 ms: 1 checkpoints
+eager 501 ms: 1 checkpoints
+first-use 499 ms: 0 checkpoints
+first-use 500 ms: 0 checkpoints
+first-use 501 ms: 0 checkpoints
+48 cases, 2 checkpoints

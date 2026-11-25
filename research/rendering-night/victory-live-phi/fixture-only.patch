@@ -1,0 +1,118 @@
+diff --git a/crates/victory-shader/examples/portbridge_phi_emit.rs b/crates/victory-shader/examples/portbridge_phi_emit.rs
+new file mode 100644
+index 0000000..a883e45
+--- /dev/null
++++ b/crates/victory-shader/examples/portbridge_phi_emit.rs
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-3.0-or-later
++//! PortBridge synthetic scalar-register rotations for VIctory.
++//! The compute and descriptor setup follows alessiodeia's VALU fixture (2e5001cf9d11).
++
++#[cfg(windows)]
++mod windows_fixture {
++    use std::path::Path;
++
++    use victory_shader::native::{ComputeIo, StageIo};
++    use victory_shader::{
++        Container, HwStage, NativeProgram, ResourceType, RootParam, RootType, UsedResource,
++        emit, io, ir, resource, structure,
++    };
++
++    const FIRST: u8 = 20;
++    const TEMP: u8 = 36;
++    const COUNT: u8 = 37;
++    const INLINE_ZERO: u8 = 128;
++
++    fn scalar_move(dest: u8, src: u8) -> u32 {
++        0xBE80_0300 | u32::from(dest) << 16 | u32::from(src)
++    }
++
++    fn source(width: u8, seeds: u8) -> Vec<u8> {
++        let (temp, count) = if width > 16 { (84, 85) } else { (TEMP, COUNT) };
++        // The register and descriptor convention follows emit::valu_tests' synthetic CS.
++        let mut words = vec![scalar_move(5, INLINE_ZERO), 0xF408_0202, 0xFA00_0000];
++        for i in 0..width {
++            words.push(scalar_move(FIRST + i, i % seeds));
++        }
++        words.push(scalar_move(count, INLINE_ZERO + 3));
++
++        let header = words.len();
++        words.push(scalar_move(temp, FIRST));
++        for i in 0..width - 1 {
++            words.push(scalar_move(FIRST + i, FIRST + i + 1));
++        }
++        words.push(scalar_move(FIRST + width - 1, temp));
++        // s_sub_u32 COUNT, COUNT, 1; s_cmp_lg_u32 COUNT, 0; s_cbranch_scc1 header.
++        words.push(0x8080_8100 | u32::from(count) << 16 | u32::from(count));
++        words.push(0xBF07_8000 | u32::from(count));
++        let offset = i16::try_from(header as isize - words.len() as isize - 1).unwrap();
++        words.push(0xBF85_0000 | u32::from(offset as u16));
++
++        for i in 0..width {
++            // v_mov_b32 v0, s(FIRST+i); buffer_store_dword v0, off, s[8:11], 0 offset:4*i.
++            words.push(0x7E00_0200 | u32::from(FIRST + i));
++            words.extend([0xE070_0000 | 4 * u32::from(i), 0x8002_0000]);
++        }
++        words.push(0xBF81_0000);
++        words.into_iter().flat_map(u32::to_le_bytes).collect()
++    }
++
++    fn run_case(output: &Path, width: u8, seeds: u8, validator: &mut emit::validator::Validator) {
++        let native = NativeProgram {
++            stage: HwStage::Cs,
++            wave64: false,
++            vgprs: 16,
++            layout: vec![
++                RootParam {
++                    root: RootType::Constants, table_offset_dwords: 0, sgprs: 4,
++                    base_register: 0, user_data: 0, slot: 0,
++                },
++                RootParam {
++                    root: RootType::Table, table_offset_dwords: 0, sgprs: 1,
++                    base_register: 0, user_data: 4, slot: 1,
++                },
++            ],
++            used: vec![UsedResource {
++                kind: ResourceType::Uav, root: RootType::Table, table_offset_dwords: 0,
++                lower_bound: 0, stride: 0, dwords: 4, user_data: 4, slot: 1,
++            }],
++            io: StageIo::Cs(ComputeIo { rsrc2: 5 << 1, threads: [1, 1, 1] }),
++            code: source(width, seeds),
++        };
++        let name = format!("{width}-regs-{seeds}-seeds");
++        std::fs::write(output.join(format!("{name}.rdna2")), &native.code).unwrap();
++        let program = ir::build(&native.patched_code(), native.wave64, native.vgprs).unwrap();
++        let structured = structure::structure(&program).unwrap();
++        let resources = resource::track(&program, &native.layout, native.stage, Some(&structured)).unwrap();
++        let io = io::raise(&program, &native).unwrap();
++        let synthetic = Container { digest: [0; 16], version: (1, 0), parts: Vec::new() };
++        let mut shader = emit::emit(&synthetic, &native, &program,
++                                    &structured, &io, &resources).unwrap();
++        validator.validate(&mut shader.dxil).unwrap_or_else(|error| panic!("{name}: {error}"));
++        std::fs::write(output.join(format!("{name}.dxil")), &shader.dxil).unwrap();
++        println!("{name}: {} source bytes, {} DXIL bytes, validated", native.code.len(), shader.dxil.len());
++    }
++
++    pub fn run() {
++        let output = std::path::PathBuf::from(std::env::args_os().nth(1).expect("new output directory"));
++        std::fs::create_dir(&output).unwrap();
++        let mut validator = emit::validator::Validator::load(emit::validator::Validator::default_path().as_deref())
++            .expect("load Microsoft dxil.dll for CPU validation");
++        for width in [2, 16, 64] {
++            for seeds in [1, 2] {
++                run_case(&output, width, seeds, &mut validator);
++            }
++        }
++    }
++}
++
++#[cfg(windows)]
++fn main() {
++    windows_fixture::run();
++}
++
++#[cfg(not(windows))]
++fn main() {
++    eprintln!("This fixture needs Microsoft dxil.dll on Windows.");
++    std::process::exit(1);
++}

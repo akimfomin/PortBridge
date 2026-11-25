@@ -1,0 +1,25 @@
+{
+  "pressure": {
+    "file_metadata_queries": 8448,
+    "directory_scans": 64
+  },
+  "reader": {
+    "memory_hit_preserved_mtime": true,
+    "external_disk_hit_refreshed_mtime": true,
+    "survivors": [
+      0,
+      2
+    ]
+  },
+  "external_writer": {
+    "configured_bytes": 8192,
+    "actual_bytes": 12288,
+    "local_total": 8192
+  },
+  "errors": {
+    "rejects_invalid": true,
+    "cleans_corrupt_disk_entry": true,
+    "overlarge_entry_not_on_disk": true,
+    "overlarge_memory_hit": true
+  }
+}

@@ -1,0 +1,59 @@
+diff --git a/tests/test_rdna2_exec.py b/tests/test_rdna2_exec.py
+index 4607888..73001c0 100644
+--- a/tests/test_rdna2_exec.py
++++ b/tests/test_rdna2_exec.py
+@@ -128,6 +128,54 @@ def test_vop3_integer_and_bitfield_operations():
+     assert [wave.v[4][lane] for lane in (0, 6, 31)] == [4, 6, 9]
+ 
+ 
++def test_vop3_packs_float_to_unsigned_byte_with_round_to_even():
++    from emu import rdna2_hlsl
++
++    opcode = "v_cvt_pk_u8_f32"
++    # Valeurs découlant des mesures gfx1030/gfx1035, mode par défaut.
++    # https://github.com/boykopovar/AnyPS5/pull/6011
++    cases = [
++        (0x0000_0000, 0), (0x8000_0000, 0), (0x0000_0001, 0),
++        (0x3EFF_FFFF, 0), (0x3F00_0000, 0), (0x3F00_0001, 1),
++        (0x3FC0_0000, 2), (0x4020_0000, 2), (0x4060_0000, 4),
++        (0x437E_8000, 254), (0x437F_8000, 255), (0x4380_0000, 255),
++        (0x7F80_0000, 255), (0xFF80_0000, 0), (0x7FC0_0011, 0), (0x7F80_0001, 0),
++    ]
++    old = 0xAABB_CCDD
++    slots = [0, 1, 2, 3, 4, 5, 6, 0xFFFF_FFFF] * 4
++    code = program(*vop3(opcode, 3, V + 1, V + 2, V + 3))
++    for value, byte in cases:
++        wave = rdna2_exec.Wave()
++        wave.s[EXEC_LO] = 0x0000_FFFF
++        wave.v[1] = [value] * rdna2_exec.LANES
++        wave.v[2] = slots.copy()
++        wave.v[3] = [old] * rdna2_exec.LANES
++        rdna2_exec.run(code, wave)
++        expected = []
++        for slot in slots[:16]:
++            start = (slot & 3) * 8
++            expected.append((old & ~(0xFF << start)) | (byte << start))
++        assert wave.v[3] == expected + [old] * 16, f"source {value:#010x}"
++
++    modifiers = program(
++        *vop3(opcode, 1, 245, const(0), LITERAL, abs_=1), old,  # abs(-2.0)
++        *vop3(opcode, 2, 244, const(1), LITERAL, neg=1), old,   # -2.0
++    )
++    wave = rdna2_exec.run(modifiers)
++    assert wave.v[1] == [0xAABB_CC02] * rdna2_exec.LANES
++    assert wave.v[2] == [0xAABB_00DD] * rdna2_exec.LANES
++    assert "v[3] = PackU8F32(v[1], v[2], v[3]);" in rdna2_hlsl.translate(code)
++    assert "PackU8F32((0xC0000000u & 0x7FFFFFFFu), 0u, 0xAABBCCDDu)" in rdna2_hlsl.translate(modifiers)
++    bad_modifiers = program(*vop3(opcode, 3, V + 1, V + 2, V + 3, neg=2))
++    mode_write = program(sopp("s_round_mode", 1), *vop3(opcode, 3, V + 1, V + 2, V + 3))
++    for execute, error in [(rdna2_exec.run, rdna2_exec.Untranslated),
++                           (rdna2_hlsl.translate, rdna2_hlsl.Untranslatable)]:
++        with pytest.raises(error, match=opcode):
++            execute(bad_modifiers)
++        with pytest.raises(error, match="s_round_mode"):
++            execute(mode_write)
++
++
+ def test_vop3_compare_writes_a_scalar_mask():
+     wave = rdna2_exec.run(program(*vop3("v_cmp_gt_u32", 4, const(16), V + 0)))
+     assert wave.s[4] == 0xFFFF and wave.vcc == 0

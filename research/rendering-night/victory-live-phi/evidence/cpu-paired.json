@@ -1,0 +1,80 @@
+{
+  "2-regs-1-seeds": {
+    "control": {
+      "bytes": 2132,
+      "phis": 4,
+      "sha256": "4aa39e985bc17167de69b2767e811c00a5bc7218339f4d0efb7d64dd4db90024"
+    },
+    "candidate": {
+      "bytes": 2120,
+      "phis": 2,
+      "sha256": "5b93b66690a1d01c38617980f0ee338a88330eab8441bf8d95cb1e8bf0bc02b5"
+    },
+    "oracle_inputs": 3
+  },
+  "2-regs-2-seeds": {
+    "control": {
+      "bytes": 2152,
+      "phis": 4,
+      "sha256": "a3eaa8099649083cda818c7faf161e80bc9ef905aadef322ed0aebab1f0a7522"
+    },
+    "candidate": {
+      "bytes": 2152,
+      "phis": 4,
+      "sha256": "a3eaa8099649083cda818c7faf161e80bc9ef905aadef322ed0aebab1f0a7522"
+    },
+    "oracle_inputs": 3
+  },
+  "16-regs-1-seeds": {
+    "control": {
+      "bytes": 2596,
+      "phis": 18,
+      "sha256": "072ede879eb9f52b75d5cf55650a35166262d63ef04449cdda6552820e5e9a12"
+    },
+    "candidate": {
+      "bytes": 2500,
+      "phis": 2,
+      "sha256": "5e0bcc7aabbf635c40ce3a279e99ada57787953e2f49154c49085aa4083f3ec4"
+    },
+    "oracle_inputs": 3
+  },
+  "16-regs-2-seeds": {
+    "control": {
+      "bytes": 2616,
+      "phis": 18,
+      "sha256": "4eaafab4c4f7683f38dde219c3c9ee4ebad0284f9a808346086bc6a8f2f93382"
+    },
+    "candidate": {
+      "bytes": 2616,
+      "phis": 18,
+      "sha256": "4eaafab4c4f7683f38dde219c3c9ee4ebad0284f9a808346086bc6a8f2f93382"
+    },
+    "oracle_inputs": 3
+  },
+  "64-regs-1-seeds": {
+    "control": {
+      "bytes": 4168,
+      "phis": 66,
+      "sha256": "1a8439c355318c2f8b634d95ec10a52e8bb0652d4339ed993b9f9599721b00d5"
+    },
+    "candidate": {
+      "bytes": 3724,
+      "phis": 2,
+      "sha256": "d69e368b910b9c6d8d6c5be05e3054d96abd2a6595e12a6290f8ddc828c0e207"
+    },
+    "oracle_inputs": 3
+  },
+  "64-regs-2-seeds": {
+    "control": {
+      "bytes": 4184,
+      "phis": 66,
+      "sha256": "e22191a608c7870613ff3d95d002516401938265163c765ece217f0080564383"
+    },
+    "candidate": {
+      "bytes": 4184,
+      "phis": 66,
+      "sha256": "e22191a608c7870613ff3d95d002516401938265163c765ece217f0080564383"
+    },
+    "oracle_inputs": 3
+  }
+}
