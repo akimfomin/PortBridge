@@ -7,6 +7,38 @@
   "protocol": "2025-11-25",
   "read_at_snapshot_refreshed_at_utc": "2026-11-25T08:49:11+00:00",
   "radar_action_count": 8,
+  "direct_comparison": {
+    "date_utc": "2026-11-25",
+    "portbridge_preflight": {
+      "q": "ds_bpermute_b32 wave64",
+      "url": "https://github.com/ivall/xcl/pull/1022",
+      "expand_global": true,
+      "limit": 8,
+      "global_candidates": [
+        "https://github.com/xcl-dev/xcl/issues/772",
+        "https://github.com/fxceless/victory-fork/pull/615",
+        "https://github.com/0x0007b/XBVK/issues/5",
+        "https://github.com/ubiquitarianism/leonida/pull/770",
+        "https://github.com/GPUOpen-Drivers/AMD-Gfx-Drivers/issues/138",
+        "https://github.com/Zettrox/ztrx/pull/43"
+      ]
+    },
+    "github_issue_search": {
+      "q": "ds_bpermute_b32 wave64 in:title,body is:public",
+      "limit": 8,
+      "top_urls": [
+        "https://github.com/xcl-dev/xcl/issues/772",
+        "https://github.com/0x0007b/XBVK/issues/5",
+        "https://github.com/GPUOpen-Drivers/AMD-Gfx-Drivers/issues/138",
+        "https://github.com/R0Y00/Xbox2Windows/issues/1543",
+        "https://github.com/Marvisak/VIctory/issues/1132",
+        "https://github.com/JMAN730/project-flamingo/issues/423",
+        "https://github.com/ROCm/llvm-project/issues/5494",
+        "https://github.com/ROCm/llvm-project/issues/4601"
+      ]
+    },
+    "observed_use": "Both returned XCL #772 and AMD #138. PortBridge also surfaced the Continued #770 pull request, whose lowering and public fixture informed this work. The two query surfaces rank different kinds of sources. This comparison does not measure recall or time saved."
+  },
   "preflight": {
     "compiler": {
       "input": {

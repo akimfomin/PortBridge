@@ -1,0 +1,1555 @@
+{
+  "xcl_commit": "7e1b659cfcd95c37d8710c85adb3753847455575",
+  "source_archive_sha256": "9e4184f43d41338b04c3981f16f7b0242adb8dea84af449ad0eb0b7b6bac6dd0",
+  "dxc_version": "dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+  "validator_version": "1.9",
+  "gpu_executed": false,
+  "capture_hook_sha256": "a798b01f37115b239da642fcfb6cce4ef60c64b2f7e52b2c2a72fb21e7ffd21b",
+  "captures": {
+    "native64": {
+      "binary_sha256": "a4152ec8cbfd6e1e12344a5a38cbcd2abe12bba05e5165ffbc360303ee74d5da",
+      "disassembly_sha256": "115350a30e57d773a90badb5cfc7d885c15720ace6f1b2a342a4f48c79369dcb",
+      "validated_in_capture_test": true,
+      "transports": [
+        {
+          "line": 108,
+          "shuffle": "%50",
+          "offset": 0,
+          "store_line": 186,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "input-u0",
+            "hi_byte_offset": 508,
+            "lo_byte_offset": 504
+          },
+          "address_vgpr": 1,
+          "data_vgpr": 0,
+          "destination_vgpr": 10,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "line": 125,
+          "shuffle": "%67",
+          "offset": 4,
+          "store_line": 187,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "input-u0",
+            "hi_byte_offset": 508,
+            "lo_byte_offset": 504
+          },
+          "address_vgpr": 2,
+          "data_vgpr": 0,
+          "destination_vgpr": 11,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "line": 138,
+          "shuffle": "%80",
+          "offset": 128,
+          "store_line": 188,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "input-u0",
+            "hi_byte_offset": 508,
+            "lo_byte_offset": 504
+          },
+          "address_vgpr": 1,
+          "data_vgpr": 0,
+          "destination_vgpr": 12,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "line": 150,
+          "shuffle": "%92",
+          "offset": 0,
+          "store_line": 189,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "literal",
+            "hi": "0xaaaaaaaa",
+            "lo": "0x55555555"
+          },
+          "address_vgpr": 4,
+          "data_vgpr": 0,
+          "destination_vgpr": 16,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 64,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "split32": {
+      "binary_sha256": "a0a96199b92f826d17bac3b3a91798d7b2c661e14f5966c0226cac27dc7035a5",
+      "disassembly_sha256": "f53837d9386a9d5a86a8722a44b85ef536984a1a0126601a5ee3e707e9133706",
+      "validated_in_capture_test": true,
+      "transports": [
+        {
+          "line": 119,
+          "shuffle": "%57",
+          "offset": 0,
+          "store_line": 196,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "input-u0",
+            "hi_byte_offset": 508,
+            "lo_byte_offset": 504
+          },
+          "address_vgpr": 1,
+          "data_vgpr": 0,
+          "destination_vgpr": 10,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "line": 136,
+          "shuffle": "%74",
+          "offset": 4,
+          "store_line": 197,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "input-u0",
+            "hi_byte_offset": 508,
+            "lo_byte_offset": 504
+          },
+          "address_vgpr": 2,
+          "data_vgpr": 0,
+          "destination_vgpr": 11,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "line": 149,
+          "shuffle": "%87",
+          "offset": 128,
+          "store_line": 198,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "input-u0",
+            "hi_byte_offset": 508,
+            "lo_byte_offset": 504
+          },
+          "address_vgpr": 1,
+          "data_vgpr": 0,
+          "destination_vgpr": 12,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "line": 161,
+          "shuffle": "%99",
+          "offset": 0,
+          "store_line": 199,
+          "input_uav": 0,
+          "output_uav": 1,
+          "guest_exec": {
+            "kind": "literal",
+            "hi": "0xaaaaaaaa",
+            "lo": "0x55555555"
+          },
+          "address_vgpr": 4,
+          "data_vgpr": 0,
+          "destination_vgpr": 16,
+          "status": "recognized",
+          "checks": {
+            "superset": {
+              "status": "passes modeled domain",
+              "projected_probes": 24064,
+              "failing_projected_probes": 0,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "superset"
+              },
+              "witnesses": []
+            },
+            "independent": {
+              "status": "refuted",
+              "projected_probes": 32000,
+              "failing_projected_probes": 3968,
+              "guest": {
+                "scope": 32,
+                "addressing": "index",
+                "inactive_source": "zero"
+              },
+              "target": {
+                "scope": 32,
+                "addressing": "index",
+                "guest_guard": true,
+                "host_guard": false,
+                "preserve_inactive": true,
+                "exchange": "none",
+                "lane_base": "destination-partition"
+              },
+              "domain": {
+                "wave": 64,
+                "physical": 32,
+                "participation": "independent"
+              },
+              "witnesses": [
+                {
+                  "destination": 0,
+                  "selector": 1,
+                  "exec": "0x3",
+                  "host": "0x1",
+                  "expected": [
+                    "source",
+                    1
+                  ],
+                  "actual": [
+                    "undefined",
+                    -1
+                  ],
+                  "reason": "target returns undefined for a defined guest result"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "in_memory_disassembly_controls": {
+    "native_half_base_removed": [
+      {
+        "line": 108,
+        "shuffle": "%50",
+        "offset": 0,
+        "store_line": 186,
+        "input_uav": 0,
+        "output_uav": 1,
+        "guest_exec": {
+          "kind": "input-u0",
+          "hi_byte_offset": 508,
+          "lo_byte_offset": 504
+        },
+        "address_vgpr": 1,
+        "data_vgpr": 0,
+        "destination_vgpr": 10,
+        "status": "recognized",
+        "checks": {
+          "superset": {
+            "status": "refuted",
+            "projected_probes": 36224,
+            "failing_projected_probes": 8128,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "superset"
+            },
+            "witnesses": [
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          },
+          "independent": {
+            "status": "refuted",
+            "projected_probes": 48256,
+            "failing_projected_probes": 14144,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "independent"
+            },
+            "witnesses": [
+              {
+                "destination": 0,
+                "selector": 1,
+                "exec": "0x3",
+                "host": "0x1",
+                "expected": [
+                  "source",
+                  1
+                ],
+                "actual": [
+                  "undefined",
+                  -1
+                ],
+                "reason": "target returns undefined for a defined guest result"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "line": 125,
+        "shuffle": "%67",
+        "offset": 4,
+        "store_line": 187,
+        "input_uav": 0,
+        "output_uav": 1,
+        "guest_exec": {
+          "kind": "input-u0",
+          "hi_byte_offset": 508,
+          "lo_byte_offset": 504
+        },
+        "address_vgpr": 2,
+        "data_vgpr": 0,
+        "destination_vgpr": 11,
+        "status": "recognized",
+        "checks": {
+          "superset": {
+            "status": "refuted",
+            "projected_probes": 36224,
+            "failing_projected_probes": 8128,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "superset"
+            },
+            "witnesses": [
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          },
+          "independent": {
+            "status": "refuted",
+            "projected_probes": 48256,
+            "failing_projected_probes": 14144,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "independent"
+            },
+            "witnesses": [
+              {
+                "destination": 0,
+                "selector": 1,
+                "exec": "0x3",
+                "host": "0x1",
+                "expected": [
+                  "source",
+                  1
+                ],
+                "actual": [
+                  "undefined",
+                  -1
+                ],
+                "reason": "target returns undefined for a defined guest result"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "line": 138,
+        "shuffle": "%80",
+        "offset": 128,
+        "store_line": 188,
+        "input_uav": 0,
+        "output_uav": 1,
+        "guest_exec": {
+          "kind": "input-u0",
+          "hi_byte_offset": 508,
+          "lo_byte_offset": 504
+        },
+        "address_vgpr": 1,
+        "data_vgpr": 0,
+        "destination_vgpr": 12,
+        "status": "recognized",
+        "checks": {
+          "superset": {
+            "status": "refuted",
+            "projected_probes": 36224,
+            "failing_projected_probes": 8128,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "superset"
+            },
+            "witnesses": [
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          },
+          "independent": {
+            "status": "refuted",
+            "projected_probes": 48256,
+            "failing_projected_probes": 14144,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "independent"
+            },
+            "witnesses": [
+              {
+                "destination": 0,
+                "selector": 1,
+                "exec": "0x3",
+                "host": "0x1",
+                "expected": [
+                  "source",
+                  1
+                ],
+                "actual": [
+                  "undefined",
+                  -1
+                ],
+                "reason": "target returns undefined for a defined guest result"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "line": 150,
+        "shuffle": "%92",
+        "offset": 0,
+        "store_line": 189,
+        "input_uav": 0,
+        "output_uav": 1,
+        "guest_exec": {
+          "kind": "literal",
+          "hi": "0xaaaaaaaa",
+          "lo": "0x55555555"
+        },
+        "address_vgpr": 4,
+        "data_vgpr": 0,
+        "destination_vgpr": 16,
+        "status": "recognized",
+        "checks": {
+          "superset": {
+            "status": "refuted",
+            "projected_probes": 36224,
+            "failing_projected_probes": 8128,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "superset"
+            },
+            "witnesses": [
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          },
+          "independent": {
+            "status": "refuted",
+            "projected_probes": 48256,
+            "failing_projected_probes": 14144,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "physical-subgroup"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 64,
+              "participation": "independent"
+            },
+            "witnesses": [
+              {
+                "destination": 0,
+                "selector": 1,
+                "exec": "0x3",
+                "host": "0x1",
+                "expected": [
+                  "source",
+                  1
+                ],
+                "actual": [
+                  "undefined",
+                  -1
+                ],
+                "reason": "target returns undefined for a defined guest result"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000000",
+                "host": "0x100000000",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "zero",
+                  -1
+                ],
+                "reason": "target changes a defined guest value"
+              },
+              {
+                "destination": 32,
+                "selector": 0,
+                "exec": "0x100000001",
+                "host": "0x100000001",
+                "expected": [
+                  "source",
+                  32
+                ],
+                "actual": [
+                  "source",
+                  0
+                ],
+                "reason": "target reads a different source lane"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "split_exec_bank_uses_physical_index": [
+      {
+        "line": 119,
+        "shuffle": "%57",
+        "status": "unmodeled",
+        "reason": "EXEC word and bit used different lanes"
+      },
+      {
+        "line": 136,
+        "shuffle": "%74",
+        "offset": 4,
+        "store_line": 197,
+        "input_uav": 0,
+        "output_uav": 1,
+        "guest_exec": {
+          "kind": "input-u0",
+          "hi_byte_offset": 508,
+          "lo_byte_offset": 504
+        },
+        "address_vgpr": 2,
+        "data_vgpr": 0,
+        "destination_vgpr": 11,
+        "status": "recognized",
+        "checks": {
+          "superset": {
+            "status": "passes modeled domain",
+            "projected_probes": 24064,
+            "failing_projected_probes": 0,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "destination-partition"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 32,
+              "participation": "superset"
+            },
+            "witnesses": []
+          },
+          "independent": {
+            "status": "refuted",
+            "projected_probes": 32000,
+            "failing_projected_probes": 3968,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "destination-partition"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 32,
+              "participation": "independent"
+            },
+            "witnesses": [
+              {
+                "destination": 0,
+                "selector": 1,
+                "exec": "0x3",
+                "host": "0x1",
+                "expected": [
+                  "source",
+                  1
+                ],
+                "actual": [
+                  "undefined",
+                  -1
+                ],
+                "reason": "target returns undefined for a defined guest result"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "line": 149,
+        "shuffle": "%87",
+        "offset": 128,
+        "store_line": 198,
+        "input_uav": 0,
+        "output_uav": 1,
+        "guest_exec": {
+          "kind": "input-u0",
+          "hi_byte_offset": 508,
+          "lo_byte_offset": 504
+        },
+        "address_vgpr": 1,
+        "data_vgpr": 0,
+        "destination_vgpr": 12,
+        "status": "recognized",
+        "checks": {
+          "superset": {
+            "status": "passes modeled domain",
+            "projected_probes": 24064,
+            "failing_projected_probes": 0,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "destination-partition"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 32,
+              "participation": "superset"
+            },
+            "witnesses": []
+          },
+          "independent": {
+            "status": "refuted",
+            "projected_probes": 32000,
+            "failing_projected_probes": 3968,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "destination-partition"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 32,
+              "participation": "independent"
+            },
+            "witnesses": [
+              {
+                "destination": 0,
+                "selector": 1,
+                "exec": "0x3",
+                "host": "0x1",
+                "expected": [
+                  "source",
+                  1
+                ],
+                "actual": [
+                  "undefined",
+                  -1
+                ],
+                "reason": "target returns undefined for a defined guest result"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "line": 161,
+        "shuffle": "%99",
+        "offset": 0,
+        "store_line": 199,
+        "input_uav": 0,
+        "output_uav": 1,
+        "guest_exec": {
+          "kind": "literal",
+          "hi": "0xaaaaaaaa",
+          "lo": "0x55555555"
+        },
+        "address_vgpr": 4,
+        "data_vgpr": 0,
+        "destination_vgpr": 16,
+        "status": "recognized",
+        "checks": {
+          "superset": {
+            "status": "passes modeled domain",
+            "projected_probes": 24064,
+            "failing_projected_probes": 0,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "destination-partition"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 32,
+              "participation": "superset"
+            },
+            "witnesses": []
+          },
+          "independent": {
+            "status": "refuted",
+            "projected_probes": 32000,
+            "failing_projected_probes": 3968,
+            "guest": {
+              "scope": 32,
+              "addressing": "index",
+              "inactive_source": "zero"
+            },
+            "target": {
+              "scope": 32,
+              "addressing": "index",
+              "guest_guard": true,
+              "host_guard": false,
+              "preserve_inactive": true,
+              "exchange": "none",
+              "lane_base": "destination-partition"
+            },
+            "domain": {
+              "wave": 64,
+              "physical": 32,
+              "participation": "independent"
+            },
+            "witnesses": [
+              {
+                "destination": 0,
+                "selector": 1,
+                "exec": "0x3",
+                "host": "0x1",
+                "expected": [
+                  "source",
+                  1
+                ],
+                "actual": [
+                  "undefined",
+                  -1
+                ],
+                "reason": "target returns undefined for a defined guest result"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

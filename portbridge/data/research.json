@@ -1,13 +1,13 @@
 [
   {
-    "at": "2026-11-25T10:25:00Z",
+    "at": "2026-11-25T10:52:00Z",
     "title": "Модель проверки обмена данными между потоками шейдера",
-    "summary": "Наш прототип проверяет обмен данными между потоками по коду SPIR-V. Модель PortBridge нашла ошибку выбора потока в контрольном модуле, который прошёл стандартную проверку. Результат получен на CPU.",
+    "summary": "Наш прототип проверяет обмен данными между потоками по выводу двух компиляторов. На CPU проверили пять операций SPIR-V от Continued и восемь операций DXIL от XCL. Модель нашла ошибку выбора потока в контрольном модуле SPIR-V, принятом стандартным валидатором.",
     "report_url": "https://github.com/akimfomin/PortBridge/tree/main/research/subgroup-validator",
     "translations": {
       "en": {
         "title": "Semantic checks for data exchange between shader lanes",
-        "summary": "Our prototype checks a lane-exchange pattern in emitted SPIR-V. The PortBridge model found a wrong-lane error in a control module accepted by the standard validator. This result was obtained on a CPU."
+        "summary": "Our prototype checks emitted lane exchange from two compilers. The CPU study covered five SPIR-V reads from Continued and eight Direct DXIL reads from XCL. The PortBridge model found a wrong-lane error in a SPIR-V control accepted by the standard validator."
       }
     }
   },
