@@ -1,0 +1,23 @@
+#version 450
+layout(local_size_x = 32) in;
+layout(set = 0, binding = 0, std430) buffer Storage { uint data[]; };
+layout(push_constant) uniform Command { uint size; uint stage; uint unused; };
+
+void main()
+{
+    uint words = (size + 31) / 32;
+    uint word = gl_WorkGroupID.x;
+    uint lane = gl_LocalInvocationID.x;
+    uint slot = word * 32 + lane;
+    if (slot >= size) return;
+    uint bit = 1u << lane;
+    uint mask = data[2 * size + (stage + 1) * words + word];
+    if ((mask & bit) == 0u) return;
+    uint rank = data[2 * size + 3 * words + word] + bitCount(mask & (bit - 1u));
+    uint start = stage == 0 ? 5 : 2;
+    uint length = stage == 0 ? 7 : size / 2;
+    if (rank < start || rank - start >= length) return;
+    uint output_base = 2 * size + 4 * words + 2 * stage * size;
+    data[output_base + (rank - start) * 2] = data[slot];
+    data[output_base + (rank - start) * 2 + 1] = data[size + slot];
+}

@@ -1,0 +1,29 @@
+Fixture sparse
+NVIDIA GeForce RTX 4070 Ti SUPER Vulkan 1.4.351
+stage=1 survivors=148 observed=7
+stage=2 survivors=119 observed=117
+1025 slots, 33 leaf words, both ordered frontiers exact
+Fixture dense
+NVIDIA GeForce RTX 4070 Ti SUPER Vulkan 1.4.351
+stage=1 survivors=2341 observed=7
+stage=2 survivors=1870 observed=1868
+4096 slots, 128 leaf words, both ordered frontiers exact
+Fixture empty
+NVIDIA GeForce RTX 4070 Ti SUPER Vulkan 1.4.351
+stage=1 survivors=0 observed=0
+stage=2 survivors=0 observed=0
+257 slots, 9 leaf words, both ordered frontiers exact
+Fixture boundary
+NVIDIA GeForce RTX 4070 Ti SUPER Vulkan 1.4.351
+stage=1 survivors=12 observed=7
+stage=2 survivors=10 observed=8
+33 slots, 2 leaf words, both ordered frontiers exact
+Fixture single
+NVIDIA GeForce RTX 4070 Ti SUPER Vulkan 1.4.351
+stage=1 survivors=1 observed=0
+stage=2 survivors=1 observed=0
+1 slots, 1 leaf words, both ordered frontiers exact
+NVIDIA GeForce RTX 4070 Ti SUPER Vulkan 1.4.351
+stage=1 survivors=148 observed=7
+second mask differs from stable compact reference
+Physical-index mutation correctly rejected.

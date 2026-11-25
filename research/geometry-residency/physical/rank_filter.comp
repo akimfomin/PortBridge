@@ -1,0 +1,49 @@
+#version 450
+layout(local_size_x = 32) in;
+layout(set = 0, binding = 0, std430) buffer Storage { uint data[]; };
+layout(push_constant) uniform Command { uint size; uint operation; uint physical_index; };
+shared uint selected[32];
+
+void main()
+{
+    uint word_count = (size + 31) / 32;
+    uint word = gl_WorkGroupID.x;
+    uint lane = gl_LocalInvocationID.x;
+    uint slot = word * 32 + lane;
+    uint bit = 1u << lane;
+    uint stage = operation / 3;
+    uint action = operation % 3;
+    uint first_mask = 2 * size;
+    uint input_mask = first_mask + stage * word_count;
+    uint output_mask = input_mask + word_count;
+    uint prefix = first_mask + 3 * word_count;
+
+    uint rank_base = 0;
+    if (action != 1) {
+        if (lane == 0) {
+            uint source_mask = (action == 0) ? input_mask : output_mask;
+            for (uint index = 0; index < word_count; ++index) {
+                data[prefix + index] = rank_base;
+                rank_base += bitCount(data[source_mask + index]);
+            }
+        }
+        return;
+    }
+
+    uint live = data[input_mask + word];
+    uint rank = data[prefix + word] + bitCount(live & (bit - 1u));
+    bool keep = false;
+    if (slot < size && (live & bit) != 0u) {
+        uint value = data[size + slot];
+        uint logical_rank = stage == 1 && physical_index != 0u ? slot : rank;
+        keep = stage == 0 ? ((value + 2u * logical_rank) % 7u < 4u)
+                          : ((3u * value + logical_rank) % 5u != 1u);
+    }
+    selected[lane] = keep ? bit : 0u;
+    barrier();
+    if (lane == 0) {
+        uint mask = 0;
+        for (uint i = 0; i < 32; ++i) mask |= selected[i];
+        data[output_mask + word] = mask;
+    }
+}
