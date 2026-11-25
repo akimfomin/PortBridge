@@ -1,0 +1,42 @@
+[
+  {
+    "id": "071",
+    "mode": "whole",
+    "dxil_bytes": 282684,
+    "sha256": "afa36112828b4cf1e1cb35440377af329293de1cdfbdbf044a68274412c574e0",
+    "ballots": 1737,
+    "quad_read": 500,
+    "quad_op": 798,
+    "instructions": 44134
+  },
+  {
+    "id": "071",
+    "mode": "local",
+    "dxil_bytes": 118220,
+    "sha256": "c9709020b6112ebf2de62cc9859a82c5b0358fc1e4ea489064c9b8f4404473f7",
+    "ballots": 133,
+    "quad_read": 132,
+    "quad_op": 0,
+    "instructions": 17345
+  },
+  {
+    "id": "073",
+    "mode": "whole",
+    "dxil_bytes": 283180,
+    "sha256": "90af112263dac7525b74c5f5e31e5732e118cdf7be15534ae2ae034b7547e2d8",
+    "ballots": 1737,
+    "quad_read": 504,
+    "quad_op": 798,
+    "instructions": 44159
+  },
+  {
+    "id": "073",
+    "mode": "local",
+    "dxil_bytes": 118404,
+    "sha256": "d977010a9e36228186489dd0a1fb8ed55b63da662ef8103003053490f71c792f",
+    "ballots": 133,
+    "quad_read": 132,
+    "quad_op": 0,
+    "instructions": 17366
+  }
+]

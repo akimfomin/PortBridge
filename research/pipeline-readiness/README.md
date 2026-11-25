@@ -14,7 +14,7 @@ The current [heavy graphics investigation](HEAVY-GRAPHICS.md) follows a measured
 
 The [ordered graphics implementation](ORDERED-GRAPHICS.md) starts exact native builds as their draw packets are discovered and keeps playback in order. It runs in the full open-scene renderer and is compared with blocking first use and eager compilation of exact known keys.
 
-The [XCL compiler experiment](XCL-READ-GUARDS.md) tests whether merging identical read guards shrinks the work submitted to the native compiler. The [follow-up](XCL-READ-GUARD-VALIDATION.md) measures warm GPU execution and checks where the pass applies. [The aperture experiment](XCL-UMA-APERTURE.md) narrows address searches while preserving carries and borrows.
+The [XCL compiler experiment](XCL-READ-GUARDS.md) tests whether merging identical read guards shrinks the work submitted to the native compiler. The [follow-up](XCL-READ-GUARD-VALIDATION.md) measures warm GPU execution and checks where the pass applies. [The aperture experiment](XCL-UMA-APERTURE.md) narrows address searches while preserving carries and borrows. The [combined compiler study](structural-suite/README.md) checks all three passes together, measures the heavy shaders, and tests an opt-in integration in the ordinary XCL graphics path.
 
 ## Deterministic replay
 

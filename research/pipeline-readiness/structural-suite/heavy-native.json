@@ -1,0 +1,222 @@
+[
+  {
+    "shader": "071",
+    "pair": 0,
+    "order": 1,
+    "arm": "off",
+    "native_ms": 1893.3412,
+    "opaque_cache_bytes": 370786,
+    "dxil_bytes": 283496,
+    "peak_process_commit_bytes": 245379072,
+    "peak_job_commit_bytes": 246829056
+  },
+  {
+    "shader": "071",
+    "pair": 0,
+    "order": 2,
+    "arm": "ags",
+    "native_ms": 1830.1445,
+    "opaque_cache_bytes": 369650,
+    "dxil_bytes": 282684,
+    "peak_process_commit_bytes": 244596736,
+    "peak_job_commit_bytes": 246046720
+  },
+  {
+    "shader": "071",
+    "pair": 1,
+    "order": 1,
+    "arm": "ags",
+    "native_ms": 1754.5102,
+    "opaque_cache_bytes": 369650,
+    "dxil_bytes": 282684,
+    "peak_process_commit_bytes": 245272576,
+    "peak_job_commit_bytes": 246722560
+  },
+  {
+    "shader": "071",
+    "pair": 1,
+    "order": 2,
+    "arm": "off",
+    "native_ms": 1709.4243,
+    "opaque_cache_bytes": 370786,
+    "dxil_bytes": 283496,
+    "peak_process_commit_bytes": 245846016,
+    "peak_job_commit_bytes": 247287808
+  },
+  {
+    "shader": "071",
+    "pair": 2,
+    "order": 1,
+    "arm": "off",
+    "native_ms": 1762.2896,
+    "opaque_cache_bytes": 370786,
+    "dxil_bytes": 283496,
+    "peak_process_commit_bytes": 246259712,
+    "peak_job_commit_bytes": 247705600
+  },
+  {
+    "shader": "071",
+    "pair": 2,
+    "order": 2,
+    "arm": "ags",
+    "native_ms": 1733.3873,
+    "opaque_cache_bytes": 369650,
+    "dxil_bytes": 282684,
+    "peak_process_commit_bytes": 245059584,
+    "peak_job_commit_bytes": 246505472
+  },
+  {
+    "shader": "071",
+    "pair": 3,
+    "order": 1,
+    "arm": "ags",
+    "native_ms": 1752.2724,
+    "opaque_cache_bytes": 369650,
+    "dxil_bytes": 282684,
+    "peak_process_commit_bytes": 245833728,
+    "peak_job_commit_bytes": 247279616
+  },
+  {
+    "shader": "071",
+    "pair": 3,
+    "order": 2,
+    "arm": "off",
+    "native_ms": 1779.0115,
+    "opaque_cache_bytes": 370786,
+    "dxil_bytes": 283496,
+    "peak_process_commit_bytes": 245702656,
+    "peak_job_commit_bytes": 247148544
+  },
+  {
+    "shader": "071",
+    "pair": 4,
+    "order": 1,
+    "arm": "off",
+    "native_ms": 1739.0034,
+    "opaque_cache_bytes": 370786,
+    "dxil_bytes": 283496,
+    "peak_process_commit_bytes": 245968896,
+    "peak_job_commit_bytes": 247418880
+  },
+  {
+    "shader": "071",
+    "pair": 4,
+    "order": 2,
+    "arm": "ags",
+    "native_ms": 1735.3235,
+    "opaque_cache_bytes": 369650,
+    "dxil_bytes": 282684,
+    "peak_process_commit_bytes": 245456896,
+    "peak_job_commit_bytes": 246898688
+  },
+  {
+    "shader": "073",
+    "pair": 0,
+    "order": 1,
+    "arm": "off",
+    "native_ms": 1719.8781,
+    "opaque_cache_bytes": 372114,
+    "dxil_bytes": 283988,
+    "peak_process_commit_bytes": 246214656,
+    "peak_job_commit_bytes": 247660544
+  },
+  {
+    "shader": "073",
+    "pair": 0,
+    "order": 2,
+    "arm": "ags",
+    "native_ms": 1719.5507,
+    "opaque_cache_bytes": 370466,
+    "dxil_bytes": 283180,
+    "peak_process_commit_bytes": 244932608,
+    "peak_job_commit_bytes": 246378496
+  },
+  {
+    "shader": "073",
+    "pair": 1,
+    "order": 1,
+    "arm": "ags",
+    "native_ms": 1820.6602,
+    "opaque_cache_bytes": 370466,
+    "dxil_bytes": 283180,
+    "peak_process_commit_bytes": 244080640,
+    "peak_job_commit_bytes": 245530624
+  },
+  {
+    "shader": "073",
+    "pair": 1,
+    "order": 2,
+    "arm": "off",
+    "native_ms": 1888.386,
+    "opaque_cache_bytes": 372114,
+    "dxil_bytes": 283988,
+    "peak_process_commit_bytes": 246202368,
+    "peak_job_commit_bytes": 247660544
+  },
+  {
+    "shader": "073",
+    "pair": 2,
+    "order": 1,
+    "arm": "off",
+    "native_ms": 1934.2023,
+    "opaque_cache_bytes": 372114,
+    "dxil_bytes": 283988,
+    "peak_process_commit_bytes": 246542336,
+    "peak_job_commit_bytes": 247984128
+  },
+  {
+    "shader": "073",
+    "pair": 2,
+    "order": 2,
+    "arm": "ags",
+    "native_ms": 1932.3383,
+    "opaque_cache_bytes": 370466,
+    "dxil_bytes": 283180,
+    "peak_process_commit_bytes": 244228096,
+    "peak_job_commit_bytes": 245678080
+  },
+  {
+    "shader": "073",
+    "pair": 3,
+    "order": 1,
+    "arm": "ags",
+    "native_ms": 1802.067,
+    "opaque_cache_bytes": 370466,
+    "dxil_bytes": 283180,
+    "peak_process_commit_bytes": 245047296,
+    "peak_job_commit_bytes": 246493184
+  },
+  {
+    "shader": "073",
+    "pair": 3,
+    "order": 2,
+    "arm": "off",
+    "native_ms": 1732.6346,
+    "opaque_cache_bytes": 372114,
+    "dxil_bytes": 283988,
+    "peak_process_commit_bytes": 245563392,
+    "peak_job_commit_bytes": 247013376
+  },
+  {
+    "shader": "073",
+    "pair": 4,
+    "order": 1,
+    "arm": "off",
+    "native_ms": 1778.8921,
+    "opaque_cache_bytes": 372114,
+    "dxil_bytes": 283988,
+    "peak_process_commit_bytes": 246665216,
+    "peak_job_commit_bytes": 248111104
+  },
+  {
+    "shader": "073",
+    "pair": 4,
+    "order": 2,
+    "arm": "ags",
+    "native_ms": 1699.4061,
+    "opaque_cache_bytes": 370466,
+    "dxil_bytes": 283180,
+    "peak_process_commit_bytes": 244543488,
+    "peak_job_commit_bytes": 245989376
+  }
+]

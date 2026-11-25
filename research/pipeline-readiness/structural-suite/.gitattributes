@@ -1,0 +1,2 @@
+*.patch -text whitespace=-blank-at-eol
+*.json.gz -text
