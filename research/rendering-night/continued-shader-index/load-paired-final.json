@@ -1,0 +1,1033 @@
+{
+  "binaries": {
+    "baseline": "affbee210740779064266770afd4c84b57ed280bef775a3424342a402a3381c5",
+    "candidate": "11bee5d55ff6000fc4306325ce207a7c2d60737b3944259f50196c177fe9f4d2",
+    "combined": "6dfb7ddf1a8e731f98f954e96d110ff2b8fb45b8f8e83f363c954125b65aec03",
+    "combined-stream": "66ea69fbd0d4e4bf496a111618aa56101177450946a7a388bf18736f94191d69"
+  },
+  "fixtures": [
+    {
+      "name": "small",
+      "entries": 64,
+      "bytes": 42264,
+      "richness": 1,
+      "sha256": "12b2c7b428efafa1800c12bfa17a3bda7aa2fed579fb45f8dfeacca589195a7f",
+      "warmup": {
+        "baseline": {
+          "verified": 64,
+          "load_ms": 1.0626,
+          "peak_working_set": 10309632,
+          "peak_commit": 2351104
+        },
+        "candidate": {
+          "verified": 64,
+          "load_ms": 0.811,
+          "peak_working_set": 9932800,
+          "peak_commit": 1945600
+        },
+        "combined": {
+          "verified": 64,
+          "load_ms": 0.8542,
+          "peak_working_set": 10403840,
+          "peak_commit": 2465792
+        },
+        "combined-stream": {
+          "verified": 64,
+          "load_ms": 0.5566,
+          "peak_working_set": 9891840,
+          "peak_commit": 1945600
+        }
+      },
+      "pairs": [
+        {
+          "order": [
+            "baseline",
+            "candidate",
+            "combined-stream",
+            "combined"
+          ],
+          "samples": {
+            "baseline": {
+              "verified": 64,
+              "load_ms": 0.96,
+              "peak_working_set": 10305536,
+              "peak_commit": 2342912
+            },
+            "candidate": {
+              "verified": 64,
+              "load_ms": 0.8722,
+              "peak_working_set": 9908224,
+              "peak_commit": 1945600
+            },
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.6034,
+              "peak_working_set": 9920512,
+              "peak_commit": 1974272
+            },
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.773,
+              "peak_working_set": 10407936,
+              "peak_commit": 2478080
+            }
+          }
+        },
+        {
+          "order": [
+            "candidate",
+            "combined",
+            "baseline",
+            "combined-stream"
+          ],
+          "samples": {
+            "candidate": {
+              "verified": 64,
+              "load_ms": 1.0845,
+              "peak_working_set": 9908224,
+              "peak_commit": 1937408
+            },
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.7855,
+              "peak_working_set": 10403840,
+              "peak_commit": 2469888
+            },
+            "baseline": {
+              "verified": 64,
+              "load_ms": 1.1508,
+              "peak_working_set": 10305536,
+              "peak_commit": 2347008
+            },
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.5695,
+              "peak_working_set": 9895936,
+              "peak_commit": 1945600
+            }
+          }
+        },
+        {
+          "order": [
+            "combined",
+            "combined-stream",
+            "candidate",
+            "baseline"
+          ],
+          "samples": {
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.7819,
+              "peak_working_set": 10395648,
+              "peak_commit": 2461696
+            },
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.5551,
+              "peak_working_set": 9912320,
+              "peak_commit": 1961984
+            },
+            "candidate": {
+              "verified": 64,
+              "load_ms": 0.9296,
+              "peak_working_set": 9900032,
+              "peak_commit": 1933312
+            },
+            "baseline": {
+              "verified": 64,
+              "load_ms": 1.0036,
+              "peak_working_set": 10321920,
+              "peak_commit": 2359296
+            }
+          }
+        },
+        {
+          "order": [
+            "combined-stream",
+            "baseline",
+            "combined",
+            "candidate"
+          ],
+          "samples": {
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.5601,
+              "peak_working_set": 9887744,
+              "peak_commit": 1937408
+            },
+            "baseline": {
+              "verified": 64,
+              "load_ms": 1.0016,
+              "peak_working_set": 10346496,
+              "peak_commit": 2387968
+            },
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.711,
+              "peak_working_set": 10391552,
+              "peak_commit": 2461696
+            },
+            "candidate": {
+              "verified": 64,
+              "load_ms": 0.8054,
+              "peak_working_set": 9916416,
+              "peak_commit": 1949696
+            }
+          }
+        },
+        {
+          "order": [
+            "baseline",
+            "candidate",
+            "combined-stream",
+            "combined"
+          ],
+          "samples": {
+            "baseline": {
+              "verified": 64,
+              "load_ms": 1.1413,
+              "peak_working_set": 10321920,
+              "peak_commit": 2359296
+            },
+            "candidate": {
+              "verified": 64,
+              "load_ms": 0.9355,
+              "peak_working_set": 9912320,
+              "peak_commit": 1941504
+            },
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.5463,
+              "peak_working_set": 9895936,
+              "peak_commit": 1945600
+            },
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.7237,
+              "peak_working_set": 10399744,
+              "peak_commit": 2469888
+            }
+          }
+        },
+        {
+          "order": [
+            "candidate",
+            "combined",
+            "baseline",
+            "combined-stream"
+          ],
+          "samples": {
+            "candidate": {
+              "verified": 64,
+              "load_ms": 0.8426,
+              "peak_working_set": 9912320,
+              "peak_commit": 1941504
+            },
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.7387,
+              "peak_working_set": 10412032,
+              "peak_commit": 2478080
+            },
+            "baseline": {
+              "verified": 64,
+              "load_ms": 1.1919,
+              "peak_working_set": 10309632,
+              "peak_commit": 2347008
+            },
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.7904,
+              "peak_working_set": 9895936,
+              "peak_commit": 1945600
+            }
+          }
+        },
+        {
+          "order": [
+            "combined",
+            "combined-stream",
+            "candidate",
+            "baseline"
+          ],
+          "samples": {
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.8255,
+              "peak_working_set": 10387456,
+              "peak_commit": 2457600
+            },
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.6458,
+              "peak_working_set": 9887744,
+              "peak_commit": 1937408
+            },
+            "candidate": {
+              "verified": 64,
+              "load_ms": 1.0515,
+              "peak_working_set": 9953280,
+              "peak_commit": 1986560
+            },
+            "baseline": {
+              "verified": 64,
+              "load_ms": 0.9695,
+              "peak_working_set": 10309632,
+              "peak_commit": 2347008
+            }
+          }
+        },
+        {
+          "order": [
+            "combined-stream",
+            "baseline",
+            "combined",
+            "candidate"
+          ],
+          "samples": {
+            "combined-stream": {
+              "verified": 64,
+              "load_ms": 0.7271,
+              "peak_working_set": 9891840,
+              "peak_commit": 1941504
+            },
+            "baseline": {
+              "verified": 64,
+              "load_ms": 1.01,
+              "peak_working_set": 10301440,
+              "peak_commit": 2347008
+            },
+            "combined": {
+              "verified": 64,
+              "load_ms": 0.766,
+              "peak_working_set": 10403840,
+              "peak_commit": 2469888
+            },
+            "candidate": {
+              "verified": 64,
+              "load_ms": 0.9351,
+              "peak_working_set": 9908224,
+              "peak_commit": 1937408
+            }
+          }
+        }
+      ],
+      "stream_on_main": {
+        "load_ms": {
+          "original": 1.0068000000000001,
+          "candidate": 0.93235,
+          "paired_candidate_over_original": 0.9171916254125413
+        },
+        "peak_working_set": {
+          "original": 10309632.0,
+          "candidate": 9910272.0,
+          "paired_candidate_over_original": 0.9614467408585056
+        },
+        "peak_commit": {
+          "original": 2347008.0,
+          "candidate": 1941504.0,
+          "paired_candidate_over_original": 0.8254799301919721
+        }
+      },
+      "stream_with_other_changes": {
+        "load_ms": {
+          "original": 0.7695000000000001,
+          "candidate": 0.58645,
+          "paired_candidate_over_original": 0.781454416665426
+        },
+        "peak_working_set": {
+          "original": 10401792.0,
+          "candidate": 9895936.0,
+          "paired_candidate_over_original": 0.9515366355023245
+        },
+        "peak_commit": {
+          "original": 2469888.0,
+          "candidate": 1945600.0,
+          "paired_candidate_over_original": 0.7877280265339967
+        }
+      }
+    },
+    {
+      "name": "medium",
+      "entries": 8000,
+      "bytes": 10425351,
+      "richness": 3,
+      "sha256": "b5e059c7783c78f4b987b8f26927091ad433080e43657037f234ab133cc8943c",
+      "warmup": {
+        "baseline": {
+          "verified": 8000,
+          "load_ms": 150.936,
+          "peak_working_set": 85725184,
+          "peak_commit": 81600512
+        },
+        "candidate": {
+          "verified": 8000,
+          "load_ms": 102.151,
+          "peak_working_set": 28524544,
+          "peak_commit": 22908928
+        },
+        "combined": {
+          "verified": 8000,
+          "load_ms": 81.0571,
+          "peak_working_set": 102580224,
+          "peak_commit": 102494208
+        },
+        "combined-stream": {
+          "verified": 8000,
+          "load_ms": 60.1134,
+          "peak_working_set": 28798976,
+          "peak_commit": 28131328
+        }
+      },
+      "pairs": [
+        {
+          "order": [
+            "baseline",
+            "candidate",
+            "combined-stream",
+            "combined"
+          ],
+          "samples": {
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 146.684,
+              "peak_working_set": 85725184,
+              "peak_commit": 81604608
+            },
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 102.68,
+              "peak_working_set": 28528640,
+              "peak_commit": 22904832
+            },
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 59.6616,
+              "peak_working_set": 29306880,
+              "peak_commit": 28114944
+            },
+            "combined": {
+              "verified": 8000,
+              "load_ms": 82.7732,
+              "peak_working_set": 102580224,
+              "peak_commit": 102494208
+            }
+          }
+        },
+        {
+          "order": [
+            "candidate",
+            "combined",
+            "baseline",
+            "combined-stream"
+          ],
+          "samples": {
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 102.91,
+              "peak_working_set": 28581888,
+              "peak_commit": 22945792
+            },
+            "combined": {
+              "verified": 8000,
+              "load_ms": 83.2881,
+              "peak_working_set": 102445056,
+              "peak_commit": 102359040
+            },
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 153.804,
+              "peak_working_set": 85725184,
+              "peak_commit": 81604608
+            },
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 61.3824,
+              "peak_working_set": 28872704,
+              "peak_commit": 28155904
+            }
+          }
+        },
+        {
+          "order": [
+            "combined",
+            "combined-stream",
+            "candidate",
+            "baseline"
+          ],
+          "samples": {
+            "combined": {
+              "verified": 8000,
+              "load_ms": 87.4764,
+              "peak_working_set": 102592512,
+              "peak_commit": 102494208
+            },
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 63.1314,
+              "peak_working_set": 28569600,
+              "peak_commit": 28139520
+            },
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 103.268,
+              "peak_working_set": 28581888,
+              "peak_commit": 22941696
+            },
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 147.631,
+              "peak_working_set": 85491712,
+              "peak_commit": 81051648
+            }
+          }
+        },
+        {
+          "order": [
+            "combined-stream",
+            "baseline",
+            "combined",
+            "candidate"
+          ],
+          "samples": {
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 59.4278,
+              "peak_working_set": 28663808,
+              "peak_commit": 28168192
+            },
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 148.043,
+              "peak_working_set": 85733376,
+              "peak_commit": 81600512
+            },
+            "combined": {
+              "verified": 8000,
+              "load_ms": 85.3295,
+              "peak_working_set": 102580224,
+              "peak_commit": 102494208
+            },
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 107.707,
+              "peak_working_set": 28590080,
+              "peak_commit": 22982656
+            }
+          }
+        },
+        {
+          "order": [
+            "baseline",
+            "candidate",
+            "combined-stream",
+            "combined"
+          ],
+          "samples": {
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 151.725,
+              "peak_working_set": 86048768,
+              "peak_commit": 81616896
+            },
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 107.999,
+              "peak_working_set": 28606464,
+              "peak_commit": 22982656
+            },
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 62.2363,
+              "peak_working_set": 28753920,
+              "peak_commit": 28143616
+            },
+            "combined": {
+              "verified": 8000,
+              "load_ms": 87.0295,
+              "peak_working_set": 102580224,
+              "peak_commit": 102494208
+            }
+          }
+        },
+        {
+          "order": [
+            "candidate",
+            "combined",
+            "baseline",
+            "combined-stream"
+          ],
+          "samples": {
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 100.66,
+              "peak_working_set": 28303360,
+              "peak_commit": 22700032
+            },
+            "combined": {
+              "verified": 8000,
+              "load_ms": 84.5944,
+              "peak_working_set": 102580224,
+              "peak_commit": 102494208
+            },
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 152.75,
+              "peak_working_set": 85766144,
+              "peak_commit": 81358848
+            },
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 60.8625,
+              "peak_working_set": 28798976,
+              "peak_commit": 28094464
+            }
+          }
+        },
+        {
+          "order": [
+            "combined",
+            "combined-stream",
+            "candidate",
+            "baseline"
+          ],
+          "samples": {
+            "combined": {
+              "verified": 8000,
+              "load_ms": 83.6386,
+              "peak_working_set": 102580224,
+              "peak_commit": 102494208
+            },
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 60.587,
+              "peak_working_set": 28393472,
+              "peak_commit": 28098560
+            },
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 109.323,
+              "peak_working_set": 28590080,
+              "peak_commit": 22982656
+            },
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 150.46,
+              "peak_working_set": 85512192,
+              "peak_commit": 81440768
+            }
+          }
+        },
+        {
+          "order": [
+            "combined-stream",
+            "baseline",
+            "combined",
+            "candidate"
+          ],
+          "samples": {
+            "combined-stream": {
+              "verified": 8000,
+              "load_ms": 60.9441,
+              "peak_working_set": 28672000,
+              "peak_commit": 28106752
+            },
+            "baseline": {
+              "verified": 8000,
+              "load_ms": 147.82,
+              "peak_working_set": 85635072,
+              "peak_commit": 81190912
+            },
+            "combined": {
+              "verified": 8000,
+              "load_ms": 81.1208,
+              "peak_working_set": 102580224,
+              "peak_commit": 102490112
+            },
+            "candidate": {
+              "verified": 8000,
+              "load_ms": 102.26,
+              "peak_working_set": 28581888,
+              "peak_commit": 22941696
+            }
+          }
+        }
+      ],
+      "stream_on_main": {
+        "load_ms": {
+          "original": 149.25150000000002,
+          "candidate": 103.089,
+          "paired_candidate_over_original": 0.6997544816036816
+        },
+        "peak_working_set": {
+          "original": 85725184.0,
+          "candidate": 28581888.0,
+          "paired_candidate_over_original": 0.33344481453192165
+        },
+        "peak_commit": {
+          "original": 81520640.0,
+          "candidate": 22943744.0,
+          "paired_candidate_over_original": 0.2816201594327886
+        }
+      },
+      "stream_with_other_changes": {
+        "load_ms": {
+          "original": 84.1165,
+          "candidate": 60.9033,
+          "paired_candidate_over_original": 0.7212401939935398
+        },
+        "peak_working_set": {
+          "original": 102580224.0,
+          "candidate": 28712960.0,
+          "paired_candidate_over_original": 0.2799073630410478
+        },
+        "peak_commit": {
+          "original": 102494208.0,
+          "candidate": 28127232.0,
+          "paired_candidate_over_original": 0.27442752667545856
+        }
+      }
+    },
+    {
+      "name": "large",
+      "entries": 29187,
+      "bytes": 57357214,
+      "richness": 7,
+      "sha256": "5979a6d33558bd65a7c93125c0cb9f5644fee792774448be6502d7740dc785ad",
+      "warmup": {
+        "baseline": {
+          "verified": 29187,
+          "load_ms": 808.965,
+          "peak_working_set": 412676096,
+          "peak_commit": 458952704
+        },
+        "candidate": {
+          "verified": 29187,
+          "load_ms": 564.191,
+          "peak_working_set": 113659904,
+          "peak_commit": 154787840
+        },
+        "combined": {
+          "verified": 29187,
+          "load_ms": 412.798,
+          "peak_working_set": 488767488,
+          "peak_commit": 499298304
+        },
+        "combined-stream": {
+          "verified": 29187,
+          "load_ms": 317.578,
+          "peak_working_set": 99164160,
+          "peak_commit": 103817216
+        }
+      },
+      "pairs": [
+        {
+          "order": [
+            "baseline",
+            "candidate",
+            "combined-stream",
+            "combined"
+          ],
+          "samples": {
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 799.889,
+              "peak_working_set": 413556736,
+              "peak_commit": 459284480
+            },
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 559.241,
+              "peak_working_set": 112046080,
+              "peak_commit": 154718208
+            },
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 317.457,
+              "peak_working_set": 99098624,
+              "peak_commit": 103833600
+            },
+            "combined": {
+              "verified": 29187,
+              "load_ms": 422.839,
+              "peak_working_set": 488853504,
+              "peak_commit": 499380224
+            }
+          }
+        },
+        {
+          "order": [
+            "candidate",
+            "combined",
+            "baseline",
+            "combined-stream"
+          ],
+          "samples": {
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 559.373,
+              "peak_working_set": 113352704,
+              "peak_commit": 154705920
+            },
+            "combined": {
+              "verified": 29187,
+              "load_ms": 419.877,
+              "peak_working_set": 488771584,
+              "peak_commit": 499302400
+            },
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 808.975,
+              "peak_working_set": 413491200,
+              "peak_commit": 459526144
+            },
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 314.088,
+              "peak_working_set": 99123200,
+              "peak_commit": 103821312
+            }
+          }
+        },
+        {
+          "order": [
+            "combined",
+            "combined-stream",
+            "candidate",
+            "baseline"
+          ],
+          "samples": {
+            "combined": {
+              "verified": 29187,
+              "load_ms": 419.026,
+              "peak_working_set": 488833024,
+              "peak_commit": 499445760
+            },
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 342.64,
+              "peak_working_set": 99164160,
+              "peak_commit": 103870464
+            },
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 560.867,
+              "peak_working_set": 113287168,
+              "peak_commit": 154714112
+            },
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 823.929,
+              "peak_working_set": 413036544,
+              "peak_commit": 458985472
+            }
+          }
+        },
+        {
+          "order": [
+            "combined-stream",
+            "baseline",
+            "combined",
+            "candidate"
+          ],
+          "samples": {
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 315.731,
+              "peak_working_set": 99098624,
+              "peak_commit": 103837696
+            },
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 796.993,
+              "peak_working_set": 412852224,
+              "peak_commit": 459034624
+            },
+            "combined": {
+              "verified": 29187,
+              "load_ms": 408.528,
+              "peak_working_set": 488763392,
+              "peak_commit": 499298304
+            },
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 560.013,
+              "peak_working_set": 113856512,
+              "peak_commit": 154734592
+            }
+          }
+        },
+        {
+          "order": [
+            "baseline",
+            "candidate",
+            "combined-stream",
+            "combined"
+          ],
+          "samples": {
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 822.154,
+              "peak_working_set": 412454912,
+              "peak_commit": 458141696
+            },
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 557.775,
+              "peak_working_set": 112037888,
+              "peak_commit": 154710016
+            },
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 313.281,
+              "peak_working_set": 99037184,
+              "peak_commit": 103870464
+            },
+            "combined": {
+              "verified": 29187,
+              "load_ms": 425.118,
+              "peak_working_set": 488767488,
+              "peak_commit": 499302400
+            }
+          }
+        },
+        {
+          "order": [
+            "candidate",
+            "combined",
+            "baseline",
+            "combined-stream"
+          ],
+          "samples": {
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 564.581,
+              "peak_working_set": 114053120,
+              "peak_commit": 154771456
+            },
+            "combined": {
+              "verified": 29187,
+              "load_ms": 422.191,
+              "peak_working_set": 488759296,
+              "peak_commit": 499298304
+            },
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 808.678,
+              "peak_working_set": 412606464,
+              "peak_commit": 458526720
+            },
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 319.624,
+              "peak_working_set": 99176448,
+              "peak_commit": 103866368
+            }
+          }
+        },
+        {
+          "order": [
+            "combined",
+            "combined-stream",
+            "candidate",
+            "baseline"
+          ],
+          "samples": {
+            "combined": {
+              "verified": 29187,
+              "load_ms": 419.172,
+              "peak_working_set": 488833024,
+              "peak_commit": 499441664
+            },
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 317.313,
+              "peak_working_set": 99164160,
+              "peak_commit": 103845888
+            },
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 556.587,
+              "peak_working_set": 112680960,
+              "peak_commit": 154746880
+            },
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 821.383,
+              "peak_working_set": 412139520,
+              "peak_commit": 458207232
+            }
+          }
+        },
+        {
+          "order": [
+            "combined-stream",
+            "baseline",
+            "combined",
+            "candidate"
+          ],
+          "samples": {
+            "combined-stream": {
+              "verified": 29187,
+              "load_ms": 318.176,
+              "peak_working_set": 99037184,
+              "peak_commit": 103821312
+            },
+            "baseline": {
+              "verified": 29187,
+              "load_ms": 799.137,
+              "peak_working_set": 412200960,
+              "peak_commit": 458498048
+            },
+            "combined": {
+              "verified": 29187,
+              "load_ms": 415.398,
+              "peak_working_set": 488820736,
+              "peak_commit": 499445760
+            },
+            "candidate": {
+              "verified": 29187,
+              "load_ms": 557.454,
+              "peak_working_set": 114012160,
+              "peak_commit": 154718208
+            }
+          }
+        }
+      ],
+      "stream_on_main": {
+        "load_ms": {
+          "original": 808.8265,
+          "candidate": 559.307,
+          "paired_candidate_over_original": 0.6945144743013223
+        },
+        "peak_working_set": {
+          "original": 412729344.0,
+          "candidate": 113319936.0,
+          "paired_candidate_over_original": 0.2742072558043365
+        },
+        "peak_commit": {
+          "original": 458756096.0,
+          "candidate": 154718208.0,
+          "paired_candidate_over_original": 0.3372663510448207
+        }
+      },
+      "stream_with_other_changes": {
+        "load_ms": {
+          "original": 419.5245,
+          "candidate": 317.385,
+          "paired_candidate_over_original": 0.7570298532308031
+        },
+        "peak_working_set": {
+          "original": 488796160.0,
+          "candidate": 99110912.0,
+          "paired_candidate_over_original": 0.20277721889714517
+        },
+        "peak_commit": {
+          "original": 499341312.0,
+          "candidate": 103841792.0,
+          "paired_candidate_over_original": 0.2079499916622296
+        }
+      }
+    }
+  ]
+}

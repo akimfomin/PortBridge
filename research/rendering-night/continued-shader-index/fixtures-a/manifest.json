@@ -1,0 +1,23 @@
+[
+  {
+    "name": "small",
+    "entries": 64,
+    "bytes": 42264,
+    "richness": 1,
+    "sha256": "12b2c7b428efafa1800c12bfa17a3bda7aa2fed579fb45f8dfeacca589195a7f"
+  },
+  {
+    "name": "medium",
+    "entries": 8000,
+    "bytes": 10425351,
+    "richness": 3,
+    "sha256": "b5e059c7783c78f4b987b8f26927091ad433080e43657037f234ab133cc8943c"
+  },
+  {
+    "name": "large",
+    "entries": 29187,
+    "bytes": 57357214,
+    "richness": 7,
+    "sha256": "5979a6d33558bd65a7c93125c0cb9f5644fee792774448be6502d7740dc785ad"
+  }
+]
