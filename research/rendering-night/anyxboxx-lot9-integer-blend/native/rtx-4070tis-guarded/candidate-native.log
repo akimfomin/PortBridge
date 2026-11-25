@@ -1,0 +1,5 @@
+ARM candidate uint_blend=0 float_blend=1
+ADAPTER NVIDIA GeForce RTX 4070 Ti SUPER LUID [matched adapter identifier]
+FORMAT 62 render_target=1 blendable=0
+FORMAT 10 render_target=1 blendable=1
+PSO candidate 0x00000000
