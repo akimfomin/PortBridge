@@ -1,0 +1,141 @@
+diff --git a/crates/victory-gpu/src/host.rs b/crates/victory-gpu/src/host.rs
+--- a/crates/victory-gpu/src/host.rs
++++ b/crates/victory-gpu/src/host.rs
+@@ -5,8 +5,8 @@
+ //! (unless `VICTORY_LATE_WAIT=1`, see [`late`]);
+ //! overlap them with per-submission fences once more than clears run.
+ 
+-use std::sync::atomic::{AtomicU32, Ordering};
+-use std::sync::{Mutex, OnceLock};
++use std::sync::atomic::{AtomicU32, AtomicU64, Ordering};
++use std::sync::{Arc, Mutex, OnceLock};
+ 
+ use windows::Win32::Foundation::{HANDLE, HWND, LPARAM, LRESULT, RECT, WPARAM};
+ use windows::Win32::Graphics::Direct3D::D3D_FEATURE_LEVEL_12_0;
+@@ -2331,6 +2331,18 @@
+     buffer: Option<(ID3D12Resource, usize, u64)>,
+ }
+ 
++#[path = "relay_fetch_pack.rs"]
++mod relay_fetch_pack;
++
++/// Trial with one queue and the original logical merge pieces.
++fn relay_pack_fetch() -> bool {
++    static ON: OnceLock<bool> = OnceLock::new();
++    *ON.get_or_init(|| std::env::var_os("VICTORY_RELAY_PACK_FETCH").is_some_and(|v| v == "1"))
++}
++
++/// Logical pieces, recorded copies, logical bytes, recorded bytes.
++static RELAY_FETCH_PACK: [AtomicU64; 4] = [const { AtomicU64::new(0) }; 4];
++
+ /// The thread that lands flights ([`relay`]): as soon as the card has run
+ /// the first flights of the line it takes them, with what follows them,
+ /// and does what they left to do ([`Host::relay_land`]); else it waits for
+@@ -2506,6 +2518,16 @@
+             r[3] / 1000.0,
+             r[4] / 1000.0,
+         );
++        if relay_pack_fetch() {
++            let [pieces, copies, requested, recorded] = RELAY_FETCH_PACK.each_ref().map(|c| {
++                c.swap(0, Ordering::Relaxed) as f64 / frames
++            });
++            tracing::info!(
++                "relay readback packing per frame: {pieces:.0} logical pieces, {copies:.0} recorded copies,                  {:.2} MB requested, {:.2} MB recorded",
++                requested / 1e6,
++                recorded / 1e6,
++            );
++        }
+     }
+     if late_exact() {
+         let [pages, runs, bytes] = crate::shadow::merged_stats().map(|n| n as f64 / frames);
+@@ -3283,6 +3305,12 @@
+             crate::shadow::relay_fetched(*QUEUE_ORDER.lock().unwrap_or_else(|e| e.into_inner()));
+             return;
+         }
++        let logical_total = total;
++        let packed = relay_pack_fetch().then(|| {
++            let (copies, packed_bytes) = relay_fetch_pack::pack_reads(&mut pieces, Arc::ptr_eq);
++            total = packed_bytes;
++            copies
++        });
+         if fetch.is_none() {
+             *fetch = self.make_relay_fetch();
+         }
+@@ -3306,8 +3334,17 @@
+             (|| -> windows::core::Result<u64> {
+                 allocator.Reset()?;
+                 list.Reset(&allocator, None)?;
+-                for (shadow, lo, hi, at) in &pieces {
+-                    list.CopyBufferRegion(&buffer, *at, &shadow.buffer, *lo as u64, (*hi - *lo) as u64);
++                let record = |(shadow, lo, _, at): &(Arc<crate::shadow::Shadow>, usize, usize, u64), end| {
++                    list.CopyBufferRegion(&buffer, *at, &shadow.buffer, *lo as u64, (end - *lo) as u64);
++                };
++                if let Some(copies) = &packed {
++                    for copy in copies {
++                        record(&pieces[copy.first], copy.end);
++                    }
++                } else {
++                    for piece in &pieces {
++                        record(piece, piece.2);
++                    }
+                 }
+                 list.Close()?;
+                 let lists = [Some(list.cast::<ID3D12CommandList>()?)];
+@@ -3336,6 +3373,13 @@
+             CARD_STATS[4].fetch_add(total, Ordering::Relaxed);
+             CARD_STATS[5].fetch_add(1, Ordering::Relaxed);
+             CARD_STATS[6].fetch_add(us, Ordering::Relaxed);
++        }
++        if let Some(copies) = &packed {
++            for (counter, value) in RELAY_FETCH_PACK.iter().zip([
++                pieces.len() as u64, copies.len() as u64, logical_total, total,
++            ]) {
++                counter.fetch_add(value, Ordering::Relaxed);
++            }
+         }
+         let mut title = Vec::new();
+         let mut written = 0;
+diff --git a/crates/victory-gpu/src/relay_fetch_pack.rs b/crates/victory-gpu/src/relay_fetch_pack.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/victory-gpu/src/relay_fetch_pack.rs
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-3.0-or-later
++//! Pack consecutive reads from one buffer and preserve the merge schedule.
++
++const LIMIT: usize = 1024 * 1024;
++
++pub(super) struct FetchCopy {
++    /// The first logical piece supplies the source, start and destination.
++    pub(super) first: usize,
++    pub(super) end: usize,
++}
++
++/// Replace each piece's old destination offset with its position inside
++/// the packed staging buffer. Input consists of nonempty, bounded pieces.
++/// The logical pieces stay in their original order, even across overlaps.
++pub(super) fn pack_reads<T>(
++    pieces: &mut [(T, usize, usize, u64)],
++    same: impl Fn(&T, &T) -> bool,
++) -> (Vec<FetchCopy>, u64) {
++    let mut copies: Vec<FetchCopy> = Vec::new();
++    let mut total = 0;
++    for i in 0..pieces.len() {
++        let (source, from, to, _) = &pieces[i];
++        let (from, to) = (*from, *to);
++        if let Some(last) = copies.last_mut() {
++            let (owner, start, _, at) = &pieces[last.first];
++            if from >= *start && from <= last.end && to - *start <= LIMIT && same(source, owner) {
++                let offset = *at + (from - *start) as u64;
++                total += to.saturating_sub(last.end) as u64;
++                last.end = last.end.max(to);
++                pieces[i].3 = offset;
++                continue;
++            }
++        }
++        copies.push(FetchCopy { first: i, end: to });
++        pieces[i].3 = total;
++        total += (to - from) as u64;
++    }
++    (copies, total)
++}

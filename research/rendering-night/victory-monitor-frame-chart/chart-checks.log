@@ -1,0 +1,10 @@
+test_counter_above_wall_expands_scale_and_stays_visible (__main__.ChartTest.test_counter_above_wall_expands_scale_and_stays_visible) ... ok
+test_equal_wait_and_copyback_have_independent_marks (__main__.ChartTest.test_equal_wait_and_copyback_have_independent_marks) ... ok
+test_history_fits_narrow_canvas_and_stays_at_last_240 (__main__.ChartTest.test_history_fits_narrow_canvas_and_stays_at_last_240) ... ok
+test_old_chart_adds_gpu_to_wall_even_for_disjoint_sample (__main__.ChartTest.test_old_chart_adds_gpu_to_wall_even_for_disjoint_sample) ... ok
+test_parser_and_summary_calculation_are_unchanged (__main__.ChartTest.test_parser_and_summary_calculation_are_unchanged) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.016s
+
+OK

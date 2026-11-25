@@ -1,0 +1,10 @@
+test_adjacent_16_piece_control (__main__.RelayCopy.test_adjacent_16_piece_control) ... ok
+test_different_clips_overlap_within_one_page (__main__.RelayCopy.test_different_clips_overlap_within_one_page) ... ok
+test_owner_gap_backward_and_one_mib_cut (__main__.RelayCopy.test_owner_gap_backward_and_one_mib_cut) ... ok
+test_random_clips_reproduce_every_original_ordered_read (__main__.RelayCopy.test_random_clips_reproduce_every_original_ordered_read) ... ok
+test_sparse_negative_control (__main__.RelayCopy.test_sparse_negative_control) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.164s
+
+OK

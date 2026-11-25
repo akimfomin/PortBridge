@@ -1,0 +1,6 @@
+uniform-trip diamond: revised #2035 corrects earlier result and keeps group sync
+nonuniform exit: revised #2035 strips only for known single-console-wave group on this host
+one guest wave, two host waves: mode 11 -> 10 at the marked site
+first-epoch static orders: required handoff gives read=1; fence-only admits read=0 and read=1
+flat UAV write: exact predicate is false even though the lowerer emits rawBufferStore; zero LDS is insufficient
+scope: pinned source and synthetic control/event model; no translator or GPU executed

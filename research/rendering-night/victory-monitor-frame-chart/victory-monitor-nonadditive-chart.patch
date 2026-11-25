@@ -1,0 +1,171 @@
+diff --git a/victory_monitor.py b/victory_monitor.py
+--- a/victory_monitor.py
++++ b/victory_monitor.py
+@@ -159,6 +159,16 @@
+ 
+ TS_RE = re.compile(r"^(\d{4}-\d\d-\d\d)T(\d\d:\d\d:\d\d)\.(\d+)Z")
+ 
++CHART_WALL_COLOR = "#33363e"
++CHART_MARKERS = (
++    ("gpu", "legend_gpu", "#e05a4e"),
++    ("copyb", "legend_copyb", "#e0a34e"),
++    ("tex", "legend_tex", "#b04ec9"),
++    ("copies", "legend_copies", "#4ea3e0"),
++    ("prep", "legend_prep", "#58b46a"),
++)
++
++
+ # ------------------------------------------------------------------- i18n
+ 
+ STRINGS = {
+@@ -178,11 +188,12 @@
+         "lbl_aux": "auxiliares",
+         "lbl_mem": "memoria do jogo",
+         "lbl_pipe": "criacao de pipelines",
+-        "legend_gpu": "GPU",
++        "legend_gpu": "espera da submissao",
++        "legend_wall": "tempo do frame",
+         "legend_copyb": "copy-back",
+         "legend_tex": "textures",
+         "legend_copies": "copies",
+-        "legend_prep": "prep resto",
++        "legend_prep": "preparo total",
+         "st_parado": "parado",
+         "st_hook": "hook no processo pid={pid}",
+         "st_hook_sw": "hook no processo (switches: {n})",
+@@ -196,7 +207,7 @@
+         "dlg_game": "exe do titulo",
+         "dlg_log": "log de run do victory",
+         "err_launch": "ERRO ao iniciar: {e}",
+-        "chart_caption": "ultimos {n} frames | escala ate {m:.0f} ms",
++        "chart_caption": "ultimos {n} frames | escala ate {m:.0f} ms | marcadores podem se sobrepor",
+         "ref_100": "100 ms",
+         "ref_33": "33 ms",
+         "stall_msg": "\n!!! STALL {s:.0f}s sem burst de fps | log fazendo: {k}\n",
+@@ -206,7 +217,7 @@
+         "compare_head": "\n=== comparacao ===\nantes : {a}\ndepois: {b}\n",
+         "cmp_metric": "metrica", "cmp_before": "antes", "cmp_after": "depois", "cmp_delta": "delta",
+         "v_ok": "ok",
+-        "v_gpu": "GPU (draws)",
++        "v_gpu": "espera da submissao",
+         "v_copyb": "copy-back",
+         "v_tex": "textures",
+         "v_copies": "copies up",
+@@ -229,11 +240,12 @@
+         "lbl_aux": "auxiliary",
+         "lbl_mem": "game memory",
+         "lbl_pipe": "pipeline creation",
+-        "legend_gpu": "GPU",
++        "legend_gpu": "submit wait",
++        "legend_wall": "frame time",
+         "legend_copyb": "copy-back",
+         "legend_tex": "textures",
+         "legend_copies": "copies",
+-        "legend_prep": "rest of prep",
++        "legend_prep": "total prep",
+         "st_parado": "idle",
+         "st_hook": "hooked into process pid={pid}",
+         "st_hook_sw": "hooked (switches: {n})",
+@@ -247,7 +259,7 @@
+         "dlg_game": "title exe",
+         "dlg_log": "victory run log",
+         "err_launch": "failed to start: {e}",
+-        "chart_caption": "last {n} frames | scale up to {m:.0f} ms",
++        "chart_caption": "last {n} frames | scale up to {m:.0f} ms | markers can overlap",
+         "ref_100": "100 ms",
+         "ref_33": "33 ms",
+         "stall_msg": "\n!!! STALL {s:.0f}s without an fps burst | log busy with: {k}\n",
+@@ -257,7 +269,7 @@
+         "compare_head": "\n=== comparison ===\nbefore: {a}\nafter : {b}\n",
+         "cmp_metric": "metric", "cmp_before": "before", "cmp_after": "after", "cmp_delta": "delta",
+         "v_ok": "ok",
+-        "v_gpu": "GPU (draws)",
++        "v_gpu": "submit wait",
+         "v_copyb": "copy-back",
+         "v_tex": "textures",
+         "v_copies": "copies up",
+@@ -686,11 +698,11 @@
+         # legenda
+         leg = tk.Frame(self.sw_inner, bg=DARK_BG)
+         leg.pack(fill=tk.X, **pad)
+-        for color, name in [("#e05a4e", tr("legend_gpu")), ("#e0a34e", tr("legend_copyb")),
+-                            ("#b04ec9", tr("legend_tex")), ("#4ea3e0", tr("legend_copies")),
+-                            ("#58b46a", tr("legend_prep"))]:
++        legend = [("legend_wall", CHART_WALL_COLOR)]
++        legend.extend((label, color) for _, label, color in CHART_MARKERS)
++        for label, color in legend:
+             tk.Label(leg, text="■", fg=color, bg=DARK_BG).pack(side=tk.LEFT)
+-            tk.Label(leg, text=name + "   ", fg=DARK_FG, bg=DARK_BG).pack(side=tk.LEFT)
++            tk.Label(leg, text=tr(label) + "   ", fg=DARK_FG, bg=DARK_BG).pack(side=tk.LEFT)
+ 
+         # texto (log bruto filtrado + compare)
+         self.text = tk.Text(self.sw_inner, height=10, bg="#0d0f14", fg="#9aa0aa",
+@@ -982,34 +994,28 @@
+         if w < 50 or not self.frames:
+             return
+         fs = self.frames[-240:]
+-        maxms = max(max(f["ms"] for f in fs), 200) * 1.15
++        wall_peak = max(f["ms"] for f in fs)
++        marker_peak = max(f[field] for f in fs for field, _, _ in CHART_MARKERS)
++        maxms = max(wall_peak, marker_peak, 200) * 1.15
+         n = len(fs)
+-        bw = max(3, w / n - 1)
+         x0 = 6
++        slot = (w - x0) / n
++        bw = 0.85 * slot
++        tick = bw / len(CHART_MARKERS)
++        scale = h / maxms
+         for i, f in enumerate(fs):
+-            x = x0 + i * (bw + 1)
+-            scale = h / maxms
+-            # empilhado: resto do frame primeiro (fundo cinza)
+-            segs = [
+-                (f["ms"] - f["prep"] - f["copyb"], "#33363e"),   # resto/submit
+-                (f["prep"] - f["tex"] - f["copies"], "#58b46a"),  # prep resto
+-                (f["copies"], "#4ea3e0"),
+-                (f["tex"], "#b04ec9"),
+-                (f["copyb"], "#e0a34e"),
+-                (f["gpu"], "#e05a4e"),
+-            ]
+-            y = h
+-            for v, color in segs:
+-                if v <= 0:
+-                    continue
+-                hh = min(v * scale, y)
+-                y -= hh
+-                c.create_rectangle(x, y, x + bw, y + hh, fill=color, width=0)
+-            # linha de 100 ms e de 33 ms
++            x = x0 + i * slot
++            c.create_rectangle(x, h - f["ms"] * scale, x + bw, h, fill=CHART_WALL_COLOR, width=0)
++            # Counters can cover the same time. Plot each from zero.
++            for j, (field, _, color) in enumerate(CHART_MARKERS):
++                value = f[field]
++                if value > 0:
++                    y = h - value * scale
++                    c.create_line(x + j * tick, y, x + (j + 1) * tick, y, fill=color, width=2)
+         # grade vertical: uma linha a cada 30 frames
+         grid_n = 30
+         for gi in range(1, n // grid_n + 1):
+-            gx = x0 + gi * grid_n * (bw + 1)
++            gx = x0 + gi * grid_n * slot
+             c.create_line(gx, 0, gx, h, fill="#23262e")
+         for ms_, color in [(100, "#3d5a3d"), (33.3, "#2a4a5a")]:
+             y = h - ms_ * (h / maxms)
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -10,10 +10,11 @@
+ ## What it shows
+ 
+ - **Live numbers**: fps, ms/frame, a **bottleneck verdict for the current
+-  frame** ("GPU (draws)", "copy-back", "textures", ...), texture queue depth,
++  frame** ("submit wait", "copy-back", "textures", ...), texture queue depth,
+   card busy %, remap lock, dropped draws.
+-- **Stacked bar chart** of the last 240 frames: GPU / copy-back / textures /
+-  copies / rest-of-preparing, with 33 ms and 100 ms reference lines.
++- **Frame-time bars** for the last 240 samples, with 33 ms and 100 ms reference
++  lines. Independent markers show submit wait, copy-back, textures, copies and
++  total preparation. These counters may cover some of the same time.
+ - **Pipeline-stall watchdog**: alerts when no statistics burst lands for more
+   than 15 s and shows what the log was doing at that moment (e.g. the
+   first-bind avalanche that precedes a silent stall — caught on run 5, where
