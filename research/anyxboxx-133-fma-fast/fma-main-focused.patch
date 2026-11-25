@@ -1,0 +1,91 @@
+diff --git a/PrototypeScarlett/emu/rdna2_exec_ops.py b/PrototypeScarlett/emu/rdna2_exec_ops.py
+index 2821f2d..f8f128a 100644
+--- a/PrototypeScarlett/emu/rdna2_exec_ops.py
++++ b/PrototypeScarlett/emu/rdna2_exec_ops.py
+@@ -2,7 +2,7 @@
+ 
+ Les tables associent un mnémonique à sa fonction, d'après la documentation publique d'AMD
+ (« RDNA 2 Instruction Set Architecture »). Les flottants sont calculés en double précision
+-puis arrondis en simple précision ; les dénormaux ne sont pas traités à part.
++puis arrondis en simple précision. Les FMA f32 évitent le double arrondi.
+ """
+ import math
+ import struct
+@@ -230,10 +230,36 @@ def _binary_float(function):
+     return lambda a, b, d, k, c: operation(F(a), F(b))
+ 
+ 
+-def _fma(a, b, c):
++def _mul_add(a, b, c):
+     return a * b + c
+ 
+ 
++# 53 bits en f64, 24 en f32. Le facteur convertit une ULP f64 en une demi-ULP f32.
++_F32_HALF_ULP_SCALE = 2.0 ** (53 - 24 - 1)
++_F32_HALF_MIN_SUBNORMAL = 2.0 ** -150
++_F32_OUT_OF_RANGE = 2.0 ** 128
++
++
++def _fma(a, b, c):
++    """Prépare l'arrondi unique d'un produit-somme de trois entrées f32."""
++    product = a * b
++    total = product + c
++    # Le produit de 24 bits par 24 bits est exact en f64. FastTwoSum retrouve
++    # l'erreur de la somme en plaçant la plus grande magnitude en premier.
++    if abs(product) < abs(c):
++        product, c = c, product
++    error = c - (total - product)
++    if not error or not _F32_HALF_MIN_SUBNORMAL <= abs(total) <= _F32_OUT_OF_RANGE:
++        return total
++
++    half_ulp = math.ulp(total) * _F32_HALF_ULP_SCALE
++    if half_ulp < _F32_HALF_MIN_SUBNORMAL:
++        half_ulp = _F32_HALF_MIN_SUBNORMAL
++    if total % (half_ulp + half_ulp) != half_ulp:
++        return total
++    return math.nextafter(total, math.copysign(math.inf, error))
++
++
+ def _round_even(x):
+     return x if math.isinf(x) or math.isnan(x) else float(round(x))
+ 
+@@ -273,7 +299,7 @@ VECTOR = {
+     "v_min_f32": _binary_float(min),
+     "v_max_f32": _binary_float(max),
+     "v_fmac_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(b), F(d)),
+-    "v_mac_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(b), F(d)),
++    "v_mac_f32": lambda a, b, d, k, c: _float_op(_mul_add)(F(a), F(b), F(d)),
+     "v_fmamk_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(k), F(b)),
+     "v_fmaak_f32": lambda a, b, d, k, c: _float_op(_fma)(F(a), F(b), F(k)),
+     "v_cndmask_b32": lambda a, b, d, k, c: b if c else a,
+diff --git a/PrototypeScarlett/emu/rdna2_exec_vop3.py b/PrototypeScarlett/emu/rdna2_exec_vop3.py
+index 368d378..b74c136 100644
+--- a/PrototypeScarlett/emu/rdna2_exec_vop3.py
++++ b/PrototypeScarlett/emu/rdna2_exec_vop3.py
+@@ -7,7 +7,7 @@ Sémantique d'après la documentation publique d'AMD (« RDNA 2 Instruction Set
+ """
+ import math
+ 
+-from emu.rdna2_exec_ops import (MASK32, VECTOR, VECTOR_COMPARE, _float_op, _fma, bits_float, float_bits,
++from emu.rdna2_exec_ops import (MASK32, VECTOR, VECTOR_COMPARE, _float_op, _fma, _mul_add, bits_float, float_bits,
+                                 ldexp, signed)
+ 
+ SIGN = 0x8000_0000
+@@ -26,7 +26,7 @@ def _float3(function):
+ 
+ 
+ def _legacy_fma(x, y, z):
+-    return z if x == 0 or y == 0 else x * y + z          # « legacy » : 0 × n'importe quoi = 0
++    return z if x == 0 or y == 0 else _fma(x, y, z)       # « legacy » : 0 × n'importe quoi = 0
+ 
+ 
+ def _bitfield(value, offset, width, is_signed=False):
+@@ -62,7 +62,7 @@ def _perm_b32(src0, src1, src2):
+ # Instructions propres à VOP3 : fonction(a, b, c) des trois sources.
+ VECTOR3 = {
+     "v_fma_f32": _float3(_fma),
+-    "v_mad_f32": _float3(_fma),
++    "v_mad_f32": _float3(_mul_add),
+     "v_fma_legacy_f32": _float3(_legacy_fma),
+     "v_mad_u32_u24": lambda a, b, c: (a & 0xFFFFFF) * (b & 0xFFFFFF) + c,
+     "v_mad_i32_i24": lambda a, b, c: signed(a, 24) * signed(b, 24) + signed(c),

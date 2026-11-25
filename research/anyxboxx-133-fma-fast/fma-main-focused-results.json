@@ -1,0 +1,258 @@
+{
+  "baseline": [
+    {
+      "inputs": [
+        "3FC00000",
+        "3F800001",
+        "99800000"
+      ],
+      "expected": "3FC00001",
+      "fused": {
+        "fmac-e32": "3FC00002",
+        "fmac-e64": "3FC00002",
+        "fma": "3FC00002",
+        "fma-legacy": "3FC00002",
+        "fmamk": "3FC00002",
+        "fmaak": "3FC00002"
+      },
+      "match": false,
+      "unfused_controls": [
+        "3FC00002",
+        "3FC00002"
+      ]
+    },
+    {
+      "inputs": [
+        "3FC00000",
+        "3F800003",
+        "19800000"
+      ],
+      "expected": "3FC00005",
+      "fused": {
+        "fmac-e32": "3FC00004",
+        "fmac-e64": "3FC00004",
+        "fma": "3FC00004",
+        "fma-legacy": "3FC00004",
+        "fmamk": "3FC00004",
+        "fmaak": "3FC00004"
+      },
+      "match": false,
+      "unfused_controls": [
+        "3FC00004",
+        "3FC00004"
+      ]
+    },
+    {
+      "inputs": [
+        "BFC00000",
+        "3F800001",
+        "19800000"
+      ],
+      "expected": "BFC00001",
+      "fused": {
+        "fmac-e32": "BFC00002",
+        "fmac-e64": "BFC00002",
+        "fma": "BFC00002",
+        "fma-legacy": "BFC00002",
+        "fmamk": "BFC00002",
+        "fmaak": "BFC00002"
+      },
+      "match": false,
+      "unfused_controls": [
+        "BFC00002",
+        "BFC00002"
+      ]
+    },
+    {
+      "inputs": [
+        "3FC00000",
+        "3F800001",
+        "00000000"
+      ],
+      "expected": "3FC00002",
+      "fused": {
+        "fmac-e32": "3FC00002",
+        "fmac-e64": "3FC00002",
+        "fma": "3FC00002",
+        "fma-legacy": "3FC00002",
+        "fmamk": "3FC00002",
+        "fmaak": "3FC00002"
+      },
+      "match": true,
+      "unfused_controls": [
+        "3FC00002",
+        "3FC00002"
+      ]
+    },
+    {
+      "inputs": [
+        "00800000",
+        "3F7FFFFF",
+        "00000000"
+      ],
+      "expected": "00800000",
+      "fused": {
+        "fmac-e32": "00800000",
+        "fmac-e64": "00800000",
+        "fma": "00800000",
+        "fma-legacy": "00800000",
+        "fmamk": "00800000",
+        "fmaak": "00800000"
+      },
+      "match": true,
+      "unfused_controls": [
+        "00800000",
+        "00800000"
+      ]
+    },
+    {
+      "inputs": [
+        "5B780000",
+        "63842108",
+        "8D800000"
+      ],
+      "expected": "7F7FFFFF",
+      "fused": {
+        "fmac-e32": "7F800000",
+        "fmac-e64": "7F800000",
+        "fma": "7F800000",
+        "fma-legacy": "7F800000",
+        "fmamk": "7F800000",
+        "fmaak": "7F800000"
+      },
+      "match": false,
+      "unfused_controls": [
+        "7F800000",
+        "7F800000"
+      ]
+    }
+  ],
+  "candidate": [
+    {
+      "inputs": [
+        "3FC00000",
+        "3F800001",
+        "99800000"
+      ],
+      "expected": "3FC00001",
+      "fused": {
+        "fmac-e32": "3FC00001",
+        "fmac-e64": "3FC00001",
+        "fma": "3FC00001",
+        "fma-legacy": "3FC00001",
+        "fmamk": "3FC00001",
+        "fmaak": "3FC00001"
+      },
+      "match": true,
+      "unfused_controls": [
+        "3FC00002",
+        "3FC00002"
+      ]
+    },
+    {
+      "inputs": [
+        "3FC00000",
+        "3F800003",
+        "19800000"
+      ],
+      "expected": "3FC00005",
+      "fused": {
+        "fmac-e32": "3FC00005",
+        "fmac-e64": "3FC00005",
+        "fma": "3FC00005",
+        "fma-legacy": "3FC00005",
+        "fmamk": "3FC00005",
+        "fmaak": "3FC00005"
+      },
+      "match": true,
+      "unfused_controls": [
+        "3FC00004",
+        "3FC00004"
+      ]
+    },
+    {
+      "inputs": [
+        "BFC00000",
+        "3F800001",
+        "19800000"
+      ],
+      "expected": "BFC00001",
+      "fused": {
+        "fmac-e32": "BFC00001",
+        "fmac-e64": "BFC00001",
+        "fma": "BFC00001",
+        "fma-legacy": "BFC00001",
+        "fmamk": "BFC00001",
+        "fmaak": "BFC00001"
+      },
+      "match": true,
+      "unfused_controls": [
+        "BFC00002",
+        "BFC00002"
+      ]
+    },
+    {
+      "inputs": [
+        "3FC00000",
+        "3F800001",
+        "00000000"
+      ],
+      "expected": "3FC00002",
+      "fused": {
+        "fmac-e32": "3FC00002",
+        "fmac-e64": "3FC00002",
+        "fma": "3FC00002",
+        "fma-legacy": "3FC00002",
+        "fmamk": "3FC00002",
+        "fmaak": "3FC00002"
+      },
+      "match": true,
+      "unfused_controls": [
+        "3FC00002",
+        "3FC00002"
+      ]
+    },
+    {
+      "inputs": [
+        "00800000",
+        "3F7FFFFF",
+        "00000000"
+      ],
+      "expected": "00800000",
+      "fused": {
+        "fmac-e32": "00800000",
+        "fmac-e64": "00800000",
+        "fma": "00800000",
+        "fma-legacy": "00800000",
+        "fmamk": "00800000",
+        "fmaak": "00800000"
+      },
+      "match": true,
+      "unfused_controls": [
+        "00800000",
+        "00800000"
+      ]
+    },
+    {
+      "inputs": [
+        "5B780000",
+        "63842108",
+        "8D800000"
+      ],
+      "expected": "7F7FFFFF",
+      "fused": {
+        "fmac-e32": "7F7FFFFF",
+        "fmac-e64": "7F7FFFFF",
+        "fma": "7F7FFFFF",
+        "fma-legacy": "7F7FFFFF",
+        "fmamk": "7F7FFFFF",
+        "fmaak": "7F7FFFFF"
+      },
+      "match": true,
+      "unfused_controls": [
+        "7F800000",
+        "7F800000"
+      ]
+    }
+  ]
+}
