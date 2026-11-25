@@ -15,3 +15,7 @@ python stage_monitor.py
 git -C upstream apply --check --whitespace=error-all ../victory-monitor-nonadditive-chart.patch
 python chart_checks.py
 ```
+
+## Accepted upstream
+
+KretliJ confirmed the same overcount and closed #1 after landing his own stacked-bar implementation on main. The measured frame duration sets the bar height and the overlapping submit wait uses an outline. His commit credits PortBridge and his validation used the five supplied scenarios. The reported expected and displayed values agreed at 50 ms for the synthetic case and 828.1 ms for a cold-start sample. [Author's verification](https://github.com/KretliJ/victory-monitor/issues/1#issuecomment-7153070742) · [Upstream commit](https://github.com/KretliJ/victory-monitor/commit/1ac612868fe1392443b6f96ee06bf4341e9b8d60)
