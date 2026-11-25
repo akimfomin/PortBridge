@@ -1,0 +1,34 @@
+{
+  "wait": {"producer": "recorder-2", "command_list": "direct-7", "begin_us": 100000000, "end_us": 260000000},
+  "resolutions": [
+    {
+      "producer": "recorder-2", "command_list": "direct-7", "pipeline": "indirect-graphics-a",
+      "begin_us": 98000000, "end_us": 150000000,
+      "phases": [
+        {"kind": "build_queue", "begin_us": 98000000, "end_us": 109000000},
+        {"kind": "translation", "begin_us": 109000000, "end_us": 120000000},
+        {"kind": "driver_admission", "begin_us": 120000000, "end_us": 126000000},
+        {"kind": "native_driver", "begin_us": 126000000, "end_us": 145000000}
+      ]
+    },
+    {
+      "producer": "recorder-2", "command_list": "direct-7", "pipeline": "mesh-graphics-b",
+      "begin_us": 149000000, "end_us": 210000000,
+      "phases": [
+        {"kind": "build_queue", "begin_us": 149000000, "end_us": 160000000},
+        {"kind": "translation", "begin_us": 160000000, "end_us": 172000000},
+        {"kind": "driver_admission", "begin_us": 172000000, "end_us": 184000000},
+        {"kind": "native_driver", "begin_us": 180000000, "end_us": 205000000}
+      ]
+    },
+    {
+      "producer": "recorder-2", "command_list": "direct-7", "pipeline": "indirect-graphics-c",
+      "begin_us": 212000000, "end_us": 269000000
+    },
+    {
+      "producer": "recorder-3", "command_list": "direct-8", "pipeline": "unrelated-build",
+      "begin_us": 70000000, "end_us": 266000000,
+      "phases": [{"kind": "native_driver", "begin_us": 70000000, "end_us": 266000000}]
+    }
+  ]
+}

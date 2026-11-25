@@ -12,6 +12,8 @@ The first milestone compares policies deterministically and exercises the measur
 
 The [open-scene replay](../../research/pipeline-readiness/full-scene/README.md) found a mixed repeat result for reserving one worker. Starting the known first-frame pipelines during actual scene upload shortened the matched interval to the first correct image in all eight pairs. This shifted peak resident memory upward while peak private commit stayed similar. This track continues with the same first-output and memory boundaries on a workload whose first-use pipeline list comes from observed engine work.
 
+The next experiment targets the seconds-scale wait for previously unseen required graphics pipelines. A public XCL trace reported 162.01 seconds inside graphics resolution on the recorder that released the presenter. XCL's merged #2118 defers compute waits and leaves that graphics path synchronous. Choose a scheduling or compilation intervention after measuring phase coverage on that dependency. [Heavy graphics evidence and trace format](../../research/pipeline-readiness/HEAVY-GRAPHICS.md)
+
 The Halide and Blender studies are complete for active research. Their sources and results remain in [Halide #76](https://github.com/akimfomin/PortBridge/pull/76), [Geometry #75](https://github.com/akimfomin/PortBridge/pull/75), and the Blender VSE replay at `ac825f2`. The standalone Geometry package is retained at `geometry-v0.1.0`. Adoption checks for existing contributions continue independently of this research track.
 
 [Working replay and results](../../research/pipeline-readiness/README.md)
