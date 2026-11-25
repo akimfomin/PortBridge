@@ -1,0 +1,18 @@
+{
+  "compile": "passed",
+  "system_commit_free_bytes": 4395786240,
+  "source_control": "BC7 mode-6 patterns and dirty block count passed",
+  "all_blocks_address_checked": 163840,
+  "blocks_in_dirty_range": 4096,
+  "physical_byte_range": [1900544, 1966080],
+  "source_box_texels": [256, 256, 0, 512, 512, 1],
+  "mip": 0,
+  "array_slice": 1,
+  "d3d_subresource": 2,
+  "sha256": {
+    "copy-case.inc": "4f606ed2a9e0c4dbee1ac5d705b1a1d53784dc0d1dd944fdfc6af8946f92744a",
+    "native-bc7.exe": "7112e3313a61b4ef3a75d45149d8ddc2b56c6751292fec613fc67f0660ae9bea",
+    "emit_case.rs": "17ee560ce33acef06bdc3e885567bae170536a99f9c11bb2de75f1064861a123",
+    "native-upload.cpp": "2cc67c7212f1750bf7af219a4e6dd1bbcc38f0b84b28577d6a120d2996579e93"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+  "README.md": "ead2a2b50b83d9f746fab14219bbe743c85bf5435305242186774c05c9fc7057",
+  "portbridge-victory-bc7-copy/README.md": "9bfe2b7319a559331ddfde420c9fc59dec3a0a88d835079d4a48e71bf568bc30",
+  "portbridge-victory-bc7-copy/build.ps1": "fa5362f57f2eb6db895c20157eaa8f834fadccfb549ca2493c9fdbbf47fbd726",
+  "portbridge-victory-bc7-copy/emit_case.rs": "17ee560ce33acef06bdc3e885567bae170536a99f9c11bb2de75f1064861a123",
+  "portbridge-victory-bc7-copy/native-upload.cpp": "2cc67c7212f1750bf7af219a4e6dd1bbcc38f0b84b28577d6a120d2996579e93",
+  "portbridge-victory-bc7-copy/proof-a/copy-case.inc": "4f606ed2a9e0c4dbee1ac5d705b1a1d53784dc0d1dd944fdfc6af8946f92744a",
+  "portbridge-victory-bc7-copy/proof-a/cpu-evidence.json": "2090078b10004e97e9d0b18d73afb12c6df6e6572100eca2854f03544389c7ca",
+  "portbridge-victory-bc7-copy/proof-a/native-preflight.json": "86a6ebfd72228edd2b7131fb01b0d9a5424d00a598acad91722eeb4526643bbb",
+  "portbridge-victory-bc7-copy/proof-a/native-receipt.json": "6b23685264242d8c029935e9a84123c73d37a839e728b67338f6f5a02716cc23",
+  "portbridge-victory-bc7-copy/proof-a/native.log": "7cbb44c05a9db15be82111e3dd9321530c9e824665fda33fd82a6fedbcde35e9",
+  "portbridge-victory-dirty-tile-upload/LICENSE.guard": "84c08d918c0e9842fab1c41dc07353ac31c853efbf5dda92e1842766f02b51b0",
+  "portbridge-victory-dirty-tile-upload/README.md": "e5a3171ecbc4a0d2b385c18169b1341d2e04629cf431b4c4392a4412086de3a5",
+  "portbridge-victory-dirty-tile-upload/copy_plan.rs": "fb272ef132e97bc0a7e6caba2ec5e414415580feba84407b3d0ca9a48a5db063",
+  "portbridge-victory-dirty-tile-upload/guard.h": "f07e7302b85bdcdd66745f283768e60a2e266b6a16847e3234f92d95606c161f",
+  "portbridge-victory-dirty-tile-upload/texture.rs": "7322f9b183762dd743c9ab423721a446d04938d4ff3af7c52accf49df00a02ea"
+}

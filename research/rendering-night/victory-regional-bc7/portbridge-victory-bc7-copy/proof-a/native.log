@@ -1,0 +1,3 @@
+guard=returned reaped=1 peak_job=122314752 exit=0 error=0
+adapter=RTX 4070 Ti SUPER driver=00200000001006b2 completed=1 debug=0 warnings_or_errors=0 result=00000000 step=
+subresources=4 target=2 update_bytes=1048576/65536 checked_bytes=2621440 changed_blocks=4096 untouched_blocks=159744 wrong_words=0

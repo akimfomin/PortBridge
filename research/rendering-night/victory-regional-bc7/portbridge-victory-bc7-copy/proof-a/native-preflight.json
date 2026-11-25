@@ -1,0 +1,9 @@
+{
+  "status": "admission_refused",
+  "free_system_commit_bytes": 3584720896,
+  "free_physical_memory_bytes": 10458353664,
+  "required_free_system_commit_bytes": 4294967296,
+  "required_free_physical_memory_bytes": 6442450944,
+  "gpu_worker_started": false,
+  "source": "Windows Win32_PerfFormattedData_PerfOS_Memory and Win32_OperatingSystem immediate sample"
+}
