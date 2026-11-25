@@ -12,6 +12,8 @@ The PortBridge preflight snapshot indexed XCL #2088 and XBVK #3. Exact source in
 
 The current [heavy graphics investigation](HEAVY-GRAPHICS.md) follows a measured 162-second semaphore wait to a graphics recorder. It prioritizes identifying the expensive phase for previously unseen required pipelines before testing a scheduling or compilation change. The earlier experiments below establish measurement and output controls at smaller scale.
 
+The [ordered graphics implementation](ORDERED-GRAPHICS.md) starts exact native builds as their draw packets are discovered and keeps playback in order. It runs in the full open-scene renderer and is compared with blocking first use and eager compilation of exact known keys.
+
 ## Deterministic replay
 
 `readiness.py` takes full opaque pipeline keys, integer compile durations and memory estimates, plus the timestamp of each warmup request and first-frame use. Equal keys share one compilation. A demanded queued pipeline moves to the tail of the demand queue, ahead of speculation. A running compile can finish without duplication and keeps its original charge until completion. A failed required compile records a terminal result, releases its budget and never reports a ready frame.

@@ -138,13 +138,18 @@ def compose_scene(output):
     print({k: v for k, v in manifest.items() if k != "sources"})
 
 
-def compile_shader(output, dxc, validator, salt):
+def compile_shader(output, dxc, validator, salt, area_nodes=0, compact_area=False, materials=False):
     output.mkdir(parents=True, exist_ok=False)
     source = ROOT / "scene.hlsl"
+    defines = ["-D", f"CACHE_KEY={salt}"]
+    if area_nodes:
+        defines += ["-D", f"PORTBRIDGE_AREA_NODES={area_nodes}", "-D", f"PORTBRIDGE_AREA_UNROLL={int(not compact_area)}"]
+    if materials:
+        defines += ["-D", "PORTBRIDGE_MATERIAL_RECIPES=1"]
     for stage, entry in (("vs", "vertex"), ("ps", "pixel")):
         target = output / (stage + ".spv")
         subprocess.run([dxc, "-spirv", "-fspv-target-env=vulkan1.3", "-O3", "-T", stage + "_6_0", "-E", entry,
-                        "-D", f"CACHE_KEY={salt}", "-Fo", target, source], check=True)
+                        *defines, "-Fo", target, source], check=True)
         subprocess.run([validator, "--target-env", "vulkan1.3", target], check=True)
 
 

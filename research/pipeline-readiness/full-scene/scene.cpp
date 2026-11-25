@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <array>
 #include <atomic>
+#include <bit>
 #include <chrono>
 #include <condition_variable>
 #include <cstdint>
@@ -19,11 +20,14 @@
 #include <limits>
 #include <mutex>
 #include <latch>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
 #include <thread>
 #include <vector>
+
+#include "../ordered_graphics.hpp"
 
 namespace {
 using Clock = std::chrono::steady_clock;
@@ -31,7 +35,10 @@ using namespace std::chrono_literals;
 constexpr uint32_t width = 1024, height = 768;
 constexpr size_t color_size = width * height * 4;
 constexpr unsigned pipeline_count = 6;
+constexpr unsigned material_count = 15;
 constexpr unsigned worker_count = 3;
+constexpr uint64_t GiB = 1ull << 30;
+constexpr uint64_t max_shader_bytes = 512ull << 10;
 constexpr VkFormat color_format = VK_FORMAT_R8G8B8A8_UNORM;
 constexpr VkFormat depth_format = VK_FORMAT_D32_SFLOAT;
 constexpr std::array<unsigned, 2> demanded{0, 3};
@@ -41,6 +48,36 @@ double ms(Clock::duration time) { return std::chrono::duration<double, std::mill
 void require(bool valid, std::string_view message) {
     if (!valid) throw std::runtime_error(std::string(message));
 }
+
+class CompileLimit {
+public:
+    CompileLimit(uint64_t shader_bytes, bool recorded) {
+        if (shader_bytes < 65536) return;
+        require(recorded, "Large shader is supported only by the two-worker recording modes");
+        MEMORYSTATUSEX memory{};
+        memory.dwLength = sizeof(memory);
+        require(GlobalMemoryStatusEx(&memory) && memory.ullAvailPhys >= 6 * GiB &&
+                memory.ullAvailPageFile >= 5 * GiB, "Insufficient system headroom for large shader");
+        job = CreateJobObjectW(nullptr, nullptr);
+        require(job != nullptr, "Create graphics compile job");
+        JOBOBJECT_EXTENDED_LIMIT_INFORMATION limits{};
+        limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_PROCESS_MEMORY;
+        limits.ProcessMemoryLimit = 3 * GiB / 2;
+        if (!SetInformationJobObject(job, JobObjectExtendedLimitInformation, &limits, sizeof(limits)) ||
+            !AssignProcessToJobObject(job, GetCurrentProcess())) {
+            CloseHandle(job);
+            throw std::runtime_error("Set graphics compile job memory limit");
+        }
+    }
+
+    CompileLimit(const CompileLimit&) = delete;
+    CompileLimit& operator=(const CompileLimit&) = delete;
+    ~CompileLimit() { if (job) CloseHandle(job); }
+
+private:
+    HANDLE job{};
+};
+
 void check(VkResult result, std::string_view method) {
     if (result != VK_SUCCESS) {
         throw std::runtime_error(std::string(method) + " status " + std::to_string(result));
@@ -89,7 +126,7 @@ struct Scene {
         read(stream, magic.data(), magic.size());
         read(stream, counts.data(), counts.size());
         require(magic == std::array{'P', 'B', 'S', 'C'} && counts[0] <= 500000 && counts[1] <= 2000000 &&
-                counts[2] == 49 && counts[3] == 34 && counts[4] == 512, "Unexpected pinned scene shape");
+                    counts[2] == 49 && counts[3] == 34 && counts[4] == 512, "Unexpected pinned scene shape");
         layers = counts[3];
         side = counts[4];
         vertices = vector_read<Vertex>(stream, counts[0]);
@@ -99,7 +136,7 @@ struct Scene {
         require(stream.peek() == EOF, "Trailing scene data");
         for (const Packet& packet : packets) {
             require(packet.first <= indices.size() && packet.count <= indices.size() - packet.first &&
-                    packet.base < vertices.size() && packet.transparent <= 1 && packet.material < 15 &&
+                    packet.base < vertices.size() && packet.transparent <= 1 && packet.material < material_count &&
                     packet.count && packet.count % 3 == 0, "Invalid draw range");
             for (unsigned i = 0; i < 3; ++i) require(packet.textures[i] < layers, "Invalid texture layer");
             for (uint32_t index = packet.first; index != packet.first + packet.count; ++index)
@@ -122,6 +159,19 @@ struct Build {
     Clock::time_point start{}, end{};
 };
 
+enum class Recording { prepared, blocking, ordered, eager };
+
+using Recipe = std::array<uint32_t, 7>;
+
+Recipe graphics_recipe(unsigned variant, const Packet* packet = nullptr) {
+    Recipe recipe{variant, UINT32_MAX, UINT32_MAX, UINT32_MAX, 0, 0, 0};
+    if (packet) {
+        std::copy_n(packet->textures, 3, recipe.begin() + 1);
+        for (unsigned i = 0; i < 3; ++i) recipe[4 + i] = std::bit_cast<uint32_t>(packet->factor[i]);
+    }
+    return recipe;
+}
+
 struct Renderer {
     VkInstance instance{};
     VkPhysicalDevice physical{};
@@ -141,8 +191,39 @@ struct Renderer {
     VkSampler sampler{};
     Buffer vertices, indices, readback, upload;
     Image color, depth, textures;
-    std::array<Build, pipeline_count> builds{};
+    std::vector<Build> builds;
+    std::vector<Recipe> recipes;
+    std::array<unsigned, material_count> material_recipes{};
+    bool specialize_materials = false;
     VkDeviceSize allocated{};
+
+    void prepare_recipes(const Scene& scene, bool material_mode) {
+        specialize_materials = material_mode;
+        if (material_mode) {
+            constexpr auto unseen = std::numeric_limits<unsigned>::max();
+            material_recipes.fill(unseen);
+            for (const auto& packet : scene.packets) {
+                const auto recipe = graphics_recipe(packet.transparent ? 3 : 0, &packet);
+                const auto found = std::find(recipes.begin(), recipes.end(), recipe);
+                const auto id = static_cast<unsigned>(found - recipes.begin());
+                if (found == recipes.end()) recipes.push_back(recipe);
+                auto& previous = material_recipes[packet.material];
+                require(previous == unseen || previous == id, "Unexpected material recipe change");
+                previous = id;
+            }
+        }
+        for (unsigned variant = 0; variant < pipeline_count; ++variant) {
+            if (material_mode && variant % 3 == 0) continue;
+            recipes.push_back(graphics_recipe(variant));
+        }
+        builds.resize(recipes.size());
+    }
+
+    unsigned recipe_id(unsigned view, const Packet& packet) const {
+        if (!specialize_materials) return view + 3 * packet.transparent;
+        if (view == 0) return material_recipes[packet.material];
+        return static_cast<unsigned>(recipes.size()) - 4 + view - 1 + 2 * packet.transparent;
+    }
 
     ~Renderer() {
         if (device) {
@@ -397,7 +478,7 @@ struct Renderer {
     void shader(const std::filesystem::path& path, VkShaderModule& output) {
         std::ifstream file(path, std::ios::binary | std::ios::ate);
         auto bytes = file.tellg();
-        require(bytes > 20 && bytes < 65536 && bytes % 4 == 0, "Unexpected shader size");
+        require(bytes > 20 && bytes <= std::streamoff(max_shader_bytes) && bytes % 4 == 0, "Unexpected shader size");
         file.seekg(0);
         auto spv = vector_read<uint32_t>(file, static_cast<size_t>(bytes) / 4);
         require(spv[0] == 0x07230203, "Bad SPIR-V signature");
@@ -407,10 +488,16 @@ struct Renderer {
         check(vkCreateShaderModule(device, &info, nullptr, &output), "vkCreateShaderModule");
     }
 
-    VkResult make_pipeline(unsigned variant, VkPipelineCache selected_cache, VkPipelineCreateFlags flags,
+    VkResult make_pipeline(unsigned id, VkPipelineCache selected_cache, VkPipelineCreateFlags flags,
                            VkPipeline& output, VkPipelineCreationFeedback* stats) {
-        const VkSpecializationMapEntry entry{0, 0, sizeof(variant)};
-        const VkSpecializationInfo specialize{1, &entry, sizeof(variant), &variant};
+        const auto& recipe = recipes[id];
+        const auto variant = recipe[0];
+        std::array<VkSpecializationMapEntry, 7> mapping{};
+        for (uint32_t i = 0; i < mapping.size(); ++i) {
+            mapping[i] = {i, i * uint32_t(sizeof(uint32_t)), sizeof(uint32_t)};
+        }
+        const VkSpecializationInfo specialize{specialize_materials ? uint32_t(mapping.size()) : 1u,
+                                              mapping.data(), sizeof(Recipe), recipe.data()};
         std::array<VkPipelineShaderStageCreateInfo, 2> stages{};
         stages[0] = structure<VkPipelineShaderStageCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO);
         stages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -511,7 +598,30 @@ struct Renderer {
         build.end = Clock::now();
     }
 
-    std::vector<uint8_t> draw(const Scene& scene, unsigned variant, unsigned camera, bool initial) {
+    std::vector<uint8_t> draw(const Scene& scene, unsigned variant, unsigned camera, bool initial,
+                              Recording recording = Recording::prepared,
+                              portbridge::PipelineQueue* pipelines = nullptr) {
+        constexpr std::array<std::array<float, 3>, 3> eyes{{{0.61f, 0.48f, 0.72f}, {-0.71f, 0.49f, 0.76f},
+                                                           {0.29f, 0.86f, -0.54f}}};
+        const auto distance = [&](const Packet* packet) {
+            float result = 0;
+            for (unsigned i = 0; i < 3; ++i) {
+                float displacement = packet->translation[i] - eyes.at(camera)[i];
+                result += displacement * displacement;
+            }
+            return result;
+        };
+        const auto visit = [&](const auto& packet_action) {
+            std::vector<const Packet*> translucent;
+            for (const auto& packet : scene.packets) {
+                if (packet.transparent) translucent.push_back(&packet);
+                else packet_action(recipe_id(variant, packet), packet);
+            }
+            std::stable_sort(translucent.begin(), translucent.end(),
+                             [&](auto left, auto right) { return distance(left) > distance(right); });
+            for (const auto* packet : translucent) packet_action(recipe_id(variant, *packet), *packet);
+        };
+        if (recording == Recording::eager) visit([&](unsigned recipe, const Packet&) { pipelines->request(recipe); });
         const auto old_color = initial ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
         const auto old_depth = initial ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
         constexpr VkImageSubresourceRange color_range{VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
@@ -550,7 +660,15 @@ struct Renderer {
         const VkDeviceSize offset = 0;
         vkCmdBindVertexBuffers(command, 0, 1, &vertices.handle, &offset);
         vkCmdBindIndexBuffer(command, indices.handle, 0, VK_INDEX_TYPE_UINT32);
-        const auto draw_packet = [&](const Packet& packet) {
+        std::optional<portbridge::OrderedDraws<Packet>> ordered;
+        if (recording == Recording::ordered) ordered.emplace(*pipelines, 64);
+        std::size_t bound = builds.size();
+        std::size_t emitted = 0;
+        const auto emit = [&](std::size_t recipe, const Packet& packet) {
+            if (recipe != bound) {
+                vkCmdBindPipeline(command, VK_PIPELINE_BIND_POINT_GRAPHICS, builds[recipe].handle);
+                bound = recipe;
+            }
             Push push{};
             std::copy_n(packet.translation, 3, push.translation);
             std::copy_n(packet.rotation, 4, push.rotation);
@@ -560,27 +678,19 @@ struct Renderer {
             vkCmdPushConstants(command, layout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
                                0, sizeof(Push), &push);
             vkCmdDrawIndexed(command, packet.count, 1, packet.first, static_cast<int32_t>(packet.base), 0);
+            ++emitted;
         };
-        vkCmdBindPipeline(command, VK_PIPELINE_BIND_POINT_GRAPHICS, builds[variant].handle);
-        std::vector<const Packet*> translucent;
-        for (const auto& packet : scene.packets) {
-            if (packet.transparent) translucent.push_back(&packet);
-            else draw_packet(packet);
-        }
-        constexpr std::array<std::array<float, 3>, 3> eyes{{{0.61f, 0.48f, 0.72f}, {-0.71f, 0.49f, 0.76f},
-                                                           {0.29f, 0.86f, -0.54f}}};
-        const auto distance = [&](const Packet* p) {
-            float result = 0;
-            for (unsigned i = 0; i < 3; ++i) {
-                float displacement = p->translation[i] - eyes.at(camera)[i];
-                result += displacement * displacement;
+        const auto draw_packet = [&](unsigned recipe, const Packet& packet) {
+            if (ordered) {
+                ordered->append(recipe, packet, emit);
+            } else {
+                if (pipelines && recipe != bound) pipelines->wait(recipe);
+                emit(recipe, packet);
             }
-            return result;
         };
-        std::stable_sort(translucent.begin(), translucent.end(),
-                         [&](auto left, auto right) {return distance(left) > distance(right);});
-        vkCmdBindPipeline(command, VK_PIPELINE_BIND_POINT_GRAPHICS, builds[variant + 3].handle);
-        for (const auto* packet : translucent) draw_packet(*packet);
+        visit(draw_packet);
+        if (ordered) ordered->flush(emit);
+        require(emitted == scene.packets.size(), "Incomplete graphics playback");
         vkCmdEndRendering(command);
         transition(color, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, color_range,
                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -610,6 +720,15 @@ Memory process_memory() {
                                  sizeof(counters)), "GetProcessMemoryInfo");
     return {counters.PrivateUsage, counters.WorkingSetSize, counters.PeakPagefileUsage,
             counters.PeakWorkingSetSize};
+}
+
+void sample_peak_commit(std::atomic<uint64_t>& peak) {
+    PROCESS_MEMORY_COUNTERS_EX metrics{};
+    if (!GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&metrics),
+                              sizeof(metrics))) return;
+    uint64_t old = peak.load(std::memory_order_relaxed);
+    while (old < metrics.PrivateUsage &&
+           !peak.compare_exchange_weak(old, metrics.PrivateUsage, std::memory_order_relaxed)) {}
 }
 
 struct Measurements {
@@ -647,14 +766,7 @@ Measurements measure(Renderer& renderer, Scene& scene, std::string_view mode, bo
     unsigned warmups_assigned = 0, required_assigned = 0, required_completed = 0;
     bool early_ready = false, demand_ready = false, abort = false;
     std::atomic<uint64_t> measured_commit{m.initial.commit};
-    auto sample_commit = [&] {
-        PROCESS_MEMORY_COUNTERS_EX metrics{};
-        if (!GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&metrics),
-                                  sizeof(metrics))) return;
-        uint64_t old = measured_commit.load(std::memory_order_relaxed);
-        while (old < metrics.PrivateUsage &&
-               !measured_commit.compare_exchange_weak(old, metrics.PrivateUsage, std::memory_order_relaxed)) {}
-    };
+    auto sample_commit = [&] { sample_peak_commit(measured_commit); };
     auto worker = [&](const unsigned index) {
         const bool dedicated = reserve && index == worker_count - 1;
         ready.wait();
@@ -776,6 +888,40 @@ Measurements measure(Renderer& renderer, Scene& scene, std::string_view mode, bo
     return m;
 }
 
+Measurements measure_recording(Renderer& renderer, const Scene& scene, Recording recording) {
+    Measurements m{};
+    m.initial = process_memory();
+    for (const auto& packet : scene.packets) m.triangles += packet.count / 3;
+    portbridge::PipelineQueue pipelines(renderer.builds.size(), 2, [&](std::size_t id) {
+        renderer.compile(static_cast<unsigned>(id));
+        check(renderer.builds[id].result, "Required graphics pipeline");
+    });
+    std::atomic<uint64_t> measured_commit{m.initial.commit};
+    std::jthread monitor([&](std::stop_token stop) {
+        while (!stop.stop_requested()) {
+            sample_peak_commit(measured_commit);
+            std::this_thread::sleep_for(1ms);
+        }
+    });
+    m.schedule = m.request = Clock::now();
+    for (unsigned pass = 0; pass < m.images.size(); ++pass) {
+        m.images[pass] = renderer.draw(scene, pass, pass, pass == 0, recording, &pipelines);
+        m.foreground_pixels[pass] = changed_pixels(m.images[pass]);
+        const auto memory = process_memory();
+        if (pass == 0) {
+            m.frame = Clock::now();
+            m.first_frame = memory;
+        }
+    }
+    for (const auto& build : renderer.builds) m.drained = std::max(m.drained, build.end);
+    m.all_frames = Clock::now();
+    monitor.request_stop();
+    monitor.join();
+    m.sampled_max_commit = measured_commit.load(std::memory_order_relaxed);
+    m.last = process_memory();
+    return m;
+}
+
 void output_frames(const std::filesystem::path& dir, const Measurements& values) {
     for (unsigned i = 0; i < values.images.size(); ++i) {
         std::ofstream output(dir / (std::to_string(i) + ".rgba"), std::ios::binary | std::ios::trunc);
@@ -788,17 +934,29 @@ void output_frames(const std::filesystem::path& dir, const Measurements& values)
 int main(int argc, char** argv) {
     try {
         const auto begin = Clock::now();
-        require(argc == 6, "scene MODE ADAPTER PREPARED_SCENE SHADER_DIR FRAME_DIR");
+        require(argc == 6 || argc == 7, "scene MODE ADAPTER PREPARED_SCENE SHADER_DIR FRAME_DIR [--materials]");
         const std::string_view mode = argv[1];
         const bool phase = mode == "phase-reference" || mode == "phase-lead";
-        require(phase || mode == "shared" || mode == "reserved" || mode == "warm" || mode == "critical-first",
+        auto recording = Recording::prepared;
+        if (mode == "record-blocking") recording = Recording::blocking;
+        if (mode == "record-ordered") recording = Recording::ordered;
+        if (mode == "record-eager") recording = Recording::eager;
+        require(recording != Recording::prepared || phase || mode == "shared" || mode == "reserved" ||
+                mode == "warm" || mode == "critical-first",
                 "Unknown arm");
+        const bool materials = argc == 7;
+        require(!materials || (std::string_view(argv[6]) == "--materials" && recording != Recording::prepared),
+                "Material recipes require recording mode");
         const std::filesystem::path shaders = argv[4];
         const std::filesystem::path captured = argv[5];
         require(std::filesystem::is_directory(captured) && std::filesystem::is_empty(captured),
                 "Expected empty output folder");
+        const auto shader_bytes = std::max(std::filesystem::file_size(shaders / "ps.spv"),
+                                           std::filesystem::file_size(shaders / "vs.spv"));
+        const CompileLimit compile_limit(shader_bytes, recording != Recording::prepared);
         Scene geometry(argv[3]);
         Renderer renderer;
+        renderer.prepare_recipes(geometry, materials);
         renderer.start(argv[2]);
         if (!phase) {
             renderer.upload_scene(geometry);
@@ -809,7 +967,8 @@ int main(int argc, char** argv) {
         renderer.shader(shaders / "vs.spv", renderer.vertex);
         renderer.shader(shaders / "ps.spv", renderer.pixel);
         renderer.preflight(mode == "warm");
-        const auto result = measure(renderer, geometry, mode, phase);
+        const auto result = recording == Recording::prepared ? measure(renderer, geometry, mode, phase)
+                                                              : measure_recording(renderer, geometry, recording);
         output_frames(captured, result);
         const auto& p = renderer.props;
         std::cout << std::fixed << std::setprecision(5)
@@ -839,6 +998,7 @@ int main(int argc, char** argv) {
                     "Graphics driver did not produce valid creation feedback");
             if (i) std::cout << ",";
             std::cout << "{\"id\":" << i << ",\"preflight\":" << int(b.probe)
+                      << ",\"first_frame\":" << (renderer.recipes[i][0] % 3 == 0 ? "true" : "false")
                       << ",\"feedback_flags\":" << b.feedback.flags
                       << ",\"feedback_ns\":" << b.feedback.duration
                       << ",\"start_ms\":" << ms(b.start - result.request)
