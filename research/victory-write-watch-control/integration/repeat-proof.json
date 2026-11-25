@@ -1,0 +1,14 @@
+{
+  "1": {
+    "runs": 24,
+    "elapsed_s": 0.391,
+    "successes": 24,
+    "failures": []
+  },
+  "4": {
+    "runs": 24,
+    "elapsed_s": 0.375,
+    "successes": 24,
+    "failures": []
+  }
+}
