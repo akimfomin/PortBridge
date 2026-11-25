@@ -1,0 +1,36 @@
+; SPDX-License-Identifier: GPL-3.0-only
+; Hand-written finite shader. The second selection arm can be serialized either
+; before the shared merge/loop header or after the loop exit.
+OpCapability Shader
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %main "main"
+OpExecutionMode %main LocalSize 1 1 1
+%void = OpTypeVoid
+%bool = OpTypeBool
+%uint = OpTypeInt 32 0
+%fn = OpTypeFunction %void
+%choose = OpConstantTrue %bool
+%zero = OpConstant %uint 0
+%one = OpConstant %uint 1
+%two = OpConstant %uint 2
+%main = OpFunction %void None %fn
+%entry = OpLabel
+OpSelectionMerge %header None
+OpBranchConditional %choose %early %late
+%early = OpLabel
+OpBranch %header
+%header = OpLabel
+%count = OpPhi %uint %zero %early %zero %late %next %latch
+OpLoopMerge %done %latch None
+OpBranch %body
+%body = OpLabel
+%next = OpIAdd %uint %count %one
+%again = OpULessThan %bool %next %two
+OpBranchConditional %again %latch %done
+%latch = OpLabel
+OpBranch %header
+%done = OpLabel
+OpReturn
+%late = OpLabel
+OpBranch %header
+OpFunctionEnd

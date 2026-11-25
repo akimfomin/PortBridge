@@ -1,0 +1,25 @@
+{
+  "pin": "c96b4f2b8365bf43d54ab074940923ef8267f4c6",
+  "candidate_patch_sha256": "c73e5eeeecf119ce078a66796135b5d11b7ab99691fb36173bc9745b88e3f21b",
+  "bindings": {
+    "windows": "89419d8f4151902703abc037dcb55b65ccba71911da2d1840be3d725728d9c74",
+    "windows_sys": "e42e08fdc4561674ba8e219b30822399628bd23e5f66fd62260aa7927d17fd07"
+  },
+  "guard_sha256": "f5ba8dcb87189500fc51c283724847d61d762cb97448dc2aa554990f1769050d",
+  "fixture_source_sha256": "6fb03dcd8ffbcaa1666c6f63472aed025129e64ee8e7628632733937b9eb9da9",
+  "shader_source_sha256": "cdc0593dbd23ae2f2ad7af04a3740497ef30fb536b8373666b3fa4648cdebd49",
+  "arms": {
+    "baseline": {
+      "source_sha256": "39a75832c6919133b1f73a17a7fa5f7b8c896017499cac2d6a1ddb68f613cd72",
+      "exe_sha256": "fa39cbda760055349aba330019a3b56218b382a0b3a08a69e15fc7652f7efa50"
+    },
+    "candidate": {
+      "source_sha256": "ee3d567b2daa20fe9449992b0c5661ce00f05fc643f71c5c4b467b69fef6d35d",
+      "exe_sha256": "52588a379ec561cbd307d8cda5ef3d102599a3e3a71f7f0f3c1685087032e138"
+    }
+  },
+  "shader_bytes": 2988,
+  "shader_sha256": "7dfbbe2f40936a6787d0f94826890ca5bf02a8eabd5093c0275e68b2861c810b",
+  "root_sha256": "4b94992ef5bce3e78811b07764ba223ce616f6e8b412a1d6e79864741710dda5",
+  "dxv_sha256": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3"
+}

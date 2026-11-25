@@ -1,0 +1,10 @@
+CPU-only source-policy differential at c96b4f2.
+Before, compatible device: requested DXGI format 29, actual 28, RGB 0.50196078.
+The synthetic test fails on the first explicit UNORM resource with an sRGB view.
+After, same extracted policy:
+supported: view=29, sampled RGB at byte 0x80=0.21586050, alpha=0.50196078
+unsupported: view=28, sampled RGB at byte 0x80=0.50196078, alpha=0.50196078
+query-failed: view=28, sampled RGB at byte 0x80=0.50196078, alpha=0.50196078
+Controls: reverse pair, typeless, implicit, UAV, denied SRV, incompatible family, failed query, one capability query.
+Windows-rs 0.62.2 metadata compile passed for the extracted final policy and feature query.
+Forward patch apply check passed against current fork head c96b4f2b8365bf43d54ab074940923ef8267f4c6.

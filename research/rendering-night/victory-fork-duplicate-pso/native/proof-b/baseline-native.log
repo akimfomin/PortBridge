@@ -1,0 +1,4 @@
+native adapter=NVIDIA GeForce RTX 4070 Ti SUPER luid=[matched adapter identifier] driver=00200000001006b2
+second boundary before first store: Create
+overlapping request API outcomes: [Event(Load, HRESULT(0x80070057)), Event(Load, HRESULT(0x80070057)), Event(Create, HRESULT(0x00000000)), Event(Store, HRESULT(0x00000000)), Event(Create, HRESULT(0x00000000)), Event(Store, HRESULT(0x80070057))]
+single-flight oracle passed, warm hit verified

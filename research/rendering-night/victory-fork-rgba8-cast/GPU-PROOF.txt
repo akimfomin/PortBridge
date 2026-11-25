@@ -1,0 +1,14 @@
+Texture input: two fully typed RGBA8 1x1 textures, byte 0x80 in each channel.
+OS build 28000. Display driver 32.0.16.1714.
+Slots: UNORM own, UNORM as sRGB, sRGB as UNORM, sRGB own.
+Values in each slot are the observed RGB and alpha float bits.
+Ideal CPU reference: UNORM 3f008081, sRGB 3e5d0a89.
+The observed sRGB value follows the documented precision tolerance.
+One dispatch and one fenced readback. Selected log excludes admission samples.
+
+guard=returned reaped=1 job_peak=100139008 exit=0 error=0
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER feature=1 debug=0 messages=0 hresult=00000000 stage=
+slot=0 3f008081 3f008081 3f008081 3f008081
+slot=1 3e5d0000 3e5d0000 3e5d0000 3f008081
+slot=2 3f008081 3f008081 3f008081 3f008081
+slot=3 3e5d0000 3e5d0000 3e5d0000 3f008081

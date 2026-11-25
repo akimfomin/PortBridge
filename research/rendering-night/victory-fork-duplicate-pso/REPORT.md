@@ -26,6 +26,23 @@ Controls cover waking a same-name retry after create failure, warm reuse, descri
 
 [Baseline log](ab/baseline/default-test.log) · [Candidate log](ab/candidate/default-test.log) · [Baseline legacy-lock log](ab/baseline/legacy-lock-test.log) · [Candidate legacy-lock log](ab/candidate/legacy-lock-test.log)
 
+## Native D3D12 A/B
+
+The same extracted admission and pipeline bodies passed with a real empty D3D12 pipeline library on NVIDIA GeForce RTX 4070 Ti SUPER. Two identical requests overlapped at a CPU gate. The gate let the first create and store complete before an already-missed second request could enter the native create call. Each arm used the same DXV-validated 2,988-byte source-generated compute shader and its root signature.
+
+| Observable API outcome | Pinned source | With patch |
+| --- | --- | --- |
+| Second request before first store | Reached its create boundary after a load miss | Waited on the exact name |
+| Overlapping requests | Both succeeded | Both succeeded |
+| `CreateComputePipelineState` calls | 2 successes | 1 success |
+| `StorePipeline` calls | 1 success and 1 duplicate-name `E_INVALIDARG` | 1 success |
+| `LoadComputePipeline` calls within the pair | 2 misses | 1 miss and 1 hit |
+| Later warm control | 1 hit with no create or store | 1 hit with no create or store |
+
+Both bounded jobs returned normally and were reaped. DXGI reported adapter LUID `[matched adapter identifier]` and driver value `00200000001006b2` in both arms. The two peak job commitments were 86,568,960 and 85,643,264 bytes respectively. The result establishes one avoided D3D12 create call under this schedule. The count of driver-internal compilations, the frequency of such overlap in the project and the effect on frame time remain open.
+
+[Fixture and scope](native/README.md) · [Native API and resource log](native/proof-b/native-attempts.jsonl) · [Input identities](native/proof-b/ready.json) · [DXV output](native/proof-b/dxv.log)
+
 ## Overlap and handoff
 
 The related pending changes cover frame-budget resets and wakeups (#398), long-running worker reporting (#458), pipeline-library save serialization (#237), shader-cache atomic publication (#488), and VIctory's two-stage scheduling of shared shader translations (#1898). The published proposals address different boundaries. #470 is the receiving thread for a result about repeated PSO work. [#398](https://github.com/fxceless/victory-fork/pull/398) · [#458](https://github.com/fxceless/victory-fork/pull/458) · [#237](https://github.com/fxceless/victory-fork/pull/237) · [#488](https://github.com/fxceless/victory-fork/pull/488) · [VIctory #1898](https://github.com/Marvisak/VIctory/pull/1898)

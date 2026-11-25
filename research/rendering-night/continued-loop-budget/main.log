@@ -1,0 +1,20 @@
+finite: wave=32 subgroup=32 emulate=False budget=0 natural=5 counter=5 marker=42
+finite: wave=32 subgroup=32 emulate=False budget=1 natural=1 counter=1 marker=42
+finite: wave=32 subgroup=32 emulate=False budget=1 natural=3 counter=1 marker=None
+finite: wave=32 subgroup=32 emulate=False budget=4 natural=3 counter=3 marker=42
+finite: wave=32 subgroup=32 emulate=False budget=4 natural=4 counter=4 marker=42
+finite: wave=32 subgroup=32 emulate=False budget=4 natural=5 counter=4 marker=None
+finite: wave=64 subgroup=64 emulate=False budget=0 natural=5 counter=5 marker=42
+finite: wave=64 subgroup=64 emulate=False budget=1 natural=1 counter=1 marker=42
+finite: wave=64 subgroup=64 emulate=False budget=1 natural=3 counter=1 marker=None
+finite: wave=64 subgroup=64 emulate=False budget=4 natural=3 counter=3 marker=42
+finite: wave=64 subgroup=64 emulate=False budget=4 natural=4 counter=4 marker=42
+finite: wave=64 subgroup=64 emulate=False budget=4 natural=5 counter=4 marker=None
+finite: wave=64 subgroup=32 emulate=True budget=0 natural=5 counter=5 marker=42
+finite: wave=64 subgroup=32 emulate=True budget=1 natural=1 counter=1 marker=42
+finite: wave=64 subgroup=32 emulate=True budget=1 natural=3 counter=1 marker=42
+finite: wave=64 subgroup=32 emulate=True budget=4 natural=3 counter=3 marker=42
+finite: wave=64 subgroup=32 emulate=True budget=4 natural=4 counter=4 marker=42
+finite: wave=64 subgroup=32 emulate=True budget=4 natural=5 counter=4 marker=42
+acyclic negative offset: lanes=32 budget=0 counter=17 loop_header=none
+acyclic negative offset: lanes=32 budget=1 counter=17 loop_header=none

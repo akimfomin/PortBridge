@@ -1,0 +1,24 @@
+native64 validated wave64 True emulate False
+281 OpStore %pc %c1
+285 OpLoopMerge %l_end4 %l_cont3 None
+381 OpStore %pc %t88
+389 OpBranchConditional %loop_guard_0_take %l_head1 %l_end4
+    %l_end4 = OpLabel
+    %g_pc7 = OpLoad %uint %pc
+    %g_is8 = OpIEqual %bool %g_pc7 %c2
+    OpSelectionMerge %g_end10 None
+    OpBranchConditional %g_is8 %g_do9 %g_end10
+    %g_do9 = OpLabel
+476 OpStore %pc %c3
+emulated64 validated wave64 True emulate True
+310 OpStore %pc %c1
+314 OpLoopMerge %l_end4 %l_cont3 None
+411 OpStore %pc %t88
+419 OpBranchConditional %loop_guard_0_take %l_head1 %l_end4
+    %l_end4 = OpLabel
+    OpBranch %blk2
+    %blk2 = OpLabel
+    %t89 = OpLoad %uint %reg_v1
+    %t91 = OpLoad %bool %active
+    %t90 = OpSelect %uint %t91 %c2a %t89
+502 OpStore %pc %c3
