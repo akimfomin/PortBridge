@@ -1,0 +1,185 @@
+{
+  "target_checks": 374784,
+  "fixtures": [
+    {
+      "blocks": 96,
+      "case_count": 1,
+      "shape": "clustered",
+      "existing_words": 3,
+      "overrides": 61,
+      "encoded_cases": [
+        0
+      ],
+      "extra_words": 20,
+      "variants": {
+        "inline": {
+          "source_bytes": 3852,
+          "container_bytes": 2708,
+          "container_sha256": "d0db5daa90629e13eef32b7f20b1d23592a56122d63d40b9da8e412deef51c24",
+          "compare_instructions": 58,
+          "select_instructions": 52
+        },
+        "pages": {
+          "source_bytes": 1692,
+          "container_bytes": 2284,
+          "container_sha256": "25114ed1a382dd4e5d54c47166cf89479a1370edb76c539cb141cd2c8c38e520",
+          "compare_instructions": 4,
+          "select_instructions": 0
+        }
+      }
+    },
+    {
+      "blocks": 2048,
+      "case_count": 8,
+      "shape": "uniform",
+      "existing_words": 192,
+      "overrides": 1,
+      "encoded_cases": [],
+      "extra_words": 0,
+      "variants": {
+        "inline": {
+          "source_bytes": 1576,
+          "container_bytes": 2076,
+          "container_sha256": "d7a17fb4e2731e73679564e4758929b1357ae301cf32a1caabd9c0576e0f96a0",
+          "compare_instructions": 3,
+          "select_instructions": 1
+        },
+        "pages": {
+          "source_bytes": 1576,
+          "container_bytes": 2076,
+          "container_sha256": "d7a17fb4e2731e73679564e4758929b1357ae301cf32a1caabd9c0576e0f96a0",
+          "compare_instructions": 3,
+          "select_instructions": 1
+        }
+      }
+    },
+    {
+      "blocks": 512,
+      "case_count": 4,
+      "shape": "clustered",
+      "existing_words": 36,
+      "overrides": 241,
+      "encoded_cases": [
+        0,
+        1,
+        2
+      ],
+      "extra_words": 100,
+      "variants": {
+        "inline": {
+          "source_bytes": 14806,
+          "container_bytes": 5728,
+          "container_sha256": "671f6528930c6277c275d73d64e7204ff770cb5c7c4fc415dda289f1b09b0251",
+          "compare_instructions": 246,
+          "select_instructions": 229
+        },
+        "pages": {
+          "source_bytes": 3206,
+          "container_bytes": 2744,
+          "container_sha256": "a222c6e27589e8672cd88ab317aa158fcd5bb097338ec59121060043b935680d",
+          "compare_instructions": 4,
+          "select_instructions": 0
+        }
+      }
+    },
+    {
+      "blocks": 2048,
+      "case_count": 8,
+      "shape": "clustered",
+      "existing_words": 192,
+      "overrides": 493,
+      "encoded_cases": [
+        0,
+        1,
+        2
+      ],
+      "extra_words": 298,
+      "variants": {
+        "inline": {
+          "source_bytes": 32475,
+          "container_bytes": 10524,
+          "container_sha256": "dc6b0f7075028812b5b78621cc2012db1b6a19baed69671edb6e4d278a8e552d",
+          "compare_instructions": 508,
+          "select_instructions": 488
+        },
+        "pages": {
+          "source_bytes": 6396,
+          "container_bytes": 3616,
+          "container_sha256": "80a0e737116560c621e9865b0102b52ed754603bfd363b5b0fc19162508e3915",
+          "compare_instructions": 4,
+          "select_instructions": 0
+        }
+      }
+    },
+    {
+      "blocks": 4096,
+      "case_count": 16,
+      "shape": "spread",
+      "existing_words": 512,
+      "overrides": 2638,
+      "encoded_cases": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "extra_words": 1246,
+      "variants": {
+        "inline": {
+          "source_bytes": 170252,
+          "container_bytes": 49464,
+          "container_sha256": "f8488ee0fa9151facfd0d44a6b43ae56e7be179802410de7aa14033f5d9a1cfb",
+          "compare_instructions": 2718,
+          "select_instructions": 2638
+        },
+        "pages": {
+          "source_bytes": 20649,
+          "container_bytes": 8432,
+          "container_sha256": "110cd5b831d1bff20314366cb0cbdfd05ea01f82915a137ac602fce9b0fe1750",
+          "compare_instructions": 4,
+          "select_instructions": 0
+        }
+      }
+    },
+    {
+      "blocks": 4096,
+      "case_count": 16,
+      "shape": "spread",
+      "existing_words": 7776,
+      "overrides": 2638,
+      "encoded_cases": [
+        2,
+        15
+      ],
+      "extra_words": 387,
+      "variants": {
+        "inline": {
+          "source_bytes": 170252,
+          "container_bytes": 49464,
+          "container_sha256": "f8488ee0fa9151facfd0d44a6b43ae56e7be179802410de7aa14033f5d9a1cfb",
+          "compare_instructions": 2718,
+          "select_instructions": 2638
+        },
+        "pages": {
+          "source_bytes": 154143,
+          "container_bytes": 45372,
+          "container_sha256": "dedde897452150e060fca359aa8226e1cd141e2fbeba1b4a07c10800d9204935",
+          "compare_instructions": 2362,
+          "select_instructions": 2290
+        }
+      }
+    }
+  ]
+}

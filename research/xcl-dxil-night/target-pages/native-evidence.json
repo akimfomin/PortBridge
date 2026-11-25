@@ -1,0 +1,33 @@
+{
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "arms": [
+    {
+      "arm": "inline",
+      "guard": {
+        "guard": "returned",
+        "reaped": true,
+        "process_exit": 0,
+        "stage": 3,
+        "runner_exit": 0,
+        "win_error": 0,
+        "peak_bytes": 108920832
+      },
+      "result_sha256": "c901faad88ce2c2b4e0981c8165ce2fc79ddf85c3560d77c34c29118034c1c1f",
+      "matched_words": 6144
+    },
+    {
+      "arm": "pages",
+      "guard": {
+        "guard": "returned",
+        "reaped": true,
+        "process_exit": 0,
+        "stage": 3,
+        "runner_exit": 0,
+        "win_error": 0,
+        "peak_bytes": 107909120
+      },
+      "result_sha256": "c901faad88ce2c2b4e0981c8165ce2fc79ddf85c3560d77c34c29118034c1c1f",
+      "matched_words": 6144
+    }
+  ]
+}

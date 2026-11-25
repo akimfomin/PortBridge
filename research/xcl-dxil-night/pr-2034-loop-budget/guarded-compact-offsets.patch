@@ -1,0 +1,171 @@
+diff --git a/crates/xcl/src/gpu/dxil/compact.rs b/crates/xcl/src/gpu/dxil/compact.rs
+index a439789..85714e5 100644
+--- a/crates/xcl/src/gpu/dxil/compact.rs
++++ b/crates/xcl/src/gpu/dxil/compact.rs
+@@ -15,8 +15,8 @@ pub struct Plan {
+     pub rep: Vec<usize>,
+     /// where each block goes: (branch taken or jump, branch not taken), as block numbers
+     pub next: Vec<(u32, u32)>,
+-    /// the distinct pairs of offsets from a block to its two successors, sorted
+-    pub steps: Vec<(u32, u32)>,
++    /// the distinct pairs of successor offsets and whether the source is a loop header, sorted
++    pub steps: Vec<(u32, u32, bool)>,
+ }
+ 
+ /// Most 32-bit words of tables a program may need to take the form by itself.
+@@ -48,6 +48,10 @@ pub const END: u32 = u32::MAX;
+ /// Sorts the reachable blocks into classes the lowering would emit the same for.
+ pub fn plan(cfg: &Cfg, lw: &Lw) -> Option<Plan> {
+     let mut order = cfg.rpo.clone();
++    // The taken offset leaves one bit for the loop-header flag.
++    if order.len() > 1 << 30 {
++        return None;
++    }
+     order.sort_by_key(|&b| (cfg.blocks[b].pc, b));
+     let mut number = vec![END; cfg.blocks.len()];
+     for (n, &b) in order.iter().enumerate() {
+@@ -89,15 +93,20 @@ pub fn plan(cfg: &Cfg, lw: &Lw) -> Option<Plan> {
+         class.push(c);
+         next.push(to);
+     }
+-    let steps: BTreeSet<(u32, u32)> = next.iter().enumerate().map(|(b, &to)| offsets(b, to)).collect();
++    let steps: BTreeSet<_> = next.iter().enumerate().map(|(b, &to)| step(cfg, &order, b, to)).collect();
+     let p = Plan { order, class, rep, next, steps: steps.into_iter().collect() };
+     let (cb, pb) = p.widths();
+     (cb + pb <= 32).then_some(p)
+ }
+ 
+-/// A block's successors as offsets from its own number.
+-fn offsets(b: usize, (t, f): (u32, u32)) -> (u32, u32) {
+-    if t == END { (0, 0) } else { (t.wrapping_sub(b as u32), f.wrapping_sub(b as u32)) }
++/// A block's successor offsets and guard, which can differ between copies of a class.
++fn step(cfg: &Cfg, order: &[usize], b: usize, (t, f): (u32, u32)) -> (u32, u32, bool) {
++    let (t, f) = if t == END { (0, 0) } else { (t.wrapping_sub(b as u32), f.wrapping_sub(b as u32)) };
++    (t, f, cfg.headers.contains(&order[b]))
++}
++
++fn guarded_offset(offset: u32, header: bool) -> u32 {
++    offset << 1 | u32::from(header)
+ }
+ 
+ fn bits(n: usize) -> u32 {
+@@ -131,13 +140,13 @@ pub fn emit(lw: &mut Lw, cfg: &Cfg, p: &Plan, head: Block, exit: Block) -> LResu
+     let width = cb + pb;
+     let mut packed = vec![0u32; p.words() - p.steps.len() * 2];
+     for (b, &to) in p.next.iter().enumerate() {
+-        let pair = p.steps.binary_search(&offsets(b, to)).expect("a pair of the plan") as u32;
++        let pair = p.steps.binary_search(&step(cfg, &p.order, b, to)).expect("a pair of the plan") as u32;
+         let e = (p.class[b] | pair << cb) as u64;
+         let at = b * width as usize;
+         packed[at / 32] |= (e << (at % 32)) as u32;
+         packed[at / 32 + 1] |= (e << (at % 32) >> 32) as u32;
+     }
+-    let steps: Vec<u32> = p.steps.iter().flat_map(|&(t, f)| [t, f]).collect();
++    let steps: Vec<u32> = p.steps.iter().flat_map(|&(t, f, header)| [guarded_offset(t, header), f]).collect();
+     let blocks = table(lw, "xcl_blocks", &packed);
+     let steps = table(lw, "xcl_steps", &steps);
+ 
+@@ -163,9 +172,24 @@ pub fn emit(lw: &mut Lw, cfg: &Cfg, p: &Plan, head: Block, exit: Block) -> LResu
+     let pair = lw.andc(pair, (1u32 << pb) - 1);
+     let pi = lw.shlc(pair, 1);
+     let step_t = word(lw, steps, pi);
++    let header_bit = lw.andc(step_t, 1);
++    let header = lw.cmpc(Pred::Ne, header_bit, 0);
++    let step_t = lw.ashrc(step_t, 1);
+     let pi1 = lw.addc(pi, 1);
+     let step_f = word(lw, steps, pi1);
+     let (taken, not_taken) = (lw.add(b, step_t), lw.add(b, step_f));
++    // Like the plain form, spend once before each visit to a loop header.
++    let left = lw.s.m.load(budget, 4);
++    let none = lw.cmpc(Pred::Eq, left, 0);
++    let spent = lw.and(header, none);
++    let done = lw.block(Some(2));
++    let dispatch = lw.block(Some(1));
++    lw.cond_br(spent, done, dispatch);
++    lw.s.m.set_block(dispatch);
++    let one = lw.c(1);
++    let less = lw.sub(left, one);
++    let l = lw.sel(header, less, left);
++    lw.s.m.store(budget, l, 4);
+     let cases: Vec<Block> = p.rep.iter().map(|_| lw.block(Some(0))).collect();
+     let latch = lw.block(Some(0));
+     let arms: Vec<(Value, Block)> = cases.iter().enumerate().skip(1).map(|(k, &c)| (lw.c(k as u32), c)).collect();
+@@ -193,26 +217,35 @@ pub fn emit(lw: &mut Lw, cfg: &Cfg, p: &Plan, head: Block, exit: Block) -> LResu
+         lw.s.m.store(to, next, 4);
+         lw.s.m.br(latch);
+     }
+-    // the epilogue's reads load here
+-    lw.init.mem = Some(latch);
+     lw.s.m.set_block(latch);
+     let next = lw.s.m.load(to, 4);
+-    // a jump back spends the loop budget
+-    let back = lw.cmp(Pred::ULe, next, b);
+-    let left = lw.s.m.load(budget, 4);
+-    let one = lw.c(1);
+-    let less = lw.sub(left, one);
+-    let l = lw.sel(back, less, left);
+-    lw.s.m.store(budget, l, 4);
+-    let none = lw.cmpc(Pred::Eq, left, 0);
+-    let spent = lw.and(back, none);
+     let past = lw.cmpc(Pred::UGe, next, n as u32);
+-    let stop = lw.or(past, spent);
+     let cont = lw.block(Some(1));
+-    lw.cond_br(stop, exit, cont);
++    lw.cond_br(past, done, cont);
+     lw.s.m.set_block(cont);
+     lw.s.m.store(at, next, 4);
+     lw.br(head);
+     lw.seal(head);
++    // Both budget and normal exits must dominate the epilogue's register loads.
++    lw.init.mem = Some(done);
++    lw.s.m.set_block(done);
++    lw.br(exit);
+     Ok(())
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::guarded_offset;
++
++    #[test]
++    fn guarded_taken_offsets_round_trip_with_their_sign() {
++        for offset in [-0x3fff_ffffi32, -9, -1, 0, 1, 9, 0x3fff_ffff] {
++            for header in [false, true] {
++                let word = guarded_offset(offset as u32, header);
++                assert_eq!(word as i32 >> 1, offset);
++                assert_eq!(word & 1 != 0, header);
++            }
++        }
++        assert_eq!(guarded_offset(0, false), 0);
++    }
++}
+diff --git a/crates/xcl/src/gpu/dxil/compact_tests.rs b/crates/xcl/src/gpu/dxil/compact_tests.rs
+index 2fd26c9..f5a44ee 100644
+--- a/crates/xcl/src/gpu/dxil/compact_tests.rs
++++ b/crates/xcl/src/gpu/dxil/compact_tests.rs
+@@ -95,3 +95,25 @@ fn a_mask_read_whole_after_one_copy_only_splits_the_class() {
+     assert_eq!(p.order.len(), 4);
+     assert_ne!(p.class[0], p.class[2]);
+ }
++
++#[test]
++fn a_loop_header_keeps_its_guard_when_blocks_share_a_class_and_offsets() {
++    let i = |n: &str, e: &str, f: &[(&str, u64)]| encode(n, e, f, None).unwrap_or_else(|x| panic!("{n}: {x}"));
++    let mut code = i("S_BRANCH", "ENC_SOPP", &[("SIMM16", 0)]);
++    for _ in 0..2 {
++        code.extend(i("S_ADD_U32", "ENC_SOP2", &[("SDST", 0), ("SSRC0", 0), ("SSRC1", 129)]));
++        code.extend(i("S_BRANCH", "ENC_SOPP", &[("SIMM16", 0)]));
++    }
++    code.extend(i("S_CBRANCH_SCC1", "ENC_SOPP", &[("SIMM16", 0xFFFD)]));
++    code.extend(i("S_ENDPGM", "ENC_SOPP", &[]));
++    let cfg = super::cfg::Cfg::build(&code).unwrap();
++    let leaders = cfg.blocks.iter().filter_map(|b| b.insts.first().map(|&i| cfg.insts[i].pc)).collect();
++    let o = KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 };
++    let lw = super::lower::Lw::new(&cfg.insts, &leaders, o, &super::kernel::Entry::Kernel);
++    let p = super::compact::plan(&cfg, &lw).unwrap();
++    assert!(!cfg.headers.contains(&p.order[1]));
++    assert!(cfg.headers.contains(&p.order[2]));
++    assert_eq!(p.class[1], p.class[2]);
++    assert!(p.steps.contains(&(1, 1, false)));
++    assert!(p.steps.contains(&(1, 1, true)));
++}
