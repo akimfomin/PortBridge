@@ -1,0 +1,182 @@
+{
+  "adjacent-clean": {
+    "ranges": {
+      "calls": 8,
+      "bytes": 33554432,
+      "returned": 0,
+      "kept": 0,
+      "repeats": 96,
+      "checksum": 0,
+      "ns_per_observation": [
+        32697.917,
+        33046.875,
+        33267.708,
+        32786.458,
+        32794.792,
+        32637.5,
+        32680.208,
+        33288.542
+      ],
+      "median_us": 32.791
+    },
+    "union": {
+      "calls": 1,
+      "bytes": 33554432,
+      "returned": 0,
+      "kept": 0,
+      "repeats": 96,
+      "checksum": 0,
+      "ns_per_observation": [
+        15594.792,
+        15656.25,
+        15617.708,
+        15578.125,
+        15741.667,
+        15835.417,
+        15673.958,
+        15479.167
+      ],
+      "median_us": 15.637
+    },
+    "paired_delta_percent": -52.4,
+    "paired_range_pct": [
+      -53.5,
+      -51.48
+    ]
+  },
+  "adjacent-dirty": {
+    "ranges": {
+      "calls": 8,
+      "bytes": 33554432,
+      "returned": 154,
+      "kept": 154,
+      "repeats": 96,
+      "checksum": 121117920,
+      "ns_per_observation": [
+        43958.333,
+        43352.083,
+        41330.208,
+        44197.917,
+        43961.458,
+        41808.333,
+        41568.75,
+        40944.792
+      ],
+      "median_us": 42.58
+    },
+    "union": {
+      "calls": 1,
+      "bytes": 33554432,
+      "returned": 154,
+      "kept": 154,
+      "repeats": 96,
+      "checksum": 121117920,
+      "ns_per_observation": [
+        25301.042,
+        26419.792,
+        25178.125,
+        26458.333,
+        25225.0,
+        25395.833,
+        24839.583,
+        24954.167
+      ],
+      "median_us": 25.263
+    },
+    "paired_delta_percent": -39.7,
+    "paired_range_pct": [
+      -42.62,
+      -39.05
+    ]
+  },
+  "gapped-clean": {
+    "ranges": {
+      "calls": 8,
+      "bytes": 33554432,
+      "returned": 0,
+      "kept": 0,
+      "repeats": 96,
+      "checksum": 0,
+      "ns_per_observation": [
+        33242.708,
+        34259.375,
+        33368.75,
+        35045.833,
+        33270.833,
+        33029.167,
+        35019.792,
+        33914.583
+      ],
+      "median_us": 33.642
+    },
+    "union": {
+      "calls": 1,
+      "bytes": 62914560,
+      "returned": 0,
+      "kept": 0,
+      "repeats": 96,
+      "checksum": 0,
+      "ns_per_observation": [
+        27648.958,
+        29582.292,
+        28647.917,
+        29253.125,
+        30080.208,
+        29710.417,
+        29610.417,
+        30040.625
+      ],
+      "median_us": 29.596
+    },
+    "paired_delta_percent": -13.9,
+    "paired_range_pct": [
+      -16.83,
+      -9.59
+    ]
+  },
+  "gapped-dirty": {
+    "ranges": {
+      "calls": 8,
+      "bytes": 33554432,
+      "returned": 155,
+      "kept": 155,
+      "repeats": 96,
+      "checksum": 113969664,
+      "ns_per_observation": [
+        41846.875,
+        43591.667,
+        43458.333,
+        42075.0,
+        41859.375,
+        44146.875,
+        42052.083,
+        42979.167
+      ],
+      "median_us": 42.527
+    },
+    "union": {
+      "calls": 1,
+      "bytes": 62914560,
+      "returned": 290,
+      "kept": 155,
+      "repeats": 96,
+      "checksum": 113969664,
+      "ns_per_observation": [
+        48179.167,
+        50481.25,
+        51179.167,
+        46920.833,
+        49455.208,
+        48775.0,
+        45025.0,
+        46230.208
+      ],
+      "median_us": 48.477
+    },
+    "paired_delta_percent": 13.32,
+    "paired_range_pct": [
+      7.07,
+      18.15
+    ]
+  }
+}
