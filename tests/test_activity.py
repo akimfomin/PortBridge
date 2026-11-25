@@ -150,6 +150,19 @@ class ActivityTest(CatalogFixture):
         self.save_pr("continued", 207, at=(NOW - timedelta(hours=1)).isoformat(), status="closed")
         self.assertEqual(build_activity(self.catalog, now=NOW)["opportunities"], [])
 
+    def test_showcase_refreshes_source_state_without_inventing_adoption(self):
+        url = "https://github.com/xcl-dev/xcl/pull/2126"
+        revision = "3283da481077c1962f13f1b4078841662f7a4ccb"
+        row = self.observation("xcl", "pr", 2126, "XCL scratch", url, {"head_sha": revision})
+        self.catalog.record_sync({"items": [row]})
+        before = next(item for item in build_activity(self.catalog)["research"] if item["problem_id"] == "PB-0025")
+        self.assertEqual(before["source_state"], "open")
+        self.catalog.record_sync({"items": [{**row, "status": "merged", "updated_at": "2026-11-25T09:00:00Z"}]})
+        after = next(item for item in build_activity(self.catalog)["research"] if item["problem_id"] == before["problem_id"])
+        self.assertEqual(after["source_state"], "merged")
+        self.assertNotIn("adopted_url", after)
+        self.assertEqual(before["delivered_url"], after["delivered_url"])
+
     def test_local_route_and_static_snapshot_share_the_public_payload(self):
         self.save_pr("xcl", 111, at=(datetime.now(timezone.utc) - timedelta(hours=1)).isoformat())
         directory = export(self.catalog, self.workspace / "activity-site")

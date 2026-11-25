@@ -146,10 +146,15 @@ def verify_export():
     previous = os.environ["PREVIOUS_STATUS"]
     failed = verify_publication(expected)
     if not failed:
-        try:
-            failed = verify_linked_snapshots(expected["site"])
-        except (OSError, ValueError, AttributeError, TypeError, HTTPException):
-            failed = ("site manifest",)
+        for delay in (0, 2, 4, 8):
+            if delay:
+                sleep(delay)
+            try:
+                failed = verify_linked_snapshots(expected["site"])
+            except (OSError, ValueError, AttributeError, TypeError, HTTPException):
+                failed = ("site manifest",)
+            if not failed:
+                break
     headline = "## GitHub Pages verification"
     if failed:
         write_summary(headline, "- Unverified public JSON: " + ", ".join(f"{name}.json" for name in failed))

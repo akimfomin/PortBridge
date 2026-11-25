@@ -2593,7 +2593,13 @@
       "translations": {
         "en": {
           "title": "Smaller scratch buffers in XCL",
-          "summary": "Strict slot reuse reduced the two synthetic scratch layouts from 288 to 256 and 192 to 160 words per workgroup. The executable patch matched the reference layout and DXV accepted 58 variants. GPU timings remain open."
+          "summary": "Strict slot reuse reduced the two synthetic scratch layouts from 288 to 256 and 192 to 160 words per workgroup. The executable patch matched the reference layout and DXV accepted 58 variants. GPU timings remain open.",
+          "tags": [
+            "Wave32",
+            "DXIL",
+            "scratch buffer",
+            "liveness"
+          ]
         }
       },
       "solutions": [
@@ -2604,11 +2610,21 @@
           "source_refs": [
             {
               "title": "xcl #2126",
-              "url": "https://github.com/xcl-dev/xcl/pull/2126"
+              "url": "https://github.com/xcl-dev/xcl/pull/2126",
+              "translations": {
+                "en": {
+                  "title": "xcl #2126"
+                }
+              }
             },
             {
-              "title": "Отчёт PortBridge / PortBridge report",
-              "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7156997647"
+              "title": "Отчёт PortBridge",
+              "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7156997647",
+              "translations": {
+                "en": {
+                  "title": "PortBridge report"
+                }
+              }
             }
           ],
           "evidence": [
@@ -2678,7 +2694,13 @@
       "translations": {
         "en": {
           "title": "Faster texture conversion in AnyXboxX",
-          "summary": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main."
+          "summary": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main.",
+          "tags": [
+            "gfx10",
+            "detile",
+            "BC7",
+            "texture"
+          ]
         }
       },
       "solutions": [
@@ -2689,11 +2711,21 @@
           "source_refs": [
             {
               "title": "anyxboxx #188",
-              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188"
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188",
+              "translations": {
+                "en": {
+                  "title": "anyxboxx #188"
+                }
+              }
             },
             {
-              "title": "Отчёт PortBridge / PortBridge report",
-              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188#issuecomment-7156830792"
+              "title": "Отчёт PortBridge",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188#issuecomment-7156830792",
+              "translations": {
+                "en": {
+                  "title": "PortBridge report"
+                }
+              }
             }
           ],
           "evidence": [
@@ -2744,7 +2776,13 @@
       "translations": {
         "en": {
           "title": "Accurate, faster FMA rounding in AnyXboxX",
-          "summary": "The revised CPU patch matched the reference across 3,072 targeted programs and 114,976 UCRT inputs. Interpreter medians were 178 ms for the revised patch, 213 ms for the first fix, and 166 ms for the original. GPU measurement is still open."
+          "summary": "The revised CPU patch matched the reference across 3,072 targeted programs and 114,976 UCRT inputs. Interpreter medians were 178 ms for the revised patch, 213 ms for the first fix, and 166 ms for the original. GPU measurement is still open.",
+          "tags": [
+            "v_fmac_f32",
+            "FMA",
+            "RDNA2",
+            "rounding"
+          ]
         }
       },
       "solutions": [
@@ -2755,11 +2793,21 @@
           "source_refs": [
             {
               "title": "anyxboxx #133",
-              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133"
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133",
+              "translations": {
+                "en": {
+                  "title": "anyxboxx #133"
+                }
+              }
             },
             {
-              "title": "Отчёт PortBridge / PortBridge report",
-              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7156830326"
+              "title": "Отчёт PortBridge",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7156830326",
+              "translations": {
+                "en": {
+                  "title": "PortBridge report"
+                }
+              }
             }
           ],
           "evidence": [
@@ -2810,7 +2858,13 @@
       "translations": {
         "en": {
           "title": "Coalescing Vulkan image barriers in Continued",
-          "summary": "On current main the recorded barriers went from 12 to 3 and from 14 to 5 across three ordered commands. Ordering and rollback passed. Mixed ranges can add CPU cost."
+          "summary": "On current main the recorded barriers went from 12 to 3 and from 14 to 5 across three ordered commands. Ordering and rollback passed. Mixed ranges can add CPU cost.",
+          "tags": [
+            "Vulkan",
+            "image layout",
+            "barrier coalescing",
+            "rollback"
+          ]
         }
       },
       "solutions": [
@@ -2821,11 +2875,21 @@
           "source_refs": [
             {
               "title": "continued #1284",
-              "url": "https://github.com/ubiquitarianism/leonida/pull/1284"
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1284",
+              "translations": {
+                "en": {
+                  "title": "continued #1284"
+                }
+              }
             },
             {
-              "title": "Отчёт PortBridge / PortBridge report",
-              "url": "https://github.com/ubiquitarianism/leonida/pull/1284#issuecomment-7156880204"
+              "title": "Отчёт PortBridge",
+              "url": "https://github.com/ubiquitarianism/leonida/pull/1284#issuecomment-7156880204",
+              "translations": {
+                "en": {
+                  "title": "PortBridge report"
+                }
+              }
             }
           ],
           "evidence": [
