@@ -97,6 +97,7 @@ class MCPTests(unittest.TestCase):
         local = ReadOnlyCatalog(self.db)
         files = {
             "activity": {"window_days": 7, "events": [], "opportunities": []},
+            "site": {"mode": "snapshot"},
             "lab": build_lab(),
             "health": local.health(),
             "problems": {"problems": local.problems()},

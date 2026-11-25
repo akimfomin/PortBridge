@@ -11,6 +11,7 @@ from .coordination import knowledge_graph, recommendations
 from .ecosystem import build_ecosystem
 from .feed import build_feed
 from .lab import build_lab
+from .preflight_index import MANIFEST, SHARD, SHARD_FORMAT, build_search_files
 
 
 PACKAGE = Path(__file__).resolve().parent
@@ -18,7 +19,7 @@ ROOT = PACKAGE.parent
 ASSETS = {"index.html": "index.html", "static/styles.css": "styles.css", "static/app.js": "app.js"}
 SNAPSHOTS = {"site", "projects", "ecosystem", "problems", "matches", "health", "observations", "coordination", "outreach", "activity", "lab",
              "graph", "source-history", "recommendations"}
-EXPORT_FILES = {*ASSETS, "api.html", "api.ru.html", "feed.xml", "feed.ru.xml", "sitemap.xml", ".nojekyll",
+EXPORT_FILES = {*ASSETS, MANIFEST, "api.html", "api.ru.html", "feed.xml", "feed.ru.xml", "sitemap.xml", ".nojekyll",
                 *(f"data/{name}.json" for name in SNAPSHOTS)}
 
 
@@ -50,8 +51,14 @@ def output_path(directory):
                 for entry in child.iterdir():
                     is_output_file = (CASE_FILE.fullmatch(entry.name) if child.name == "cases"
                                       else f"{child.name}/{entry.name}" in EXPORT_FILES)
+                    is_output_file = is_output_file or (child.name == "data" and SHARD.fullmatch(entry.name))
                     if entry.is_symlink() or not entry.is_file() or not is_output_file:
                         raise ValueError("export directory contains files outside PortBridge's public snapshot")
+                    if child.name == "data" and SHARD.fullmatch(entry.name):
+                        with entry.open("rb") as stream:
+                            marker = f'{{"format":"{SHARD_FORMAT}",'.encode("ascii")
+                            if stream.read(len(marker)) != marker:
+                                raise ValueError("export directory contains an unrecognized search shard")
                     if child.name == "cases":
                         with entry.open("rb") as stream:
                             if b'<meta name="generator" content="PortBridge">' not in stream.read(4096):
@@ -85,8 +92,14 @@ def export(catalog, directory, repository=""):
                                       drafts=data["outreach"]["drafts"])
     data["ecosystem"] = build_ecosystem(catalog, projects=data["projects"]["projects"],
                                        observations=data["observations"]["observations"])
+    search = build_search_files(data["projects"]["projects"], data["observations"]["observations"])
+    manifest = search.pop(MANIFEST)
+    index = json.loads(manifest)
+    data["site"]["search_index"] = {key: index[key] for key in ("version", "generation")}
+    site = json.dumps(data.pop("site"), ensure_ascii=False).encode("utf-8")
     contents = {f"data/{name}.json": json.dumps(value, ensure_ascii=False).encode("utf-8")
                 for name, value in data.items()}
+    contents.update(search)
     contents.update({path: (PACKAGE / "static" / source).read_bytes() for path, source in ASSETS.items()})
     contents["api.html"] = docs_page("en").encode("utf-8")
     contents["api.ru.html"] = docs_page("ru").encode("utf-8")
@@ -107,4 +120,9 @@ def export(catalog, directory, repository=""):
         target = directory / path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(value)
+    (directory / MANIFEST).write_bytes(manifest)
+    (directory / "data/site.json").write_bytes(site)
+    for path in (directory / "data").iterdir():
+        if SHARD.fullmatch(path.name) and f"data/{path.name}" not in search:
+            path.unlink()
     return directory

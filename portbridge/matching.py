@@ -236,3 +236,38 @@ class RelatedIndex:
                     "problem_id": None, "different_stacks": different,
                 })
         return sorted(found, key=lambda row: (-row["score"], row["left"]["url"], row["right"]["url"]))[:limit]
+
+
+def rank_query(text, title, technical):
+    anchors = terms(title)
+    hints = terms(" ".join(technical))
+    if not text:
+        return 0
+    shared = text & (anchors | hints)
+    if not shared or (len(text) > 3 and len(shared) < 2):
+        return 0
+    return (2 * len(anchors & shared) + len(hints & shared)) / len(text)
+
+
+def observation_summary(row):
+    return {"title": row["title"], "project": row["project"], "url": row["url"], "status": row["status"],
+            "revision": source_revision(row), "observed_at": row.get("fetched_at")}
+
+
+def preflight_matches(index, stacks, origin, *, limit, checked_source=None):
+    """Project a ranked match with freshness and cross-project applicability."""
+    if not origin:
+        return []
+    matches = index.matches(stacks, origin=origin, limit=limit, exclude=lambda _left, right: right == checked_source)
+    for match in matches:
+        first, second = (index.rows[canonical_url(match[side]["url"])] for side in ("left", "right"))
+        first_revision, second_revision = source_revision(first), source_revision(second)
+        shared_revision = first_revision and first_revision == second_revision
+        match["relationship"] = "same_revision" if shared_revision else "candidate"
+        if shared_revision:
+            match["applicability"] = "shared_commit_check_adoption_separately"
+        else:
+            match["applicability"] = ("test_reference_across_stacks" if match["different_stacks"]
+                                      else "verify_behavior_in_target_revision")
+        match["right"].update(status=second["status"], revision=second_revision, observed_at=second.get("fetched_at"))
+    return matches

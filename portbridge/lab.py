@@ -3,11 +3,12 @@
 from copy import deepcopy
 import re
 
-from .lab_reports import has_passing_coverage, read_report_states
+from .lab_report_formats import FRAMELAB_DISCUSSION, FRAMELAB_REVISION, FRAMELAB_TESTER_ID, REPORT_POLICIES
+from .lab_reports import coverage_cells, has_passing_coverage, read_report_states
 
 
 CHECKED_AT = "2026-11-24T21:00:10Z"
-EQUIPMENT = ("amd", "cpu", "nvidia")
+EQUIPMENT = ("amd", "cpu", "intel", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review", "blocked")
 TASK_ID_PATTERN = r"^[a-z0-9-]{1,80}$"
 PORTBRIDGE = "https://github.com/akimfomin/PortBridge"
@@ -39,8 +40,10 @@ WAVE64_CASE = "https://github.com/LooperSalty/AnyXboxX/pull/147"
 WAVE64_GUIDE = f"{PORTBRIDGE}/tree/main/contrib/rdna2-wave64-bpermute"
 FRAMELAB = "https://github.com/5headsmartbtw/leonida-framelab"
 FRAMELAB_HANDOFF = f"{FRAMELAB}/pull/12"
-FRAMELAB_RESULTS = f"{FRAMELAB}/issues/15"
-FRAMELAB_HANDOFF_HEAD = "82f069e82197e61b97f60bbcbcb7a3af7d3f8e77"
+FRAMELAB_RESULTS = FRAMELAB_DISCUSSION
+XCL_SCRATCH = f"{XCL}/pull/2126"
+XCL_SCRATCH_SHA = "3283da481077c1962f13f1b4078841662f7a4ccb"
+FRAMELAB_HANDOFF_HEAD = FRAMELAB_REVISION
 
 
 def revision(label, label_ru, repository, sha):
@@ -406,6 +409,7 @@ TASKS = (
         "source_url": FRAMELAB_HANDOFF,
         "procedure_url": f"{FRAMELAB}/blob/{FRAMELAB_HANDOFF_HEAD}/tests/vulkan-handoff/README.md",
         "evidence_url": f"{FRAMELAB_HANDOFF}#issuecomment-7142089405", "result_url": FRAMELAB_RESULTS,
+        "approved_testers": [FRAMELAB_TESTER_ID],
         "revisions": [revision("FrameLab #12 standalone Vulkan test", "Отдельный тест Vulkan FrameLab #12",
                                "5headsmartbtw/leonida-framelab", FRAMELAB_HANDOFF_HEAD)],
         "why": "An independent AMD run checks the same synthetic image and synchronization across another GPU vendor.",
@@ -442,7 +446,55 @@ TASKS = (
                        "Номера семейств очередей, итоги четырёх сценариев или причины пропуска, пиксели и диагностика"],
         }},
     },
+    {
+        "id": "xcl-2126-scratch-coverage", "priority": 11,
+        "title": "Repeat the XCL scratch checks on Radeon and Intel Arc",
+        "projects": ["xcl"],
+        "equipment": ["amd", "intel"], "os": ["Windows"], "coverage_policy": "all",
+        "requirements": ["Physical Radeon or Intel Arc adapter with native Wave32", "D3D12, Rust and DXC"],
+        "status": "needs_run", "evidence_stage": "author_gpu", "adoption": "pending",
+        "source_url": XCL_SCRATCH, "receiving_url": XCL_SCRATCH,
+        "reviewed_reports": {
+            f"{XCL_SCRATCH}#issuecomment-7154962703": {
+                "actor_id": 341226708,
+                "body_sha256": "a3eccfe7190503c996ecacf6d58a0023ff350ce454f08608199f453d1bbbae71",
+                "revisions": [XCL_SCRATCH_SHA], "equipment": "amd", "hardware": "AMD Radeon RX 9070 XT",
+                "os": "Windows 11", "os_family": "Windows", "driver": "32.0.32029.2010",
+                "cases": {"skip-middle-piece": "pass", "overlapping-edges": "pass"},
+            },
+        },
+        "procedure_url": f"{XCL}/blob/{XCL_SCRATCH_SHA}/README.md#tests",
+        "evidence_url": XCL_SCRATCH, "result_url": f"{PORTBRIDGE}/issues/54",
+        "revisions": [revision("XCL scratch test revision", "Версия тестов памяти XCL", "xcl-dev/xcl",
+                               XCL_SCRATCH_SHA)],
+        "why": "The author reported the two checks on NVIDIA. Radeon and Intel Arc are separate coverage cells.",
+        "evidence": "The receiving PR describes the synthetic comparisons. The independent Radeon and Intel checks are open.",
+        "steps": [
+            "Check PortBridge #54 before taking a run. Use the exact revision in a clean checkout.",
+            "Run the two dispatch_chain_payload_ tests following the linked setup and confirm the selected adapter.",
+            "Report the outcomes in #54, including explicit skips. State if the device cannot run native Wave32.",
+        ],
+        "expected": "Both tests match the synthetic reference on the selected physical adapter with no skips.",
+        "report": ["Pinned revision, physical GPU, Windows build, driver and DXC",
+                   "The skip-middle-piece and overlapping-edges outcomes with the observed output"],
+        "translations": {"ru": {
+            "title": "Повторить проверки памяти XCL на Radeon и Intel Arc",
+            "requirements": ["Физический Radeon или Intel Arc с аппаратным Wave32", "D3D12, Rust и DXC"],
+            "why": "Автор сообщил о двух проверках на NVIDIA. Теперь нужны отдельные прогоны на Radeon и Intel Arc.",
+            "evidence": "В исходном PR описаны синтетические сравнения. Независимые прогоны Radeon и Intel пока открыты.",
+            "steps": [
+                "Сверьте статус в PortBridge #54 и откройте указанную версию в отдельной чистой копии.",
+                "По инструкции запустите два теста dispatch_chain_payload_ и убедитесь, какая видеокарта выбрана.",
+                "Оставьте результаты в #54. Укажите пропуски и возможность запуска аппаратного Wave32.",
+            ],
+            "expected": "Оба теста совпадают с эталоном на выбранной физической видеокарте и проходят без пропусков.",
+            "report": ["Точная версия, модель видеокарты, сборка Windows, драйвер и DXC",
+                       "Фактические результаты skip-middle-piece и overlapping-edges"],
+        }},
+    },
 )
+TASKS = tuple({**entry, "report_profile": REPORT_POLICIES[entry["id"]][0],
+               "report_cases": list(REPORT_POLICIES[entry["id"]][1])} for entry in TASKS)
 
 
 def filter_lab(payload, *, equipment="", status="", task=""):
@@ -467,7 +519,8 @@ def build_lab(catalog=None, *, equipment="", status="", task=""):
             continue
         report_sync = states[entry["id"]]
         entry["report_sync"] = report_sync
-        if entry["status"] == "needs_run" and has_passing_coverage(report_sync["reports"]):
+        entry["coverage"] = coverage_cells(entry, report_sync["reports"])
+        if entry["status"] == "needs_run" and has_passing_coverage(entry, report_sync["reports"]):
             entry["status"] = "awaiting_review"
     payload = {"checked_at": CHECKED_AT, "filters": {"equipment": list(EQUIPMENT), "status": list(STATUSES)},
                "tasks": tasks}

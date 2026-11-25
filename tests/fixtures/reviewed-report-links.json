@@ -1,0 +1,78 @@
+{
+  "published_base": "6148cbe1d2c7ffc158eabec8ba854a4ee4273e51",
+  "description": "Holdout for exact author-reported evidence anchors. Positives were read from reviewed public cards. Controls are actual technical links that must not inherit reviewed scope. Existing N04 audit is marked as a regression control, not a new holdout item.",
+  "cases": [
+    {
+      "id": "S01",
+      "url": "https://github.com/xcl-dev/xcl/pull/2034#issuecomment-7149592580",
+      "expected": "PB-0022",
+      "note": "WebIdentity1 independently exercised the carry-loop guard."
+    },
+    {
+      "id": "S02",
+      "url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15#issuecomment-7147944059",
+      "expected": "PB-0024",
+      "note": "JoeY54 reported four Vulkan handoff checks on Radeon 860M."
+    },
+    {
+      "id": "S03",
+      "url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15#issuecomment-7153817545",
+      "expected": "PB-0024",
+      "note": "JoeY54 reported the same tests on a second GPU."
+    },
+    {
+      "id": "S04",
+      "url": "https://github.com/xcl-dev/xcl/pull/1100#issuecomment-7144197194",
+      "expected": "PB-0006",
+      "note": "PastiiJay reported native Wave64 on AMD RDNA4."
+    },
+    {
+      "id": "S05",
+      "url": "https://github.com/ubiquitarianism/leonida/pull/511#issuecomment-7131186456",
+      "expected": "PB-0007",
+      "note": "BadgersMC independently compared Vulkan rectangle pixels."
+    },
+    {
+      "id": "S06",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7132864418",
+      "expected": "PB-0011",
+      "note": "The first hardware report explicitly recorded the failed case."
+    },
+    {
+      "id": "S07",
+      "url": "https://github.com/Marvisak/VIctory/pull/571#issuecomment-7128201680",
+      "expected": "PB-0010",
+      "note": "The check describes scoped LDS execution on NVIDIA and WARP."
+    },
+    {
+      "id": "S08",
+      "url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7138758788",
+      "expected": "PB-0020",
+      "note": "The direct comment contains an independently recorded Linux suspension check."
+    },
+    {
+      "id": "N01",
+      "url": "https://github.com/xcl-dev/xcl/pull/2080#issuecomment-7154185295",
+      "expected": null,
+      "note": "This newer vkd3d-proton retest is not reviewed evidence for a stored card."
+    },
+    {
+      "id": "N02",
+      "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7154497649",
+      "expected": null,
+      "note": "PortBridge describes a synthetic scratch lifetime model. The catalog does not yet review this exact comment."
+    },
+    {
+      "id": "N03",
+      "url": "https://github.com/5headsmartbtw/leonida-framelab/pull/12#issuecomment-7142557889",
+      "expected": null,
+      "note": "This conversation describes willingness to take part. It is not a checked hardware result."
+    },
+    {
+      "id": "N04",
+      "url": "https://github.com/Marvisak/VIctory/pull/346#issuecomment-7121170075",
+      "expected": "PB-0004",
+      "note": "The comment discusses a menu symptom unrelated to the parent PR's verified rectangle check. Catalog inspection verified that the exact link is deliberately attached to PB-0004 for the menu symptom. It must not attach to PB-0001."
+    }
+  ]
+}

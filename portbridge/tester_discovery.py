@@ -77,7 +77,7 @@ END_REPORT = re.compile(r"^(?:not tested|negative controls?|next steps?|question
 PYTHON = re.compile(r"\bPython\s+(3\.\d+(?:\.\d+)?)\b", re.I)
 
 
-def report_lines(body):
+def report_lines(body, *, preserve_blank=False):
     body = re.sub(r"<!--.*?(?:-->|$)", "", body, flags=re.S)
     body = re.sub(r"<(blockquote|details|pre)\b[^>]*>.*?(?:</\1\s*>|$)", "", body, flags=re.I | re.S)
     fence = ""
@@ -89,7 +89,11 @@ def report_lines(body):
             elif fence[0] == marker[1][0] and len(marker[1]) >= len(fence) and not marker[2].strip():
                 fence = ""
             continue
-        if fence or not line or line.startswith((">", "<")) or raw.startswith(("    ", "\t")):
+        if fence or line.startswith((">", "<")) or raw.startswith(("    ", "\t")):
+            continue
+        if not line:
+            if preserve_blank:
+                yield ""
             continue
         line = line.lstrip("#*- ").replace("**", "").replace("`", "")
         if END_REPORT.match(line):

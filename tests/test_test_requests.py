@@ -35,6 +35,7 @@ class TestRequestTests(TestCase):
         self.github = Mock()
         self.github.get.side_effect = self.github_get
         self.github.comments.side_effect = self.github_comments
+        self.github.request.return_value = ([], False)
         self.current = deepcopy(self.issue)
         self.request_comments = []
         self.recent_comments = []
@@ -45,6 +46,9 @@ class TestRequestTests(TestCase):
             return self.current
         if path.endswith("/permission"):
             return {"permission": self.permission}
+        if public and path in {"/repos/akimfomin/PortBridge/issues/5", "/repos/xcl-dev/xcl/issues/1100",
+                                "/repos/LooperSalty/AnyXboxX/issues/133"}:
+            return {"state": "open"}
         if public and path == "/repos/example/public":
             return {"private": False}
         if public and path == "/repos/example/public/commits/" + "a" * 40:
@@ -121,6 +125,20 @@ class TestRequestTests(TestCase):
         self.assertIn("already", self.run_dispatch(roster))
         self.github.comment.assert_called_once()
 
+    def test_duplicate_scope_from_another_request_avoids_a_second_invitation(self):
+        sha = REVISION.rsplit("/", 1)[1]
+        self.recent_comments = [{
+            "user": {"login": BOT},
+            "body": f"<!-- portbridge:test-invite:v2:12:Another:{TASK}:{sha}:amd -->" + chr(10),
+            "created_at": "2026-11-23T10:00:00Z",
+        }]
+        with self.subTest("same cell"):
+            self.assertIn("hardware cell already", self.run_dispatch([tester("Different", "d3d12-native-wave64")]))
+            self.github.comment.assert_not_called()
+        self.recent_comments[0]["body"] = self.recent_comments[0]["body"].replace(":amd -->", ":intel -->")
+        with self.subTest("different cell"):
+            self.assertIn("Posted one", self.run_dispatch([tester("Different", "d3d12-native-wave64")]))
+
     def test_rejects_known_task_with_wrong_pin_and_checks_custom_public_revision(self):
         custom = "https://github.com/example/public/commit/" + "a" * 40
         self.issue["body"] = issue_body(revision=custom)
@@ -140,7 +158,8 @@ class TestRequestTests(TestCase):
         base_get = self.github_get
         self.github.get.side_effect = lambda path, public=False: (
             {"state": "open"} if public and path.endswith("/issues/15") else base_get(path, public=public))
-        scan.return_value = [{"hardware": "AMD Radeon 860M", "outcome": "pass"}]
+        scan.return_value = [{"hardware": "AMD Radeon 860M", "outcome": "pass",
+                              "equipment": "amd", "authority": "approved"}]
         candidate = tester("Volunteer")
         self.assertIn("already reported", self.run_dispatch([candidate]))
         self.github.comment.assert_not_called()

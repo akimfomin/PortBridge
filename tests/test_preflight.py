@@ -211,7 +211,7 @@ class PreflightTest(CatalogFixture):
 
     def test_public_uses_same_rules_without_token_or_local_db(self):
         frozen = {"projects": {"projects": self.catalog.projects()}, "problems": {"problems": self.catalog.problems()},
-                  "observations": {"observations": []}, "health": self.catalog.health()}
+                  "observations": {"observations": []}, "health": self.catalog.health(), "site": {}}
         with patch("portbridge.preflight.snapshot", side_effect=lambda resource, **_: frozen[resource]):
             report = public_preflight(q="#20")
         self.assertEqual(report["problems"][0]["relationship"], "source_port")

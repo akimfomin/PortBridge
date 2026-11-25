@@ -18,7 +18,7 @@ body:
     id: equipment
     attributes:
       label: Equipment
-      description: 'Enter amd, nvidia, or cpu. For a specific GPU in a new check, enter a model such as amd: RX 9070 XT.'
+      description: 'Enter amd, nvidia, intel, or cpu. For a specific GPU in a new check, enter a model such as amd: RX 9070 XT.'
       placeholder: amd
     validations:
       required: true

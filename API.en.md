@@ -78,3 +78,11 @@ Each active curated case has a standalone page under `cases/`. Built-in cases de
 The public MCP server reads the same snapshot by default. Call `portbridge_activity` with no arguments for the dashboard data. For an existing local database, pass `--db`. [MCP quick start](docs/QUICKSTART.md#connect-codex-or-claude-code)
 
 The volunteer queue is exported as `data/lab.json`. Call `portbridge_lab` to filter by `amd`, `nvidia`, or `cpu`, readiness, or an exact `task` ID. An omitted filter lists all values. A task's `evidence_stage` describes the existing report. `adoption` reflects the receiving project's decision. [Test Lab guide](docs/TEST-LAB.md)
+
+### Public preflight search
+
+The hosted CLI, MCP tool and one-PR action use the partitioned search index announced in `data/site.json`. They read the relevant partitions for an exact source, issue number or technical query. `catalog_index.partial` indicates limited retrieval on broad queries. The local HTTP route continues to search its local database.
+
+An exact reviewed evidence comment can match its card. This establishes the association with that report. Its recorded outcome and test scope still determine how it can be used.
+
+Use `python -m portbridge.preflight --global --q "vulkan scratch buffer"`, or pass `expand_global: true` to `portbridge_preflight`, to send selected technical terms to public GitHub Search. Use public terms with this option. A source-only query can use the exact indexed source title. `external_search` returns candidate URLs and tells you whether the request was available, partial, or unavailable. This option is disabled for the authorized local exchange. [GitHub Search](https://docs.github.com/en/rest/search/search#search-issues-and-pull-requests)

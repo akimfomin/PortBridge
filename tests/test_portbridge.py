@@ -17,6 +17,7 @@ from portbridge.case_pages import case_languages, case_path
 from portbridge.catalog import Catalog
 from portbridge.coordination import knowledge_graph, recommendations
 from portbridge.export import EXPORT_FILES, export
+from portbridge.preflight_index import SHARD
 
 
 class CatalogFixture(unittest.TestCase):
@@ -400,13 +401,16 @@ class SnapshotTest(CatalogFixture):
             destination = export(self.catalog, self.workspace / "dist", "example/PortBridge")
         files = {path.relative_to(destination).as_posix() for path in destination.rglob("*") if path.is_file()}
         cases = {case_path(card, language) for card in self.catalog.problems() for language in case_languages(card)}
-        self.assertEqual(files, EXPORT_FILES | cases)
+        shards = {name for name in files if name.startswith("data/") and SHARD.fullmatch(Path(name).name)}
+        self.assertEqual(files, EXPORT_FILES | cases | shards)
         for name in files:
             with self.subTest(file=name):
                 self.assertNotIn(sentinel.encode(), (destination / name).read_bytes())
         site = json.loads((destination / "data/site.json").read_text(encoding="utf-8"))
         self.assertEqual(site["repository"], "example/PortBridge")
         self.assertEqual(site["mode"], "snapshot")
+        index = json.loads((destination / "data/preflight-index.json").read_bytes())
+        self.assertEqual(site["search_index"], {key: index[key] for key in ("version", "generation")})
         cards = json.loads((destination / "data/problems.json").read_text(encoding="utf-8"))
         self.assertEqual(cards["problems"], self.catalog.problems())
         base = "https://akimfomin.github.io/PortBridge/"

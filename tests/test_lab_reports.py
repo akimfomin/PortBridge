@@ -1,3 +1,4 @@
+from hashlib import sha256
 import json
 from unittest.mock import patch
 
@@ -5,7 +6,8 @@ from portbridge.catalog import ReadOnlyCatalog
 from portbridge.export import export
 from portbridge.github import API, RepositoryNotPublic, Unavailable
 from portbridge.lab import FRAMELAB_HANDOFF_HEAD, FRAMELAB_RESULTS, TASKS, build_lab
-from portbridge.lab_reports import FRAMELAB_TASK, FRAMELAB_TESTER_ID, refresh_reports
+from portbridge.lab_reports import (FRAMELAB_TASK, FRAMELAB_TESTER_ID, coverage_cells, normalize_report,
+                                    refresh_reports, report_source, report_sources)
 from portbridge.mcp import PortBridgeMCP
 
 from test_portbridge import CatalogFixture
@@ -45,14 +47,26 @@ def comment(ident, *, device="1114", revision=FRAMELAB_HANDOFF_HEAD, actor=FRAME
 
 class LabReportsTest(CatalogFixture):
     def refresh(self, *responses, private=False):
+        def request_page(url, resource, etag):
+            if url.startswith(ISSUE + "/comments?"):
+                response = next(expected)
+                if isinstance(response, Exception):
+                    raise response
+                return response
+            self.assertTrue(url.startswith(f"{API}/repos/{REPO}/issues/12/comments?"))
+            return [], {}
+
+        expected = iter(responses)
+        frame = next(task for task in TASKS if task["id"] == FRAMELAB_TASK)
         with patch("portbridge.lab_reports._Sync._require_public") as public_check, \
-                patch("portbridge.lab_reports._Sync._request", side_effect=responses) as request:
+                patch("portbridge.lab_reports._Sync._request", side_effect=request_page) as request:
             if private:
                 public_check.side_effect = RepositoryNotPublic("not public")
-            states = refresh_reports(self.catalog, TASKS)
-            public_check.assert_called_once_with(REPO, verify_anonymous=True)
+            states = refresh_reports(self.catalog, [frame])
+            public_check.assert_called_with(REPO, verify_anonymous=True)
             if not private:
-                self.assertEqual(request.call_args_list[0].args[0], f"{ISSUE}/comments?per_page=30&page=1")
+                self.assertIn(f"{ISSUE}/comments?per_page=30&page=1",
+                              [call.args[0] for call in request.call_args_list])
         return states[FRAMELAB_TASK]
 
     def card(self):
@@ -101,7 +115,9 @@ class LabReportsTest(CatalogFixture):
 
     def test_partial_source_failure_retains_previous_scan_then_complete_scan_removes_it(self):
         wait = self.refresh(Unavailable("temporarily unavailable", http_status=503))
-        self.assertEqual((wait["state"], wait["checked_at"], wait["reports"]), ("unavailable", None, []))
+        self.assertEqual((wait["state"], wait["reports"]), ("stale", []))
+        primary = next(source for source in wait["sources"] if source["url"] == FRAMELAB_RESULTS)
+        self.assertEqual((primary["state"], primary["checked_at"]), ("unavailable", None))
         initial = self.refresh(([comment(1)], {}))
         stale = self.refresh(([], {"Link": '<unused>; rel="next"'}), Unavailable("rate limited"))
         self.assertEqual(stale["state"], "stale")
@@ -119,3 +135,112 @@ class LabReportsTest(CatalogFixture):
             self.assertEqual(self.card()["report_sync"]["state"], "unchecked")
         removed = self.refresh(private=True)
         self.assertEqual((removed["state"], removed["reports"]), ("unavailable", []))
+
+
+def structured_comment(task, source, ident, *, equipment, actor_id=9876, association="NONE", cases=None):
+    repo, issue = report_source(task, source)
+    hardware = {"amd": ("AMD Radeon RX 9070 XT", "1002:7550"),
+                "intel": ("Intel Arc B580", "8086:e20b"),
+                "nvidia": ("NVIDIA RTX 4090", "10de:2684"),
+                "cpu": ("Intel Core i5-13600KF", "")}
+    model, pci = hardware[equipment]
+    fields = ["PortBridge test report v1", f"Task: {task['id']}",
+              "Revisions: " + " ".join(row["sha"] for row in task["revisions"]), f"Equipment: {equipment}",
+              f"Hardware: {model}", f"OS: {task['os'][0]} 25H2", "Toolchain: Python 3.12.10 or DXC 1.9",
+              "Opt-in: yes"]
+    if pci:
+        fields.extend((f"PCI: {pci}", "Driver: 1.2.3"))
+    fields.extend(f"Case: {name} = {outcome}" for name, outcome in
+                  (cases or {name: "pass" for name in task["report_cases"]}).items())
+    return {"id": ident, "html_url": f"{source}#issuecomment-{ident}", "issue_url": issue,
+            "url": f"{API}/repos/{repo}/issues/comments/{ident}", "author_association": association,
+            "user": {"type": "User", "login": f"volunteer-{actor_id}", "id": actor_id},
+            "created_at": f"2026-11-25T02:00:{ident:02}Z", "body": "\n".join(fields)}
+
+
+class StructuredLabReportsTest(CatalogFixture):
+    def test_all_curated_tasks_accept_only_their_exact_structured_inputs(self):
+        for task in TASKS:
+            source = report_sources(task)[0]
+            repo, issue = report_source(task, source)
+            with self.subTest(task=task["id"]):
+                result = structured_comment(task, source, 1, equipment=task["equipment"][0])
+                report = normalize_report(result, task, source, repo, issue)
+                self.assertEqual((report["outcome"], report["authority"]), ("pass", "community"))
+                self.assertEqual(report["revisions"], [row["sha"] for row in task["revisions"]])
+                self.assertTrue(report["opt_in"])
+                result["body"] = result["body"].replace(task["revisions"][0]["sha"], "0" * 40)
+                self.assertIsNone(normalize_report(result, task, source, repo, issue))
+
+    def test_partial_skips_and_malformed_hardware_never_count_as_pass(self):
+        task = next(task for task in TASKS if task["id"] == "xcl-2126-scratch-coverage")
+        source = report_sources(task)[0]
+        repo, issue = report_source(task, source)
+        row = structured_comment(task, source, 1, equipment="intel", cases={"skip-middle-piece": "skip"})
+        self.assertEqual(normalize_report(row, task, source, repo, issue)["outcome"], "partial")
+        for new_body in (
+            row["body"].replace("8086:e20b", "1002:e20b"),
+            row["body"].replace("Intel Arc B580", "WARP"),
+            row["body"].replace("Windows 25H2", "Linux 25H2"),
+            row["body"] + "\nCase: skip-middle-piece = pass",
+            "\n".join("> " + line for line in row["body"].splitlines()),
+        ):
+            self.assertIsNone(normalize_report({**row, "body": new_body}, task, source, repo, issue))
+
+    def test_combined_coverage_uses_both_sources_and_preserves_partial_failure(self):
+        task = next(task for task in TASKS if task["id"] == "xcl-2126-scratch-coverage")
+        primary, linked = report_sources(task)
+        amd = structured_comment(task, primary, 1, equipment="amd", association="OWNER")
+        intel = structured_comment(task, linked, 2, equipment="intel", association="OWNER")
+        community = structured_comment(task, linked, 3, equipment="intel")
+
+        def refresh(primary_reports, linked_reports):
+            def request(url, resource, etag):
+                data = primary_reports if "/issues/54/comments" in url else linked_reports
+                if isinstance(data, Exception):
+                    raise data
+                return data, {}
+            with patch("portbridge.lab_reports._Sync._require_public"), \
+                    patch("portbridge.lab_reports._Sync._request", side_effect=request):
+                refresh_reports(self.catalog, [task])
+            return build_lab(self.catalog, task=task["id"])["tasks"][0]
+
+        partial = refresh([amd], [community])
+        self.assertEqual(partial["status"], "needs_run")
+        self.assertEqual([cell["state"] for cell in partial["coverage"]], ["covered", "reported"])
+        full = refresh([amd], [community, intel])
+        self.assertEqual(full["status"], "awaiting_review")
+        self.assertEqual(full["adoption"], "pending")
+        self.assertEqual(len(full["report_sync"]["reports"]), 3)
+        retained = refresh([], Unavailable("temporarily unavailable", http_status=503))
+        self.assertEqual([cell["state"] for cell in retained["coverage"]], ["missing", "covered"])
+        self.assertEqual(retained["report_sync"]["state"], "stale")
+        self.assertEqual(retained["status"], "needs_run")
+
+    def test_legacy_and_reviewed_prose_are_bound_to_exact_contracts(self):
+        frame = next(task for task in TASKS if task["id"] == FRAMELAB_TASK)
+        changed_frame = {**frame, "report_cases": frame["report_cases"] + ["new-control"]}
+        self.assertIsNone(normalize_report(comment(1), changed_frame, FRAMELAB_RESULTS, REPO, ISSUE))
+
+        task = next(task for task in TASKS if task["id"] == "xcl-2126-scratch-coverage")
+        source = report_sources(task)[1]
+        repo, issue = report_source(task, source)
+        row = structured_comment(task, source, 2, equipment="amd")
+        row["body"] = "Verified free-form report with the two published synthetic tests."
+        record = next(iter(task["reviewed_reports"].values()))
+        reviewed = {**task, "reviewed_reports": {row["html_url"]: {**record, "actor_id": row["user"]["id"],
+                    "body_sha256": sha256(row["body"].encode()).hexdigest()}}}
+        self.assertEqual(normalize_report(row, reviewed, source, repo, issue)["authority"], "approved")
+        row["body"] += " An edit requires a new review."
+        self.assertIsNone(normalize_report(row, reviewed, source, repo, issue))
+
+    def test_edited_approved_outcome_supersedes_a_newer_created_report(self):
+        task = next(task for task in TASKS if task["id"] == "xcl-2126-scratch-coverage")
+        source = report_sources(task)[0]
+        repo, issue = report_source(task, source)
+        old = structured_comment(task, source, 1, equipment="amd", association="OWNER",
+                                 cases={"overlapping-edges": "fail"})
+        old["updated_at"] = "2026-11-25T03:00:00Z"
+        latest = structured_comment(task, source, 2, equipment="amd", association="OWNER")
+        reports = [normalize_report(row, task, source, repo, issue) for row in (old, latest)]
+        self.assertEqual(coverage_cells(task, reports)[0]["state"], "contradicted")

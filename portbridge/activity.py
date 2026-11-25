@@ -194,6 +194,9 @@ def handoff_summary(cards, projects, observations, as_of):
 
 
 def build_activity(catalog, *, now=None, projects=None, cards=None, observations=None, health=None, drafts=None):
+    from .lab import build_lab
+    from .radar import build_radar
+
     as_of = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(microsecond=0)
     start = as_of - timedelta(days=WINDOW_DAYS)
     projects = catalog.projects() if projects is None else projects
@@ -234,8 +237,10 @@ def build_activity(catalog, *, now=None, projects=None, cards=None, observations
             displayed[kind] += 1
             events.append(event)
 
+    opportunities = current_opportunities(cards, drafts)
+    radar = build_radar(projects, observations, changes, build_lab(catalog), opportunities, as_of)
     return {"as_of": as_of.isoformat(), "refreshed_at": health["refresh_at"], "health": health["status"],
             "window_days": WINDOW_DAYS, "window_start": start.isoformat(),
             "counts": {**counts, "projects": len(per_project)}, "projects": list(per_project.values()),
             "handoffs": handoff_summary(cards, projects, observations, as_of),
-            "events": events, "opportunities": current_opportunities(cards, drafts)}
+            "events": events, "opportunities": opportunities, "radar": radar}

@@ -15,9 +15,11 @@ After the run, use **Copy result template** to get the link and fields for a rep
 
 Volunteers choose a task and execute it locally. If you need another setup, open a test request from the queue. PortBridge can invite a tester based on public hardware reports. The maintainers of each receiving project decide what to adopt. A report or a request for review records delivery. A receiving team's decision, linked run, or merged change can establish acceptance or reuse.
 
-Selected tasks show reports found in their linked discussion, with the reporter, tested hardware, pinned revision and result. A complete passing report can move a task to **Awaiting team review**. Look under **Show all statuses** to find it. The initial monitored task is FrameLab's AMD Vulkan check. [Reporting discussion](https://github.com/5headsmartbtw/leonida-framelab/issues/15)
+All Lab tasks show reports from their linked discussions. Use **Copy result template** to report one setup in the common format. Fill in the versions in the given order, the hardware, the operating system and build, the toolchain version, and each case result. For a GPU include its PCI vendor and device IDs and driver version. Keep the report lines together without blank lines. Use pass, fail, or skip for each case and add the observed output beneath a blank line. For CPU checks leave out PCI and driver.
 
 Before inviting a tester for a monitored task, PortBridge checks the reporting discussion. An unavailable discussion or a passing result that covers the request puts the invitation on hold.
+
+The task's coverage table shows which hardware still needs a run. Reports from community members stay visible for review. Passing reports from approved testers or a linked repository owner can satisfy coverage. Select `Opt-in: yes` only if you welcome proposals for other suitable checks. A later report with `Opt-in: no` withdraws that choice.
 
 ## Для участника
 
@@ -33,24 +35,26 @@ Before inviting a tester for a monitored task, PortBridge checks the reporting d
 
 Сначала проверьте, нужна ли ещё помощь в исходном обсуждении. Затем повторите тест в отдельной копии проекта и оставьте результат со своим стендом и точной версией. Подробности о том, как передать результат и сохранить авторство, есть в [инструкции для агента](AGENT-PROMPT.md).
 
-В некоторых карточках PortBridge показывает найденные отчёты с автором, оборудованием, точной версией и итогом. Полный успешный прогон может перевести задачу в статус **Ждём ответа команды**. Чтобы найти такую задачу в очереди, включите **Показать все статусы**. Первой отслеживается проверка FrameLab на AMD. [Обсуждение с отчётами](https://github.com/5headsmartbtw/leonida-framelab/issues/15)
+Во всех карточках PortBridge проверяет связанные обсуждения. Возьмите шаблон кнопкой **Копировать шаблон результата**. Укажите версии в заданном порядке, оборудование, ОС и её сборку, версию инструмента и итог каждого сценария. Для видеокарты добавьте PCI ID и версию драйвера. Для CPU эти поля не нужны. Оставьте строки шаблона подряд. Фактический вывод можно добавить после пустой строки.
 
 Перед приглашением тестировщика PortBridge сверяет обсуждение отслеживаемой задачи. При недоступном обсуждении или уже полученном полном результате приглашение откладывается.
+
+В таблице видно, какого оборудования ещё не хватает. Отчёты сообщества видны и ждут проверки. Успешные отчёты согласованных участников и владельцев связанных репозиториев закрывают нужные ячейки. Выберите Opt-in yes, если готовы к другим подходящим проверкам. Более свежий отчёт с Opt-in no отменяет этот выбор.
 
 ## For integrations
 
 Read `data/lab.json` from the public site, call the local `GET /api/v1/lab` endpoint, or use the read-only `portbridge_lab` MCP tool. Use `task` to filter by a task's exact `id`. To open the same check for a person, link to `#/lab?task=<id>` on the public site. The equipment filter uses a value supplied by the caller. `checked_at` records when the queue was reviewed. Consult the linked discussions for the latest claims, source revisions, and decisions.
 
-Monitored tasks include `report_sync`. Its `state` is `fresh` after a successful check, `stale` when the latest attempt failed and the previous check is still available, `unavailable` when a check fails with no previous check available, or `unchecked` before the first attempt. The object's `checked_at` and `attempted_at` give the last successful and attempted checks in UTC. Either may be null. Each entry in `reports` has the original comment `url`, GitHub `author`, tested `revision`, `hardware`, `outcome` (`pass`, `fail`, or `partial`), and `reported_at`. The `adoption` field still records the receiving team's decision.
+Monitored tasks include `report_sync`. Its `state` is `fresh` after a successful check, `stale` when the latest attempt failed and the previous check is still available, `unavailable` when a check fails with no previous check available, or `unchecked` before the first attempt. The object's `checked_at` and `attempted_at` give the last successful and attempted checks in UTC. Either may be null. The `sources` list gives the freshness of each linked discussion. Each entry in `reports` has the original comment `url`, GitHub `author`, tested `revision`, `hardware`, `outcome` (`pass`, `fail`, or `partial`), and `reported_at`. The `authority` value tells integrators whether an owner or approved reporter supplied the result. Community submissions remain listed for review. A card's `coverage` tracks each hardware cell, and `adoption` separately records the receiving team's decision.
 
 Pages checks monitored discussions before exporting the queue. To refresh a local copy, run `python -m portbridge refresh-lab`. To use a specific database, run `python -m portbridge --db path/to/catalog.sqlite3 refresh-lab` and use that same database for the local API, export, or MCP.
 
 ### Show open checks on a partner site
 
-Start with a link to [PortBridge Test Lab](https://akimfomin.github.io/PortBridge/#/lab). This optional snippet shows up to three checks marked `needs_run` and the equipment they need. Each link opens the instructions and reporting discussion for that check. It reads the [public JSON](https://akimfomin.github.io/PortBridge/data/lab.json) across origins without credentials. The Test Lab link stays visible if the feed is empty or unavailable.
+Start with a link to [PortBridge Test Lab](https://akimfomin.github.io/PortBridge/#/lab). This optional snippet shows up to three checks marked `needs_run` and the equipment they need. Each link opens the instructions and reporting discussion for that check. Set data-equipment to amd, nvidia, intel or cpu for your audience, or omit it for all setups. It reads the [public JSON](https://akimfomin.github.io/PortBridge/data/lab.json) across origins without credentials. The Test Lab link stays visible if the feed is empty or unavailable.
 
 ```html
-<section id="portbridge-open-tests" aria-labelledby="portbridge-tests-title">
+<section id="portbridge-open-tests" aria-labelledby="portbridge-tests-title" data-equipment="intel">
   <h2 id="portbridge-tests-title">Help run a compatibility check</h2>
   <p><a href="https://akimfomin.github.io/PortBridge/#/lab">Open PortBridge Test Lab</a></p>
   <ul hidden></ul>
@@ -60,7 +64,7 @@ Start with a link to [PortBridge Test Lab](https://akimfomin.github.io/PortBridg
   const section = document.getElementById('portbridge-open-tests')
   const list = section.querySelector('ul')
   const reviewed = section.querySelector('small')
-  const equipment = new Map([['amd', 'AMD'], ['nvidia', 'NVIDIA'], ['cpu', 'CPU']])
+  const equipment = new Map([['amd', 'AMD'], ['nvidia', 'NVIDIA'], ['intel', 'Intel'], ['cpu', 'CPU']])
 
   function discussion(value) {
     try {
@@ -82,6 +86,9 @@ Start with a link to [PortBridge Test Lab](https://akimfomin.github.io/PortBridg
       for (const task of tasks) {
         if (task?.status !== 'needs_run' || typeof task.title !== 'string' || !task.title.trim()) continue
         if (!/^[a-z0-9-]{1,80}$/.test(task.id) || !discussion(task.source_url)) continue
+        const requested = section.dataset.equipment
+        if (requested && (!Array.isArray(task.equipment) || !task.equipment.includes(requested) ||
+          (Array.isArray(task.coverage) && task.coverage.some(cell => cell?.equipment === requested && cell.state === 'covered')))) continue
         const item = document.createElement('li')
         const link = document.createElement('a')
         link.href = 'https://akimfomin.github.io/PortBridge/#/lab?' + new URLSearchParams({task: task.id})

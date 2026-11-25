@@ -775,6 +775,102 @@ function activityHandoffs(handoffs) {
   return panel;
 }
 
+const radarKinds = {
+  recheck_revision: t('New revision', 'Новая ревизия'),
+  review_report: t('Review a report', 'Сверить отчёт'),
+  cover_hardware: t('Hardware check', 'Проверка на оборудовании'),
+  compare_sources: t('Compare sources', 'Сопоставить источники'),
+};
+const radarProofs = {
+  target: t('Open discussion', 'Открыть обсуждение'),
+  report: t('Open report', 'Открыть отчёт'),
+  procedure: t('Test procedure', 'Порядок проверки'),
+  tested_revision: t('Tested revision', 'Проверенная версия'),
+  pinned_revision: t('Pinned revision', 'Закреплённая версия'),
+  comparison: t('Comparison source', 'Источник для сравнения'),
+};
+const radarPriority = {
+  high: t('High priority', 'Высокий приоритет'),
+  normal: t('Test queue', 'Очередь проверок'),
+  exploratory: t('Research lead', 'Кандидат для исследования'),
+};
+const radarSelection = {kind: '', equipment: ''};
+
+function radarAction(action) {
+  const card = element('li', 'activity-opportunity');
+  const check = action.freshness || {};
+  const verify = action.state === 'verify_sources' || check.state !== 'fresh'
+    || Date.now() - Date.parse(check.checked_at) > freshnessLimit;
+  const meta = element('div', 'activity-meta');
+  meta.append(badge(action.kind, radarKinds), element('span', '', radarPriority[action.priority]));
+  if (verify) meta.append(element('strong', '', t('Check the source first', 'Сначала сверьте источник')));
+  if (check.checked_at) meta.append(activityTime(check.checked_at));
+  const title = element('h3');
+  const name = editorial(action, 'title');
+  title.append(labTaskID.test(action.task_id || '') ? internalLink(name, labTaskPath(action.task_id))
+    : githubLink(name, action.target_url));
+  card.append(meta, title);
+  const hardware = list(action.equipment).map((kind) => labEquipment[kind] || kind);
+  if (hardware.length) card.append(element('p', 'activity-opportunity-projects', hardware.join(' · ')));
+  const summary = editorial(action, 'summary');
+  if (summary) card.append(element('p', '', summary));
+  if (!verify) card.append(element('p', 'activity-next-step', editorial(action, 'next_step')));
+  const criterion = editorial(action, 'criterion');
+  if (criterion) card.append(element('p', '', criterion));
+  const links = element('div', 'activity-handoff-proof');
+  for (const item of list(action.sources)) {
+    if (Object.hasOwn(radarProofs, item.role)) {
+      const label = item.role === 'comparison' && item.status === 'closed'
+        ? t('Comparison source (closed)', 'Источник для сравнения (закрыт)') : radarProofs[item.role];
+      links.append(githubLink(label, item.url));
+    }
+  }
+  card.append(links);
+  return card;
+}
+
+function activityRadar(radar) {
+  const panel = activityPanel(t('Research radar', 'Радар исследований'));
+  const actions = list(radar.actions);
+  const bar = element('div', 'lab-bar');
+  const rows = element('ul', 'activity-timeline');
+  const count = element('p', 'lab-count');
+  count.setAttribute('role', 'status');
+
+  function render() {
+    const visible = actions.filter((action) => (!radarSelection.kind || action.kind === radarSelection.kind)
+      && (!radarSelection.equipment || list(action.equipment).includes(radarSelection.equipment)));
+    const amount = numberFormat.format(visible.length);
+    count.textContent = visible.length
+      ? t('Actions shown ' + amount, 'Задач показано ' + amount)
+      : t('No actions match these filters.', 'По этим фильтрам задач нет.');
+    rows.replaceChildren(...visible.map(radarAction));
+  }
+
+  function filter(name, labelText, choices) {
+    const group = element('div', 'filter-group');
+    const input = element('select');
+    input.id = 'radar-' + name;
+    const label = element('label', '', labelText);
+    label.htmlFor = input.id;
+    input.append(new Option(t('All', 'Все'), ''));
+    for (const [value, option] of choices) input.append(new Option(option, value));
+    input.value = radarSelection[name];
+    input.addEventListener('change', () => {
+      radarSelection[name] = input.value;
+      render();
+    });
+    group.append(label, input);
+    return group;
+  }
+
+  bar.append(filter('kind', t('Action', 'Действие'), Object.entries(radarKinds)),
+    filter('equipment', t('Equipment', 'Оборудование'), Object.entries(labEquipment)));
+  panel.append(bar, count, rows);
+  render();
+  return panel;
+}
+
 function showActivity(data, quiet = false) {
   const {as_of, window_start, ...observed} = data;
   const signature = JSON.stringify(observed);
@@ -827,7 +923,9 @@ function showActivity(data, quiet = false) {
   else teams.append(element('p', 'activity-note', t('Project data is unavailable.', 'Данные о проектах недоступны.')));
   board.append(stats);
   if (list(data.handoffs?.items).length) board.append(activityHandoffs(data.handoffs));
-  board.append(columns, feed, teams);
+  board.append(columns);
+  if (data.radar) board.append(activityRadar(data.radar));
+  board.append(feed, teams);
   viewStatus.textContent = '';
   content.replaceChildren(board);
   return true;
@@ -921,7 +1019,8 @@ function drawProjects(ecosystem) {
 }
 
 const labEquipment = {
-  amd: t('AMD graphics', 'Видеокарта AMD'), cpu: t('CPU only', 'Только процессор'), nvidia: t('NVIDIA graphics', 'Видеокарта NVIDIA'),
+  amd: t('AMD graphics', 'Видеокарта AMD'), cpu: t('CPU only', 'Только процессор'),
+  intel: t('Intel graphics', 'Видеокарта Intel'), nvidia: t('NVIDIA graphics', 'Видеокарта NVIDIA'),
 };
 const portbridgeRepository = 'https://github.com/akimfomin/PortBridge';
 const portbridgePublicSite = 'https://akimfomin.github.io/PortBridge/';
@@ -955,6 +1054,14 @@ const labReportStates = {
   stale: t('Latest check failed. Showing the last successful check.', 'Последняя проверка не удалась. Показаны данные предыдущей успешной проверки.'),
   unavailable: t('Could not check the reporting discussion.', 'Не удалось проверить обсуждение с отчётами.'),
   unchecked: t('The reporting discussion has yet to be checked automatically.', 'Автоматическая проверка обсуждения ещё не проводилась.'),
+};
+const labCoverageStates = {
+  covered: t('Covered', 'Покрыто'), reported: t('Report needs review', 'Отчёт ждёт проверки'),
+  missing: t('Run needed', 'Нужен прогон'), contradicted: t('Failure needs review', 'Нужен разбор сбоя'),
+};
+const labReportAuthority = {
+  approved: t('Approved reporter', 'Согласованный автор отчёта'),
+  community: t('Community report', 'Отчёт сообщества'),
 };
 const labReportOutcomes = {
   pass: evidenceOutcomes.passed,
@@ -1018,7 +1125,8 @@ function labRequestURL(task, equipment) {
   form.searchParams.set('template', 'test-request.yml');
   form.searchParams.set('title', 'Test request: ');
   if (!task) return form.href;
-  if (task.status !== 'needs_run' || typeof task.id !== 'string' || !labTaskID.test(task.id)
+  if (task.status !== 'needs_run' || list(task.coverage).some((cell) => cell.equipment === equipment && cell.state === 'covered')
+      || typeof task.id !== 'string' || !labTaskID.test(task.id)
       || !Object.hasOwn(labEquipment, equipment) || !list(task.equipment).includes(equipment)
       || typeof task.expected !== 'string' || !task.expected.trim()) return null;
 
@@ -1072,12 +1180,28 @@ function labCompatibleEquipment(task, equipment) {
   return next;
 }
 
-function labReport(task, returnPath) {
+function labReport(task, returnPath, equipment) {
   const section = element('section', 'lab-agent');
   const actions = element('div', 'lab-agent-actions');
   const field = element('textarea');
   const page = portbridgePublicSite + labTaskPath(task.id);
+  const cases = list(task.report_cases);
+  const selected = labCompatibleEquipment(task, equipment);
+  const reportHeader = cases.length ? [
+    'PortBridge test report v1',
+    'Task: ' + task.id,
+    'Revisions: ' + list(task.revisions).map((revision) => revision.sha).join(' '),
+    'Equipment: ' + selected,
+    'Hardware: ',
+    ...(selected === 'cpu' ? [] : ['PCI: ', 'Driver: ']),
+    'OS: ',
+    'Toolchain: ',
+    'Opt-in: no',
+    ...cases.map((name) => 'Case: ' + name + ' = '),
+    '',
+  ] : [];
   field.value = [
+    ...reportHeader,
     `[PortBridge Test Lab](${page}) · ${editorial(task, 'title')}`,
     '',
     t('- Tested revision(s): ', '- Проверенные версии: '),
@@ -1097,7 +1221,12 @@ function labReport(task, returnPath) {
 
   actions.append(copy, githubLink(t('Share result in the discussion', 'Оставить результат в обсуждении'), task.result_url),
     internalLink(t('Find another check', 'Выбрать другую проверку'), returnPath), status);
-  section.append(element('h3', '', t('After the run', 'После прогона')), actions, field);
+  section.append(element('h3', '', t('After the run', 'После прогона')));
+  if (cases.length) {
+    section.append(element('p', '', t('Fill in the fields and use pass, fail, or skip for each case. Choose yes under Opt-in only if you welcome other suitable tests.',
+      'Заполните поля и укажите pass, fail или skip для каждой проверки. Выберите Opt-in yes, если готовы получать предложения о других подходящих тестах.')));
+  }
+  section.append(actions, field);
   return section;
 }
 
@@ -1118,6 +1247,7 @@ function labSyncedReports(sync) {
     const row = element('li');
     const source = report.hardware || t('Open report', 'Открыть отчёт');
     row.append(githubLink(source, report.url), badge(report.outcome, labReportOutcomes));
+    if (Object.hasOwn(labReportAuthority, report.authority)) row.append(badge(report.authority, labReportAuthority));
     if (report.author) row.append(element('span', '', `@${report.author}`));
     if (typeof report.revision === 'string' && /^[a-f0-9]{40}$/.test(report.revision)) {
       const revision = element('code', 'identifier', report.revision.slice(0, 12));
@@ -1147,7 +1277,15 @@ function labTask(task, focused = false, queueEquipment = '', showAll = false) {
   if (setup.length) card.append(element('p', '', setup.join(' · ')));
   const evidence = editorial(task, 'evidence');
   if (evidence) card.append(element('p', 'lab-evidence', evidence));
-  if (task.report_sync && Object.hasOwn(labReportStates, task.report_sync.state)) {
+  const coverage = list(task.coverage);
+  if (coverage.length && (focused || task.coverage_policy === 'all')) {
+    const cells = coverage.filter((cell) => Object.hasOwn(labEquipment, cell.equipment)
+      && Object.hasOwn(labCoverageStates, cell.state)).map((cell) =>
+      labEquipment[cell.equipment] + ' · ' + labCoverageStates[cell.state]);
+    if (cells.length) card.append(labChecklist(t('Hardware coverage', 'Аппаратное покрытие'), cells));
+  }
+  if (task.report_sync && Object.hasOwn(labReportStates, task.report_sync.state)
+      && (focused || list(task.report_sync.reports).length)) {
     card.append(labSyncedReports(task.report_sync));
   }
 
@@ -1202,7 +1340,7 @@ function labTask(task, focused = false, queueEquipment = '', showAll = false) {
   if (focused) {
     const returnPath = labQueuePath(labCompatibleEquipment(task, queueEquipment), showAll);
     if (blocked || reportsForReview) links.append(internalLink(t('Find another check', 'Выбрать другую проверку'), returnPath));
-    else card.append(labReport(task, returnPath));
+    else card.append(labReport(task, returnPath, queueEquipment));
   }
   return card;
 }

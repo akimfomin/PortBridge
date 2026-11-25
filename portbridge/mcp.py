@@ -63,7 +63,9 @@ TOOLS = [
                 "description": "Symptom, technology, issue number (for example #20), or PortBridge ID."},
           "url": {"type": "string", "minLength": 1, "maxLength": MAX_URL_CHARS,
                   "description": "Public HTTPS GitHub issue, pull request, or commit URL."},
-          "limit": {"type": "integer", "minimum": 1, "maximum": MAX_RESULTS, "default": DEFAULT_RESULTS}},
+          "limit": {"type": "integer", "minimum": 1, "maximum": MAX_RESULTS, "default": DEFAULT_RESULTS},
+          "expand_global": {"type": "boolean", "default": False,
+                            "description": "Send selected public technical terms to GitHub Search for candidate links."}},
          anyOf=[{"required": ["q"]}, {"required": ["url"]}]),
     tool("portbridge_problem", "Read a PortBridge card and its per-project sources and test evidence.",
          {"id": {"type": "string", "pattern": f"^{PROBLEM_ID.pattern}$", "maxLength": 70}}, required=["id"]),
@@ -187,7 +189,8 @@ class PortBridgeMCP:
             q = args.get("q", "")
             url = args.get("url", "")
             limit = args.get("limit", DEFAULT_RESULTS)
-            if (args.keys() - {"q", "url", "limit"} or not isinstance(q, str) or not isinstance(url, str) or
+            expand = args.get("expand_global", False)
+            if (args.keys() - {"q", "url", "limit", "expand_global"} or type(expand) is not bool or not isinstance(q, str) or not isinstance(url, str) or
                     len(q) > MAX_QUERY_CHARS or len(url) > MAX_URL_CHARS or not (q.strip() or url.strip()) or
                     type(limit) is not int or not 1 <= limit <= MAX_RESULTS):
                 return tool_error("Provide a search query or a public GitHub source URL. "
@@ -195,9 +198,13 @@ class PortBridgeMCP:
             options = {"q": q.strip(), "url": url.strip(), "limit": limit}
             try:
                 if self.exchange:
+                    if expand:
+                        return tool_error("Global search is unavailable for an authorized loopback exchange.")
                     payload = self.exchange.preflight(**options)
+                elif self.catalog is None:
+                    payload = public_preflight(expand_global=expand, **options)
                 else:
-                    payload = public_preflight(**options) if self.catalog is None else preflight(self.catalog, **options)
+                    payload = preflight(self.catalog, expand_global=expand, **options)
             except json.JSONDecodeError:
                 raise
             except ValueError as exc:

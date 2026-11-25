@@ -14,7 +14,7 @@ Before starting substantial work, open the receiving issue, PR or maintainer not
 4. Where could the result be accepted or reused? Name the review, test, fix, or decision it could change.
 5. Who has claimed related work? Compare current revisions, open changes and reported coverage before starting.
 
-Start with one bounded check. Use PortBridge search to find shared evidence and Test Lab to fill a named gap. Pause if the receiver's decision is already supported, a parallel effort covers the same case, or the available public evidence cannot support a useful check.
+Start with one bounded check. The [research radar](decisions/009-research-radar.md) in Activity surfaces version changes, reports, missing hardware and linked technical comparisons. Use PortBridge search to find shared evidence and Test Lab to fill a named gap. Pause if the receiver's decision is already supported, a parallel effort covers the same case, or the available public evidence cannot support a useful check.
 
 ## Receiving teams
 
