@@ -176,6 +176,7 @@ def handoff_summary(cards, projects, observations, as_of):
         delivery_urls = "|".join(map(re.escape, source_url_aliases(delivery)))
         proofs = {"independent_url": f"(?:{delivery_urls})" + r"#issuecomment-[1-9][0-9]*",
                   "review_url": f"(?:{delivery_urls})" + r"#pullrequestreview-[1-9][0-9]*",
+                  "branch_implementation_url": prefix + r"commit/[0-9a-f]{40}",
                   "adopted_url": prefix + rf"(?:{subject}(?:#issuecomment-[1-9][0-9]*)?|commit/[0-9a-f]{{40}})"}
         item = {"problem_id": case["id"], "project": row["project"], "delivered_url": delivery, "revision": revision,
                 **public_text(case["title"], english_text(case, "title"))}
@@ -201,7 +202,9 @@ def showcased_research(cards, observations, handoffs):
     for card in cards:
         if not card.get("showcase"):
             continue
-        solution = card["solutions"][0]
+        handoff = by_case.get(card["id"], {})
+        solution = next((row for row in card["solutions"] if row["project"] == handoff.get("project")),
+                        card["solutions"][0])
         subject = solution["source_refs"][0]["url"]
         evidence = solution["evidence"][0]
         source = latest.get(canonical_url(subject))
@@ -213,8 +216,8 @@ def showcased_research(cards, observations, handoffs):
             item["source_state"] = "draft" if source["metadata"].get("draft") else source["status"]
             item["checked_at"] = source["fetched_at"]
             item["current_revision"] = source_revision(source)
-        for key in ("independent_url", "adopted_url"):
-            if link := by_case.get(card["id"], {}).get(key):
+        for key in ("independent_url", "branch_implementation_url", "adopted_url"):
+            if link := handoff.get(key):
                 item[key] = link
         items.append(item)
     return sorted(items, key=lambda row: (row["at"], row["problem_id"]), reverse=True)

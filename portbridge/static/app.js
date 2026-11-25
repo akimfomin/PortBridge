@@ -936,6 +936,9 @@ function activityHandoffs(handoffs) {
     for (const [, field, label] of stages) {
       if (handoff[field]) links.append(githubLink(label, handoff[field]));
     }
+    if (handoff.branch_implementation_url) {
+      links.append(githubLink(t('Implemented in PR branch', 'Реализовано в ветке PR'), handoff.branch_implementation_url));
+    }
     row.append(element('span', 'activity-meta activity-project-name', projectName(handoff.project)),
       element('h3', '', editorial(handoff, 'title') || handoff.problem_id), links);
     items.append(row);
@@ -1071,6 +1074,7 @@ function researchHighlights(items) {
     for (const [key, label] of [
       ['delivered_url', t('Upstream discussion', 'Обсуждение команды')],
       ['independent_url', t('Independent check', 'Независимая проверка')],
+      ['branch_implementation_url', t('Implemented in PR branch', 'Реализовано в ветке PR')],
       ['adopted_url', t('Adoption evidence', 'Подтверждение внедрения')],
     ]) {
       if (item[key]) links.append(githubLink(label, item[key]));
@@ -1081,7 +1085,9 @@ function researchHighlights(items) {
       : t('Shared with the project', 'Передано команде')));
     if (original) stage.append(activityTime(item.at));
     if (item.checked_at && sourceStates[item.source_state]) {
-      stage.append(element('span', '', sourceStates[item.source_state]), activityTime(item.checked_at));
+      const state = sourceStates[item.source_state];
+      stage.append(githubLink(t(`Source status · ${state}`, `Статус источника · ${state}`), item.source_url),
+        activityTime(item.checked_at));
     }
     row.append(h, stage, element('p', '', editorial(item, 'summary')), links);
     results.append(row);

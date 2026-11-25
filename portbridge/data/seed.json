@@ -912,12 +912,12 @@
     },
     {
       "id": "PB-0011",
-      "recorded_at": "2026-11-24T13:27:47Z",
+      "recorded_at": "2026-11-25T13:29:58Z",
       "title": "Округление и NaN при переводе RDNA2 в AnyXboxX",
-      "summary": "PortBridge сопоставил 16 измерений RDNA2 из VIctory с AnyXboxX #133. KainanP подтвердил ошибку, исправил её в своей ветке и включил измерения в тесты. Независимый прогон подтвердил исправление.",
-      "status": "verified",
+      "summary": "KainanP исправил преобразования RDNA2 по измерениям Lyrnc, которые PortBridge сопоставил с AnyXboxX. PortBridge также подготовил отдельную пробу переноса, которую Lyrnc выполнил на RDNA2 и KainanP указал в пояснениях. LooperSalty влил #133.",
+      "status": "resolved",
       "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"],
-      "translations": {"en": {"title": "RDNA2 rounding and NaN conversion in AnyXboxX", "summary": "PortBridge replayed 16 VIctory RDNA2 measurements in AnyXboxX #133. KainanP confirmed the issue, corrected it in the PR branch and added the measured inputs as tests. An independent run confirmed the fix.", "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"]}},
+      "translations": {"en": {"title": "RDNA2 rounding and NaN conversion in AnyXboxX", "summary": "KainanP fixed RDNA2 conversions using Lyrnc's measurements linked to AnyXboxX by PortBridge. PortBridge also prepared a separate carry probe that Lyrnc ran on RDNA2 and KainanP cited in the docstrings. LooperSalty merged #133.", "tags": ["v_cvt_rpi_i32_f32", "v_cvt_flr_i32_f32", "RDNA2", "NaN"]}},
       "platforms": ["RDNA2 hardware reference", "Windows 11", "AnyXboxX CPU interpreter", "Microsoft WARP"],
       "dependency_ids": [],
       "solutions": [
@@ -931,19 +931,22 @@
         },
         {
           "project": "anyxboxx",
-          "status": "verified",
-          "summary": "У исходной версии было 9 расхождений из 16 для RPI и 4 из 16 для FLR в каждой форме. Последняя проверенная версия исправления KainanP прошла 49 целевых проверок, включая эталонные входы и WARP.",
-          "translations": {"en": {"summary": "The original head had 9 of 16 RPI mismatches and 4 of 16 FLR mismatches per form. The latest tested revision of KainanP's fix passed 49 focused checks including the measured inputs and WARP."}},
+          "status": "merged",
+          "summary": "У исходной версии было 9 расхождений из 16 для RPI и 4 из 16 для FLR в каждой форме. Исправление KainanP на проверенной версии прошло 49 целевых проверок, включая эталонные входы и WARP. LooperSalty влил #133.",
+          "translations": {"en": {"summary": "The original head had 9 of 16 RPI mismatches and 4 of 16 FLR mismatches per form. The tested revision of KainanP's fix passed 49 focused checks including the measured inputs and WARP. LooperSalty merged #133."}},
           "source_refs": [
             {"title": "Проверка AnyXboxX #133", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133", "translations": {"en": {"title": "AnyXboxX #133"}}},
-            {"title": "Подтверждение и исправление от KainanP", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7133079649", "translations": {"en": {"title": "KainanP's confirmation and fix"}}}
+            {"title": "Подтверждение и исправление от KainanP", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7133079649", "translations": {"en": {"title": "KainanP's confirmation and fix"}}},
+            {"title": "Исправление KainanP с указанием вклада PortBridge", "url": "https://github.com/LooperSalty/AnyXboxX/commit/8d468fbcf160dbf72b906e3c1682375bee8ab81e", "translations": {"en": {"title": "KainanP's conversion fix credits PortBridge"}}},
+            {"title": "Замер переноса и указание вклада", "url": "https://github.com/LooperSalty/AnyXboxX/commit/365bd2accbc1e2d6db3baf5950f1f60c74f0116e", "translations": {"en": {"title": "Carry measurement and credit"}}}
           ],
           "evidence": [
             {"kind": "independent", "outcome": "failed", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7132864418", "title": "Воспроизведение расхождений с измерениями RDNA2", "revision": "4a67f67619b10c5fabc2a60de986fdd02f8ee457", "reported_at": "2026-11-24T13:27:47Z", "platforms": ["Windows 11", "AnyXboxX CPU interpreter"], "observed": "В RPI вход 0x3effffff дал 1 при ожидаемом 0. FLR для 0xffc00000 дал 0 при ожидаемом 0x80000000. Результат повторяется в VOP1 и VOP3.", "translations": {"en": {"title": "Reproduction against RDNA2 values", "observed": "RPI of 0x3effffff returned 1 instead of 0. FLR of 0xffc00000 returned 0 instead of 0x80000000. Both discrepancies reproduced in VOP1 and VOP3."}}},
             {"kind": "independent", "outcome": "passed", "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7133315650", "title": "Независимая проверка исправления AnyXboxX", "revision": "e2af2d38e48b5a0019dae5c78aa398cc71c42c8d", "reported_at": "2026-11-24T13:53:51Z", "platforms": ["Windows 11", "AnyXboxX CPU interpreter", "Microsoft WARP"], "observed": "49 целевых проверок прошли без пропусков. На исходной версии аппаратный эталон ловит ошибку RPI в обеих формах. Результаты интерпретатора и WARP на той версии совпадают между собой.", "translations": {"en": {"title": "Independent check of the AnyXboxX fix", "observed": "All 49 focused checks passed without skips. On the original revision, the hardware oracle caught the RPI error in both forms. The interpreter and WARP agreed with each other on that revision."}}}
           ]
         }
-      ]
+      ],
+      "showcase": true
     },
     {
       "id": "PB-0012",
@@ -1390,8 +1393,8 @@
       "id": "PB-0016",
       "recorded_at": "2026-11-24T15:10:46Z",
       "title": "Маска переноса неактивных потоков AMD RDNA2",
-      "summary": "По приглашению PortBridge Lyrnc проверил обе формы инструкции на AMD gfx1036 в Wave32. Во всех трёх прогонах обе формы очистили биты переноса неактивных потоков. KainanP сослался на замер в открытом AnyXboxX #133.",
-      "status": "investigating",
+      "summary": "PortBridge подготовил пробу, а Lyrnc проверил обе формы инструкции на AMD gfx1036 в Wave32. Во всех трёх прогонах обе формы очистили биты переноса неактивных потоков. Ссылка KainanP на замер вошла в основной код через AnyXboxX #133.",
+      "status": "resolved",
       "tags": [
         "RDNA2",
         "Wave32",
@@ -1403,7 +1406,7 @@
       "translations": {
         "en": {
           "title": "RDNA2 carry masks for inactive lanes",
-          "summary": "PortBridge invited Lyrnc to test both instruction forms on AMD gfx1036 in Wave32. Both forms cleared inactive carry bits in all three runs. KainanP cited the result in the open AnyXboxX #133 PR.",
+          "summary": "PortBridge prepared the probe, and Lyrnc tested both forms on AMD gfx1036 in Wave32. Both forms cleared inactive carry bits in all three runs. KainanP's citation landed in main through AnyXboxX #133.",
           "tags": [
             "RDNA2",
             "Wave32",
@@ -1422,11 +1425,11 @@
       "solutions": [
         {
           "project": "anyxboxx",
-          "status": "open",
-          "summary": "Аппаратный замер Lyrnc подтвердил 00000001 для обеих форм v_add_co_ci_u32 при EXEC = 1 и начальной маске 0xfffffffe. KainanP использовал замер в пояснениях к коду и тесту в #133. Решение AnyXboxX о слиянии ожидается.",
+          "status": "merged",
+          "summary": "Аппаратный замер Lyrnc подтвердил 00000001 для обеих форм v_add_co_ci_u32 при EXEC = 1 и начальной маске 0xfffffffe. Пояснения KainanP к коду и тесту вошли в основной код через #133.",
           "translations": {
             "en": {
-              "summary": "Lyrnc measured 00000001 for both forms of v_add_co_ci_u32 with EXEC = 1 and the 0xfffffffe preload. KainanP used the result in code and test docstrings in #133. AnyXboxX's merge decision is pending."
+              "summary": "Lyrnc measured 00000001 for both forms of v_add_co_ci_u32 with EXEC = 1 and the 0xfffffffe preload. KainanP's code and test docstrings landed in main through #133."
             }
           },
           "source_refs": [
@@ -2576,9 +2579,9 @@
     },
     {
       "id": "PB-0025",
-      "recorded_at": "2026-11-25T08:24:59Z",
+      "recorded_at": "2026-11-25T13:36:47Z",
       "title": "Уменьшение временного буфера в XCL",
-      "summary": "В проверенных синтетических программах повторное использование слотов сократило буфер с 288 до 256 и с 192 до 160 слов на группу. Патч применён к точной версии в проверочном стенде. DXV принял 58 вариантов. Замер GPU открыт.",
+      "summary": "ettehn независимо проверил патч PortBridge поверх работы Kalmarv. При компиляции одной записи размер временного буфера снизился с 47 712 до 20 064 DWORD на группу. На стенде с RTX 5070 Ti Laptop прошли все восемь проверок. XCL влил базовую правку Kalmarv. Для отдельного патча ещё нужны замеры GPU на трёх программах.",
       "status": "verified",
       "tags": [
         "Wave32",
@@ -2587,13 +2590,13 @@
         "liveness"
       ],
       "platforms": [
-        "Windows CPU and DXV"
+        "Windows CPU and DXV", "RTX 5070 Ti Laptop"
       ],
       "dependency_ids": [],
       "translations": {
         "en": {
           "title": "Smaller scratch buffers in XCL",
-          "summary": "Strict slot reuse reduced the two synthetic scratch layouts from 288 to 256 and 192 to 160 words per workgroup. The executable patch matched the reference layout and DXV accepted 58 variants. GPU timings remain open.",
+          "summary": "ettehn independently checked the PortBridge patch on top of Kalmarv's work. The scratch size returned by compilation for one record dropped from 47,712 to 20,064 DWORDs per workgroup. All eight checks passed on a setup with an RTX 5070 Ti Laptop GPU. XCL merged Kalmarv's base change. GPU measurements on three workloads remain open for the separate patch.",
           "tags": [
             "Wave32",
             "DXIL",
@@ -2606,14 +2609,14 @@
         {
           "project": "xcl",
           "status": "verified",
-          "summary": "В проверенных синтетических программах повторное использование слотов сократило буфер с 288 до 256 и с 192 до 160 слов на группу. Патч применён к точной версии в проверочном стенде. DXV принял 58 вариантов. Замер GPU открыт.",
+          "summary": "PortBridge разработал повторное использование слотов. ettehn подтвердил снижение с 47 712 до 20 064 DWORD на группу на одной записи и восемь успешных проверок. Kalmarv запросил измерения памяти и времени GPU на трёх программах перед отдельным рассмотрением.",
           "source_refs": [
             {
-              "title": "xcl #2126",
+              "title": "Базовый PR Kalmarv",
               "url": "https://github.com/xcl-dev/xcl/pull/2126",
               "translations": {
                 "en": {
-                  "title": "xcl #2126"
+                  "title": "Kalmarv's base PR"
                 }
               }
             },
@@ -2625,6 +2628,16 @@
                   "title": "PortBridge report"
                 }
               }
+            },
+            {
+              "title": "Требования Kalmarv к отдельному патчу",
+              "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7157104814",
+              "translations": {"en": {"title": "Kalmarv's requirements for the follow-up"}}
+            },
+            {
+              "title": "Слияние базового PR Kalmarv",
+              "url": "https://github.com/xcl-dev/xcl/commit/afc5ee86ae3a9521c9f15d96505cd73fe72f2191",
+              "translations": {"en": {"title": "Merge of Kalmarv's base PR"}}
             }
           ],
           "evidence": [
@@ -2664,11 +2677,22 @@
                   "observed": "RTX 3080 Ti confirmed both existing upstream scratch tests at the pinned revision."
                 }
               }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "title": "ettehn проверил компактные слоты PortBridge",
+              "observed": "Патч из PortBridge 8988421 применён поверх XCL f6fa8a9. На одной записи обе версии выдали 12 валидных частей. Расчётный буфер сократился с 47 712 до 20 064 DWORD на группу. На стенде RTX 5070 Ti Laptop прошли 8 из 8 целевых тестов без пропусков. Замер времени GPU и драйвера для записи не проводился.",
+              "url": "https://github.com/xcl-dev/xcl/pull/2126#issuecomment-7162128623",
+              "revision": "f6fa8a931eaadf925cb42dbac8024af9e3875e1b",
+              "reported_at": "2026-11-25T12:15:28Z",
+              "platforms": ["Windows 11", "NVIDIA RTX 5070 Ti Laptop", "DXC/DXIL 1.8.2502.11"],
+              "translations": {"en": {"title": "ettehn independently checked the PortBridge allocator", "observed": "The PortBridge patch at 8988421 applied over XCL f6fa8a9. Both versions emitted 12 valid pieces of the same record. Modeled scratch decreased from 47,712 to 20,064 DWORDs per workgroup. Eight focused tests passed on an RTX 5070 Ti Laptop setup with zero skips. No GPU or driver timing was collected for the record."}}
             }
           ],
           "translations": {
             "en": {
-              "summary": "Strict slot reuse reduced the two synthetic scratch layouts from 288 to 256 and 192 to 160 words per workgroup. The executable patch matched the reference layout and DXV accepted 58 variants. GPU timings remain open."
+              "summary": "PortBridge developed the scratch-slot reuse. ettehn confirmed 47,712 to 20,064 DWORDs per group on one record and eight passing checks. Kalmarv requested scratch size and GPU time on three programs before separate review."
             }
           }
         }
@@ -2677,9 +2701,9 @@
     },
     {
       "id": "PB-0026",
-      "recorded_at": "2026-11-25T08:16:48Z",
-      "title": "Быстрая обработка текстур в AnyXboxX",
-      "summary": "Точные правки GFX10 и BC7 вместе прошли 17 тестов. Исходная версия прошла 13. Правка BC7 применима отдельно, проверено на основной ветке, где прошло шесть тестов.",
+      "recorded_at": "2026-11-25T11:22:09Z",
+      "title": "Раздельный расчёт координат GFX10 в AnyXboxX",
+      "summary": "PortBridge предложил переиспользовать отдельные части адреса. Lewandox реализовал раздельный расчёт X, Y и Z в ветке #188 и сообщил о 14 успешных тестах Rust. Yoshi-233 независимо проверил предыдущую версию #188 на Ubuntu. Правка BC7 рассматривается отдельно.",
       "status": "verified",
       "tags": [
         "gfx10",
@@ -2693,8 +2717,8 @@
       "dependency_ids": [],
       "translations": {
         "en": {
-          "title": "Faster texture conversion in AnyXboxX",
-          "summary": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main.",
+          "title": "Separable GFX10 coordinate evaluation in AnyXboxX",
+          "summary": "PortBridge proposed reusing the separate address terms. Lewandox implemented X, Y and Z factorization in the branch for PR #188 and reported 14 passing Rust tests. Yoshi-233 independently checked the earlier PR revision on Ubuntu. The BC7 patch is tracked separately.",
           "tags": [
             "gfx10",
             "detile",
@@ -2707,7 +2731,7 @@
         {
           "project": "anyxboxx",
           "status": "verified",
-          "summary": "Точные правки GFX10 и BC7 вместе прошли 17 тестов. Исходная версия прошла 13. Правка BC7 применима отдельно, проверено на основной ветке, где прошло шесть тестов.",
+          "summary": "Lewandox реализовал предложенную PortBridge оптимизацию в c5ca937. Проверка автора сравнила обе операции копирования с поэлементным эталоном.",
           "source_refs": [
             {
               "title": "anyxboxx #188",
@@ -2726,6 +2750,16 @@
                   "title": "PortBridge report"
                 }
               }
+            },
+            {
+              "title": "Реализация Lewandox в ветке #188",
+              "url": "https://github.com/LooperSalty/AnyXboxX/commit/c5ca937c371d8b21e56feb36f3d009ecffe5765a",
+              "translations": {"en": {"title": "Lewandox's implementation in PR #188"}}
+            },
+            {
+              "title": "Отдельное исправление BC7",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/202",
+              "translations": {"en": {"title": "Separate BC7 patch"}}
             }
           ],
           "evidence": [
@@ -2746,11 +2780,33 @@
                   "observed": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main."
                 }
               }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "title": "Yoshi-233 проверил исходную ветку на Ubuntu",
+              "observed": "На исходной версии #188 прошли восемь новых тестов GFX10 и пять прежних BC7. Проверка была до интеграции раздельного расчёта.",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188#issuecomment-7151190742",
+              "revision": "22c1cf973e7e2ad89fbec8e801d77d287c48729f",
+              "reported_at": "2026-11-25T02:47:26Z",
+              "platforms": ["Ubuntu 24.04.5 x86-64", "Rust 1.98.1"],
+              "translations": {"en": {"title": "Yoshi-233 checked the earlier branch on Ubuntu", "observed": "The earlier PR revision passed eight new GFX10 and five existing BC7 tests. This check predates the integrated coordinate optimization."}}
+            },
+            {
+              "kind": "maintainer_claim",
+              "outcome": "passed",
+              "title": "Lewandox проверил свою реализацию",
+              "observed": "Автор сообщил о 14 успешных тестах Rust, включая сравнение результата копирования с поэлементным расчётом для разных режимов, а также успешных pytest и ruff.",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/188#issuecomment-7160953584",
+              "revision": "c5ca937c371d8b21e56feb36f3d009ecffe5765a",
+              "reported_at": "2026-11-25T11:22:09Z",
+              "platforms": ["Rust texture crate"],
+              "translations": {"en": {"title": "Lewandox tested the implementation", "observed": "The author reported 14 passing Rust tests, including copy output compared with the per-element calculation across layouts, plus passing pytest and ruff."}}
             }
           ],
           "translations": {
             "en": {
-              "summary": "The two patches applied to the open texture branch and passed 17 tests. Its unchanged version passed 13. The BC7 patch independently passed six tests on main."
+              "summary": "Lewandox implemented the PortBridge proposal in c5ca937. The author's check compared both directions of the copy against the per-element reference."
             }
           }
         }
@@ -2792,11 +2848,11 @@
           "summary": "Обновлённая правка совпала с эталоном на 3 072 целевых программах и 114 976 входах UCRT. В тесте интерпретатора её медиана 178 мс вместо 213 мс у предыдущей правки, исходный код занял 166 мс. Проверка GPU открыта.",
           "source_refs": [
             {
-              "title": "anyxboxx #133",
-              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133",
+              "title": "Отдельный запрос на проверку FMA",
+              "url": "https://github.com/akimfomin/PortBridge/issues/58",
               "translations": {
                 "en": {
-                  "title": "anyxboxx #133"
+                  "title": "Separate FMA test request"
                 }
               }
             },
@@ -2808,6 +2864,11 @@
                   "title": "PortBridge report"
                 }
               }
+            },
+            {
+              "title": "KainanP о следующем исправлении FMA",
+              "url": "https://github.com/LooperSalty/AnyXboxX/pull/133#issuecomment-7159494945",
+              "translations": {"en": {"title": "KainanP's separate FMA follow-up"}}
             }
           ],
           "evidence": [
