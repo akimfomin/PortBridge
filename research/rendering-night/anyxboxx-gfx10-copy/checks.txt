@@ -1,0 +1,45 @@
+baseline gfx10_tiling
+
+running 8 tests
+test bc7_decode_round_trip_through_64k_xor_array ... ok
+test every_tiled_mode_and_bpe_is_bijective_within_a_block ... ok
+test mesa_rbplus_golden_equations_match_exact_bit_positions ... ok
+test mip_tail_64k_all_twelve_levels_are_disjoint_and_round_trip ... ok
+test sw_4k_s_matches_legacy_tiles_module_byte_for_byte ... ok
+test sw_64k_s_bit_order_and_legacy_helper ... ok
+test texture_arrays_with_xor_and_non_square_mips_round_trip ... ok
+test validates_pipe_configs_and_error_paths ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+baseline gfx10_copy_oracle
+
+running 3 tests
+test copies_match_element_oracle_across_modes_and_sizes ... ok
+test copies_match_element_oracle_with_shape_and_pipe_variation ... ok
+test invalid_subresource_copy_keeps_the_backing_bytes ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+candidate gfx10_tiling
+
+running 8 tests
+test bc7_decode_round_trip_through_64k_xor_array ... ok
+test every_tiled_mode_and_bpe_is_bijective_within_a_block ... ok
+test mesa_rbplus_golden_equations_match_exact_bit_positions ... ok
+test mip_tail_64k_all_twelve_levels_are_disjoint_and_round_trip ... ok
+test sw_4k_s_matches_legacy_tiles_module_byte_for_byte ... ok
+test sw_64k_s_bit_order_and_legacy_helper ... ok
+test texture_arrays_with_xor_and_non_square_mips_round_trip ... ok
+test validates_pipe_configs_and_error_paths ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+candidate gfx10_copy_oracle
+
+running 3 tests
+test copies_match_element_oracle_across_modes_and_sizes ... ok
+test copies_match_element_oracle_with_shape_and_pipe_variation ... ok
+test invalid_subresource_copy_keeps_the_backing_bytes ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
