@@ -1,0 +1,12 @@
+{
+  "base": "9376fd60c0ba0e76a74c39b49b1407dbac0a64c7",
+  "patch_sha256": "ec178facc9d022d94235d6c656494a79ca45581981b82dee2f1faddd1947918d",
+  "toolchain": "Rust 1.100.0 x86_64-pc-windows-gnullvm",
+  "target": "victory-gpu watch::tests",
+  "passed": 14,
+  "failed": 0,
+  "filtered": 136,
+  "native_api": "GetWriteWatch on Win32",
+  "changed_runtime_default": false,
+  "gpu_executed": false
+}

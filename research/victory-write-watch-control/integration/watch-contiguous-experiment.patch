@@ -1,0 +1,190 @@
+diff --git a/crates/victory-gpu/src/host.rs b/crates/victory-gpu/src/host.rs
+index 78a43cb..9b1eda4 100644
+--- a/crates/victory-gpu/src/host.rs
++++ b/crates/victory-gpu/src/host.rs
+@@ -4603,21 +4603,29 @@ impl Host {
+         let mut settled = std::time::Duration::ZERO;
+         // One write-watch asking for everything the submission refreshes
+         // (`VICTORY_ASK_ONCE`): per copy, the span of its refreshed ranges.
++        // The contiguous experiment retains single refreshes for page grouping.
+         if crate::watch::once() {
+             let mut spans: std::collections::HashMap<usize, (usize, usize)> = std::collections::HashMap::new();
++            let contiguous = crate::watch::contiguous();
++            let mut ranges = Vec::new();
+             for list in runs {
+                 for step in &list.deferred().copies {
+                     if let Step::Refresh(shadow, address, len) = step
+                         && !shadow.unwatched()
+                     {
+-                        let span = spans
+-                            .entry(std::sync::Arc::as_ptr(shadow) as usize)
+-                            .or_insert((*address, *address + *len));
+-                        *span = (span.0.min(*address), span.1.max(*address + *len));
++                        let end = *address + *len;
++                        if contiguous {
++                            ranges.push((*address, end));
++                        } else {
++                            let span = spans
++                                .entry(std::sync::Arc::as_ptr(shadow) as usize)
++                                .or_insert((*address, end));
++                            *span = (span.0.min(*address), span.1.max(end));
++                        }
+                     }
+                 }
+             }
+-            let ranges: Vec<(usize, usize)> = spans.into_values().collect();
++            ranges.extend(spans.into_values());
+             crate::watch::ask_once(&ranges);
+             // Behind flights: the title wrote memory that a flight's shaders
+             // may write too, and this submission refreshes it. The flights
+diff --git a/crates/victory-gpu/src/watch.rs b/crates/victory-gpu/src/watch.rs
+index 02d066f..8f54aab 100644
+--- a/crates/victory-gpu/src/watch.rs
++++ b/crates/victory-gpu/src/watch.rs
+@@ -96,6 +96,10 @@ const AHEAD_MAX: usize = (1 << 30) / PAGE;
+ /// 456 ms, in run 14). Ranges that are not write-watched, or lie alone, are
+ /// left to `writes`.
+ pub(crate) fn ask_ahead(ranges: &[(usize, usize)]) {
++    ask_ahead_with_gap(ranges, AHEAD_GAP);
++}
++
++fn ask_ahead_with_gap(ranges: &[(usize, usize)], gap: usize) {
+     let mut pieces: Vec<(usize, usize)> = ranges
+         .iter()
+         .filter(|r| r.0 < r.1)
+@@ -117,21 +121,25 @@ pub(crate) fn ask_ahead(ranges: &[(usize, usize)]) {
+     j.ahead.clear();
+     let mut i = 0;
+     while i < pieces.len() {
+-        let first = pieces[i].0;
+-        let mut last = pieces[i].1;
+-        let mut k = i + 1;
+-        while k < pieces.len()
+-            && pieces[k].0 <= last + AHEAD_GAP
+-            && last.max(pieces[k].1) - first <= AHEAD_MAX
+-        {
+-            last = last.max(pieces[k].1);
+-            k += 1;
+-        }
++        let k = ahead_batch_end(&pieces, i, gap);
+         ask_run(j, &pieces[i..k]);
+         i = k;
+     }
+ }
+ 
++fn ahead_batch_end(pieces: &[(usize, usize)], start: usize, gap: usize) -> usize {
++    let (first, mut last) = pieces[start];
++    let mut end = start + 1;
++    while end < pieces.len()
++        && pieces[end].0 <= last.saturating_add(gap)
++        && last.max(pieces[end].1) - first <= AHEAD_MAX
++    {
++        last = last.max(pieces[end].1);
++        end += 1;
++    }
++    end
++}
++
+ /// Since the last frame line: the kernel askings that took a millisecond
+ /// or more, their microseconds, and the longest asking's. An asking walks
+ /// page tables, some ten microseconds for most ranges; in run 75 the 2,644
+@@ -189,6 +197,13 @@ pub(crate) fn once() -> bool {
+     *ON.get_or_init(|| std::env::var_os("VICTORY_ASK_ONCE").is_none_or(|v| v != "0"))
+ }
+ 
++/// A/B arm for submission-wide asks: retain the original refreshed ranges
++/// and join only overlapping or directly adjacent page ranges.
++pub(crate) fn contiguous() -> bool {
++    static ON: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
++    *ON.get_or_init(|| std::env::var_os("VICTORY_ASK_CONTIGUOUS").is_some_and(|v| v == "1"))
++}
++
+ /// With [`once`]: asks about `ranges` (everything a submission's lists
+ /// refresh) as [`ask_ahead`] does, and lets that asking stand until
+ /// [`ask_once_end`].
+@@ -197,7 +212,7 @@ pub(crate) fn ask_once(ranges: &[(usize, usize)]) {
+         return;
+     }
+     ask_once_end();
+-    ask_ahead(ranges);
++    ask_ahead_with_gap(ranges, if contiguous() { 0 } else { AHEAD_GAP });
+     let mut j = JOURNAL.lock().unwrap_or_else(|e| e.into_inner());
+     let j = &mut *j;
+     if j.ahead.is_empty() {
+@@ -1018,6 +1033,76 @@ mod tests {
+     };
+     const MEM_WRITE_WATCH: u32 = 0x20_0000;
+ 
++    #[test]
++    fn contiguous_batch_keeps_gap_pages_out_of_the_reset() {
++        let ranges = [(3, 7), (4, 6), (7, 8), (9, 12), (11, 14)];
++        assert_eq!(ahead_batch_end(&ranges, 0, 0), 3);
++        assert_eq!(ahead_batch_end(&ranges, 3, 0), 5);
++        assert_eq!(ahead_batch_end(&ranges, 0, AHEAD_GAP), 5);
++    }
++
++    #[test]
++    fn contiguous_batch_preserves_the_existing_span_limit() {
++        let ranges = [(0, AHEAD_MAX), (AHEAD_MAX, AHEAD_MAX + 1)];
++        assert_eq!(ahead_batch_end(&ranges, 0, 0), 1);
++        assert_eq!(ahead_batch_end(&ranges, 1, 0), 2);
++    }
++
++    #[test]
++    fn contiguous_batch_leaves_a_written_gap_for_the_next_kernel_read() {
++        use windows_sys::Win32::System::Memory::GetWriteWatch;
++
++        ask_once_end();
++        ask_ahead_done();
++        let allocation = unsafe {
++            VirtualAlloc(
++                std::ptr::null(),
++                8 * PAGE,
++                MEM_RESERVE | MEM_COMMIT | MEM_WRITE_WATCH,
++                PAGE_READWRITE,
++            )
++        };
++        assert!(!allocation.is_null());
++        let base = allocation as usize;
++        let gap = base + 3 * PAGE;
++        unsafe {
++            ((base + PAGE) as *mut u8).write(1);
++            (gap as *mut u8).write(1);
++            ((base + 6 * PAGE) as *mut u8).write(1);
++        }
++        ask_ahead_with_gap(
++            &[
++                (base, base + PAGE),
++                (base + PAGE, base + 2 * PAGE),
++                (base + 5 * PAGE, base + 6 * PAGE),
++                (base + 6 * PAGE, base + 7 * PAGE),
++            ],
++            0,
++        );
++        let left = asked(base, base + 2 * PAGE);
++        let right = asked(base + 5 * PAGE, base + 7 * PAGE);
++        let gap_was_not_asked = asked(gap, gap + PAGE).is_none();
++        let mut found = [0usize];
++        let mut count = found.len();
++        let mut granularity = 0;
++        let result = unsafe {
++            GetWriteWatch(0, gap as *const _, PAGE, found.as_mut_ptr().cast(), &mut count, &mut granularity)
++        };
++        ask_ahead_done();
++        unsafe { VirtualFree(allocation, 0, MEM_RELEASE) };
++
++        let (left_generation, left_pages) = left.expect("left ranges were read ahead");
++        let (right_generation, right_pages) = right.expect("right ranges were read ahead");
++        assert_eq!(left_generation, right_generation);
++        let current_pages = |pages: Vec<(usize, u64)>| {
++            pages.into_iter().filter(|&(_, generation)| generation == left_generation).collect::<Vec<_>>()
++        };
++        assert_eq!(current_pages(left_pages), [(base / PAGE + 1, left_generation)]);
++        assert_eq!(current_pages(right_pages), [(base / PAGE + 6, right_generation)]);
++        assert!(gap_was_not_asked);
++        assert_eq!((result, count, found[0]), (0, 1, gap));
++    }
++
+     #[test]
+     fn written_pages_are_reported_to_every_asker() {
+         // SAFETY: a fresh write-watched allocation, freed at the end.
