@@ -60,6 +60,7 @@ CAPABILITIES = {
 TASK_CAPABILITIES = {
     "anyxboxx-147-native-wave64-gather": "amd-rdna2-native-isa-hip",
     "anyxboxx-133-native-carry": "amd-rdna2-native-isa-hip",
+    "anyxboxx-133-native-fma": "amd-rdna2-native-isa-hip",
     "pb-5-xcl-wave64": "d3d12-native-wave64",
     "pb-9-reforge-present": "win32-vulkan-1.3",
     "scarlett-commons-continued-add-basic": "python-cpu",

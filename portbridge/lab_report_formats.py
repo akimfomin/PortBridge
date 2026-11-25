@@ -18,6 +18,7 @@ REPORT_POLICIES = {
     "xcl-1100-fma": ("d3d12-wave64", ("native-adapter", "fma-values")),
     "pb-4-d16": ("cpu", ("baseline-13", "seven-negative-controls", "fixed-15")),
     "anyxboxx-133-native-carry": ("hip-wave32", ("initial-exec", "e32-carry-mask", "e64-carry-mask")),
+    "anyxboxx-133-native-fma": ("hip-wave32", ("positive-down", "positive-up", "negative", "exact-tie")),
     "continued-511-repeated-draw": ("vulkan", ("eager-32-frames", "deferred-32-frames", "omission-control")),
     "scarlett-commons-continued-add-basic": ("cpu", ("case-validation", "addition-0x40700000", "subtraction-control")),
     "anyxboxx-147-native-wave64-gather": ("hip-wave64", ("lane-exec-controls", "both-addresses")),

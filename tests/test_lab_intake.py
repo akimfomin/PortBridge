@@ -95,11 +95,17 @@ class LabIntakeTest(unittest.TestCase):
                 self.assertIsNone(classify_event(event))
 
     def test_workflow_prefilter_matches_current_local_report_threads(self):
-        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/lab-intake.yml"
+        workflow_root = Path(__file__).resolve().parents[1] / ".github/workflows"
+        workflow = workflow_root / "lab-intake.yml"
         text = workflow.read_text(encoding="utf-8")
         workflow_numbers = set(json.loads(re.search(r"fromJSON\('(\[[0-9,]+\])'\)", text)[1]))
         mapped_numbers = {int(url.removeprefix(ISSUE_PREFIX)) for task in TASKS
                           for url in report_sources(task) if url.startswith(ISSUE_PREFIX)}
         self.assertEqual(workflow_numbers, mapped_numbers)
+        pages = (workflow_root / "pages.yml").read_text(encoding="utf-8")
+        pages_filters = re.findall(r"fromJSON\('(\[[0-9,]+\])'\)", pages)
+        self.assertEqual(len(pages_filters), 2)
+        for numbers in pages_filters:
+            self.assertEqual(set(json.loads(numbers)), mapped_numbers)
         for needle in (":", "=", REVIEW_HEADER.casefold()):
             self.assertIn(f"'{needle}'", text)

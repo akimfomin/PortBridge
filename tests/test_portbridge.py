@@ -413,8 +413,10 @@ class SnapshotTest(CatalogFixture):
                   and any(pattern.fullmatch(Path(name).name) for pattern in browse_patterns)}
         self.assertEqual(files, EXPORT_FILES | cases | shards | snapshots | assets | browse)
         self.assertEqual(len(assets), 2)
+        index_html = (destination / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="api-link" class="nav-item api-link" href="./api.html"', index_html)
         for name in assets:
-            self.assertIn(f"./{name}", (destination / "index.html").read_text(encoding="utf-8"))
+            self.assertIn(f"./{name}", index_html)
         for name in files:
             with self.subTest(file=name):
                 self.assertNotIn(sentinel.encode(), (destination / name).read_bytes())

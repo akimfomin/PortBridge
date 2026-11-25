@@ -12,7 +12,7 @@ jobs:
     if: >-
       github.repository == 'akimfomin/PortBridge' && github.ref == 'refs/heads/main'
       && !github.event.issue.pull_request && github.event.comment.user.type == 'User'
-      && contains(fromJSON('[4,5,9,54]'), github.event.issue.number)
+      && contains(fromJSON('[4,5,9,54,58]'), github.event.issue.number)
       && ((contains(github.event.comment.body, ':') && contains(github.event.comment.body, '='))
           || (contains(github.event.changes.body.from, ':') && contains(github.event.changes.body.from, '='))
           || (github.event.comment.author_association == 'OWNER'

@@ -33,6 +33,10 @@ CARRY_PROBE = f"{PORTBRIDGE}/blob/main/contrib/rdna2-carry-mask/README.md"
 CARRY_PROBE_REVISION = "9923c3bba74f4a7f3249e0c820f2e6821327c1f4"
 CARRY_REPORT = f"{PORTBRIDGE}/issues/19#issuecomment-7136020663"
 CARRY_REPLY = f"{CARRY}#issuecomment-7136721736"
+NATIVE_FMA_HEAD = "c4e76abac687e55c00cb005ad3de9132a7cbacf3"
+NATIVE_FMA_REQUEST = f"{PORTBRIDGE}/issues/58"
+NATIVE_FMA_PROBE = f"{NATIVE_FMA_REQUEST}#issuecomment-7157139688"
+NATIVE_FMA_EVIDENCE = f"{CARRY}#issuecomment-7156830326"
 DRAW_SEQUENCE = f"{CONTINUED}/pull/511"
 DRAW_HEAD = "88658f1b3fcdca2231358c18d09253a213dc8533"
 DRAW_GUIDE = f"{PORTBRIDGE}/tree/main/contrib/continued-repeated-draw"
@@ -500,6 +504,41 @@ TASKS = (
             "expected": "Оба теста совпадают с эталоном на выбранной физической видеокарте и проходят без пропусков.",
             "report": ["Точная версия, модель видеокарты, сборка Windows, драйвер и DXC",
                        "Фактические результаты skip-middle-piece и overlapping-edges"],
+        }},
+    },
+    {
+        "id": "anyxboxx-133-native-fma", "priority": 12,
+        "title": "Verify AnyXboxX FMA rounding on native AMD RDNA2",
+        "projects": ["anyxboxx"], "equipment": ["amd"], "os": ["Windows", "Linux"],
+        "requirements": ["Physical AMD RDNA2 with Wave32", "HIP or an equivalent native AMDGPU code-object harness"],
+        "status": "needs_run", "evidence_stage": "author_cpu", "adoption": "pending",
+        "source_url": CARRY, "procedure_url": NATIVE_FMA_PROBE,
+        "evidence_url": NATIVE_FMA_EVIDENCE, "result_url": NATIVE_FMA_REQUEST,
+        "revisions": [revision("AnyXboxX #133 FMA base", "Версия AnyXboxX #133 для FMA",
+                               "LooperSalty/AnyXboxX", NATIVE_FMA_HEAD)],
+        "why": "Separate native hardware evidence is needed for the rounding cases in the CPU correction.",
+        "evidence": "The CPU patch matched 3,072 directed tests and 114,976 UCRT comparisons. All eight instructions assemble for gfx1036 Wave32.",
+        "steps": [
+            "Use the four inputs in the linked test request and the pinned revision as the reference.",
+            "Run the regular and legacy FMA instructions on the physical GPU in Wave32 with round-to-nearest-even.",
+            "Read back v4 through v11 and report each case in PortBridge #58. Include mismatches and unsupported cases.",
+        ],
+        "expected": "The two forms agree per case. Expected words in order: 3fc00001, 3fc00005, bfc00001, and 3fc00002.",
+        "report": ["Pinned revision, physical device, PCI ID, driver, OS, and assembler or runtime version",
+                   "Initial EXEC, all eight observed words, and separate outcomes for positive-down, positive-up, negative, and exact-tie"],
+        "translations": {"ru": {
+            "title": "Проверить округление FMA AnyXboxX на AMD RDNA2",
+            "requirements": ["Физическая AMD RDNA2 с Wave32", "HIP или другой стенд с запуском нативного кода AMDGPU"],
+            "why": "Исправление проверено на процессоре. Округление нужно отдельно проверить на реальной видеокарте.",
+            "evidence": "Правка прошла 3 072 целевых теста и 114 976 сравнений с UCRT. Восемь инструкций собираются для gfx1036 Wave32.",
+            "steps": [
+                "Возьмите четыре входа из запроса и используйте указанную версию для сверки.",
+                "Запустите обе формы FMA на физической видеокарте в Wave32 с округлением к ближайшему чётному.",
+                "Считайте регистры от v4 до v11 и укажите исход каждого случая в PortBridge #58. Включите расхождения и пропуски.",
+            ],
+            "expected": "Обе формы дают одинаковый результат для каждого входа. По порядку: 3fc00001, 3fc00005, bfc00001 и 3fc00002.",
+            "report": ["Коммит, физическая видеокарта, PCI ID, драйвер, ОС и версия ассемблера или среды исполнения",
+                       "Начальная EXEC, восемь значений и отдельные результаты positive-down, positive-up, negative и exact-tie"],
         }},
     },
 )

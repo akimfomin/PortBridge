@@ -105,6 +105,7 @@ def output_path(directory):
 def browser_assets():
     assets = {path: (PACKAGE / "static" / source).read_bytes() for path, source in ASSETS.items()}
     index = assets["index.html"].decode("utf-8")
+    index = index.replace('href="/api/docs?lang=en"', 'href="./api.html"')
     for path in ("static/styles.css", "static/app.js"):
         source = Path(path)
         alias = f"static/{source.stem}-{content_id(assets[path])}{source.suffix}"
