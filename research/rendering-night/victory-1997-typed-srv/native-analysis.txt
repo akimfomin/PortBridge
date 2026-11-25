@@ -1,0 +1,5 @@
+format=28 bit_exact=4/4 max_abs_error=0 nearest_input_codes=(32, 0, 255, 128) expected=(32, 0, 255, 128)
+format=11 bit_exact=4/4 max_abs_error=0 nearest_input_codes=(16384, 0, 0, 32768) expected=(16384, 0, 0, 32768)
+format=13 bit_exact=4/4 max_abs_error=0 nearest_input_codes=(-16384, 8192, 32767, 16384) expected=(-16384, 8192, 32767, 16384)
+format=31 bit_exact=1/4 max_abs_error=1.537799835e-05 nearest_input_codes=(-64, 32, 127, 64) expected=(-64, 32, 127, 64)
+strict_abs_tolerance=2e-6 strict_numeric_pass=False

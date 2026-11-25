@@ -1,0 +1,6 @@
+guard=returned reaped=1 job_peak=100835328 exit=0 error=0
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER precise_sample_support_mask=15 debug=0 messages=0 hresult=00000000 stage=
+format=28 support1=33fcd3f3 values=3e008081 00000000 3f800000 3f008081
+format=11 support1=02f4d3f3 values=3e800080 00000000 00000000 3f000080
+format=13 support1=02f4d3f3 values=bf000100 3e800100 3f800000 3f000100
+format=31 support1=02f4d3f3 values=bf010102 3e810102 3f800000 3f010302

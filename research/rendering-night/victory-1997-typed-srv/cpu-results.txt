@@ -1,0 +1,29 @@
+rustc 1.100.0 (0ef1bc386 2026-11-09)
+baseline: exit 2
+typed=11 selected=10 prohibited=true
+typed=13 selected=10 prohibited=true
+typed=31 selected=28 prohibited=true
+control=10 selected=10
+control=28 selected=28
+control=87 selected=87
+control=9 selected=10
+control=23 selected=24
+control=27 selected=28
+control=90 selected=87
+control=29 selected=28
+control=91 selected=87
+premultiplied_overlay=unavailable_for_prohibited_srv
+candidate: exit 0
+typed=11 selected=11 prohibited=false
+typed=13 selected=13 prohibited=false
+typed=31 selected=31 prohibited=false
+control=10 selected=10
+control=28 selected=28
+control=87 selected=87
+control=9 selected=10
+control=23 selected=24
+control=27 selected=28
+control=90 selected=87
+control=29 selected=28
+control=91 selected=87
+premultiplied_overlay_cpu_expected=[64, 0, 127, 255]

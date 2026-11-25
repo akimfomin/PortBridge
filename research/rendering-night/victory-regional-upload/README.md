@@ -15,7 +15,7 @@ The exact planner generated box `[256,384) × [128,256)` from a single 64 KiB di
 | Bytes in the requested box | 1,048,576 | 65,536 |
 | Unexpected final bytes | 0 | 0 |
 
-The RTX 4070 Ti SUPER process was reaped under the existing 512 MiB and three-second Windows guard. Peak job commit was 108,240,896 B. The D3D12 debug layer was unavailable, and the device returned `S_OK` after the readback. There is no measured GPU transfer latency, frame-time or runtime integration effect. For 4096×4096 RGBA8 the CPU plan calculates 67,108,864 versus 65,536 copy bytes for one corresponding dirty tile. That larger case was evaluated as a plan only.
+The RTX 4070 Ti SUPER process was reaped under the existing 512 MiB and three-second Windows guard. Peak job commit was 108,240,896 B. The D3D12 debug layer was unavailable, and the device returned `S_OK` after the readback. A separate fixture times the submitted copies with GPU timestamps. For 4096×4096 RGBA8 the CPU plan calculates 67,108,864 versus 65,536 copy bytes for one corresponding dirty tile. That larger case was evaluated as a plan only. [GPU timestamps](TIMING.md)
 
 [CPU logs](proof-results.log) · [Native readback](native-upload-rtx-a.log) · [Microsoft CopyTextureRegion rules](https://learn.microsoft.com/en-us/windows/win32/api/d3d12/nf-d3d12-id3d12graphicscommandlist-copytextureregion)
 

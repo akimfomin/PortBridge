@@ -1,0 +1,264 @@
+{
+  "completed": 4,
+  "cohorts": [
+    {
+      "log": "timestamp-rtx-a.csv",
+      "sha256": "efe81bbcd8d49dd28d34360d8a5c0313c2e617780aaf87549948ea77f56b60cd",
+      "guard": "guard=returned reaped=1 peak_job=107122688 exit=0 error=0",
+      "frequency_hz": 1000000000,
+      "cases": {
+        "one-tile": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 30.799999999999997,
+          "regional_us": 2.192,
+          "regional_over_full": 0.07170435802676028
+        },
+        "four-adjacent": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 24.144,
+          "regional_us": 6.176,
+          "regional_over_full": 0.26681072034481174
+        },
+        "four-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 11,
+          "full_us": 29.775999999999996,
+          "regional_us": 5.952,
+          "regional_over_full": 0.20206685648001688
+        },
+        "eight-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 26.32,
+          "regional_us": 10.64,
+          "regional_over_full": 0.428397849142925
+        }
+      }
+    },
+    {
+      "log": "timestamp-rtx-b.csv",
+      "sha256": "da164edb50ff4523fa728b5c6114133970c5f6e3d42aaabc740a017b799a7e2a",
+      "guard": "guard=admission_refused reaped=0 peak_job=0 exit=0 error=0"
+    },
+    {
+      "log": "timestamp-rtx-c.csv",
+      "sha256": "f78f680b5136b8ea9028b923217dbb0e3cd1ed6051c37c71313f85b61acad61c",
+      "guard": "guard=returned reaped=1 peak_job=103682048 exit=0 error=0",
+      "frequency_hz": 1000000000,
+      "cases": {
+        "one-tile": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 21.68,
+          "regional_us": 2.064,
+          "regional_over_full": 0.09506491295836797
+        },
+        "four-adjacent": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 25.200000000000003,
+          "regional_us": 5.4079999999999995,
+          "regional_over_full": 0.21785701795727092
+        },
+        "four-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 24.944000000000003,
+          "regional_us": 5.696000000000001,
+          "regional_over_full": 0.22904679881193693
+        },
+        "eight-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 23.776,
+          "regional_us": 10.0,
+          "regional_over_full": 0.42444342209713504
+        }
+      }
+    },
+    {
+      "log": "timestamp-rtx-d.csv",
+      "sha256": "81780864190916d46fbd21ca4c1db01dec318dfb333187234403971f363f0877",
+      "guard": "guard=returned reaped=1 peak_job=103473152 exit=0 error=0",
+      "frequency_hz": 1000000000,
+      "cases": {
+        "one-tile": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 22.784000000000002,
+          "regional_us": 2.08,
+          "regional_over_full": 0.09123457642498545
+        },
+        "four-adjacent": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 22.944000000000003,
+          "regional_us": 5.4719999999999995,
+          "regional_over_full": 0.23400410276448178
+        },
+        "four-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 23.439999999999998,
+          "regional_us": 5.872,
+          "regional_over_full": 0.24824336514266723
+        },
+        "eight-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 24.240000000000002,
+          "regional_us": 10.112,
+          "regional_over_full": 0.41794060582755066
+        }
+      }
+    },
+    {
+      "log": "timestamp-rtx-e.csv",
+      "sha256": "87abb3aa53b5c7988d4b6bf4dd8cea00020b8ea84a88413dfc184f5dafedcbd9",
+      "guard": "guard=returned reaped=1 peak_job=102998016 exit=0 error=0",
+      "frequency_hz": 1000000000,
+      "cases": {
+        "one-tile": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 28.64,
+          "regional_us": 2.08,
+          "regional_over_full": 0.07174670786213516
+        },
+        "four-adjacent": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 24.48,
+          "regional_us": 5.4399999999999995,
+          "regional_over_full": 0.221658883286509
+        },
+        "four-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 23.584,
+          "regional_us": 5.728,
+          "regional_over_full": 0.2381289030281607
+        },
+        "eight-separated": {
+          "pairs": 12,
+          "regional_faster_pairs": 12,
+          "full_us": 26.752000000000002,
+          "regional_us": 10.32,
+          "regional_over_full": 0.39723656951499847
+        }
+      }
+    }
+  ],
+  "cases": {
+    "one-tile": {
+      "regions": 1,
+      "regional_bytes": 65536,
+      "overall": {
+        "pairs": 48,
+        "regional_faster_pairs": 48,
+        "full_us": 25.648000000000003,
+        "regional_us": 2.08,
+        "regional_over_full": 0.07884893822393824
+      },
+      "order": {
+        "FR": {
+          "pairs": 24,
+          "regional_faster_pairs": 24,
+          "full_us": 25.744,
+          "regional_us": 2.4320000000000004,
+          "regional_over_full": 0.09615202695327564
+        },
+        "RF": {
+          "pairs": 24,
+          "regional_faster_pairs": 24,
+          "full_us": 25.648000000000003,
+          "regional_us": 1.728,
+          "regional_over_full": 0.07563040045508487
+        }
+      }
+    },
+    "four-adjacent": {
+      "regions": 1,
+      "regional_bytes": 262144,
+      "overall": {
+        "pairs": 48,
+        "regional_faster_pairs": 48,
+        "full_us": 24.256,
+        "regional_us": 5.616,
+        "regional_over_full": 0.2292615914947354
+      },
+      "order": {
+        "FR": {
+          "pairs": 24,
+          "regional_faster_pairs": 24,
+          "full_us": 24.48,
+          "regional_us": 5.888,
+          "regional_over_full": 0.23826234796634552
+        },
+        "RF": {
+          "pairs": 24,
+          "regional_faster_pairs": 24,
+          "full_us": 24.208,
+          "regional_us": 5.152,
+          "regional_over_full": 0.21716224647354682
+        }
+      }
+    },
+    "four-separated": {
+      "regions": 4,
+      "regional_bytes": 262144,
+      "overall": {
+        "pairs": 48,
+        "regional_faster_pairs": 47,
+        "full_us": 24.4,
+        "regional_us": 5.728,
+        "regional_over_full": 0.234903732671
+      },
+      "order": {
+        "FR": {
+          "pairs": 24,
+          "regional_faster_pairs": 23,
+          "full_us": 24.288,
+          "regional_us": 5.952,
+          "regional_over_full": 0.2360177538783262
+        },
+        "RF": {
+          "pairs": 24,
+          "regional_faster_pairs": 24,
+          "full_us": 24.992,
+          "regional_us": 5.696000000000001,
+          "regional_over_full": 0.22904679881193693
+        }
+      }
+    },
+    "eight-separated": {
+      "regions": 8,
+      "regional_bytes": 524288,
+      "overall": {
+        "pairs": 48,
+        "regional_faster_pairs": 48,
+        "full_us": 24.64,
+        "regional_us": 10.176,
+        "regional_over_full": 0.41924629878869446
+      },
+      "order": {
+        "FR": {
+          "pairs": 24,
+          "regional_faster_pairs": 24,
+          "full_us": 25.136,
+          "regional_us": 10.431999999999999,
+          "regional_over_full": 0.4299773495716115
+        },
+        "RF": {
+          "pairs": 24,
+          "regional_faster_pairs": 24,
+          "full_us": 24.64,
+          "regional_us": 10.016,
+          "regional_over_full": 0.40650901165063724
+        }
+      }
+    }
+  }
+}

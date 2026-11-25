@@ -1,0 +1,56 @@
+// Source-extracted CPU check. Generated files include GPL-3.0-or-later VIctory code.
+#![allow(non_camel_case_types)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+struct DXGI_FORMAT(i32);
+const DXGI_FORMAT_R16G16B16A16_FLOAT: DXGI_FORMAT = DXGI_FORMAT(10);
+const DXGI_FORMAT_R16G16B16A16_UNORM: DXGI_FORMAT = DXGI_FORMAT(11);
+const DXGI_FORMAT_R16G16B16A16_SNORM: DXGI_FORMAT = DXGI_FORMAT(13);
+const DXGI_FORMAT_R10G10B10A2_UNORM: DXGI_FORMAT = DXGI_FORMAT(24);
+const DXGI_FORMAT_R8G8B8A8_UNORM: DXGI_FORMAT = DXGI_FORMAT(28);
+const DXGI_FORMAT_R8G8B8A8_SNORM: DXGI_FORMAT = DXGI_FORMAT(31);
+const DXGI_FORMAT_B8G8R8A8_UNORM: DXGI_FORMAT = DXGI_FORMAT(87);
+
+@FORMAT_FUNCTIONS@
+
+#[allow(non_snake_case)]
+struct TextureDesc { Format: DXGI_FORMAT }
+
+fn choose(d: TextureDesc) -> DXGI_FORMAT {
+@SOURCE_SRV@
+    srv_fmt
+}
+
+fn prohibited_typed_sample(source: i32, srv: i32) -> bool {
+    // The combinations at issue are prohibited by the D3D12 relaxed-casting spec.
+    matches!((source, srv), (11 | 13, 10) | (31, 28))
+}
+
+fn main() {
+    let baseline = "@MODE@" == "baseline";
+    let mut rejected = 0;
+    for (input, valid) in [(11, 11), (13, 13), (31, 31)] {
+        let chosen = choose(TextureDesc { Format: DXGI_FORMAT(input) }).0;
+        let prohibited = prohibited_typed_sample(input, chosen);
+        println!("typed={input} selected={chosen} prohibited={prohibited}");
+        if prohibited { rejected += 1; } else { assert_eq!(chosen, valid); }
+    }
+    for (input, want) in [(10, 10), (28, 28), (87, 87), (9, 10), (23, 24), (27, 28), (90, 87), (29, 28), (91, 87)] {
+        let chosen = choose(TextureDesc { Format: DXGI_FORMAT(input) }).0;
+        println!("control={input} selected={chosen}");
+        assert_eq!(chosen, want, "control format {input}");
+    }
+    // Opaque blue RGBA8 primary plus a premultiplied R16_UNORM red overlay.
+    // Apply declared source semantics only if SRV selection supports them.
+    let overlay = choose(TextureDesc { Format: DXGI_FORMAT(11) }).0;
+    if prohibited_typed_sample(11, overlay) {
+        println!("premultiplied_overlay=unavailable_for_prohibited_srv");
+    } else {
+        let source = [0x4000u16, 0, 0, 0x8000].map(|x| f64::from(x) / 65535.0);
+        let primary = [0.0, 0.0, 1.0, 1.0];
+        let mixed: [u8; 4] = std::array::from_fn(|i| ((source[i] + primary[i] * (1.0 - source[3])) * 255.0).round() as u8);
+        assert_eq!(mixed, [64, 0, 127, 255]);
+        println!("premultiplied_overlay_cpu_expected={mixed:?}");
+    }
+    assert_eq!(rejected, if baseline { 3 } else { 0 });
+    if rejected != 0 { std::process::exit(2); }
+}
