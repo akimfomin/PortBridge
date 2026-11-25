@@ -1,0 +1,195 @@
+// CPU state model containing source-extracted victory-fork GPL-3.0-or-later routines.
+#![allow(non_snake_case, non_camel_case_types, unused)]
+use std::cell::{Cell, RefCell};
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+use std::time::Instant;
+
+extern crate self as tracing;
+#[macro_export]
+macro_rules! warn { ($($x:tt)*) => { panic!("unexpected mock wait error") } }
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+struct D3D12_RESOURCE_STATES(i32);
+const D3D12_RESOURCE_STATE_COMMON: D3D12_RESOURCE_STATES = D3D12_RESOURCE_STATES(0);
+const READ: D3D12_RESOURCE_STATES = D3D12_RESOURCE_STATES(0xac3);
+const COMPUTE_SRV: D3D12_RESOURCE_STATES = D3D12_RESOURCE_STATES(0x40);
+const UAV: D3D12_RESOURCE_STATES = D3D12_RESOURCE_STATES(8);
+const INFINITE: usize = 0;
+
+#[derive(Clone)]
+struct ID3D12Resource(usize);
+impl ID3D12Resource {
+    fn as_raw(&self) -> *mut std::ffi::c_void { self.0 as *mut _ }
+}
+
+@STATES@
+
+#[derive(Clone, Copy)]
+enum Op {
+    Transition(usize, D3D12_RESOURCE_STATES, D3D12_RESOURCE_STATES),
+    Use(usize, D3D12_RESOURCE_STATES),
+    UavOrdering,
+}
+
+#[derive(Clone)]
+struct ID3D12CommandList(&'static str, Arc<Vec<Op>>);
+impl ID3D12CommandList {
+    fn cast(&self) -> Result<Self, ()> { Ok(self.clone()) }
+}
+
+struct HostList {
+    list: ID3D12CommandList,
+    prelude: Option<ID3D12CommandList>,
+    buffer_states: Mutex<BufferStates>,
+}
+impl HostList {
+    fn recorded(label: &'static str, prelude: Option<&'static str>, accesses: &[(usize, D3D12_RESOURCE_STATES)]) -> Self {
+        let mut commands = Vec::new();
+        let mut tracker = BufferStates::default();
+        for &(buffer, wanted) in accesses {
+            if let Some(before) = tracker.transition_for(&ID3D12Resource(buffer), wanted) {
+                commands.push(Op::Transition(buffer, before, wanted));
+            }
+            commands.push(Op::Use(buffer, wanted));
+        }
+        Self { list: ID3D12CommandList(label, Arc::new(commands)), buffer_states: Mutex::new(tracker),
+            prelude: prelude.map(|name| ID3D12CommandList(name, Arc::new(Vec::new()))) }
+    }
+    fn prelude(&self) -> Option<ID3D12CommandList> { self.prelude.clone() }
+    fn run_deferred(&self, _: &mut Batch) {}
+}
+
+#[derive(Default)]
+struct Queue {
+    calls: RefCell<Vec<Vec<&'static str>>>,
+    errors: RefCell<Vec<String>>,
+    events: RefCell<Vec<String>>,
+    relay_locks: RefCell<Vec<bool>>,
+}
+impl Queue {
+    unsafe fn ExecuteCommandLists(&self, group: &[Option<ID3D12CommandList>]) {
+        // Buffers begin in COMMON for every completed API call. Sublists
+        // within the same call share the state until the whole call ends.
+        let mut state = HashMap::new();
+        let mut names = Vec::new();
+        for command_list in group.iter().flatten() {
+            names.push(command_list.0);
+            for &op in command_list.1.iter() {
+                match op {
+                    Op::Transition(id, before, after) => {
+                        let status = state.entry(id).or_insert(D3D12_RESOURCE_STATE_COMMON);
+                        if *status != before {
+                            self.errors.borrow_mut().push(format!("{}: shadow {id} before={:#x} actual={:#x}", command_list.0, before.0, status.0));
+                        }
+                        *status = after;
+                    }
+                    Op::Use(id, wanted) => {
+                        let status = state.entry(id).or_insert(D3D12_RESOURCE_STATE_COMMON);
+                        if *status == D3D12_RESOURCE_STATE_COMMON {
+                            *status = wanted;
+                        } else if status.0 & wanted.0 != wanted.0 {
+                            self.errors.borrow_mut().push(format!("{}: shadow {id} access={:#x} actual={:#x}", command_list.0, wanted.0, status.0));
+                        }
+                    }
+                    Op::UavOrdering => {}
+                }
+            }
+        }
+        self.relay_locks.borrow_mut().push(QUEUE_ORDER.try_lock().is_err());
+        self.events.borrow_mut().push(names.join("+"));
+        self.calls.borrow_mut().push(names);
+    }
+    unsafe fn Signal(&self, _: &Fence, value: u64) -> Result<(), &'static str> {
+        assert!(QUEUE_ORDER.try_lock().is_ok(), "relay lock still held at signal");
+        self.events.borrow_mut().push(format!("signal{value}"));
+        Ok(())
+    }
+}
+
+#[derive(Default)]
+struct Fence;
+impl Fence {
+    unsafe fn SetEventOnCompletion(&self, _: u64, _: usize) -> Result<(), &'static str> { Ok(()) }
+}
+
+#[derive(Default)]
+struct Host { queue: Queue, fence: Fence, event: usize }
+#[derive(Default)]
+struct Batch;
+struct CardPlan { check: Option<ID3D12CommandList> }
+static QUEUE_ORDER: Mutex<u64> = Mutex::new(0);
+thread_local! {
+    static TIMED: Cell<bool> = const { Cell::new(false) };
+    static RELAY: Cell<bool> = const { Cell::new(false) };
+}
+fn relay() -> bool { RELAY.with(Cell::get) }
+fn timing() -> bool { TIMED.with(Cell::get) }
+fn working(_: bool) {}
+fn submitting(_: usize, _: usize) {}
+fn stood(_: Instant) {}
+unsafe fn WaitForSingleObject(_: usize, _: usize) {}
+
+impl Host {
+@EXECUTE@
+    fn submit(&self, runs: &[&HostList], card: Option<CardPlan>, late: bool, timed: bool) {
+        TIMED.with(|enabled| enabled.set(timed));
+        let mut submitted = Box::new(0u64);
+@SETUP@
+@APPEND_RUN@
+@APPEND_CARD@
+@LATE@
+            assert!(signalled.is_ok());
+            return;
+        }
+@SYNC@
+        }
+    }
+    fn card_sent(&self) {}
+}
+
+fn probe(
+    tag: &str, runs: &[&HostList], card: Option<usize>, late: bool, timed: bool,
+    expected_calls: &[&[&str]], expected_faults: usize, expected_signals: usize, expected_lock: bool,
+) -> bool {
+    let card = card.map(|id| CardPlan { check: Some(ID3D12CommandList("check", Arc::new(vec![Op::UavOrdering, Op::Use(id, COMPUTE_SRV)]))) });
+    let host = Host::default();
+    host.submit(runs, card, late, timed);
+    let calls = host.queue.calls.into_inner();
+    let errors = host.queue.errors.into_inner();
+    let events = host.queue.events.into_inner();
+    let locks = host.queue.relay_locks.into_inner();
+    println!("{tag}: calls={calls:?} errors={errors:?} events={events:?} relay_locks={locks:?}");
+    let expected_calls: Vec<_> = expected_calls.iter().map(|group| group.to_vec()).collect();
+    assert_eq!(calls, expected_calls, "{tag} call boundaries");
+    assert_eq!(errors.len(), expected_faults, "{tag} CPU state errors");
+    assert_eq!(events.iter().filter(|event| event.starts_with("signal")).count(), expected_signals, "{tag} fences");
+    assert_eq!(locks, vec![expected_lock; calls.len()], "{tag} relay lock scope");
+    assert!(events.last().unwrap().starts_with("signal"));
+    errors.is_empty()
+}
+
+fn main() {
+    let baseline = "@MODE@" == "baseline";
+    let a = HostList::recorded("a", Some("pa"), &[(1, UAV)]);
+    let b = HostList::recorded("b", Some("pb"), &[(2, READ)]);
+    let c = HostList::recorded("c", Some("pc"), &[(1, READ)]);
+    let local = HostList::recorded("local", None, &[(1, UAV), (1, READ)]);
+    let mut ok = probe("single_list", &[&local], None, false, false, &[&["local"]], 0, 1, false);
+    ok &= probe("disjoint", &[&a, &b], None, false, false, &[&["pa", "a", "pb", "b"]], 0, 1, false);
+    for (tag, late, relay) in [("sync", false, false), ("late", true, false), ("relay", true, true)] {
+        RELAY.with(|enabled| enabled.set(relay));
+        ok &= probe(&format!("{tag}_disjoint"), &[&a, &b], None, late, false, &[&["pa", "a", "pb", "b"]], 0, 1, false);
+        let calls: &[&[&str]] = if baseline { &[&["pa", "a", "pb", "b", "pc", "c"]] } else { &[&["pa", "a", "pb", "b"], &["pc", "c"]] };
+        ok &= probe(&format!("{tag}_reused_shadow"), &[&a, &b, &c], None, late, false, calls, usize::from(baseline), 1, relay && !baseline);
+        let calls: &[&[&str]] = if baseline { &[&["pa", "a", "check"]] } else { &[&["pa", "a"], &["check"]] };
+        ok &= probe(&format!("{tag}_card_check"), &[&a], Some(1), late, false, calls, usize::from(baseline), 1, relay && !baseline);
+    }
+    RELAY.with(|enabled| enabled.set(false));
+    if cfg!(feature = "diagnostics") {
+        ok &= probe("timed_reused_shadow", &[&a, &c], None, false, true, &[&["pa", "a"], &["pc", "c"]], 0, 2, false);
+        let calls: &[&[&str]] = if baseline { &[&["pb", "b"], &["pa", "a", "check"]] } else { &[&["pb", "b"], &["pa", "a"], &["check"]] };
+        ok &= probe("timed_card_check", &[&b, &a], Some(1), false, true, calls, usize::from(baseline), 2, false);
+    }
+    if !ok { std::process::exit(2); }
+}

@@ -1,0 +1,107 @@
+{
+  "revision": "10ad8809b3ddf9f33c97ff0a52555bffbbb15aa7",
+  "fixtures": [
+    {
+      "name": "native32_natural",
+      "lanes": 32,
+      "host_subgroup": 32,
+      "budget": 4,
+      "natural": 3,
+      "count": 3,
+      "marker": 42,
+      "capabilities": [
+        "Shader",
+        "Int64",
+        "PhysicalStorageBufferAddresses",
+        "SignedZeroInfNanPreserve",
+        "DenormPreserve"
+      ],
+      "assembly_sha256": "b3f72512e21e20b60279ea044fd3b35c60cb6e4d1ac5a724cc8867d50effdd78"
+    },
+    {
+      "name": "emulated64_natural",
+      "lanes": 64,
+      "host_subgroup": 32,
+      "budget": 4,
+      "natural": 3,
+      "count": 3,
+      "marker": 42,
+      "capabilities": [
+        "Shader",
+        "Int64",
+        "PhysicalStorageBufferAddresses",
+        "SignedZeroInfNanPreserve",
+        "DenormPreserve"
+      ],
+      "assembly_sha256": "d457be720aa7c590f42c5560f617b3ed9f815bf9d21a1bcd990447bd1bc3ba7d"
+    },
+    {
+      "name": "native32_forced",
+      "lanes": 32,
+      "host_subgroup": 32,
+      "budget": 4,
+      "natural": 5,
+      "count": 4,
+      "marker": 4008636142,
+      "capabilities": [
+        "Shader",
+        "Int64",
+        "PhysicalStorageBufferAddresses",
+        "SignedZeroInfNanPreserve",
+        "DenormPreserve"
+      ],
+      "assembly_sha256": "40468863e928b649210eb7a9f1eb1b4572e472e3d9c5889d2c90fbab03cfd61b"
+    },
+    {
+      "name": "emulated64_forced",
+      "lanes": 64,
+      "host_subgroup": 32,
+      "budget": 4,
+      "natural": 5,
+      "count": 4,
+      "marker": 42,
+      "capabilities": [
+        "Shader",
+        "Int64",
+        "PhysicalStorageBufferAddresses",
+        "SignedZeroInfNanPreserve",
+        "DenormPreserve"
+      ],
+      "assembly_sha256": "3da145329155794ba017d776ce595a9cb22c245152a8a7911cbe6004a83729d4"
+    },
+    {
+      "name": "native32_disabled",
+      "lanes": 32,
+      "host_subgroup": 32,
+      "budget": 0,
+      "natural": 5,
+      "count": 5,
+      "marker": 42,
+      "capabilities": [
+        "Shader",
+        "Int64",
+        "PhysicalStorageBufferAddresses",
+        "SignedZeroInfNanPreserve",
+        "DenormPreserve"
+      ],
+      "assembly_sha256": "d0f05b8bc433e02c8ffd04596a1f9e9380ff44cc04ddd0b9b9e5e96c3a87db4a"
+    },
+    {
+      "name": "emulated64_disabled",
+      "lanes": 64,
+      "host_subgroup": 32,
+      "budget": 0,
+      "natural": 5,
+      "count": 5,
+      "marker": 42,
+      "capabilities": [
+        "Shader",
+        "Int64",
+        "PhysicalStorageBufferAddresses",
+        "SignedZeroInfNanPreserve",
+        "DenormPreserve"
+      ],
+      "assembly_sha256": "e9bc31f323481d5b1b75d95cf0aa9e6813e1bfcef17d971cd08349277bae1a77"
+    }
+  ]
+}

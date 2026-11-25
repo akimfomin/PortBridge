@@ -1,0 +1,187 @@
+diff --git a/crates/victory-gpu/src/host.rs b/crates/victory-gpu/src/host.rs
+index 60e3a62..38663ff 100644
+--- a/crates/victory-gpu/src/host.rs
++++ b/crates/victory-gpu/src/host.rs
+@@ -766,7 +766,8 @@ mod tests {
+ 
+ /// Per-list D3D12 state of `Shadow` buffers. Every `Shadow` buffer is created
+ /// in `D3D12_RESOURCE_STATE_COMMON` and decays back to `COMMON` at the end of
+-/// `ExecuteCommandLists`, so state tracking is strictly local to each list.
++/// `ExecuteCommandLists`. Submission starts a new call before a second list
++/// that assumes `COMMON` for a buffer already tracked in the current call.
+ #[derive(Default)]
+ struct BufferStates {
+     /// Raw `ID3D12Resource` pointer -> `(current state, live handle)`.
+@@ -798,6 +799,24 @@ impl BufferStates {
+     }
+ }
+ 
++fn buffer_reuse_starts_batch(
++    active_buffers: &mut std::collections::HashSet<usize>,
++    list_buffers: impl Iterator<Item = usize> + Clone,
++) -> bool {
++    let reused = list_buffers.clone().any(|key| active_buffers.contains(&key));
++    if reused {
++        active_buffers.clear();
++    }
++    active_buffers.extend(list_buffers);
++    reused
++}
++
++fn command_groups(start: usize, end: usize, split_before: &[usize]) -> impl Iterator<Item = std::ops::Range<usize>> + '_ {
++    let mut next = start;
++    split_before.iter().copied().filter(move |&cut| start < cut && cut < end)
++        .chain([end]).map(move |cut| std::mem::replace(&mut next, cut)..cut)
++}
++
+ /// A host command list and its allocator, always used together.
+ pub(crate) struct HostList {
+     allocator: ID3D12CommandAllocator,
+@@ -1630,7 +1649,7 @@ struct CardRange {
+ /// What a submission does for copies in the card's memory.
+ struct CardPlan {
+     ranges: Vec<CardRange>,
+-    /// The compare, run after the submission's lists.
++    /// The compare, run in its own queue call after the submission's lists.
+     check: Option<ID3D12CommandList>,
+     /// The copies whose card side was brought up to date, alive until the
+     /// submission has run.
+@@ -3967,6 +3986,22 @@ impl Host {
+         working(was_working);
+     }
+ 
++    fn execute_command_groups(
++        &self,
++        lists: &[Option<ID3D12CommandList>],
++        start: usize,
++        end: usize,
++        split_before: &[usize],
++    ) {
++        // Keep a relay fetch from interleaving the parts of one submission.
++        let _order = (!split_before.is_empty() && relay())
++            .then(|| QUEUE_ORDER.lock().unwrap_or_else(|e| e.into_inner()));
++        for group in command_groups(start, end, split_before) {
++            // SAFETY: the caller prepared closed lists under the submission lock.
++            unsafe { self.queue.ExecuteCommandLists(&lists[group]) };
++        }
++    }
++
+     /// [`Host::execute`], or with `late` the first half of
+     /// [`Host::execute_late`]: the lists are prepared and sent, and what is
+     /// to be done once they have run comes back with the submission lock
+@@ -4026,6 +4061,13 @@ impl Host {
+         let mut lists: Vec<Option<ID3D12CommandList>> = Vec::with_capacity(2 * runs.len());
+         // Where each run's lists start in `lists`.
+         let mut firsts = Vec::with_capacity(runs.len());
++        #[cfg(feature = "diagnostics")]
++        let timed = !late && timing();
++        #[cfg(not(feature = "diagnostics"))]
++        let timed = false;
++        let detect_reuse = !timed && runs.len() > 1;
++        let mut active_buffers = std::collections::HashSet::new();
++        let mut split_before = Vec::new();
+         let mut batch = Batch::default();
+         // The time a settle of flights takes inside this preparing: the
+         // wait for the card and the copy-back have their own places on the
+@@ -4066,6 +4108,14 @@ impl Host {
+         }
+         for list in runs {
+             list.run_deferred(&mut batch);
++            // Timing already isolates every run. Otherwise keep its texture
++            // prelude with it, and split only on a repeated tracked buffer.
++            if detect_reuse {
++                let buffers = list.buffer_states.lock().unwrap_or_else(|e| e.into_inner());
++                if buffer_reuse_starts_batch(&mut active_buffers, buffers.entries.keys().copied()) {
++                    split_before.push(lists.len());
++                }
++            }
+             firsts.push(lists.len());
+             if let Some(prelude) = list.prelude() {
+                 lists.push(Some(prelude));
+@@ -4095,16 +4145,17 @@ impl Host {
+         }
+         let card = self.card_before(runs, flown);
+         if let Some(check) = card.as_ref().and_then(|c| c.check.clone()) {
++            // The compare reads previously written shadows as SRVs. Those
++            // buffers can still be UAVs until the preceding call finishes.
++            split_before.push(lists.len());
+             lists.push(Some(check));
+         }
+         let prepared = std::time::Instant::now();
+         if late {
+             *submitted += 1;
+-            // SAFETY: closed lists; the fence is ours.
+-            let signalled = unsafe {
+-                self.queue.ExecuteCommandLists(&lists);
+-                self.queue.Signal(&self.fence, *submitted)
+-            };
++            self.execute_command_groups(&lists, 0, lists.len(), &split_before);
++            // SAFETY: the fence is ours.
++            let signalled = unsafe { self.queue.Signal(&self.fence, *submitted) };
+             self.card_sent();
+             if let Err(e) = signalled {
+                 fail(format_args!("a submission sent ahead could not be followed by a signal ({e})"));
+@@ -4126,24 +4177,24 @@ impl Host {
+         }
+         // Diagnostics: each list on its own, timed (`VICTORY_GPU_TIMING`).
+         #[cfg(feature = "diagnostics")]
+-        let groups: Vec<&[Option<ID3D12CommandList>]> = if timing() {
++        let groups: Vec<(usize, usize)> = if timed {
+             firsts
+                 .iter()
+                 .zip(firsts.iter().skip(1).chain([&lists.len()]))
+-                .map(|(&a, &b)| &lists[a..b])
++                .map(|(&a, &b)| (a, b))
+                 .collect()
+         } else {
+-            vec![&lists[..]]
++            vec![(0, lists.len())]
+         };
+         #[cfg(not(feature = "diagnostics"))]
+-        let groups = [&lists[..]];
++        let groups = [(0, lists.len())];
+         submitting(2, runs.len());
+-        for (i, group) in groups.iter().enumerate() {
++        for (i, &(start, end)) in groups.iter().enumerate() {
+             *submitted += 1;
+             let started = std::time::Instant::now();
+-            // SAFETY: closed lists; the fence and event are ours.
++            self.execute_command_groups(&lists, start, end, &split_before);
++            // SAFETY: the fence and event are ours.
+             unsafe {
+-                self.queue.ExecuteCommandLists(group);
+                 self.card_sent();
+                 let waited = self
+                     .queue
+@@ -4580,8 +4631,8 @@ impl HostList {
+     /// Moves a `Shadow` buffer (created in `COMMON`) to `wanted`
+     /// (`GENERIC_READ` or `UNORDERED_ACCESS`) in this list and records the
+     /// transition barrier when its state changes. Buffers always decay back
+-    /// to `COMMON` at the end of `ExecuteCommandLists`, so no prelude is
+-    /// needed.
++    /// to `COMMON` at the end of `ExecuteCommandLists`. The submission
++    /// splits the call when a later list needs that decay.
+     pub(crate) fn buffer_state(&self, buffer: &ID3D12Resource, wanted: D3D12_RESOURCE_STATES) {
+         if wanted == D3D12_RESOURCE_STATE_UNORDERED_ACCESS {
+             // SAFETY: a live buffer.
+@@ -6673,6 +6724,20 @@ mod batch {   // Batch::texture_due lives here; `mod tests` is already taken at
+         assert_eq!(ram_idle_ms(None), 10_000);
+     }
+ 
++    #[test]
++    fn command_groups_keep_preludes_and_split_at_reused_buffers() {
++        let mut active = std::collections::HashSet::new();
++        assert!(!super::buffer_reuse_starts_batch(&mut active, [1, 2].into_iter()));
++        assert!(!super::buffer_reuse_starts_batch(&mut active, [3].into_iter()));
++        assert!(super::buffer_reuse_starts_batch(&mut active, [2, 4].into_iter()));
++        assert!(!super::buffer_reuse_starts_batch(&mut active, [1].into_iter()));
++
++        // Two initial runs, a run that reuses a buffer, then card compare.
++        assert_eq!(super::command_groups(0, 7, &[4, 6]).collect::<Vec<_>>(), [0..4, 4..6, 6..7]);
++        // Timing already isolates the final run, before the separate compare.
++        assert_eq!(super::command_groups(4, 7, &[4, 6]).collect::<Vec<_>>(), [4..6, 6..7]);
++    }
++
+     #[test]
+     fn buffer_states_track_transitions_and_execute_on_d3d12() {
+         use windows::Win32::Graphics::Direct3D::D3D_FEATURE_LEVEL_12_0;

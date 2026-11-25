@@ -1,0 +1,27 @@
+{
+  "rev": "1ae8ad326ef6b4fe6e5ac1c5555079fafb78575a",
+  "upstream": {
+    "crates/victory-gpu/src/descriptor.rs": "8b7d33c6f396fccb0673c96f9a36743eafe0149dd54a5343afbd9a9701611469",
+    "crates/victory-gpu/src/descriptor/host.rs": "a47109051b55024d7e5ddc6787316d43854653b6a718bb3b6f8263c46a81d225",
+    "crates/victory-gpu/src/host.rs": "f536dbcfad9d6c0f2fc659aba3755a3806aa25532bede9071945ccc999240c67",
+    "crates/victory-gpu/src/draw.rs": "68a84f183ed1d5561c4b3eecfd4947a7ab478fea5cb25eab869283bad72ef09a",
+    "crates/victory-shader/src/emit/lower.rs": "38c61d75496f93c4a6420db638a151dad98c8f228ceaeb579588b25442602831",
+    "crates/victory-shader/src/emit/shader.rs": "902ed95ecb33103f79755fd68f544d9379954578ee13734c76139f16bba696eb"
+  },
+  "bindings": {
+    "windows": "89419d8f4151902703abc037dcb55b65ccba71911da2d1840be3d725728d9c74",
+    "windows_sys": "e42e08fdc4561674ba8e219b30822399628bd23e5f66fd62260aa7927d17fd07"
+  },
+  "guard": "f5ba8dcb87189500fc51c283724847d61d762cb97448dc2aa554990f1769050d",
+  "shader_bytes": 3292,
+  "root_bytes": 116,
+  "sha256": {
+    "metadata.exe": "a877bb4ed9a656b2c45055dd899b89c9d413cc04ef56edbce78c309fa37143a5",
+    "shader.dxil": "cfbdca6fe5068960cfc6b6b5f605728cdd30b7a3b7051b7f7e958b505155a110",
+    "signature.rootsig": "ef4dd545682f0d8e1761067eba8911be3b20578ccbdfd19bcfc8e893f07a8ae3",
+    "exact.rs": "71967c898ed06baee331c12a3dd55464ce90ac4cfef5a38cf1bb746c11bc6a5d",
+    "fixture.rs": "78221f38535e424ba95a0e06407af18edf06524a125482d95905ef1cc4695c2d",
+    "read_metadata.hlsl": "50c440b71ba35b492017106484f19bfe31ef3d8677cddaef8b80c50e3f49cf66",
+    "dxv.exe": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3"
+  }
+}

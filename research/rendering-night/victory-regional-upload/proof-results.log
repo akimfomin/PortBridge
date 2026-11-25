@@ -1,0 +1,19 @@
+
+running 11 tests
+test exact_tile_fallbacks_and_validated_area ... 512x512 generated RGBA8: 1048576 full / 65536 regional bytes
+4096x4096 generated RGBA8: 67108864 full / 65536 regional bytes
+ok
+test plan_matches_full_after_deterministic_dirty_updates ... plans tested: 314 unchanged, 1174 full, 104 regional
+ok
+test texture::tests::addresses_are_a_bijection_and_copies_round_trip ... ok
+test texture::tests::bad_descriptions_and_buffers_are_refused ... ok
+test texture::tests::blocks_hold_their_size_in_elements ... ok
+test texture::tests::depth_stencil_is_two_planes ... ok
+test texture::tests::extents_past_the_hardware_limit_are_invalid ... ok
+test texture::tests::hand_checked_addresses ... ok
+test texture::tests::mip_tail_comes_first ... ok
+test texture::tests::texture_copies_reject_overflowing_pitches ... ok
+test texture::tests::volume_copy_rejects_overflowing_depth_pitch ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

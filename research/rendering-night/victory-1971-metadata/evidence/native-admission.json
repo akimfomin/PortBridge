@@ -1,0 +1,13 @@
+{
+  "status": "admitted",
+  "free_system_commit_min_bytes": 4294967296,
+  "free_physical_memory_min_bytes": 6442450944,
+  "immediate_samples": [
+    {"free_system_commit_bytes": 4789190656, "free_physical_memory_bytes": 11211153408},
+    {"free_system_commit_bytes": 4771545088, "free_physical_memory_bytes": 11201286144},
+    {"free_system_commit_bytes": 4772724736, "free_physical_memory_bytes": 11199836160}
+  ],
+  "os": "Windows 11 Pro",
+  "os_build": 28000,
+  "source": "Windows Win32_PerfFormattedData_PerfOS_Memory and Win32_OperatingSystem prelaunch samples"
+}

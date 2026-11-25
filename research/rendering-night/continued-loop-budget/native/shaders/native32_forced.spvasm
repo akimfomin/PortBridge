@@ -1,0 +1,492 @@
+         OpCapability Shader
+         OpCapability Int64
+         OpCapability PhysicalStorageBufferAddresses
+         OpCapability SignedZeroInfNanPreserve
+         OpCapability DenormPreserve
+         OpExtension "SPV_KHR_physical_storage_buffer"
+%glsl = OpExtInstImport "GLSL.std.450"
+         OpMemoryModel PhysicalStorageBuffer64 GLSL450
+         OpEntryPoint GLCompute %main "main" %wg_id %local_id %user_data
+         OpExecutionMode %main LocalSize 32 1 1
+         OpExecutionMode %main SignedZeroInfNanPreserve 32
+         OpExecutionMode %main DenormPreserve 16
+         OpDecorate %wg_id BuiltIn WorkgroupId
+         OpDecorate %local_id BuiltIn LocalInvocationId
+         OpDecorate %rt_uint ArrayStride 4
+         OpDecorate %arr_ud ArrayStride 4
+         OpDecorate %UserData Block
+         OpMemberDecorate %UserData 0 Offset 0
+         OpMemberDecorate %UserData 1 Offset 128
+         OpMemberDecorate %UserData 2 Offset 132
+         OpMemberDecorate %UserData 3 Offset 136
+         OpMemberDecorate %UserData 4 Offset 140
+%void = OpTypeVoid
+%fn = OpTypeFunction %void
+%bool = OpTypeBool
+%uint = OpTypeInt 32 0
+%int = OpTypeInt 32 1
+%float = OpTypeFloat 32
+%v4float = OpTypeVector %float 4
+%v2float = OpTypeVector %float 2
+%umul = OpTypeStruct %uint %uint
+%smul = OpTypeStruct %int %int
+%n256 = OpConstant %uint 256
+%n_sgprs = OpConstant %uint 128
+%arr_v = OpTypeArray %uint %n256
+%arr_s = OpTypeArray %uint %n_sgprs
+%null_v = OpConstantNull %arr_v
+%null_s = OpConstantNull %arr_s
+%_ptr_Function_arr_v = OpTypePointer Function %arr_v
+%_ptr_Function_arr_s = OpTypePointer Function %arr_s
+%_ptr_Function_uint = OpTypePointer Function %uint
+%_ptr_Output_v4 = OpTypePointer Output %v4float
+%_ptr_Input_int = OpTypePointer Input %int
+%_ptr_Input_v4 = OpTypePointer Input %v4float
+%_ptr_Input_float = OpTypePointer Input %float
+%f0 = OpConstant %float 0
+%f1 = OpConstant %float 1
+%true = OpConstantTrue %bool
+%false = OpConstantFalse %bool
+%_ptr_Function_bool = OpTypePointer Function %bool
+%ulong = OpTypeInt 64 0
+%c64_32 = OpConstant %ulong 32
+%long = OpTypeInt 64 1
+%rt_uint = OpTypeRuntimeArray %uint
+%_ptr_PSB_arr = OpTypePointer PhysicalStorageBuffer %rt_uint
+%_ptr_PSB_uint = OpTypePointer PhysicalStorageBuffer %uint
+%cl4 = OpConstant %ulong 4
+%c0 = OpConstant %uint 0
+%c1 = OpConstant %uint 1
+%c2 = OpConstant %uint 2
+%c3 = OpConstant %uint 3
+%c4 = OpConstant %uint 4
+%c5 = OpConstant %uint 5
+%c6 = OpConstant %uint 6
+%c7 = OpConstant %uint 7
+%c8 = OpConstant %uint 8
+%c9 = OpConstant %uint 9
+%ca = OpConstant %uint 10
+%cb = OpConstant %uint 11
+%cc = OpConstant %uint 12
+%cd = OpConstant %uint 13
+%ce = OpConstant %uint 14
+%cf = OpConstant %uint 15
+%c10 = OpConstant %uint 16
+%c11 = OpConstant %uint 17
+%c12 = OpConstant %uint 18
+%c13 = OpConstant %uint 19
+%c14 = OpConstant %uint 20
+%c15 = OpConstant %uint 21
+%c16 = OpConstant %uint 22
+%c17 = OpConstant %uint 23
+%c18 = OpConstant %uint 24
+%c19 = OpConstant %uint 25
+%c1a = OpConstant %uint 26
+%c1b = OpConstant %uint 27
+%c1c = OpConstant %uint 28
+%c1d = OpConstant %uint 29
+%c1e = OpConstant %uint 30
+%c1f = OpConstant %uint 31
+%c20 = OpConstant %uint 32
+%c2a = OpConstant %uint 42
+%c7f = OpConstant %uint 127
+%c80 = OpConstant %uint 128
+%cffff = OpConstant %uint 65535
+%cfffffffc = OpConstant %uint 4294967292
+%cffffffff = OpConstant %uint 4294967295
+%n_ud = OpConstant %uint 32
+%arr_ud = OpTypeArray %uint %n_ud
+%UserData = OpTypeStruct %arr_ud %uint %uint %uint %uint
+%_ptr_PC_UserData = OpTypePointer PushConstant %UserData
+%_ptr_PC_uint = OpTypePointer PushConstant %uint
+%v3uint = OpTypeVector %uint 3
+%_ptr_Input_v3u = OpTypePointer Input %v3uint
+%user_data = OpVariable %_ptr_PC_UserData PushConstant
+%wg_id = OpVariable %_ptr_Input_v3u Input
+%local_id = OpVariable %_ptr_Input_v3u Input
+%main = OpFunction %void None %fn
+%entry = OpLabel
+%vgpr = OpVariable %_ptr_Function_arr_v Function %null_v
+%sgpr = OpVariable %_ptr_Function_arr_s Function %null_s
+%vcc = OpVariable %_ptr_Function_uint Function %c0
+%m0 = OpVariable %_ptr_Function_uint Function %c0
+%vcc_hi = OpVariable %_ptr_Function_uint Function %c0
+%scc = OpVariable %_ptr_Function_uint Function %c0
+%active = OpVariable %_ptr_Function_bool Function %true
+%pc = OpVariable %_ptr_Function_uint Function %c0
+%done = OpVariable %_ptr_Function_bool Function %false
+%ud_base_lo_p = OpAccessChain %_ptr_PC_uint %user_data %c1
+%ud_base_hi_p = OpAccessChain %_ptr_PC_uint %user_data %c2
+%heap_base_lo = OpLoad %uint %ud_base_lo_p
+%heap_base_hi = OpLoad %uint %ud_base_hi_p
+%heap_base_lo64 = OpUConvert %ulong %heap_base_lo
+%heap_base_hi64 = OpUConvert %ulong %heap_base_hi
+%heap_base_hi_sh = OpShiftLeftLogical %ulong %heap_base_hi64 %c64_32
+%heap_base = OpBitwiseOr %ulong %heap_base_hi_sh %heap_base_lo64
+%ud0p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c0
+%ud0 = OpLoad %uint %ud0p
+%ud0s = OpAccessChain %_ptr_Function_uint %sgpr %c0
+         OpStore %ud0s %ud0
+%ud1p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c1
+%ud1 = OpLoad %uint %ud1p
+%ud1s = OpAccessChain %_ptr_Function_uint %sgpr %c1
+         OpStore %ud1s %ud1
+%ud2p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c2
+%ud2 = OpLoad %uint %ud2p
+%ud2s = OpAccessChain %_ptr_Function_uint %sgpr %c2
+         OpStore %ud2s %ud2
+%ud3p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c3
+%ud3 = OpLoad %uint %ud3p
+%ud3s = OpAccessChain %_ptr_Function_uint %sgpr %c3
+         OpStore %ud3s %ud3
+%ud4p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c4
+%ud4 = OpLoad %uint %ud4p
+%ud4s = OpAccessChain %_ptr_Function_uint %sgpr %c4
+         OpStore %ud4s %ud4
+%ud5p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c5
+%ud5 = OpLoad %uint %ud5p
+%ud5s = OpAccessChain %_ptr_Function_uint %sgpr %c5
+         OpStore %ud5s %ud5
+%ud6p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c6
+%ud6 = OpLoad %uint %ud6p
+%ud6s = OpAccessChain %_ptr_Function_uint %sgpr %c6
+         OpStore %ud6s %ud6
+%ud7p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c7
+%ud7 = OpLoad %uint %ud7p
+%ud7s = OpAccessChain %_ptr_Function_uint %sgpr %c7
+         OpStore %ud7s %ud7
+%ud8p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c8
+%ud8 = OpLoad %uint %ud8p
+%ud8s = OpAccessChain %_ptr_Function_uint %sgpr %c8
+         OpStore %ud8s %ud8
+%ud9p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c9
+%ud9 = OpLoad %uint %ud9p
+%ud9s = OpAccessChain %_ptr_Function_uint %sgpr %c9
+         OpStore %ud9s %ud9
+%ud10p = OpAccessChain %_ptr_PC_uint %user_data %c0 %ca
+%ud10 = OpLoad %uint %ud10p
+%ud10s = OpAccessChain %_ptr_Function_uint %sgpr %ca
+         OpStore %ud10s %ud10
+%ud11p = OpAccessChain %_ptr_PC_uint %user_data %c0 %cb
+%ud11 = OpLoad %uint %ud11p
+%ud11s = OpAccessChain %_ptr_Function_uint %sgpr %cb
+         OpStore %ud11s %ud11
+%ud12p = OpAccessChain %_ptr_PC_uint %user_data %c0 %cc
+%ud12 = OpLoad %uint %ud12p
+%ud12s = OpAccessChain %_ptr_Function_uint %sgpr %cc
+         OpStore %ud12s %ud12
+%ud13p = OpAccessChain %_ptr_PC_uint %user_data %c0 %cd
+%ud13 = OpLoad %uint %ud13p
+%ud13s = OpAccessChain %_ptr_Function_uint %sgpr %cd
+         OpStore %ud13s %ud13
+%ud14p = OpAccessChain %_ptr_PC_uint %user_data %c0 %ce
+%ud14 = OpLoad %uint %ud14p
+%ud14s = OpAccessChain %_ptr_Function_uint %sgpr %ce
+         OpStore %ud14s %ud14
+%ud15p = OpAccessChain %_ptr_PC_uint %user_data %c0 %cf
+%ud15 = OpLoad %uint %ud15p
+%ud15s = OpAccessChain %_ptr_Function_uint %sgpr %cf
+         OpStore %ud15s %ud15
+%ud16p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c10
+%ud16 = OpLoad %uint %ud16p
+%ud16s = OpAccessChain %_ptr_Function_uint %sgpr %c10
+         OpStore %ud16s %ud16
+%ud17p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c11
+%ud17 = OpLoad %uint %ud17p
+%ud17s = OpAccessChain %_ptr_Function_uint %sgpr %c11
+         OpStore %ud17s %ud17
+%ud18p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c12
+%ud18 = OpLoad %uint %ud18p
+%ud18s = OpAccessChain %_ptr_Function_uint %sgpr %c12
+         OpStore %ud18s %ud18
+%ud19p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c13
+%ud19 = OpLoad %uint %ud19p
+%ud19s = OpAccessChain %_ptr_Function_uint %sgpr %c13
+         OpStore %ud19s %ud19
+%ud20p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c14
+%ud20 = OpLoad %uint %ud20p
+%ud20s = OpAccessChain %_ptr_Function_uint %sgpr %c14
+         OpStore %ud20s %ud20
+%ud21p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c15
+%ud21 = OpLoad %uint %ud21p
+%ud21s = OpAccessChain %_ptr_Function_uint %sgpr %c15
+         OpStore %ud21s %ud21
+%ud22p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c16
+%ud22 = OpLoad %uint %ud22p
+%ud22s = OpAccessChain %_ptr_Function_uint %sgpr %c16
+         OpStore %ud22s %ud22
+%ud23p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c17
+%ud23 = OpLoad %uint %ud23p
+%ud23s = OpAccessChain %_ptr_Function_uint %sgpr %c17
+         OpStore %ud23s %ud23
+%ud24p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c18
+%ud24 = OpLoad %uint %ud24p
+%ud24s = OpAccessChain %_ptr_Function_uint %sgpr %c18
+         OpStore %ud24s %ud24
+%ud25p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c19
+%ud25 = OpLoad %uint %ud25p
+%ud25s = OpAccessChain %_ptr_Function_uint %sgpr %c19
+         OpStore %ud25s %ud25
+%ud26p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c1a
+%ud26 = OpLoad %uint %ud26p
+%ud26s = OpAccessChain %_ptr_Function_uint %sgpr %c1a
+         OpStore %ud26s %ud26
+%ud27p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c1b
+%ud27 = OpLoad %uint %ud27p
+%ud27s = OpAccessChain %_ptr_Function_uint %sgpr %c1b
+         OpStore %ud27s %ud27
+%ud28p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c1c
+%ud28 = OpLoad %uint %ud28p
+%ud28s = OpAccessChain %_ptr_Function_uint %sgpr %c1c
+         OpStore %ud28s %ud28
+%ud29p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c1d
+%ud29 = OpLoad %uint %ud29p
+%ud29s = OpAccessChain %_ptr_Function_uint %sgpr %c1d
+         OpStore %ud29s %ud29
+%ud30p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c1e
+%ud30 = OpLoad %uint %ud30p
+%ud30s = OpAccessChain %_ptr_Function_uint %sgpr %c1e
+         OpStore %ud30s %ud30
+%ud31p = OpAccessChain %_ptr_PC_uint %user_data %c0 %c1f
+%ud31 = OpLoad %uint %ud31p
+%ud31s = OpAccessChain %_ptr_Function_uint %sgpr %c1f
+         OpStore %ud31s %ud31
+%wgi = OpLoad %v3uint %wg_id
+%lci = OpLoad %v3uint %local_id
+%wg0 = OpCompositeExtract %uint %wgi 0
+%wgp0 = OpAccessChain %_ptr_Function_uint %sgpr %c8
+         OpStore %wgp0 %wg0
+%li0 = OpCompositeExtract %uint %lci 0
+%lip0 = OpAccessChain %_ptr_Function_uint %vgpr %c0
+         OpStore %lip0 %li0
+%reg_v0 = OpAccessChain %_ptr_Function_uint %vgpr %c0
+%reg_v2 = OpAccessChain %_ptr_Function_uint %vgpr %c2
+%reg_s8 = OpAccessChain %_ptr_Function_uint %sgpr %c8
+%reg_v1 = OpAccessChain %_ptr_Function_uint %vgpr %c1
+%reg_s0 = OpAccessChain %_ptr_Function_uint %sgpr %c0
+%reg_s1 = OpAccessChain %_ptr_Function_uint %sgpr %c1
+%reg_s2 = OpAccessChain %_ptr_Function_uint %sgpr %c2
+%reg_s3 = OpAccessChain %_ptr_Function_uint %sgpr %c3
+         OpBranch %blk0
+%blk0 = OpLabel
+         %t3 = OpLoad %v3uint %local_id
+         %t4 = OpCompositeExtract %uint %t3 0
+         %t5 = OpCompositeExtract %uint %t3 1
+         %t6 = OpCompositeExtract %uint %t3 2
+         %t8 = OpIMul %uint %t5 %c20
+         %t9 = OpIMul %uint %t6 %c20
+         %t7 = OpIAdd %uint %t4 %t8
+         %t2 = OpIAdd %uint %t7 %t9
+         %t1 = OpBitwiseAnd %uint %t2 %c1f
+         %t11 = OpULessThan %bool %t1 %c20
+         %t10 = OpCopyObject %uint %t1
+         %t16 = OpBitwiseAnd %uint %t10 %c1f
+         %t17 = OpShiftRightLogical %uint %cffffffff %t16
+         %t12 = OpBitwiseAnd %uint %t17 %c1
+         %t13 = OpINotEqual %bool %t12 %c0
+         %t14 = OpLoad %bool %active
+         %t15 = OpSelect %bool %t11 %t13 %t14
+         OpStore %active %t15
+         %t18 = OpLoad %uint %reg_v0
+         %t19 = OpShiftLeftLogical %uint %t18 %c3
+         %t20 = OpLoad %uint %reg_v2
+         %t21 = OpSelect %uint %t15 %t19 %t20
+         OpStore %reg_v2 %t21
+         OpStore %reg_s8 %c0
+         OpStore %pc %c1
+         OpBranch %l_head1
+%l_head1 = OpLabel
+%loop_guard_0_count = OpPhi %uint %c1 %blk0 %loop_guard_0_next %l_cont3
+         OpLoopMerge %l_end4 %l_cont3 None
+         OpBranch %l_body2
+%l_body2 = OpLabel
+         OpBranch %blk1
+%blk1 = OpLabel
+         %t22 = OpLoad %uint %reg_s8
+         %t23 = OpIAddCarry %umul %t22 %c1
+         %t24 = OpCompositeExtract %uint %t23 0
+         %t25 = OpCompositeExtract %uint %t23 1
+         OpStore %reg_s8 %t24
+         OpStore %scc %t25
+         %t26 = OpLoad %uint %reg_s8
+         %t27 = OpLoad %uint %reg_v1
+         %t29 = OpLoad %bool %active
+         %t28 = OpSelect %uint %t29 %t26 %t27
+         OpStore %reg_v1 %t28
+         %t30 = OpLoad %uint %reg_s0
+         %t31 = OpLoad %uint %reg_s1
+         %t32 = OpLoad %uint %reg_s2
+         %t33 = OpLoad %uint %reg_s3
+         %t34 = OpBitwiseAnd %uint %t31 %cffff
+         %t35 = OpBitFieldUExtract %uint %t31 %c10 %ce
+         %t36 = OpLoad %uint %reg_v2
+         %t39 = OpLoad %v3uint %local_id
+         %t40 = OpCompositeExtract %uint %t39 0
+         %t41 = OpCompositeExtract %uint %t39 1
+         %t42 = OpCompositeExtract %uint %t39 2
+         %t44 = OpIMul %uint %t41 %c20
+         %t45 = OpIMul %uint %t42 %c20
+         %t43 = OpIAdd %uint %t40 %t44
+         %t38 = OpIAdd %uint %t43 %t45
+         %t37 = OpBitwiseAnd %uint %t38 %c1f
+         %t46 = OpBitFieldUExtract %uint %t33 %c17 %c1
+         %t47 = OpIMul %uint %t37 %t46
+         %t48 = OpBitFieldUExtract %uint %t31 %c1f %c1
+         %t49 = OpBitwiseAnd %uint %t48 %t46
+         %t50 = OpBitFieldUExtract %uint %t33 %c15 %c2
+         %t51 = OpIAdd %uint %t50 %c3
+         %t52 = OpIMul %uint %t51 %t49
+         %t53 = OpBitwiseAnd %uint %t36 %cfffffffc
+         %t54 = OpBitwiseAnd %uint %t36 %c3
+         %t56 = OpShiftRightLogical %uint %t47 %t52
+         %t57 = OpIMul %uint %t56 %t35
+         %t58 = OpIAdd %uint %t57 %t53
+         %t55 = OpShiftLeftLogical %uint %t58 %t52
+         %t62 = OpShiftLeftLogical %uint %t56 %t52
+         %t59 = OpISub %uint %t47 %t62
+         %t60 = OpShiftLeftLogical %uint %t59 %c2
+         %t61 = OpIAdd %uint %t55 %t60
+         %t63 = OpIAdd %uint %t61 %t54
+         %t64 = OpShiftLeftLogical %uint %c4 %t52
+         %t65 = OpIMul %uint %t52 %t35
+         %t66 = OpINotEqual %bool %t65 %c0
+         %t67 = OpUConvert %ulong %t30
+         %t68 = OpUConvert %ulong %t34
+         %t69 = OpShiftLeftLogical %ulong %t68 %c64_32
+         %t70 = OpBitwiseOr %ulong %t69 %t67
+         %t71 = OpUConvert %ulong %t63
+         %t72 = OpIAdd %ulong %t70 %t71
+         %t73 = OpULessThan %bool %t47 %t32
+         %t74 = OpINotEqual %bool %t32 %c0
+         %t75 = OpUConvert %ulong %t36
+         %t76 = OpUConvert %ulong %t32
+         %t77 = OpUConvert %ulong %t35
+         %t78 = OpBitFieldUExtract %uint %t33 %c1c %c2
+         %t79 = OpIEqual %bool %t78 %c1
+         %t80 = OpIEqual %bool %t78 %c2
+         %t81 = OpIEqual %bool %t78 %c3
+         %t82 = OpIAdd %ulong %t75 %cl4
+         %t83 = OpULessThanEqual %bool %t82 %t77
+         %t84 = OpLogicalAnd %bool %t73 %t83
+         %t85 = OpULessThanEqual %bool %t82 %t76
+         %t86 = OpSelect %bool %t66 %t84 %t85
+         %t87 = OpSelect %bool %t79 %t73 %t84
+         %t88 = OpSelect %bool %t80 %t74 %t87
+         %t89 = OpSelect %bool %t81 %t86 %t88
+         %t90 = OpLoad %uint %reg_v1
+         %t91 = OpLogicalAnd %bool %t29 %t89
+         OpSelectionMerge %t93_end None
+         OpBranchConditional %t91 %t92_do %t93_end
+%t92_do = OpLabel
+         %t95 = OpIAdd %ulong %heap_base %t72
+         %t94 = OpConvertUToPtr %_ptr_PSB_arr %t95
+         %t96 = OpAccessChain %_ptr_PSB_uint %t94 %c0
+         OpStore %t96 %t90 Aligned 4
+         OpBranch %t93_end
+%t93_end = OpLabel
+         %t97 = OpLoad %uint %reg_s8
+         %t98 = OpIEqual %bool %t97 %c5
+         %t99 = OpSelect %uint %t98 %c1 %c0
+         OpStore %scc %t99
+         %t100 = OpLoad %uint %scc
+         %t101 = OpIEqual %bool %t100 %c0
+         %t102 = OpSelect %uint %t101 %c1 %c2
+         OpStore %pc %t102
+         OpBranch %l_cont3
+%l_cont3 = OpLabel
+         %l_pc5 = OpLoad %uint %pc
+         %l_again6 = OpIEqual %bool %l_pc5 %c1
+%loop_guard_0_next = OpIAdd %uint %loop_guard_0_count %c1
+%loop_guard_0_room = OpULessThan %bool %loop_guard_0_count %c4
+%loop_guard_0_take = OpLogicalAnd %bool %l_again6 %loop_guard_0_room
+OpBranchConditional %loop_guard_0_take %l_head1 %l_end4
+%l_end4 = OpLabel
+         %g_pc7 = OpLoad %uint %pc
+         %g_is8 = OpIEqual %bool %g_pc7 %c2
+         OpSelectionMerge %g_end10 None
+         OpBranchConditional %g_is8 %g_do9 %g_end10
+%g_do9 = OpLabel
+         OpBranch %blk2
+%blk2 = OpLabel
+         %t103 = OpLoad %uint %reg_v1
+         %t105 = OpLoad %bool %active
+         %t104 = OpSelect %uint %t105 %c2a %t103
+         OpStore %reg_v1 %t104
+         %t106 = OpLoad %uint %reg_s0
+         %t107 = OpLoad %uint %reg_s1
+         %t108 = OpLoad %uint %reg_s2
+         %t109 = OpLoad %uint %reg_s3
+         %t110 = OpBitwiseAnd %uint %t107 %cffff
+         %t111 = OpBitFieldUExtract %uint %t107 %c10 %ce
+         %t112 = OpLoad %uint %reg_v2
+         %t115 = OpLoad %v3uint %local_id
+         %t116 = OpCompositeExtract %uint %t115 0
+         %t117 = OpCompositeExtract %uint %t115 1
+         %t118 = OpCompositeExtract %uint %t115 2
+         %t120 = OpIMul %uint %t117 %c20
+         %t121 = OpIMul %uint %t118 %c20
+         %t119 = OpIAdd %uint %t116 %t120
+         %t114 = OpIAdd %uint %t119 %t121
+         %t113 = OpBitwiseAnd %uint %t114 %c1f
+         %t122 = OpBitFieldUExtract %uint %t109 %c17 %c1
+         %t123 = OpIMul %uint %t113 %t122
+         %t124 = OpBitFieldUExtract %uint %t107 %c1f %c1
+         %t125 = OpBitwiseAnd %uint %t124 %t122
+         %t126 = OpIAdd %uint %t112 %c4
+         %t127 = OpBitFieldUExtract %uint %t109 %c15 %c2
+         %t128 = OpIAdd %uint %t127 %c3
+         %t129 = OpIMul %uint %t128 %t125
+         %t130 = OpBitwiseAnd %uint %t126 %cfffffffc
+         %t131 = OpBitwiseAnd %uint %t126 %c3
+         %t133 = OpShiftRightLogical %uint %t123 %t129
+         %t134 = OpIMul %uint %t133 %t111
+         %t135 = OpIAdd %uint %t134 %t130
+         %t132 = OpShiftLeftLogical %uint %t135 %t129
+         %t139 = OpShiftLeftLogical %uint %t133 %t129
+         %t136 = OpISub %uint %t123 %t139
+         %t137 = OpShiftLeftLogical %uint %t136 %c2
+         %t138 = OpIAdd %uint %t132 %t137
+         %t140 = OpIAdd %uint %t138 %t131
+         %t141 = OpShiftLeftLogical %uint %c4 %t129
+         %t142 = OpIMul %uint %t129 %t111
+         %t143 = OpINotEqual %bool %t142 %c0
+         %t144 = OpUConvert %ulong %t106
+         %t145 = OpUConvert %ulong %t110
+         %t146 = OpShiftLeftLogical %ulong %t145 %c64_32
+         %t147 = OpBitwiseOr %ulong %t146 %t144
+         %t148 = OpUConvert %ulong %t140
+         %t149 = OpIAdd %ulong %t147 %t148
+         %t150 = OpULessThan %bool %t123 %t108
+         %t151 = OpINotEqual %bool %t108 %c0
+         %t152 = OpUConvert %ulong %t126
+         %t153 = OpUConvert %ulong %t108
+         %t154 = OpUConvert %ulong %t111
+         %t155 = OpBitFieldUExtract %uint %t109 %c1c %c2
+         %t156 = OpIEqual %bool %t155 %c1
+         %t157 = OpIEqual %bool %t155 %c2
+         %t158 = OpIEqual %bool %t155 %c3
+         %t159 = OpIAdd %ulong %t152 %cl4
+         %t160 = OpULessThanEqual %bool %t159 %t154
+         %t161 = OpLogicalAnd %bool %t150 %t160
+         %t162 = OpULessThanEqual %bool %t159 %t153
+         %t163 = OpSelect %bool %t143 %t161 %t162
+         %t164 = OpSelect %bool %t156 %t150 %t161
+         %t165 = OpSelect %bool %t157 %t151 %t164
+         %t166 = OpSelect %bool %t158 %t163 %t165
+         %t167 = OpLoad %uint %reg_v1
+         %t168 = OpLogicalAnd %bool %t105 %t166
+         OpSelectionMerge %t170_end None
+         OpBranchConditional %t168 %t169_do %t170_end
+%t169_do = OpLabel
+         %t172 = OpIAdd %ulong %heap_base %t149
+         %t171 = OpConvertUToPtr %_ptr_PSB_arr %t172
+         %t173 = OpAccessChain %_ptr_PSB_uint %t171 %c0
+         OpStore %t173 %t167 Aligned 4
+         OpBranch %t170_end
+%t170_end = OpLabel
+         OpStore %pc %c3
+         OpStore %done %true
+         OpBranch %g_end10
+%g_end10 = OpLabel
+         OpReturn
+         OpFunctionEnd
