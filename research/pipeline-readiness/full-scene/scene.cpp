@@ -106,6 +106,11 @@ struct Scene {
                 require(indices[index] < vertices.size() - packet.base, "Out of range geometry index");
         }
     }
+    void release_upload_data() {
+        std::vector<uint8_t>().swap(texels);
+        std::vector<Vertex>().swap(vertices);
+        std::vector<uint32_t>().swap(indices);
+    }
 };
 
 struct Buffer {VkBuffer handle{}; VkDeviceMemory memory{}; void* mapped = nullptr;};
@@ -339,11 +344,7 @@ struct Renderer {
         finish();
         release(upload);
     }
-    void descriptors_for_scene() {
-        auto sampling = structure<VkSamplerCreateInfo>(VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO);
-        sampling.magFilter = sampling.minFilter = VK_FILTER_LINEAR;
-        sampling.addressModeU = sampling.addressModeV = sampling.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        check(vkCreateSampler(device, &sampling, nullptr, &sampler), "vkCreateSampler");
+    void layout_for_scene() {
         const std::array<VkDescriptorSetLayoutBinding, 2> binding_specs{{
             {0, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr},
             {1, VK_DESCRIPTOR_TYPE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr},
@@ -359,6 +360,12 @@ struct Renderer {
         pipe.pushConstantRangeCount = 1;
         pipe.pPushConstantRanges = &push;
         check(vkCreatePipelineLayout(device, &pipe, nullptr, &layout), "vkCreatePipelineLayout");
+    }
+    void descriptors_for_scene() {
+        auto sampling = structure<VkSamplerCreateInfo>(VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO);
+        sampling.magFilter = sampling.minFilter = VK_FILTER_LINEAR;
+        sampling.addressModeU = sampling.addressModeV = sampling.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        check(vkCreateSampler(device, &sampling, nullptr, &sampler), "vkCreateSampler");
         const std::array<VkDescriptorPoolSize, 2> sizes{{
             {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1}, {VK_DESCRIPTOR_TYPE_SAMPLER, 1},
         }};
@@ -607,6 +614,7 @@ Memory process_memory() {
 
 struct Measurements {
     Clock::time_point schedule, request, frame, drained, all_frames;
+    Clock::time_point upload_begin, upload_end;
     Memory initial, first_frame, last;
     uint64_t sampled_max_commit = 0;
     unsigned active = 0;
@@ -625,9 +633,10 @@ size_t changed_pixels(const std::vector<uint8_t>& rgba) {
     return changed;
 }
 
-Measurements measure(Renderer& renderer, const Scene& scene, std::string_view mode) {
+Measurements measure(Renderer& renderer, Scene& scene, std::string_view mode, bool upload_pending) {
     const bool reserve = mode == "reserved";
-    const bool first_known = mode == "critical-first";
+    const bool early_create = mode == "phase-lead";
+    const bool first_known = mode == "critical-first" || upload_pending;
     const unsigned first_background = reserve ? worker_count - 1 : worker_count;
     Measurements m{};
     m.initial = process_memory();
@@ -636,7 +645,7 @@ Measurements measure(Renderer& renderer, const Scene& scene, std::string_view mo
     std::condition_variable work;
     std::latch ready(1), foreground_done(demanded.size());
     unsigned warmups_assigned = 0, required_assigned = 0, required_completed = 0;
-    bool demand_ready = false, abort = false;
+    bool early_ready = false, demand_ready = false, abort = false;
     std::atomic<uint64_t> measured_commit{m.initial.commit};
     auto sample_commit = [&] {
         PROCESS_MEMORY_COUNTERS_EX metrics{};
@@ -655,10 +664,11 @@ Measurements measure(Renderer& renderer, const Scene& scene, std::string_view mo
             {
                 std::unique_lock guard(lock);
                 work.wait(guard, [&] {
-                    return abort || demand_ready || (!first_known && !dedicated && warmups_assigned < prewarm.size());
+                    return abort || demand_ready || (early_ready && required_assigned < demanded.size()) ||
+                           (!first_known && !dedicated && warmups_assigned < prewarm.size());
                 });
                 if (abort) return;
-                if (demand_ready && required_assigned < demanded.size()) {
+                if ((demand_ready || early_ready) && required_assigned < demanded.size()) {
                     job = demanded[required_assigned++];
                     need = true;
                 } else if (warmups_assigned < prewarm.size() && (!dedicated || required_completed == demanded.size())) {
@@ -710,6 +720,29 @@ Measurements measure(Renderer& renderer, const Scene& scene, std::string_view mo
     }
     m.schedule = Clock::now();
     ready.count_down();
+    if (upload_pending) {
+        try {
+            if (early_create) {
+                {
+                    std::lock_guard guard(lock);
+                    early_ready = true;
+                }
+                work.notify_all();
+            }
+            m.upload_begin = Clock::now();
+            renderer.upload_scene(scene);
+            m.upload_end = Clock::now();
+            scene.release_upload_data();
+            renderer.descriptors_for_scene();
+        } catch (...) {
+            {
+                std::lock_guard guard(lock);
+                abort = true;
+            }
+            work.notify_all();
+            throw;
+        }
+    }
     {
         std::unique_lock guard(lock);
         if (!first_known) work.wait(guard, [&] { return warmups_assigned >= first_background; });
@@ -757,7 +790,9 @@ int main(int argc, char** argv) {
         const auto begin = Clock::now();
         require(argc == 6, "scene MODE ADAPTER PREPARED_SCENE SHADER_DIR FRAME_DIR");
         const std::string_view mode = argv[1];
-        require(mode == "shared" || mode == "reserved" || mode == "warm" || mode == "critical-first", "Unknown arm");
+        const bool phase = mode == "phase-reference" || mode == "phase-lead";
+        require(phase || mode == "shared" || mode == "reserved" || mode == "warm" || mode == "critical-first",
+                "Unknown arm");
         const std::filesystem::path shaders = argv[4];
         const std::filesystem::path captured = argv[5];
         require(std::filesystem::is_directory(captured) && std::filesystem::is_empty(captured),
@@ -765,15 +800,16 @@ int main(int argc, char** argv) {
         Scene geometry(argv[3]);
         Renderer renderer;
         renderer.start(argv[2]);
-        renderer.upload_scene(geometry);
-        std::vector<uint8_t>().swap(geometry.texels);
-        std::vector<Vertex>().swap(geometry.vertices);
-        std::vector<uint32_t>().swap(geometry.indices);
-        renderer.descriptors_for_scene();
+        if (!phase) {
+            renderer.upload_scene(geometry);
+            geometry.release_upload_data();
+        }
+        renderer.layout_for_scene();
+        if (!phase) renderer.descriptors_for_scene();
         renderer.shader(shaders / "vs.spv", renderer.vertex);
         renderer.shader(shaders / "ps.spv", renderer.pixel);
         renderer.preflight(mode == "warm");
-        const auto result = measure(renderer, geometry, mode);
+        const auto result = measure(renderer, geometry, mode, phase);
         output_frames(captured, result);
         const auto& p = renderer.props;
         std::cout << std::fixed << std::setprecision(5)
@@ -784,6 +820,8 @@ int main(int argc, char** argv) {
                   << ",\"startup_to_frame_ms\":" << ms(result.frame - begin)
                   << ",\"schedule_to_drained_ms\":" << ms(result.drained - result.schedule)
                   << ",\"schedule_to_all_frames_ms\":" << ms(result.all_frames - result.schedule)
+                  << ",\"upload_begin_ms\":" << (phase ? ms(result.upload_begin - result.request) : 0)
+                  << ",\"upload_end_ms\":" << (phase ? ms(result.upload_end - result.request) : 0)
                   << ",\"process_commit_before\":" << result.initial.commit
                   << ",\"process_commit_at_frame\":" << result.first_frame.commit
                   << ",\"process_commit_sampled_peak\":" << result.sampled_max_commit

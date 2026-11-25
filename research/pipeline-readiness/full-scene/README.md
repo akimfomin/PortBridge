@@ -24,3 +24,30 @@ The first campaign's four blocks showed readback latency gains from reserving a 
 The reserve won four of eight paired request-latency comparisons, with a 0.10 ms median paired advantage. Startup won five of eight with a 9.22 ms paired median advantage, while individual paired differences ranged from an 85.52 ms loss to an 84.76 ms win. Peak commit was lower in seven of eight by a paired median of 1.91 MiB. Those magnitudes and the mixed pilot limit the inference about reserve policy. All 96 output images in the confirming campaign matched their three reference hashes exactly. [Initial raw runs](evidence/reservation-pilot.jsonl) · [Confirming raw runs](evidence/reservation-confirmation.jsonl) · [Confirming summary](evidence/reservation-confirmation.json)
 
 The process memory counters include memory for the benchmark and scene, and measure Windows private commit and working set. Explicit Vulkan allocation bytes are a separate cumulative counter, including temporary allocations. [Windows process memory counters](https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex)
+
+## Start the required pipelines during upload
+
+The next paired experiment uses the same complete workload and three workers. Both arms know which two pipelines the first frame needs. The reference starts them after real scene upload. The candidate starts those same two at layout readiness, while the main thread transfers the geometry and textures. Both arms wait for upload and compilation before drawing. The other four pipelines start at or after the common post-upload request. The native timelines show both required calls intersecting upload in every candidate pair and zero overlaps in the reference. [Vulkan pipeline creation](https://docs.vulkan.org/refpages/latest/refpages/source/vkCreateGraphicsPipelines.html) · [Vulkan image-upload synchronization](https://docs.vulkan.org/guide/latest/synchronization_examples.html#image-upload-from-a-cpu-to-a-gpu)
+
+| Observed endpoint | Compile after upload | Compile during upload |
+| --- | ---: | ---: |
+| Layout ready to verified first image | 65.84 ms | 57.15 ms |
+| Layout ready to all three verified images | 102.88 ms | 91.81 ms |
+| Full process start to verified first image | 355.12 ms | 323.39 ms |
+| Lifetime peak host private commit | 205.76 MiB | 205.79 MiB |
+| Lifetime peak host working set | 149.92 MiB | 161.58 MiB |
+
+Layout-ready time covers the real texture and geometry upload, required compilation, the render, and the synchronized image readback. It improved in all eight pairs, with a median paired gain of **8.32 ms** for the first image and **11.00 ms** for all three. All 48 frames matched their corresponding reference images byte for byte, totaling 150,994,944 compared RGBA bytes. Each process created six qualified cold pipelines. Total explicit Vulkan allocations were 93,016,128 bytes in every run.
+
+The full-start measurement includes unrelated setup that finished before the policy took effect. It varied materially between paired processes. The layout-ready endpoint estimates the benefit of overlapping the phases. Peak private commit stayed similar, and peak resident working set rose in all eight pairs. The measured benefit is scoped to this scene on one physical RTX. Use the exact first-frame requirements and maintain both timing and memory comparisons when transferring the approach to another workload. [Raw overlap runs](evidence/overlap-runs.jsonl) · [Overlap summary](evidence/overlap-summary.json) · [Audit](evidence/paired-audit.json)
+
+## Reproduce on Windows
+
+The active sources build the upload comparison and the default four-way reservation experiment. The earlier commit in this branch preserves the exact reservation-only source used for the confirming campaign. The final check used Python with Pillow 13.0.0, LLVM-MinGW, DXC 1.9.2602 and SPIRV-Tools. Set the local tool paths below and a fresh campaign number. The script downloads the pinned scene and independently verifies all three frame hashes per run.
+
+```powershell
+$toolPath = 'C:/tools'
+python -B prepare.py scene prepared
+python -B run.py build build-559 --clang "$toolPath/llvm-mingw/bin/clang++.exe" --headers "$toolPath/Vulkan-Headers/include" --dlltool "$toolPath/llvm-mingw/bin/llvm-dlltool.exe"
+python -B run.py run results-559 --executable build-559/scene.exe --scene-dir prepared --dxc "$toolPath/dxc/bin/x64/dxc.exe" --validator "$toolPath/spirv-tools/bin/spirv-val.exe" --adapter 'NVIDIA GeForce RTX 4070 Ti SUPER' --campaign 559 --groups 8 --phase
+```

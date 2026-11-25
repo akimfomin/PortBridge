@@ -18,6 +18,8 @@ ROOT = Path(__file__).resolve().parent
 SIZE = (1024, 768)
 MODES = ("shared", "reserved", "critical-first", "warm")
 ORDERS = ((0, 1, 3, 2), (1, 2, 0, 3), (2, 3, 1, 0), (3, 0, 2, 1))
+PHASE_MODES = ("phase-reference", "phase-lead")
+PHASE_ORDERS = ((0, 1), (1, 0))
 METRICS = ("demand_ms", "startup_to_frame_ms", "schedule_to_drained_ms",
            "schedule_to_all_frames_ms", "process_commit_before", "process_commit_at_frame",
            "process_commit_sampled_peak", "lifetime_peak_commit", "lifetime_peak_working_set")
@@ -59,9 +61,19 @@ def verify(value, mode, manifest):
     active = sum(job["start_ms"] <= 0 < job["return_ms"] for job in jobs if job["id"] not in (0, 3))
     if active != value["active_at_demand"]:
         raise ValueError("Incorrect overlap calculation")
+    if mode in PHASE_MODES:
+        begin, end = value["upload_begin_ms"], value["upload_end_ms"]
+        if not begin < end <= 0:
+            raise ValueError("Invalid scene upload window")
+        overlaps = [j["id"] for j in jobs if j["start_ms"] < end and j["return_ms"] > begin]
+        if mode == "phase-reference" and overlaps:
+            raise ValueError("Reference arm compiled during upload")
+        if mode == "phase-lead" and (not overlaps or set(overlaps) - {0, 3}):
+            raise ValueError("Could not establish first-frame compilation during upload")
+        value["pipelines_overlapping_upload"] = overlaps
 
 
-def run(folder, executable, scene_dir, adapter, dxc, validator, campaign, groups):
+def run(folder, executable, scene_dir, adapter, dxc, validator, campaign, groups, phase):
     if any(name.startswith(("VK_LOADER_", "VK_DRIVER_", "VK_LAYER_")) or name in
            ("VK_ICD_FILENAMES", "VK_INSTANCE_LAYERS", "VK_ADD_DRIVER_FILES") for name in os.environ):
         raise ValueError("Inherited Vulkan loader overrides must be cleared for the isolated run")
@@ -71,9 +83,10 @@ def run(folder, executable, scene_dir, adapter, dxc, validator, campaign, groups
         raise ValueError("Scene manifest mismatch")
     folder.mkdir(exist_ok=False)
     arms = []
+    modes, orders = (PHASE_MODES, PHASE_ORDERS) if phase else (MODES, ORDERS)
     for block in range(groups):
-        for index in ORDERS[block % len(ORDERS)]:
-            mode = MODES[index]
+        for index in orders[block % len(orders)]:
+            mode = modes[index]
             directory = folder / f"{block}-{mode}"
             shaders = directory / "shaders"
             const = 1000 * campaign + 10 * block + index + 1
@@ -86,7 +99,8 @@ def run(folder, executable, scene_dir, adapter, dxc, validator, campaign, groups
     config = {"exe": artifact_hash(executable), "scene": manifest["scene_sha256"],
               "vs_ps_hlsl": artifact_hash(ROOT / "scene.hlsl"),
               "dxc": artifact_hash(dxc), "spirv_validator": artifact_hash(validator),
-              "campaign": campaign, "adapter": adapter, "width": SIZE[0], "height": SIZE[1]}
+              "campaign": campaign, "adapter": adapter, "width": SIZE[0], "height": SIZE[1],
+              "comparison": "upload-overlap" if phase else "prewarm-admission"}
     with (folder / "runs.jsonl").open("w", encoding="utf-8", newline="\n") as trace:
         trace.write(json.dumps(config) + "\n")
         for block, mode, directory, shaders, key in arms:
@@ -122,17 +136,24 @@ def run(folder, executable, scene_dir, adapter, dxc, validator, campaign, groups
     summary = dict(config)
     summary.update(frames_compared=len(done) * 3, rgba_bytes_compared=len(done) * 3 * SIZE[0] * SIZE[1] * 4,
                    input_draws=manifest["draws"], input_triangles=manifest["indexed_triangles"],
-                   reference_sha256=reference[2], mixes={}, paired_shared_minus_reserved_ms=[])
-    for mode in MODES:
+                   reference_sha256=reference[2], mixes={})
+    for mode in modes:
         records = [row for row in done if row["mode"] == mode]
         summary["mixes"][mode] = {
             **{name: median(row[name] for row in records) for name in METRICS},
             "active_at_demand": [row["active_at_demand"] for row in records],
             "elapsed_each_ms": [row["demand_ms"] for row in records],
         }
+        if phase:
+            summary["mixes"][mode]["overlapping_per_run"] = [
+                row["pipelines_overlapping_upload"] for row in records]
+    checked_fields = METRICS + ("explicit_vk_allocation_total_bytes",)
+    comparison = "paired_reference_minus_lead" if phase else "paired_shared_minus_reserved"
+    summary[comparison] = {name: [] for name in checked_fields}
     for block in range(groups):
         rows = {row["mode"]: row for row in done if row["block"] == block}
-        summary["paired_shared_minus_reserved_ms"].append(rows["shared"]["demand_ms"] - rows["reserved"]["demand_ms"])
+        for name in checked_fields:
+            summary[comparison][name].append(rows[modes[0]][name] - rows[modes[1]][name])
     (folder / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2))
 
@@ -151,12 +172,13 @@ def main():
     sweep.add_argument("--adapter", required=True)
     sweep.add_argument("--campaign", type=int, choices=range(1, 999), required=True, metavar="1..998")
     sweep.add_argument("--groups", type=int, choices=(4, 8), default=4)
+    sweep.add_argument("--phase", action="store_true", help="compare critical-first creation during vs after uploads")
     args = parser.parse_args()
     if args.action == "build":
         build(args.output, args.clang, args.dlltool, args.headers)
     else:
         run(args.output, args.executable.resolve(), args.scene_dir.resolve(), args.adapter, args.dxc,
-            args.validator, args.campaign, args.groups)
+            args.validator, args.campaign, args.groups, args.phase)
 
 
 if __name__ == "__main__":

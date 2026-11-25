@@ -146,7 +146,7 @@
       "f1df1e4b755e95741a4170c73281fb5532394026f2683e5bd5478af053a4c40a"
     ]
   },
-  "asset_license": "CC BY 4.0, ASWF / original model MaterialX Project",
+  "asset_license": "CC BY 4.0, ASWF (2020) / original model MaterialX Project, Ed Mackey (2022) glTF conversion",
   "scene_sha256": "03edde12da9f800196ee0a2555a1ddf58db92f63ad2212e60d72241b731384af",
   "texture_size": 512,
   "draws": 49,

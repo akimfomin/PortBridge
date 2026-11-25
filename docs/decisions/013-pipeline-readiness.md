@@ -10,6 +10,8 @@ XCL already has demand priority, separate pools, and per-size limits. XBVK has d
 
 The first milestone compares policies deterministically and exercises the measurement boundary through actual Vulkan dispatch and output checks. The next milestone measures memory and queue delays in an openly reproducible workload and compares the strongest existing policy with the proposed admission policy. Integration depends on a shorter tail to the same verified output, acceptable warm and accurate-prefetch behavior, and bounded work on failure and retry. Retaining raw request, compile, result and resource timestamps makes the milestones comparable.
 
+The [open-scene replay](../../research/pipeline-readiness/full-scene/README.md) found a mixed repeat result for reserving one worker. Starting the known first-frame pipelines during actual scene upload shortened the matched interval to the first correct image in all eight pairs. This shifted peak resident memory upward while peak private commit stayed similar. This track continues with the same first-output and memory boundaries on a workload whose first-use pipeline list comes from observed engine work.
+
 The Halide and Blender studies are complete for active research. Their sources and results remain in [Halide #76](https://github.com/akimfomin/PortBridge/pull/76), [Geometry #75](https://github.com/akimfomin/PortBridge/pull/75), and the Blender VSE replay at `ac825f2`. The standalone Geometry package is retained at `geometry-v0.1.0`. Adoption checks for existing contributions continue independently of this research track.
 
 [Working replay and results](../../research/pipeline-readiness/README.md)
