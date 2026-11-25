@@ -1,0 +1,13 @@
+unit_baseline
+running 1 test
+test surface_rows_preserve_crops_and_block_order ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+unit_candidate
+running 1 test
+test surface_rows_preserve_crops_and_block_order ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+block_payloads=4560 surfaces=400 reserved=64 errors_checked=true
+full_block_allocations=1->0
+surface_64x128_512_blocks_allocations=513->1

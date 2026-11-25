@@ -1,0 +1,3 @@
+I used [PortBridge](https://github.com/akimfomin/PortBridge) to check the BC7 export path shared by current AnyXboxX and #188, after looking at the GFX10 work. `decode` was allocating a vector for block anchors. The patch uses a local anchor mask, chooses the weight tables once per block and copies decoded rows directly into the output.
+
+Against exact main `b92a71b9`, the CPU oracle matched all bytes for 4,560 generated BC7 blocks and 400 image shapes. A 512-block image went from 513 allocations to 1. Four alternating warm CPU pairs measured 91.14 → 51.86 ms for a 3840×2160 image and 22.18 → 12.17 ms for a cropped 1919×1079 image. This measures BC7-to-RGBA conversion. The source patch also apply-checks against the current #188 head.

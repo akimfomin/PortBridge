@@ -1,0 +1,23 @@
+test_actual_shape_one_mebibyte_and_two_disjoint_tiles (__main__.TransactionTests.test_actual_shape_one_mebibyte_and_two_disjoint_tiles) ... ok
+test_all_256_previous_next_tile_masks (__main__.TransactionTests.test_all_256_previous_next_tile_masks) ... ok
+test_backing_and_host_route_eligibility (__main__.TransactionTests.test_backing_and_host_route_eligibility) ... ok
+test_before_submit_failure_keeps_previous_image (__main__.TransactionTests.test_before_submit_failure_keeps_previous_image) ... ok
+test_dense_zero_and_unsupported_whole_copy (__main__.TransactionTests.test_dense_zero_and_unsupported_whole_copy) ... ok
+test_device_loss_never_advances_dirty_epoch (__main__.TransactionTests.test_device_loss_never_advances_dirty_epoch) ... ok
+test_first_image_then_exact_regions (__main__.TransactionTests.test_first_image_then_exact_regions) ... ok
+test_generation_change_during_callback_keeps_new_entry_dirty (__main__.TransactionTests.test_generation_change_during_callback_keeps_new_entry_dirty) ... ok
+test_gpu_authority_never_writes (__main__.TransactionTests.test_gpu_authority_never_writes) ... ok
+test_ineligible_geometry_and_format_require_full (__main__.TransactionTests.test_ineligible_geometry_and_format_require_full) ... ok
+test_layout_already_unknown_does_not_try_partial (__main__.TransactionTests.test_layout_already_unknown_does_not_try_partial) ... ok
+test_mixed_other_committed_images_and_single_entry_bound (__main__.TransactionTests.test_mixed_other_committed_images_and_single_entry_bound) ... ok
+test_new_notifier_during_transfer_is_not_consumed (__main__.TransactionTests.test_new_notifier_during_transfer_is_not_consumed) ... ok
+test_new_owner_even_if_raw_handles_reused (__main__.TransactionTests.test_new_owner_even_if_raw_handles_reused) ... ok
+test_primary_completed_but_consumer_acquire_failed (__main__.TransactionTests.test_primary_completed_but_consumer_acquire_failed) ... ok
+test_read_failure_and_older_snapshot_do_not_consume_dirty (__main__.TransactionTests.test_read_failure_and_older_snapshot_do_not_consume_dirty) ... ok
+test_staging_declines_undefined_layout_before_recording (__main__.TransactionTests.test_staging_declines_undefined_layout_before_recording) ... ok
+test_unknown_completion_quarantines_staging_and_old_image (__main__.TransactionTests.test_unknown_completion_quarantines_staging_and_old_image) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.005s
+
+OK
