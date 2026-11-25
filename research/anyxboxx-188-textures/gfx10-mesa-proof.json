@@ -1,0 +1,17 @@
+{
+  "source": "https://raw.githubusercontent.com/Holastor/Xbox2Windows/088add19123aceba20c60b7c0498033f08d193c2/tests/startup_xg_gfx10_check.py",
+  "layouts": 12,
+  "coordinates": 105,
+  "arms": {
+    "upstream": {
+      "revision": "22c1cf973e7e2ad89fbec8e801d77d287c48729f",
+      "code": 0,
+      "output": "105 Mesa coordinates; 0 mismatches"
+    },
+    "optimized": {
+      "revision": "f2329f13fc4c9dee11fe21897698323c6a3067b2",
+      "code": 0,
+      "output": "105 Mesa coordinates; 0 mismatches"
+    }
+  }
+}
