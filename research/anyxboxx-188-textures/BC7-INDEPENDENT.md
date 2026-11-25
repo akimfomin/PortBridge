@@ -1,0 +1,5 @@
+# Independent BC7 comparison
+
+Pillow 13.0.0's separate BC7 decoder decoded the same seeded BC7 UNORM data as AnyXboxX. The pinned upstream and optimization both matched 68,868 RGBA texels byte for byte. The corpus holds 256 blocks for each of BC7’s eight modes and mixed-mode surfaces covering all 361 widths and heights from 1 through 19. The reported SHA-256 is computed over all decoded RGBA bytes. Synthetic CPU test only.
+
+Run with Python 3.12+, Pillow 13.0.0, Rust 1.100 and a working linker. Prepare clean AnyXboxX checkouts at d02eee01bedefedda48204b798df3002c7e2ffcc and at the BC7 candidate. From this directory run `python verify_bc7_pillow.py <upstream> <candidate>`. Pass `--rustc` or `--linker` to select local tools if necessary. The generator and runner are original GPL-3.0-or-later test code. No game data is used. [Pillow decoder](https://github.com/python-pillow/Pillow/blob/13.0.0/src/libImaging/BcnDecode.c) · [Microsoft DDS header](https://learn.microsoft.com/en-us/windows/win32/direct3ddds/dds-header-dxt10) · [Microsoft BC7](https://learn.microsoft.com/en-us/windows/win32/direct3d11/bc7-format)

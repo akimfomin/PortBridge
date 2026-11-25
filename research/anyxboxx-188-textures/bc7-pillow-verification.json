@@ -1,0 +1,31 @@
+{
+  "pillow": "13.0.0",
+  "cases": {
+    "mode-0": 256,
+    "mode-1": 256,
+    "mode-2": 256,
+    "mode-3": 256,
+    "mode-4": 256,
+    "mode-5": 256,
+    "mode-6": 256,
+    "mode-7": 256,
+    "mixed-crop": 361
+  },
+  "texels": 68868,
+  "corpus_sha256": "d38a39921a62f61871d32d41b97fd208a7e443c8c1f5d16757b2e538d27d155a",
+  "oracle_sha256": "465f5d10d7876f211593ac27d8cb6acf78cde28e07a4b057b152bcd28b4a71a7",
+  "arms": {
+    "upstream": {
+      "sha256": "465f5d10d7876f211593ac27d8cb6acf78cde28e07a4b057b152bcd28b4a71a7",
+      "bytes": 275472,
+      "matches_oracle": true,
+      "sha": "d02eee01bedefedda48204b798df3002c7e2ffcc"
+    },
+    "candidate": {
+      "sha256": "465f5d10d7876f211593ac27d8cb6acf78cde28e07a4b057b152bcd28b4a71a7",
+      "bytes": 275472,
+      "matches_oracle": true,
+      "sha": "b923a550f9a9602a95ebc0d7e8d686211c869728"
+    }
+  }
+}
