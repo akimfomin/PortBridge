@@ -1,0 +1,208 @@
+{
+  "groups": {
+    "17": {
+      "sizes": {
+        "individual_cache_bytes": 10932,
+        "library_bytes": 6436
+      },
+      "same_filename": {
+        "order": [
+          "plain",
+          "blobs",
+          "library"
+        ],
+        "ms": {
+          "plain": 2.0374,
+          "blobs": 2.4399,
+          "library": 2.4234
+        }
+      },
+      "fresh_filenames": {
+        "order": [
+          "library",
+          "blobs",
+          "plain"
+        ],
+        "ms": {
+          "plain": 16.5317,
+          "blobs": 5.3791,
+          "library": 5.1278999999999995
+        }
+      }
+    },
+    "83": {
+      "sizes": {
+        "individual_cache_bytes": 10964,
+        "library_bytes": 6468
+      },
+      "same_filename": {
+        "order": [
+          "plain",
+          "library",
+          "blobs"
+        ],
+        "ms": {
+          "plain": 2.3555,
+          "blobs": 2.2853,
+          "library": 2.5749
+        }
+      },
+      "fresh_filenames": {
+        "order": [
+          "blobs",
+          "library",
+          "plain"
+        ],
+        "ms": {
+          "plain": 14.9118,
+          "blobs": 6.0066,
+          "library": 5.2378
+        }
+      }
+    },
+    "223": {
+      "sizes": {
+        "individual_cache_bytes": 10996,
+        "library_bytes": 6500
+      },
+      "same_filename": {
+        "order": [
+          "blobs",
+          "plain",
+          "library"
+        ],
+        "ms": {
+          "plain": 2.1332,
+          "blobs": 2.1156,
+          "library": 2.4082000000000003
+        }
+      },
+      "fresh_filenames": {
+        "order": [
+          "library",
+          "plain",
+          "blobs"
+        ],
+        "ms": {
+          "plain": 15.5713,
+          "blobs": 5.7002,
+          "library": 5.4705
+        }
+      }
+    },
+    "509": {
+      "sizes": {
+        "individual_cache_bytes": 10996,
+        "library_bytes": 6500
+      },
+      "same_filename": {
+        "order": [
+          "blobs",
+          "library",
+          "plain"
+        ],
+        "ms": {
+          "plain": 1.9823,
+          "blobs": 2.0816,
+          "library": 2.132
+        }
+      },
+      "fresh_filenames": {
+        "order": [
+          "plain",
+          "library",
+          "blobs"
+        ],
+        "ms": {
+          "plain": 15.3126,
+          "blobs": 6.4294,
+          "library": 5.6283
+        }
+      }
+    },
+    "1009": {
+      "sizes": {
+        "individual_cache_bytes": 10996,
+        "library_bytes": 6500
+      },
+      "same_filename": {
+        "order": [
+          "library",
+          "plain",
+          "blobs"
+        ],
+        "ms": {
+          "plain": 1.9628,
+          "blobs": 2.1919,
+          "library": 2.6275
+        }
+      },
+      "fresh_filenames": {
+        "order": [
+          "blobs",
+          "plain",
+          "library"
+        ],
+        "ms": {
+          "plain": 15.2859,
+          "blobs": 5.9898,
+          "library": 5.319500000000001
+        }
+      }
+    },
+    "1423": {
+      "sizes": {
+        "individual_cache_bytes": 10996,
+        "library_bytes": 6500
+      },
+      "same_filename": {
+        "order": [
+          "library",
+          "blobs",
+          "plain"
+        ],
+        "ms": {
+          "plain": 2.177,
+          "blobs": 2.0635,
+          "library": 2.3569
+        }
+      },
+      "fresh_filenames": {
+        "order": [
+          "plain",
+          "blobs",
+          "library"
+        ],
+        "ms": {
+          "plain": 15.8346,
+          "blobs": 5.2278,
+          "library": 5.461399999999999
+        }
+      }
+    }
+  },
+  "guarded_processes": 42,
+  "pipelines_created": 252,
+  "same_filename": {
+    "median_ms": {
+      "plain": 2.0853,
+      "blobs": 2.15375,
+      "library": 2.4158
+    },
+    "paired_reduction_ms": {
+      "blobs": -0.04085000000000005,
+      "library": -0.2472000000000001
+    }
+  },
+  "fresh_filenames": {
+    "median_ms": {
+      "plain": 15.44195,
+      "blobs": 5.845,
+      "library": 5.3904499999999995
+    },
+    "paired_reduction_ms": {
+      "blobs": 9.5836,
+      "library": 10.0336
+    }
+  }
+}

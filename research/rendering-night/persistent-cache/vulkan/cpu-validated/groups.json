@@ -1,0 +1,78 @@
+[
+  {
+    "group": 0,
+    "preseed_reference": {
+      "pipeline_ms": 26.3151,
+      "cache_open_ms": 0.0,
+      "replay_ms": 26.3151,
+      "valid_feedback": 6,
+      "application_hits": 0
+    },
+    "archive_bytes": [
+      40826,
+      6835,
+      6837,
+      6833,
+      6836,
+      6834,
+      6831
+    ],
+    "header_only": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "cohorts": {
+      "same": {
+        "absent": {
+          "pipeline_ms": 0.2597,
+          "cache_open_ms": 0.0,
+          "replay_ms": 0.2597,
+          "valid_feedback": 6,
+          "application_hits": 0
+        },
+        "separate": {
+          "pipeline_ms": 0.7847999999999999,
+          "cache_open_ms": 0.0199,
+          "replay_ms": 0.8047,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "combined": {
+          "pipeline_ms": 0.2003,
+          "cache_open_ms": 0.0204,
+          "replay_ms": 0.2207,
+          "valid_feedback": 6,
+          "application_hits": 6
+        }
+      },
+      "fresh": {
+        "separate": {
+          "pipeline_ms": 1.7098,
+          "cache_open_ms": 0.0225,
+          "replay_ms": 1.7323,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "combined": {
+          "pipeline_ms": 1.6832,
+          "cache_open_ms": 0.0226,
+          "replay_ms": 1.7058,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "absent": {
+          "pipeline_ms": 21.6943,
+          "cache_open_ms": 0.0,
+          "replay_ms": 21.6943,
+          "valid_feedback": 6,
+          "application_hits": 0
+        }
+      }
+    }
+  }
+]

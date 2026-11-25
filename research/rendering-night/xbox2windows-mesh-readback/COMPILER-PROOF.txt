@@ -1,0 +1,22 @@
+Xbox2Windows #2127 source and compiler evidence
+Translator head: 2dc58a8bdf7e6ed8f4ff2ca4a2f5463c2f34c4d0
+LLVM MC 23.1.6 gfx1013 Wave64 assembler and decoder. DXC 1.9.2609 for ms_6_5 and ps_6_0.
+Each decoded instruction was checked against its encoded bytes before entering the PR lowerer.
+The traced MS outputs below were byte-identical to the binaries submitted to the renderer.
+Pixel shader SHA-256: fb5731f6ec589f5162c68f0e61982233ca92e706d944032cddb2163cc5053091
+
+both-spills: words=(1, 256) CPU-triangle-depth=0.5
+zero-low: words=(0, 256) CPU-triangle-depth=-0.5
+zero-high: words=(1, 0) CPU-triangle-depth=-0.5
+
+known-sgpr-selector gfx1013-bytes 336 sha256 61ac15b5c570a529bb23a390775c719c80c0a7f26ab0ca5bc529ebd483d2c3d2
+original known SGPR selector REFUSED by exact PR, within its stated scope: v_writelane_b32 requires a constant integer lane: s44
+positive gfx1013-bytes 340 sha256 9d7a655c8cb9c0dc3af44671c1466602bd13e24479b5322d10968e45d9886126
+positive-plain.dxil exact PR verified byte-identical to independent reference eebf2ac2997e5836124495207bf9cf852205a7347f62d19485bd3d44339c6ed5
+positive-trace.dxil exact PR verified byte-identical to independent reference 74619726e977334c480fb2b84620dd61b428b0af2c2097798b3fbbe1399e529a
+drop-low gfx1013-bytes 340 sha256 c2b9fc59adc5f8364da33d3dc021bb1fa01aebf82e8bc0dc7ecf17092c61e362
+drop-low-plain.dxil exact PR verified byte-identical to independent reference 1f194d667e677301644440dbd2f46bef2ae567f4e7e3461da51009e6c5bc8577
+drop-low-trace.dxil exact PR verified byte-identical to independent reference 41e5760d022419d77de76ac7a5075a588f290b80415ff28920722b6d589aec58
+drop-high gfx1013-bytes 340 sha256 5e4b0294480271193b9466975c9faf6d756dcf393cdbfa142226f9a676a9c921
+drop-high-plain.dxil exact PR verified byte-identical to independent reference 1f194d667e677301644440dbd2f46bef2ae567f4e7e3461da51009e6c5bc8577
+drop-high-trace.dxil exact PR verified byte-identical to independent reference 41e5760d022419d77de76ac7a5075a588f290b80415ff28920722b6d589aec58

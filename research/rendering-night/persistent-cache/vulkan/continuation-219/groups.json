@@ -1,0 +1,188 @@
+[
+  {
+    "group": 0,
+    "order_slot": 1,
+    "orders": {
+      "same": [
+        "separate",
+        "combined",
+        "absent"
+      ],
+      "fresh": [
+        "combined",
+        "absent",
+        "separate"
+      ]
+    },
+    "preseed_reference": {
+      "pipeline_ms": 20.456599999999998,
+      "cache_open_ms": 0.0,
+      "replay_ms": 20.456599999999998,
+      "valid_feedback": 6,
+      "application_hits": 0
+    },
+    "archive_bytes": [
+      40831,
+      6836,
+      6836,
+      6837,
+      6833,
+      6837,
+      6832
+    ],
+    "header_only": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "cohorts": {
+      "fresh": {
+        "combined": {
+          "pipeline_ms": 1.6444,
+          "cache_open_ms": 0.0229,
+          "replay_ms": 1.6673,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "absent": {
+          "pipeline_ms": 21.6791,
+          "cache_open_ms": 0.0,
+          "replay_ms": 21.6791,
+          "valid_feedback": 6,
+          "application_hits": 0
+        },
+        "separate": {
+          "pipeline_ms": 1.6313,
+          "cache_open_ms": 0.0271,
+          "replay_ms": 1.6583999999999999,
+          "valid_feedback": 6,
+          "application_hits": 6
+        }
+      },
+      "same": {
+        "separate": {
+          "pipeline_ms": 0.2087,
+          "cache_open_ms": 0.0232,
+          "replay_ms": 0.2319,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "combined": {
+          "pipeline_ms": 0.2041,
+          "cache_open_ms": 0.024,
+          "replay_ms": 0.2281,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "absent": {
+          "pipeline_ms": 0.2338,
+          "cache_open_ms": 0.0,
+          "replay_ms": 0.2338,
+          "valid_feedback": 6,
+          "application_hits": 0
+        }
+      }
+    },
+    "cohort_order": [
+      "fresh",
+      "same"
+    ]
+  },
+  {
+    "group": 1,
+    "order_slot": 2,
+    "orders": {
+      "same": [
+        "combined",
+        "absent",
+        "separate"
+      ],
+      "fresh": [
+        "absent",
+        "separate",
+        "combined"
+      ]
+    },
+    "preseed_reference": {
+      "pipeline_ms": 21.1648,
+      "cache_open_ms": 0.0,
+      "replay_ms": 21.1648,
+      "valid_feedback": 6,
+      "application_hits": 0
+    },
+    "archive_bytes": [
+      40828,
+      6831,
+      6835,
+      6838,
+      6834,
+      6832,
+      6838
+    ],
+    "header_only": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "cohorts": {
+      "same": {
+        "combined": {
+          "pipeline_ms": 0.21589999999999998,
+          "cache_open_ms": 0.02,
+          "replay_ms": 0.23589999999999997,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "absent": {
+          "pipeline_ms": 0.3627,
+          "cache_open_ms": 0.0,
+          "replay_ms": 0.3627,
+          "valid_feedback": 6,
+          "application_hits": 0
+        },
+        "separate": {
+          "pipeline_ms": 0.2066,
+          "cache_open_ms": 0.0208,
+          "replay_ms": 0.2274,
+          "valid_feedback": 6,
+          "application_hits": 6
+        }
+      },
+      "fresh": {
+        "absent": {
+          "pipeline_ms": 20.789,
+          "cache_open_ms": 0.0,
+          "replay_ms": 20.789,
+          "valid_feedback": 6,
+          "application_hits": 0
+        },
+        "separate": {
+          "pipeline_ms": 1.5317,
+          "cache_open_ms": 0.0217,
+          "replay_ms": 1.5534000000000001,
+          "valid_feedback": 6,
+          "application_hits": 6
+        },
+        "combined": {
+          "pipeline_ms": 1.6262,
+          "cache_open_ms": 0.0237,
+          "replay_ms": 1.6499000000000001,
+          "valid_feedback": 6,
+          "application_hits": 6
+        }
+      }
+    },
+    "cohort_order": [
+      "same",
+      "fresh"
+    ]
+  }
+]

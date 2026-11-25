@@ -1,0 +1,40 @@
+Xbox2Windows #2127 native mesh readback
+Translator head: 2dc58a8bdf7e6ed8f4ff2ca4a2f5463c2f34c4d0
+Renderer source baseline: 84ce29421ab633eb4ec79eb29155ab16f73433d3
+Renderer exe SHA-256: 7087774a68a7f547e337b9daa011199db0503569afc76526e7da4665da59d04e
+Renderer comparison: the mesh draw, command dispatch, and desktop_gpu.cpp/.h match at both revisions.
+The build inputs inspected matched 137/138. The sole differing source was tests/compute_check.cpp, outside this mesh draw.
+OS: Windows 11 build 28000
+D3D12 debug layer: unavailable
+Three traced draws with matching input references and one stale-pixels-only comparison.
+Selected native stdout and stderr follow. Pipeline timings and host resource admissions omitted.
+
+positive
+exit=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=0
+
+drop-low
+exit=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=0
+
+drop-high
+exit=0
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=0
+
+stale-pixels-only
+exit=1
+backend=hardware debug_layer=unavailable
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+driver=32.0.16.1714
+pixels=1024 mismatches=1024
+Draw reference mismatch
+
