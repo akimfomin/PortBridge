@@ -77,16 +77,19 @@ END_REPORT = re.compile(r"^(?:not tested|negative controls?|next steps?|question
 PYTHON = re.compile(r"\bPython\s+(3\.\d+(?:\.\d+)?)\b", re.I)
 
 
-def _report_lines(body):
-    body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
-    body = re.sub(r"<(blockquote|details)\b[^>]*>.*?(?:</\1\s*>|$)", "", body, flags=re.I | re.S)
-    fenced = False
+def report_lines(body):
+    body = re.sub(r"<!--.*?(?:-->|$)", "", body, flags=re.S)
+    body = re.sub(r"<(blockquote|details|pre)\b[^>]*>.*?(?:</\1\s*>|$)", "", body, flags=re.I | re.S)
+    fence = ""
     for raw in body.splitlines():
         line = raw.strip()
-        if line.startswith(("```", "~~~")):
-            fenced = not fenced
+        if marker := re.match(r" {0,3}([`]{3,}|~{3,})(.*)", raw):
+            if not fence:
+                fence = marker[1]
+            elif fence[0] == marker[1][0] and len(marker[1]) >= len(fence) and not marker[2].strip():
+                fence = ""
             continue
-        if fenced or not line or line.startswith((">", "<")) or raw.startswith(("    ", "\t")):
+        if fence or not line or line.startswith((">", "<")) or raw.startswith(("    ", "\t")):
             continue
         line = line.lstrip("#*- ").replace("**", "").replace("`", "")
         if END_REPORT.match(line):
@@ -167,7 +170,7 @@ def _candidate(comment, thread, equipment, required):
             for key, value in expected.items()) or str(user.get("html_url")).casefold() != f"https://github.com/{login}".casefold()):
         return None
 
-    lines = list(_report_lines(body))
+    lines = list(report_lines(body))
     if equipment == "cpu":
         if thread != CONTINUED_D16 or not any(_pass_lines(lines, THREAD_TESTS[thread])):
             return None

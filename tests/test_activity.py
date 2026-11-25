@@ -86,9 +86,10 @@ class ActivityTest(CatalogFixture):
         summary = build_activity(self.catalog, now=NOW)
         handoffs = summary["handoffs"]
         self.assertEqual(summary["counts"]["merged"], 1)
-        self.assertEqual(handoffs["counts"], {"delivered": 10, "independently_reproduced": 6,
-                                             "formally_reviewed": 4, "adopted": 2})
-        continued, xcl, anyxboxx, rounding, division, warp, texture, paired_lds, lds_wait, frame_pacer = handoffs["items"]
+        self.assertEqual(handoffs["counts"], {"delivered": 13, "independently_reproduced": 8,
+                                             "formally_reviewed": 4, "adopted": 4})
+        (continued, xcl, anyxboxx, rounding, division, warp, texture, paired_lds, lds_wait,
+         frame_pacer, xcl_compact, monitor, framelab) = handoffs["items"]
         self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
         self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
         self.assertTrue(xcl["independent_url"].endswith("#issuecomment-7133929789"))
@@ -108,6 +109,16 @@ class ActivityTest(CatalogFixture):
         self.assertNotIn("independent_url", warp)
         self.assertTrue(warp["adopted_url"].endswith("becaf7829d2aa03c293e0b52125fc740c5590ea1"))
         self.assertTrue(anyxboxx["adopted_url"].endswith("b15d8821bffcd8fbc98e56f41daf07fc91118192"))
+        self.assertTrue(xcl_compact["independent_url"].endswith("#issuecomment-7149592580"))
+        self.assertTrue(xcl_compact["adopted_url"].endswith("aaa093657bd96a146c05c0c1a9b61149fe761453"))
+        self.assertTrue(monitor["adopted_url"].endswith("1ac612868fe1392443b6f96ee06bf4341e9b8d60"))
+        self.assertNotIn("independent_url", monitor)
+        self.assertTrue(framelab["independent_url"].endswith("#issuecomment-7147944059"))
+        self.assertNotIn("adopted_url", framelab)
+        self.assertNotIn("review_url", framelab)
+        reports = self.catalog.problem(framelab["problem_id"])["solutions"][0]["evidence"]
+        self.assertEqual({report["url"].split("#")[-1] for report in reports},
+                         {"issuecomment-7147944059", "issuecomment-7153817545"})
         self.assertEqual(build_activity(self.catalog, now=NOW, cards=[])["handoffs"]["items"], [])
 
     def test_handoffs_automatically_count_only_the_reviewed_head_on_merge(self):
@@ -116,7 +127,7 @@ class ActivityTest(CatalogFixture):
         self.save_pr("continued", 701, at=date, status="merged", merged_at=date, revision=fix)
         self.save_pr("xcl", 1100, at=date, status="merged", merged_at=date, revision="a" * 40)
         handoffs = build_activity(self.catalog, now=NOW)["handoffs"]
-        self.assertEqual(handoffs["counts"]["adopted"], 3)
+        self.assertEqual(handoffs["counts"]["adopted"], 5)
         continued, xcl, *_ = handoffs["items"]
         self.assertEqual(continued["adopted_url"], continued["delivered_url"])
         self.assertNotIn("adopted_url", xcl)

@@ -72,7 +72,7 @@ def export(catalog, directory, repository=""):
         "problems": {"problems": catalog.problems()},
         "matches": {"matches": catalog.matches(limit=200)},
         "health": catalog.health(),
-        "lab": build_lab(),
+        "lab": build_lab(catalog),
         "observations": {"observations": catalog.observations(limit=None)},
         "coordination": {"coordination": catalog.coordination()},
         "graph": knowledge_graph(catalog),

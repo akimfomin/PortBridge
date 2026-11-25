@@ -70,5 +70,27 @@
     "delivered_url": "https://github.com/ubiquitarianism/leonida/pull/1042",
     "independent_url": "https://github.com/ubiquitarianism/leonida/pull/1042#issuecomment-7138758788",
     "review_url": "https://github.com/ubiquitarianism/leonida/pull/1042#pullrequestreview-6044064503"
+  },
+  {
+    "problem_id": "PB-0022",
+    "project": "xcl",
+    "revision": "e591a8c8971206c854b0d6c5f8f21362182ed12d",
+    "delivered_url": "https://github.com/xcl-dev/xcl/pull/2034",
+    "independent_url": "https://github.com/xcl-dev/xcl/pull/2034#issuecomment-7149592580",
+    "adopted_url": "https://github.com/xcl-dev/xcl/commit/aaa093657bd96a146c05c0c1a9b61149fe761453"
+  },
+  {
+    "problem_id": "PB-0023",
+    "project": "victory-monitor",
+    "revision": "1ac612868fe1392443b6f96ee06bf4341e9b8d60",
+    "delivered_url": "https://github.com/KretliJ/victory-monitor/issues/1",
+    "adopted_url": "https://github.com/KretliJ/victory-monitor/commit/1ac612868fe1392443b6f96ee06bf4341e9b8d60"
+  },
+  {
+    "problem_id": "PB-0024",
+    "project": "framelab",
+    "revision": "82f069e82197e61b97f60bbcbcb7a3af7d3f8e77",
+    "delivered_url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15",
+    "independent_url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15#issuecomment-7147944059"
   }
 ]

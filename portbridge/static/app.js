@@ -950,6 +950,17 @@ const labAdoption = {
   adopted: t('Adopted by the team', 'Принято командой'),
   declined: t('Declined by the team', 'Отклонено командой'),
 };
+const labReportStates = {
+  fresh: t('Discussion checked', 'Обсуждение проверено'),
+  stale: t('Latest check failed. Showing the last successful check.', 'Последняя проверка не удалась. Показаны данные предыдущей успешной проверки.'),
+  unavailable: t('Could not check the reporting discussion.', 'Не удалось проверить обсуждение с отчётами.'),
+  unchecked: t('The reporting discussion has yet to be checked automatically.', 'Автоматическая проверка обсуждения ещё не проводилась.'),
+};
+const labReportOutcomes = {
+  pass: evidenceOutcomes.passed,
+  fail: evidenceOutcomes.failed,
+  partial: t('Partial coverage', 'Частичная проверка'),
+};
 
 const labAgentPrompt = t(
   `Open ${portbridgeRepository} and read AGENTS.md. Choose one open Test Lab check that fits my equipment. `
@@ -1090,9 +1101,41 @@ function labReport(task, returnPath) {
   return section;
 }
 
+function labReportsForReview(task) {
+  return task.status === 'awaiting_review' && list(task.report_sync?.reports).length > 0;
+}
+
+function labSyncedReports(sync) {
+  const section = element('section', 'lab-checklist');
+  const checked = element('p', 'lab-checked', labReportStates[sync.state]);
+  const date = sync.checked_at || sync.attempted_at;
+  if (date) checked.append(activityTime(date));
+  section.append(element('h3', '', t('Public test reports', 'Публичные отчёты о проверках')), checked);
+
+  const reports = element('ul', 'lab-commits');
+  for (const report of list(sync.reports)) {
+    if (!report || !Object.hasOwn(labReportOutcomes, report.outcome)) continue;
+    const row = element('li');
+    const source = report.hardware || t('Open report', 'Открыть отчёт');
+    row.append(githubLink(source, report.url), badge(report.outcome, labReportOutcomes));
+    if (report.author) row.append(element('span', '', `@${report.author}`));
+    if (typeof report.revision === 'string' && /^[a-f0-9]{40}$/.test(report.revision)) {
+      const revision = element('code', 'identifier', report.revision.slice(0, 12));
+      revision.title = report.revision;
+      row.append(revision);
+    }
+    if (report.reported_at) row.append(activityTime(report.reported_at));
+    reports.append(row);
+  }
+  if (reports.childElementCount) section.append(reports);
+  else if (sync.state === 'fresh') section.append(element('p', '', t('No matching reports yet.', 'Подходящих отчётов пока нет.')));
+  return section;
+}
+
 function labTask(task, focused = false, queueEquipment = '', showAll = false) {
   const card = element('article', 'card lab-task');
   const blocked = task.status === 'blocked';
+  const reportsForReview = labReportsForReview(task);
   const status = element('div', 'meta-row lab-status');
   status.append(badge(task.status, labStatus), badge(task.evidence_stage, labEvidence), badge(task.adoption, labAdoption));
   const projects = element('div', 'meta-row');
@@ -1104,9 +1147,12 @@ function labTask(task, focused = false, queueEquipment = '', showAll = false) {
   if (setup.length) card.append(element('p', '', setup.join(' · ')));
   const evidence = editorial(task, 'evidence');
   if (evidence) card.append(element('p', 'lab-evidence', evidence));
+  if (task.report_sync && Object.hasOwn(labReportStates, task.report_sync.state)) {
+    card.append(labSyncedReports(task.report_sync));
+  }
 
   const details = element('details', 'lab-details');
-  details.open = focused;
+  details.open = focused && !reportsForReview;
   details.append(element('summary', '', t('Versions, steps and what to report', 'Версии, шаги и что указать в отчёте')));
   const versions = element('section', 'lab-checklist');
   const commits = element('ul', 'lab-commits');
@@ -1132,9 +1178,14 @@ function labTask(task, focused = false, queueEquipment = '', showAll = false) {
     open.setAttribute('aria-label', `${open.textContent} · ${editorial(task, 'title')}`);
     links.append(open);
   }
-  if (!blocked) links.append(githubLink(t('Open instructions', 'Открыть инструкцию'), task.procedure_url));
-  if (blocked || !focused) links.append(githubLink(blocked ? t('Report a confirmed public source', 'Сообщить публичный адрес')
-    : t('Share result in the discussion', 'Оставить результат в обсуждении'), task.result_url));
+  if (!blocked) links.append(githubLink(reportsForReview ? t('View test procedure', 'Посмотреть порядок проверки')
+    : t('Open instructions', 'Открыть инструкцию'), task.procedure_url));
+  if (blocked || !focused || reportsForReview) {
+    const discussion = blocked ? t('Report a confirmed public source', 'Сообщить публичный адрес')
+      : reportsForReview ? t('Open reporting discussion', 'Открыть обсуждение с отчётами')
+        : t('Share result in the discussion', 'Оставить результат в обсуждении');
+    links.append(githubLink(discussion, task.result_url));
+  }
   if (task.evidence_url) links.append(githubLink(t('Existing evidence', 'Что уже проверили'), task.evidence_url));
   if (task.source_url && ![task.procedure_url, task.result_url, task.evidence_url].includes(task.source_url)) {
     links.append(githubLink(t('Coordination issue', 'Задача координации'), task.source_url));
@@ -1150,7 +1201,7 @@ function labTask(task, focused = false, queueEquipment = '', showAll = false) {
   card.append(links, details);
   if (focused) {
     const returnPath = labQueuePath(labCompatibleEquipment(task, queueEquipment), showAll);
-    if (blocked) links.append(internalLink(t('Find another check', 'Выбрать другую проверку'), returnPath));
+    if (blocked || reportsForReview) links.append(internalLink(t('Find another check', 'Выбрать другую проверку'), returnPath));
     else card.append(labReport(task, returnPath));
   }
   return card;
@@ -1170,7 +1221,7 @@ function drawLab(data, params) {
     bar.append(back);
     lab.append(bar);
     if (task) {
-      if (task.status !== 'blocked') lab.append(labAgentEntry(task));
+      if (task.status !== 'blocked' && !labReportsForReview(task)) lab.append(labAgentEntry(task));
       lab.append(labTask(task, true, equipment, showAll));
     } else {
       lab.append(element('p', 'empty', t('This test is unavailable in the current queue.',
@@ -1201,7 +1252,7 @@ function drawLab(data, params) {
   showAllLabel.append(showAll, t('Show all statuses', 'Показать все статусы'));
   bar.append(group, showAllLabel);
   if (data.checked_at) {
-    const checked = element('p', 'lab-checked', t('Task status checked', 'Статусы сверены'));
+    const checked = element('p', 'lab-checked', t('Queue reviewed', 'Очередь сверена'));
     checked.append(activityTime(data.checked_at));
     bar.append(checked);
   }

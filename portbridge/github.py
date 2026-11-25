@@ -291,10 +291,11 @@ def _query(project, kind, page, *, since=None):
 
 
 class _Sync:
-    def __init__(self, db, refresh, projects=()):
+    def __init__(self, db, refresh, projects=(), *, anonymous=False):
         self.db = db
         self.refresh = refresh
-        self.token = os.environ.get("PORTBRIDGE_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN")
+        self.token = None if anonymous else (
+            os.environ.get("PORTBRIDGE_GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN"))
         self.context = "authenticated" if self.token else "anonymous"
         self.opener = build_opener(NoRedirect())
         self.deadline = time.monotonic() + 45
@@ -400,10 +401,10 @@ class _Sync:
             time.sleep(0.25)
         raise Unavailable("GitHub request failed")
 
-    def _require_public(self, repo):
-        # Anonymous requests already cannot read private repositories. For a token
-        # that can see private repositories, check visibility before listing metadata.
-        if not self.token:
+    def _require_public(self, repo, *, verify_anonymous=False):
+        # Authenticated reads check visibility before listing metadata. Anonymous
+        # callers may also need an explicit repository check for retained evidence.
+        if not self.token and not verify_anonymous:
             return
         if repo not in self.public_checks:
             try:

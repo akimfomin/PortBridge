@@ -166,5 +166,11 @@
     "scope": "Стенд шейдеров сверяет адаптер фактически созданного D3D12-устройства и отдельно отмечает программный адаптер для тестов, требующих видеокарту.",
     "translations": {"en": {"scope": "The shader harness identifies the adapter of the actual D3D12 device and distinguishes software adapters for tests that require a GPU."}},
     "evidence": "https://github.com/fxceless/victory-fork/commit/7b0f736d0b29c2c512a9506e38df92f1f8d50986"
+  },
+  {
+    "project": "victory-monitor", "area": "performance", "kind": "tested",
+    "scope": "После исправления график показал 50 мс для синтетического кадра 50 мс и 828,1 мс для кадра при холодном запуске. Ожидание отправки показано отдельным контуром.",
+    "translations": {"en": {"scope": "After the fix, the chart plotted 50 ms for a synthetic 50 ms frame and 828.1 ms for a cold-start frame. Submit wait is shown as a separate outline."}},
+    "evidence": "https://github.com/KretliJ/victory-monitor/issues/1#issuecomment-7153070742"
   }
 ]

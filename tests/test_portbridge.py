@@ -200,7 +200,7 @@ class CatalogTest(CatalogFixture):
                                     "leonida-ce", "kestrelx", "xportpc", "rebox", "scarlett-layer", "anyxboxx",
                                     "xbox2windows", "scenegate-vi", "palmwave", "tuxbox", "openscarlett",
                                     "openscarlett-ce", "percyscarlett", "victory-macos", "xvalkyrie", "holy-interoperability",
-                                    "scarlett-commons", "five-star-recomp", "framelab", "victory-gta6"})
+                                    "scarlett-commons", "five-star-recomp", "framelab", "victory-gta6", "victory-monitor"})
         cards = self.catalog.problems()
         ids = [card["id"] for card in cards]
         self.assertGreaterEqual(len(ids), 3)
@@ -228,7 +228,7 @@ class CatalogTest(CatalogFixture):
         self.assertEqual([p["id"] for p in self.catalog.problems(q="ПРЯМОУГОЛЬНИКОВ", project="continued")],
                          ["PB-0001", "PB-0007"])
         self.assertEqual([p["id"] for p in self.catalog.problems(project="xcl")],
-                         ["PB-0004", "PB-0005", "PB-0006", "PB-0012", "PB-0014", "PB-0017", "PB-0018"])
+                         ["PB-0004", "PB-0005", "PB-0006", "PB-0012", "PB-0014", "PB-0017", "PB-0018", "PB-0022"])
         self.assertEqual([p["id"] for p in self.catalog.problems(status="investigating")], ["PB-0004", "PB-0016"])
         opportunities = {p["id"] for p in self.catalog.problems(partial=True)}
         self.assertTrue({"PB-0001", "PB-0002"} <= opportunities)
@@ -384,6 +384,7 @@ class LocalAPITest(CatalogFixture):
             "urn:portbridge:PB-0007", "urn:portbridge:PB-0008", "urn:portbridge:PB-0009",
             "urn:portbridge:PB-0010", "urn:portbridge:PB-0011", "urn:portbridge:PB-0012", "urn:portbridge:PB-0013", "urn:portbridge:PB-0014",
             "urn:portbridge:PB-0018", "urn:portbridge:PB-0019", "urn:portbridge:PB-0020", "urn:portbridge:PB-0021",
+            "urn:portbridge:PB-0022", "urn:portbridge:PB-0023", "urn:portbridge:PB-0024",
             "urn:portbridge:PB-044801754884724660835754613454516035131",
         })
         _, _, body = self.request("GET", "/api/v1/outreach")

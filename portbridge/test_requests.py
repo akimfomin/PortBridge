@@ -10,8 +10,9 @@ from urllib.parse import urlencode
 from urllib.request import Request, build_opener
 
 from .activity import source_time
-from .github import API, NoRedirect
+from .github import API, NoRedirect, Unavailable
 from .lab import EQUIPMENT, PORTBRIDGE, build_lab
+from .lab_reports import has_passing_coverage, monitored, report_source, scan_reports
 from .matching import canonical_url, current_repository
 
 
@@ -116,14 +117,30 @@ def validate_scope(fields, github):
         if (task is None or not task["revisions"]
                 or canonical_url(task["revisions"][0]["url"]) != canonical_url(fields["revision"])):
             raise ValueError("Lab task, equipment or revision does not match the open test")
-        return TASK_CAPABILITIES.get(task["id"]), task["result_url"]
+        return TASK_CAPABILITIES.get(task["id"]), task["result_url"], task
     owner, repo, sha = commit_parts(fields["revision"])
     path = f"/repos/{current_repository(f'{owner}/{repo}')}"
     if github.get(path, public=True).get("private") is not False:
         raise ValueError("custom check needs a public repository")
     if github.get(f"{path}/commits/{sha}", public=True).get("sha", "").casefold() != sha.casefold():
         raise ValueError("custom check needs a pinned public commit")
-    return None, None
+    return None, None, None
+
+
+def report_invitation_hold(task, github):
+    if not task or not monitored(task):
+        return ""
+    _, issue = report_source(task)
+    try:
+        thread = github.get(issue.removeprefix(API), public=True)
+        if not isinstance(thread, dict) or thread.get("state") != "open":
+            return "The linked Test Lab report thread is closed or unavailable."
+        reports = scan_reports(task, lambda url: github.request(url.removeprefix(API), public=True))
+    except (OSError, Unavailable, ValueError):
+        return "The linked Test Lab results could not be verified. No tester was invited."
+    if has_passing_coverage(reports):
+        return "The requested Test Lab coverage is already reported and ready for review."
+    return ""
 
 
 def load_testers(path=TESTERS_FILE):
@@ -194,7 +211,7 @@ def dispatch(event, testers, github, *, event_name="issues", now=None, discover=
     if permissions.get("permission") not in {"write", "admin"}:
         raise ValueError("the approving account needs repository write access")
     fields = parse_request(issue.get("body"))
-    capability, original = validate_scope(fields, github)
+    capability, original, task = validate_scope(fields, github)
     now = now or datetime.now(timezone.utc)
     since = now - COOLDOWN
     excluded = {actor.casefold(), issue["user"]["login"].casefold()}
@@ -223,6 +240,8 @@ def dispatch(event, testers, github, *, event_name="issues", now=None, discover=
         head = (source.get("head") or {}).get("sha") or ""
         if source.get("state") != "open" or head.casefold() != revision.casefold():
             return "The receiving pull request changed or closed. Review the current revision before inviting a tester."
+    if hold := report_invitation_hold(task, github):
+        return hold
     current = github.get(path)
     if not approved_issue(current):
         return "The request is no longer open and approved."

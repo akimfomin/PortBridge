@@ -175,7 +175,7 @@ class PortBridgeMCP:
                     key in args and args[key] not in values for key, values in enums.items()):
                 return tool_error("Provide Test Lab filters from the tool schema.")
             try:
-                lab = snapshot("lab") if self.catalog is None else build_lab()
+                lab = snapshot("lab") if self.catalog is None else build_lab(self.catalog)
                 return tool_result(filter_lab(lab, **args))
             except json.JSONDecodeError:
                 raise

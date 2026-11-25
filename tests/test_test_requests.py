@@ -5,6 +5,7 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 
 from portbridge.lab import build_lab
+from portbridge.lab_reports import FRAMELAB_TASK
 from portbridge.test_requests import APPROVAL, BOT, REPO_PATH, GitHub, dispatch, load_testers, parse_request
 
 
@@ -130,6 +131,27 @@ class TestRequestTests(TestCase):
         self.assertIn("Posted one", self.run_dispatch([tester("Volunteer")]))
         self.github.get.assert_any_call("/repos/example/public", public=True)
         self.github.get.assert_any_call("/repos/example/public/commits/" + "a" * 40, public=True)
+
+    @patch("portbridge.test_requests.scan_reports")
+    def test_monitored_task_checks_coverage_before_rechecking_approval(self, scan):
+        task = build_lab(task=FRAMELAB_TASK)["tasks"][0]
+        request = issue_body(task=task["id"], revision=task["revisions"][0]["url"])
+        self.issue["body"] = self.current["body"] = request
+        base_get = self.github_get
+        self.github.get.side_effect = lambda path, public=False: (
+            {"state": "open"} if public and path.endswith("/issues/15") else base_get(path, public=public))
+        scan.return_value = [{"hardware": "AMD Radeon 860M", "outcome": "pass"}]
+        candidate = tester("Volunteer")
+        self.assertIn("already reported", self.run_dispatch([candidate]))
+        self.github.comment.assert_not_called()
+
+        def revoked(*args):
+            self.current["labels"] = []
+            return []
+
+        scan.side_effect = revoked
+        self.assertIn("no longer", self.run_dispatch([candidate]))
+        self.github.comment.assert_not_called()
 
     def test_control_revision_is_not_an_actionable_lab_pin(self):
         task = next(row for row in build_lab()["tasks"] if row["id"] == "scarlett-commons-continued-add-basic")

@@ -215,6 +215,19 @@
       "stack": "C++20, Vulkan, синтетические тесты передачи кадров между очередями",
       "license": "MIT",
       "translations": {"en": {"stack": "C++20, Vulkan, synthetic frame handoff tests across queues"}}
+    },
+    {
+      "slug": "victory-monitor",
+      "name": "victory-monitor",
+      "repo": "KretliJ/victory-monitor",
+      "url": "https://github.com/KretliJ/victory-monitor",
+      "stack": "Python, мониторинг времени кадров VIctory",
+      "license": "MIT",
+      "translations": {
+        "en": {
+          "stack": "Python, VIctory frame-time monitoring"
+        }
+      }
     }
   ],
   "coordination": {
@@ -2270,6 +2283,292 @@
               "platforms": ["Windows", "NVIDIA RTX 4070 Ti SUPER", "Vulkan fragment subgroup 32"],
               "observed": "Исходный шейдер MUBUF и вариант MTBUF с заменой одной инструкции прошли по три прогона. В каждом совпали все четыре канала каждого из 4096 пикселей. Смена XY изменила результат, смена ZW сохранила его. Проверка на аппаратной группе из 64 потоков остаётся открытой.",
               "translations": {"en": {"title": "PortBridge read back the exact D16 result on RTX", "observed": "The original MUBUF shader and one-instruction MTBUF variant passed three runs each. All four channels of all 4,096 pixels matched in each run. Swapping XY changed the output. Changing ZW preserved it. A hardware run with a subgroup size of 64 is still open."}}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0022",
+      "recorded_at": "2026-11-25T02:08:45Z",
+      "title": "Разный предел числа входов в цикл в XCL",
+      "summary": "PortBridge обнаружил расхождение на 65 537-м входе в цикл и передал контроль. Royalflamejlh использовал его в собственной правке. XCL #2034 вошёл в основную ветку.",
+      "status": "resolved",
+      "tags": [
+        "DXIL",
+        "loop budget",
+        "shader control flow"
+      ],
+      "translations": {
+        "en": {
+          "title": "XCL loop budget diverges between shader forms",
+          "summary": "PortBridge found a divergence on the 65,537th loop entry and shared a regression case. Royalflamejlh used the case in his own fix. XCL merged #2034.",
+          "tags": ["DXIL", "loop budget", "shader control flow"]
+        }
+      },
+      "platforms": [
+        "Windows 10",
+        "NVIDIA RTX 3090",
+        "AMD Radeon iGPU"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "xcl",
+          "status": "merged",
+          "summary": "Компактная и обычная формы теперь списывают лимит в начале заголовка цикла. WebIdentity1 независимо проверил версию автора на двух устройствах.",
+          "translations": {
+            "en": {
+              "summary": "The compact and ordinary forms now charge the budget on entry to a loop header. WebIdentity1 independently tested the author's revision on two devices."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Обсуждение и слияние XCL #2034",
+              "url": "https://github.com/xcl-dev/xcl/pull/2034",
+              "translations": {
+                "en": {
+                  "title": "XCL #2034 discussion and merge"
+                }
+              }
+            },
+            {
+              "title": "Проверка границы PortBridge",
+              "url": "https://github.com/xcl-dev/xcl/pull/2034#issuecomment-7149944968",
+              "translations": {
+                "en": {
+                  "title": "PortBridge boundary check"
+                }
+              }
+            },
+            {
+              "title": "Коммит слияния XCL #2034",
+              "url": "https://github.com/xcl-dev/xcl/commit/aaa093657bd96a146c05c0c1a9b61149fe761453",
+              "translations": {
+                "en": {
+                  "title": "XCL #2034 merge commit"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/xcl-dev/xcl/pull/2034#issuecomment-7149592580",
+              "title": "WebIdentity1 проверил правку автора",
+              "revision": "e591a8c8971206c854b0d6c5f8f21362182ed12d",
+              "reported_at": "2026-11-25T01:28:47Z",
+              "platforms": [
+                "Windows 10 build 19045",
+                "NVIDIA RTX 3090 split Wave64",
+                "AMD Radeon iGPU native Wave64"
+              ],
+              "observed": "На версии автора все шесть целевых тестов прошли на каждом устройстве без пропусков.",
+              "translations": {
+                "en": {
+                  "title": "WebIdentity1 tested the author's fix",
+                  "observed": "All six focused tests passed on each device with no skips at the author's revision."
+                }
+              }
+            },
+            {
+              "kind": "maintainer_claim",
+              "outcome": "observed",
+              "url": "https://github.com/xcl-dev/xcl/pull/2034#issuecomment-7150370452",
+              "title": "Royalflamejlh использовал контроль PortBridge",
+              "revision": "e591a8c8971206c854b0d6c5f8f21362182ed12d",
+              "reported_at": "2026-11-25T02:08:45Z",
+              "platforms": [
+                "Windows",
+                "NVIDIA RTX 5070 Ti"
+              ],
+              "observed": "Автор использовал проверку выхода на 65 537-м входе. На его реализации обе формы остановились на 65 536 без маркера выхода.",
+              "translations": {
+                "en": {
+                  "title": "Royalflamejlh used the PortBridge regression case",
+                  "observed": "The author used the 65,537th-entry regression case. With his implementation, both forms stopped at 65,536 without the exit marker."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0023",
+      "recorded_at": "2026-11-25T04:41:09Z",
+      "title": "victory-monitor повторно прибавляет время ожидания",
+      "summary": "PortBridge воспроизвёл завышение графика: кадр 50 мс отображался как 70 мс. KretliJ внедрил собственную правку и использовал пять проверок PortBridge.",
+      "status": "resolved",
+      "tags": [
+        "frame-time",
+        "chart",
+        "submit wait"
+      ],
+      "translations": {
+        "en": {
+          "title": "victory-monitor double-counts submit wait",
+          "summary": "PortBridge reproduced a chart overcount that drew a 50 ms frame as 70 ms. KretliJ implemented his own fix and used the five PortBridge checks.",
+          "tags": ["frame-time", "chart", "submit wait"]
+        }
+      },
+      "platforms": [
+        "Headless chart checks"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "victory-monitor",
+          "status": "merged",
+          "summary": "В основной ветке высота столбца совпадает с длительностью кадра. Время ожидания показано отдельным контуром.",
+          "translations": {
+            "en": {
+              "summary": "On main, the bar height equals the measured frame duration. Submit wait is drawn as a separate outline."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Исходный отчёт PortBridge в victory-monitor #1",
+              "url": "https://github.com/KretliJ/victory-monitor/issues/1",
+              "translations": {
+                "en": {
+                  "title": "PortBridge report in victory-monitor #1"
+                }
+              }
+            },
+            {
+              "title": "Правка KretliJ в основной ветке",
+              "url": "https://github.com/KretliJ/victory-monitor/commit/1ac612868fe1392443b6f96ee06bf4341e9b8d60",
+              "translations": {
+                "en": {
+                  "title": "KretliJ's fix on main"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "maintainer_claim",
+              "outcome": "observed",
+              "url": "https://github.com/KretliJ/victory-monitor/issues/1#issuecomment-7153070742",
+              "title": "KretliJ подтвердил исправление графика",
+              "revision": "1ac612868fe1392443b6f96ee06bf4341e9b8d60",
+              "reported_at": "2026-11-25T04:41:09Z",
+              "platforms": [
+                "Headless chart checks",
+                "Historical monitor logs"
+              ],
+              "observed": "Синтетический кадр 50 мс отобразился как 50 мс. Автор также сверил кадр 828,1 мс и проверил совместимость со старыми журналами.",
+              "translations": {
+                "en": {
+                  "title": "KretliJ confirmed the chart fix",
+                  "observed": "The 50 ms synthetic frame plotted at 50 ms. The author also checked an 828.1 ms frame and historical log compatibility."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PB-0024",
+      "recorded_at": "2026-11-25T05:28:56Z",
+      "title": "Проверка передачи данных Vulkan в FrameLab на AMD",
+      "summary": "FrameLab открыл задачу #15 для проверки через PortBridge Test Lab. JoeY54 подтвердил все четыре сценария на Radeon 860M и отдельно на встроенной графике Ryzen 9 9950X3D.",
+      "status": "verified",
+      "tags": [
+        "Vulkan",
+        "AMD",
+        "queue family",
+        "semaphore",
+        "synchronization"
+      ],
+      "translations": {
+        "en": {
+          "title": "FrameLab Vulkan handoff checks on AMD",
+          "summary": "FrameLab opened #15 for validation through PortBridge Test Lab. JoeY54 passed all four scenarios on a Radeon 860M and separately on the Ryzen 9 9950X3D integrated GPU.",
+          "tags": ["Vulkan", "AMD", "queue family", "semaphore", "synchronization"]
+        }
+      },
+      "platforms": [
+        "Windows 11",
+        "AMD Radeon 860M",
+        "AMD Ryzen 9 9950X3D iGPU"
+      ],
+      "dependency_ids": [],
+      "solutions": [
+        {
+          "project": "framelab",
+          "status": "verified",
+          "summary": "В обоих прогонах совпали результаты чтения изображения и завершилось ожидание принимающей очереди. В итоговых прогонах пропусков и ошибок валидации не было. Задача #15 открыта.",
+          "translations": {
+            "en": {
+              "summary": "Both runs matched the image readback and completed the consumer fence. The final runs had no skips or validation errors. Issue #15 remains open."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Запрос FrameLab #15 на проверку AMD",
+              "url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15",
+              "translations": {
+                "en": {
+                  "title": "FrameLab #15 AMD validation request"
+                }
+              }
+            },
+            {
+              "title": "Сопровождающий назначил точную версию",
+              "url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15#issuecomment-7146610949",
+              "translations": {
+                "en": {
+                  "title": "Maintainer confirmed the pinned revision"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15#issuecomment-7147944059",
+              "title": "JoeY54 проверил передачу Vulkan на Radeon 860M",
+              "revision": "82f069e82197e61b97f60bbcbcb7a3af7d3f8e77",
+              "reported_at": "2026-11-24T23:55:29Z",
+              "platforms": [
+                "Windows 11 25H2 build 26200.9711",
+                "AMD Radeon 860M",
+                "AMD driver 26.11.1",
+                "Vulkan SDK 1.4.363.1"
+              ],
+              "observed": "Прошли четыре сценария с включённой проверкой синхронизации Vulkan. Все 64 пикселя совпали в каждом сценарии. Предупреждений, ошибок и пропусков не было.",
+              "translations": {
+                "en": {
+                  "title": "JoeY54 tested the Vulkan handoff on Radeon 860M",
+                  "observed": "All four scenarios passed with Vulkan synchronization validation enabled. All 64 pixels matched in each scenario. There were no warnings, errors, or skips."
+                }
+              }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "url": "https://github.com/5headsmartbtw/leonida-framelab/issues/15#issuecomment-7153817545",
+              "title": "JoeY54 повторил проверку на встроенной графике Ryzen 9 9950X3D",
+              "revision": "82f069e82197e61b97f60bbcbcb7a3af7d3f8e77",
+              "reported_at": "2026-11-25T05:28:56Z",
+              "platforms": [
+                "Windows 11 Pro 26H2 build 26300.9974",
+                "AMD Ryzen 9 9950X3D iGPU",
+                "AMD driver 26.11.2",
+                "Vulkan SDK 1.4.363.1"
+              ],
+              "observed": "На втором устройстве того же участника прошли четыре сценария. В итоговом прогоне с включённой проверкой синхронизации предупреждений, ошибок и пропусков не было.",
+              "translations": {
+                "en": {
+                  "title": "JoeY54 repeated the check on the Ryzen 9 9950X3D iGPU",
+                  "observed": "All four scenarios passed on the same volunteer's second device. The final run with synchronization validation enabled had no warnings, errors, or skips."
+                }
+              }
             }
           ]
         }

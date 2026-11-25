@@ -3,6 +3,8 @@
 from copy import deepcopy
 import re
 
+from .lab_reports import has_passing_coverage, read_report_states
+
 
 CHECKED_AT = "2026-11-24T21:00:10Z"
 EQUIPMENT = ("amd", "cpu", "nvidia")
@@ -37,6 +39,7 @@ WAVE64_CASE = "https://github.com/LooperSalty/AnyXboxX/pull/147"
 WAVE64_GUIDE = f"{PORTBRIDGE}/tree/main/contrib/rdna2-wave64-bpermute"
 FRAMELAB = "https://github.com/5headsmartbtw/leonida-framelab"
 FRAMELAB_HANDOFF = f"{FRAMELAB}/pull/12"
+FRAMELAB_RESULTS = f"{FRAMELAB}/issues/15"
 FRAMELAB_HANDOFF_HEAD = "82f069e82197e61b97f60bbcbcb7a3af7d3f8e77"
 
 
@@ -402,17 +405,17 @@ TASKS = (
         "status": "needs_run", "evidence_stage": "reviewed_gpu", "adoption": "pending",
         "source_url": FRAMELAB_HANDOFF,
         "procedure_url": f"{FRAMELAB}/blob/{FRAMELAB_HANDOFF_HEAD}/tests/vulkan-handoff/README.md",
-        "evidence_url": f"{FRAMELAB_HANDOFF}#issuecomment-7142089405", "result_url": FRAMELAB_HANDOFF,
+        "evidence_url": f"{FRAMELAB_HANDOFF}#issuecomment-7142089405", "result_url": FRAMELAB_RESULTS,
         "revisions": [revision("FrameLab #12 standalone Vulkan test", "Отдельный тест Vulkan FrameLab #12",
                                "5headsmartbtw/leonida-framelab", FRAMELAB_HANDOFF_HEAD)],
         "why": "An independent AMD run checks the same synthetic image and synchronization across another GPU vendor.",
         "evidence": ("The author's RTX 2050 and PortBridge's RTX 4070 Ti SUPER passed all four standalone cases. "
                      "The AMD check covers this fixture only."),
         "steps": [
-            "Check FrameLab #12 for existing AMD evidence and use the pinned revision in a separate checkout.",
+            "Check FrameLab #15 for existing AMD evidence and use the pinned revision in a separate checkout.",
             "Build and run the unchanged tests/vulkan-handoff fixture with the pinned README and verbose CTest output.",
             "Confirm that the Adapter line associated with the results identifies a physical AMD GPU.",
-            "Report the four case outcomes in #12. Record unsupported queue configurations or timeline semaphores as skips.",
+            "Report the four case outcomes in #15. Record unsupported queue configurations or timeline semaphores as skips.",
         ],
         "expected": ("Binary and timeline waits pass for each supported same-family and cross-family queue setup, "
                      "with 64 matching pixels, a completed consumer fence and no validation diagnostics. "
@@ -427,10 +430,10 @@ TASKS = (
             "evidence": ("У автора на RTX 2050 и у PortBridge на RTX 4070 Ti SUPER прошли все четыре сценария. "
                          "Задача AMD охватывает этот отдельный тест."),
             "steps": [
-                "Проверьте, есть ли уже результат AMD в FrameLab #12, и откройте указанную версию в отдельной копии.",
+                "Проверьте, есть ли уже результат AMD в FrameLab #15, и откройте указанную версию в отдельной копии.",
                 "Соберите и запустите tests/vulkan-handoff без изменений по инструкции с подробным выводом CTest.",
                 "Убедитесь, что строка Adapter, к которой относятся результаты, указывает на физическую видеокарту AMD.",
-                "Оставьте результаты четырёх сценариев в #12. Недоступные сочетания очередей и виды семафоров отметьте как пропуски.",
+                "Оставьте результаты четырёх сценариев в #15. Недоступные сочетания очередей и виды семафоров отметьте как пропуски.",
             ],
             "expected": ("Оба вида семафоров проходят для каждого поддерживаемого сочетания очередей внутри одного семейства и между разными. "
                          "Все 64 пикселя совпадают, очередь-получатель завершает работу, проверка синхронизации не выдаёт сообщений. "
@@ -456,7 +459,16 @@ def filter_lab(payload, *, equipment="", status="", task=""):
     ]}
 
 
-def build_lab(*, equipment="", status="", task=""):
+def build_lab(catalog=None, *, equipment="", status="", task=""):
+    tasks = deepcopy(TASKS)
+    states = read_report_states(catalog, tasks)
+    for entry in tasks:
+        if entry["id"] not in states:
+            continue
+        report_sync = states[entry["id"]]
+        entry["report_sync"] = report_sync
+        if entry["status"] == "needs_run" and has_passing_coverage(report_sync["reports"]):
+            entry["status"] = "awaiting_review"
     payload = {"checked_at": CHECKED_AT, "filters": {"equipment": list(EQUIPMENT), "status": list(STATUSES)},
-               "tasks": deepcopy(TASKS)}
+               "tasks": tasks}
     return filter_lab(payload, equipment=equipment, status=status, task=task)

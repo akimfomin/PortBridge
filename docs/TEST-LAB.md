@@ -15,6 +15,10 @@ After the run, use **Copy result template** to get the link and fields for a rep
 
 Volunteers choose a task and execute it locally. If you need another setup, open a test request from the queue. PortBridge can invite a tester based on public hardware reports. The maintainers of each receiving project decide what to adopt. A report or a request for review records delivery. A receiving team's decision, linked run, or merged change can establish acceptance or reuse.
 
+Selected tasks show reports found in their linked discussion, with the reporter, tested hardware, pinned revision and result. A complete passing report can move a task to **Awaiting team review**. Look under **Show all statuses** to find it. The initial monitored task is FrameLab's AMD Vulkan check. [Reporting discussion](https://github.com/5headsmartbtw/leonida-framelab/issues/15)
+
+Before inviting a tester for a monitored task, PortBridge checks the reporting discussion. An unavailable discussion or a passing result that covers the request puts the invitation on hold.
+
 ## Для участника
 
 Откройте очередь и выберите AMD, NVIDIA или CPU. Сначала показаны проверки, которым нужен исполнитель. Включите **Показать все статусы**, чтобы увидеть также результаты на ревью и отложенные проверки.
@@ -29,9 +33,17 @@ Volunteers choose a task and execute it locally. If you need another setup, open
 
 Сначала проверьте, нужна ли ещё помощь в исходном обсуждении. Затем повторите тест в отдельной копии проекта и оставьте результат со своим стендом и точной версией. Подробности о том, как передать результат и сохранить авторство, есть в [инструкции для агента](AGENT-PROMPT.md).
 
+В некоторых карточках PortBridge показывает найденные отчёты с автором, оборудованием, точной версией и итогом. Полный успешный прогон может перевести задачу в статус **Ждём ответа команды**. Чтобы найти такую задачу в очереди, включите **Показать все статусы**. Первой отслеживается проверка FrameLab на AMD. [Обсуждение с отчётами](https://github.com/5headsmartbtw/leonida-framelab/issues/15)
+
+Перед приглашением тестировщика PortBridge сверяет обсуждение отслеживаемой задачи. При недоступном обсуждении или уже полученном полном результате приглашение откладывается.
+
 ## For integrations
 
 Read `data/lab.json` from the public site, call the local `GET /api/v1/lab` endpoint, or use the read-only `portbridge_lab` MCP tool. Use `task` to filter by a task's exact `id`. To open the same check for a person, link to `#/lab?task=<id>` on the public site. The equipment filter uses a value supplied by the caller. `checked_at` records when the queue was reviewed. Consult the linked discussions for the latest claims, source revisions, and decisions.
+
+Monitored tasks include `report_sync`. Its `state` is `fresh` after a successful check, `stale` when the latest attempt failed and the previous check is still available, `unavailable` when a check fails with no previous check available, or `unchecked` before the first attempt. The object's `checked_at` and `attempted_at` give the last successful and attempted checks in UTC. Either may be null. Each entry in `reports` has the original comment `url`, GitHub `author`, tested `revision`, `hardware`, `outcome` (`pass`, `fail`, or `partial`), and `reported_at`. The `adoption` field still records the receiving team's decision.
+
+Pages checks monitored discussions before exporting the queue. To refresh a local copy, run `python -m portbridge refresh-lab`. To use a specific database, run `python -m portbridge --db path/to/catalog.sqlite3 refresh-lab` and use that same database for the local API, export, or MCP.
 
 ### Show open checks on a partner site
 

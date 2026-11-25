@@ -208,7 +208,7 @@ class Handler(ExchangeHandlerMixin, BaseHTTPRequestHandler):
         if name == "lab":
             if params.keys() - {"equipment", "status", "task"} or any(len(values) != 1 for values in params.values()):
                 raise ValueError("use each Test Lab filter at most once")
-            return 200, build_lab(**{key: values[0] for key, values in params.items()})
+            return 200, build_lab(catalog, **{key: values[0] for key, values in params.items()})
         if name == "coordination":
             return 200, {"coordination": catalog.coordination()}
         if name == "graph":
@@ -320,6 +320,7 @@ def main(argv=None):
     update = commands.add_parser("incremental", help="index issues and pull requests updated since the last sweep")
     update.add_argument("--pages", type=int, choices=range(1, 11), default=3)
     commands.add_parser("status", help="show cached synchronization status")
+    commands.add_parser("refresh-lab", help="refresh reports for monitored Test Lab checks")
     backup = commands.add_parser("backup", help="write a separate verified SQLite backup of --db")
     backup.add_argument("--out", type=Path, required=True)
     principal = commands.add_parser("exchange-key", help="create a scoped local exchange key")
@@ -367,6 +368,12 @@ def main(argv=None):
             parser.error(str(exc))
         return 0
     catalog = Catalog(args.db, args.seed)
+    if args.command == "refresh-lab":
+        from .lab import TASKS
+        from .lab_reports import refresh_reports
+
+        print(json.dumps({"tasks": refresh_reports(catalog, TASKS)}, indent=2, ensure_ascii=True))
+        return 0
     if args.command == "serve":
         serve(catalog, args)
         return 0

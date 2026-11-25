@@ -59,7 +59,7 @@ class LabTest(CatalogFixture):
         repository = "https://github.com/5headsmartbtw/leonida-framelab"
         self.assertEqual(handoff["revisions"][0]["sha"], head)
         self.assertEqual(handoff["procedure_url"], f"{repository}/blob/{head}/tests/vulkan-handoff/README.md")
-        self.assertEqual(handoff["result_url"], f"{repository}/pull/12")
+        self.assertEqual(handoff["result_url"], f"{repository}/issues/15")
         self.assertEqual(handoff["evidence_url"], f"{repository}/pull/12#issuecomment-7142089405")
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")

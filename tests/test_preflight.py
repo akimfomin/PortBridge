@@ -1,10 +1,26 @@
+from io import BytesIO
 import unittest
 from unittest.mock import patch
 
 from portbridge.github import _technical
-from portbridge.preflight import assess, preflight, public_preflight
+from portbridge.preflight import assess, preflight, public_preflight, snapshot
 from test_portbridge import CatalogFixture
 
+
+class PublicSnapshotTest(unittest.TestCase):
+    def test_observations_have_a_larger_but_bounded_download(self):
+        at_limit = b'{"observations":[]}'.ljust(32)
+        with patch("portbridge.preflight.SNAPSHOT_LIMIT", 16), \
+                patch("portbridge.preflight.OBSERVATIONS_SNAPSHOT_LIMIT", 32), \
+                patch("portbridge.preflight.build_opener") as opener:
+            opener.return_value.open.side_effect = [
+                BytesIO(at_limit), BytesIO(at_limit + b" "), BytesIO(at_limit),
+            ]
+            self.assertEqual(snapshot("observations"), {"observations": []})
+            with self.assertRaisesRegex(ValueError, "size limit"):
+                snapshot("observations")
+            with self.assertRaisesRegex(ValueError, "size limit"):
+                snapshot("health")
 
 class PreflightTest(CatalogFixture):
     def test_xcl_repo_move_keeps_exact_link_and_scope(self):
@@ -94,6 +110,27 @@ class PreflightTest(CatalogFixture):
                 result = assess([], [a, b], [source, unrelated], {}, url=source["url"])
                 self.assertEqual(result["matches"], [])
                 self.assertEqual(result["observations"], [])
+
+    def test_comment_never_borrows_parent_pr_metadata(self):
+        parent_url = "https://github.com/Marvisak/VIctory/pull/346"
+        parent = self.observation("victory", "pr", 346, "Expand indirect rectangle-list draws", parent_url, {})
+        related = self.observation("continued", "pr", 207, "Expand indirect rectangle-list draws",
+                                   "https://github.com/ubiquitarianism/leonida/pull/207", {})
+        explicit = self.observation("xcl", "issue", 723, "Application hangs after account screen",
+                                    "https://github.com/ivall/xcl/issues/723", {})
+        rows = [parent, related, explicit]
+        projects = self.catalog.projects()
+        self.assertTrue(assess([], projects, rows, {}, url=parent_url)["matches"])
+
+        url = parent_url + "#issuecomment-7121170075"
+        report = assess([], projects, rows, {}, url=url)
+        self.assertFalse(report["indexed"])
+        self.assertTrue(report["origin_url"].endswith("#issuecomment-7121170075"))
+        self.assertEqual((report["matches"], report["observations"]), ([], []))
+        self.assertIn("linked comment", report["next_step"])
+
+        relevant = assess([], projects, rows, {}, url=url, q="account screen")["observations"]
+        self.assertEqual([row["url"] for row in relevant], [explicit["url"]])
 
     def test_missing_source_is_visible_in_advice(self):
         report = preflight(self.catalog, url="https://github.com/Marvisak/VIctory/pull/99999")

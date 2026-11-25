@@ -38,6 +38,7 @@ class FeedTest(unittest.TestCase):
 
         english_entries, russian_entries = self.entries(english), self.entries(russian)
         self.assertEqual(list(english_entries), [
+            "urn:portbridge:PB-0024", "urn:portbridge:PB-0023", "urn:portbridge:PB-0022",
             "urn:portbridge:PB-0021",
             "urn:portbridge:PB-0020",
             "urn:portbridge:PB-0019",
