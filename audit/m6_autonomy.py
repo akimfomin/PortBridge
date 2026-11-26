@@ -32,25 +32,40 @@ def measure(start, now, runs, artifacts):
     end = start + timedelta(days=7)
     if now < start:
         raise ValueError("Rollout timestamp is in the future")
-    receipts = {row["workflow_run"]["id"]: row["id"] for row in artifacts
-                if row["name"] == RECEIPT and not row["expired"] and row.get("workflow_run")}
-    observed = sorted((row for row in runs if start <= stamp(row["created_at"]) < min(end, now)
+    stop = min(end, now)
+    receipts = {}
+    for artifact in artifacts:
+        origin = artifact.get("workflow_run")
+        if artifact["name"] != RECEIPT or artifact["expired"] or not origin:
+            continue
+        received = stamp(artifact["created_at"])
+        if not start <= received < stop:
+            continue
+        key = (origin["id"], origin["head_sha"])
+        receipt = (received, artifact["id"])
+        if key not in receipts or receipt < receipts[key]:
+            receipts[key] = receipt
+    observed = sorted((row for row in runs if start <= stamp(row["created_at"]) < stop
                        and row["event"] == "schedule" and row["head_branch"] == "main"),
                       key=lambda row: row["created_at"])
     buckets = [0] * 7
     checked = []
+    missing = []
     for run in observed:
-        receipt = receipts.get(run["id"])
-        if receipt and run["conclusion"] == "success":
-            buckets[(stamp(run["created_at"]) - start).days] += 1
-            checked.append({"at": run["created_at"], "url": run["html_url"],
-                            "sha": run["head_sha"], "artifact_id": receipt})
-    dates = [start, *(stamp(row["at"]) for row in checked), min(end, now)]
+        receipt = receipts.get((run["id"], run["head_sha"]))
+        if not receipt or run["conclusion"] != "success" or receipt[0] < stamp(run["created_at"]):
+            missing.append(run["html_url"])
+            continue
+        received, identifier = receipt
+        buckets[(received - start).days] += 1
+        checked.append({"at": received.isoformat(), "run_started_at": run["created_at"],
+                        "url": run["html_url"], "sha": run["head_sha"], "artifact_id": identifier})
+    checked.sort(key=lambda row: row["at"])
+    dates = [start, *(stamp(row["at"]) for row in checked), stop]
     return {"start_utc": start.isoformat(), "end_utc": end.isoformat(),
             "elapsed_days": round((min(end, now) - start).total_seconds() / 86400, 3),
             "scheduled_runs": len(observed), "verified_publications": checked,
-            "scheduled_without_success_receipt": [r["html_url"] for r in observed
-                if r["id"] not in receipts or r["conclusion"] != "success"],
+            "scheduled_without_success_receipt": missing,
             "verified_per_24h": buckets,
             "longest_observed_gap_hours": round(max((b-a).total_seconds() for a,b in zip(dates,dates[1:])) / 3600, 2),
             "seven_intervals_observed": now >= end and all(buckets)}

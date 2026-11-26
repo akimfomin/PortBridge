@@ -1,3 +1,24 @@
+# PortBridge · пилот KLBF Lab после v0.2.0
+
+Кандидат пилота использует релиз [v0.2.0, `49bf084250ec55c70d6732000ea40e62c3d36b4c`](https://github.com/akimfomin/PortBridge/releases/tag/v0.2.0). Аудит доставки и документация проверены полным набором из 284 тестов, без ошибок и пропусков.
+
+## Запрос по BM-v1
+
+27 ноября в 00:33 МСК отправили BrokeAsh одно предложение в PortBridge Test Lab. Вопрос — есть ли для уже опубликованного результата сопоставимый контроль на том же компьютере. Опубликованная таблица содержит референс на том же GPU и с теми же номинальными настройками Series S, FSR и лимитом текстур. У него другой процессор, другая статистика пропущенных конвейеров, а версия FSR и драйвер в JSON не указаны. По этим данным нельзя объяснить разницу между замерами. [Запрос и приглашение](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7203842475) · [Исходные JSON и точные версии](evidence/klbf-bm-v1-pilot.md)
+
+PortBridge опубликовал проверяемую заявку с точной ревизией и условиями. Выбор участника и условий сравнения выполнялся вручную. Участник может найти подходящий опубликованный JSON или назвать поле, без которого сравнение невозможно. В зачёт входит только его самостоятельный результат. К концу проверки ответа в заявке не было. [Очередь заявок Test Lab](https://github.com/akimfomin/PortBridge/issues?q=is%3Aissue+%22Test+request%3A%22+in%3Atitle) · [Обсуждение методики](https://github.com/PastiiJay/klbf-lab/issues/79)
+
+## Публикации по расписанию
+
+Последний видимый запуск по расписанию стартовал 26 ноября в 18:45 МСК, до выхода версии с квитанциями. Состояние опубликованных данных подтверждено отдельной выгрузкой. Предшествующий сбой произошёл на этапе сверки публичного снимка после успешной выкладки. Следующий запуск прошёл. Первого планового запуска новой версии на момент проверки в GitHub ещё не было. Публичная история запусков доступна, а анонимный запрос к API списка артефактов в этой проверке исчерпал лимит GitHub. [История расписания](https://github.com/akimfomin/PortBridge/actions/workflows/pages.yml?query=branch%3Amain+event%3Aschedule) · [Сбой старой версии](https://github.com/akimfomin/PortBridge/actions/runs/45761703311/job/139714248009) · [Следующий успешный запуск](https://github.com/akimfomin/PortBridge/actions/runs/45852310279) · [Публичное состояние](https://akimfomin.github.io/PortBridge/data/health.json)
+
+Недельная проверка привязана к этому чату на 4 декабря в 00:15 МСК. Учитываются только поставки по расписанию с подтверждённой квитанцией той же ревизии, по времени её создания. Тест проверяет переход через границу суток, несовпадающую ревизию и ручной запуск. [Команда проверки](m6_autonomy.py) · [Тест](../tests/test_audit_autonomy.py) · [Схема квитанции GitHub](https://docs.github.com/en/rest/actions/artifacts#list-artifacts-for-a-repository)
+
+```sh
+python -B audit/m6_autonomy.py --since 2026-11-26T21:07:13Z
+python -B -m unittest discover -s tests -p test_audit_autonomy.py -v
+```
+
 # PortBridge M5–M6 · пилот и приёмка выпуска
 
 Исходная ревизия — [M5.3, 0cb1fe46d14f0930e7e347e3c9980a53c9d94be9](https://github.com/akimfomin/PortBridge/blob/0cb1fe46d14f0930e7e347e3c9980a53c9d94be9/audit/LATEST.md). Результаты выпуска и послерелизные проверки доступны в [постоянном отчёте для аудитора](https://github.com/akimfomin/PortBridge/blob/audit/review/audit/LATEST.md). [Релизный PR #93](https://github.com/akimfomin/PortBridge/pull/93) · [Реестр 122 требований](../docs/PORTBRIDGE-CHECKLIST.md)
