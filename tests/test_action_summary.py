@@ -135,6 +135,20 @@ class ActionSummaryTests(TestCase):
         self.assertEqual(output.read_text(encoding="utf-8").splitlines(), [
             "status=skipped", "status=invalid_input", "status=summary_unavailable", "status=unavailable", "status=reported"])
 
+    def test_replay_uses_the_original_event_revision_and_url(self):
+        revision = "a" * 40
+        event = {"pull_request": {"title": "Fixture", "html_url": self.source, "head": {"sha": revision}}}
+        self.event.write_text(json.dumps(event), encoding="utf-8")
+        report = {"origin_url": "https://github.com/legacy/alias/pull/42", "problems": [], "matches": []}
+        with mock.patch.object(action_summary, "public_preflight", return_value=report):
+            first = action_summary.summary(self.env)
+            self.assertEqual(first, action_summary.summary(self.env))
+            manual = action_summary.summary({**self.env, "PORTBRIDGE_PR_URL": self.source})
+        self.assertIn(self.source, first)
+        self.assertNotIn("legacy/alias", first)
+        self.assertIn(revision, first)
+        self.assertNotIn("PR event head", manual)
+
     def test_successful_snapshot_reports_an_unindexed_pull_request(self):
         result = {"origin_url": self.source, "indexed": False, "catalog_status": "ok",
                   "problems": [], "matches": [], "observations": []}

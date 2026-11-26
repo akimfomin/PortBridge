@@ -25,6 +25,7 @@ def pull_request(event_name, event_path):
     if len(data) > EVENT_LIMIT:
         raise ValueError("GitHub event exceeds size limit")
     event = json.loads(data)
+    head = None
     if event_name == "workflow_dispatch":
         title, source = "", event["inputs"]["pull_request_url"]
         if isinstance(source, str):
@@ -32,10 +33,13 @@ def pull_request(event_name, event_path):
     else:
         request = event["pull_request"]
         title, source = request["title"], request["html_url"]
+        revision = (request.get("head") or {}).get("sha")
+        if isinstance(revision, str) and re.fullmatch("[0-9a-f]{40}", revision):
+            head = revision
     if (not isinstance(title, str) or not isinstance(source, str)
             or len(source) > 500 or not PR_URL.fullmatch(source)):
         raise ValueError("Invalid pull request data")
-    return {"q": " ".join(title.split())[:200], "url": source}
+    return {"q": " ".join(title.split())[:200], "url": source}, head
 
 
 def label(text):
@@ -60,11 +64,13 @@ def source_group(heading, items, confidence=None):
     return [f"### {heading}", "", *rows, ""] if rows else []
 
 
-def render_report(result):
+def render_report(result, *, source_url=None, event_head=None):
     lines = ["Review these leads against the target revision and configuration.", ""]
-    origin = result.get("origin_url")
+    origin = source_url or result.get("origin_url")
     if origin and PR_URL.fullmatch(origin):
         lines.extend([source_link("Source pull request", origin), ""])
+        if event_head:
+            lines.extend([f"PR event head: `{event_head}`. Catalog evidence may predate this head.", ""])
     if result.get("catalog_status") in {"partial", "stale", "error", "seed-only"}:
         lines.extend(["The public snapshot may be incomplete.", ""])
     if (result.get("catalog_freshness") or {}).get("age_state") == "stale":
@@ -167,16 +173,17 @@ def summary_result(environ):
             if len(explicit) > 500 or not PR_URL.fullmatch(explicit):
                 raise ValueError("Use a public GitHub pull request URL")
             request = {"q": "", "url": explicit}
+            head = None
         else:
-            request = pull_request(event_name, environ["GITHUB_EVENT_PATH"])
-    except (KeyError, OSError, TypeError, ValueError):
+            request, head = pull_request(event_name, environ["GITHUB_EVENT_PATH"])
+    except (AttributeError, KeyError, OSError, TypeError, ValueError):
         if explicit or event_name == "workflow_dispatch":
             return "invalid_input", "Enter a public GitHub pull request URL in pull_request_url.\n"
         return "invalid_input", "The pull request event could not be read. Continue the usual review.\n"
     try:
         result = public_preflight(**request, limit=5)
         status = "unavailable" if result.get("catalog_status") == "unavailable" else "reported"
-        return status, render_report(result)
+        return status, render_report(result, source_url=request["url"], event_head=head)
     except (AttributeError, KeyError, OSError, TypeError, ValueError):
         return "unavailable", UNAVAILABLE
 
