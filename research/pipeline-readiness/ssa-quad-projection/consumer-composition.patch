@@ -1,0 +1,121 @@
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 3eadeb8..843740f 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -554,7 +554,7 @@ impl Lw {
+             project_pixel_masks: matches!(entry, Entry::Pixel(_, mode) if *mode != PixelMaskMode::Whole),
+             project_quad_inputs: matches!(entry, Entry::Pixel(_, PixelMaskMode::Predicates | PixelMaskMode::QuadWindow)),
+             share_quad_exec: matches!(entry, Entry::Pixel(_, PixelMaskMode::QuadWindow)),
+-            last_pixel_ballots: None,
++            pixel_ballots: Default::default(),
+             xs: None,
+             xw: None,
+             xc: None,
+diff --git a/crates/xcl/src/gpu/dxil/lanes.rs b/crates/xcl/src/gpu/dxil/lanes.rs
+index 2f83fe8..3aaf29f 100644
+--- a/crates/xcl/src/gpu/dxil/lanes.rs
++++ b/crates/xcl/src/gpu/dxil/lanes.rs
+@@ -184,6 +184,13 @@ impl Lw {
+         if let Some(&v) = self.exec_cache.get(&key) {
+             return v;
+         }
++        if self.project_pixel_masks {
++            if let Some(ballots) = self.pixel_ballots.get(&(lo, hi)).copied() {
++                let bit = self.project_quad_ballots(&ballots);
++                self.exec_cache.insert(key, bit);
++                return bit;
++            }
++        }
+         let w = if self.wave64 {
+             let u = self.upper;
+             self.sel(u, hi, lo)
+@@ -536,7 +543,7 @@ impl Lw {
+             (m0, z)
+         };
+         if self.project_pixel_masks {
+-            self.last_pixel_ballots = Some((self.cur(), lo, hi, votes));
++            self.pixel_ballots.insert((lo, hi), votes);
+         }
+         (lo, hi)
+     }
+@@ -820,6 +827,42 @@ mod ps_ballot_tests {
+         }
+     }
+ 
++    #[test]
++    fn own_bit_of_two_live_carry_masks_uses_each_ballot_producer() {
++        // Both mask pairs remain live after the second producer. The conditional moves
++        // select different position inputs so a reused or swapped mask changes exports.
++        let mut code = Vec::new();
++        let mut emit = |name, enc, fields: &[(&str, u64)]| {
++            code.extend(encode(name, enc, fields, None).unwrap());
++        };
++        for (dst, a, b) in [(16, 2, 3), (18, 3, 3)] {
++            emit("V_ADD_CO_U32", "VOP3_SDST_ENC", &[
++                ("VDST", 4), ("SDST", dst), ("SRC0", V + a), ("SRC1", V + b),
++            ]);
++        }
++        for (dst, mask) in [(6, 16), (7, 18)] {
++            emit("V_CNDMASK_B32", "ENC_VOP3", &[
++                ("VDST", dst), ("SRC0", V + 2), ("SRC1", V + 3), ("SRC2", mask),
++            ]);
++        }
++        emit("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 15), ("VSRC0", 6), ("VSRC1", 7),
++             ("VSRC2", 2), ("VSRC3", 3), ("DONE", 1), ("VM", 1)]);
++        emit("S_ENDPGM", "ENC_SOPP", &[]);
++        for wave64 in [false, true] {
++            let opt = KernelOptions { wave64, split: false, mem_windows: 4, sampler_base: 0 };
++            let whole = kernel::translate_pixel(&code, opt, &ps_interface()).unwrap();
++            let projected = kernel::translate_pixel_projected_masks(&code, opt, &ps_interface()).unwrap();
++            validate::validate(&whole.dxil).unwrap();
++            validate::validate(&projected.dxil).unwrap();
++            let whole_ir = validate::disassemble(&whole.dxil).unwrap();
++            let projected_ir = validate::disassemble(&projected.dxil).unwrap();
++            let ballots = "call %dx.types.fouri32 @dx.op.waveActiveBallot(";
++            assert_eq!(whole_ir.matches(ballots).count(), projected_ir.matches(ballots).count());
++            assert!(whole_ir.contains("286331153"));
++            assert!(!projected_ir.contains("286331153"), "both full mask reconstructions should be dead");
++        }
++    }
++
+     #[test]
+     fn projected_mask_preserves_wave32_high_word_after_adjacent_carry() {
+         let mut code = Vec::new();
+diff --git a/crates/xcl/src/gpu/dxil/lower.rs b/crates/xcl/src/gpu/dxil/lower.rs
+index d3b5521..c915fd3 100644
+--- a/crates/xcl/src/gpu/dxil/lower.rs
++++ b/crates/xcl/src/gpu/dxil/lower.rs
+@@ -220,12 +220,12 @@ pub struct Lw {
+     pub static_used: Vec<([u32; 4], bool, super::ops::Sampler)>,
+     pub sampler_base: u32,
+     pub exec_cache: HashMap<(Block, Value, Value), Value>,
+-    /// Opt-in pixel translation keeps the four unmodified ballot results behind the most
+-    /// recent full mask. An exact same-block SSA pair can project its own bit from them.
++    /// An exact SSA mask pair carries the unmodified votes that produced its two words.
++    /// Those votes dominate any legal use of the pair. Scalar users still see the words.
+     pub project_pixel_masks: bool,
+     pub project_quad_inputs: bool,
+     pub share_quad_exec: bool,
+-    pub last_pixel_ballots: Option<(Block, Value, Value, [[Value; 2]; 4])>,
++    pub pixel_ballots: HashMap<(Value, Value), [[Value; 2]; 4]>,
+     /// groupshared exchange words of the split form
+     /// split form: the halves' exchange words (storage, first index) and the lane counter
+     pub xs: Option<(super::ops::GroupShared, u32)>,
+@@ -943,17 +943,6 @@ impl Lw {
+     /// This lane's bit of a mask (lo, hi).
+     pub fn lane_of(&mut self, lo: Value, hi: Value) -> Value {
+         let hi = if self.wave64 { hi } else { self.c(0) };
+-        if let Some((b, orig_lo, orig_hi, ballots)) = self.last_pixel_ballots {
+-            let key = (self.cur(), lo, hi);
+-            if key == (b, orig_lo, orig_hi) {
+-                if let Some(&bit) = self.exec_cache.get(&key) {
+-                    return bit;
+-                }
+-                let bit = self.project_quad_ballots(&ballots);
+-                self.exec_cache.insert(key, bit);
+-                return bit;
+-            }
+-        }
+         self.lanebit(lo, hi)
+     }
+ 

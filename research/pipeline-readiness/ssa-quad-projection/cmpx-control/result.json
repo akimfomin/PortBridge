@@ -1,0 +1,91 @@
+{
+  "source": "a764afcfd076a052ad8937e37f168c4863b301e6",
+  "source_tree": "308cc7d970f7603cbb340e9131cc7fa9fdda674f",
+  "parent": "ba83447cd9ce59035cead63bc340135b5e46bc1b",
+  "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "driver": "617.14",
+  "dxc": "1.9.2609.5",
+  "test": "gpu::dxil::lanes::ps_ballot_tests::gpu_pixel_cmpx_preserves_partial_exec_words",
+  "test_binary_sha256": "878d64cb586343dd6b212977180dccf889e2ab92ce7fe1290c1230cdc07c92a1",
+  "patch_sha256": "5b83b06e07778371fdcce27921b0c5dbad06ad4ccd43d7fb62b760f596dcf729",
+  "controls": {
+    "partial_exec_words": [
+      "a5a5c385",
+      "5a5a3c49"
+    ],
+    "comparison": "lane modulo 4 != 2",
+    "expected": "entry_word & partial_EXEC_word & 0xbbbbbbbb",
+    "physical_high_word_coverage": false
+  },
+  "arms": [
+    {
+      "guest_width": 32,
+      "word": 0,
+      "arm": "strict-consumer",
+      "entry_or": "ffffffff",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 32,
+      "word": 0,
+      "arm": "quad-inputs",
+      "entry_or": "ffffffff",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 32,
+      "word": 0,
+      "arm": "shared-window",
+      "entry_or": "ffffffff",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 64,
+      "word": 0,
+      "arm": "strict-consumer",
+      "entry_or": "ffffffff",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 64,
+      "word": 0,
+      "arm": "quad-inputs",
+      "entry_or": "ffffffff",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 64,
+      "word": 0,
+      "arm": "shared-window",
+      "entry_or": "ffffffff",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 64,
+      "word": 1,
+      "arm": "strict-consumer",
+      "entry_or": "00000000",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 64,
+      "word": 1,
+      "arm": "quad-inputs",
+      "entry_or": "00000000",
+      "pixel_count": 1024
+    },
+    {
+      "guest_width": 64,
+      "word": 1,
+      "arm": "shared-window",
+      "entry_or": "00000000",
+      "pixel_count": 1024
+    }
+  ],
+  "counts": {
+    "frames": 9,
+    "word_pairs_checked": 9216,
+    "mismatches": 0
+  },
+  "limitations": "High coverage remained zero with a Wave64 guest on this Wave32 GPU. A positive lane 32 witness requires a physically populated high word."
+}

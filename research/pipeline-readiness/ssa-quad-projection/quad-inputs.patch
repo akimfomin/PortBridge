@@ -1,0 +1,272 @@
+diff --git a/crates/xcl/examples/morning_mask.rs b/crates/xcl/examples/morning_mask.rs
+new file mode 100644
+index 0000000..8be671f
+--- /dev/null
++++ b/crates/xcl/examples/morning_mask.rs
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//! Compile-only DXIL shape observation for public AMD PAL pixel instruction streams.
++//! The synthetic XCL interface deliberately does not emulate Vulkan resource bindings.
++use std::path::Path;
++use xcl::gpu::dxbc::SigElement;
++use xcl::gpu::dxil::{kernel::{
++    translate_pixel, translate_pixel_projected_masks, translate_pixel_mask_inputs, KernelOptions,
++}, validate};
++use xcl::gpu::recomp::{PsInterface, HEAP_WINDOWS};
++
++fn sig(name: &str, index: u32, system_value: u32, component_type: u32, register: u32, mask: u8) -> SigElement {
++    SigElement { name: name.into(), index, system_value, component_type, register, mask, rw_mask: mask, stream: 0 }
++}
++
++fn run() -> Result<(), Box<dyn std::error::Error>> {
++    let args: Vec<String> = std::env::args().skip(1).collect();
++    let [code, out, wave, ena, interps, targets, depth, windows, proof_base, mode] = args.as_slice() else {
++        return Err("expected RDNA DXIL wave spi_ps_input_ena input_locations color_mask depth_mode windows-layout generic mode".into());
++    };
++    let mut inputs = vec![sig("SV_Position", 0, 1, 3, 0, 15)];
++    let interps = interps.parse::<u32>()?;
++    for index in 0..interps {
++        inputs.push(sig("TEXCOORD", index, 0, 3, 1 + index, 15));
++    }
++    let input_ena = ena.parse::<u32>()?;
++    if input_ena & (1 << 12) != 0 {
++        inputs.push(sig("SV_IsFrontFace", 0, 9, 1, 1 + interps, 1));
++    }
++    let targets = targets.parse::<u32>()?;
++    let mut outputs: Vec<_> = (0..8).filter(|i| targets & (1 << i) != 0)
++        .map(|i| sig("SV_Target", i, 64, 3, i, 15)).collect();
++    match depth.as_str() {
++        "0" => outputs.push(sig("SV_Depth", 0, 65, 3, u32::MAX, 1)),
++        "1" => outputs.push(sig("SV_DepthLessEqual", 0, 68, 3, u32::MAX, 1)),
++        "2" => outputs.push(sig("SV_DepthGreaterEqual", 0, 67, 3, u32::MAX, 1)),
++        "-1" => {}
++        _ => return Err("invalid conservative depth export type".into()),
++    }
++    let abi = PsInterface { inputs, outputs, input_ena, attrs: None };
++    let (layout, count) = windows.split_once('-').ok_or("windows-layout must be heap-N or root-N")?;
++    let flags = match layout {
++        "heap" => HEAP_WINDOWS,
++        "root" => 0,
++        _ => return Err("unknown memory-window layout".into()),
++    };
++    let mem_windows = count.parse::<u32>()? | flags;
++    let options = KernelOptions { wave64: wave == "64", split: false, mem_windows, sampler_base: 0 };
++    let code = std::fs::read(code)?;
++    if proof_base != "generic" { return Err("upstream observer requires generic".into()) }
++    let shader = match mode.as_str() {
++        "whole" => translate_pixel(&code, options, &abi)?,
++        "inputs" => translate_pixel_mask_inputs(&code, options, &abi, false)?,
++        "window" => translate_pixel_mask_inputs(&code, options, &abi, true)?,
++        "project" => translate_pixel_projected_masks(&code, options, &abi)?,
++        _ => return Err("expected whole, project, inputs or window".into()),
++    };
++    validate::validate(&shader.dxil)?;
++    std::fs::write(out, &shader.dxil)?;
++    std::fs::write(Path::new(out).with_extension("ll"), validate::disassemble(&shader.dxil)?)?;
++    Ok(())
++}
++
++fn main() {
++    if let Err(error) = run() {
++        eprintln!("{error}");
++        std::process::exit(1);
++    }
++}
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 4c45055..3eadeb8 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -117,12 +117,28 @@ pub fn translate_vertex(code: &[u8], o: KernelOptions, vs: &VsInterface) -> Resu
+ 
+ /// A pixel shader (the recompiler's `Mode::Pixel`; wave-size independent).
+ pub fn translate_pixel(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
+-    translate_entry(code, o, Entry::Pixel(ps.clone(), false), None, None, 0)
++    translate_entry(code, o, Entry::Pixel(ps.clone(), PixelMaskMode::Whole), None, None, 0)
+ }
+ 
+ /// Offline pixel comparison that retains the original ballots and projects only observed bits.
+ pub fn translate_pixel_projected_masks(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
+-    translate_entry(code, o, Entry::Pixel(ps.clone(), true), None, None, 0)
++    translate_entry(code, o, Entry::Pixel(ps.clone(), PixelMaskMode::Consumer), None, None, 0)
++}
++
++/// Offline study of the quad comparisons that feed the unchanged pixel ballots.
++pub fn translate_pixel_mask_inputs(
++    code: &[u8], o: KernelOptions, ps: &PsInterface, share_exec_window: bool,
++) -> Result<Kernel, String> {
++    let mode = if share_exec_window { PixelMaskMode::QuadWindow } else { PixelMaskMode::Predicates };
++    translate_entry(code, o, Entry::Pixel(ps.clone(), mode), None, None, 0)
++}
++
++#[derive(Clone, Copy, PartialEq, Eq)]
++pub enum PixelMaskMode {
++    Whole,
++    Consumer,
++    Predicates,
++    QuadWindow,
+ }
+ 
+ /// A geometry-mode (ES+GS) program: the compute pass that writes one mesh record per
+@@ -138,7 +154,7 @@ pub enum Entry {
+     Compute(CsInterface),
+     Mesh(MsInterface),
+     Vertex(VsInterface),
+-    Pixel(PsInterface, bool),
++    Pixel(PsInterface, PixelMaskMode),
+     Geometry(GsInterface),
+ }
+ 
+@@ -535,7 +551,9 @@ impl Lw {
+             has_f64_round_op: false,
+             img_writes: crate::gpu::recomp::emit::image_write_srsrcs(insts),
+             exec_cache: HashMap::new(),
+-            project_pixel_masks: matches!(entry, Entry::Pixel(_, true)),
++            project_pixel_masks: matches!(entry, Entry::Pixel(_, mode) if *mode != PixelMaskMode::Whole),
++            project_quad_inputs: matches!(entry, Entry::Pixel(_, PixelMaskMode::Predicates | PixelMaskMode::QuadWindow)),
++            share_quad_exec: matches!(entry, Entry::Pixel(_, PixelMaskMode::QuadWindow)),
+             last_pixel_ballots: None,
+             xs: None,
+             xw: None,
+diff --git a/crates/xcl/src/gpu/dxil/lanes.rs b/crates/xcl/src/gpu/dxil/lanes.rs
+index 67e57c9..2f83fe8 100644
+--- a/crates/xcl/src/gpu/dxil/lanes.rs
++++ b/crates/xcl/src/gpu/dxil/lanes.rs
+@@ -487,14 +487,30 @@ impl Lw {
+         if self.s.m.const_u64(q) == Some(0) {
+             return (z, z);
+         }
++        self.ballot_ps_bits(|lw, p| {
++            let shifted = lw.lshrc(q, p);
++            let low = lw.andc(shifted, 1);
++            lw.nz(low)
++        })
++    }
++
++    /// The four inputs are the exact i1s that would have been packed into q.
++    pub(super) fn ballot_ps_predicates(&mut self, bits: [Value; 4]) -> (Value, Value) {
++        if bits.iter().all(|&v| self.s.m.const_u64(v) == Some(0)) {
++            let z = self.c(0);
++            return (z, z);
++        }
++        self.ballot_ps_bits(|_, p| bits[p as usize])
++    }
++
++    fn ballot_ps_bits(&mut self, mut predicate: impl FnMut(&mut Self, u32) -> Value) -> (Value, Value) {
++        let z = self.c(0);
+         let need_hi = self.wave64 || self.gfx_half.is_some();
+         let mut m0 = z;
+         let mut m1 = z;
+         let mut votes = [[z; 2]; 4];
+         for p in 0..4u32 {
+-            let qp = self.lshrc(q, p);
+-            let qp = self.andc(qp, 1);
+-            let bit = self.nz(qp);
++            let bit = predicate(self, p);
+             let w = self.s.wave_ballot(bit);
+             votes[p as usize] = [w[0], w[1]];
+             let spread = |lw: &mut Lw, mut v: Value| -> Value {
+@@ -773,7 +789,8 @@ mod ps_ballot_tests {
+         let mut state = 0x7aa8b247u32;
+         for wave64 in [false, true] {
+             let opt = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
+-            let mut lw = super::Lw::new(&[], &Default::default(), opt, &kernel::Entry::Pixel(ps_interface(), true));
++            let entry = kernel::Entry::Pixel(ps_interface(), kernel::PixelMaskMode::Consumer);
++            let mut lw = super::Lw::new(&[], &Default::default(), opt, &entry);
+             for pattern in 0..26 {
+                 let raw: [[u32; 2]; 4] = std::array::from_fn(|p| std::array::from_fn(|halfwave| {
+                     state ^= state << 13;
+@@ -950,6 +967,19 @@ mod ps_ballot_tests {
+             let pp = runner::draw(&vs, &projected.dxil, &layout, &quad, 8, &[], &[], size as u32, [9.0; 4]).unwrap();
+             let lanes = if wave64 { 64.0 } else { 32.0 };
+             assert_eq!(px.len(), pp.len());
++            for window in [false, true] {
++                let candidate = kernel::translate_pixel_mask_inputs(
++                    &helper_lane_masks_ps_code(wave64), opt, &psi, window,
++                ).unwrap();
++                validate::validate(&candidate.dxil).unwrap();
++                let frame = runner::draw(&vs, &candidate.dxil, &layout, &quad, 8, &[], &[], size as u32, [9.0; 4]).unwrap();
++                assert_eq!(frame.len(), px.len());
++                for (i, (got, reference)) in frame.iter().zip(&px).enumerate() {
++                    assert_eq!([got[0], got[1], got[3]], [reference[0], reference[1], reference[3]],
++                        "quad inputs: wave64={wave64} window={window} pixel={i}");
++                    assert!((1.0..=lanes).contains(&got[2]), "invalid waterfall count at {i}");
++                }
++            }
+             for (i, (reference, candidate)) in px.iter().zip(&pp).enumerate() {
+                 // The waterfall iteration count depends on physical wave packing.
+                 assert_eq!([candidate[0], candidate[1], candidate[3]], [reference[0], reference[1], reference[3]],
+diff --git a/crates/xcl/src/gpu/dxil/lower.rs b/crates/xcl/src/gpu/dxil/lower.rs
+index 04692b3..d3b5521 100644
+--- a/crates/xcl/src/gpu/dxil/lower.rs
++++ b/crates/xcl/src/gpu/dxil/lower.rs
+@@ -223,6 +223,8 @@ pub struct Lw {
+     /// Opt-in pixel translation keeps the four unmodified ballot results behind the most
+     /// recent full mask. An exact same-block SSA pair can project its own bit from them.
+     pub project_pixel_masks: bool,
++    pub project_quad_inputs: bool,
++    pub share_quad_exec: bool,
+     pub last_pixel_ballots: Option<(Block, Value, Value, [[Value; 2]; 4])>,
+     /// groupshared exchange words of the split form
+     /// split form: the halves' exchange words (storage, first index) and the lane counter
+diff --git a/crates/xcl/src/gpu/dxil/lower_valu.rs b/crates/xcl/src/gpu/dxil/lower_valu.rs
+index 08e15a5..efaacec 100644
+--- a/crates/xcl/src/gpu/dxil/lower_valu.rs
++++ b/crates/xcl/src/gpu/dxil/lower_valu.rs
+@@ -1255,7 +1255,21 @@ impl Lw {
+             };
+             let (el, eh) = self.exec_mask();
+             let qbase = self.andc(self.lane, !3);
++            // All four members of an aligned quad select the same guest EXEC word.
++            let quad_exec = if self.share_quad_exec {
++                let word = if self.wave64 {
++                    let upper = self.cmpc(Pred::UGe, qbase, 32);
++                    self.sel(upper, eh, el)
++                } else {
++                    el
++                };
++                let shift = self.andc(qbase, 31);
++                Some(self.lshr(word, shift))
++            } else {
++                None
++            };
+             let mut q = self.c(0);
++            let mut predicates = [q; 4];
+             for p in 0..4u32 {
+                 let kp = self.c(p);
+                 let qa = if a_vgpr { self.s.quad_read_lane_at(ua, kp) } else { ua };
+@@ -1269,14 +1283,27 @@ impl Lw {
+                     ub
+                 };
+                 let cp = self.vopc_cond(d, opn, ty, qa, qb, m)?;
+-                let lp = self.or(qbase, kp);
+-                let ap = self.lanebit_at(el, eh, lp);
+-                let bp = self.land(ap, cp);
+-                let up = self.u(bp);
+-                let sh = self.shlc(up, p);
+-                q = self.or(q, sh);
+-            }
+-            let (lo, hi) = self.ballot_ps_quad(q);
++                let active = if let Some(window) = quad_exec {
++                    let bit = self.andc(window, 1 << p);
++                    self.nz(bit)
++                } else {
++                    let lp = self.or(qbase, kp);
++                    self.lanebit_at(el, eh, lp)
++                };
++                let bp = self.land(active, cp);
++                if self.project_quad_inputs {
++                    predicates[p as usize] = bp;
++                } else {
++                    let up = self.u(bp);
++                    let sh = self.shlc(up, p);
++                    q = self.or(q, sh);
++                }
++            }
++            let (lo, hi) = if self.project_quad_inputs {
++                self.ballot_ps_predicates(predicates)
++            } else {
++                self.ballot_ps_quad(q)
++            };
+             if self.wave64 {
+                 self.write64(&dst, lo, hi);
+             } else {

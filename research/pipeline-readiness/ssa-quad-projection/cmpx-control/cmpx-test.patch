@@ -1,0 +1,108 @@
+From a764afcfd076a052ad8937e37f168c4863b301e6 Mon Sep 17 00:00:00 2001
+From: akimfomin <akim.fomin@mail.ru>
+Date: Thu, 26 Nov 2026 04:09:03 +0300
+Subject: [PATCH] Check whole pixel EXEC after partial 32- and 64-lane CMPX
+ with a host oracle
+
+---
+ crates/xcl/src/gpu/dxil/lanes.rs | 87 ++++++++++++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
+
+diff --git a/crates/xcl/src/gpu/dxil/lanes.rs b/crates/xcl/src/gpu/dxil/lanes.rs
+index 2f83fe8..712e9f3 100644
+--- a/crates/xcl/src/gpu/dxil/lanes.rs
++++ b/crates/xcl/src/gpu/dxil/lanes.rs
+@@ -938,6 +938,93 @@ mod ps_ballot_tests {
+         assert!(dis.contains("dx.op.quadOp.i32"), "non-VOPC PS carry ballot must preserve helper lanes via quadOp:\n{dis}");
+     }
+ 
++    #[test]
++    fn gpu_pixel_cmpx_preserves_partial_exec_words() {
++        use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R32G32_FLOAT;
++
++        if runner::adapter().is_err() || dxc::location().is_err() {
++            runner::skip_test("no GPU or DXC");
++            return;
++        }
++        let vs = dxc::compile(
++            "float4 main(float2 p : POSITION) : SV_Position { return float4(p, 0.5, 1); }",
++            "main", "vs_6_6", &[],
++        ).unwrap();
++        let triangle = [-1.0f32, -1.0, -1.0, 3.0, 3.0, -1.0];
++        let layout = [runner::VertexElement {
++            semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0,
++        }];
++        let patterns = [0xa5a5_c385u32, 0x5a5a_3c49];
++        for wave64 in [false, true] {
++            let opt = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
++            let width = if wave64 { "S_MOV_B64" } else { "S_MOV_B32" };
++            for word in 0..if wave64 { 2 } else { 1 } {
++                let mut code = Vec::new();
++                let mut emit = |name, encoding, fields: &[(&str, u64)], literal| {
++                    code.extend(encode(name, encoding, fields, literal).unwrap());
++                };
++                // Preserve the physical entry coverage. MBCNT(-1) gives the guest
++                // lane number before a partial EXEC can suppress any VGPR writes.
++                emit(width, "ENC_SOP1", &[("SDST", 20), ("SSRC0", 126)], None);
++                emit("V_MBCNT_LO_U32_B32", "ENC_VOP3", &[("VDST", 4), ("SRC0", 193), ("SRC1", 128)], None);
++                if wave64 {
++                    emit("V_MBCNT_HI_U32_B32", "ENC_VOP3", &[("VDST", 4), ("SRC0", 193), ("SRC1", V + 4)], None);
++                }
++                emit("V_AND_B32", "ENC_VOP2", &[("VDST", 4), ("SRC0", 131), ("VSRC1", 4)], None);
++                for i in 0..if wave64 { 2 } else { 1 } {
++                    emit("S_AND_B32", "ENC_SOP2",
++                         &[("SDST", 126 + i), ("SSRC0", 20 + i), ("SSRC1", 255)], Some(patterns[i as usize]));
++                }
++                // Keep members 0, 1 and 3 of each quad. Lanes 31 and 32 survive
++                // on opposite sides of the word boundary when both are present.
++                emit("V_CMPX_NE_U32", "ENC_VOPC", &[("SRC0", 130), ("VSRC1", 4)], None);
++                emit(width, "ENC_SOP1", &[("SDST", 22), ("SSRC0", 126)], None);
++                emit(width, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 20)], None);
++                // Return all bits of entry and post-CMPX words as exact f32
++                // integers. This also preserves NaN payloads and sign bits of
++                // an arbitrary word without passing them through a float export.
++                for (register, channel) in [(20 + word as u64, 0), (22 + word as u64, 2)] {
++                    emit("S_AND_B32", "ENC_SOP2", &[("SDST", 26), ("SSRC0", register), ("SSRC1", 255)], Some(0xffff));
++                    emit("S_LSHR_B32", "ENC_SOP2", &[("SDST", 27), ("SSRC0", register), ("SSRC1", 144)], None);
++                    emit("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 8 + channel), ("SRC0", 26)], None);
++                    emit("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 9 + channel), ("SRC0", 27)], None);
++                }
++                emit("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 15), ("VSRC0", 8), ("VSRC1", 9),
++                     ("VSRC2", 10), ("VSRC3", 11), ("DONE", 1), ("VM", 1)], None);
++                emit("S_ENDPGM", "ENC_SOPP", &[], None);
++                let psi = ps_interface();
++                let arms = [
++                    kernel::translate_pixel_projected_masks(&code, opt, &psi),
++                    kernel::translate_pixel_mask_inputs(&code, opt, &psi, false),
++                    kernel::translate_pixel_mask_inputs(&code, opt, &psi, true),
++                ];
++                for (arm, compiled) in arms.into_iter().enumerate() {
++                    let dxil = compiled.unwrap().dxil;
++                    validate::validate(&dxil).unwrap();
++                    let frame = runner::draw(&vs, &dxil, &layout, &triangle, 8, &[], &[], 32, [-1.0; 4]).unwrap();
++                    assert_eq!(frame.len(), 1024);
++                    let mut covered = 0u32;
++                    for (pixel, f) in frame.iter().enumerate() {
++                        assert!(f.iter().all(|v| (0.0..=65535.0).contains(v) && v.fract() == 0.0));
++                        let entry = f[0] as u32 | ((f[1] as u32) << 16);
++                        let actual = f[2] as u32 | ((f[3] as u32) << 16);
++                        // Host oracle depends only on entry coverage, the fixed
++                        // mask and lane position, independent of the translator.
++                        let expected = entry & patterns[word] & 0xbbbb_bbbb;
++                        assert_eq!(actual, expected, "wave64={wave64} word={word} arm={arm} pixel={pixel}");
++                        covered |= entry;
++                    }
++                    if word == 0 || covered != 0 || !runner::wave32_supported().unwrap() {
++                        let boundary = if word == 0 { 1u32 << 31 } else { 1 };
++                        assert_ne!(covered & boundary, 0, "boundary lane was never exercised");
++                        assert_ne!(covered & patterns[word] & 0x4444_4444, 0, "CMPX never cleared an enabled lane");
++                    }
++                    println!("CMPX wave64={wave64} word={word} arm={arm} observed_entry={covered:08x} pixels=1024");
++                }
++            }
++        }
++    }
++
+     #[test]
+     fn gpu_direct_ps_masks_hold_helper_lanes_on_triangle_edges() {
+         match (runner::adapter(), runner::wave64_programs_supported(), dxc::location()) {
