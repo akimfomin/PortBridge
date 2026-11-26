@@ -1,0 +1,57 @@
+{
+  "xcl_commit": "dfb580beccbc1fe4353544a5068245d502de9bfa",
+  "tree": "76ccfec1b44b3fe54cb81fca2d84df07b20a5506",
+  "parent": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7",
+  "pr_2322_pinned": "b3f7ab5574c4489761141e2de0ce31d2eb216412",
+  "scope": "split test module, Windows 11 / NVIDIA 617.14",
+  "runs": {
+    "candidate": {
+      "environment": {
+        "XCL_SAMPLE_SLOT_REUSE": null
+      },
+      "passed_tests": [
+        "gpu::dxil::module::split::tests::dispatch_chain_declares_typed_uav_loads_only_where_they_are",
+        "gpu::dxil::module::split::tests::dispatch_chain_divergent_forward_edges_3d",
+        "gpu::dxil::module::split::tests::dispatch_chain_oversized_loop_matches_whole",
+        "gpu::dxil::module::split::tests::dispatch_chain_payload_skips_middle_piece",
+        "gpu::dxil::module::split::tests::dispatch_chain_payload_survives_reused_edge_slot",
+        "gpu::dxil::module::split::tests::dispatch_chain_wave32_live_loops",
+        "gpu::dxil::module::split::tests::dispatch_chain_wave32_reuses_scratch_before_gpu_run",
+        "gpu::dxil::module::split::tests::dispatch_chain_wave64_live_loops_and_exchange",
+        "gpu::dxil::module::split::tests::oversized_loop_occupies_one_piece_up_to_the_hard_ceiling",
+        "gpu::dxil::module::split::tests::payload_slots_reopen_only_after_the_last_consumer",
+        "gpu::dxil::module::split::tests::scratch_layout_keeps_the_offline_first_fit_comparison"
+      ],
+      "gpu_output": [
+        "CHAIN_GPU=NVIDIA GeForce RTX 4070 Ti SUPER",
+        "CHAIN_BRANCH threads=32 pieces=3 scratch_words_per_group=288 checked_words=384 guards=16",
+        "CHAIN_BRANCH threads=64 pieces=3 scratch_words_per_group=576 checked_words=768 guards=16"
+      ],
+      "rust_summary": "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 1328 filtered out; finished in 0.69s"
+    },
+    "offline-comparator": {
+      "environment": {
+        "XCL_SAMPLE_SLOT_REUSE": "1"
+      },
+      "passed_tests": [
+        "gpu::dxil::module::split::tests::dispatch_chain_declares_typed_uav_loads_only_where_they_are",
+        "gpu::dxil::module::split::tests::dispatch_chain_divergent_forward_edges_3d",
+        "gpu::dxil::module::split::tests::dispatch_chain_oversized_loop_matches_whole",
+        "gpu::dxil::module::split::tests::dispatch_chain_payload_skips_middle_piece",
+        "gpu::dxil::module::split::tests::dispatch_chain_payload_survives_reused_edge_slot",
+        "gpu::dxil::module::split::tests::dispatch_chain_wave32_live_loops",
+        "gpu::dxil::module::split::tests::dispatch_chain_wave32_reuses_scratch_before_gpu_run",
+        "gpu::dxil::module::split::tests::dispatch_chain_wave64_live_loops_and_exchange",
+        "gpu::dxil::module::split::tests::oversized_loop_occupies_one_piece_up_to_the_hard_ceiling",
+        "gpu::dxil::module::split::tests::payload_slots_reopen_only_after_the_last_consumer",
+        "gpu::dxil::module::split::tests::scratch_layout_keeps_the_offline_first_fit_comparison"
+      ],
+      "gpu_output": [
+        "CHAIN_GPU=NVIDIA GeForce RTX 4070 Ti SUPER",
+        "CHAIN_BRANCH threads=32 pieces=3 scratch_words_per_group=288 checked_words=384 guards=16",
+        "CHAIN_BRANCH threads=64 pieces=3 scratch_words_per_group=576 checked_words=768 guards=16"
+      ],
+      "rust_summary": "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 1328 filtered out; finished in 0.41s"
+    }
+  }
+}

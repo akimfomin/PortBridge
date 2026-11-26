@@ -1,0 +1,389 @@
+From 0944a17fda62bd201dd1dd76892ee4a03dca20a7 Mon Sep 17 00:00:00 2001
+From: akimfomin <akim.fomin@mail.ru>
+Date: Thu, 26 Nov 2026 04:28:28 +0300
+Subject: [PATCH] DXIL: prune unobserved pixel collectives behind a live wave
+ ballot
+
+---
+ crates/xcl/examples/morning_prune.rs  |  70 ++++++++++++
+ crates/xcl/src/gpu/dxil/graphics.rs   |  11 +-
+ crates/xcl/src/gpu/dxil/kernel.rs     |  32 +++++-
+ crates/xcl/src/gpu/dxil/module/opt.rs | 155 ++++++++++++++++++++++++++
+ 4 files changed, 261 insertions(+), 7 deletions(-)
+ create mode 100644 crates/xcl/examples/morning_prune.rs
+
+diff --git a/crates/xcl/examples/morning_prune.rs b/crates/xcl/examples/morning_prune.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..c13f91cecf535b297e7f739b5885d6d3704208e5
+--- /dev/null
++++ b/crates/xcl/examples/morning_prune.rs
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//! Compile-only DXIL shape observation for public AMD PAL pixel instruction streams.
++//! The synthetic XCL interface deliberately does not emulate Vulkan resource bindings.
++use std::path::Path;
++use xcl::gpu::dxbc::SigElement;
++use xcl::gpu::dxil::{kernel::{
++    translate_pixel, translate_pixel_projected_masks, translate_pixel_pruned_ballots, KernelOptions,
++}, validate};
++use xcl::gpu::recomp::{PsInterface, HEAP_WINDOWS};
++
++fn sig(name: &str, index: u32, system_value: u32, component_type: u32, register: u32, mask: u8) -> SigElement {
++    SigElement { name: name.into(), index, system_value, component_type, register, mask, rw_mask: mask, stream: 0 }
++}
++
++fn run() -> Result<(), Box<dyn std::error::Error>> {
++    let args: Vec<String> = std::env::args().skip(1).collect();
++    let [code, out, wave, ena, interps, targets, depth, windows, proof_base, mode] = args.as_slice() else {
++        return Err("expected RDNA DXIL wave spi_ps_input_ena input_locations color_mask depth_mode windows-layout generic mode".into());
++    };
++    let mut inputs = vec![sig("SV_Position", 0, 1, 3, 0, 15)];
++    let interps = interps.parse::<u32>()?;
++    for index in 0..interps {
++        inputs.push(sig("TEXCOORD", index, 0, 3, 1 + index, 15));
++    }
++    let input_ena = ena.parse::<u32>()?;
++    if input_ena & (1 << 12) != 0 {
++        inputs.push(sig("SV_IsFrontFace", 0, 9, 1, 1 + interps, 1));
++    }
++    let targets = targets.parse::<u32>()?;
++    let mut outputs: Vec<_> = (0..8).filter(|i| targets & (1 << i) != 0)
++        .map(|i| sig("SV_Target", i, 64, 3, i, 15)).collect();
++    match depth.as_str() {
++        "0" => outputs.push(sig("SV_Depth", 0, 65, 3, u32::MAX, 1)),
++        "1" => outputs.push(sig("SV_DepthLessEqual", 0, 68, 3, u32::MAX, 1)),
++        "2" => outputs.push(sig("SV_DepthGreaterEqual", 0, 67, 3, u32::MAX, 1)),
++        "-1" => {}
++        _ => return Err("invalid conservative depth export type".into()),
++    }
++    let abi = PsInterface { inputs, outputs, input_ena, attrs: None };
++    let (layout, count) = windows.split_once('-').ok_or("windows-layout must be heap-N or root-N")?;
++    let flags = match layout {
++        "heap" => HEAP_WINDOWS,
++        "root" => 0,
++        _ => return Err("unknown memory-window layout".into()),
++    };
++    let mem_windows = count.parse::<u32>()? | flags;
++    let options = KernelOptions { wave64: wave == "64", split: false, mem_windows, sampler_base: 0 };
++    let code = std::fs::read(code)?;
++    if proof_base != "generic" { return Err("upstream observer requires generic".into()) }
++    let shader = match mode.as_str() {
++        "whole" => translate_pixel(&code, options, &abi)?,
++        "ballot" => translate_pixel_pruned_ballots(&code, options, &abi, false, false)?,
++        "project-ballot" => translate_pixel_pruned_ballots(&code, options, &abi, true, false)?,
++        "ballot-quad" => translate_pixel_pruned_ballots(&code, options, &abi, false, true)?,
++        "project-ballot-quad" => translate_pixel_pruned_ballots(&code, options, &abi, true, true)?,
++        "project" => translate_pixel_projected_masks(&code, options, &abi)?,
++        _ => return Err("expected whole/project, ballot or ballot-quad, optionally prefixed with project-".into()),
++    };
++    validate::validate(&shader.dxil)?;
++    std::fs::write(out, &shader.dxil)?;
++    std::fs::write(Path::new(out).with_extension("ll"), validate::disassemble(&shader.dxil)?)?;
++    Ok(())
++}
++
++fn main() {
++    if let Err(error) = run() {
++        eprintln!("{error}");
++        std::process::exit(1);
++    }
++}
+diff --git a/crates/xcl/src/gpu/dxil/graphics.rs b/crates/xcl/src/gpu/dxil/graphics.rs
+index 239a923ea9e0442661acef250a2688d3eb8f63b3..79f1fc5bfbfa7d2652e93e2a320a9b761f48c201 100644
+--- a/crates/xcl/src/gpu/dxil/graphics.rs
++++ b/crates/xcl/src/gpu/dxil/graphics.rs
+@@ -977,7 +977,11 @@ impl Shader {
+     }
+ 
+     /// [`Shader::finish_graphics`], or the first builder error.
+-    pub fn try_finish_graphics(mut self, io: GraphicsIo, info: StageInfo) -> Result<Vec<u8>, String> {
++    pub fn try_finish_graphics(self, io: GraphicsIo, info: StageInfo) -> Result<Vec<u8>, String> {
++        self.try_finish_graphics_with_sweep(io, info, None)
++    }
++
++    pub(super) fn try_finish_graphics_with_sweep(mut self, io: GraphicsIo, info: StageInfo, sweep: Option<bool>) -> Result<Vec<u8>, String> {
+         if self.stage != io.stage {
+             return Err(format!("{:?} shader with {:?} I/O", self.stage, io.stage));
+         }
+@@ -989,6 +993,11 @@ impl Shader {
+             self.m.ret();
+         }
+         self.m.optimize();
++        if self.stage == Stage::Pixel {
++            if let Some(include_quad_reads) = sweep {
++                self.m.prune_pixel_collectives(include_quad_reads);
++            }
++        }
+         self.infer_type_features();
+         let ins = io.place(Dir::In);
+         let outs = io.place(Dir::Out);
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 4c450557382ae158d650f5a0602525c8a12867d0..f408f88b18ecd5affedc442026585ccf874843da 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -125,6 +125,13 @@ pub fn translate_pixel_projected_masks(code: &[u8], o: KernelOptions, ps: &PsInt
+     translate_entry(code, o, Entry::Pixel(ps.clone(), true), None, None, 0)
+ }
+ 
++/// Offline A/B experiment. The ordinary runtime and its cache never enable this sweep.
++pub fn translate_pixel_pruned_ballots(
++    code: &[u8], o: KernelOptions, ps: &PsInterface, project_masks: bool, include_quad_reads: bool,
++) -> Result<Kernel, String> {
++    translate_entry_sweep(code, o, Entry::Pixel(ps.clone(), project_masks), None, None, 0, Some(include_quad_reads))
++}
++
+ /// A geometry-mode (ES+GS) program: the compute pass that writes one mesh record per
+ /// group of 21 triangles into `res` (the recompiler's `Mode::Geometry`). Always wave64.
+ pub fn translate_geometry(code: &[u8], o: KernelOptions, g: &GsInterface) -> Result<Kernel, String> {
+@@ -160,6 +167,18 @@ fn translate_entry(
+     compact: Option<bool>,
+     nest: Option<super::compact::Nest>,
+     tables: usize,
++) -> Result<Kernel, String> {
++    translate_entry_sweep(code, o, entry, compact, nest, tables, None)
++}
++
++fn translate_entry_sweep(
++    code: &[u8],
++    o: KernelOptions,
++    entry: Entry,
++    compact: Option<bool>,
++    nest: Option<super::compact::Nest>,
++    tables: usize,
++    sweep: Option<bool>,
+ ) -> Result<Kernel, String> {
+     // SSA construction recurses along the CFG (one level per guarded memory access between
+     // a register's definition and its use): a thread with a large stack for big programs
+@@ -167,7 +186,7 @@ fn translate_entry(
+     std::thread::Builder::new()
+         .name("xcl-dxil-translate".into())
+         .stack_size(256 << 20)
+-        .spawn(move || translate_on_this_thread(&code, o, entry, compact, nest, tables))
++        .spawn(move || translate_on_this_thread(&code, o, entry, compact, nest, tables, sweep))
+         .map_err(|e| format!("translator thread: {e}"))?
+         .join()
+         .map_err(|e| {
+@@ -198,6 +217,7 @@ fn translate_on_this_thread(
+     compact: Option<bool>,
+     nest: Option<super::compact::Nest>,
+     tables: usize,
++    sweep: Option<bool>,
+ ) -> Result<Kernel, String> {
+     let geo = match &entry {
+         Entry::Geometry(g) => Some(g.clone()),
+@@ -445,7 +465,7 @@ fn translate_on_this_thread(
+     lw.s.m.br(h0);
+     let hw = if split || !o.wave64 { 32 } else { 64 };
+     let limit = if compute && (!split || split_tid.is_some()) { dispatch_piece_limit() } else { 0 };
+-    lw.finish_dispatch(numthreads, hw, limit, split_tid)
++    lw.finish_dispatch(numthreads, hw, limit, split_tid, sweep)
+ }
+ 
+ /// True when a pixel shader uses RDNA2 Primitive Ordered Pixel Shading (POPS):
+@@ -616,10 +636,10 @@ impl Lw {
+     /// is closed: `numthreads` and the hardware wave size `hw` for a compute-like entry, the
+     /// stage's I/O for a VS / PS.
+     pub fn finish(self, numthreads: [u32; 3], hw: u32) -> Result<Kernel, String> {
+-        self.finish_dispatch(numthreads, hw, 0, None)
++        self.finish_dispatch(numthreads, hw, 0, None, None)
+     }
+ 
+-    fn finish_dispatch(mut self, numthreads: [u32; 3], hw: u32, limit: usize, split_tid: Option<Value>) -> Result<Kernel, String> {
++    fn finish_dispatch(mut self, numthreads: [u32; 3], hw: u32, limit: usize, split_tid: Option<Value>, sweep: Option<bool>) -> Result<Kernel, String> {
+         if let Some(e) = self.exchange_error.take() {
+             return Err(e);
+         }
+@@ -628,7 +648,7 @@ impl Lw {
+         let c = if matches!(stage, Stage::Vertex | Stage::Pixel) {
+             let g = self.gfx.take().ok_or("graphics entry without graphics I/O")?;
+             let info = if stage == Stage::Pixel { super::graphics::StageInfo::Pixel { early_depth_stencil: false } } else { super::graphics::StageInfo::Vertex };
+-            self.s.try_finish_graphics(g.io, info)
++            self.s.try_finish_graphics_with_sweep(g.io, info, sweep)
+         } else if limit > 0 && (numthreads == [32, 1, 1] || split_tid.is_some()) && hw == 32 {
+             self.s.m.optimize();
+             dispatch_chain = self.s.split_compute(numthreads, split_tid, limit).map(std::sync::Arc::new);
+@@ -677,7 +697,7 @@ fn dispatch_chain_native_wave64_builds_whole() {
+     lw.s.m.optimize();
+     // Exercise the native-wave admission gate with an otherwise partitionable CFG.
+     assert!(lw.s.m.dispatch_plan(64).is_some());
+-    let program = lw.finish_dispatch(threads, 64, 64, None).unwrap();
++    let program = lw.finish_dispatch(threads, 64, 64, None, None).unwrap();
+     assert!(program.dispatch_chain.is_none());
+     super::validate::validate(&program.dxil).expect("valid native wave64 whole shader");
+ 
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index b7d1ef7c19d8784b4b2bceb8cc28871ed32b3e6f..050d1bc9322cb05fb48028dec8d699615995649a 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -440,6 +440,103 @@ impl Module {
+         }
+     }
+ 
++    /// Remove unobserved pixel ballot results only when a used ballot witnesses WaveOps.
++    /// Preserve the CFG and the order of all remaining instructions. A call can converge
++    /// differently when moved or merged; this sweep only erases an unobserved result.
++    pub(in crate::gpu::dxil) fn prune_pixel_collectives(&mut self, include_quad_reads: bool) -> bool {
++        use super::{MdDef, TypeDef};
++
++        let order: Vec<u32> = self.block_layout().0.into_iter().map(|b| b as u32).collect();
++        if !self.uses_well_formed(&order) {
++            return false;
++        }
++        let mut ballots = vec![false; self.insts.len()];
++        let mut quads = vec![false; self.insts.len()];
++        for &b in &order {
++            for &i in &self.blocks[b as usize] {
++                let Op::Call(f, args) = &self.insts[i as usize].op else { continue };
++                let decl = &self.funcs[*f as usize];
++                if decl.attrs != FnAttrs::NoUnwind {
++                    continue;
++                }
++                let opcode = args.first().and_then(|&v| self.const_u64(v));
++                let integer = |ty: Ty, width| matches!(self.types[ty.0 as usize], TypeDef::Int(w) if w == width);
++                let ret = self.insts[i as usize].ty;
++                match (decl.name.as_str(), opcode, args.as_slice()) {
++                    ("dx.op.waveActiveBallot", Some(116), [op, cond])
++                        if integer(self.value_ty(*op), 32) && integer(self.value_ty(*cond), 1)
++                            && matches!(&self.types[ret.0 as usize], TypeDef::Struct(Some(n), fields)
++                                if n == "dx.types.fouri32" && fields.len() == 4 && fields.iter().all(|&t| integer(t, 32))) =>
++                    {
++                        ballots[i as usize] = true;
++                    }
++                    (name, Some(code), [op, value, lane])
++                        if include_quad_reads && integer(ret, 32) && integer(self.value_ty(*op), 32)
++                            && integer(self.value_ty(*value), 32) &&
++                            ((name == "dx.op.quadReadLaneAt.i32" && code == 122 && integer(self.value_ty(*lane), 32))
++                                || (name == "dx.op.quadOp.i32" && code == 123 && integer(self.value_ty(*lane), 8)
++                                    && matches!(self.const_u64(*lane), Some(0..=2)))) =>
++                    {
++                        quads[i as usize] = true;
++                    }
++                    _ => {}
++                }
++            }
++        }
++        if !ballots.contains(&true) {
++            return false;
++        }
++        let narrow_int = |ty: Ty| matches!(self.types[ty.0 as usize], TypeDef::Int(1 | 32));
++        let mut live = vec![false; self.insts.len()];
++        let mut stack = Vec::new();
++        for &b in &order {
++            for &i in &self.blocks[b as usize] {
++                let inst = &self.insts[i as usize];
++                if ballots[i as usize] || quads[i as usize] {
++                    continue;
++                }
++                // No other calls, loads, casts from wide values, FP ops or derivatives
++                // are candidates. Integer feeders may become dead after ballot removal.
++                let pure = match &inst.op {
++                    Op::Extract(Value::Inst(src), idx) => *idx < 4 && ballots[*src as usize],
++                    Op::Bin(..) | Op::Cmp(..) | Op::Cast(..) | Op::Select(..) | Op::Phi(_) => {
++                        let mut narrow = narrow_int(inst.ty);
++                        inst.op.for_each_operand(|v| narrow &= narrow_int(self.value_ty(v)));
++                        narrow
++                    }
++                    _ => false,
++                };
++                if !pure {
++                    stack.push(i);
++                }
++            }
++        }
++        for md in &self.md {
++            if let MdDef::Val(_, Value::Inst(i)) = md {
++                stack.push(*i);
++            }
++        }
++        while let Some(i) = stack.pop() {
++            if std::mem::replace(&mut live[i as usize], true) {
++                continue;
++            }
++            self.insts[i as usize].op.for_each_operand(|v| {
++                if let Value::Inst(id) = v {
++                    stack.push(id);
++                }
++            });
++        }
++        if !ballots.iter().zip(&live).any(|(&ballot, &used)| ballot && used)
++            || !(0..live.len()).any(|i| !live[i] && (ballots[i] || quads[i]))
++        {
++            return false;
++        }
++        for b in order {
++            self.blocks[b as usize].retain(|&i| live[i as usize]);
++        }
++        true
++    }
++
+     /// Whether every non-phi operand of the reachable instructions is written before its
+     /// use and has a value (what the writer checks).
+     fn uses_well_formed(&self, order: &[u32]) -> bool {
+@@ -1129,6 +1226,64 @@ mod tests {
+             .count()
+     }
+ 
++    #[test]
++    fn pixel_sweep_preserves_an_observed_ballot_and_every_other_call_in_order() {
++        use crate::gpu::dxil::shader::Shader;
++        use crate::gpu::dxil::container::Stage;
++        let mut sh = Shader::new(Stage::Pixel, (6, 6));
++        let i32t = sh.m.i32();
++        let i1 = sh.m.i1c(true);
++        let x = sh.wave_ballot(i1)[0];
++        let opcode = sh.m.i32c(77);
++        let sink_ty = sh.m.func_ty(i32t, &[i32t, i32t]);
++        let sink = sh.m.declare("test.external.observer", sink_ty, FnAttrs::NoUnwind);
++        sh.m.call(sink, &[opcode, x]);
++        let lane = sh.m.i32c(2);
++        let _ = sh.quad_read_lane_at(x, lane);
++        let float = sh.m.f32c(0);
++        let derivative = sh.deriv(crate::gpu::dxil::ops::Deriv::FineX, float);
++        sh.barrier(8);
++        let unused = sh.wave_ballot(i1)[0];
++        let _ = sh.m.bin(BinOp::And, unused, x);
++        sh.m.ret();
++        let before = sh.m.blocks.clone();
++        assert!(sh.m.prune_pixel_collectives(false));
++        let ballot_only = sh.m.blocks.clone();
++        assert!(sh.m.prune_pixel_collectives(true));
++        let after = &sh.m.blocks;
++        assert_eq!(before.len(), after.len());
++        assert!(after[0].len() < ballot_only[0].len());
++        assert!(after[0].windows(2).all(|w| w[0] < w[1]));
++        assert_eq!(count_calls(&sh.m, sink), 1);
++        let Value::Inst(derivative) = derivative else { panic!("expected a derivative call") };
++        assert!(after[0].contains(&derivative));
++        let taken: Vec<_> = after[0].iter().filter_map(|&i| {
++            if let Op::Call(f, _) = &sh.m.insts[i as usize].op {
++                Some(sh.m.funcs[*f as usize].name.as_str())
++            } else { None }
++        }).collect();
++        assert_eq!(taken, ["dx.op.waveActiveBallot", "test.external.observer", "dx.op.unary.f32", "dx.op.barrier"]);
++        assert!(!sh.m.prune_pixel_collectives(true));
++    }
++
++    #[test]
++    fn pixel_sweep_falls_back_when_only_dead_ballots_or_unreachable_anchors_exist() {
++        use crate::gpu::dxil::shader::Shader;
++        use crate::gpu::dxil::container::Stage;
++        let mut sh = Shader::new(Stage::Pixel, (6, 6));
++        let i1 = sh.m.i1c(true);
++        let _ = sh.wave_ballot(i1);
++        sh.m.ret();
++        let b = sh.m.new_block();
++        sh.m.set_block(b);
++        let word = sh.wave_ballot(i1)[0];
++        let _ = sh.m.md_value(word);
++        sh.m.ret();
++        let before = sh.m.blocks.clone();
++        assert!(!sh.m.prune_pixel_collectives(true));
++        assert_eq!(sh.m.blocks, before);
++    }
++
+     #[test]
+     fn block_cse_invalidates_wave_and_quad_calls_across_discard() {
+         let build = |op_name: &str, with_discard: bool| -> (Module, u32) {
+-- 
+2.56.0.windows.4
+

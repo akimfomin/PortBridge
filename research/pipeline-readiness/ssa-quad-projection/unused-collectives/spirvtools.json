@@ -1,0 +1,178 @@
+{
+  "optimizer": "SPIRV-Tools v2026.4 unknown hash, 2026-10-02T00:06:47+00:00",
+  "optimizer_sha256": "460ad0789c72549e2c4d0b88fcce92f18d8abde58faac89d7737fe16703dd665",
+  "libraries": {
+    "libSPIRV-Tools-opt.dll": "8f0574441166de142f124e79c0a901e2eab9c688000ef2b08703fda41aaad336",
+    "libSPIRV-Tools.dll": "1f7de3a18d76fa6ffa27ce54cf6f532d44a819075bc162f5814c0e5dc427e224"
+  },
+  "runs": [
+    {
+      "shader": "nerf71",
+      "mode": "project",
+      "passes": [
+        "--eliminate-dead-code-aggressive",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "ee8b222654003f23450365d2f6d8191e09b865c15f24a26d9b1fed1e679b5be1",
+      "bytes": 931280,
+      "sha256": "0c9fecf90e55012a5c0021741d007f9c7bbea4826bd727716da6ff79daddb628",
+      "ballots": 1739,
+      "quads": 1298
+    },
+    {
+      "shader": "nerf71",
+      "mode": "project",
+      "passes": [
+        "-O",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "ee8b222654003f23450365d2f6d8191e09b865c15f24a26d9b1fed1e679b5be1",
+      "bytes": 919644,
+      "sha256": "9cf32d4a84051ce9b43634daa62f19e14b1b7b699d87f275361c067c80f3fff2",
+      "ballots": 1739,
+      "quads": 1298
+    },
+    {
+      "shader": "nerf71",
+      "mode": "project-ballot-quad",
+      "passes": [
+        "--eliminate-dead-code-aggressive",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "1840c78e34583895860ddaf3029c28432106c29ff1265e4e6f3d3644709343d6",
+      "bytes": 832172,
+      "sha256": "98e82968367f280b6947e2ffe65f1257fb3bfafe8cedb53d3e6f8ae3dea2631b",
+      "ballots": 1205,
+      "quads": 899
+    },
+    {
+      "shader": "nerf71",
+      "mode": "project-ballot-quad",
+      "passes": [
+        "-O",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "1840c78e34583895860ddaf3029c28432106c29ff1265e4e6f3d3644709343d6",
+      "bytes": 820576,
+      "sha256": "96ddb988bbd15832de9b494f8fc257775935ca25a6fe2d06ee2ab15ad2dfdf09",
+      "ballots": 1205,
+      "quads": 899
+    },
+    {
+      "shader": "nerf73",
+      "mode": "project",
+      "passes": [
+        "--eliminate-dead-code-aggressive",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "9c31c98fbfee86cdd7b5d58dbb6ad179c08e030a57c684736da0221ebcb56948",
+      "bytes": 932776,
+      "sha256": "18558ce70277e55936e3b98f12dc2458cd77eee93b83b1297a327ffabf2a0e06",
+      "ballots": 1739,
+      "quads": 1302
+    },
+    {
+      "shader": "nerf73",
+      "mode": "project",
+      "passes": [
+        "-O",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "9c31c98fbfee86cdd7b5d58dbb6ad179c08e030a57c684736da0221ebcb56948",
+      "bytes": 921108,
+      "sha256": "e9438941ad58ca4d3950090f441547860b3a3d756b2d5ef9df05c8f86f4a992f",
+      "ballots": 1739,
+      "quads": 1302
+    },
+    {
+      "shader": "nerf73",
+      "mode": "project-ballot-quad",
+      "passes": [
+        "--eliminate-dead-code-aggressive",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "3f387492370480d44e6974f27a4c9b7ffd3ab6ff2ab6d9bcdcaa0f195de6ed9a",
+      "bytes": 833668,
+      "sha256": "ee8c733a1da5530cbc107a7e859702f4f836d27b3e3789db8e7092a6d9ac2441",
+      "ballots": 1205,
+      "quads": 903
+    },
+    {
+      "shader": "nerf73",
+      "mode": "project-ballot-quad",
+      "passes": [
+        "-O",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "3f387492370480d44e6974f27a4c9b7ffd3ab6ff2ab6d9bcdcaa0f195de6ed9a",
+      "bytes": 822040,
+      "sha256": "bc9ad94898ac1abfeeafaa37c6296285395986ac3a9589891c52628f69586198",
+      "ballots": 1205,
+      "quads": 903
+    },
+    {
+      "shader": "raylib",
+      "mode": "project",
+      "passes": [
+        "--eliminate-dead-code-aggressive",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "115a097059e0ad2f78a683859d1c645045440a81caff94ef7d429f5a0d4b0ade",
+      "bytes": 533344,
+      "sha256": "a471757d1640b02cc78170e24d1c271b1af89a04f92020f62cc1b09edf0ef052",
+      "ballots": 546,
+      "quads": 528
+    },
+    {
+      "shader": "raylib",
+      "mode": "project",
+      "passes": [
+        "-O",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "115a097059e0ad2f78a683859d1c645045440a81caff94ef7d429f5a0d4b0ade",
+      "bytes": 514904,
+      "sha256": "3d0da38c51a28aa0e83f15ff18a0b1185ecf13571f891eef82ae35c1fd96a967",
+      "ballots": 546,
+      "quads": 528
+    },
+    {
+      "shader": "raylib",
+      "mode": "project-ballot-quad",
+      "passes": [
+        "--eliminate-dead-code-aggressive",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "29de25a53be827ed9c8032f48a7b17786e1f3a3611c90e779b2235d085549ad0",
+      "bytes": 532800,
+      "sha256": "b7db9174bb46cf73fc13a6a1c9c2b72ccf73984b9ed37c30482f953bff4c328d",
+      "ballots": 538,
+      "quads": 528
+    },
+    {
+      "shader": "raylib",
+      "mode": "project-ballot-quad",
+      "passes": [
+        "-O",
+        "--strip-debug",
+        "--compact-ids"
+      ],
+      "input_sha256": "29de25a53be827ed9c8032f48a7b17786e1f3a3611c90e779b2235d085549ad0",
+      "bytes": 514520,
+      "sha256": "d3c56c9194ee4eb9e8205bf25e5d8d336d88b6dda8687c84587d8eabf082b5dd",
+      "ballots": 538,
+      "quads": 528
+    }
+  ]
+}

@@ -1,0 +1,547 @@
+{
+  "revision": "488ffe89e86e0a1678e2c1b44af4816708af20ec",
+  "tree": "0ec1cfb601c299fa0c9204b2fd2ca6006c20aee0",
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "rust_harness_totals": {
+    "passed": 1450,
+    "failed": 0,
+    "ignored": 47,
+    "measured": 0,
+    "filtered": 0
+  },
+  "cargo_targets": 37,
+  "test_threads": 4,
+  "explicit_skip_records": 28,
+  "reported_skip_labels": 17,
+  "reasons": {
+    "no native wave64": 21,
+    "unsupported per-lane Wave32 lowering": 3,
+    "D3D12 debug layer unavailable": 3,
+    "heap windows unavailable or disabled": 1
+  },
+  "fixture_omissions_with_explicit_test_stdout": [
+    {
+      "test": "gpu::recomp::tests::gpu_retail_vs_blit_gen_amb_cube",
+      "variable": "XCL_SAMPLE_RPF"
+    },
+    {
+      "test": "gpu::texture::tests::retail_ttpf_textures_detile_with_their_mip_chains",
+      "variable": "XCL_SAMPLE_TTPF"
+    },
+    {
+      "test": "hle::opus::tests::decodes_a_game_sound",
+      "variable": "XCL_SAMPLE_AWC"
+    },
+    {
+      "test": "retail_es_gs_voxelize_geometry_mode",
+      "variable": "XCL_SAMPLE_RPF"
+    },
+    {
+      "test": "retail_gs_pipeline_through_the_hook",
+      "variable": "XCL_SAMPLE_RPF"
+    },
+    {
+      "test": "retail_mesh_pipelines_through_the_hook",
+      "variable": "XCL_SAMPLE_RPF"
+    },
+    {
+      "test": "retail_pipelines_built_in_the_background_behind_a_stand_in",
+      "variable": "XCL_SAMPLE_RPF"
+    },
+    {
+      "test": "retail_textured_ps_decoded_descriptors_and_a_descriptor_change_between_draws",
+      "variable": "XCL_SAMPLE_RPF"
+    },
+    {
+      "test": "retail_vs_ps_through_the_pso_hook_render_and_read_back",
+      "variable": "XCL_SAMPLE_RPF"
+    },
+    {
+      "test": "shaders::tests::retail_pack_sample",
+      "variable": "XCL_SAMPLE_RPF"
+    }
+  ],
+  "guest_e2e_markers": {
+    "[PASS] D3D12.X: triangle rendered on the real GPU and read back (console + derived pipeline)": 1,
+    "xcl_testtitle: done, failures: 0": 1
+  },
+  "raw_hash": "40a2f89d599a411fcb412517d13702f2368f6a256399a63d388d81a47353d0f4",
+  "targets": [
+    {
+      "target": "unittests src\\lib.rs",
+      "result": "ok",
+      "passed": 1324,
+      "failed": 0,
+      "ignored": 27,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "unittests src\\main.rs",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\bcpack_parity.rs",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\console_dlls_e2e.rs",
+      "result": "ok",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\console_heap_contract.rs",
+      "result": "ok",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\console_shaders.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 4,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_allocation_and_heap_info.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_check_feature_support.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_command_objects_and_root_sig.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_command_queue.rs",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_create_committed_resource.rs",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_create_heap.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_create_placed_resource.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_create_reserved_resource.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_descriptor_heap_and_fence.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_layout.rs",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_mesh_stream.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_query_and_command_signature.rs",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12_resource_and_sync.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\d3d12x_guard_contract.rs",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\disasm_e2e.rs",
+      "result": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\e2e.rs",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\gpu_compute_e2e.rs",
+      "result": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\gpu_pso_e2e.rs",
+      "result": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\heap_probe.rs",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 4,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\inspect_e2e.rs",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\launcher_e2e.rs",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\low_va.rs",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\pls_quota.rs",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\predication_e2e.rs",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\rpf_e2e.rs",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\shaders_e2e.rs",
+      "result": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\sparse_reinit.rs",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\texture_states.rs",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "tests\\xg_oracle.rs",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 12,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "unittests src\\main.rs",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    },
+    {
+      "target": "Doc-tests xcl",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0
+    }
+  ],
+  "skip_records": [
+    {
+      "test_or_subcase": "gpu::dxil::kernel::dispatch_chain_native_wave64_builds_whole",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower::tests::a_2d_or_3d_group_agrees_with_the_hlsl_path_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower::tests::coalesced_guarded_runs_agree_with_the_hlsl_path_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower::tests::cross_lane_reads_agree_with_the_hlsl_path_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower::tests::the_wave64_lowering_agrees_with_the_hlsl_path_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::a_per_lane_2d_or_3d_group_runs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::const_and_null_mask_operands_agree_with_hlsl_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "const_mask, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f32_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f32 arithmetic, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f64_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f64, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f16_programs_on_the_gpu",
+      "category": "unsupported per-lane Wave32 lowering",
+      "reason": "f16 arithmetic, wave32, per-lane form: refused (unsupported V_MUL_F16 (its #1426 semantics differ from the console's))"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f16_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f16 arithmetic, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f16_programs_on_the_gpu",
+      "category": "unsupported per-lane Wave32 lowering",
+      "reason": "f16 packed, wave32, per-lane form: refused (unsupported V_PK_MUL_F16: VOP3 modifiers (its #1426 semantics differ from the console's))"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f16_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f16 packed, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::mask_ff0_and_flbit_agree_with_hlsl_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "mask_ff0_flbit, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::integer_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "integer arithmetic, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f32_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f32 compares, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::integer_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "integer carries, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f32_programs_on_the_gpu",
+      "category": "unsupported per-lane Wave32 lowering",
+      "reason": "f32 conversions, wave32, per-lane form: refused (unsupported V_CVT_F16_F32 (its #1426 semantics differ from the console's))"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f32_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f32 conversions, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f32_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f32 rounding, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f32_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f32 transcendentals, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::lower_dxil::tests::f32_programs_on_the_gpu",
+      "category": "no native wave64",
+      "reason": "f32 three-source, wave64: no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::tests::gpu_geometry_wave32_prefix_count_over_a_mask",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "gpu::recomp::tests::gpu_wave32_program_in_wave64_hardware",
+      "category": "no native wave64",
+      "reason": "no wave64"
+    },
+    {
+      "test_or_subcase": "the title under the debug layer (dred",
+      "category": "D3D12 debug layer unavailable",
+      "reason": "false): no d3d12SDKLayers.dll"
+    },
+    {
+      "test_or_subcase": "the title under the debug layer (dred",
+      "category": "D3D12 debug layer unavailable",
+      "reason": "true): no d3d12SDKLayers.dll"
+    },
+    {
+      "test_or_subcase": "heap_window_out_of_memory_falls_back_to_the_switch_form",
+      "category": "heap windows unavailable or disabled",
+      "reason": "no heap windows"
+    },
+    {
+      "test_or_subcase": "uploads_start_from_each_subresources_state",
+      "category": "D3D12 debug layer unavailable",
+      "reason": "no D3D12 debug layer (\u041f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u0437\u0430\u043f\u0440\u043e\u0441\u0438\u043b\u043e \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u044e, \u043a\u043e\u0442\u043e\u0440\u0430\u044f \u0437\u0430\u0432\u0438\u0441\u0438\u0442 \u043e\u0442 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0433\u043e \u0438\u043b\u0438 \u043d\u0435\u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0435\u0433\u043e \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u0430 \u043f\u0430\u043a\u0435\u0442\u0430 SDK. (0x887A002D))"
+    }
+  ],
+  "redacted_text_sha256": "6381e70ffedffd964948841fb94757f765985c18e1030f3af5affe03275bba44"
+}

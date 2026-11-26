@@ -1,0 +1,10 @@
+--- a/research/pipeline-readiness/structural-suite/night/vulkan/nerf_modules.inl
++++ b/research/pipeline-readiness/structural-suite/night/vulkan/nerf_modules.inl
+@@ -24,6 +24,7 @@
+     if (shader_sha(vertex) != "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb")
+         throw std::runtime_error("Unexpected Mobile NeRF vertex module");
+     constexpr std::string_view reviewed[] = {
++        "08add5ab2950ef52b92c98c606f7ef0c9674687904472e819e6564e74b711b28",  // nerf71-unused-collectives-typed
+         "20ed5b34446b6ee56ebdad547b0c08cbc806a80537ad96bf4508db2b168cc5e1",  // nerf71-gamma-bounded
+         "ab11d670ac348ff60d4de41ffe94c3c0a4a809e54a0629946ea1557706592064",  // nerf71-gamma-typed
+         "c5caa7dfa2ca35d1985b2b77d8e65b2715517e9182635ff9f4fca295b2da4458",  // nerf71-strict-bounded

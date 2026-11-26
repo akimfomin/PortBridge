@@ -1,0 +1,80 @@
+[
+  {
+    "camera": "primary",
+    "before_spirv": "115a097059e0ad2f78a683859d1c645045440a81caff94ef7d429f5a0d4b0ade",
+    "after_spirv": "29de25a53be827ed9c8032f48a7b17786e1f3a3611c90e779b2235d085549ad0",
+    "reference_executable": 197888,
+    "matched_executable": 197888,
+    "vertex_sha256": "2bd6b18a5864c4fdbe3ac52741a54005c9e00d415e8af08fcf02cd1ed63e9423",
+    "worker_sha256": "e05fbda5d562e279e550fc84fb217330cae952af0d0f79e530bcfb33b43e8610",
+    "scene_controls": {
+      "viewEye": [
+        2.5,
+        2.5,
+        3.0
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 1.0,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "references": {
+      "gl": "7785d9ef2ca55d94b3bb8b1a862df71064becbd268fc93f11ec7014a45cb7408",
+      "sgprs": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3"
+    },
+    "output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+    "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver_version_raw": 2588114944,
+    "api_version_raw": 4211039,
+    "timestamp_period_ns": 1,
+    "width": 800,
+    "height": 450,
+    "subgroup_size": 32,
+    "root_and_readback_guards_intact": true
+  },
+  {
+    "camera": "secondary",
+    "before_spirv": "115a097059e0ad2f78a683859d1c645045440a81caff94ef7d429f5a0d4b0ade",
+    "after_spirv": "29de25a53be827ed9c8032f48a7b17786e1f3a3611c90e779b2235d085549ad0",
+    "reference_executable": 197888,
+    "matched_executable": 197888,
+    "vertex_sha256": "2bd6b18a5864c4fdbe3ac52741a54005c9e00d415e8af08fcf02cd1ed63e9423",
+    "worker_sha256": "e05fbda5d562e279e550fc84fb217330cae952af0d0f79e530bcfb33b43e8610",
+    "scene_controls": {
+      "viewEye": [
+        3.0,
+        1.8,
+        3.5
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 2.75,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "references": {
+      "gl": "4f6a32b195fc47053b522f3165e863b06614fc5400f4067c9c183a03d7eed232",
+      "sgprs": "919570b79902408a67e110f46e2959f917a80fbac8562082c1f093e5e492e96c"
+    },
+    "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+    "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver_version_raw": 2588114944,
+    "api_version_raw": 4211039,
+    "timestamp_period_ns": 1,
+    "width": 800,
+    "height": 450,
+    "subgroup_size": 32,
+    "root_and_readback_guards_intact": true
+  }
+]

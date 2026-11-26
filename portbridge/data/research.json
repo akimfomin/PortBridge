@@ -1,5 +1,17 @@
 [
   {
+    "at": "2026-11-26T01:38:35Z",
+    "title": "Два шейдера Mobile NeRF после перевода XCL",
+    "summary": "На RTX 4070 Ti SUPER два шейдера Mobile NeRF после расширенной проекции выполнялись за 163–170 и 156–157 мкс. Сильная предыдущая версия требовала 193–195 и 178–184 мкс. Во всех 57 600 пикселях обоих кадров результаты совпали побитово. Исходный Vulkan-код выполнялся за 13–14 мкс. Измерена отдельная стадия нейросети через Vulkan.",
+    "report_url": "https://github.com/akimfomin/PortBridge/tree/main/research/pipeline-readiness/ssa-quad-projection",
+    "translations": {
+      "en": {
+        "title": "Two translated XCL Mobile NeRF shaders checked against the originals",
+        "summary": "On an RTX 4070 Ti SUPER the two translated Mobile NeRF inference passes took 163–170 and 156–157 µs with expanded mask projection, versus 193–195 and 178–184 µs with prior strict projection. Every RGBA value in both 57,600-pixel frames matched between translated modes. Original Vulkan took 13–14 µs. These are isolated inference-pass timings."
+      }
+    }
+  },
+  {
     "at": "2026-11-26T00:22:55Z",
     "title": "Эксперимент: проекция пиксельной маски в XCL",
     "summary": "В открытой сцене raylib первый проверенный кадр на RTX 4070 Ti SUPER появился на 99–120 мс раньше в трёх парах запусков. На двух ракурсах время отрисовки в Vulkan снизилось на 19%. Фильтр Microsoft показал смешанные результаты. Опция отключена по умолчанию. Прежний вариант Lane-local Masks отозван после ошибки Wave32.",

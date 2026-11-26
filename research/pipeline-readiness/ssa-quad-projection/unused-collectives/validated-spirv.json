@@ -1,0 +1,182 @@
+[
+  {
+    "case": "nerf71",
+    "mode": "whole",
+    "dxil_sha256": "f6ce46bbcc182665aa803ce9464d7c12425a92793c12db17c663283efd45b61e",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 1119668,
+    "spirv_sha256": "d509467c9b2c18b392bf8970993cd551788f013ad5130a381211c969cebce0d0",
+    "ballots": 1739,
+    "quad_reads": 1298
+  },
+  {
+    "case": "nerf73",
+    "mode": "whole",
+    "dxil_sha256": "1b25f995e78ca6af29cbc764b12c09e25bb12f738fc7ac47624af41c7eff3b2a",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 1120268,
+    "spirv_sha256": "7ee8b474ad50167516f003a23f8f9ab995f6e994e75f16ad0b2eae83b650dbee",
+    "ballots": 1739,
+    "quad_reads": 1302
+  },
+  {
+    "case": "raylib",
+    "mode": "whole",
+    "dxil_sha256": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a",
+    "dxil_features": "0x4000",
+    "spirv_bytes": 634668,
+    "spirv_sha256": "0634013ae82c0b90eb013cee31411064666aeabf6af4984b9dffe99f2348ecaa",
+    "ballots": 546,
+    "quad_reads": 528
+  },
+  {
+    "case": "nerf71",
+    "mode": "project",
+    "dxil_sha256": "acc2807d1fdefccaf752baf1d434db71b30b78bf41cbdf855db2b94bdf82921b",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 931624,
+    "spirv_sha256": "ee8b222654003f23450365d2f6d8191e09b865c15f24a26d9b1fed1e679b5be1",
+    "ballots": 1739,
+    "quad_reads": 1298
+  },
+  {
+    "case": "nerf73",
+    "mode": "project",
+    "dxil_sha256": "141fc53f80c9b95e322cb1cefcd7c53efb517caa7b6bdfe6756799e8c7c34eb7",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 933120,
+    "spirv_sha256": "9c31c98fbfee86cdd7b5d58dbb6ad179c08e030a57c684736da0221ebcb56948",
+    "ballots": 1739,
+    "quad_reads": 1302
+  },
+  {
+    "case": "raylib",
+    "mode": "project",
+    "dxil_sha256": "28b9ac69e6d8e7af6bc6438d1e152a2109aeaf3ee98edd19317b17d1cf68f1b9",
+    "dxil_features": "0x4000",
+    "spirv_bytes": 533520,
+    "spirv_sha256": "115a097059e0ad2f78a683859d1c645045440a81caff94ef7d429f5a0d4b0ade",
+    "ballots": 546,
+    "quad_reads": 528
+  },
+  {
+    "case": "nerf71",
+    "mode": "ballot",
+    "dxil_sha256": "0ab08f7f8519cc8153a5b66b49b53c299f1e997095bab2dcf848bc4728180362",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 1046116,
+    "spirv_sha256": "d1754c5864e56e107cf5253e61593cd868a841eeea271a8e4412d6966868a542",
+    "ballots": 1205,
+    "quad_reads": 1298
+  },
+  {
+    "case": "nerf73",
+    "mode": "ballot",
+    "dxil_sha256": "1af5376648013ccad00a7d2092d10d31116a2089a81c0ef73f0339d5cf90afb6",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 1046716,
+    "spirv_sha256": "d66d56d2d2a4129bc239727f61eeed3a2b9c52094ebaa3ea1ba14d2004aa4bfd",
+    "ballots": 1205,
+    "quad_reads": 1302
+  },
+  {
+    "case": "raylib",
+    "mode": "ballot",
+    "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "dxil_features": "0x4000",
+    "spirv_bytes": 634124,
+    "spirv_sha256": "a981483e0bc88e483bb8baee47f5d24b6c1dc4cef6c36d967aeff148ab5aee5f",
+    "ballots": 538,
+    "quad_reads": 528
+  },
+  {
+    "case": "nerf71",
+    "mode": "ballot-quad",
+    "dxil_sha256": "d162ca2f524474119cd51c852d6483b6ffa2a13d996ef6e14250c25924423a29",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 1025368,
+    "spirv_sha256": "0255b7292b156851dd5fe074bd06ebeb9994a5ad269ac117335e4c6632ef23ac",
+    "ballots": 1205,
+    "quad_reads": 899
+  },
+  {
+    "case": "nerf73",
+    "mode": "ballot-quad",
+    "dxil_sha256": "f7b98dc279ea645d5ed4a630e1059144929964b048f39bde4819bd08b503754f",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 1025968,
+    "spirv_sha256": "c57abd31ca8f746cfc6bb56b2d7af6074158f002c8073d5c7e33b56240023131",
+    "ballots": 1205,
+    "quad_reads": 903
+  },
+  {
+    "case": "raylib",
+    "mode": "ballot-quad",
+    "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "dxil_features": "0x4000",
+    "spirv_bytes": 634124,
+    "spirv_sha256": "a981483e0bc88e483bb8baee47f5d24b6c1dc4cef6c36d967aeff148ab5aee5f",
+    "ballots": 538,
+    "quad_reads": 528
+  },
+  {
+    "case": "nerf71",
+    "mode": "project-ballot",
+    "dxil_sha256": "ab1f0f244941e66e2354053f91b8855f8c85a298c584d73b535fb147840ccefd",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 858072,
+    "spirv_sha256": "0b6b851a1a763e88f088ce2efc13adc5356bb27704be6c35e68cd1378676b621",
+    "ballots": 1205,
+    "quad_reads": 1298
+  },
+  {
+    "case": "nerf73",
+    "mode": "project-ballot",
+    "dxil_sha256": "3600de6c588a38f9c43eac94ffdeacb788dc056a9684f5ef121a5894933ad804",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 859568,
+    "spirv_sha256": "127a7da853aeb94ff6fdb69bc02dedf6412ad6424dd29dad81d164099eb742e0",
+    "ballots": 1205,
+    "quad_reads": 1302
+  },
+  {
+    "case": "raylib",
+    "mode": "project-ballot",
+    "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+    "dxil_features": "0x4000",
+    "spirv_bytes": 532976,
+    "spirv_sha256": "29de25a53be827ed9c8032f48a7b17786e1f3a3611c90e779b2235d085549ad0",
+    "ballots": 538,
+    "quad_reads": 528
+  },
+  {
+    "case": "nerf71",
+    "mode": "project-ballot-quad",
+    "dxil_sha256": "115717ec4065e4c82d439a1f58e5f9896bc60040bb6d88be233276dfb6a98c06",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 837324,
+    "spirv_sha256": "1840c78e34583895860ddaf3029c28432106c29ff1265e4e6f3d3644709343d6",
+    "ballots": 1205,
+    "quad_reads": 899
+  },
+  {
+    "case": "nerf73",
+    "mode": "project-ballot-quad",
+    "dxil_sha256": "71ed12307fd04663ac88badd51c69cb7e64d05ea939f4b59cb7667efc959d5cb",
+    "dxil_features": "0x200c000",
+    "spirv_bytes": 838820,
+    "spirv_sha256": "3f387492370480d44e6974f27a4c9b7ffd3ab6ff2ab6d9bcdcaa0f195de6ed9a",
+    "ballots": 1205,
+    "quad_reads": 903
+  },
+  {
+    "case": "raylib",
+    "mode": "project-ballot-quad",
+    "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+    "dxil_features": "0x4000",
+    "spirv_bytes": 532976,
+    "spirv_sha256": "29de25a53be827ed9c8032f48a7b17786e1f3a3611c90e779b2235d085549ad0",
+    "ballots": 538,
+    "quad_reads": 528
+  }
+]

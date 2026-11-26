@@ -1,0 +1,30 @@
+; A fragment with two unused nonuniform operations and one defined color output.
+OpCapability Shader
+OpCapability GroupNonUniform
+OpCapability GroupNonUniformBallot
+OpCapability GroupNonUniformQuad
+OpMemoryModel Logical GLSL450
+OpEntryPoint Fragment %main "main" %color
+OpExecutionMode %main OriginUpperLeft
+OpDecorate %color Location 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%uint = OpTypeInt 32 0
+%float = OpTypeFloat 32
+%uint4 = OpTypeVector %uint 4
+%float4 = OpTypeVector %float 4
+%out = OpTypePointer Output %float4
+%sig = OpTypeFunction %void
+%color = OpVariable %out Output
+%true = OpConstantTrue %bool
+%scope = OpConstant %uint 3
+%zero = OpConstant %uint 0
+%onef = OpConstant %float 1
+%rgba = OpConstantComposite %float4 %onef %onef %onef %onef
+%main = OpFunction %void None %sig
+%start = OpLabel
+%vote = OpGroupNonUniformBallot %uint4 %scope %true
+%q = OpGroupNonUniformQuadBroadcast %uint %scope %zero %zero
+OpStore %color %rgba
+OpReturn
+OpFunctionEnd

@@ -1,0 +1,114 @@
+From 4423f915aa9286649563484174203b980650c203 Mon Sep 17 00:00:00 2001
+From: PortBridge <portbridge@localhost>
+Date: Thu, 26 Nov 2026 04:38:00 +0300
+Subject: [PATCH] Check a sealed cyclic mask projection through two physical
+ loop latch updates
+
+---
+ crates/xcl/src/gpu/dxil/lanes.rs | 93 ++++++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+
+diff --git a/crates/xcl/src/gpu/dxil/lanes.rs b/crates/xcl/src/gpu/dxil/lanes.rs
+index 4d5c9c2..7037793 100644
+--- a/crates/xcl/src/gpu/dxil/lanes.rs
++++ b/crates/xcl/src/gpu/dxil/lanes.rs
+@@ -1015,6 +1015,99 @@ mod ps_ballot_tests {
+         }
+     }
+ 
++
++    #[test]
++    fn gpu_two_latch_updates_preserve_the_loop_header_mask_window() {
++        use crate::gpu::dxil::module::Pred;
++        use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R32G32_FLOAT;
++
++        let Ok(adapter) = runner::adapter() else {
++            println!("SKIPPED: no D3D12 adapter");
++            return;
++        };
++        let vs = dxc::compile("float4 main(float2 p : POSITION) : SV_Position { return float4(p, 0.5, 1); }", "main", "vs_6_6", &[]).unwrap();
++        let layout = [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }];
++        let vertices = [-1.0f32, -1.0, -1.0, 3.0, 3.0, -1.0];
++        let export_bytes = encode("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 15), ("DONE", 1), ("VM", 1)], None).unwrap();
++        let export = crate::gpu::rdna2::decode(&export_bytes, 0).unwrap();
++        for wave64 in [false, true] {
++            for seed in [1u32, 8] {
++                for project in [false, true] {
++                    let ps = ps_interface();
++                    let options = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
++                    let mut lw = super::Lw::new(&[], &Default::default(), options, &kernel::Entry::Pixel(ps.clone(), project));
++                    lw.setup_lanes_gfx();
++                    lw.setup_pixel(&ps, &Default::default());
++                    let entry = lw.cur();
++                    lw.seal(entry);
++                    let seed_word = lw.c(seed);
++                    let initial = lw.ballot_ps_quad(seed_word);
++                    let zero = lw.c(0);
++                    let one = lw.c(1);
++                    let header = lw.block(Some(2));
++                    let latch = lw.block(Some(1));
++                    let exit = lw.block(Some(1));
++                    lw.br(header);
++                    lw.s.m.set_block(header);
++                    let word = lw.s.m.i32();
++                    let round = lw.s.m.phi_at(header, word);
++                    let lo = lw.s.m.phi_at(header, word);
++                    let hi = if wave64 { lw.s.m.phi_at(header, word) } else { zero };
++                    let again = lw.cmpc(Pred::ULt, round, 2);
++                    lw.cond_br(again, latch, exit);
++
++                    // Each trip adds a different member. A substitution of either
++                    // entry, last vote, or previous iteration alone changes the answer.
++                    lw.s.m.set_block(latch);
++                    let next = lw.addc(round, 1);
++                    let member = lw.shl(one, next);
++                    let vote = lw.ballot_ps_quad(member);
++                    let carried = (lw.or(lo, vote.0), if wave64 { lw.or(hi, vote.1) } else { zero });
++                    if project {
++                        lw.note_mask_union(carried, [(lo, hi), vote]);
++                        assert!(lw.pixel_unions.contains_key(&carried));
++                        lw.discover_mask_join((lo, hi));
++                        assert!(!lw.pixel_joins.contains_key(&(lo, hi)), "header has no backedge yet");
++                    }
++                    lw.br(header);
++                    for (phi, first, back) in [(round, zero, next), (lo, initial.0, carried.0)] {
++                        lw.s.m.add_incoming(phi, first, entry);
++                        lw.s.m.add_incoming(phi, back, latch);
++                    }
++                    if wave64 {
++                        lw.s.m.add_incoming(hi, carried.1, latch);
++                        lw.s.m.add_incoming(hi, initial.1, entry);
++                    }
++                    lw.s.m.set_block(exit);
++                    let window = if project {
++                        let projected = lw.known_quad_window((lo, hi)).expect("sealed cyclic projection");
++                        assert!(lw.pixel_joins.contains_key(&(lo, hi)));
++                        projected
++                    } else {
++                        let bits = if wave64 { lw.sel(lw.upper, hi, lo) } else { lo };
++                        let shift = lw.andc(lw.lane31, 28);
++                        let local = lw.lshr(bits, shift);
++                        lw.andc(local, 15)
++                    };
++                    let channels = [window, round, seed_word, one].map(|v| {
++                        let f = lw.uitof(v);
++                        lw.bits(f)
++                    });
++                    lw.export_gfx(&export, 15, 0, false, &channels).unwrap();
++                    lw.finish_gfx();
++                    lw.s.m.ret();
++                    let shader = lw.finish([1, 1, 1], 0).unwrap();
++                    validate::validate(&shader.dxil).expect("loop header remains valid DXIL");
++                    let pixels = runner::draw(&vs, &shader.dxil, &layout, &vertices, 8, &[], &[], 32, [-1.0; 4]).unwrap();
++                    let expected = [(seed | 2 | 4) as f32, 2.0, seed as f32, 1.0];
++                    assert_eq!(pixels.len(), 32 * 32);
++                    assert!(pixels.iter().all(|p| *p == expected), "wave64={wave64} seed={seed} project={project}: {:?}", pixels.iter().find(|p| **p != expected));
++                    println!("LOOP_GFX adapter={adapter} wave64={wave64} seed={seed} projected={project} pixels={} expected={expected:?}", pixels.len());
++                }
++            }
++        }
++    }
++
+     #[test]
+     fn matched_mask_phi_uses_each_predecessor_and_keeps_folded_or_untracked() {
+         for wave64 in [false, true] {

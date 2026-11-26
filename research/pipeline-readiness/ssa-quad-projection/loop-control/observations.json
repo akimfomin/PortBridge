@@ -1,0 +1,18 @@
+{
+  "control_commit": "4423f915aa9286649563484174203b980650c203",
+  "compiler_commit": "072b1f25bed8ef69d976f547d05fcc35f37db101",
+  "parent_comparison": "051bdda602796c47c107419ae5afff8272d5ca2d",
+  "driver": "NVIDIA 617.14",
+  "host_subgroup": 32,
+  "fixture": "ordinary typed pixel DXIL IR with sealed loop header, two traversals and reversed high-word incoming order",
+  "output": [
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=false seed=1 projected=false pixels=1024 expected=[7.0, 2.0, 1.0, 1.0]",
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=false seed=1 projected=true pixels=1024 expected=[7.0, 2.0, 1.0, 1.0]",
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=false seed=8 projected=false pixels=1024 expected=[14.0, 2.0, 8.0, 1.0]",
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=false seed=8 projected=true pixels=1024 expected=[14.0, 2.0, 8.0, 1.0]",
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=true seed=1 projected=false pixels=1024 expected=[7.0, 2.0, 1.0, 1.0]",
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=true seed=1 projected=true pixels=1024 expected=[7.0, 2.0, 1.0, 1.0]",
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=true seed=8 projected=false pixels=1024 expected=[14.0, 2.0, 8.0, 1.0]",
+    "LOOP_GFX adapter=NVIDIA GeForce RTX 4070 Ti SUPER wave64=true seed=8 projected=true pixels=1024 expected=[14.0, 2.0, 8.0, 1.0]"
+  ]
+}
