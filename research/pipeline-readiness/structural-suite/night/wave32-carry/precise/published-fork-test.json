@@ -1,0 +1,29 @@
+{
+  "xcl_commit": "d3e7725f9f48c39c18e7b6e011ec76423edb0004",
+  "git_tree": "3c13951db8df3d728d4ad8e1b5bbec0aebfe4546",
+  "release_test_executable_sha256": "15664049d0ac404942e0256bb087613e2bb9e54863311cbd6cd3276e38cdf5ca",
+  "build_and_cpu_wall_seconds": 291.67,
+  "cpu": {
+    "test": "gpu::recomp::x64_masks::tests::wave32_carry_into_s20_preserves_a_whole_read_of_s21",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 1332,
+    "seconds": 0.01
+  },
+  "gpu": {
+    "test": "gpu::recomp::tests::gpu_wave32_pixel_carry_preserves_adjacent_mask_at_triangle_edges",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 1332,
+    "seconds": 0.26,
+    "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "render_dimensions": [
+      32,
+      32
+    ],
+    "checked_pixels": 1024,
+    "worker_peak_bytes": 118693888
+  }
+}

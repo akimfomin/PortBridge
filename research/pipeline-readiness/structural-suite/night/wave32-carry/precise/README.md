@@ -10,6 +10,8 @@ The fix was implemented and tested on XCL `e1d84b7` as `ee2a37ca4461193c46eed161
 
 The candidate passed 61 CPU tests covering the graphics decoder, CFG, split and upper lanes, Wave32 and Wave64 mask use. One manual performance test remained ignored. The release GPU regression separately passed on the RTX 4070 Ti SUPER. The full workspace suite and both upstream-requested title smoke runs remain outstanding. [Test filters and counts](cpu-test-receipts.json) · [GPU regression](gpu-regression.log)
 
+On a fresh checkout of the published fork commit `d3e7725`, a release build and the targeted CPU regression completed in 291.67 seconds. The native GPU regression passed on all 1,024 pixels of a two-triangle image on the RTX 4070 Ti SUPER in 0.26 seconds. Both selected tests ran with zero skips. [Exact tests, executable hash and timings](published-fork-test.json)
+
 ## Open corpus and a physical downside avoided
 
 Out of 218 configured public inputs, 195 Wave32 guest shader configurations produced complete paired HLSL. This includes two different binding layouts of Microsoft's BicubicUpsampleGammaPS. The width-only fix changed four configurations and replaced 32 local call sites with full ballots. The precise version returned stock HLSL byte-for-byte on all 195. The concrete correctness bug was demonstrated on the independently assembled carry shader. The incidence of this correctness defect in titles remains unmeasured. [Per-input shader hashes, calls and exclusions count](wave32-census.json.gz)
