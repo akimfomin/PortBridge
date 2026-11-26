@@ -69,8 +69,10 @@ void store_image(const std::filesystem::path& path, const unsigned char* data, D
     if (!ok) throw std::runtime_error("Image write failed");
 }
 
+#include "nerf_inputs.inl"
+
 void draw_ray(std::ostream& out, const Pipeline& p, VkPhysicalDevice physical, uint32_t family,
-              uint32_t bits, float period, VkExtent2D extent, const DrawRequest& opts, bool translated) {
+              uint32_t bits, float period, VkExtent2D extent, const DrawRequest& opts, bool translated, bool native_nerf) {
     if (!bits || bits > 64 || !(period > 0.0f)) throw std::runtime_error("Missing graphics timestamps");
     if (std::filesystem::exists(opts.output)) throw std::runtime_error("Output already exists");
     const size_t pixel_bytes = static_cast<size_t>(extent.width) * extent.height * 16;
@@ -78,12 +80,16 @@ void draw_ray(std::ostream& out, const Pipeline& p, VkPhysicalDevice physical, u
     constexpr unsigned char canary = 0xa7;
     std::array<unsigned char, root_bytes> input;
     input.fill(canary);
+    NeRFInputs nerf{p.device};
     RayResources r{p.device, physical};
     void* mapped{};
     std::array<unsigned char, 40> push{};
-    std::ifstream camera(opts.registers, std::ios::binary | std::ios::ate);
-    if (camera.tellg() != (translated ? 512 : 40)) throw std::runtime_error("Unexpected camera input size");
-    camera.seekg(0);
+    std::ifstream camera;
+    if (!native_nerf) {
+        camera.open(opts.registers, std::ios::binary | std::ios::ate);
+        if (camera.tellg() != (translated ? 512 : 40)) throw std::runtime_error("Unexpected camera input size");
+        camera.seekg(0);
+    }
     if (translated) {
         if (!camera.read(reinterpret_cast<char*>(input.data() + pad), 512)) throw std::runtime_error("SGPR read");
         uint32_t uma_hi = 0;
@@ -102,7 +108,7 @@ void draw_ray(std::ostream& out, const Pipeline& p, VkPhysicalDevice physical, u
         for (size_t i = 0; i < addresses.size(); ++i) addresses[i] = base + stride * i + pad;
         static_assert(sizeof(addresses) == sizeof(push));
         std::memcpy(push.data(), addresses.data(), push.size());
-    } else if (!camera.read(reinterpret_cast<char*>(push.data()), push.size())) {
+    } else if (!native_nerf && !camera.read(reinterpret_cast<char*>(push.data()), push.size())) {
         throw std::runtime_error("Native raylib camera read");
     }
     r.make_buffer(r.readback, pixel_bytes + 2 * pad, VK_BUFFER_USAGE_TRANSFER_DST_BIT);
@@ -130,6 +136,12 @@ void draw_ray(std::ostream& out, const Pipeline& p, VkPhysicalDevice physical, u
     check(vkCreateImageView(p.device, &iv, nullptr, &r.view), "vkCreateImageView");
     VkFramebufferCreateInfo fb{VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO};
     fb.renderPass = p.render_pass; fb.attachmentCount = 1; fb.pAttachments = &r.view;
+    std::array<VkImageView, 5> framebuffer_views{r.view};
+    if (native_nerf) {
+        nerf.prepare(r, p.image_set, opts.registers, extent);
+        for (size_t i = 0; i < 4; ++i) framebuffer_views[i + 1] = nerf.inputs[i].view;
+        fb.attachmentCount = 5; fb.pAttachments = framebuffer_views.data();
+    }
     fb.width = extent.width; fb.height = extent.height; fb.layers = 1;
     check(vkCreateFramebuffer(p.device, &fb, nullptr, &r.framebuffer), "vkCreateFramebuffer");
     VkCommandPoolCreateInfo pc{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
@@ -157,6 +169,7 @@ void draw_ray(std::ostream& out, const Pipeline& p, VkPhysicalDevice physical, u
         begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
         check(vkBeginCommandBuffer(cmd, &begin), "vkBeginCommandBuffer");
         vkCmdResetQueryPool(cmd, r.timestamps, 0, 2);
+        if (native_nerf && epoch == 0) nerf.upload(cmd, extent);
         VkClearValue clear{};
         for (float& x : clear.color.float32) x = -3.f;
         VkRenderPassBeginInfo pass{VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
@@ -164,7 +177,8 @@ void draw_ray(std::ostream& out, const Pipeline& p, VkPhysicalDevice physical, u
         pass.renderArea.extent = extent; pass.clearValueCount = 1; pass.pClearValues = &clear;
         vkCmdBeginRenderPass(cmd, &pass, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.handle);
-        vkCmdPushConstants(cmd, p.layout, VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push), push.data());
+        if (native_nerf) vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, p.layout, 0, 1, &nerf.set, 0, nullptr);
+        else vkCmdPushConstants(cmd, p.layout, VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(push), push.data());
         vkCmdWriteTimestamp(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, r.timestamps, 0);
         for (uint32_t j = 0; j < (epoch ? draws : 1); ++j) vkCmdDraw(cmd, 3, 1, 0, 0);
         vkCmdWriteTimestamp(cmd, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, r.timestamps, 1);
