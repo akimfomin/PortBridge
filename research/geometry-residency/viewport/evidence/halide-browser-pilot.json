@@ -1,0 +1,128 @@
+{
+  "ok": true,
+  "report": {
+    "adapter": {
+      "vendor": "nvidia",
+      "architecture": "lovelace",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "shaderSha256": "7ae9045b45fca6c39cef3a8524fa5b9a4a03dee64862000641e6f39c6af94442",
+    "width": 512,
+    "height": 384,
+    "pairs": 6,
+    "dispatches": 24,
+    "sourceScope": "Halide-generated WGSL exercised through browser WebGPU, with JS host submissions",
+    "results": [
+      {
+        "pair": 1,
+        "mode": "reuse",
+        "dispatches": 24,
+        "pipelineCreates": 0,
+        "submit_ms": 0.5,
+        "input_to_readback_ms": 5.899999998509884,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 1,
+        "mode": "create-each",
+        "dispatches": 24,
+        "pipelineCreates": 24,
+        "submit_ms": 0.29999999701976776,
+        "input_to_readback_ms": 8.599999994039536,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 2,
+        "mode": "create-each",
+        "dispatches": 24,
+        "pipelineCreates": 24,
+        "submit_ms": 0.29999999701976776,
+        "input_to_readback_ms": 6.5999999940395355,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 2,
+        "mode": "reuse",
+        "dispatches": 24,
+        "pipelineCreates": 0,
+        "submit_ms": 0.10000000149011612,
+        "input_to_readback_ms": 4.5,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 3,
+        "mode": "reuse",
+        "dispatches": 24,
+        "pipelineCreates": 0,
+        "submit_ms": 0.10000000149011612,
+        "input_to_readback_ms": 6.700000002980232,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 3,
+        "mode": "create-each",
+        "dispatches": 24,
+        "pipelineCreates": 24,
+        "submit_ms": 0.20000000298023224,
+        "input_to_readback_ms": 6.700000002980232,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 4,
+        "mode": "create-each",
+        "dispatches": 24,
+        "pipelineCreates": 24,
+        "submit_ms": 0.5,
+        "input_to_readback_ms": 6.600000001490116,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 4,
+        "mode": "reuse",
+        "dispatches": 24,
+        "pipelineCreates": 0,
+        "submit_ms": 0.5,
+        "input_to_readback_ms": 5.299999997019768,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 5,
+        "mode": "reuse",
+        "dispatches": 24,
+        "pipelineCreates": 0,
+        "submit_ms": 0.10000000149011612,
+        "input_to_readback_ms": 4.5,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 5,
+        "mode": "create-each",
+        "dispatches": 24,
+        "pipelineCreates": 24,
+        "submit_ms": 0.29999999701976776,
+        "input_to_readback_ms": 6.299999997019768,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 6,
+        "mode": "create-each",
+        "dispatches": 24,
+        "pipelineCreates": 24,
+        "submit_ms": 0.7000000029802322,
+        "input_to_readback_ms": 6.5,
+        "verifiedPixels": 196608
+      },
+      {
+        "pair": 6,
+        "mode": "reuse",
+        "dispatches": 24,
+        "pipelineCreates": 0,
+        "submit_ms": 0.20000000298023224,
+        "input_to_readback_ms": 3.7000000029802322,
+        "verifiedPixels": 196608
+      }
+    ]
+  }
+}

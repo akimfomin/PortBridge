@@ -1,0 +1,153 @@
+{
+  "device": {
+    "source_sha256": "6c8c381c234030d86a25fb34579e60963973fb20482c9e602196db0380f5ac67",
+    "build": "8657240ced44",
+    "backend": "VULKAN",
+    "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver": "NVIDIA 617.14"
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "order": [
+        "cpu",
+        "gpu"
+      ],
+      "cpu": {
+        "all_ms": 2411.4101,
+        "frames_21_to_150_ms": 2316.1077
+      },
+      "gpu": {
+        "all_ms": 2934.9339,
+        "frames_21_to_150_ms": 2810.1682
+      },
+      "gpu_over_cpu_pct": 21.710276489262448
+    },
+    {
+      "pair": 2,
+      "order": [
+        "gpu",
+        "cpu"
+      ],
+      "gpu": {
+        "all_ms": 2773.3752,
+        "frames_21_to_150_ms": 2656.5822
+      },
+      "cpu": {
+        "all_ms": 2228.8922,
+        "frames_21_to_150_ms": 2149.9999
+      },
+      "gpu_over_cpu_pct": 24.42841336157937
+    },
+    {
+      "pair": 3,
+      "order": [
+        "cpu",
+        "gpu"
+      ],
+      "cpu": {
+        "all_ms": 2319.4377999999997,
+        "frames_21_to_150_ms": 2229.877
+      },
+      "gpu": {
+        "all_ms": 2858.8752,
+        "frames_21_to_150_ms": 2738.9474999999998
+      },
+      "gpu_over_cpu_pct": 23.25724794172106
+    },
+    {
+      "pair": 4,
+      "order": [
+        "gpu",
+        "cpu"
+      ],
+      "gpu": {
+        "all_ms": 2915.5285999999996,
+        "frames_21_to_150_ms": 2796.258
+      },
+      "cpu": {
+        "all_ms": 2242.537,
+        "frames_21_to_150_ms": 2155.0398999999998
+      },
+      "gpu_over_cpu_pct": 30.0102785372103
+    },
+    {
+      "pair": 5,
+      "order": [
+        "cpu",
+        "gpu"
+      ],
+      "cpu": {
+        "all_ms": 2329.6522999999997,
+        "frames_21_to_150_ms": 2236.7282999999998
+      },
+      "gpu": {
+        "all_ms": 2854.585,
+        "frames_21_to_150_ms": 2735.5708999999997
+      },
+      "gpu_over_cpu_pct": 22.53266292141538
+    },
+    {
+      "pair": 6,
+      "order": [
+        "gpu",
+        "cpu"
+      ],
+      "gpu": {
+        "all_ms": 2826.2221999999997,
+        "frames_21_to_150_ms": 2701.0049999999997
+      },
+      "cpu": {
+        "all_ms": 2292.5717,
+        "frames_21_to_150_ms": 2207.3172
+      },
+      "gpu_over_cpu_pct": 23.27737448734972
+    }
+  ],
+  "timed_scene_frames": 1800,
+  "cpu_median_full_scene_loop_ms": 2306.00475,
+  "gpu_median_full_scene_loop_ms": 2856.7300999999998,
+  "paired_gpu_over_cpu_pct": 23.26731121453539,
+  "point_observations": [
+    {
+      "frame": 2,
+      "object": "Particles",
+      "points": 1562,
+      "sha256": "3aa7615f1e1d6465c58ab674e1d7b0e11e4b93fe7c9acab85c6e69aeebec348d"
+    },
+    {
+      "frame": 20,
+      "object": "Particles",
+      "points": 10516,
+      "sha256": "8bffa997c83d56889fc806031add410a4e7a83b8b3aa1d407faf1bb07e839999"
+    },
+    {
+      "frame": 70,
+      "object": "Particles",
+      "points": 25585,
+      "sha256": "cf4e04494d0ff880ea91ff2942425e6115ce947960e2e17e0f99900a8f449639"
+    },
+    {
+      "frame": 120,
+      "object": "Particles",
+      "points": 25395,
+      "sha256": "2e2ecd443879c3da0ad62c31638eeeac46202fa45a83e3470e92aa36a2c28572"
+    }
+  ],
+  "diagnostic_mechanism": {
+    "cpu": {
+      "age_dispatches": 0,
+      "age_element_count": 0,
+      "age_input_values": 0,
+      "age_downloads": 0,
+      "age_output_values": 0
+    },
+    "gpu": {
+      "age_dispatches": 119,
+      "age_element_count": 2448860,
+      "age_input_values": 2448860,
+      "age_downloads": 119,
+      "age_output_values": 2448860
+    }
+  }
+}

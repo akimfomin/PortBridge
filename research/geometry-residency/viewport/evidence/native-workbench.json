@@ -1,0 +1,358 @@
+{
+  "scope": "Set stock Geometry Nodes cut threshold, evaluate view layer, draw the native Blender 3D viewport into the same RGBA8 offscreen target, and wait for complete image readback. View is SOLID Workbench with overlays and AA disabled. Initialization, render target allocation, image hashing, checks and disk I/O are outside measurement.",
+  "data_sha256": "47b03aa5cbecf2b3c3ad4cf8f00a7f420bf034ec33de8f7b206809dd7c4b5b3a",
+  "data_origin": [
+    -12600.0,
+    -34050.0,
+    147.752
+  ],
+  "points": 6385097,
+  "blender": "5.3.0",
+  "build_hash": "02f0899d78e3",
+  "backend": "VULKAN",
+  "renderer": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "width": 960,
+  "height": 720,
+  "point_radius_m": 0.45,
+  "camera_eye": [
+    125.0,
+    -1200.0,
+    1200.0
+  ],
+  "view_matrix": [
+    [
+      0.9946184158325195,
+      0.10360607504844666,
+      7.450580596923828e-09,
+      -2.5980589271057397e-05
+    ],
+    [
+      -0.07306262105703354,
+      0.7014012932777405,
+      0.7090120315551758,
+      -5.9125788538949564e-05
+    ],
+    [
+      0.07345794886350632,
+      -0.7051964402198792,
+      0.7051963806152344,
+      -1701.6536865234375
+    ],
+    [
+      -0.0,
+      0.0,
+      -0.0,
+      1.0
+    ]
+  ],
+  "projection_matrix": [
+    [
+      0.00147058826405555,
+      0.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      0.0019607844296842813,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      0.0,
+      -0.0003333388885948807,
+      -1.0000333786010742
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "warmup_rounds": 2,
+  "trials": [
+    {
+      "round": 1,
+      "threshold_x_m": -125.0,
+      "edit_evaluate_ms": 53.4329,
+      "draw_call_ms": 51.925,
+      "image_read_wait_ms": 56.995,
+      "edit_to_completed_image_ms": 162.3529,
+      "image_sha256": "6d86494754f3a33899f0bf5b086029ac2312878c1df81ec7aae491d53dc0a34e",
+      "noncorner_pixels": 53117
+    },
+    {
+      "round": 1,
+      "threshold_x_m": -25.0,
+      "edit_evaluate_ms": 57.9779,
+      "draw_call_ms": 42.8139,
+      "image_read_wait_ms": 50.0589,
+      "edit_to_completed_image_ms": 150.8507,
+      "image_sha256": "a15a672d0159f1beb77e41c9befc405e22ee13dce621c2b304305f36296dfa15",
+      "noncorner_pixels": 54004
+    },
+    {
+      "round": 1,
+      "threshold_x_m": 35.0,
+      "edit_evaluate_ms": 58.2121,
+      "draw_call_ms": 42.8064,
+      "image_read_wait_ms": 56.6324,
+      "edit_to_completed_image_ms": 157.6509,
+      "image_sha256": "2c429205f4b23c070acd16441b6cd83247bdabf30dcc9fa4f270a3631a39285e",
+      "noncorner_pixels": 54945
+    },
+    {
+      "round": 1,
+      "threshold_x_m": 125.0,
+      "edit_evaluate_ms": 61.056,
+      "draw_call_ms": 44.4837,
+      "image_read_wait_ms": 58.1455,
+      "edit_to_completed_image_ms": 163.6852,
+      "image_sha256": "addc6868b1f0bf6cd396b94a79d7cf0b4529b08d4286e1694670a5deb90634c8",
+      "noncorner_pixels": 56194
+    },
+    {
+      "round": 2,
+      "threshold_x_m": -125.0,
+      "edit_evaluate_ms": 50.749,
+      "draw_call_ms": 40.6413,
+      "image_read_wait_ms": 60.115,
+      "edit_to_completed_image_ms": 151.5053,
+      "image_sha256": "6d86494754f3a33899f0bf5b086029ac2312878c1df81ec7aae491d53dc0a34e",
+      "noncorner_pixels": 53117
+    },
+    {
+      "round": 2,
+      "threshold_x_m": -25.0,
+      "edit_evaluate_ms": 55.8141,
+      "draw_call_ms": 40.2368,
+      "image_read_wait_ms": 54.3912,
+      "edit_to_completed_image_ms": 150.4421,
+      "image_sha256": "a15a672d0159f1beb77e41c9befc405e22ee13dce621c2b304305f36296dfa15",
+      "noncorner_pixels": 54004
+    },
+    {
+      "round": 2,
+      "threshold_x_m": 35.0,
+      "edit_evaluate_ms": 57.6056,
+      "draw_call_ms": 42.1484,
+      "image_read_wait_ms": 58.3536,
+      "edit_to_completed_image_ms": 158.1076,
+      "image_sha256": "2c429205f4b23c070acd16441b6cd83247bdabf30dcc9fa4f270a3631a39285e",
+      "noncorner_pixels": 54945
+    },
+    {
+      "round": 2,
+      "threshold_x_m": 125.0,
+      "edit_evaluate_ms": 57.4139,
+      "draw_call_ms": 41.2034,
+      "image_read_wait_ms": 58.8442,
+      "edit_to_completed_image_ms": 157.4615,
+      "image_sha256": "addc6868b1f0bf6cd396b94a79d7cf0b4529b08d4286e1694670a5deb90634c8",
+      "noncorner_pixels": 56194
+    },
+    {
+      "round": 3,
+      "threshold_x_m": -125.0,
+      "edit_evaluate_ms": 52.516,
+      "draw_call_ms": 34.7441,
+      "image_read_wait_ms": 54.826,
+      "edit_to_completed_image_ms": 142.0861,
+      "image_sha256": "6d86494754f3a33899f0bf5b086029ac2312878c1df81ec7aae491d53dc0a34e",
+      "noncorner_pixels": 53117
+    },
+    {
+      "round": 3,
+      "threshold_x_m": -25.0,
+      "edit_evaluate_ms": 53.7071,
+      "draw_call_ms": 35.3922,
+      "image_read_wait_ms": 55.2772,
+      "edit_to_completed_image_ms": 144.3765,
+      "image_sha256": "a15a672d0159f1beb77e41c9befc405e22ee13dce621c2b304305f36296dfa15",
+      "noncorner_pixels": 54004
+    },
+    {
+      "round": 3,
+      "threshold_x_m": 35.0,
+      "edit_evaluate_ms": 55.3478,
+      "draw_call_ms": 36.0725,
+      "image_read_wait_ms": 58.4823,
+      "edit_to_completed_image_ms": 149.9026,
+      "image_sha256": "2c429205f4b23c070acd16441b6cd83247bdabf30dcc9fa4f270a3631a39285e",
+      "noncorner_pixels": 54945
+    },
+    {
+      "round": 3,
+      "threshold_x_m": 125.0,
+      "edit_evaluate_ms": 58.0822,
+      "draw_call_ms": 35.5269,
+      "image_read_wait_ms": 59.2902,
+      "edit_to_completed_image_ms": 152.8993,
+      "image_sha256": "addc6868b1f0bf6cd396b94a79d7cf0b4529b08d4286e1694670a5deb90634c8",
+      "noncorner_pixels": 56194
+    },
+    {
+      "round": 4,
+      "threshold_x_m": -125.0,
+      "edit_evaluate_ms": 51.0881,
+      "draw_call_ms": 34.7233,
+      "image_read_wait_ms": 47.2425,
+      "edit_to_completed_image_ms": 133.0539,
+      "image_sha256": "6d86494754f3a33899f0bf5b086029ac2312878c1df81ec7aae491d53dc0a34e",
+      "noncorner_pixels": 53117
+    },
+    {
+      "round": 4,
+      "threshold_x_m": -25.0,
+      "edit_evaluate_ms": 53.2944,
+      "draw_call_ms": 34.8371,
+      "image_read_wait_ms": 57.2249,
+      "edit_to_completed_image_ms": 145.3564,
+      "image_sha256": "a15a672d0159f1beb77e41c9befc405e22ee13dce621c2b304305f36296dfa15",
+      "noncorner_pixels": 54004
+    },
+    {
+      "round": 4,
+      "threshold_x_m": 35.0,
+      "edit_evaluate_ms": 58.9938,
+      "draw_call_ms": 34.2295,
+      "image_read_wait_ms": 58.4473,
+      "edit_to_completed_image_ms": 151.6706,
+      "image_sha256": "2c429205f4b23c070acd16441b6cd83247bdabf30dcc9fa4f270a3631a39285e",
+      "noncorner_pixels": 54945
+    },
+    {
+      "round": 4,
+      "threshold_x_m": 125.0,
+      "edit_evaluate_ms": 57.4417,
+      "draw_call_ms": 34.5265,
+      "image_read_wait_ms": 59.2925,
+      "edit_to_completed_image_ms": 151.2607,
+      "image_sha256": "addc6868b1f0bf6cd396b94a79d7cf0b4529b08d4286e1694670a5deb90634c8",
+      "noncorner_pixels": 56194
+    },
+    {
+      "round": 5,
+      "threshold_x_m": -125.0,
+      "edit_evaluate_ms": 50.5203,
+      "draw_call_ms": 33.8964,
+      "image_read_wait_ms": 60.0969,
+      "edit_to_completed_image_ms": 144.5136,
+      "image_sha256": "6d86494754f3a33899f0bf5b086029ac2312878c1df81ec7aae491d53dc0a34e",
+      "noncorner_pixels": 53117
+    },
+    {
+      "round": 5,
+      "threshold_x_m": -25.0,
+      "edit_evaluate_ms": 54.0661,
+      "draw_call_ms": 39.9919,
+      "image_read_wait_ms": 58.8153,
+      "edit_to_completed_image_ms": 152.8733,
+      "image_sha256": "a15a672d0159f1beb77e41c9befc405e22ee13dce621c2b304305f36296dfa15",
+      "noncorner_pixels": 54004
+    },
+    {
+      "round": 5,
+      "threshold_x_m": 35.0,
+      "edit_evaluate_ms": 57.4375,
+      "draw_call_ms": 41.3769,
+      "image_read_wait_ms": 55.2385,
+      "edit_to_completed_image_ms": 154.0529,
+      "image_sha256": "2c429205f4b23c070acd16441b6cd83247bdabf30dcc9fa4f270a3631a39285e",
+      "noncorner_pixels": 54945
+    },
+    {
+      "round": 5,
+      "threshold_x_m": 125.0,
+      "edit_evaluate_ms": 60.2116,
+      "draw_call_ms": 40.7927,
+      "image_read_wait_ms": 54.3946,
+      "edit_to_completed_image_ms": 155.3989,
+      "image_sha256": "addc6868b1f0bf6cd396b94a79d7cf0b4529b08d4286e1694670a5deb90634c8",
+      "noncorner_pixels": 56194
+    },
+    {
+      "round": 6,
+      "threshold_x_m": -125.0,
+      "edit_evaluate_ms": 52.211,
+      "draw_call_ms": 39.4055,
+      "image_read_wait_ms": 59.7588,
+      "edit_to_completed_image_ms": 151.3753,
+      "image_sha256": "6d86494754f3a33899f0bf5b086029ac2312878c1df81ec7aae491d53dc0a34e",
+      "noncorner_pixels": 53117
+    },
+    {
+      "round": 6,
+      "threshold_x_m": -25.0,
+      "edit_evaluate_ms": 52.5752,
+      "draw_call_ms": 42.1636,
+      "image_read_wait_ms": 58.2565,
+      "edit_to_completed_image_ms": 152.9953,
+      "image_sha256": "a15a672d0159f1beb77e41c9befc405e22ee13dce621c2b304305f36296dfa15",
+      "noncorner_pixels": 54004
+    },
+    {
+      "round": 6,
+      "threshold_x_m": 35.0,
+      "edit_evaluate_ms": 55.1794,
+      "draw_call_ms": 39.2497,
+      "image_read_wait_ms": 58.3491,
+      "edit_to_completed_image_ms": 152.7782,
+      "image_sha256": "2c429205f4b23c070acd16441b6cd83247bdabf30dcc9fa4f270a3631a39285e",
+      "noncorner_pixels": 54945
+    },
+    {
+      "round": 6,
+      "threshold_x_m": 125.0,
+      "edit_evaluate_ms": 58.2905,
+      "draw_call_ms": 39.3906,
+      "image_read_wait_ms": 58.5493,
+      "edit_to_completed_image_ms": 156.2304,
+      "image_sha256": "addc6868b1f0bf6cd396b94a79d7cf0b4529b08d4286e1694670a5deb90634c8",
+      "noncorner_pixels": 56194
+    }
+  ],
+  "image_hashes_by_threshold": {
+    "-125.0": [
+      "6d86494754f3a33899f0bf5b086029ac2312878c1df81ec7aae491d53dc0a34e"
+    ],
+    "-25.0": [
+      "a15a672d0159f1beb77e41c9befc405e22ee13dce621c2b304305f36296dfa15"
+    ],
+    "35.0": [
+      "2c429205f4b23c070acd16441b6cd83247bdabf30dcc9fa4f270a3631a39285e"
+    ],
+    "125.0": [
+      "addc6868b1f0bf6cd396b94a79d7cf0b4529b08d4286e1694670a5deb90634c8"
+    ]
+  },
+  "repeat_exact": true,
+  "median_ms_by_threshold": {
+    "-125.0": {
+      "edit_evaluate_ms": 51.64955,
+      "draw_call_ms": 37.0748,
+      "image_read_wait_ms": 58.3769,
+      "edit_to_completed_image_ms": 147.94445000000002
+    },
+    "-25.0": {
+      "edit_evaluate_ms": 53.8866,
+      "draw_call_ms": 40.11435,
+      "image_read_wait_ms": 56.25105,
+      "edit_to_completed_image_ms": 150.6464
+    },
+    "35.0": {
+      "edit_evaluate_ms": 57.521550000000005,
+      "draw_call_ms": 40.3133,
+      "image_read_wait_ms": 58.35135,
+      "edit_to_completed_image_ms": 153.41555
+    },
+    "125.0": {
+      "edit_evaluate_ms": 58.186350000000004,
+      "draw_call_ms": 40.09165,
+      "image_read_wait_ms": 58.69675,
+      "edit_to_completed_image_ms": 155.81465
+    }
+  }
+}

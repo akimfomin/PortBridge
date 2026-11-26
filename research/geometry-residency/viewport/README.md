@@ -1,0 +1,55 @@
+# Point view inside Blender
+
+The add-on uses Blender's existing Vulkan device and a `POST_VIEW` drawing callback. It loads the pinned 6,385,097-point Tokyo LiDAR tile. The cut control flattens points of class 1 below a local X threshold and assigns those points to class 2. The resident source remains immutable. The preview consumes the edit directly on the GPU. The explicit **Create Blender Point Cloud** action converts the current edit to an ordinary saved Blender object. [Add-on](point_view_addon.py) · [Source report and CC BY attribution](../README.md#full-point-edit-in-stock-blender)
+
+The preview uses additive, depth-independent class colors. Its consumer can legally draw points in source order. The native object retains stable order within the retained and edited partitions, with retained points first. It preserves the source IDs, intensity and exact output positions and classes. General Geometry Nodes scheduling, order-sensitive materials and arbitrary native consumers require a different integration contract. The public GPU API and deterministic preview make this path testable in the stock distribution. [Blender viewport callback](https://docs.blender.org/api/5.4/bpy.types.SpaceView3D.html#bpy.types.SpaceView3D.draw_handler_add) · [Pinned GPU buffer tests](https://github.com/blender/blender/blob/02f0899d78e374b63e7181d9061e1f7ab03419cc/tests/python/bl_pyapi_gpu.py#L77-L101)
+
+## Edit to completed frame
+
+Blender 5.3.0 `02f0899d78e3`, i5-13600KF, RTX 4070 Ti SUPER, driver 617.14. Every timed arm uses the same project tile, add-on cut property, camera, class colors and Vulkan framebuffer. Branches separate stock Geometry Nodes evaluation followed by extraction and upload, fused CPU editing followed by dense upload, an AVX2 CPU mask with precomputed word extents and a small upload, GPU stable compact indices, GPU-resident masks, and direct consumption of an edit by the add-on draw. The compact path stores the retained-then-edited order. GPU masks and the proposed direct draw can defer that order at the tested observer.
+
+The timer starts before the cut property changes and ends at a synchronizing framebuffer read. Draw and edit subintervals include command submission. The GPU can execute submitted work during the final wait. Twelve rotated and reversed blocks per resolution cover four edits and three views. A second set of ten blocks per resolution uses a one-pixel completion read, followed by full-frame validation outside the timer. Every arm produces the same full RGBA8 bytes for its edit and view. Startup, data load, persistent allocation, UI input delivery and the display compositor are outside timing. Device activity sampled between runs ranged from 50% to 69%. [Vulkan read completion](https://github.com/blender/blender/blob/02f0899d78e374b63e7181d9061e1f7ab03419cc/source/blender/gpu/vulkan/vk_texture.cc#L292-L309) · [Frames and paired summary](evidence/summary.json)
+
+| Full image completion | Stock graph and same renderer | Fused CPU, dense upload | CPU bitmask | Stable GPU indices | Resident GPU mask | Add-on direct GPU |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 960×720 | 351.72 ms | 47.01 ms | 8.58 ms | 8.10 ms | 7.75 ms | 7.72 ms |
+| 1600×1000 | 359.59 ms | 47.54 ms | 9.24 ms | 8.76 ms | 8.98 ms | 8.24 ms |
+
+There were 576 timed frames with complete image readback and 400 with the one-pixel completion timing. The add-on was 5.28% and 3.22% faster than stable GPU indices by paired median in the two full-image matrices. Against the resident GPU mask the paired changes were +3.99% and +8.46%, with 27 and 32 faster pairs out of 48 respectively. Positive changes denote lower time for the add-on. The completion-marker control found −0.57% and −0.07% against masks, with 20 of 40 faster pairs at each resolution. The optimized CPU mask also remained close. This establishes a practical way to avoid dense CPU copies for this preview. It leaves the advantage over the strongest resident path unconfirmed.
+
+The compact implementation uses 27,237,280 bytes of index and scan buffers, including 25,540,400 bytes of compact IDs, with the source already resident. The add-on reads its source rows directly and needs no per-edit index buffer. These are requested logical buffer sizes. Driver allocations, residency and whole application memory are separate quantities. [Compact implementation](stable_gpu_index.py) · [Full ordered GPU hashes and boundary tests](evidence/gpu-index-validation.txt)
+
+## Native workflow and limits
+
+The separate Workbench control includes stock Geometry Nodes, the native solid viewport and a full image read. Its four edit medians were 147.94–155.81 ms, with 24 timed frames. It has a different renderer and pixel contract from the additive preview. Measure Workbench in its own scope. [Native control](native_viewport.py) · [Native raw measurements](evidence/native-workbench.json)
+
+A separate GUI Blender process exercised the registered 3D View callback with two edit values on Vulkan. The logical image comparison and timing use an offscreen target. The live test verifies that the add-on redraws through the actual application event loop. [Live viewport check](verify_live_view.py) · [Live draw observations](evidence/live-viewport.json)
+
+The load action stages a native source point cloud once. The final native commit uses Blender's modifier apply so the ordered point result can stay in Blender's data model. The four runs took **3.39–3.48 s** for input decoding and staging, **95–228 ms** for the first synchronized preview including GPU upload, and **142–231 ms** for explicit native commit. The initial implementation wrote a second complete object through Python and took about 775–778 ms per commit after loading. The current route moves some work to load and retains an additional native CPU source. All four resulting objects matched the stock ordered geometry hashes. Saving and opening the 125 m object in a fresh process preserved its hash. [Modifier apply](https://github.com/blender/blender/blob/02f0899d78e374b63e7181d9061e1f7ab03419cc/source/blender/editors/object/object_modifier.cc) · [Operator checks](verify_workflow.py) · [Current operator results](evidence/operators.json) · [Initial commit experiment](evidence/operators-initial-copy.json)
+
+Preserve the add-on as a working specialized path. Broad promotion needs an order-sensitive native consumer or a robust win over device-resident masks in a larger workflow. The current timing supports continued scrutiny of device boundaries, including cases where the renderer or tool requires a host-visible result.
+
+## PortBridge connection
+
+VIctory also faced a native draw whose geometry or count came from device work. The earlier GPU rectangle experiment removed reported drops in an independent pass, while the final frame remained black in that configuration. VIctory ultimately used a different generated geometry-shader route. This is a precedent for verifying final observations and attribution at the actual draw boundary. It supplies no prediction about the speed of this Blender experiment. [VIctory independent run](https://github.com/Marvisak/VIctory/pull/346#issuecomment-7140320609) · [Adopted VIctory change](https://github.com/Marvisak/VIctory/commit/683ad7a99f369571ab4252495989aef68b04933c)
+
+Halide provides a separate active candidate for a larger repeated-work cost. The current WebGPU runtime constructs a compute pipeline for each invocation. The issue author reports whole-test gains on Dawn/Metal. Our official Halide 22.1.0 feasibility check rejected native Windows WebGPU at compilation, while Windows/Vulkan and WASM/WebGPU archives built. In one isolated Chrome WebGPU session on the same NVIDIA adapter, the generated 512×384 Halide shader took 6.60 ms to create a pipeline for each of 24 dispatches and read the resulting image, versus 4.90 ms when the pipeline was available for reuse. Six balanced pairs matched every output pixel. Five favored reuse and one tied. This measures a browser API analogue while the Halide runtime and a complete receiving application remain open. [Halide report](https://github.com/halide/Halide/issues/9565) · [Current runtime](https://github.com/halide/Halide/blob/e9485e16333fd5cd8457d63a0827ee15fdf35e0e/src/runtime/webgpu.cpp#L937-L975) · [Native Windows compiler gate](https://github.com/halide/Halide/blob/e9485e16333fd5cd8457d63a0827ee15fdf35e0e/src/LLVM_Runtime_Linker.cpp#L1399-L1407) · [Browser pilot results](evidence/halide-browser-pilot.json)
+
+## Reproduce
+
+From the repository root, start the tested Blender 5.3.0 build with Vulkan and load the script. In the 3D View sidebar, use **PortBridge**, choose the original Tokyo ZIP, load and frame the preview, and move **Cut X**. **Create Blender Point Cloud** materializes the chosen edit. The input SHA-256 and attribution are documented with the stock fixture. Use an absolute path to the script when Blender starts from another folder.
+
+```sh
+blender --disable-autoexec --gpu-backend vulkan --python /path/to/research/geometry-residency/viewport/point_view_addon.py
+```
+
+Run the headless comparisons through the stock binary. Build the CPU comparison library with a C++20 compiler with threading support. On the tested Windows machine it used LLVM-MinGW `clang++ -O3 -march=native -std=c++20 -shared -static -pthread`. Portable builds can use the scalar fallback and must report CPU flags. Keep external data, the DLL, debug captures and saved geometry in scratch.
+
+```sh
+blender --background --factory-startup --disable-autoexec --gpu-backend vulkan --debug-gpu-backend-no-fallback --python-exit-code 5 --python research/geometry-residency/viewport/run_viewport_benchmark.py -- /path/to/09LD1638.zip /path/to/pb_preview_cpu.dll /path/to/app-image-960 --blocks 12
+blender --background --factory-startup --disable-autoexec --gpu-backend vulkan --debug-gpu-backend-no-fallback --python-exit-code 5 --python research/geometry-residency/viewport/native_viewport.py -- /path/to/09LD1638.zip research/geometry-residency /path/to/workbench.json --rounds 6
+blender --background --factory-startup --disable-autoexec --gpu-backend vulkan --debug-gpu-backend-no-fallback --python-exit-code 5 --python research/geometry-residency/viewport/verify_workflow.py -- /path/to/09LD1638.zip /path/to/operators
+blender --background --factory-startup --disable-autoexec /path/to/operators/committed-cloud.blend --python-exit-code 5 --python research/geometry-residency/viewport/verify_workflow.py -- /path/to/09LD1638.zip /path/to/operators --reopen
+```
+
+Use `--width 1600 --height 1000` for the larger frame. To run the recorded completion-marker variants use `--completion pixel --blocks 10 --modes graph cpu-mask compact mask fused` with `--workers 8` at 960×720 or `--workers 4` at 1600×1000. Use [the summarizer](summarize_viewport.py) with the resulting `frames.json` files to check paired timing and image identities. [Original catalog](https://catalog.data.metro.tokyo.lg.jp/api/3/action/package_show?id=t000029d0000000024)

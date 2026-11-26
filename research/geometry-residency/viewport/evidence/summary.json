@@ -1,0 +1,196 @@
+{
+  "app-image-960": {
+    "schema": 1,
+    "build": "02f0899d78e3",
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver": "NVIDIA 617.14",
+    "backend": "VULKAN",
+    "point_count": 6385097,
+    "dimensions": [
+      960,
+      720
+    ],
+    "scope": "property edit through synchronized framebuffer completion in the shared renderer",
+    "completion": "image",
+    "workers": 20,
+    "partition_scratch_bytes": 27237280,
+    "frames": 288,
+    "unique_images": 12,
+    "pairs": 48,
+    "modes": {
+      "compact": {
+        "median_ms": 8.09675,
+        "fused_paired_saving_pct": 5.274777648245898,
+        "fused_faster_pairs": 28
+      },
+      "cpu": {
+        "median_ms": 47.0123,
+        "fused_paired_saving_pct": 83.2316784453586,
+        "fused_faster_pairs": 48
+      },
+      "cpu-mask": {
+        "median_ms": 8.58005,
+        "fused_paired_saving_pct": 8.723613723291923,
+        "fused_faster_pairs": 33
+      },
+      "fused": {
+        "median_ms": 7.71565,
+        "fused_paired_saving_pct": 0.0,
+        "fused_faster_pairs": 0
+      },
+      "graph": {
+        "median_ms": 351.72305,
+        "fused_paired_saving_pct": 97.59423642614368,
+        "fused_faster_pairs": 48
+      },
+      "mask": {
+        "median_ms": 7.74955,
+        "fused_paired_saving_pct": 3.9904507741494735,
+        "fused_faster_pairs": 27
+      }
+    }
+  },
+  "app-image-1600": {
+    "schema": 1,
+    "build": "02f0899d78e3",
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver": "NVIDIA 617.14",
+    "backend": "VULKAN",
+    "point_count": 6385097,
+    "dimensions": [
+      1600,
+      1000
+    ],
+    "scope": "property edit through synchronized framebuffer completion in the shared renderer",
+    "completion": "image",
+    "workers": 20,
+    "partition_scratch_bytes": 27237280,
+    "frames": 288,
+    "unique_images": 12,
+    "pairs": 48,
+    "modes": {
+      "compact": {
+        "median_ms": 8.76285,
+        "fused_paired_saving_pct": 3.2179412837271606,
+        "fused_faster_pairs": 30
+      },
+      "cpu": {
+        "median_ms": 47.5446,
+        "fused_paired_saving_pct": 81.99511926418037,
+        "fused_faster_pairs": 48
+      },
+      "cpu-mask": {
+        "median_ms": 9.2399,
+        "fused_paired_saving_pct": 11.222936295096225,
+        "fused_faster_pairs": 35
+      },
+      "fused": {
+        "median_ms": 8.24305,
+        "fused_paired_saving_pct": 0.0,
+        "fused_faster_pairs": 0
+      },
+      "graph": {
+        "median_ms": 359.5908,
+        "fused_paired_saving_pct": 97.5450332901138,
+        "fused_faster_pairs": 48
+      },
+      "mask": {
+        "median_ms": 8.9803,
+        "fused_paired_saving_pct": 8.462318418374293,
+        "fused_faster_pairs": 32
+      }
+    }
+  },
+  "app-marker-960": {
+    "schema": 1,
+    "build": "02f0899d78e3",
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver": "NVIDIA 617.14",
+    "backend": "VULKAN",
+    "point_count": 6385097,
+    "dimensions": [
+      960,
+      720
+    ],
+    "scope": "property edit through synchronized framebuffer completion in the shared renderer",
+    "completion": "pixel",
+    "workers": 8,
+    "partition_scratch_bytes": 27237280,
+    "frames": 200,
+    "unique_images": 12,
+    "pairs": 40,
+    "modes": {
+      "compact": {
+        "median_ms": 7.46325,
+        "fused_paired_saving_pct": 8.521917033910226,
+        "fused_faster_pairs": 25
+      },
+      "cpu-mask": {
+        "median_ms": 7.45685,
+        "fused_paired_saving_pct": 4.695469831114963,
+        "fused_faster_pairs": 25
+      },
+      "fused": {
+        "median_ms": 6.9578,
+        "fused_paired_saving_pct": 0.0,
+        "fused_faster_pairs": 0
+      },
+      "graph": {
+        "median_ms": 258.0911,
+        "fused_paired_saving_pct": 97.32333942739166,
+        "fused_faster_pairs": 40
+      },
+      "mask": {
+        "median_ms": 7.2115,
+        "fused_paired_saving_pct": -0.5691196870061976,
+        "fused_faster_pairs": 20
+      }
+    }
+  },
+  "app-marker-1600": {
+    "schema": 1,
+    "build": "02f0899d78e3",
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver": "NVIDIA 617.14",
+    "backend": "VULKAN",
+    "point_count": 6385097,
+    "dimensions": [
+      1600,
+      1000
+    ],
+    "scope": "property edit through synchronized framebuffer completion in the shared renderer",
+    "completion": "pixel",
+    "workers": 4,
+    "partition_scratch_bytes": 27237280,
+    "frames": 200,
+    "unique_images": 12,
+    "pairs": 40,
+    "modes": {
+      "compact": {
+        "median_ms": 7.14135,
+        "fused_paired_saving_pct": 2.8423920386450474,
+        "fused_faster_pairs": 24
+      },
+      "cpu-mask": {
+        "median_ms": 7.46825,
+        "fused_paired_saving_pct": 4.636433586926492,
+        "fused_faster_pairs": 27
+      },
+      "fused": {
+        "median_ms": 7.1612,
+        "fused_paired_saving_pct": 0.0,
+        "fused_faster_pairs": 0
+      },
+      "graph": {
+        "median_ms": 265.2539,
+        "fused_paired_saving_pct": 97.30564515880779,
+        "fused_faster_pairs": 40
+      },
+      "mask": {
+        "median_ms": 7.25095,
+        "fused_paired_saving_pct": -0.06876641218178658,
+        "fused_faster_pairs": 20
+      }
+    }
+  }
+}
