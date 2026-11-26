@@ -8,6 +8,12 @@
 
 > PortBridge is an open coordination tool for independent Xbox Series compatibility projects. Find related work, reuse verified tests, and share results in the repositories where development happens.
 
+## Пассивная поддержка с 26 ноября 2026 года
+
+Я прекращаю инициативные исследования и подбор тестировщиков. Каталог, поиск и Test Lab остаются открытыми. GitHub Actions обновляет открытые данные по расписанию. Отдельные источники могут отставать. Предложения и исправления можно по-прежнему отправить на GitHub. Срок ответа не гарантирован.
+
+[Письмо основателя](https://akimfomin.github.io/PortBridge/letter.ru.html) · [Ответить или взять часть проекта](https://github.com/akimfomin/PortBridge/issues/91) · [История и инженерные итоги](docs/FINAL-AUDIT.ru.md) · [Как запустить и поддерживать проект](docs/PASSIVE-MAINTENANCE.md)
+
 ## Что можно сделать сейчас
 
 | Ваша задача | Куда идти |
@@ -19,7 +25,7 @@
 | Найти проекты по направлению | [Отслеживаемые репозитории](docs/PROJECTS.md) |
 | Взять совместную проверку | Сверьте [текущие задачи команд](docs/WORK-PRIORITIES.md#по-русски) и выберите подходящий прогон в [Test Lab](https://akimfomin.github.io/PortBridge/?lang=ru#/lab). |
 | Продолжить работу после потери доступа к репозиторию | Сохранить авторство и передать воспроизводимый результат в действующий проект. [Пилот PortBridge](docs/CONTINUITY.md#по-русски) |
-| Запросить проверку на другом железе | Откройте запрос из Test Lab или предложите свой тест. PortBridge ищет подходящего человека по публичным отчётам и приглашает его после проверки запроса. [Как это работает](docs/TEST-REQUESTS.md#по-русски) |
+| Запросить проверку на другом железе | Откройте запрос из Test Lab. Доброволец может откликнуться в самом запросе. При необходимости сопровождающий вручную проверяет и отправляет приглашение. [Как это работает](docs/TEST-REQUESTS.md#по-русски) |
 | Попробовать PortBridge в своём проекте | Вставьте полную ссылку на PR в [каталог](https://akimfomin.github.io/PortBridge/?lang=ru#/problems) или запустите [GitHub Action для одного PR](docs/GITHUB-ACTION.md). [Пример сводки](https://github.com/akimfomin/PortBridge/actions/runs/45420038315) |
 | Подключить помощника к поиску | [Codex и Claude Code через MCP](docs/MCP.md) |
 | Попросить агента взять задачу и довести её до результата | [Готовый запрос и порядок работы](docs/AGENT-PROMPT.md) |

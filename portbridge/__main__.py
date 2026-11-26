@@ -26,6 +26,8 @@ STATIC = {
     "/": (PACKAGE / "static" / "index.html", "text/html; charset=utf-8"),
     "/static/styles.css": (PACKAGE / "static" / "styles.css", "text/css; charset=utf-8"),
     "/static/app.js": (PACKAGE / "static" / "app.js", "text/javascript; charset=utf-8"),
+    "/letter.html": (PACKAGE / "static" / "letter.html", "text/html; charset=utf-8"),
+    "/letter.ru.html": (PACKAGE / "static" / "letter.ru.html", "text/html; charset=utf-8"),
     "/api/docs": (ROOT / "API.md", "text/plain; charset=utf-8"),
 }
 OFFICE_STATIC = {

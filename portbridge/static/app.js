@@ -78,6 +78,7 @@ const freshnessLimit = 2 * 60 * 60 * 1000;
 function applyPageLanguage() {
   document.documentElement.lang = language;
   if (language === 'en') return;
+  byId('founder-letter').href = './letter.ru.html';
   byId('api-link').href = '/api/docs';
   byId('feed-link').href = './feed.ru.xml';
   byId('feed-alternate').href = './feed.ru.xml';
@@ -1385,8 +1386,8 @@ function labRequestEntry() {
   queue.searchParams.set('q', 'is:issue "Test request:" in:title');
   actions.append(newRequest, githubLink(t('View test requests', 'Смотреть запросы'), queue.href));
   section.append(element('h2', '', t('Find a tester', 'Найти тестировщика')),
-    element('p', '', t('PortBridge matches a tester from public hardware reports and posts the invitation in your request after review.',
-      'PortBridge подбирает тестировщика по публичным отчётам о стендах и после проверки оставляет приглашение в вашем запросе.')),
+    element('p', '', t('Share a reproducible check and the hardware it needs. Volunteers can reply in your request. A maintainer can review and send an invitation manually.',
+      'Опишите проверку и нужное оборудование. Добровольцы могут ответить в запросе. Адресное приглашение проверяет и отправляет сопровождающий вручную.')),
     actions, githubLink(t('How test requests work', 'Как работают запросы'), `${portbridgeRepository}/blob/main/docs/TEST-REQUESTS.md`));
   return section;
 }

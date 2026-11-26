@@ -1,8 +1,6 @@
 name: PortBridge test invitations
 
 on:
-  issues:
-    types: [labeled]
   workflow_dispatch:
     inputs:
       issue_number:
@@ -16,7 +14,7 @@ jobs:
   invite:
     if: >-
       github.repository == 'akimfomin/PortBridge' && github.ref == 'refs/heads/main'
-      && (github.event_name == 'workflow_dispatch' || github.event.label.name == 'notify-testers')
+      && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

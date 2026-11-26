@@ -375,6 +375,12 @@ p, h1, h2, h3, a { overflow-wrap: anywhere; }
 
 .section-freshness { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 9px; margin: 0 0 12px; color: var(--muted); font-size: .84rem; }
 .section-freshness time + span { margin-inline-start: 12px; }
+.maintenance-note { margin: 0 0 16px; padding: 12px 16px; border-inline-start: 3px solid var(--stroke); background: var(--surface); line-height: 1.55; }
+.maintenance-note a { display: inline-block; }
+.founder-letter { max-width: 70ch; margin: 2rem auto; padding: 0 1.25rem; font-size: 1rem; line-height: 1.65; }
+.founder-letter h1 { margin-block-start: .75em; line-height: 1.2; }
+.founder-letter p { margin-block-start: 1em; }
+.founder-letter footer { margin: 2rem 0; padding-top: 1rem; border-top: 1px solid var(--stroke); }
 .activity-start, .browse-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 .activity-start a, .browse-pagination a { display: inline-flex; align-items: center; min-height: 44px; }
 .browse-pagination { justify-content: center; padding-block: 14px; }

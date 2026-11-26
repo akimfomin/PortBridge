@@ -1,6 +1,8 @@
 from copy import deepcopy
 from datetime import datetime, timezone
 from io import BytesIO
+from pathlib import Path
+import re
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
@@ -27,6 +29,11 @@ def tester(login, *capabilities, equipment="amd", rate="2026-11-24T10:00:00Z"):
 
 
 class TestRequestTests(TestCase):
+    def test_invitation_workflow_requires_manual_dispatch(self):
+        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/test-requests.yml"
+        settings = workflow.read_text(encoding="utf-8").split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
+        self.assertEqual(re.findall(r"^  ([\w-]+):", settings, re.MULTILINE), ["workflow_dispatch"])
+
     def setUp(self):
         # Exercise the original monitored request while the real legacy card awaits a new pin.
         active = tuple({**task, "status": "needs_run", "receiving_url": None} if task["id"] == TASK else task

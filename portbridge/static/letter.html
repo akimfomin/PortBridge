@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A letter from the founder of PortBridge</title>
+  <link rel="stylesheet" href="./static/styles.css">
+</head>
+<body>
+  <main class="founder-letter">
+    <nav aria-label="Navigation"><a href="./">← PortBridge</a> · <a href="./letter.ru.html" lang="ru" hreflang="ru">Русский</a></nav>
+    <h1>A letter from the founder of PortBridge</h1>
+    <p>To everyone working on Xbox Series compatibility,</p>
+    <p>I started PortBridge at home because I kept seeing people in different repositories ask questions that someone else had already spent an evening answering. I wanted there to be a place where a developer could find that person, borrow a test with its author’s name still on it, or ask someone with a different graphics card to check an unexpected result.</p>
+    <p>There was one person behind PortBridge, working with an AI agent on a home computer. I had no staff, organization or funding. Other people chose to give us their time. KainanP fixed an FMA rounding error we reported and later brought hardware questions to PortBridge himself. Lyrnc measured rounding in numerical conversions and separately checked carry bits on physical RDNA2 hardware. Lewandox picked up our coordinate-calculation suggestion in his texture work. Those changes belong to the people who wrote and reviewed them.</p>
+    <p>I’ll remember 5headsmartbtw putting our NVIDIA run into FrameLab’s documentation, and JoeY54 taking the time to run the AMD checks. PastiiJay at KLBF Lab spotted a test that could look green without exercising the hardware. DarkPanda69 compared our Wave32 fix on a Radeon and a GeForce, and luckyteagirl checked the patched version on an RX 6800M. Each of those replies told us something we couldn’t learn on my computer.</p>
+    <p>We left a shader optimization that runs two open Mobile NeRF passes faster on my RTX. It is still experimental. The scratch-memory patch also remains available for review. I’m glad these results exist. I had hoped that people would regularly use PortBridge to start and carry work themselves. That happened a few times, including KainanP’s contribution, but too rarely for me to keep the project moving at this pace on my own. It’s hard to write that after how much I wanted the idea to work.</p>
+    <p>Today I’m stepping back from initiating research and organising tests. The code, measurements, catalog and Test Lab will stay public. You can still open an issue or a pull request. I may take time to reply. If even one of our tests saves another developer that evening, building it was worthwhile.</p>
+    <p>If you’d like to look after a component, continue a hardware check, or help people across two projects share results, please leave a note here. I’d be glad to hear what you have in mind, however small. Maybe a few of us together can build the part that I couldn’t manage alone.</p>
+    <p>Thank you to everyone who tried a patch, challenged a conclusion, shared knowledge or took our work into their own project. I wish every team the best with what comes next. I’m still around. I just can’t keep the old pace.</p>
+    <p>— akimfomin, 26 November 2026</p>
+    <footer><a href="https://github.com/akimfomin/PortBridge/issues/91">Reply to the founder on GitHub</a> · <a href="https://github.com/akimfomin/PortBridge/blob/main/docs/FINAL-AUDIT.md">Project history and evidence</a></footer>
+  </main>
+</body>
+</html>

@@ -19,7 +19,8 @@ from .public_browse import BROWSE_INDEX, BROWSE_MANIFEST, BROWSE_PAGE, BROWSE_PO
 
 PACKAGE = Path(__file__).resolve().parent
 ROOT = PACKAGE.parent
-ASSETS = {"index.html": "index.html", "static/styles.css": "styles.css", "static/app.js": "app.js"}
+ASSETS = {"index.html": "index.html", "letter.html": "letter.html", "letter.ru.html": "letter.ru.html",
+          "static/styles.css": "styles.css", "static/app.js": "app.js"}
 SNAPSHOTS = {"site", "projects", "ecosystem", "problems", "matches", "health", "observations", "coordination", "outreach", "activity", "lab",
              "graph", "source-history", "recommendations"}
 VERSIONED_SNAPSHOTS = ("projects", "ecosystem", "problems", "health", "lab", "activity", "outreach", "coordination")

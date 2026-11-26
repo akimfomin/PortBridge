@@ -1,0 +1,664 @@
+{
+  "captured_utc": "2026-11-26 02:33:24 UTC",
+  "scope": "PortBridge public refs and PRs before the passive-maintenance release. Upstream authorship, adoption and reproduction conditions are documented in FINAL-AUDIT.md.",
+  "main_revision": "2223a0b6a4dbaac1e98f8f90204b190296c4ef75",
+  "refs": {
+    "refs/heads/activity-front-page": "2e710b03e073695eee6f24bd4afba94b793b2899",
+    "refs/heads/codex/adoption-and-live-lab": "a8f9ac072cd35816ce28b2cf7026c20bd12aaabf",
+    "refs/heads/codex/autonomous-test-lab": "72b91957b2e51c8e590c4cf5e9f8ec11c6d9846a",
+    "refs/heads/codex/compiler-ecosystem-next": "6d57f27fe20802912272f5cddc51382358b5db66",
+    "refs/heads/codex/compiler-rewrite-research": "c35a5b7ddfd3120e5c843b8f9f5798ebbf572481",
+    "refs/heads/codex/evidence-first-mipmaps": "74b3c0a318e20d975019d6ed892dff9607fbf23f",
+    "refs/heads/codex/fma-lab-coverage": "2843c9def9719cb2df641897afc9378a24641df7",
+    "refs/heads/codex/geometry-residency": "88cede556d9613a6e09964a1c7fdc15fc9449a0c",
+    "refs/heads/codex/gpu-transfer-planner": "d490a4e498bdbd956a3d0a8fd8a057c6bfe11d7a",
+    "refs/heads/codex/halide-webgpu-callbacks": "c07750453d6b0b70218a5f94edd851deb1500b8f",
+    "refs/heads/codex/lab-evidence-review": "07a9188b049aa7464e0ced35ed3728280ab3daaf",
+    "refs/heads/codex/mipmap-evidence-citations": "939ffe04092d0bc0c88947bc9a39c423e517d8e3",
+    "refs/heads/codex/native-mobile-nerf-fragment": "806a4c0dec2364c8881e1efb437964ac4aa42b27",
+    "refs/heads/codex/online-readback-policy": "1be71c6b908252c359d76ff9e211d30d0264e35b",
+    "refs/heads/codex/original-rnd-evidence": "2b396a7c8e83d0325b280950730e0286ecac443a",
+    "refs/heads/codex/pipeline-readiness": "64280ea4688f152100360403adb33f527f36c0a9",
+    "refs/heads/codex/rdna2-d16-probe": "6a31f4495947922185ebb5aeea9d88c8634c62c0",
+    "refs/heads/codex/rdna2-pack-a1-a4-source": "ad753787a803797ead4667331f1ed8cb2580e7ce",
+    "refs/heads/codex/rdna2-pr78-complete-output": "14bacd57bca9d7244f8ba964b5ce499248f21bc2",
+    "refs/heads/codex/readback-observation-epochs": "f2c840b6e1c38e1ec7e4f4032c81fd3e4e9c319f",
+    "refs/heads/codex/reports-search-radar": "7d550fb43c5a8195036291e1947d5a35234d5be8",
+    "refs/heads/codex/research-anyxboxx-133-fma": "95de2b9a7b89e11176866beb18cd332c11dd093c",
+    "refs/heads/codex/research-anyxboxx-133-fma-fast": "a81494e29a78e18f8f585867aee3473221e54fc1",
+    "refs/heads/codex/research-anyxboxx-188-texture-adoption": "8a0decf3d505384e9376d47df33fff4d9c662811",
+    "refs/heads/codex/research-continued-vulkan-layout-coalescing": "049b46286518c20d98dc74ae700e66599110d964",
+    "refs/heads/codex/research-xcl-2126-fragmentation": "4412c8504928858fc35b4b237e668da155aed8e5",
+    "refs/heads/codex/research-xcl-2126-private-replay": "89884212b8a5718f44b16b66e8df0cf5f263306b",
+    "refs/heads/codex/ssa-quad-input-evidence": "b47d346ca2da1a317eb4521fea3c0feac8be1624",
+    "refs/heads/codex/subgroup-dxil-proof": "225450cde85b463693f07a9a7e6179f6fbf6b8a8",
+    "refs/heads/codex/testlab-pinned-requests-84-87": "1f5340968b3d89584435fc7921bfdd4a792312fc",
+    "refs/heads/codex/verified-upstream-outcomes": "b6b5d8b475b98bd7b0b5016aa97f8ad0ca6b0fde",
+    "refs/heads/codex/verified-wave32-and-mask-projection": "56963bf15eae78593513c9f96589e2ab9bde0461",
+    "refs/heads/codex/verify-mipmap-open-textures": "cb0faec3b66e9d97f120de17288f1e5435757156",
+    "refs/heads/codex/xcl-scratch-comparison-revisions": "64a3e569b6980268cd5fca05289edbb7f8877f9b",
+    "refs/heads/coordination-field-notes": "53eaf40ee284c3fe5aaf9f1897787b7aaeb00714",
+    "refs/heads/data/track-found-projects-and-pacing": "050c99ae6c8cbc6afcb9503a1b8206bbef3f2e88",
+    "refs/heads/discovery/public-tracker-and-victory-fork": "1b988dae399c04932d51b2943d1691ba499d253d",
+    "refs/heads/docs/anyxboxx-nvidia-followup": "5bcd9de85f916f1cc2cf8b32a64603c47b5f63d7",
+    "refs/heads/docs/framelab-collaboration": "4d788e2a45cfad2704456d7e3b1a0d297162d7f7",
+    "refs/heads/docs/log-tracker-and-pacing-handoffs": "cad43772c2e6b3068365813757001fa4649b9b33",
+    "refs/heads/docs/log-transfer-offer-and-invitation": "052e1a814ddb63979c01350b5454819295a0bc33",
+    "refs/heads/docs/log-volunteer-task-trials": "b75b0d5714a5b5f13fa519ba0a9928d66752213c",
+    "refs/heads/docs/maintainer-led-priorities": "47942fbe098b3dfa0f7f138aae5f9bb72664a721",
+    "refs/heads/docs/project-continuity-pilot": "ebf76f050109322d6a68251ed00b54bc75b96dd6",
+    "refs/heads/docs/record-anyxboxx-warp-adoption": "b14a7677ccc8337a2a9031020024168ed3064dfc",
+    "refs/heads/docs/record-community-trial-and-checks": "711ad20515a5f00f8f07d05d65031804210762f7",
+    "refs/heads/docs/record-independent-amd-carry": "790519dfe2d093a26ba0c95dd7b2d48b3e7f35f9",
+    "refs/heads/docs/record-paired-lds-and-carry-reuse": "c3c3a18eba90dba0627f5283f03965ffb037f02f",
+    "refs/heads/docs/record-wave64-handoff": "22f76342d192833ab58fe320ee26fff693efd3d0",
+    "refs/heads/docs/voluntary-one-pr-pilot": "08aff9d3160ff717dae866b2c7c942c9c19da897",
+    "refs/heads/english-first": "6079bffac3cf9f6553f833d0fce86de38388f48d",
+    "refs/heads/feat/ecosystem-source-discovery": "b4ab38b348f8c363d05a404f18e47a63ceca9a87",
+    "refs/heads/feat/scarlett-commons-test-exchange": "ae2fe7a6467648069a0d1ac84239bd55f4f25ebb",
+    "refs/heads/feat/shareable-test-lab-tasks": "77f0b59f7756e3f6bdcbdaa31bcd2c23df0387a5",
+    "refs/heads/feat/test-lab-repeat-use": "aa0bc7b1f45a11c821a2c6557a4ba27dd206147a",
+    "refs/heads/feature/agent-start-and-test-requests": "efba8c1125cc4636caddf3b004f2064ac24835d1",
+    "refs/heads/feature/evidence-of-reuse": "460e1deb172a525ccb91778ad7e8b865570f4d98",
+    "refs/heads/feature/live-handoff-validation": "d581cb30b5c4a58927042af02c9d82bffb1a3e36",
+    "refs/heads/feature/log-native-invitation": "299375c3f0e1da56b481c53f649fb372dc879d58",
+    "refs/heads/feature/native-carry-compare-control": "7b24eadb5cf34f240dbbd3f86f08dc8a98c3c18a",
+    "refs/heads/feature/native-rdna2-pilot": "065dcd9445ed2cc2196199498f5d51a86104d22b",
+    "refs/heads/feature/one-pr-workflow-pilot": "812aab85f739c56d48d5b49d433554f4cf6527dc",
+    "refs/heads/feature/public-community-pilot": "aa9e683e73044c57b2fb21467525f7288bb90827",
+    "refs/heads/feature/record-three-team-validation": "a5c9af8c4ad34d89c6bba7d141a99ac95fd7fbf0",
+    "refs/heads/feature/verify-xcl-division-uptake": "494f8e5ce3dafe4bcbc207161e0e9976085acb2f",
+    "refs/heads/first-frame-evidence": "3d27bfd9929507e3dcb7a0823019bb93db5925f0",
+    "refs/heads/fix/refresh-ecosystem-assets": "728cc40e3b7076b4b5d47a7a5b6c32ceb203363a",
+    "refs/heads/fix/refresh-oldest-projects-first": "515bee13c21cd863406853b2c22f9df5662cc690",
+    "refs/heads/fix/unavailable-source-handoffs": "3a638abeb350b904753aac7d3b466c11cc78df25",
+    "refs/heads/fix/victory-fork-canonical-address": "08ad0dd6e1be0363274112ed7235e72b499fdf3b",
+    "refs/heads/iteration/engineering-results-2026-11-25": "da1a914d426bf45b3def20579bfdfc960117bf36",
+    "refs/heads/iteration/independent-amd-and-test-lab": "eb48afbeda643c09e39c3ed28e00d692e8a57a70",
+    "refs/heads/lab-d16-review": "642abcd3eca60132bd9ced458f195b2c148eecfb",
+    "refs/heads/main": "2223a0b6a4dbaac1e98f8f90204b190296c4ef75",
+    "refs/heads/open-shared-checks": "9cb5c844539eac4d9318e31f49e44b720aaca5cb",
+    "refs/heads/public-test-lab": "79ef5f8f4e62ec7776c7ebb0b75a162ba69411c0",
+    "refs/heads/research/continued-pipeline-admission": "8b1ff9aff1ece7be0c4f2a2e50637af5627716f5",
+    "refs/heads/research/rendering-night": "0053134a92e051d51a2b4b9ff26b6b454b95d197",
+    "refs/heads/research/victory-write-watch-control": "86a3f2cb35b9aa398840ed92a27fef2add7f6e47",
+    "refs/heads/research/xcl-2126-compact-slots": "2e46a3635ee7725860ceec08ca246a2ab14615b9",
+    "refs/heads/research/xcl-2126-lifetime-census": "2012934dd41bf805ac936d2901eca6b31c58acd0",
+    "refs/heads/research/xcl-dxil-night": "f64d464b3f6016c085997c541ab339e3c08d622e",
+    "refs/heads/research/xcl-phi-worklist": "edfee7f248c2336eb139885d2b36c4c5589040f4",
+    "refs/heads/scarlett-xcl-evidence": "2ca07ab6474aa52afdf1bb86cff485259c82953b",
+    "refs/heads/test/framelab-and-d16-followup": "85bd750c61ccdb9dc4af6a414ce68efc1c975448",
+    "refs/heads/verified-work-first": "3032dc3115651495a76d8c280e3dc86878aaa96e",
+    "refs/tags/v0.1.0": "5ac6c3fd58cf10faf34ab7175da33e99cc55eebf",
+    "refs/tags/v0.1.1": "7b1dbdedccccdf75b257c130e970344e3434d0e4",
+    "refs/tags/v0.1.2": "156fa43fe9a65f9111123a4c110599e837c35d24"
+  },
+  "pull_requests": [
+    {
+      "number": 1,
+      "title": "Ship audit fixes and verified cross-team coordination",
+      "state": "merged",
+      "head": "53eaf40ee284c3fe5aaf9f1897787b7aaeb00714",
+      "url": "https://github.com/akimfomin/PortBridge/pull/1"
+    },
+    {
+      "number": 2,
+      "title": "Make PortBridge English-first with Russian language support",
+      "state": "merged",
+      "head": "6079bffac3cf9f6553f833d0fce86de38388f48d",
+      "url": "https://github.com/akimfomin/PortBridge/pull/2"
+    },
+    {
+      "number": 3,
+      "title": "Show live project progress and shared checks on PortBridge",
+      "state": "merged",
+      "head": "2e710b03e073695eee6f24bd4afba94b793b2899",
+      "url": "https://github.com/akimfomin/PortBridge/pull/3"
+    },
+    {
+      "number": 6,
+      "title": "Make open shared checks discoverable and track Scarlett Layer",
+      "state": "merged",
+      "head": "9cb5c844539eac4d9318e31f49e44b720aaca5cb",
+      "url": "https://github.com/akimfomin/PortBridge/pull/6"
+    },
+    {
+      "number": 7,
+      "title": "Keep verified results visible on the activity dashboard",
+      "state": "merged",
+      "head": "3032dc3115651495a76d8c280e3dc86878aaa96e",
+      "url": "https://github.com/akimfomin/PortBridge/pull/7"
+    },
+    {
+      "number": 8,
+      "title": "Record the verified Scarlett Layer to XCL handoff",
+      "state": "merged",
+      "head": "2ca07ab6474aa52afdf1bb86cff485259c82953b",
+      "url": "https://github.com/akimfomin/PortBridge/pull/8"
+    },
+    {
+      "number": 10,
+      "title": "Record first-frame checks from three teams",
+      "state": "merged",
+      "head": "3d27bfd9929507e3dcb7a0823019bb93db5925f0",
+      "url": "https://github.com/akimfomin/PortBridge/pull/10"
+    },
+    {
+      "number": 11,
+      "title": "Open the PortBridge Test Lab for volunteers and agents",
+      "state": "merged",
+      "head": "79ef5f8f4e62ec7776c7ebb0b75a162ba69411c0",
+      "url": "https://github.com/akimfomin/PortBridge/pull/11"
+    },
+    {
+      "number": 12,
+      "title": "Point the D16 lab task to the receiving review",
+      "state": "merged",
+      "head": "642abcd3eca60132bd9ced458f195b2c148eecfb",
+      "url": "https://github.com/akimfomin/PortBridge/pull/12"
+    },
+    {
+      "number": 13,
+      "title": "Invite public hardware testers through PortBridge",
+      "state": "merged",
+      "head": "efba8c1125cc4636caddf3b004f2064ac24835d1",
+      "url": "https://github.com/akimfomin/PortBridge/pull/13"
+    },
+    {
+      "number": 15,
+      "title": "Show verified PortBridge contributions and pilot onboarding",
+      "state": "merged",
+      "head": "aa9e683e73044c57b2fb21467525f7288bb90827",
+      "url": "https://github.com/akimfomin/PortBridge/pull/15"
+    },
+    {
+      "number": 16,
+      "title": "Record tested handoffs and the first adopted regression",
+      "state": "merged",
+      "head": "460e1deb172a525ccb91778ad7e8b865570f4d98",
+      "url": "https://github.com/akimfomin/PortBridge/pull/16"
+    },
+    {
+      "number": 17,
+      "title": "Verify live test revisions and record cross-project fixes",
+      "state": "merged",
+      "head": "d581cb30b5c4a58927042af02c9d82bffb1a3e36",
+      "url": "https://github.com/akimfomin/PortBridge/pull/17"
+    },
+    {
+      "number": 18,
+      "title": "Record independently confirmed XCL division fix",
+      "state": "merged",
+      "head": "494f8e5ce3dafe4bcbc207161e0e9976085acb2f",
+      "url": "https://github.com/akimfomin/PortBridge/pull/18"
+    },
+    {
+      "number": 20,
+      "title": "Publish verified shader findings and native RDNA2 test request",
+      "state": "merged",
+      "head": "065dcd9445ed2cc2196199498f5d51a86104d22b",
+      "url": "https://github.com/akimfomin/PortBridge/pull/20"
+    },
+    {
+      "number": 21,
+      "title": "Record the native AMD invitation and exact XCL validation",
+      "state": "merged",
+      "head": "299375c3f0e1da56b481c53f649fb372dc879d58",
+      "url": "https://github.com/akimfomin/PortBridge/pull/21"
+    },
+    {
+      "number": 22,
+      "title": "Record AnyXboxX, Continued and VIctory validation",
+      "state": "merged",
+      "head": "a5c9af8c4ad34d89c6bba7d141a99ac95fd7fbf0",
+      "url": "https://github.com/akimfomin/PortBridge/pull/22"
+    },
+    {
+      "number": 23,
+      "title": "Pilot one public pull request with a focused Action summary",
+      "state": "merged",
+      "head": "812aab85f739c56d48d5b49d433554f4cf6527dc",
+      "url": "https://github.com/akimfomin/PortBridge/pull/23"
+    },
+    {
+      "number": 24,
+      "title": "Share the tested one-PR pilot and volunteer instructions",
+      "state": "merged",
+      "head": "08aff9d3160ff717dae866b2c7c942c9c19da897",
+      "url": "https://github.com/akimfomin/PortBridge/pull/24"
+    },
+    {
+      "number": 25,
+      "title": "Validate the native carry probe and share first-frame checks",
+      "state": "merged",
+      "head": "7b24eadb5cf34f240dbbd3f86f08dc8a98c3c18a",
+      "url": "https://github.com/akimfomin/PortBridge/pull/25"
+    },
+    {
+      "number": 26,
+      "title": "Record the adopted AnyXboxX WARP correction",
+      "state": "merged",
+      "head": "b14a7677ccc8337a2a9031020024168ed3064dfc",
+      "url": "https://github.com/akimfomin/PortBridge/pull/26"
+    },
+    {
+      "number": 27,
+      "title": "Record the independent RDNA2 carry measurement",
+      "state": "merged",
+      "head": "790519dfe2d093a26ba0c95dd7b2d48b3e7f35f9",
+      "url": "https://github.com/akimfomin/PortBridge/pull/27"
+    },
+    {
+      "number": 28,
+      "title": "Track paired LDS fixes and AnyXboxX evidence reuse",
+      "state": "merged",
+      "head": "c3c3a18eba90dba0627f5283f03965ffb037f02f",
+      "url": "https://github.com/akimfomin/PortBridge/pull/28"
+    },
+    {
+      "number": 29,
+      "title": "Record community trials and cross-project verification",
+      "state": "merged",
+      "head": "711ad20515a5f00f8f07d05d65031804210762f7",
+      "url": "https://github.com/akimfomin/PortBridge/pull/29"
+    },
+    {
+      "number": 30,
+      "title": "Log the fixture transfer offer and prior invitation",
+      "state": "merged",
+      "head": "052e1a814ddb63979c01350b5454819295a0bc33",
+      "url": "https://github.com/akimfomin/PortBridge/pull/30"
+    },
+    {
+      "number": 31,
+      "title": "Add tracker discoveries and frame pacing evidence",
+      "state": "merged",
+      "head": "050c99ae6c8cbc6afcb9503a1b8206bbef3f2e88",
+      "url": "https://github.com/akimfomin/PortBridge/pull/31"
+    },
+    {
+      "number": 32,
+      "title": "Log tracker proposals and frame pacing handoffs",
+      "state": "merged",
+      "head": "cad43772c2e6b3068365813757001fa4649b9b33",
+      "url": "https://github.com/akimfomin/PortBridge/pull/32"
+    },
+    {
+      "number": 33,
+      "title": "Discover ecosystem sources and track verified transfers",
+      "state": "merged",
+      "head": "b4ab38b348f8c363d05a404f18e47a63ceca9a87",
+      "url": "https://github.com/akimfomin/PortBridge/pull/33"
+    },
+    {
+      "number": 34,
+      "title": "Refresh project map assets and record TuxBox timing check",
+      "state": "merged",
+      "head": "728cc40e3b7076b4b5d47a7a5b6c32ceb203363a",
+      "url": "https://github.com/akimfomin/PortBridge/pull/34"
+    },
+    {
+      "number": 35,
+      "title": "Share individual lab checks and follow XCL repository move",
+      "state": "merged",
+      "head": "77f0b59f7756e3f6bdcbdaa31bcd2c23df0387a5",
+      "url": "https://github.com/akimfomin/PortBridge/pull/35"
+    },
+    {
+      "number": 36,
+      "title": "Record technical handoff and scoped volunteer invitations",
+      "state": "merged",
+      "head": "b75b0d5714a5b5f13fa519ba0a9928d66752213c",
+      "url": "https://github.com/akimfomin/PortBridge/pull/36"
+    },
+    {
+      "number": 37,
+      "title": "Share a synthetic Scarlett Commons test with Continued",
+      "state": "merged",
+      "head": "ae2fe7a6467648069a0d1ac84239bd55f4f25ebb",
+      "url": "https://github.com/akimfomin/PortBridge/pull/37"
+    },
+    {
+      "number": 38,
+      "title": "Make shared tests easier to run and repeat",
+      "state": "merged",
+      "head": "aa0bc7b1f45a11c821a2c6557a4ba27dd206147a",
+      "url": "https://github.com/akimfomin/PortBridge/pull/38"
+    },
+    {
+      "number": 39,
+      "title": "Record the Wave64 invitation and Continued adoption",
+      "state": "merged",
+      "head": "22f76342d192833ab58fe320ee26fff693efd3d0",
+      "url": "https://github.com/akimfomin/PortBridge/pull/39"
+    },
+    {
+      "number": 40,
+      "title": "Preserve evidence when a public source disappears",
+      "state": "merged",
+      "head": "3a638abeb350b904753aac7d3b466c11cc78df25",
+      "url": "https://github.com/akimfomin/PortBridge/pull/40"
+    },
+    {
+      "number": 42,
+      "title": "Document the public project continuity pilot",
+      "state": "merged",
+      "head": "ebf76f050109322d6a68251ed00b54bc75b96dd6",
+      "url": "https://github.com/akimfomin/PortBridge/pull/42"
+    },
+    {
+      "number": 43,
+      "title": "Add FrameLab AMD check and publish Continued test evidence",
+      "state": "merged",
+      "head": "85bd750c61ccdb9dc4af6a414ce68efc1c975448",
+      "url": "https://github.com/akimfomin/PortBridge/pull/43"
+    },
+    {
+      "number": 44,
+      "title": "Record FrameLab collaboration reply and AMD handoff",
+      "state": "merged",
+      "head": "4d788e2a45cfad2704456d7e3b1a0d297162d7f7",
+      "url": "https://github.com/akimfomin/PortBridge/pull/44"
+    },
+    {
+      "number": 45,
+      "title": "Prioritize current maintainer needs and track downstream use",
+      "state": "merged",
+      "head": "47942fbe098b3dfa0f7f138aae5f9bb72664a721",
+      "url": "https://github.com/akimfomin/PortBridge/pull/45"
+    },
+    {
+      "number": 46,
+      "title": "Record AnyXboxX NVIDIA validation and downstream use",
+      "state": "merged",
+      "head": "5bcd9de85f916f1cc2cf8b32a64603c47b5f63d7",
+      "url": "https://github.com/akimfomin/PortBridge/pull/46"
+    },
+    {
+      "number": 47,
+      "title": "Track the VIctory fork and document independent test partnerships",
+      "state": "merged",
+      "head": "1b988dae399c04932d51b2943d1691ba499d253d",
+      "url": "https://github.com/akimfomin/PortBridge/pull/47"
+    },
+    {
+      "number": 48,
+      "title": "Refresh the oldest GitHub sources first",
+      "state": "merged",
+      "head": "515bee13c21cd863406853b2c22f9df5662cc690",
+      "url": "https://github.com/akimfomin/PortBridge/pull/48"
+    },
+    {
+      "number": 49,
+      "title": "Follow the verified VIctory fork repository rename",
+      "state": "merged",
+      "head": "08ad0dd6e1be0363274112ed7235e72b499fdf3b",
+      "url": "https://github.com/akimfomin/PortBridge/pull/49"
+    },
+    {
+      "number": 50,
+      "title": "Record independent GPU checks and simplify the Test Lab queue",
+      "state": "merged",
+      "head": "eb48afbeda643c09e39c3ed28e00d692e8a57a70",
+      "url": "https://github.com/akimfomin/PortBridge/pull/50"
+    },
+    {
+      "number": 51,
+      "title": "Record four upstream engineering handoffs",
+      "state": "merged",
+      "head": "da1a914d426bf45b3def20579bfdfc960117bf36",
+      "url": "https://github.com/akimfomin/PortBridge/pull/51"
+    },
+    {
+      "number": 53,
+      "title": "Refresh Test Lab reports from public discussions",
+      "state": "merged",
+      "head": "72b91957b2e51c8e590c4cf5e9f8ec11c6d9846a",
+      "url": "https://github.com/akimfomin/PortBridge/pull/53"
+    },
+    {
+      "number": 55,
+      "title": "Generalize Test Lab reports, partition public search and add research radar",
+      "state": "merged",
+      "head": "7d550fb43c5a8195036291e1947d5a35234d5be8",
+      "url": "https://github.com/akimfomin/PortBridge/pull/55"
+    },
+    {
+      "number": 56,
+      "title": "Review Test Lab reports and improve technical search and publication checks",
+      "state": "merged",
+      "head": "07a9188b049aa7464e0ced35ed3728280ab3daaf",
+      "url": "https://github.com/akimfomin/PortBridge/pull/56"
+    },
+    {
+      "number": 57,
+      "title": "Make the public catalog complete, searchable, and current",
+      "state": "merged",
+      "head": "a8f9ac072cd35816ce28b2cf7026c20bd12aaabf",
+      "url": "https://github.com/akimfomin/PortBridge/pull/57"
+    },
+    {
+      "number": 59,
+      "title": "Track native AnyXboxX FMA checks and link static API docs",
+      "state": "merged",
+      "head": "2843c9def9719cb2df641897afc9378a24641df7",
+      "url": "https://github.com/akimfomin/PortBridge/pull/59"
+    },
+    {
+      "number": 62,
+      "title": "Publish physical buffer-transfer study and shader lane validator",
+      "state": "merged",
+      "head": "2b396a7c8e83d0325b280950730e0286ecac443a",
+      "url": "https://github.com/akimfomin/PortBridge/pull/62"
+    },
+    {
+      "number": 64,
+      "title": "Validate XCL Direct DXIL with the shared shader lane contract",
+      "state": "merged",
+      "head": "225450cde85b463693f07a9a7e6179f6fbf6b8a8",
+      "url": "https://github.com/akimfomin/PortBridge/pull/64"
+    },
+    {
+      "number": 65,
+      "title": "Record independent checks and upstream implementation separately",
+      "state": "merged",
+      "head": "b6b5d8b475b98bd7b0b5016aa97f8ad0ca6b0fde",
+      "url": "https://github.com/akimfomin/PortBridge/pull/65"
+    },
+    {
+      "number": 66,
+      "title": "Publish shader compiler optimizations and add independent Wave64 verification",
+      "state": "merged",
+      "head": "c35a5b7ddfd3120e5c843b8f9f5798ebbf572481",
+      "url": "https://github.com/akimfomin/PortBridge/pull/66"
+    },
+    {
+      "number": 67,
+      "title": "Measure shader compiler alternatives and expand reviewed ecosystem coverage",
+      "state": "merged",
+      "head": "6d57f27fe20802912272f5cddc51382358b5db66",
+      "url": "https://github.com/akimfomin/PortBridge/pull/67"
+    },
+    {
+      "number": 68,
+      "title": "Verify portable Vulkan mipmaps and measure subgroup transport",
+      "state": "merged",
+      "head": "74b3c0a318e20d975019d6ed892dff9607fbf23f",
+      "url": "https://github.com/akimfomin/PortBridge/pull/68"
+    },
+    {
+      "number": 69,
+      "title": "Correct mipmap benchmark attribution and link upstream report",
+      "state": "merged",
+      "head": "939ffe04092d0bc0c88947bc9a39c423e517d8e3",
+      "url": "https://github.com/akimfomin/PortBridge/pull/69"
+    },
+    {
+      "number": 70,
+      "title": "Pin both revisions for independent XCL scratch measurements",
+      "state": "merged",
+      "head": "64a3e569b6980268cd5fca05289edbb7f8877f9b",
+      "url": "https://github.com/akimfomin/PortBridge/pull/70"
+    },
+    {
+      "number": 71,
+      "title": "Replay Vulkan mipmaps on open textures and stock Blender",
+      "state": "merged",
+      "head": "cb0faec3b66e9d97f120de17288f1e5435757156",
+      "url": "https://github.com/akimfomin/PortBridge/pull/71"
+    },
+    {
+      "number": 72,
+      "title": "Measure observation-scoped GPU readbacks end to end",
+      "state": "merged",
+      "head": "f2c840b6e1c38e1ec7e4f4032c81fd3e4e9c319f",
+      "url": "https://github.com/akimfomin/PortBridge/pull/72"
+    },
+    {
+      "number": 74,
+      "title": "Validate online readbacks and begin compute dependency research",
+      "state": "merged",
+      "head": "1be71c6b908252c359d76ff9e211d30d0264e35b",
+      "url": "https://github.com/akimfomin/PortBridge/pull/74"
+    },
+    {
+      "number": 75,
+      "title": "Measure the Blender GPU residency boundary and validate ordered point views",
+      "state": null,
+      "head": "88cede556d9613a6e09964a1c7fdc15fc9449a0c",
+      "url": "https://github.com/akimfomin/PortBridge/pull/75"
+    },
+    {
+      "number": 76,
+      "title": "Remove timer polling from two Halide WebGPU previews",
+      "state": null,
+      "head": "c07750453d6b0b70218a5f94edd851deb1500b8f",
+      "url": "https://github.com/akimfomin/PortBridge/pull/76"
+    },
+    {
+      "number": 77,
+      "title": "Measure cold pipeline readiness under competing compilation",
+      "state": null,
+      "head": "64280ea4688f152100360403adb33f527f36c0a9",
+      "url": "https://github.com/akimfomin/PortBridge/pull/77"
+    },
+    {
+      "number": 78,
+      "title": "Add RDNA2 probes for five open AnyXboxX hardware questions",
+      "state": null,
+      "head": "81f607fa1325ce1cb22f0341ad10e1aad71a543b",
+      "url": "https://github.com/akimfomin/PortBridge/pull/78"
+    },
+    {
+      "number": 88,
+      "title": "Publish the independently verified XCL Wave32 fix and scope the SSA results",
+      "state": "merged",
+      "head": "56963bf15eae78593513c9f96589e2ab9bde0461",
+      "url": "https://github.com/akimfomin/PortBridge/pull/88"
+    },
+    {
+      "number": 89,
+      "title": "Make the active XCL and AnyXboxX volunteer checks available in Test Lab",
+      "state": "merged",
+      "head": "1f5340968b3d89584435fc7921bfdd4a792312fc",
+      "url": "https://github.com/akimfomin/PortBridge/pull/89"
+    },
+    {
+      "number": 90,
+      "title": "Verify SSA mask projection on complete Mobile NeRF inference passes",
+      "state": "merged",
+      "head": "b47d346ca2da1a317eb4521fea3c0feac8be1624",
+      "url": "https://github.com/akimfomin/PortBridge/pull/90"
+    }
+  ],
+  "research_and_contribution_guides": [
+    {
+      "path": "contrib/continued-repeated-draw/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/contrib/continued-repeated-draw/README.md"
+    },
+    {
+      "path": "contrib/rdna2-carry-mask/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/contrib/rdna2-carry-mask/README.md"
+    },
+    {
+      "path": "contrib/rdna2-wave64-bpermute/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/contrib/rdna2-wave64-bpermute/README.md"
+    },
+    {
+      "path": "contrib/scarlett-commons-add-basic/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/contrib/scarlett-commons-add-basic/README.md"
+    },
+    {
+      "path": "research/adaptive-switch-dispatch/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/adaptive-switch-dispatch/README.md"
+    },
+    {
+      "path": "research/compute-dependencies/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/compute-dependencies/README.md"
+    },
+    {
+      "path": "research/mipmap-contract/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/mipmap-contract/README.md"
+    },
+    {
+      "path": "research/mipmap-contract/benchmark/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/mipmap-contract/benchmark/README.md"
+    },
+    {
+      "path": "research/mipmap-contract/benchmark/blender/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/mipmap-contract/benchmark/blender/README.md"
+    },
+    {
+      "path": "research/pipeline-readiness/ssa-quad-projection/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/pipeline-readiness/ssa-quad-projection/README.md"
+    },
+    {
+      "path": "research/pipeline-readiness/ssa-quad-projection/cmpx-control/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/pipeline-readiness/ssa-quad-projection/cmpx-control/README.md"
+    },
+    {
+      "path": "research/pipeline-readiness/ssa-quad-projection/loop-control/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/pipeline-readiness/ssa-quad-projection/loop-control/README.md"
+    },
+    {
+      "path": "research/pipeline-readiness/ssa-quad-projection/unused-collectives/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/pipeline-readiness/ssa-quad-projection/unused-collectives/README.md"
+    },
+    {
+      "path": "research/pipeline-readiness/structural-suite/night/ssa-mask-projection/consumer-demand/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/pipeline-readiness/structural-suite/night/ssa-mask-projection/consumer-demand/README.md"
+    },
+    {
+      "path": "research/pipeline-readiness/structural-suite/night/ssa-mask-projection/mobilenerf/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/pipeline-readiness/structural-suite/night/ssa-mask-projection/mobilenerf/README.md"
+    },
+    {
+      "path": "research/readback-epochs/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/readback-epochs/README.md"
+    },
+    {
+      "path": "research/shader-tail-factoring/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/shader-tail-factoring/README.md"
+    },
+    {
+      "path": "research/subgroup-validator/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/subgroup-validator/README.md"
+    },
+    {
+      "path": "research/subgroup-validator/timing/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/subgroup-validator/timing/README.md"
+    },
+    {
+      "path": "research/transfer-planner/physical/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/transfer-planner/physical/README.md"
+    },
+    {
+      "path": "research/transient-slot-cover/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/transient-slot-cover/README.md"
+    },
+    {
+      "path": "research/xcl-compact-scratch-adoption/README.md",
+      "url": "https://github.com/akimfomin/PortBridge/blob/2223a0b6a4dbaac1e98f8f90204b190296c4ef75/research/xcl-compact-scratch-adoption/README.md"
+    }
+  ]
+}

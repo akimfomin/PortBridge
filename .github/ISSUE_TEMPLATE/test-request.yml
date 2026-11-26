@@ -1,11 +1,11 @@
 name: Request a compatibility test
-description: Ask PortBridge to find a tester for a public, repeatable hardware check.
+description: Request a public, repeatable hardware check that a volunteer can take.
 title: 'Test request: '
 body:
   - type: markdown
     attributes:
       value: |
-        Request one synthetic check at an exact public commit. After review PortBridge can invite someone who has reported using suitable hardware. They decide whether to take it.
+        Request one synthetic check at an exact public commit. Volunteers can reply here. Requests stay open for community follow-up and have no guaranteed response time. A maintainer may choose to arrange an invitation manually.
 
         Keep game data, credentials, and private logs out of this public issue.
   - type: input

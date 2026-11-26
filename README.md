@@ -6,6 +6,12 @@
 
 PortBridge connects public issues, pull requests, and test results across projects bringing Xbox Series software to PC. Look up an error or shader instruction, see what another team already tested, and share a reproducible result in the repository where it can help. Each team keeps its own tools, priorities, and review process.
 
+## Passive maintenance · 26 November 2026
+
+I have stepped back from initiating research and recruiting testers. The catalog, search and Test Lab stay open. GitHub Actions refreshes public data while individual sources can lag. Issues and pull requests remain welcome. There is no guaranteed response time.
+
+[Letter from the founder](https://akimfomin.github.io/PortBridge/letter.html) · [Reply or volunteer to maintain a component](https://github.com/akimfomin/PortBridge/issues/91) · [Engineering history and evidence](docs/FINAL-AUDIT.md) · [Run or maintain PortBridge](docs/PASSIVE-MAINTENANCE.md)
+
 ## For project contributors
 
 | What you want to do | Where to go |
@@ -16,7 +22,7 @@ PortBridge connects public issues, pull requests, and test results across projec
 | Share a test, a fix, or a result that ruled something out | Include the original source, exact commit, platform, and observed result. [Evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml) |
 | Continue public work when its repository becomes unavailable | Keep author and source links and reproduce one useful result in an active project. [Continuity pilot](docs/CONTINUITY.md) |
 | Take a shared check or see where a result was delivered | Start with a [current team need](docs/WORK-PRIORITIES.md), then find a matching check in [Test Lab](https://akimfomin.github.io/PortBridge/#/lab). See prior runs in the [work log](docs/PORTING-WORK.en.md). |
-| Get a test run on hardware you lack | Open a request from the Test Lab or submit your own check. PortBridge uses public hardware reports to find someone to invite. [Test requests](docs/TEST-REQUESTS.md) |
+| Get a test run on hardware you lack | Open a request in the Test Lab. Volunteers can reply there. A maintainer can manually send a reviewed invitation. [Test requests](docs/TEST-REQUESTS.md) |
 | Try PortBridge in your repository | Check one open PR for prior work, then see if a collaborator can reuse a result. [Pilot for maintainers](docs/AGENT-PROMPT.md#try-portbridge-in-your-repository) |
 | Suggest a project, a missing link, or a search improvement | Open the [feedback form](https://github.com/akimfomin/PortBridge/issues/new?template=idea.yml). |
 
