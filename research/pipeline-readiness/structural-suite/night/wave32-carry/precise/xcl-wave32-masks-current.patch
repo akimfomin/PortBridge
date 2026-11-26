@@ -1,0 +1,259 @@
+From 181bf103bd9c56067c51a4333854bf235711f9b9 Mon Sep 17 00:00:00 2001
+From: akimfomin <akim.fomin@mail.ru>
+Date: Thu, 26 Nov 2026 03:15:44 +0300
+Subject: [PATCH] recomp: preserve live adjacent scalar mask words in Wave32
+ pixels
+
+---
+ README.md                              |  2 +
+ crates/xcl/src/gpu/recomp/emit.rs      | 11 ++--
+ crates/xcl/src/gpu/recomp/mod.rs       |  4 +-
+ crates/xcl/src/gpu/recomp/tests.rs     | 44 ++++++++++++++++
+ crates/xcl/src/gpu/recomp/x64_masks.rs | 73 ++++++++++++++++++++++++--
+ 5 files changed, 122 insertions(+), 12 deletions(-)
+
+diff --git a/README.md b/README.md
+index 786f6bf..a214d3b 100644
+--- a/README.md
++++ b/README.md
+@@ -155,6 +155,8 @@ A gamepad is recommended ([Controls](#controls)). The game folder is never modif
+ | **Ray tracing** | ✅ | BLAS / TLAS built on the GPU by the game's own XboxBvhBuilder; RDNA2 BVH node format; BVH intersection instructions emulated in shaders | GPU traversal = brute force reference; the game's builder output checked on the GPU |
+ | **Upscaling** | ✅ | the game's AMD FSR 4 console DLL (`amd_fidelityfx_upscaler_xbox.dll`): context, the 29 pipelines in the console driver's own container (FSPX) translated, a frame's 20 passes recorded and run on the GPU | end-to-end with the real DLL: a 1280×720 → 1920×1080 frame on an RX 9070, the input's gradient in the output |
+ 
++The pixel recompiler preserves a Wave32 carry mask when another instruction writes the neighboring scalar register, including at triangle edges.
++
+ Far-jump address calculations are resolved to fixed targets only when branches enter at the start of the calculation.
+ An entry partway through it keeps the jump indirect and subject to the recompiler's existing indirect-branch limits.
+ 
+diff --git a/crates/xcl/src/gpu/recomp/emit.rs b/crates/xcl/src/gpu/recomp/emit.rs
+index 2f817a8..5da130f 100644
+--- a/crates/xcl/src/gpu/recomp/emit.rs
++++ b/crates/xcl/src/gpu/recomp/emit.rs
+@@ -46,10 +46,9 @@ pub(super) struct Em {
+     /// split wave64 (`x64`): words one exchange carries (1: masks and lane reads, up to 16:
+     /// coherent scalar loads, 32: `ds_bpermute`)
+     x64_words: usize,
+-    /// split wave64 and pixel shaders: pc → SGPRs whose whole value may be read after that
+-    /// instruction (`x64_masks`); a mask written to none of them is only read lane by lane
+-    /// (split: stays in its half, no exchange; pixel: no quad reads for the helper lanes)
+-    pub mask_whole_live: BTreeMap<u64, u128>,
++    /// Mask-producing instruction PC and starting SGPR destinations that require
++    /// full reconstruction (split-wave exchange or pixel helper quad reads).
++    pub full_mask_destinations: BTreeMap<u64, u128>,
+     /// wave64 VS / PS on a GPU with 32-lane waves only: what the console's lanes 32..63 hold
+     /// where the program reads them (`upper_lanes`), used when the wave has 32 lanes
+     pub upper: Option<super::upper_lanes::UpperLanes>,
+@@ -613,7 +612,7 @@ impl Em {
+             uses_lds: false,
+             uses_scratch: false,
+             x64_words: 1,
+-            mask_whole_live: BTreeMap::new(),
++            full_mask_destinations: BTreeMap::new(),
+             upper: None,
+             cur_pc: 0,
+             static_ss: BTreeMap::new(),
+@@ -971,7 +970,7 @@ impl Em {
+         // lane (the half's own word, the lane's own bit are enough), that goes nowhere, or that
+         // is 0 in every lane anyway
+         let local = match *dst {
+-            Dst::S(n) => n < 126 && self.mask_whole_live.get(&self.cur_pc).is_some_and(|live| live & (3u128 << n) == 0),
++            Dst::S(n) => n < 126 && self.full_mask_destinations.get(&self.cur_pc).is_some_and(|live| live & (1u128 << n) == 0),
+             Dst::Null => true,
+             Dst::V(_) => false,
+         };
+diff --git a/crates/xcl/src/gpu/recomp/mod.rs b/crates/xcl/src/gpu/recomp/mod.rs
+index 528493d..5d638d1 100644
+--- a/crates/xcl/src/gpu/recomp/mod.rs
++++ b/crates/xcl/src/gpu/recomp/mod.rs
+@@ -1554,9 +1554,9 @@ pub fn translate(code: &[u8], opt: &Options) -> Result<Translation, String> {
+     // continues from the ES into the GS through s_setpc: left as it is); pixel shaders: they
+     // skip the quad reads that give the helper lanes' bits
+     if opt.wave64 && opt.split_wave64 && matches!(opt.mode, Mode::Kernel | Mode::Compute(_) | Mode::Mesh(_)) && std::env::var_os("XCL_X64_ALL_MASKS").is_none() {
+-        em.mask_whole_live = x64_masks::by_pc(&insts, matches!(opt.mode, Mode::Kernel));
++        em.full_mask_destinations = x64_masks::full_mask_destinations(&insts, matches!(opt.mode, Mode::Kernel), true);
+     } else if matches!(opt.mode, Mode::Pixel(_)) {
+-        em.mask_whole_live = x64_masks::by_pc(&insts, false);
++        em.full_mask_destinations = x64_masks::full_mask_destinations(&insts, false, opt.wave64);
+     }
+     // a wave64 VS / PS on a GPU that can run 32-lane waves: what lanes 32..63 hold where the
+     // program reads them (the driver may still pick 64 lanes: decided at run time); only a
+diff --git a/crates/xcl/src/gpu/recomp/tests.rs b/crates/xcl/src/gpu/recomp/tests.rs
+index 0b018ed..820d2d7 100644
+--- a/crates/xcl/src/gpu/recomp/tests.rs
++++ b/crates/xcl/src/gpu/recomp/tests.rs
+@@ -1813,6 +1813,50 @@ fn el(name: &str, index: u32, sv: u32, ct: u32, reg: u32, mask: u8) -> crate::gp
+     crate::gpu::dxbc::SigElement { name: name.into(), index, system_value: sv, component_type: ct, register: reg, mask, rw_mask: mask, stream: 0 }
+ }
+ 
++#[test]
++fn gpu_wave32_pixel_carry_preserves_adjacent_mask_at_triangle_edges() {
++    use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R32G32_FLOAT;
++    if runner::adapter().is_err() {
++        runner::skip_test("no GPU");
++        return;
++    }
++    if super::dxc::location().is_err() {
++        runner::skip_test("no DXC");
++        return;
++    }
++    // GFX1030 wave32. Expected green counts the odd lanes of WQM EXEC. Red
++    // counts the same lanes through s21, after writing the neighboring s20.
++    let words: &[u32] = &[
++        0xbefe097e,                         // s_wqm_b32 exec_lo, exec_lo
++        0x8706ff7e, 0xaaaaaaaa,             // s_and_b32 s6, exec_lo, 0xaaaaaaaa
++        0xbe870f06,                         // s_bcnt1_i32_b32 s7, s6
++        0xd7650002, 0x020100c1,             // v_mbcnt_lo_u32_b32 v2, -1, 0
++        0x36040481,                         // v_and_b32 v2, 1, v2
++        0xd70f1503, 0x020204c1,             // v_add_co_u32 v3, s21, -1, v2
++        0xd70f1403, 0x02020480,             // v_add_co_u32 v3, s20, 0, v2
++        0xd7640004, 0x02010015,             // v_bcnt_u32_b32 v4, s21, 0
++        0x7e080d04, 0x7e0a0c07, 0x7e0c02f2, // convert v4 and s7 to float, set v6 to 1.0
++        0xf800180f, 0x06060504, 0xbf810000, // exp mrt0 v4, v5, v6, v6 done vm; end
++    ];
++    let code: Vec<u8> = words.iter().flat_map(|w| w.to_le_bytes()).collect();
++    let ps = super::PsInterface { inputs: vec![el("SV_Position", 0, 1, 3, 0, 15)],
++        outputs: vec![el("SV_Target", 0, 64, 3, 0, 15)], input_ena: 0x300, attrs: None };
++    let t = translate(&code, &Options { wave64: false, mode: Mode::Pixel(ps), ..Default::default() }).unwrap();
++    assert!(t.complete(), "{:?}", t.unsupported_why);
++    let ps = super::dxc::compile(&t.hlsl, "main", "ps_6_6", &[]).unwrap();
++    let vs = super::dxc::compile("float4 main(float2 p:POSITION):SV_Position { return float4(p,0.5,1); }",
++        "main", "vs_6_6", &[]).unwrap();
++    let layout = [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }];
++    let triangles = [-1.,-1., 1.,-1., -1.,1., 1.,-1., 1.,1., -1.,1.];
++    let pixels = runner::draw(&vs, &ps, &layout, &triangles, 8, &[], &[], 32, [-99.; 4]).unwrap();
++    assert_eq!(pixels.len(), 1024);
++    for (i, c) in pixels.iter().enumerate() {
++        assert_eq!((c[2], c[3]), (1., 1.), "raster coverage at {i}");
++        assert!((1.0..=16.0).contains(&c[1]), "odd active lanes at {i}: {c:?}");
++        assert_eq!(c[0], c[1], "mask popcount at {i}");
++    }
++}
++
+ /// VS + PS pair recompiled to graphics stages and drawn on the GPU: VS inputs from the
+ /// fetch-shader VGPRs, exp pos0/param0, PS interpolation through v_interp, discard via v_cmpx.
+ #[test]
+diff --git a/crates/xcl/src/gpu/recomp/x64_masks.rs b/crates/xcl/src/gpu/recomp/x64_masks.rs
+index cc8b830..132625d 100644
+--- a/crates/xcl/src/gpu/recomp/x64_masks.rs
++++ b/crates/xcl/src/gpu/recomp/x64_masks.rs
+@@ -398,7 +398,20 @@ struct Block {
+     has_exit: bool,
+ }
+ 
+-fn whole_live_out_unsorted(insts: &[Decoded], end_reads_all: bool, table: &UsePlanTable) -> Vec<Regs> {
++/// Pixel VALU mask writes and scalar saveexec/wrexec write one dword in
++/// XCL's wave32 lowering. The instruction tables describe their wave64 pairs.
++/// Dropping a neighboring kill is conservative if two destinations touch.
++fn liveness_uses(d: &Decoded, table: &UsePlanTable, wave64: bool) -> (Regs, Regs) {
++    let (whole, written) = uses_with_table(d, table);
++    let name = d.inst.name;
++    if !wave64 && (name.starts_with("V_") || name.contains("SAVEEXEC") || name.contains("WREXEC")) {
++        (whole, written & !(written << 1))
++    } else {
++        (whole, written)
++    }
++}
++
++fn whole_live_out_unsorted(insts: &[Decoded], end_reads_all: bool, table: &UsePlanTable, wave64: bool) -> Vec<Regs> {
+     let pcs: BTreeMap<u64, usize> = insts.iter().enumerate().map(|(i, d)| (d.pc, i)).collect();
+     let at_end = if end_reads_all { ALL } else { EXEC };
+     let succ: Vec<Option<Vec<usize>>> = insts
+@@ -429,7 +442,7 @@ fn whole_live_out_unsorted(insts: &[Decoded], end_reads_all: bool, table: &UsePl
+         .iter()
+         .map(|d| loops.iter().filter(|&&(a, b)| a <= d.pc && d.pc < b).map(|&(_, b)| pcs.range(b..).next().map(|(_, &j)| j)).collect())
+         .collect();
+-    let gen_kill: Vec<(Regs, Regs)> = insts.iter().map(|d| uses_with_table(d, table)).collect();
++    let gen_kill: Vec<(Regs, Regs)> = insts.iter().map(|d| liveness_uses(d, table, wave64)).collect();
+     let mut live_in = vec![0 as Regs; insts.len()];
+     let mut live_out = vec![0 as Regs; insts.len()];
+     loop {
+@@ -515,13 +528,17 @@ fn nested_loop_ranges(mut raw: Vec<(u64, u64)>) -> Vec<(u64, u64)> {
+ /// For each instruction (index in `insts`): the SGPRs whose whole value may be read after it.
+ /// `end_reads_all`: the program's end reads every SGPR (kernel mode).
+ pub fn whole_live_out(insts: &[Decoded], end_reads_all: bool) -> Vec<Regs> {
++    whole_live_out_for_width(insts, end_reads_all, true)
++}
++
++fn whole_live_out_for_width(insts: &[Decoded], end_reads_all: bool, wave64: bool) -> Vec<Regs> {
+     let n = insts.len();
+     if n == 0 {
+         return Vec::new();
+     }
+     let table = use_plans();
+     if !insts.windows(2).all(|w| w[0].pc < w[1].pc) {
+-        return whole_live_out_unsorted(insts, end_reads_all, table);
++        return whole_live_out_unsorted(insts, end_reads_all, table, wave64);
+     }
+ 
+     let at_end = if end_reads_all { ALL } else { EXEC };
+@@ -589,7 +606,7 @@ pub fn whole_live_out(insts: &[Decoded], end_reads_all: bool) -> Vec<Regs> {
+     }
+     let num_blocks = block_starts.len();
+ 
+-    let gen_kill: Vec<(Regs, Regs)> = insts.iter().map(|d| uses_with_table(d, table)).collect();
++    let gen_kill: Vec<(Regs, Regs)> = insts.iter().map(|d| liveness_uses(d, table, wave64)).collect();
+ 
+     // Summarize each basic block: because `(X & !k) | X == X` for bitmasks, the constant
+     // per-block `left | EXEC` term collapses out of the intra-block composition into:
+@@ -743,6 +760,22 @@ pub fn by_pc(insts: &[Decoded], end_reads_all: bool) -> BTreeMap<u64, Regs> {
+     insts.iter().map(|d| d.pc).zip(whole_live_out(insts, end_reads_all)).collect()
+ }
+ 
++/// Bit n blocks a local ballot for a mask written at SGPR n. Keep the original
++/// pair-wide admission rule. A Wave32 pixel mask also needs the full ballot
++/// when its actual single output word can still be observed as a whole.
++pub fn full_mask_destinations(insts: &[Decoded], end_reads_all: bool, wave64: bool) -> BTreeMap<u64, Regs> {
++    let mut blocked = whole_live_out(insts, end_reads_all);
++    for bits in &mut blocked {
++        *bits |= *bits >> 1;
++    }
++    if !wave64 {
++        for (veto, actual) in blocked.iter_mut().zip(whole_live_out_for_width(insts, end_reads_all, false)) {
++            *veto |= actual;
++        }
++    }
++    insts.iter().map(|d| d.pc).zip(blocked).collect()
++}
++
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+@@ -845,6 +878,38 @@ mod tests {
+     const BCNT_S20: I = ("S_BCNT1_I32_B64", "ENC_SOP1", &[("SDST", 0), ("SSRC0", 20)]);
+     const BCNT_VCC: I = ("S_BCNT1_I32_B64", "ENC_SOP1", &[("SDST", 0), ("SSRC0", 106)]);
+ 
++    #[test]
++    fn wave32_carry_into_s20_preserves_a_whole_read_of_s21() {
++        let carry = |dst| rdna2::encode("V_ADD_CO_U32", "VOP3_SDST_ENC",
++            &[("VDST", 3), ("SDST", dst), ("SRC0", 193), ("SRC1", V + 2)], None).unwrap();
++        let mut code = carry(21);
++        code.extend(carry(20));
++        code.extend(rdna2::encode("V_BCNT_U32_B32", "ENC_VOP3", &[("VDST", 4), ("SRC0", 21), ("SRC1", 128)], None).unwrap());
++        code.extend(rdna2::encode("S_ENDPGM", "ENC_SOPP", &[], None).unwrap());
++        let p = program(&code);
++        assert_ne!(full_mask_destinations(&p, false, false)[&p[0].pc] & (1 << 21), 0);
++        assert_eq!(liveness_uses(&p[1], use_plans(), true).1, 3 << 20);
++        assert_eq!(liveness_uses(&p[1], use_plans(), false).1, 1 << 20);
++
++        // A neighbor live across a second write to s20 did not observe s20.
++        // An unconditional branch makes the read a distinct successor block.
++        let mut other = carry(20);
++        other.extend(carry(20));
++        other.extend(rdna2::encode("S_BRANCH", "ENC_SOPP", &[("SIMM16", 1)], None).unwrap());
++        other.extend(rdna2::encode("S_ENDPGM", "ENC_SOPP", &[], None).unwrap());
++        other.extend(rdna2::encode("V_BCNT_U32_B32", "ENC_VOP3", &[("VDST", 4), ("SRC0", 21), ("SRC1", 128)], None).unwrap());
++        other.extend(rdna2::encode("S_ENDPGM", "ENC_SOPP", &[], None).unwrap());
++        let q = program(&other);
++        assert_ne!(whole_live_out_for_width(&q, false, false)[0] & (1 << 21), 0);
++        let blocked = full_mask_destinations(&q, false, false);
++        assert_eq!(blocked[&q[0].pc] & (1 << 20), 0);
++        assert_ne!(blocked[&q[1].pc] & (1 << 20), 0, "retain the original conservative refusal");
++
++        // An actual scalar pair write still kills both words at either width.
++        let scalar = asm(&[("S_MOV_B64", "ENC_SOP1", &[("SDST", 20), ("SSRC0", 128)])]);
++        assert_eq!(liveness_uses(&scalar[0], use_plans(), false).1, 3 << 20);
++    }
++
+     // review findings: writes that are not full overwrites, reads the operand tables miss
+ 
+     #[test]

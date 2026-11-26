@@ -4,6 +4,8 @@ On XCL `e1d84b7d9153f86a97d2ec5d209d196046fc0bea`, the HLSL pixel path returns t
 
 The first carry writes `s21`. The second writes `s20`. A full scalar read of `s21` must still observe its first value. The effective Wave32 destination is one register. A backward analysis that treats the second write as covering both registers can classify the first mask as lane-local. The pixel shader exports two independently computed counts. Red reads `s21` after both writes. Green counts the bits in `EXEC & 0xaaaaaaaa` before either write. This comparison accounts for the wave occupancy of the actual draw. Blue and alpha are sentinels.
 
+The [current review patch](precise/README.md) also avoids an unnecessary slowdown found on Microsoft MiniEngine. It preserves the original HLSL in all 195 matched open Wave32 configurations and the corrected DXIL for this edge case.
+
 ## What the RTX returned
 
 Each column covers 2,953 pixels across four triangle geometries. The adapter was an RTX 4070 Ti SUPER, driver 617.14. Wave32 is the guest program configuration. The generated HLSL used Microsoft DXC 1.9.2609.5.

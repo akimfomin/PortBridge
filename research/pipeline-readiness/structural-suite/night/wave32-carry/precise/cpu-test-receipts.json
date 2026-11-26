@@ -1,0 +1,68 @@
+[
+  {
+    "filter": "gpu::rdna2::tests",
+    "passed": 18,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::cfg::tests",
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::upper_lanes::tests",
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::x64_masks::tests",
+    "passed": 20,
+    "failed": 0,
+    "ignored": 1
+  },
+  {
+    "filter": "gpu::recomp::tests::geometry_wave32_rejects_cross_half_operations",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::tests::geometry_wave_path_selection_preserves_native_wave64",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::tests::mesh_split_wave64_form",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::tests::ps_masks_in_loops_quad_read_the_operands_not_the_compare",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::tests::ps_mrtz_sample_mask_writes_sv_coverage",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::tests::split_wave64_reduction_tail_rules",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  {
+    "filter": "gpu::recomp::tests::wave32_src_vccz_execz_and_saveexec_b32_hlsl",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  }
+]

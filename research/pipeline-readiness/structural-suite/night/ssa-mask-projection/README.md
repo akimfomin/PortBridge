@@ -1,5 +1,7 @@
 # Same-block SSA projection of pixel mask bits
 
+The optional runtime implementation is available at a pinned commit in the PortBridge XCL fork. The existing Test Lab thread accepts independent comparisons. [Exact runtime implementation](https://github.com/akimfomin/xcl/commit/be7722969c6604da56fe553cd8ecb5e3b7ed0f37) · [Independent hardware checks](https://github.com/akimfomin/PortBridge/issues/87)
+
 PortBridge's direct-DXIL experiment preserves every original quad read and every wave ballot. It changes the arithmetic used by an instruction that reads just its own lane's bit. In an 800 × 450 procedural raylib draw on the RTX 4070 Ti SUPER, the matched Vulkan measurement improved from 5.177 to 4.210 ms for one camera and 5.446 to 4.404 ms for a second. Each resulting image matched its baseline across all 360,000 RGBA32F pixels. These are medians of warmed groups of eight fullscreen draws on one host, with no presentation cost.
 
 ## What changes
