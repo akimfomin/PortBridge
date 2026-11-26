@@ -19,11 +19,12 @@ class AutonomyAuditTest(unittest.TestCase):
                     "expired": False, "workflow_run": {"id": run_id, "head_sha": sha}}
 
         runs = [run(1, start + day - minute), run(2, start + day + minute, "workflow_dispatch"),
-                run(3, start + day + minute), run(4, start + 7 * day - minute)]
+                run(3, start + day + minute), run(4, start + 7 * day - minute),
+                {**run(5, start + 2 * day), "run_attempt": 2}]
         artifacts = [receipt(11, 1, start + day + minute), receipt(12, 1, start + day * 2),
                      receipt(21, 2, start + day + 2 * minute),
                      receipt(31, 3, start + day + 2 * minute, sha="b" * 40),
-                     receipt(41, 4, start + 7 * day + minute)]
+                     receipt(41, 4, start + 7 * day + minute), receipt(51, 5, start + 2 * day + minute)]
 
         report = measure(start, start + 8 * day, runs, artifacts)
         self.assertEqual(report["verified_per_24h"], [0, 1, 0, 0, 0, 0, 0])
@@ -31,5 +32,5 @@ class AutonomyAuditTest(unittest.TestCase):
             {"at": (start + day + minute).isoformat(), "run_started_at": runs[0]["created_at"],
              "url": "run-1", "sha": "a" * 40, "artifact_id": 11},
         ])
-        self.assertEqual(report["scheduled_without_success_receipt"], ["run-3", "run-4"])
+        self.assertEqual(report["scheduled_without_success_receipt"], ["run-3", "run-5", "run-4"])
         self.assertFalse(report["seven_intervals_observed"])

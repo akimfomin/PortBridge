@@ -53,7 +53,8 @@ def measure(start, now, runs, artifacts):
     missing = []
     for run in observed:
         receipt = receipts.get((run["id"], run["head_sha"]))
-        if not receipt or run["conclusion"] != "success" or receipt[0] < stamp(run["created_at"]):
+        if (not receipt or run["conclusion"] != "success" or run.get("run_attempt", 1) != 1
+                or receipt[0] < stamp(run["created_at"])):
             missing.append(run["html_url"])
             continue
         received, identifier = receipt
