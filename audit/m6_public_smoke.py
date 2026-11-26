@@ -42,6 +42,7 @@ def call_public_mcp(tool, arguments):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--site-sha256", help="optional expected data/site.json digest from the deployment")
+    parser.add_argument("--continued-pilot", action="store_true", help="require both independent reports in Impact and the partner feed")
     args = parser.parse_args()
     with public_snapshot("site") as res:
         raw = res.read()
@@ -92,13 +93,27 @@ def main():
     if via_mcp.get("origin_url") != prior["origin_url"] or observed != expected:
         raise SystemExit("The MCP preflight and the published URL search returned different sources")
     health = read(site["snapshots"]["health"].removesuffix(".json"))
+    pilot = None
+    if args.continued_pilot:
+        pr = "https://github.com/ubiquitarianism/leonida/pull/2392"
+        offer = pr + "#issuecomment-7202363138"
+        reports = {"qhukz13": pr + "#issuecomment-7202911853", "lixonik": pr + "#pullrequestreview-6080300502"}
+        proofs = {offer, *reports.values()}
+        impact = read(site["snapshots"]["impact"].removesuffix(".json"))
+        story = next((s for s in impact["stories"] if s["id"] == "impact:continued-m53-cache-control"), {})
+        credits = {c["login"]: c["source"] for c in story.get("credits", []) if c["kind"] == "independent_test"}
+        if (story.get("state") != "reviewed" or credits != reports
+                or not any(r["kind"] == "result" and proofs <= set(r.get("proofs", [])) for r in feed["items"])):
+            raise SystemExit("The published pilot case lacks the expected team credits or partner proofs")
+        pilot = {"task": pr, "state": "reviewed", "offer": offer, "team_reports": reports}
     print(json.dumps({"site_sha256": checksum, "generated_at": site["generated_at"],
         "health_status": health["status"], "observations": health["observation_count"],
         "source_last_success": health["last_success"], "published_sections_verified": sorted(site["snapshots"]),
         "browse_totals": counts, "partner_counts": feed["counts"], "tasks_in_first_poll": len(first["added_or_changed"]),
         "changed_on_second_poll": 0, "mcp_partner_first_page_items": len(page["items"]),
         "reference_pr": url, "origin_in_source_index": prior.get("indexed"),
-        "discovery_matches": len(discovery["matches"]), "mcp_and_api_sources": observed}, indent=2))
+        "discovery_matches": len(discovery["matches"]), "mcp_and_api_sources": observed,
+        "continued_pilot": pilot}, indent=2))
 
 
 if __name__ == "__main__":

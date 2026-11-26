@@ -2,9 +2,19 @@
 
 Исходная ревизия — [M5.3, 0cb1fe46d14f0930e7e347e3c9980a53c9d94be9](https://github.com/akimfomin/PortBridge/blob/0cb1fe46d14f0930e7e347e3c9980a53c9d94be9/audit/LATEST.md). Результаты выпуска и послерелизные проверки доступны в [постоянном отчёте для аудитора](https://github.com/akimfomin/PortBridge/blob/audit/review/audit/LATEST.md). [Релизный PR #93](https://github.com/akimfomin/PortBridge/pull/93) · [Реестр 122 требований](../docs/PORTBRIDGE-CHECKLIST.md)
 
-## Ревизия и приёмка
+## Итог выпуска v0.2.0
 
-Код выпуска в `main` — [98d1a39be0c2ea161fb3f30fdfb8bb572d55e5cf](https://github.com/akimfomin/PortBridge/commit/98d1a39be0c2ea161fb3f30fdfb8bb572d55e5cf). Дерево совпадает с проверенной ревизией [dc5272213997bca3ffa4fe781e448bd60b382d03](https://github.com/akimfomin/PortBridge/commit/dc5272213997bca3ffa4fe781e448bd60b382d03). До слияния на Windows прошли 282 теста за 46,763 с и проверка полного экспорта. В GitHub прошли те же 282 теста за 37,983 с. Ошибок и пропусков 0. В контрольном восстановлении прежний код заново собрал сайт и Lab для всех 26 106 наблюдений. [Проверка точного кандидата](https://github.com/akimfomin/PortBridge/actions/runs/45894117888) · [Сборка main](https://github.com/akimfomin/PortBridge/actions/runs/45895096163)
+[Публичный GitHub Release v0.2.0](https://github.com/akimfomin/PortBridge/releases/tag/v0.2.0) опубликован 26 ноября в 21:23:55 UTC. Указатель Git-тега и GitHub API независимо указывают на приведённый ниже SHA. В браузере проверены карточка Continued, оба тестера и ссылки на их измерения.
+
+Итоговый код в `main` — [49bf084250ec55c70d6732000ea40e62c3d36b4c](https://github.com/akimfomin/PortBridge/commit/49bf084250ec55c70d6732000ea40e62c3d36b4c). Дополнение с ответами двух участников прошло 283/283 теста на Windows за 47,512 с и 283/283 на GitHub за 35,474 с, без пропусков и ошибок. В репетиции отката сравнили 26 908 наблюдений. [PR #94](https://github.com/akimfomin/PortBridge/pull/94) · [Проверка и репетиция](https://github.com/akimfomin/PortBridge/actions/runs/45896345148) · [Публикация и проверка работающего сайта](https://github.com/akimfomin/PortBridge/actions/runs/45896956002)
+
+На итоговом сайте **27 262 наблюдения**, 14 сверенных разделов. Лента партнёров отдаёт 6 задач и 15 результатов. Два независимых отчёта Continued доступны и на витрине, и в ленте. Полный SHA-256 опубликованного `data/site.json` — `348ddc192d65970ad81fab9c6e15f28580e6e6a3cde453bcf8c615ecb02bd5d4`. Состояние источников — `partial`. Недельное наблюдение стартовало после первой проверенной поставки, 26 ноября в 21:07:13 UTC. Семь суток истекут 3 декабря в 21:07:13 UTC. На момент проверки после второго деплоя плановых публикаций в этом интервале было 0. [Данные конечной проверки](evidence/m6/public-release.json) · [Исходная точка наблюдения](evidence/m6/autonomy-at-release.json) · [Карточка команды](https://akimfomin.github.io/PortBridge/#/impact?target=https%3A%2F%2Fgithub.com%2Fubiquitarianism%2Fleonida%2Fpull%2F2392)
+
+В реестре спецификации 3.0 совпали все **122 уникальных ID**. Подтверждены **80**, выполнено частично **41**, заблокировано **1**. Последнее — подтверждённое повторное применение новой версии тремя независимыми командами. Для пилота отдельно учитываются одна реально использованная рекомендация, два аппаратных отчёта и ноль подтверждённых внешних установок. Фактическое число установок остаётся неизвестным. [Реестр требований](../docs/PORTBRIDGE-CHECKLIST.md) · [Методика и источники пилота](evidence/m6-pilot.md)
+
+## Первая поставка и приёмка
+
+Первая поставка в `main` — [98d1a39be0c2ea161fb3f30fdfb8bb572d55e5cf](https://github.com/akimfomin/PortBridge/commit/98d1a39be0c2ea161fb3f30fdfb8bb572d55e5cf). Дерево совпадает с проверенной ревизией [dc5272213997bca3ffa4fe781e448bd60b382d03](https://github.com/akimfomin/PortBridge/commit/dc5272213997bca3ffa4fe781e448bd60b382d03). До слияния на Windows прошли 282 теста за 46,763 с и проверка полного экспорта. В GitHub прошли те же 282 теста за 37,983 с. Ошибок и пропусков 0. В контрольном восстановлении прежний код заново собрал сайт и Lab для всех 26 106 наблюдений. [Проверка точного кандидата](https://github.com/akimfomin/PortBridge/actions/runs/45894117888) · [Сборка main](https://github.com/akimfomin/PortBridge/actions/runs/45895096163)
 
 При первой выкладке с `main` **14 публичных разделов** совпали со сборкой. На сайте 26 766 записей, в прежнем снимке было 25 426. Состояние источников `partial`. Проверены 10 маршрутов в обычном Chrome и при эмуляции телефона 390×844. Первый опрос партнёрской ленты вернул 6 задач, повторный — 0 изменений. На примере XCL #2322 обычная строка поиска, настоящий MCP-клиент, чтение опубликованного API и GitHub-сводка показали один и тот же пример LLVM. Проверяющий клиент учитывает канонический адрес репозитория после переименования и служебные инструкции формата MCP. [Исходный публичный снимок](evidence/m6/public-before.json) · [Проверка после выкладки](evidence/m6/public-after.json) · [Проверка браузера и опубликованных ссылок](evidence/m6/production-ux.json) · [GitHub Action на выпущенном main](https://github.com/akimfomin/PortBridge/actions/runs/45895897766#summary-140169576949)
 
@@ -46,7 +56,8 @@ python -B -m unittest discover -s tests -v
 python -B -m portbridge --db .portbridge/check.sqlite3 export --out .portbridge/review-site --repository akimfomin/PortBridge
 python -B -m portbridge.release_gate .portbridge/review-site
 python -B -m portbridge.network --outcomes-only
-python -B audit/m6_public_smoke.py
+python -B audit/m6_public_smoke.py --continued-pilot
+python -B audit/m6_autonomy.py --since 2026-11-26T21:07:13Z
 ```
 
 Для повторного запуска на GitHub откройте **Actions → PortBridge one-PR pilot → Run workflow** и вставьте публичную ссылку на PR. Для отдельной копии стенда и проверки отключения используйте [инструкцию приёмки](evidence/m6/receiver.md). Полный перечень оставшихся условий закреплён за ID в [реестре](../docs/PORTBRIDGE-CHECKLIST.md).
