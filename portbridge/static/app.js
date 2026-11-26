@@ -1151,7 +1151,8 @@ function showActivity(data, quiet = false) {
     internalLink(t('Browse reviewed cases', 'Посмотреть проверенные карточки'), '#/problems', 'retry'));
   if (snapshotSite?.browse_index) start.append(internalLink(t('Browse public GitHub sources', 'Открыть индекс GitHub'), '#/sources', 'retry'));
   board.append(start, stats);
-  const research = [...list(data.original_research), ...list(data.research)];
+  const research = [...list(data.original_research), ...list(data.research)]
+    .sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
   if (research.length) board.append(researchHighlights(research));
   board.append(columns);
   if (data.radar) board.append(activityRadar(data.radar));

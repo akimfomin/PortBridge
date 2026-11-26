@@ -32,6 +32,8 @@ The exact AnyXboxX search links the earlier RDNA2 evidence and the new CPU corre
 
 ## PortBridge research
 
+- **Wave32 carry fix.** DarkPanda69 reproduced the XCL error and verified PortBridge’s correction on an RX 9070 XT and an RTX 3060. The patch is awaiting upstream review. [Independent comparison](https://github.com/xcl-dev/xcl/issues/2584#issuecomment-7178879816) · [Fork patch](https://github.com/akimfomin/xcl/commit/d3e7725f9f48c39c18e7b6e011ec76423edb0004)
+- **Experimental pixel mask projection.** On one RTX 4070 Ti SUPER, a verified raylib image arrived 99–120 ms sooner. Vulkan draw time fell by 19% in two views. Microsoft’s display filter had mixed timings. This separate opt-in preserves the original ballots. The earlier Lane-local Masks experiment was withdrawn after a Wave32 failure. [Measurements and code](https://github.com/akimfomin/PortBridge/blob/9c2616998e176806565ee1a0076dc4efb7ae4dc1/research/pipeline-readiness/structural-suite/night/ssa-mask-projection/README.md)
 - [Observation-scoped GPU readbacks](research/readback-epochs) reuses already observed bytes and tests packed selective readback against bounded exact-range staging. [Ecosystem evidence](docs/READBACK-2026-11-25.md)
 - [Portable Vulkan mipmaps](research/mipmap-contract) demonstrates a lane-numbering assumption in NVIDIA's fast shader, a guarded correction, and matched physical output.
 - [Adaptive shader dispatch](research/adaptive-switch-dispatch) partitions large sparse switches. The study compares a flat switch, a fixed-size range tree, and a table where the case bodies allow one.

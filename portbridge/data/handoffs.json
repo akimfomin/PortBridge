@@ -124,5 +124,12 @@
     "delivered_url": "https://github.com/LooperSalty/AnyXboxX/pull/202",
     "review_url": "https://github.com/LooperSalty/AnyXboxX/pull/202#pullrequestreview-6056983166",
     "adopted_url": "https://github.com/LooperSalty/AnyXboxX/commit/0539d7f8ad7734e30396e7c913edeb0755d0f9ce"
+  },
+  {
+    "problem_id": "PB-0030",
+    "project": "xcl",
+    "revision": "d3e7725f9f48c39c18e7b6e011ec76423edb0004",
+    "delivered_url": "https://github.com/xcl-dev/xcl/issues/2584",
+    "independent_url": "https://github.com/xcl-dev/xcl/issues/2584#issuecomment-7178879816"
   }
 ]

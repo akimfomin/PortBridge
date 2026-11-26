@@ -86,11 +86,14 @@ class ActivityTest(CatalogFixture):
         summary = build_activity(self.catalog, now=NOW)
         handoffs = summary["handoffs"]
         self.assertEqual(summary["counts"]["merged"], 1)
-        self.assertEqual(handoffs["counts"], {"delivered": 17, "independently_reproduced": 11,
+        self.assertEqual(handoffs["counts"], {"delivered": 18, "independently_reproduced": 12,
                                              "formally_reviewed": 6, "adopted": 6})
         (continued, xcl, anyxboxx, rounding, division, warp, texture, paired_lds, lds_wait,
          frame_pacer, xcl_compact, monitor, framelab, scratch_candidate, gfx10,
-         coalescing, bc7) = handoffs["items"]
+         coalescing, bc7, wave32) = handoffs["items"]
+        self.assertEqual(wave32["problem_id"], "PB-0030")
+        self.assertEqual(wave32["independent_url"], "https://github.com/xcl-dev/xcl/issues/2584#issuecomment-7178879816")
+        self.assertNotIn("adopted_url", wave32)
         self.assertEqual(continued["problem_id"], "PB-044801754884724660835754613454516035131")
         self.assertTrue(continued["review_url"].endswith("#pullrequestreview-6039203797"))
         self.assertTrue(xcl["independent_url"].endswith("#issuecomment-7133929789"))

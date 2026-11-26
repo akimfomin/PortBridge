@@ -234,7 +234,7 @@ class CatalogTest(CatalogFixture):
         self.assertEqual([p["id"] for p in self.catalog.problems(q="ПРЯМОУГОЛЬНИКОВ", project="continued")],
                          ["PB-0001", "PB-0007"])
         self.assertEqual([p["id"] for p in self.catalog.problems(project="xcl")],
-                         ["PB-0004", "PB-0005", "PB-0006", "PB-0012", "PB-0014", "PB-0017", "PB-0018", "PB-0022", "PB-0025"])
+                         ["PB-0004", "PB-0005", "PB-0006", "PB-0012", "PB-0014", "PB-0017", "PB-0018", "PB-0022", "PB-0025", "PB-0030"])
         self.assertEqual([p["id"] for p in self.catalog.problems(status="investigating")], ["PB-0004"])
         opportunities = {p["id"] for p in self.catalog.problems(partial=True)}
         self.assertTrue({"PB-0001", "PB-0002"} <= opportunities)
@@ -392,7 +392,7 @@ class LocalAPITest(CatalogFixture):
             "urn:portbridge:PB-0016", "urn:portbridge:PB-0018", "urn:portbridge:PB-0019", "urn:portbridge:PB-0020", "urn:portbridge:PB-0021",
             "urn:portbridge:PB-0022", "urn:portbridge:PB-0023", "urn:portbridge:PB-0024",
             "urn:portbridge:PB-0025", "urn:portbridge:PB-0026", "urn:portbridge:PB-0027", "urn:portbridge:PB-0028",
-            "urn:portbridge:PB-0029",
+            "urn:portbridge:PB-0029", "urn:portbridge:PB-0030",
             "urn:portbridge:PB-044801754884724660835754613454516035131",
         })
         _, _, body = self.request("GET", "/api/v1/outreach")

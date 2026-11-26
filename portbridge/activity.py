@@ -209,7 +209,7 @@ def showcased_research(cards, observations, handoffs):
         evidence = solution["evidence"][0]
         source = latest.get(canonical_url(subject))
         item = {"problem_id": card["id"], "project": solution["project"],
-                "at": card["recorded_at"], "delivered_url": evidence["url"], "source_url": subject,
+                "at": card["recorded_at"], "delivered_url": handoff.get("delivered_url", evidence["url"]), "source_url": subject,
                 **public_text(card["title"], english_text(card, "title"), summary=card["summary"],
                               en_summary=english_text(card, "summary"))}
         if source:

@@ -3304,6 +3304,104 @@
         }
       ],
       "showcase": true
+    },
+    {
+      "id": "PB-0030",
+      "recorded_at": "2026-11-26T00:33:30Z",
+      "title": "XCL Wave32: маска переноса на границе треугольника",
+      "summary": "PortBridge исправил потерю маски переноса в пиксельных шейдерах XCL. DarkPanda69 воспроизвёл ошибку и подтвердил исправление на Radeon RX 9070 XT и GeForce RTX 3060. Исправление передано сопровождающим XCL.",
+      "status": "verified",
+      "tags": [
+        "Wave32",
+        "HLSL",
+        "carry mask",
+        "liveness"
+      ],
+      "platforms": [
+        "AMD RDNA4",
+        "NVIDIA Ampere",
+        "NVIDIA Ada"
+      ],
+      "dependency_ids": [],
+      "showcase": true,
+      "translations": {
+        "en": {
+          "title": "XCL Wave32 carry mask at triangle edges",
+          "tags": ["Wave32", "HLSL", "carry mask", "liveness"],
+          "summary": "PortBridge fixed a lost carry mask in XCL pixel shaders. DarkPanda69 reproduced the error and verified the fix on a Radeon RX 9070 XT and a GeForce RTX 3060. XCL maintainers have been sent the patch."
+        }
+      },
+      "solutions": [
+        {
+          "project": "xcl",
+          "status": "verified",
+          "summary": "Запись в s20 ошибочно помечала s21 как перезаписанный. Исправление сохраняет значение s21 при последующем подсчёте битов на краю треугольника. Решение доступно в форке и ожидает рассмотрения XCL.",
+          "translations": {
+            "en": {
+              "summary": "A write to s20 incorrectly marked s21 as overwritten. The fix preserves s21 for a later population count at triangle edges. The fork patch awaits upstream review."
+            }
+          },
+          "source_refs": [
+            {
+              "title": "Обсуждение исправления в XCL",
+              "url": "https://github.com/xcl-dev/xcl/issues/2584",
+              "translations": {
+                "en": {
+                  "title": "Upstream issue"
+                }
+              }
+            },
+            {
+              "title": "Исправление PortBridge в форке XCL",
+              "url": "https://github.com/akimfomin/xcl/commit/d3e7725f9f48c39c18e7b6e011ec76423edb0004",
+              "translations": {
+                "en": {
+                  "title": "PortBridge fork patch"
+                }
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "kind": "automated_test",
+              "outcome": "passed",
+              "title": "Проверка PortBridge на RTX",
+              "url": "https://github.com/akimfomin/PortBridge/blob/2bee6a191566006e03403af904693f7cee7a6009/research/pipeline-readiness/structural-suite/night/wave32-carry/precise/published-fork-test.json",
+              "revision": "d3e7725f9f48c39c18e7b6e011ec76423edb0004",
+              "platforms": [
+                "NVIDIA RTX 4070 Ti SUPER"
+              ],
+              "observed": "На RTX 4070 Ti SUPER исправленная версия прошла целевую проверку CPU и проверку всех 1 024 пикселей без пропусков.",
+              "reported_at": "2026-11-26T00:30:39Z",
+              "translations": {
+                "en": {
+                  "title": "PortBridge RTX check",
+                  "observed": "The fixed build passed the targeted CPU and native GPU checks on all 1,024 pixels on RTX 4070 Ti SUPER with zero skips."
+                }
+              }
+            },
+            {
+              "kind": "independent",
+              "outcome": "passed",
+              "title": "Проверка DarkPanda69 на AMD и NVIDIA",
+              "url": "https://github.com/xcl-dev/xcl/issues/2584#issuecomment-7178879816",
+              "revision": "d3e7725f9f48c39c18e7b6e011ec76423edb0004",
+              "platforms": [
+                "AMD RX 9070 XT",
+                "NVIDIA RTX 3060"
+              ],
+              "observed": "На обеих картах исходный компилятор с добавленным тестом дал сбой, исправление прошло. На AMD две прежние ошибки и шесть пропусков сохранились. На NVIDIA осталось 24 пропуска и ноль ошибок.",
+              "reported_at": "2026-11-26T00:33:30Z",
+              "translations": {
+                "en": {
+                  "title": "DarkPanda69 on AMD and NVIDIA",
+                  "observed": "Both cards failed with the test alone and passed with the fix. AMD retained two existing failures and six skips. NVIDIA retained 24 skips and zero failures."
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

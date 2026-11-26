@@ -38,6 +38,8 @@ python -m portbridge.preflight --url https://github.com/LooperSalty/AnyXboxX/pul
 
 ## Исследования PortBridge
 
+- **Исправление маски переноса Wave32.** DarkPanda69 воспроизвёл ошибку XCL и подтвердил исправление PortBridge на RX 9070 XT и RTX 3060. Правка ожидает рассмотрения в XCL. [Независимая проверка](https://github.com/xcl-dev/xcl/issues/2584#issuecomment-7178879816) · [Исходный код](https://github.com/akimfomin/xcl/commit/d3e7725f9f48c39c18e7b6e011ec76423edb0004)
+- **Эксперимент с проекцией пиксельных масок.** На RTX 4070 Ti SUPER первый проверенный кадр raylib появился на 99–120 мс раньше. В двух ракурсах время отрисовки в Vulkan сократилось на 19%. В фильтре Microsoft результаты разошлись. Отдельная опция сохраняет исходные групповые операции и выключена по умолчанию. Прежний вариант Lane-local Masks отозван после ошибки Wave32. [Измерения и код](https://github.com/akimfomin/PortBridge/blob/9c2616998e176806565ee1a0076dc4efb7ae4dc1/research/pipeline-readiness/structural-suite/night/ssa-mask-projection/README.md)
 - [Выборочный возврат данных GPU](research/readback-epochs) возвращает только изменившиеся диапазоны и измеряет полный цикл на Vulkan. [Исследование и актуальные отчёты команд](docs/READBACK-2026-11-25.md)
 - [Переносимая генерация уровней текстуры в Vulkan](research/mipmap-contract) показывает зависимость от нумерации потоков, исправление с явными условиями и проверку вывода на физической RTX.
 - [Разбиение больших ветвлений шейдера](research/adaptive-switch-dispatch) сравнивает плоское ветвление, дерево с фиксированными группами и таблицу для совместимых входов.

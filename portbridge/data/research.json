@@ -1,5 +1,17 @@
 [
   {
+    "at": "2026-11-26T00:22:55Z",
+    "title": "Эксперимент: проекция пиксельной маски в XCL",
+    "summary": "В открытой сцене raylib первый проверенный кадр на RTX 4070 Ti SUPER появился на 99–120 мс раньше в трёх парах запусков. На двух ракурсах время отрисовки в Vulkan снизилось на 19%. Фильтр Microsoft показал смешанные результаты. Опция отключена по умолчанию. Прежний вариант Lane-local Masks отозван после ошибки Wave32.",
+    "report_url": "https://github.com/akimfomin/PortBridge/blob/9c2616998e176806565ee1a0076dc4efb7ae4dc1/research/pipeline-readiness/structural-suite/night/ssa-mask-projection/README.md",
+    "translations": {
+      "en": {
+        "title": "Experimental pixel mask projection in XCL",
+        "summary": "The first verified raylib image arrived 99–120 ms sooner across three paired RTX 4070 Ti SUPER runs. Vulkan draw time fell by 19% in two views. A Microsoft filter showed mixed timings. The option defaults off. The earlier Lane-local Masks experiment was withdrawn after a Wave32 error."
+      }
+    }
+  },
+  {
     "at": "2026-11-25T16:48:14Z",
     "title": "Выборочный возврат изменившихся GPU-данных",
     "summary": "Адаптивный выбор без будущей трассы сократил полное время синтетической нагрузки со сменой фаз на 16,9%. На запросах из открытых приложений устойчивый системный выигрыш не подтверждён. Исходники и замеры сохранены, основной фокус перешёл к вычислительным зависимостям.",
