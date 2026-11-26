@@ -113,6 +113,28 @@ class ActionSummaryTests(TestCase):
             self.assertEqual(action_summary.main(self.env), 0)
         self.assertIn("No related work was found", self.report.read_text(encoding="utf-8"))
 
+    def test_unknown_receiver_gets_a_bounded_health_note_and_reason(self):
+        result = {"origin_url": self.source, "catalog_status": "ok", "indexed": False,
+                  "problems": [], "matches": [], "source_coverage": [{"slug": str(i)} for i in range(100)],
+                  "discovery": {"empty_reason": "There is no saved external search for this link."}}
+        markdown = action_summary.render_report(result)
+        self.assertIn(self.source, markdown)
+        self.assertIn("data/health.json", markdown)
+        self.assertIn("no saved external search", markdown)
+        self.assertLess(len(markdown), 700)
+
+    def test_runner_outputs_and_privileged_event_with_explicit_input(self):
+        output = self.report.parent / "outputs"
+        env = {**self.env, "GITHUB_OUTPUT": str(output), "PORTBRIDGE_PR_URL": self.source}
+        with mock.patch.object(action_summary, "public_preflight", side_effect=[
+                URLError("unavailable"), {"problems": [], "matches": []}]) as preflight:
+            for overrides in ({"GITHUB_EVENT_NAME": "pull_request_target"}, {"PORTBRIDGE_PR_URL": "wrong"},
+                              {"GITHUB_STEP_SUMMARY": ""}, {}, {}):
+                self.assertEqual(action_summary.main({**env, **overrides}), 0)
+            self.assertEqual(preflight.call_count, 2)
+        self.assertEqual(output.read_text(encoding="utf-8").splitlines(), [
+            "status=skipped", "status=invalid_input", "status=summary_unavailable", "status=unavailable", "status=reported"])
+
     def test_successful_snapshot_reports_an_unindexed_pull_request(self):
         result = {"origin_url": self.source, "indexed": False, "catalog_status": "ok",
                   "problems": [], "matches": [], "observations": []}

@@ -4,10 +4,15 @@ inputs:
   pull-request-url:
     description: Optional exact public GitHub pull request URL
     required: false
+outputs:
+  status:
+    description: reported, unavailable, invalid_input, skipped or summary_unavailable
+    value: ${{ steps.summary.outputs.status }}
 runs:
   using: composite
   steps:
     - name: Look for prior work
+      id: summary
       shell: bash
       working-directory: ${{ github.action_path }}
       env:
