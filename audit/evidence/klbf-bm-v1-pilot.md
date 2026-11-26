@@ -19,3 +19,27 @@ Reference JSON SHA-256 is `288443cb1f599cf6856e0ecbba8994d2211cdc8f55d425cbdb625
 - At the latest check the only comment was the invitation. There is no demonstrated use or decision on this new task. The BM-v1 results and KLBF approvals in the table preceded the pilot. [Current discussion](https://github.com/akimfomin/PortBridge/issues/95)
 
 The maintainers supplied the comparison criteria and selected the invitation recipient by reading the original threads. Submitting a matched report, deciding whether the comparison is fair and recording an independent decision are manual. PortBridge supplies the persistent request and scope. [Released Test Lab](https://akimfomin.github.io/PortBridge/#/lab) · [Test request workflow](../../docs/TEST-REQUESTS.md)
+
+## Independent same-host controls
+
+On 27 November (Moscow time), BrokeAsh responded to the released Test Lab request with two new 300-second runs on Ryzen 5 9600X and RX 9070 XT. Both were KLBF Lab commit [`a0687b76d3926894c46de85f77463cc0e0e4ad7a`](https://github.com/PastiiJay/klbf-lab/commit/a0687b76d3926894c46de85f77463cc0e0e4ad7a), Series S, FSR 4.1.2 per the submitter, 1024 px texture cap and driver 32.0.32029.2010. The testing and results belong to BrokeAsh. PortBridge supplied the request, checked both JSON reports and returned the comparison.
+
+| Run | Mean FPS | 1% low | Longest frame, ms | Freezes over 200 ms | Pipelines compiled / skipped |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| [Cold KLBF `e961b086`](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205367219), with launcher prebuild | 8.84 | 1.55 | 1828.88 | 238 | 100 / 48 |
+| [Warm KLBF `faae3748`](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205488418), on the cache left by the cold run | 9.03 | 2.04 | 905.83 | 251 | 59 / 48 |
+| [Fork `59f38136`](https://github.com/PastiiJay/klbf-lab/issues/87#issuecomment-7202910961), existing corrected result | 16.08 | 9.14 | 329 (reported rounded) | 1 | 0 / 0 |
+
+Use `faae3748` as the warmer same-host control and `e961b086` for the cache comparison. Warming changed the longest frame substantially, with little change in average FPS. The pair compares two submitted configurations. Pipeline skip policy, observed rendering work and in-run pipeline compilation still differ, so the measurements leave attribution to a particular code change open. The 9800X3D reference remains a separate row. [Returned interpretation](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205850459)
+
+### Verify the reports
+
+Save the JSON blocks from the two linked comments under the filenames in the commands. Both public copies contain U+FFFD in the `reason` field and initially failed the content-serial check. The [pinned benchmark code](https://github.com/PastiiJay/klbf-lab/blob/a0687b76d3926894c46de85f77463cc0e0e4ad7a/crates/victory-gpu/src/klbf_bench.rs#L277-L296) writes U+00B7. Restoring that one character in `reason` recovered both recorded serials and passed the pinned checker. Keep all other fields intact. The correction is needed for the pasted copies.
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/PastiiJay/klbf-lab/0c529ca05c68e3d8a77f2a66143cb43b6b90e225/tools/bench-check.py -o bench-check.py
+python -I bench-check.py KLBF-Bench-BM-v1-e961b086.json --login BrokeAsh
+python -I bench-check.py KLBF-Bench-BM-v1-faae3748.json --login BrokeAsh
+```
+
+The participant used the published Test Lab thread to complete the existing request. This establishes independent submission to the Lab. The participant ran KLBF's tooling and did not report running PortBridge CLI or installing an integration.

@@ -1,4 +1,77 @@
-# PortBridge · Самостоятельная проверка совместимости PR
+# PortBridge · Адресная кампания 27 ноября 2026
+
+Срез ответов и публикаций — 02:49 МСК. В GitHub проверены все **27** сообщений с инженерным результатом для **27** разных получателей. Волны — **10, 15 и 2**. Для 22 это первое найденное опубликованное предложение PortBridge, для 5 — продолжение прежнего контакта. Разбор отчёта BrokeAsh по прежнему запросу и публикации для сообществ учтены отдельно.
+
+## Отбор и охват
+
+Просмотрены 233 недавно обновлённые открытые темы в AnyXboxX, VIctory, VIctory-7900XTX, XCL, Continued и KLBF Lab. Это 120 PR и 113 Issues. В AnyXboxX было 13 открытых Issues, в остальных выборка составила по 20 PR и 20 Issues. В списке 152 разных автора и 176 разных аккаунтов с учётом участников 62 прочитанных технических обсуждений. Повторные PR и ответы одного человека учитывались по одному логину. Группу получения определяли по доступному публичному журналу взаимодействий.
+
+До ориентира 50 не дошли. Для 27 адресатов был готов отдельный проверяемый результат или точный контроль для открытого вопроса. В остальных рассмотренных случаях для публикации мешали уже готовый ответ, смена базы, отсутствие сопоставимого стенда либо недостаток доказательств. Выборка открытых тем сама по себе не доказывает, что полезных адресатов больше нет.
+
+| Что измерили | Подтверждение |
+| --- | --- |
+| Ответ на результат кампании | **3 участника.** mauroalvare сослался на найденный конфликт. UwUCammie добавил тот же контроль в AMD-ветку. CwWwWwW подтвердил, что сбой проверки пришёл из main. [AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/454#issuecomment-7205307619) · [AMD-ветка](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084) · [VIctory](https://github.com/fxceless/victory-fork/pull/1333#issuecomment-7205834214) |
+| Ответы на прежние предложения | **2 участника.** Lewandox добавил проверку двух перекрывающихся чтений. BrokeAsh сам прогнал оба контроля и передал отчёты в Test Lab. [Lewandox](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7205033607) · [Холодный контроль BrokeAsh](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205367219) · [Прогретый контроль](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205488418) |
+| Самостоятельные заявки и запуски | **0 новых заявок**, **1 участник с двумя аппаратными отчётами в существующей заявке Test Lab**. UwUCammie независимо добавил и прогнал регрессию под Wine, mauroalvare самостоятельно сверил 41 ветку. Отдельный запуск CLI или Action PortBridge этими двумя участниками не подтверждён. [Разбор Test Lab](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205850459) · [Wine](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084) · [Перепроверка веток](https://github.com/LooperSalty/AnyXboxX/pull/454#issuecomment-7205307619) |
+| Повторная самостоятельная задача и рекомендация коллеге | **0 и 0**. Прогретый замер BrokeAsh завершал тот же вопрос. |
+| Передача между командами | **2 документированных передачи.** Проверка конкурентного кэша VIctory дошла до AMD/Linux-форка и добавлена в его регрессию. Проверка однокадрового ввода из KLBF направлена в Continued с тестом его кода. Ответ Continued по этому переносу пока не подтверждён. [VIctory](https://github.com/fxceless/victory-fork/pull/1393#issuecomment-7205145118) · [AMD/Linux](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084) · [KLBF](https://github.com/PastiiJay/klbf-lab/pull/78#issuecomment-7205556873) · [Continued](https://github.com/ubiquitarianism/leonida/issues/1900#issuecomment-7205804917) |
+| Решения в командах | У UwUCammie новая регрессия в голове PR. mauroalvare предложил проверять переносы до следующей замены базы. AnyXboxX закрыл #436 после замены базы и без замера производительности на ней. Слияний, вызванных этой кампанией, не подтверждено. [Регрессия](https://github.com/jtrudeau1530/VIctory-7900XTX/commit/4455a70d6065b2dacdd8aafdb05121360fcd2756) · [Переносы AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/454#issuecomment-7205307619) · [Закрытие #436](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7205296487) |
+| Публичные площадки и звёзды | Пример опубликован в GitHub Issues PortBridge и в действующем обсуждении Toolkit у PortWatch VI. Число читателей неизвестно. Звёзды **2 → 2**, изменение **0**. [Вход для нового PR](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7205337398) · [PortWatch VI](https://github.com/4lwayz/portwatch-vi/issues/55#issuecomment-7205762419) |
+
+## Два случая
+
+**Помогло · VIctory.** В исходном коде #1393 создание объекта могло вернуть пустой результат после того, как другой поток уже опубликовал объект. В управляемом тесте исходник упал, перестановка одной проверки исправила результат. UwUCammie привязал ту же проверку к своему переносу на AMD/Linux и подтвердил её под Wine 11.22. Так следующий перенос может проверять конкретный порядок двух потоков. Это результат теста корректности. Игровая производительность отдельно не измерялась. [Исходный тест и правка](https://github.com/fxceless/victory-fork/pull/1393#issuecomment-7205145118) · [Независимое применение](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084)
+
+**Не дошло до переноса · AnyXboxX.** Lewandox добавил недостающую проверку перекрывающихся чтений, и PortBridge получил 4/4 на физической RTX 4070 Ti SUPER. После #454 файл был переписан, а результатов производительности для новой базы не было. LooperSalty закрыл #436. Повторять тест на прежней ветке смысла нет. Для возобновления нужны актуальная реализация и замер на выбранной базе. [Аппаратная проверка](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7205213561) · [Решение сопровождающего](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7205296487)
+
+## Дополнительные вопросы
+
+- BrokeAsh сам провёл два 300-секундных контроля BM-v1 на Ryzen 5 9600X и RX 9070 XT. Для KLBF 8,84 → 9,03 среднего FPS после прогрева, для его форка 16,08 FPS. Прогрев почти вдвое сократил худший кадр KLBF, но оставил основную разницу в средней частоте кадров. Политики пропуска конвейеров различались, вклад отдельной оптимизации открыт. Проверка обоих JSON восстановила один повреждённый символ по исходнику, после чего совпали контрольные номера и прошла проверка KLBF. [Исходные JSON, условия и команда](evidence/klbf-bm-v1-pilot.md#independent-same-host-controls)
+- KLBF #73 и #86 по воде. Пара с одним маршрутом и ревизией остаётся открыта. Доступные прогоны различались режимом Series S/X, масштабированием и кодом. Новая ветка beta-amd требует отдельного прогона RDNA2. [Контроль #73](https://github.com/PastiiJay/klbf-lab/issues/73#issuecomment-7202491449) · [Сверка #86](https://github.com/PastiiJay/klbf-lab/issues/86#issuecomment-7205205908) · [Новая ветка](https://github.com/PastiiJay/klbf-lab/issues/86#issuecomment-7205221785)
+- NVIDIA 8 ГБ. Два отчёта для RTX 3070 различались сценой, ревизией и настройкой BAR. Для VIctory #1083 указан доступный переключатель для проверки. Перенос #1316 в ветку #389 конфликтует в четырёх файлах. Парного игрового результата нет. [VIctory #1083](https://github.com/fxceless/victory-fork/issues/1083#issuecomment-7205249537) · [VIctory-7900XTX #389](https://github.com/avatarmanz/VIctory-7900XTX/issues/389#issuecomment-7205556631)
+
+## Фактические доставки
+
+| Волна | Адресат | Контакт | Сообщение | Переданный результат |
+| --- | --- | --- | --- | --- |
+| 1 | LooperSalty | Прежний | [AnyXboxX #454](https://github.com/LooperSalty/AnyXboxX/pull/454#issuecomment-7205087487) | На предложенной базе Vice-Tay найдены конфликты #433 и #436. |
+| 1 | n-romanovich | Первый | [victory-fork #1393](https://github.com/fxceless/victory-fork/pull/1393#issuecomment-7205145118) | Воспроизведение ошибки двух потоков и проверка исправления. |
+| 1 | FunWithFlagsDev | Первый | [AnyXboxX #449](https://github.com/LooperSalty/AnyXboxX/issues/449#issuecomment-7205184273) | Проверка разрыва 85%/88% на новой базе и пороговый тест. |
+| 1 | real-alponzo | Первый | [xcl #2910](https://github.com/xcl-dev/xcl/pull/2910#issuecomment-7205205815) | Лишнее чтение драйверного кэша при отключённом диске. |
+| 1 | narimantos | Первый | [klbf-lab #86](https://github.com/PastiiJay/klbf-lab/issues/86#issuecomment-7205205908) | Два замера воды на разных сборках и способ сравнить в одной. |
+| 1 | Lewandox | Прежний | [AnyXboxX #436](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7205213561) | Четыре теста RTX, включая предложенную проверку двух чтений. |
+| 1 | CuteBooty | Первый | [victory-fork #1083](https://github.com/fxceless/victory-fork/issues/1083#issuecomment-7205249537) | Отдельный уже имеющийся переключатель для 8 ГБ и проверка без переноса. |
+| 1 | fiestorra | Первый | [leonida #1937](https://github.com/ubiquitarianism/leonida/pull/1937#issuecomment-7205310358) | При совместном слиянии #1737 блокирует вызов до новой логики. |
+| 1 | CryingLaughing | Первый | [xcl #2908](https://github.com/xcl-dev/xcl/issues/2908#issuecomment-7205310457) | Нативный CopyTiles прошёл на четырёх смещениях, включая 69 632 байта. |
+| 1 | SalmanBarkat | Первый | [victory-fork #1385](https://github.com/fxceless/victory-fork/pull/1385#issuecomment-7205337164) | Три проверки WARP с контролем против тихого пропуска. |
+| 2 | Alpacher | Первый | [victory-fork #1396](https://github.com/fxceless/victory-fork/pull/1396#issuecomment-7205389775) | Семь конфликтов со свежим main и первый тест холодной компиляции. |
+| 2 | mauroalvare | Прежний | [AnyXboxX #438](https://github.com/LooperSalty/AnyXboxX/pull/438#issuecomment-7205406430) | #434 и #438 чисто сочетаются с новой базой и друг с другом. |
+| 2 | Luke-Ervin | Первый | [AnyXboxX #402](https://github.com/LooperSalty/AnyXboxX/pull/402#issuecomment-7205467131) | Три теста в обеих сборках и красный контроль старой арифметики. |
+| 2 | MKmajster | Первый | [VIctory-7900XTX #389](https://github.com/avatarmanz/VIctory-7900XTX/issues/389#issuecomment-7205556631) | Сверка замеров RTX 3070 и четырёх конфликтов переноса #1316. |
+| 2 | Jesper-Andersson | Первый | [VIctory-7900XTX #392](https://github.com/avatarmanz/VIctory-7900XTX/issues/392#issuecomment-7205556763) | Подобран перенос защиты динамических слотов с проверкой двух куч. |
+| 2 | Vladimir-Human | Первый | [klbf-lab #78](https://github.com/PastiiJay/klbf-lab/pull/78#issuecomment-7205556873) | Воспроизведена потеря однокадрового ввода при пропущенном опросе. |
+| 2 | UwUCammie | Первый | [VIctory-7900XTX #27](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205556913) | Тот же тест двух потоков прошёл в AMD-переносе. |
+| 2 | ending3729 | Первый | [VIctory-7900XTX #347](https://github.com/avatarmanz/VIctory-7900XTX/pull/347#issuecomment-7205598633) | 100 свежих процессов без сбоя на 31 тесте. |
+| 2 | HenriqueSBueno | Первый | [VIctory-7900XTX #237](https://github.com/avatarmanz/VIctory-7900XTX/pull/237#issuecomment-7205598787) | Два конфликта и отсутствие защиты от смены владельца слотов. |
+| 2 | LofisMusk | Первый | [VIctory-7900XTX #386](https://github.com/avatarmanz/VIctory-7900XTX/pull/386#issuecomment-7205598843) | #166 чисто применяется. Предложен отдельный контроль ожидания compute. |
+| 2 | ecox982745 | Прежний | [leonida #2352](https://github.com/ubiquitarianism/leonida/pull/2352#issuecomment-7205599124) | Чистый перенос на main с уже включённым #2404. Сборка упёрлась в SDK. |
+| 2 | ErRusso | Первый | [victory-fork #20](https://github.com/fxceless/victory-fork/pull/20#issuecomment-7205662848) | Оба варианта шейдера компилируются. Нужно сохранить выбор при разрешении конфликта. |
+| 2 | CwWwWwW | Первый | [victory-fork #1333](https://github.com/fxceless/victory-fork/pull/1333#issuecomment-7205727397) | Пять тестов переноса памяти прошли на объединённой ревизии. |
+| 2 | Ahmet-Dedeler | Прежний | [VIctory-7900XTX #390](https://github.com/avatarmanz/VIctory-7900XTX/pull/390#issuecomment-7205762082) | Синтетика показала, что до включения режима контроль пропускает изменения между полосами. |
+| 2 | kalijerry | Первый | [VIctory-7900XTX #97](https://github.com/avatarmanz/VIctory-7900XTX/pull/97#issuecomment-7205775800) | Скрытая ошибка сборки после слияния исправлена локально. Четыре теста прошли. |
+| 3 | jean-melikian | Первый | [AnyXboxX #413](https://github.com/LooperSalty/AnyXboxX/issues/413#issuecomment-7205791034) | На новой базе прежний переключатель больше не действует. Прошла проверка срока жизни чтения. |
+| 3 | BubsMcgee | Первый | [leonida #1900](https://github.com/ubiquitarianism/leonida/issues/1900#issuecomment-7205804917) | Тест точного кода показал 0 попаданий для 0,3 с и 1 для 2,5 с. Передан контроль из KLBF. |
+
+Полный набор PortBridge на Windows — **291 PASS, 0 FAIL, 0 SKIP**. Результаты по внешним проектам относятся к указанным ревизиям и средам. Тесты и исходник аппаратной пробы сохранены рядом. Отслеживание публикаций по расписанию продолжается по прежнему плану, до контрольной недели 4 декабря.
+
+```sh
+python -B -m unittest discover -s tests -v
+python -B -m portbridge.merge_check https://github.com/LooperSalty/AnyXboxX/pull/433 5ac6926e59043c06317edbe012aee7e51e738cf7
+```
+
+[Доказательства и воспроизведение](evidence/campaign-probes.md) · [Журнал взаимодействий](../docs/COMMUNITY-COORDINATION.md) · [Расписание публикаций](https://github.com/akimfomin/PortBridge/actions/workflows/pages.yml?query=branch%3Amain+event%3Aschedule)
+
+## Предыдущая итерация · Самостоятельная проверка совместимости PR
 
 ## Итог 27 ноября 2026
 

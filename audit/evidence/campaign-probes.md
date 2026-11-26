@@ -37,3 +37,13 @@ offset=69632 payload_mismatches=0 guard_mismatches=0
 ## VIctory · command-signature concurrency
 
 [Source at `0a7ee02`](https://github.com/fxceless/victory-fork/blob/0a7ee02e8b2f3e27e7df5ef07c094f148d15a788/crates/victory-gpu/src/draw.rs#L4829-L4848) was extracted verbatim into a temporary Rust unit test and compiled with Rust 1.100.0. The CPU test uses two channels for ordering. Thread A starts creating key 1, notifies B and waits. B immediately creates and publishes `Some(42)`, then signals A. A's create callback returns `None`. The original returned `None` for A even though B's value was already live (0 passed, 1 failed). Delaying `?` until after the second lookup returned B's value (1 passed, 0 failed). The creation error is simulated and its frequency in D3D12 is unmeasured. [Published to the author](https://github.com/fxceless/victory-fork/pull/1393#issuecomment-7205145118)
+
+The same forced ordering passed against UwUCammie's AMD/Linux port at [`2936e0c10e43c38ef13542e2349f9468325c8780`](https://github.com/jtrudeau1530/VIctory-7900XTX/commit/2936e0c10e43c38ef13542e2349f9468325c8780). The author then added the ordering to the actual PR regression at [`4455a70d6065b2dacdd8aafdb05121360fcd2756`](https://github.com/jtrudeau1530/VIctory-7900XTX/commit/4455a70d6065b2dacdd8aafdb05121360fcd2756) and reported a pass under Wine 11.22. [Author's report](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084)
+
+## VIctory-7900XTX · placed-texture integration
+
+[PR #97](https://github.com/avatarmanz/VIctory-7900XTX/pull/97) head `856b6f87ea7b08b092a57b95796e962f0a703b2e` against receiver `014d52dedf837d1ac660a0bd256c4704be9eeb40`. Resolve the textual conflict in `draw.rs` using receiver's `host_heaps_set` path. The text merge still fails to compile: the new placement path returns a `PlacedTexture` while `begun_before` needs a reference to a `View`. Borrow `&placed.view` and keep `PlacedTexture` in scope until the query returns. Retain the existing direct `&View` for the shader path. The resulting test tree `e7d0b88fbea83194211b1df36bbf7964ea85aa2e` passed this four-test filter. This was a local candidate and the report was sent to the author. [Exact conflict, compilation error and result](https://github.com/avatarmanz/VIctory-7900XTX/pull/97#issuecomment-7205775800)
+
+```sh
+cargo test --locked -p victory-gpu --lib placed_texture -- --test-threads=1 --nocapture
+```

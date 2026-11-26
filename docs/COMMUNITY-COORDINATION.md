@@ -1,5 +1,15 @@
 # Координация между командами
 
+## 27 ноября 2026 · Адресная кампания
+
+В [аудите](../audit/LATEST.md#фактические-доставки) сохранены 27 публичных сообщений и границы каждой проверки. Одно сообщение относится к одному адресату, даже если в нём проверены несколько PR. Ответ на старое приглашение отмечен отдельно. Число читателей неизвестно.
+
+- mauroalvare самостоятельно сравнил 41 ветку, сослался на найденный конфликт AnyXboxX #433 и предложил такую проверку до следующей смены базы. [Перепроверка](https://github.com/LooperSalty/AnyXboxX/pull/454#issuecomment-7205307619)
+- UwUCammie перенёс работу n-romanovich по кэшу командных сигнатур в AMD/Linux-форк. PortBridge проверил один порядок двух потоков и сообщил обеим веткам. UwUCammie добавил этот случай в свой тест и запустил его под Wine 11.22. [Первичная проверка](https://github.com/fxceless/victory-fork/pull/1393#issuecomment-7205145118) · [Ответ и регрессия](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084)
+- Lewandox добавил проверку двух перекрывающихся чтений. PortBridge подтвердил четыре теста на физической RTX. После перехода AnyXboxX на новую базу LooperSalty закрыл исходный PR, для обновлённой реализации нужен замер. [Аппаратный результат](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7205213561) · [Решение](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7205296487)
+- BrokeAsh сам провёл два замера KLBF Lab на одном ПК по прежней заявке Test Lab. PortBridge проверил контрольные номера и вернул вывод в ту же заявку. Авторство замеров сохранилось за BrokeAsh. [Два отчёта и вывод](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205850459)
+- Опубликован пример проверки переноса с точным PR и SHA в PortBridge #98. В существующее обсуждение Toolkit PortWatch VI переданы подтверждённый случай и способ принести следующий PR. [Рабочий вход](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7205337398) · [PortWatch VI](https://github.com/4lwayz/portwatch-vi/issues/55#issuecomment-7205762419)
+
 ## Повторяемая проверка PR · 27 ноября 2026
 
 - mauroalvare получил облачный результат для #433 и способ принести следующую пару PR и целевого коммита. Lewandox получил три независимых теста #436 на RTX 4070 Ti SUPER и предложение проверки двух одновременных чтений с примером из VIctory #1376. [Результат #409](https://github.com/LooperSalty/AnyXboxX/pull/409#issuecomment-7204915315) · [Результат #436](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7204915059)
