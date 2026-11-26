@@ -19,7 +19,7 @@ Each column covers 2,953 pixels across four triangle geometries. The adapter was
 | PortBridge original lane-local DXIL | 2,951 | 2,953 |
 | PortBridge whole-mask control | 0 | 0 |
 
-For stock HLSL with WQM, the full-screen triangle passed all 1,024 pixels. The two-triangle diagonal differed at 204/1,024, the single edge at 176/496 and the cropped triangle at 288/409. All six translations produced the same coverage for each geometry. This is a correctness measurement on NVIDIA running XCL. Physical RDNA2 guest-hardware comparison and AMD/Intel host results remain open. [Original experiment](../../LANE-MASKS.md) · [Pixel counts and readback digests](pixels.json) · [Raw RGBA32F images](readbacks.zip)
+For stock HLSL with WQM, the full-screen triangle passed all 1,024 pixels. The two-triangle diagonal differed at 204/1,024, the single edge at 176/496 and the cropped triangle at 288/409. All six translations produced the same coverage for each geometry. This is a correctness measurement on NVIDIA running XCL. DarkPanda69 subsequently confirmed the HLSL defect and fix on an RX 9070 XT and RTX 3060. A physical RDNA2 guest comparison and Intel host evidence remain open. [Independent host comparison](https://github.com/xcl-dev/xcl/issues/2584#issuecomment-7178879816) [Original experiment](../../LANE-MASKS.md) · [Pixel counts and readback digests](pixels.json) · [Raw RGBA32F images](readbacks.zip)
 
 ## The compiler change
 

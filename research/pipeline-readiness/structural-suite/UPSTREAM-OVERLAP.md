@@ -1,5 +1,7 @@
 # Interaction with current XCL mask fixes
 
+**Withdrawn experiment.** A Wave32 carry witness exposed a wrong pixel result in this lane-local lowering. Its timings are retained to explain the investigation. The HLSL correction and the experimental same-block SSA projection are separate changes. [Wave32 witness and fix](night/wave32-carry/precise/README.md) · [SSA projection measurements](night/ssa-mask-projection/README.md)
+
 The direct pixel path has two related upstream correctness changes. XCL #2501 makes first-lane selection and scalar condition checks prefer live lanes. The lane-local experiment leaves EXEC and masks with whole-value readers in the existing whole-mask path, where that correction applies. XCL #2503 masks bridged compares with EXEC in the separate per-lane compute translator. The pixel experiment already gates its write with EXEC and does not enter that bridge. [XCL #2501](https://github.com/xcl-dev/xcl/pull/2501) · [XCL #2503](https://github.com/xcl-dev/xcl/pull/2503)
 
 Both PR commits apply to the exact [matrix tree](README.md). The experimental [mask patch](lane-local-masks.patch) then applies unchanged. The tested Git tree is `07622a771150d9f14278426f6402080b30f067ca`. #2446 scalar reload CSE remains enabled in both timing arms.
@@ -20,4 +22,4 @@ The two Mobile NeRF baseline and treatment shader outputs all pass standalone DX
 
 The local variant was faster in all ten pairs. The procedure uses five alternating fresh-process pairs per entry with the same [D3D12 timing carrier](README.md#physical-cold-pipeline-creation). Some arms overlapped a separate Rust compiler build. The system-memory guard delayed starts when commit headroom was too low, then completed every planned arm. Comparisons across the two campaigns therefore use the ratios from their own matched pairs. [All timing samples and binary hashes](upstream-overlap-native.json)
 
-These tests establish coexistence for the pinned code and fixtures. General equivalence under helper-lane reconvergence, AMD and Intel results, original-scene execution and XCL title smoke remain open.
+These controls passed for the pinned fixtures. The later Wave32 failure ruled out deploying this lowering.

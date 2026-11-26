@@ -1,6 +1,8 @@
 # Lane-local pixel mask lowering
 
-Two open Mobile NeRF pixel shaders spend about 1.7 seconds in a D3D12 pipeline creation call after the address optimizations in the combined study. XCL restores wave-wide masks even when later instructions need only the caller's own carry or comparison bit. This experiment reuses XCL's existing HLSL-backed mask liveness analysis in the direct DXIL path. A certified write produces the EXEC-gated bit for the current lane, in the appropriate half for Wave64. Reads of full masks, writes to EXEC and unanalyzed writes retain whole-wave reconstruction. [Heavy structure census](heavy-structure.json) · [Experimental source](lane-local-masks.patch)
+**Withdrawn experiment.** A Wave32 carry witness exposed a wrong pixel result in this lane-local lowering. Its timings are retained to explain the investigation. The HLSL correction and the experimental same-block SSA projection are separate changes. [Wave32 witness and fix](night/wave32-carry/precise/README.md) · [SSA projection measurements](night/ssa-mask-projection/README.md)
+
+Two open Mobile NeRF pixel shaders spend about 1.7 seconds in a D3D12 pipeline creation call after the address optimizations in the combined study. XCL restores wave-wide masks even when later instructions need only the caller's own carry or comparison bit. This experiment reuses XCL's existing HLSL-backed mask liveness analysis in the direct DXIL path. A write admitted by that analysis produces the EXEC-gated bit for the current lane, in the appropriate half for Wave64. Reads of full masks, writes to EXEC and unanalyzed writes retain whole-wave reconstruction. [Heavy structure census](heavy-structure.json) · [Experimental source](lane-local-masks.patch)
 
 ## Physical comparison
 
@@ -17,7 +19,7 @@ The new arm was faster in all ten pairs. Both entries drop from 1,737 to 133 sta
 
 Four targeted compiler tests and 19 existing mask-liveness tests passed. The tests verify both mask halves, require an actual local-mask rewrite, retain whole reconstruction with a full VCC reader, and cover an unchanged entry EXEC ballot. A physical synthetic draw on the same NVIDIA GPU compared horizontal and vertical derivatives and coverage at all 2,048 pixels across guest Wave32 and Wave64, including triangle edges. Waterfall iteration counts were checked within the valid range because hardware wave grouping can differ.
 
-A fully inactive quad can be invisible to a wave-wide ballot inside divergent control flow. If a helper in that quad subsequently reaches a derivative, whole-wave reconstruction and lane-local materialization can differ. The existing HLSL local-mask semantics inform the lane-local representation. Current evidence covers the synthetic edge and waterfall cases. It does not establish general equivalence under reconvergence. The research patch uses a separate explicit offline entry point. AMD and Intel, full scene output, GPU time and safe runtime enablement remain open.
+A fully inactive quad can be invisible to a wave-wide ballot inside divergent control flow. If a helper in that quad subsequently reaches a derivative, whole-wave reconstruction and lane-local materialization can differ. The existing HLSL local-mask semantics inform the lane-local representation. The original checks covered synthetic edge and waterfall cases. The later Wave32 witness invalidated the admission rule. The explicit offline entry point is preserved for historical comparison.
 
 The follow-up checks this patch together with XCL's proposed live-lane and bridged EXEC fixes. [Pinned upstream comparison](UPSTREAM-OVERLAP.md)
 
