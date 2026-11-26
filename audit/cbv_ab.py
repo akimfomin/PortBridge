@@ -11,19 +11,35 @@ from statistics import median
 FIELDS = ("hits", "misses", "bytes_avoided", "invalidated")
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 COUNTER = re.compile(r"\b(" + "|".join(FIELDS) + r")=(\d+)\b")
+REQUIRED = {"MsBetweenPresents", "ProcessID", "SwapChainAddress", "TimeInSeconds"}
+WINDOW_SECONDS = 90
+WINDOW_TOLERANCE = 2
 
 
 def summarize(path, enabled):
     with path.open(encoding="utf-8-sig", newline="") as stream:
         rows = csv.DictReader(stream)
-        if not rows.fieldnames or "MsBetweenPresents" not in rows.fieldnames:
-            raise ValueError(f"{path}: need PresentMon MsBetweenPresents")
-        frames = [float(row["MsBetweenPresents"]) for row in rows]
+        if not rows.fieldnames or not REQUIRED.issubset(rows.fieldnames):
+            raise ValueError(f"{path}: need PresentMon v1 metrics, including process, swapchain and time")
+        rows = list(rows)
+    identities = {(row["ProcessID"], row["SwapChainAddress"], row.get("Application")) for row in rows}
+    if len(identities) != 1 or any(not row["ProcessID"] or not row["SwapChainAddress"] for row in rows):
+        raise ValueError(f"{path}: capture must contain one identified process and swapchain")
+    frames = [float(row["MsBetweenPresents"]) for row in rows]
+    timestamps = [float(row["TimeInSeconds"]) for row in rows]
     if len(frames) < 100 or any(not math.isfinite(x) or x <= 0 for x in frames):
         raise ValueError(f"{path}: need at least 100 positive frame intervals from the measured window")
-    frames.sort()
+    elapsed = timestamps[-1] - timestamps[0]
+    if not math.isfinite(elapsed) or abs(elapsed - WINDOW_SECONDS) > WINDOW_TOLERANCE:
+        raise ValueError(f"{path}: measured window must be 90 seconds (+/-2)")
+    for interval, left, right in zip(frames[1:], timestamps, timestamps[1:]):
+        delta = (right - left) * 1000
+        if not math.isfinite(delta) or delta <= 0 or abs(delta - interval) > max(2, interval * .03):
+            raise ValueError(f"{path}: discontinuous timestamps or mixed present stream")
+    # The first frame's interval starts before the observed window.
+    frames = sorted(frames[1:])
     tail = frames[-math.ceil(len(frames) / 100):]
-    report = {"frames": len(frames), "seconds": round(sum(frames) / 1000, 2),
+    report = {"frames": len(frames), "seconds": round(elapsed, 2),
               "median_ms": round(median(frames), 3), "p95_ms": round(frames[math.ceil(len(frames) * .95) - 1], 3),
               "one_percent_low_fps": round(1000 / (sum(tail) / len(tail)), 3),
               "frames_over_50ms": sum(value > 50 for value in frames)}

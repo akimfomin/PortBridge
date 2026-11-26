@@ -19,4 +19,27 @@ Checked the current receiving tree and four open heads with `git merge-tree --wr
 | [#448](https://github.com/LooperSalty/AnyXboxX/pull/448) · `534396239a59d9273a6edcdf05e87c7f64e46937` | Lowering files merge. Conflicts remain in `emit/valu_tests.rs` and `lib.rs`, including test integration and cache-version context. Neptune still emits constant-predicate floating-point compares. | Keep the WARP dispatch and native hardware tests for finite, infinite and NaN inputs, and verify old shader cache entries are invalidated. |
 | [#436](https://github.com/LooperSalty/AnyXboxX/pull/436) · `c60ae2c8bf0c1ab96710e12e5955c51adade8431` | Directly based on the restored main, clean textual merge. | Check pooling at the fence boundary and verify contents on repeated readbacks. Compare warm performance with equivalent rendered work. |
 
-The two early candidates for the current tree are #433 for correctness at list cuts and #436 for a cleanly applicable readback optimization. This is source triage. None of these open PRs were locally built or measured in this check. [Confirmed receiving tree](https://github.com/LooperSalty/AnyXboxX/commit/15024d54e690743604a67287f0e3f3f30adbaba8) · [Current replay](https://github.com/LooperSalty/AnyXboxX/blob/15024d54e690743604a67287f0e3f3f30adbaba8/third_party/victory/crates/victory-gpu/src/draw.rs#L904-L923)
+The two early candidates for the current tree are #433 for correctness at list cuts and #436 for a cleanly applicable readback optimization. This was the source-only triage. [Confirmed receiving tree](https://github.com/LooperSalty/AnyXboxX/commit/15024d54e690743604a67287f0e3f3f30adbaba8) · [Current replay](https://github.com/LooperSalty/AnyXboxX/blob/15024d54e690743604a67287f0e3f3f30adbaba8/third_party/victory/crates/victory-gpu/src/draw.rs#L904-L923)
+
+## Follow-up on the receiving commit
+
+[PortBridge #96](https://github.com/akimfomin/PortBridge/pull/96) adds a rerunnable Git comparison. Give it a public pull request URL and the full receiving commit. It checks the current PR head, records both pins, shows changed test files and suggests a first verification. It never runs code from the PR. The next behavioral step for #433 (checking current constants after a cut and preserving earlier descriptors until the fence completes) came from manual source review. The automated report supplies the exact conflict and test file.
+
+```sh
+python -B -m portbridge.merge_check https://github.com/LooperSalty/AnyXboxX/pull/433 15024d54e690743604a67287f0e3f3f30adbaba8
+```
+
+On that same receiving commit, #433 reported one conflict in `draw.rs` and linked [the changed cut regression](https://github.com/LooperSalty/AnyXboxX/blob/7fa7e26ac1a58e68ea692d0ced17319025683e19/third_party/victory/crates/victory-gpu/src/draw/cut_tables_tests.rs). #436 reported a clean merge. #429 reported no tree changes.
+
+### Independent GPU check for #436
+
+Built and ran the PR's public tests at [`c60ae2c8bf0c1ab96710e12e5955c51adade8431`](https://github.com/LooperSalty/AnyXboxX/pull/436/commits/c60ae2c8bf0c1ab96710e12e5955c51adade8431) on a physical NVIDIA GeForce RTX 4070 Ti SUPER with driver 617.14. From the PR worktree's `third_party/victory` directory:
+
+```sh
+cargo test --locked -p victory-gpu texback::tests -- --test-threads=1 --nocapture
+```
+
+Three tests passed. The reuse case ran 128 readbacks with two resource allocations, 50,331,648 allocated bytes, zero CPU scratch allocations and 3,029 µs aggregate landing time. Pattern changes and guard padding were covered. The test waits for each batch through `host.execute()`, so it supplies no evidence for two outstanding submissions or game frame times.
+
+A useful next control keeps two distinct readback payloads outstanding, delays the first completion, and checks that each result retains its own contents. spk-c's VIctory #1376 test demonstrates separate stale-mapping and fresh-readback controls at a different lifetime boundary. [Readback reuse tests](https://github.com/LooperSalty/AnyXboxX/tree/c60ae2c8bf0c1ab96710e12e5955c51adade8431/third_party/victory/crates/victory-gpu/src) · [VIctory #1376](https://github.com/fxceless/victory-fork/pull/1376)
+
