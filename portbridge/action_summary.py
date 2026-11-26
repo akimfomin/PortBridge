@@ -36,9 +36,11 @@ def pull_request(event_name, event_path):
     else:
         request = event["pull_request"]
         title, source = request["title"], request["html_url"]
-        revision = (request.get("head") or {}).get("sha")
-        if isinstance(revision, str) and re.fullmatch("[0-9a-f]{40}", revision):
-            head = revision
+        if event["repository"]["private"] is not False or request["base"]["repo"]["private"] is not False:
+            raise ValueError("Public repositories only")
+        head = request["head"]["sha"]
+        if not isinstance(head, str) or not re.fullmatch("[0-9a-f]{40}", head):
+            raise ValueError("Missing PR event head")
     if (not isinstance(title, str) or not isinstance(source, str)
             or len(source) > 500 or not PR_URL.fullmatch(source)):
         raise ValueError("Invalid pull request data")

@@ -25,7 +25,8 @@ class ActionSummaryTests(TestCase):
         resolver = mock.patch.object(action_summary, "public_pr_head", return_value="b" * 40)
         self.resolve = resolver.start()
         self.addCleanup(resolver.stop)
-        self.event.write_text(json.dumps({"pull_request": {
+        self.event.write_text(json.dumps({"repository": {"private": False}, "pull_request": {
+            "base": {"repo": {"private": False}}, "head": {"sha": "a" * 40},
             "title": self.title, "html_url": self.source,
             "body": "Secret body omitted from the summary and query",
         }}), encoding="utf-8")
@@ -141,7 +142,8 @@ class ActionSummaryTests(TestCase):
 
     def test_replay_uses_the_original_event_revision_and_url(self):
         revision = "a" * 40
-        event = {"pull_request": {"title": "Fixture", "html_url": self.source, "head": {"sha": revision}}}
+        event = json.loads(self.event.read_text(encoding="utf-8"))
+        event["pull_request"]["head"]["sha"] = revision
         self.event.write_text(json.dumps(event), encoding="utf-8")
         report = {"origin_url": "https://github.com/legacy/alias/pull/42", "problems": [], "matches": []}
         with mock.patch.object(action_summary, "public_preflight", return_value=report):
@@ -154,6 +156,25 @@ class ActionSummaryTests(TestCase):
         self.assertNotIn("PR event head", manual)
         self.assertIn("Public PR head: `" + "b" * 40, manual)
         self.resolve.assert_called_once_with(self.source)
+
+    def test_private_and_unpinned_events_do_not_access_the_catalog(self):
+        event = json.loads(self.event.read_text(encoding="utf-8"))
+        with mock.patch.object(action_summary, "public_preflight") as preflight:
+            for key, value in ((("repository", "private"), True),
+                               (("pull_request", "base", "repo", "private"), None),
+                               (("pull_request", "head", "sha"), "bad")):
+                modified = json.loads(json.dumps(event))
+                field = modified
+                for word in key[:-1]:
+                    field = field[word]
+                field[key[-1]] = value
+                self.event.write_text(json.dumps(modified), encoding="utf-8")
+                status, message = action_summary.summary_result(self.env)
+                self.assertEqual(status, "invalid_input")
+                self.assertNotIn(self.source, message)
+                self.assertNotIn(self.title, message)
+        preflight.assert_not_called()
+        self.resolve.assert_not_called()
 
     def test_missing_public_pr_is_distinct_from_rate_limit_and_empty_result(self):
         self.resolve.side_effect = [HTTPError(self.source, code, "", {}, None) for code in (404, 403)]
