@@ -9,7 +9,7 @@ from tempfile import TemporaryDirectory
 from time import monotonic
 from urllib.parse import quote, urlsplit
 
-from .action_summary import public_pr_head, source_link
+from .action_summary import source_link
 from .github import PR_URL
 from .matching import current_repository
 from .preflight import public_preflight
@@ -34,10 +34,10 @@ def compare(url, target):
         raise ValueError("Enter a public GitHub pull request URL")
     if not isinstance(target, str) or not SHA.fullmatch(target):
         raise ValueError("Enter a full lowercase receiving commit SHA from the PR repository")
-    head = public_pr_head(url)
     owner, name, _, number = urlsplit(url).path.strip("/").split("/")
     public_repo = f"https://github.com/{current_repository(f'{owner}/{name}')}"
-    result = {"url": url, "head": head, "target": target, "status": "unverified",
+    pull_ref = f"refs/pull/{number}/head"
+    result = {"url": url, "target": target, "status": "unverified",
               "conflicts": [], "changed_files": [], "changed_tests": []}
     # Read repository data in a bare repository without local Git configuration, templates or hooks.
     env = {key: val for key, val in os.environ.items() if not key.startswith(("GIT_", "SSH_"))}
@@ -56,12 +56,16 @@ def compare(url, target):
         if git("remote", "add", "origin", public_repo + ".git").returncode:
             return {**result, "reason": "Git could not register the public source"}
         fetched = git("fetch", "--quiet", "--no-tags", "--no-recurse-submodules", "--filter=blob:none", "origin",
-                      f"+refs/pull/{number}/head:refs/compare/head", f"+{target}:refs/compare/target")
+                      f"+{pull_ref}:refs/compare/head", f"+{target}:refs/compare/target")
         if fetched.returncode:
             return {**result, "reason": "Git could not fetch both revisions from this public repository"}
         captured = git("rev-parse", "refs/compare/head", "refs/compare/target").stdout.decode().splitlines()
-        if captured != [head, target]:
-            return {**result, "reason": "The PR moved or the receiving object was not the requested commit"}
+        if len(captured) != 2 or captured[1] != target or not SHA.fullmatch(captured[0]):
+            return {**result, "reason": "Git did not resolve the two requested commits"}
+        head = result["head"] = captured[0]
+        advertised = git("ls-remote", "--exit-code", "--refs", "origin", pull_ref)
+        if advertised.returncode or advertised.stdout.strip() != f"{head}\t{pull_ref}".encode("ascii"):
+            return {**result, "reason": "The public PR head moved or could not be rechecked"}
         common = git("merge-base", target, head)
         if common.returncode:
             return {**result, "reason": "Git could not find a common ancestor"}

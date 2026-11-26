@@ -1,3 +1,4 @@
+from subprocess import CompletedProcess
 import unittest
 from unittest.mock import patch
 
@@ -13,11 +14,31 @@ class MergeCheckTest(unittest.TestCase):
         bad = [("https://example.org/a/b/pull/1", TARGET),
                ("https://github.com/a/b/pull/1?x=2", TARGET),
                (URL, "--upload-pack=invalid"), (URL, "abc")]
-        with patch("portbridge.merge_check.public_pr_head") as resolve:
+        with patch("portbridge.merge_check.subprocess.run") as git:
             for url, target in bad:
                 with self.subTest(url=url, target=target), self.assertRaises(ValueError):
                     compare(url, target)
-            resolve.assert_not_called()
+            git.assert_not_called()
+
+    def test_rejects_a_pr_that_moved_after_fetch_while_using_public_git(self):
+        head = "b" * 40
+        other = "c" * 40
+        ref = "refs/pull/433/head"
+
+        def run(args, **kwargs):
+            stdout = b""
+            if "rev-parse" in args:
+                stdout = f"{head}\n{TARGET}\n".encode()
+            if "ls-remote" in args:
+                stdout = f"{other}\t{ref}\n".encode()
+            return CompletedProcess(args, 0, stdout=stdout, stderr=b"")
+
+        with patch("portbridge.merge_check.subprocess.run", side_effect=run) as git:
+            result = compare(URL, TARGET)
+        self.assertEqual(result["status"], "unverified")
+        self.assertIn("moved", result["reason"])
+        self.assertTrue(any(f"+{ref}:refs/compare/head" in call.args[0] for call in git.call_args_list))
+        self.assertFalse(any("merge-tree" in call.args[0] for call in git.call_args_list))
 
     def test_linked_test_survives_the_changed_file_display_limit(self):
         raw = b"\0".join([f"src/file{n:02}.rs".encode() for n in range(26)] + [b"tests/test_regression.py"])
