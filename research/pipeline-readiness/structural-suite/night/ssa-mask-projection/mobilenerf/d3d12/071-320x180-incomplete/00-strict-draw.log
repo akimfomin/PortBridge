@@ -1,0 +1,4 @@
+
+running 1 test
+test gpu::dxil::aperture_tests::open_mobilenerf_mlp_draw ... nerf validated_inputs_loaded
+nerf d3d_device_and_cache_ready

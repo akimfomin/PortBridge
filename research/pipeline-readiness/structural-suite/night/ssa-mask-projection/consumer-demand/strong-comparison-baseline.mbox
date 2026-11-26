@@ -1,0 +1,1283 @@
+From 639bf8598de5ef0e8fee6ac190429c1493c6b7b0 Mon Sep 17 00:00:00 2001
+From: Decodere <98278826+Decodere@users.noreply.github.com>
+Date: Wed, 25 Nov 2026 23:19:37 +0300
+Subject: [PATCH 1/5] dxil: prefer live lanes in PS v_readfirstlane and
+ lane-mask SCC tests
+
+Bring the direct DXIL pixel-shader lowering into parity with the HLSL
+recompiler's live-lane handling for helper lanes under s_wqm:
+
+- lanes.rs: add Lw::is_pixel (reused in ballot and rla) and
+  Lw::live_lanes (WaveActiveBallot(true), selecting the active half in
+  wave32-in-64 mode). Update Lw::first_lane so pixel shaders intersect
+  EXEC with live lanes before firstbitlow when any live lane is set,
+  falling back to the raw mask otherwise (parity with first_lane_live).
+- lower.rs: add Lw::ps_mask_live_scc and mask only the SCC zero-check
+  (leaving the destination register unmasked) for pixel-shader ENC_SOP2
+  s_and_b32 / s_andn2_b32 / s_and_b64 / s_andn2_b64 instructions that
+  reference VCC (106) or EXEC (126) (parity with mask_live, extended to
+  64-bit masks).
+- lanes.rs (ps_ballot_tests): add DXC-validated disassembly tests with
+  non-mask and compute negative controls plus a two-triangle edge GPU
+  test covering v_readfirstlane, helper-only s_andn2 SCC, unmasked
+  destination preservation, and the 6-pass march loop shape.
+
+Part of #675
+Part of #1401
+Part of #1833
+
+Assisted-by: Google Antigravity (Gemini 4 Neon)
+---
+ crates/xcl/src/gpu/dxil/lanes.rs | 157 ++++++++++++++++++++++++++++++-
+ crates/xcl/src/gpu/dxil/lower.rs |  23 ++++-
+ 2 files changed, 175 insertions(+), 5 deletions(-)
+
+diff --git a/crates/xcl/src/gpu/dxil/lanes.rs b/crates/xcl/src/gpu/dxil/lanes.rs
+index 4ee59b5..1016ff4 100644
+--- a/crates/xcl/src/gpu/dxil/lanes.rs
++++ b/crates/xcl/src/gpu/dxil/lanes.rs
+@@ -434,9 +434,28 @@ impl Lw {
+         self.sel(same, own, other)
+     }
+ 
++    /// Whether this shader is a pixel shader (has helper lanes under `s_wqm`).
++    pub fn is_pixel(&self) -> bool {
++        self.gfx.as_ref().is_some_and(|g| g.ps.is_some())
++    }
++
++    /// Live lanes of the current wave (`WaveActiveBallot(true)`), matching HLSL `ballot(true)`.
++    pub fn live_lanes(&mut self) -> (Value, Value) {
++        let t = self.s.m.i1c(true);
++        let w = self.s.wave_ballot(t);
++        if !self.wave64 {
++            let z = self.c(0);
++            if let Some(h) = self.gfx_half {
++                return (self.sel(h, w[1], w[0]), z);
++            }
++            return (w[0], z);
++        }
++        (w[0], w[1])
++    }
++
+     /// The program's ballot of `cond` → (lo, hi) mask words.
+     pub fn ballot(&mut self, cond: Value) -> (Value, Value) {
+-        if self.gfx.as_ref().is_some_and(|g| g.ps.is_some()) {
++        if self.is_pixel() {
+             return self.ballot_ps(cond);
+         }
+         let w = self.s.wave_ballot(cond);
+@@ -564,7 +583,7 @@ impl Lw {
+     pub fn rla(&mut self, v: Value, l: Value) -> Value {
+         let h = self.hw_lane(l);
+         let w = self.s.wave_read_lane_at(v, h);
+-        if !self.gfx.as_ref().is_some_and(|g| g.ps.is_some()) {
++        if !self.is_pixel() {
+             return w;
+         }
+         let q: Vec<Value> = (0..4u32).map(|k| {
+@@ -615,8 +634,23 @@ impl Lw {
+         self.sel(same, qv, w)
+     }
+ 
+-    /// First set lane of (lo, hi), 0 when none (the recompiler's `first_lane`).
+-    pub fn first_lane(&mut self, lo: Value, hi: Value) -> Value {
++    /// First set lane of (lo, hi), 0 when none (the recompiler's `first_lane`, or
++    /// `first_lane_live` in a pixel shader: prefer a live lane when one is set).
++    pub fn first_lane(&mut self, mut lo: Value, mut hi: Value) -> Value {
++        if self.is_pixel() {
++            let (lv_lo, lv_hi) = self.live_lanes();
++            let mlo = self.and(lo, lv_lo);
++            if self.wave64 {
++                let mhi = self.and(hi, lv_hi);
++                let both = self.or(mlo, mhi);
++                let has = self.nz(both);
++                lo = self.sel(has, mlo, lo);
++                hi = self.sel(has, mhi, hi);
++            } else {
++                let has = self.nz(mlo);
++                lo = self.sel(has, mlo, lo);
++            }
++        }
+         let fl = self.firstbitlow(lo);
+         let fh = self.firstbitlow(hi);
+         let fh = self.addc(fh, 32);
+@@ -815,4 +849,119 @@ mod ps_ballot_tests {
+             );
+         }
+     }
++
++    #[test]
++    fn direct_ps_readfirstlane_filters_exec_by_live_lanes() {
++        let (psi, ins) = (ps_interface(), |n, e, f: &[(&str, u64)]| encode(n, e, f, None).unwrap());
++        for wave64 in [false, true] {
++            let ps = [
++                ins(if wave64 { "S_WQM_B64" } else { "S_WQM_B32" }, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 126)]),
++                ins("V_READFIRSTLANE_B32", "ENC_VOP1", &[("VDST", 4), ("SRC0", V + 2)]),
++                ins("V_MOV_B32", "ENC_VOP1", &[("VDST", 4), ("SRC0", 4)]),
++                ins("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 0xF), ("VSRC0", 4), ("VSRC1", 3), ("VSRC2", 2), ("VSRC3", 3), ("DONE", 1), ("VM", 1)]),
++                ins("S_ENDPGM", "ENC_SOPP", &[]),
++            ].concat();
++            let k = kernel::translate_pixel(&ps, KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 }, &psi).expect("translate PS");
++            validate::validate(&k.dxil).expect("validate PS");
++            let dis = validate::disassemble(&k.dxil).expect("disassemble PS");
++            let sels: Vec<&str> = dis.lines().filter(|l| l.contains(" = select i1 ")).collect();
++            let fbl_from_sel = dis.lines().any(|l| {
++                l.contains("@dx.op.unaryBits.i32(i32 32, i32 ") && sels.iter().any(|s| s.split('=').next().is_some_and(|v| l.contains(&format!(", i32 {})", v.trim()))))
++            });
++            assert!(fbl_from_sel, "wave64 {wave64}: PS first_lane must select live-masked EXEC before firstbitlow:\n{dis}");
++        }
++        let cs = [ins("V_READFIRSTLANE_B32", "ENC_VOP1", &[("VDST", 4), ("SRC0", V)]), ins("S_ENDPGM", "ENC_SOPP", &[])].concat();
++        let kc = runner::direct_kernel_full(&cs, false).expect("translate CS");
++        validate::validate(&kc.dxil).expect("validate CS");
++        assert!(!validate::disassemble(&kc.dxil).unwrap().contains("dx.op.waveActiveBallot(i32 116, i1 true)"));
++    }
++
++    #[test]
++    fn direct_ps_mask_and_scc_counts_live_lanes_only() {
++        let (psi, ins) = (ps_interface(), |n, e, f: &[(&str, u64)]| encode(n, e, f, None).unwrap());
++        let ballots = |dis: &str| dis.matches("dx.op.waveActiveBallot(i32 116, i1 true)").count();
++        for (wave64, op, dst, s0, s1, want) in [
++            (false, "S_ANDN2_B32", 10, 10, 106, 2), (false, "S_AND_B32", 10, 10, 126, 2),
++            (false, "S_AND_B32", 125, 10, 126, 2), (true, "S_ANDN2_B64", 10, 10, 106, 2),
++            (false, "S_AND_B32", 10, 10, 143, 1), // non-mask SGPR op: entry EXEC ballot only
++        ] {
++            let c = [
++                ins(if wave64 { "S_MOV_B64" } else { "S_MOV_B32" }, "ENC_SOP1", &[("SDST", 10), ("SSRC0", 126)]),
++                ins(if wave64 { "S_WQM_B64" } else { "S_WQM_B32" }, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 126)]),
++                ins("V_CMP_LT_F32", "ENC_VOPC", &[("SRC0", 128), ("VSRC1", 2)]),
++                // Split basic block so block-local CSE keeps `op`'s live-lane ballot distinct from entry EXEC.
++                ins("S_CMP_EQ_U32", "ENC_SOPC", &[("SSRC0", 10), ("SSRC1", 128)]),
++                ins("S_CBRANCH_SCC1", "ENC_SOPP", &[("SIMM16", 1)]),
++                ins("S_ADD_U32", "ENC_SOP2", &[("SDST", 14), ("SSRC0", 14), ("SSRC1", 129)]),
++                ins(op, "ENC_SOP2", &[("SDST", dst), ("SSRC0", s0), ("SSRC1", s1)]),
++                ins("S_CSELECT_B32", "ENC_SOP2", &[("SDST", 11), ("SSRC0", 129), ("SSRC1", 128)]),
++                ins("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 4), ("SRC0", 11)]),
++                ins("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 0xF), ("VSRC0", 4), ("VSRC1", 3), ("VSRC2", 2), ("VSRC3", 3), ("DONE", 1), ("VM", 1)]),
++                ins("S_ENDPGM", "ENC_SOPP", &[]),
++            ].concat();
++            let k = kernel::translate_pixel(&c, KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 }, &psi).expect("translate PS");
++            validate::validate(&k.dxil).expect("validate PS");
++            let dis = validate::disassemble(&k.dxil).expect("disassemble PS");
++            assert_eq!(ballots(&dis), want, "wave64 {wave64} {op} dst={dst} s1={s1}:\n{dis}");
++        }
++        let cs = [ins("S_ANDN2_B32", "ENC_SOP2", &[("SDST", 10), ("SSRC0", 10), ("SSRC1", 106)]), ins("S_ENDPGM", "ENC_SOPP", &[])].concat();
++        let kc = runner::direct_kernel_full(&cs, false).expect("translate CS");
++        validate::validate(&kc.dxil).expect("validate CS");
++        assert_eq!(ballots(&validate::disassemble(&kc.dxil).unwrap()), 0);
++    }
++
++    #[test]
++    fn gpu_direct_ps_readfirstlane_and_mask_live_on_triangle_edges() {
++        match (runner::adapter(), runner::wave32_supported(), dxc::location()) {
++            (Ok(_), Ok(true), Ok(_)) => {}
++            (a, w, d) => return runner::skip_test(if a.is_err() || w.is_err() { "no GPU" } else if d.is_err() { "no DXC" } else { "no wave32" }),
++        }
++        use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R32G32_FLOAT;
++        let vs = dxc::compile("float4 main(float2 p : POSITION) : SV_Position { return float4(p, 0.5, 1.0); }\n", "main", "vs_6_6", &[]).unwrap();
++        let (psi, ins) = (ps_interface(), |n, e, f: &[(&str, u64)], x| encode(n, e, f, x).unwrap());
++        let (quad, layout) = ([-1.0f32, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0], [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }]);
++        for &wave64 in if runner::wave64_programs_supported() == Ok(true) { &[false, true][..] } else { &[false][..] } {
++            let (mov, wqm, and, andn2, or, xor) = if wave64 { ("S_MOV_B64", "S_WQM_B64", "S_AND_B64", "S_ANDN2_B64", "S_OR_B64", "S_XOR_B64") } else { ("S_MOV_B32", "S_WQM_B32", "S_AND_B32", "S_ANDN2_B32", "S_OR_B32", "S_XOR_B32") };
++            let march = [
++                ins("V_ADD_F32", "ENC_VOP2", &[("VDST", 9), ("SRC0", 242), ("VSRC1", 9)], None),
++                ins("S_ADD_U32", "ENC_SOP2", &[("SDST", 8), ("SSRC0", 8), ("SSRC1", 129)], None),
++                ins("V_CMP_LE_F32", "ENC_VOPC", &[("SRC0", 255), ("VSRC1", 9)], Some(0x40C0_0000)),
++                ins(andn2, "ENC_SOP2", &[("SDST", 14), ("SSRC0", 14), ("SSRC1", 106)], None),
++            ].concat();
++            let back = (-((march.len() as i64 + 4) / 4)) as u16 as u64;
++            let c = [
++                ins(mov, "ENC_SOP1", &[("SDST", 20), ("SSRC0", 126)], None),
++                ins(wqm, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 126)], None),
++                ins("V_MOV_B32", "ENC_VOP1", &[("VDST", 4), ("SRC0", 242)], None), // helpers = 1.0
++                ins(mov, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 20)], None),
++                ins("V_MOV_B32", "ENC_VOP1", &[("VDST", 4), ("SRC0", 244)], None), // live = 2.0
++                ins(wqm, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 20)], None),
++                ins("V_READFIRSTLANE_B32", "ENC_VOP1", &[("VDST", 4), ("SRC0", V + 4)], None),
++                ins("V_MOV_B32", "ENC_VOP1", &[("VDST", 5), ("SRC0", 4)], None),
++                // s[10:11] = EXEC & ~live (helper bits only): SCC must be 0, while dst preserves helper bits.
++                ins(andn2, "ENC_SOP2", &[("SDST", 10), ("SSRC0", 126), ("SSRC1", 20)], None),
++                ins("S_CSELECT_B32", "ENC_SOP2", &[("SDST", 16), ("SSRC0", 129), ("SSRC1", 128)], None),
++                ins("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 6), ("SRC0", 16)], None),
++                ins(or, "ENC_SOP2", &[("SDST", 12), ("SSRC0", 10), ("SSRC1", 20)], None),
++                ins(xor, "ENC_SOP2", &[("SDST", 12), ("SSRC0", 12), ("SSRC1", 126)], None),
++                ins("S_CSELECT_B32", "ENC_SOP2", &[("SDST", 17), ("SSRC0", 128), ("SSRC1", 129)], None),
++                ins(and, "ENC_SOP2", &[("SDST", 14), ("SSRC0", 20), ("SSRC1", 126)], None),
++                ins("S_CSELECT_B32", "ENC_SOP2", &[("SDST", 18), ("SSRC0", 17), ("SSRC1", 128)], None),
++                ins("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 7), ("SRC0", 18)], None),
++                ins("V_MOV_B32", "ENC_VOP1", &[("VDST", 9), ("SRC0", 128)], None),
++                ins("S_MOV_B32", "ENC_SOP1", &[("SDST", 8), ("SSRC0", 128)], None),
++                ins(mov, "ENC_SOP1", &[("SDST", 14), ("SSRC0", 126)], None),
++                march,
++                ins("S_CBRANCH_SCC1", "ENC_SOPP", &[("SIMM16", back)], None),
++                ins(mov, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 20)], None),
++                ins("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 8), ("SRC0", 8)], None),
++                ins("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 0xF), ("VSRC0", 5), ("VSRC1", 6), ("VSRC2", 7), ("VSRC3", 8), ("DONE", 1), ("VM", 1)], None),
++                ins("S_ENDPGM", "ENC_SOPP", &[], None),
++            ].concat();
++            let ps = kernel::translate_pixel(&c, KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 }, &psi).expect("translate PS");
++            let px = runner::draw(&vs, &ps.dxil, &layout, &quad, 8, &[], &[], 32, [9.0; 4]).unwrap();
++            let bad: Vec<(usize, usize, [f32; 4])> = (0..1024).filter(|&i| px[i] != [2.0, 0.0, 1.0, 6.0]).map(|i| (i % 32, i / 32, px[i])).collect();
++            assert!(bad.is_empty(), "wave64 {wave64}: {} of 1024 pixels wrong, first {:?}", bad.len(), &bad[..bad.len().min(6)]);
++        }
++    }
+ }
+diff --git a/crates/xcl/src/gpu/dxil/lower.rs b/crates/xcl/src/gpu/dxil/lower.rs
+index 5034d31..fa2d799 100644
+--- a/crates/xcl/src/gpu/dxil/lower.rs
++++ b/crates/xcl/src/gpu/dxil/lower.rs
+@@ -1538,7 +1538,13 @@ impl Lw {
+         match scc {
+             Scc::No => {}
+             Scc::Nz => {
+-                let c = self.nz(res);
++                let v = if self.ps_mask_live_scc(d, name) {
++                    let (lv, _) = self.live_lanes();
++                    self.and(res, lv)
++                } else {
++                    res
++                };
++                let c = self.nz(v);
+                 self.set_scc(c);
+             }
+             Scc::Is(c) => self.set_scc(c),
+@@ -1547,6 +1553,15 @@ impl Lw {
+         Ok(())
+     }
+ 
++    /// Whether a pixel-shader `s_and*` / `s_andn2*` operates on a lane mask (`VCC` / `EXEC`),
++    /// so its `SCC` should test live lanes only (parity with HLSL `mask_live` in `recomp/emit.rs`).
++    fn ps_mask_live_scc(&self, d: &Decoded, name: &str) -> bool {
++        self.is_pixel()
++            && d.enc.name == "ENC_SOP2"
++            && matches!(name, "s_and_b32" | "s_andn2_b32" | "s_and_b64" | "s_andn2_b64")
++            && ["SSRC0", "SSRC1", "SDST"].iter().any(|f| matches!(Self::field(d, f), 106 | 126))
++    }
++
+     fn smovrel(&mut self, d: &Decoded, name: &str) -> LResult<()> {
+         let dst = Self::field(d, "SDST");
+         let src = Self::field(d, "SSRC0");
+@@ -1780,6 +1795,12 @@ impl Lw {
+         if nz {
+             let c = if one_word {
+                 self.nz(lo)
++            } else if self.ps_mask_live_scc(d, name) {
++                let (lv_lo, lv_hi) = self.live_lanes();
++                let ml = self.and(lo, lv_lo);
++                let mh = self.and(hi, lv_hi);
++                let o = self.or(ml, mh);
++                self.nz(o)
+             } else {
+                 let o = self.or(lo, hi);
+                 self.nz(o)
+
+From 69010d51f828c8e03db29bbd47c8cb42173e89fc Mon Sep 17 00:00:00 2001
+From: ChAlanA <88502758+ChalanaGimhanaX@users.noreply.github.com>
+Date: Thu, 26 Nov 2026 02:19:55 +0530
+Subject: [PATCH 2/5] Recompiler: mask bridged V_CMP_* results with EXEC in
+ per-lane lowering
+
+---
+ crates/xcl/src/gpu/recomp/lower.rs      |  5 +-
+ crates/xcl/src/gpu/recomp/lower_dxil.rs | 91 +++++++++++++++++++++++++
+ 2 files changed, 94 insertions(+), 2 deletions(-)
+
+diff --git a/crates/xcl/src/gpu/recomp/lower.rs b/crates/xcl/src/gpu/recomp/lower.rs
+index 0d86a16..61de43a 100644
+--- a/crates/xcl/src/gpu/recomp/lower.rs
++++ b/crates/xcl/src/gpu/recomp/lower.rs
+@@ -1779,7 +1779,8 @@ impl<I: Ir> Lower<'_, I> {
+         if writes_scc {
+             outputs.push(Var::Scc);
+         }
+-        let old_exec = if cmpx { Some(self.read_bit(b, EXEC)?) } else { None };
++        let cmp = name.starts_with("V_CMP");
++        let old_exec = if cmp && !in_guarded_run { Some(self.read_bit(b, EXEC)?) } else { None };
+         let guard = if cmpx || in_guarded_run || !self.guarded.contains(&d.pc) { self.ir.boolean(true) } else { self.read_bit(b, EXEC)? };
+         let vals = self.ir.foreign(d, guard, &inputs, &outputs)?;
+         for (&var, &v) in outputs.iter().zip(&vals) {
+@@ -1814,7 +1815,7 @@ impl<I: Ir> Lower<'_, I> {
+             let x = self.ir.bin(Bin::And, x, one);
+             let z = self.ir.int(0);
+             let bit = self.ir.icmp(Cmp::Ne, x, z);
+-            // `v_cmpx`: the new EXEC is the compare in the lanes that were in EXEC (#1426's
++            // `v_cmp*` / `v_cmpx*`: inactive lanes always clear their result bit (#1426's
+             // lowering ran with the guard `true`, so its result is the compare alone)
+             let bit = match old_exec {
+                 Some(e) => self.ir.bin(Bin::And, bit, e),
+diff --git a/crates/xcl/src/gpu/recomp/lower_dxil.rs b/crates/xcl/src/gpu/recomp/lower_dxil.rs
+index cec9257..8f35e53 100644
+--- a/crates/xcl/src/gpu/recomp/lower_dxil.rs
++++ b/crates/xcl/src/gpu/recomp/lower_dxil.rs
+@@ -501,6 +501,97 @@ mod tests {
+         }
+     }
+ 
++    /// A bridged non-CMPX `V_CMP_*` (e.g. `V_CMP_LT_F32` in VOPC or VOP3) must clear its
++    /// destination bit in lanes outside EXEC, matching RDNA2 hardware and the HLSL path (#2458).
++    #[test]
++    fn a_bridged_v_cmp_clears_inactive_lanes_outside_exec() {
++        const F15: u64 = 15.0f32.to_bits() as u64;
++        const F31: u64 = 31.0f32.to_bits() as u64;
++        const F7: u64 = 7.0f32.to_bits() as u64;
++        // Kernel wave32: EXEC = lanes 0..15, then bridged VOPC and VOP3 float compares whose
++        // predicate holds in inactive lanes 16..31 (and for VOP3 also in active lanes 8..15).
++        let kernel_lines: &[I] = &[
++            ("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 1), ("SRC0", V)]),
++            ("V_CMP_GT_U32", "ENC_VOPC", &[("SRC0", 144), ("VSRC1", 0)]),
++            ("S_AND_SAVEEXEC_B32", "ENC_SOP1", &[("SDST", 0), ("SSRC0", 106)]),
++            ("V_CMP_LT_F32", "ENC_VOPC", &[("SRC0", 255), ("VSRC1", 1), ("LITERAL", F15)]),
++            ("V_CMP_LT_F32", "ENC_VOP3", &[("VDST", 4), ("SRC0", 255), ("SRC1", V + 1), ("LITERAL", F7)]),
++            ("S_OR_B32", "ENC_SOP2", &[("SDST", 126), ("SSRC0", 126), ("SSRC1", 0)]),
++            ENDPGM,
++        ];
++        // Compute wave_branches (wave32 and split wave64): narrowed EXEC + bridged `V_CMP_LT_F32`
++        // false in all active lanes and true in all inactive lanes -> `S_CBRANCH_VCCZ` must be taken.
++        let branch_prog = |w64: bool| -> Vec<I> {
++            let (cut_cmp, fcmp, save, restore): (I, I, &str, &str) = if w64 {
++                (
++                    ("V_CMP_GT_U32", "ENC_VOPC", &[("SRC0", 160), ("VSRC1", 0)]),
++                    ("V_CMP_LT_F32", "ENC_VOPC", &[("SRC0", 255), ("VSRC1", 1), ("LITERAL", F31)]),
++                    "S_AND_SAVEEXEC_B64",
++                    "S_OR_B64",
++                )
++            } else {
++                (
++                    ("V_CMP_GT_U32", "ENC_VOPC", &[("SRC0", 144), ("VSRC1", 0)]),
++                    ("V_CMP_LT_F32", "ENC_VOPC", &[("SRC0", 255), ("VSRC1", 1), ("LITERAL", F15)]),
++                    "S_AND_SAVEEXEC_B32",
++                    "S_OR_B32",
++                )
++            };
++            vec![
++                ("V_CVT_F32_U32", "ENC_VOP1", &[("VDST", 1), ("SRC0", V)]),
++                ("V_MOV_B32", "ENC_VOP1", &[("VDST", 2), ("SRC0", 129)]),
++                cut_cmp,
++                (save, "ENC_SOP1", &[("SDST", 0), ("SSRC0", 106)]),
++                fcmp,
++                ("S_CBRANCH_VCCZ", "ENC_SOPP", &[("SIMM16", 1)]),
++                ("V_MOV_B32", "ENC_VOP1", &[("VDST", 2), ("SRC0", 137)]),
++                (restore, "ENC_SOP2", &[("SDST", 126), ("SSRC0", 126), ("SSRC1", 0)]),
++                ("V_LSHLREV_B32", "ENC_VOP2", &[("VDST", 3), ("SRC0", 130), ("VSRC1", 0)]),
++                ("GLOBAL_STORE_DWORD", "ENC_FLAT_GLBL", &[("ADDR", 3), ("DATA", 2), ("SADDR", 125)]),
++                ENDPGM,
++            ]
++        };
++
++        let (k_dxil, _) = super::kernel(&decode(kernel_lines), false).unwrap_or_else(|e| panic!("{e}"));
++        let mut cs32 = compute_cs();
++        cs32.threads = [32, 1, 1];
++        let b32_lines = branch_prog(false);
++        let b32_dxil = super::compute(&decode(&b32_lines), &cs32, false).unwrap_or_else(|e| panic!("{e}"));
++        let mut cs64 = compute_cs();
++        cs64.threads = [64, 1, 1];
++        let b64_lines = branch_prog(true);
++        let b64_dxil = super::compute_split(&decode(&b64_lines), &cs64).unwrap_or_else(|e| panic!("{e}"));
++        if crate::gpu::dxil::validate::validator_supported() {
++            crate::gpu::dxil::validate::validate(&k_dxil).unwrap();
++            crate::gpu::dxil::validate::validate(&b32_dxil).unwrap();
++            crate::gpu::dxil::validate::validate(&b64_dxil).unwrap();
++        }
++        if !gpu() {
++            return;
++        }
++        let (s, v) = state(32);
++        let mut st = runner::KernelState::default();
++        st.sgpr.copy_from_slice(&s);
++        for (l, regs) in v.iter().enumerate() {
++            st.vgpr[l][..regs.len()].copy_from_slice(regs);
++        }
++        let direct = runner::run(&k_dxil, &st, &[]).unwrap();
++        assert_eq!(direct.sgpr[106], 0x0000_0000, "vcc must clear inactive lanes 16..31");
++        assert_eq!(direct.sgpr[4], 0x0000_FF00, "VOP3 s4 must clear inactive lanes 16..31");
++        assert_eq!(direct.sgpr[126], u32::MAX, "exec restored");
++        if dxc::location().is_ok() {
++            let bytes: Vec<u8> = kernel_lines.iter().flat_map(encode_line).collect();
++            let t = translate(&bytes, &Options { wave64: false, ..Default::default() }).unwrap();
++            assert!(t.complete(), "{:?}", t.unsupported_why);
++            let hlsl = runner::run(&dxc::compile(&t.hlsl, "main", "cs_6_6", &[]).unwrap(), &st, &[]).unwrap();
++            assert_eq!((direct.sgpr[106], direct.sgpr[4], direct.sgpr[126]), (hlsl.sgpr[106], hlsl.sgpr[4], hlsl.sgpr[126]));
++        }
++        let out32 = runner::dispatch(&b32_dxil, [1, 1, 1], &[], &[0; 32]).unwrap();
++        assert_eq!(&out32[..32], &[1; 32], "wave32 s_cbranch_vccz must be taken when only inactive lanes match");
++        let out64 = runner::dispatch(&b64_dxil, [1, 1, 1], &[], &[0; 64]).unwrap();
++        assert_eq!(&out64[..64], &[1; 64], "split wave64 s_cbranch_vccz must be taken when only inactive lanes match");
++    }
++
+     #[test]
+     fn gpu_frexp_exp_f32_denorm_per_lane() {
+         const PRESERVE: I = ("S_DENORM_MODE", "ENC_SOPP", &[("SIMM16", 13)]);
+
+From 9fbe01f65379f9907a06c2345f1596bdf99aedfb Mon Sep 17 00:00:00 2001
+From: akimfomin <akim.fomin@mail.ru>
+Date: Thu, 26 Nov 2026 02:32:28 +0300
+Subject: [PATCH 3/5] Recompiler: project known pixel ballot bits at their SSA
+ consumer
+
+Keep all four original wave ballots and every whole-mask consumer. An identified own-bit reader in the same block can test its quad nibble directly. This offline comparison retains full reconstruction on phi edges, whole reads, mixed registers, and all other unrecognized cases.
+---
+ crates/xcl/src/gpu/dxil/kernel.rs |  21 +++--
+ crates/xcl/src/gpu/dxil/lanes.rs  | 136 ++++++++++++++++++++++++++++--
+ crates/xcl/src/gpu/dxil/lower.rs  |  21 +++--
+ 3 files changed, 160 insertions(+), 18 deletions(-)
+
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 6ef85ad..04adb0e 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -117,7 +117,12 @@ pub fn translate_vertex(code: &[u8], o: KernelOptions, vs: &VsInterface) -> Resu
+ 
+ /// A pixel shader (the recompiler's `Mode::Pixel`; wave-size independent).
+ pub fn translate_pixel(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
+-    translate_entry(code, o, Entry::Pixel(ps.clone()), None, None, 0)
++    translate_entry(code, o, Entry::Pixel(ps.clone(), false), None, None, 0)
++}
++
++/// Offline pixel comparison that retains the original ballots and projects only observed bits.
++pub fn translate_pixel_projected_masks(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
++    translate_entry(code, o, Entry::Pixel(ps.clone(), true), None, None, 0)
+ }
+ 
+ /// A geometry-mode (ES+GS) program: the compute pass that writes one mesh record per
+@@ -133,7 +138,7 @@ pub enum Entry {
+     Compute(CsInterface),
+     Mesh(MsInterface),
+     Vertex(VsInterface),
+-    Pixel(PsInterface),
++    Pixel(PsInterface, bool),
+     Geometry(GsInterface),
+ }
+ 
+@@ -204,7 +209,7 @@ fn translate_on_this_thread(
+     };
+     let kernel = matches!(entry, Entry::Kernel);
+     let follow_loads = matches!(entry, Entry::Kernel | Entry::Compute(_));
+-    let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(_));
++    let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(..));
+     let compute = matches!(entry, Entry::Compute(_));
+     let split = o.wave64 && o.split && !gfx;
+     let leaders: BTreeSet<u64> = cfg.blocks.iter().filter_map(|b| b.insts.first().map(|&i| cfg.insts[i].pc)).collect();
+@@ -252,7 +257,7 @@ fn translate_on_this_thread(
+             lw.setup_vertex(vs, &used);
+             [1, 1, 1]
+         }
+-        Entry::Pixel(ps) => {
++        Entry::Pixel(ps, _) => {
+             lw.setup_lanes_gfx();
+             let modes = crate::gpu::recomp::emit::ps_attr_modes(&cfg.insts, ps.input_ena);
+             lw.setup_pixel(ps, &modes);
+@@ -484,11 +489,11 @@ impl Lw {
+             Entry::Mesh(ms) => Some(ms.clone()),
+             _ => None,
+         };
+-        let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(_));
++        let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(..));
+         let split = split && !gfx;
+         let stage = match entry {
+             Entry::Vertex(_) => Stage::Vertex,
+-            Entry::Pixel(_) => Stage::Pixel,
++            Entry::Pixel(..) => Stage::Pixel,
+             _ => Stage::Compute,
+         };
+         let mut s = Shader::new(stage, (6, 6));
+@@ -530,6 +535,8 @@ impl Lw {
+             has_f64_round_op: false,
+             img_writes: crate::gpu::recomp::emit::image_write_srsrcs(insts),
+             exec_cache: HashMap::new(),
++            project_pixel_masks: matches!(entry, Entry::Pixel(_, true)),
++            last_pixel_ballots: None,
+             xs: None,
+             xw: None,
+             xc: None,
+@@ -582,7 +589,7 @@ impl Lw {
+         }
+         lw.static_samplers = crate::gpu::recomp::constant_samplers(insts, leaders);
+         let group_threads: Option<u32> = match entry {
+-            Entry::Vertex(_) | Entry::Pixel(_) => None,
++            Entry::Vertex(_) | Entry::Pixel(..) => None,
+             Entry::Kernel => None,
+             Entry::Compute(cs) => Some(cs.threads.iter().product()),
+             Entry::Mesh(ms) => Some(ms.threads),
+diff --git a/crates/xcl/src/gpu/dxil/lanes.rs b/crates/xcl/src/gpu/dxil/lanes.rs
+index 1016ff4..67e57c9 100644
+--- a/crates/xcl/src/gpu/dxil/lanes.rs
++++ b/crates/xcl/src/gpu/dxil/lanes.rs
+@@ -490,11 +490,13 @@ impl Lw {
+         let need_hi = self.wave64 || self.gfx_half.is_some();
+         let mut m0 = z;
+         let mut m1 = z;
++        let mut votes = [[z; 2]; 4];
+         for p in 0..4u32 {
+             let qp = self.lshrc(q, p);
+             let qp = self.andc(qp, 1);
+             let bit = self.nz(qp);
+             let w = self.s.wave_ballot(bit);
++            votes[p as usize] = [w[0], w[1]];
+             let spread = |lw: &mut Lw, mut v: Value| -> Value {
+                 let s1 = lw.lshrc(v, 1);
+                 v = lw.or(v, s1);
+@@ -510,13 +512,43 @@ impl Lw {
+                 m1 = self.or(m1, b1);
+             }
+         }
+-        if !self.wave64 {
+-            if let Some(h) = self.gfx_half {
+-                return (self.sel(h, m1, m0), z);
+-            }
+-            return (m0, z);
++        let (lo, hi) = if self.wave64 {
++            (m0, m1)
++        } else if let Some(h) = self.gfx_half {
++            (self.sel(h, m1, m0), z)
++        } else {
++            (m0, z)
++        };
++        if self.project_pixel_masks {
++            self.last_pixel_ballots = Some((self.cur(), lo, hi, votes));
++        }
++        (lo, hi)
++    }
++
++    pub(super) fn project_quad_ballots(&mut self, ballots: &[[Value; 2]; 4]) -> Value {
++        let mut w = [self.c(0); 4];
++        for (p, ballot) in ballots.iter().enumerate() {
++            w[p] = if self.wave64 {
++                self.sel(self.upper, ballot[1], ballot[0])
++            } else if let Some(half) = self.gfx_half {
++                self.sel(half, ballot[1], ballot[0])
++            } else {
++                ballot[0]
++            };
+         }
+-        (m0, m1)
++        let b0 = self.andc(self.lane31, 1);
++        let b0 = self.nz(b0);
++        let b1 = self.andc(self.lane31, 2);
++        let b1 = self.nz(b1);
++        let a = self.sel(b0, w[1], w[0]);
++        let b = self.sel(b0, w[3], w[2]);
++        let vote = self.sel(b1, b, a);
++        // The reference spread sets output bit 4k+p iff any bit of ballot[p]'s
++        // nibble k is set. Other nibbles cannot cross a four-lane boundary.
++        let shift = self.andc(self.lane31, 28);
++        let nibble = self.lshr(vote, shift);
++        let nibble = self.andc(nibble, 15);
++        self.nz(nibble)
+     }
+ 
+     /// Pixel-shader ballot including helper lanes (parity with HLSL `ballot_px` in
+@@ -732,6 +764,89 @@ mod ps_ballot_tests {
+         ps_code
+     }
+ 
++    /// The reference is a four-pass ballot with OR over all four carrier lanes per bit.
++    /// Feed independently arbitrary words, even different high and low halves and no
++    /// votes in a quad. This exercises the emitted arithmetic without relying on which
++    /// values any driver happens to return to helpers.
++    #[test]
++    fn projected_mask_preserves_the_observed_bit_for_arbitrary_ballot_words() {
++        let mut state = 0x7aa8b247u32;
++        for wave64 in [false, true] {
++            let opt = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
++            let mut lw = super::Lw::new(&[], &Default::default(), opt, &kernel::Entry::Pixel(ps_interface(), true));
++            for pattern in 0..26 {
++                let raw: [[u32; 2]; 4] = std::array::from_fn(|p| std::array::from_fn(|halfwave| {
++                    state ^= state << 13;
++                    state ^= state >> 17;
++                    state ^= state << 5;
++                    match pattern {
++                        0 => 0,
++                        1 => u32::MAX,
++                        2..=17 => ((pattern - 2) as u32).rotate_left((4 * (p + halfwave)) as u32),
++                        _ => state,
++                    }
++                }));
++                let ballots = raw.map(|v| [lw.c(v[0]), lw.c(v[1])]);
++                for lane in 0..64u32 {
++                    let halfwave = (lane >> 5) as usize;
++                    let local = (lane & 31) as usize;
++                    let quad = local & !3;
++                    let expected = (0..4).any(|carrier| raw[local & 3][halfwave] >> (quad + carrier) & 1 != 0);
++                    lw.lane31 = lw.c(local as u32);
++                    lw.upper = lw.b(wave64 && halfwave == 1);
++                    lw.gfx_half = if wave64 { None } else { Some(lw.b(halfwave == 1)) };
++                    let bit = lw.project_quad_ballots(&ballots);
++                    let got = lw.s.m.const_u64(bit).expect("constant projection");
++                    assert_eq!(got, u64::from(expected), "wave64={wave64} lane={lane} pattern={pattern}");
++                }
++            }
++        }
++    }
++
++    #[test]
++    fn projected_mask_preserves_wave32_high_word_after_adjacent_carry() {
++        let mut code = Vec::new();
++        for (name, enc, fields) in [
++            ("V_ADD_CO_U32", "VOP3_SDST_ENC", vec![("VDST", 4), ("SDST", 21), ("SRC0", V + 2), ("SRC1", V + 3)]),
++            ("V_ADD_CO_U32", "VOP3_SDST_ENC", vec![("VDST", 4), ("SDST", 20), ("SRC0", 128), ("SRC1", V + 2)]),
++            ("V_MOV_B32", "ENC_VOP1", vec![("VDST", 5), ("SRC0", 21)]),
++            ("EXP", "ENC_EXP", vec![("TGT", 0), ("EN", 1), ("VSRC0", 5), ("DONE", 1), ("VM", 1)]),
++            ("S_ENDPGM", "ENC_SOPP", vec![]),
++        ] {
++            code.extend(encode(name, enc, &fields, None).unwrap());
++        }
++        let opt = KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 };
++        let original = kernel::translate_pixel(&code, opt, &ps_interface()).unwrap();
++        let projected = kernel::translate_pixel_projected_masks(&code, opt, &ps_interface()).unwrap();
++        assert!(original.dxil == projected.dxil, "wave32 carry wrote only s20; s21 is read as a whole word");
++    }
++
++    #[test]
++    fn projected_mask_leaves_divergent_loop_exit_popcount_whole() {
++        // Hand-assembled public #1498 loop: OR exiting VCC lanes into s10 and
++        // count the accumulated mask after EXEC is restored. A lane-splat reads 1
++        // instead of the population if the scalar use is missed. Use the actual
++        // forward/backward CFG and require identical emitted containers.
++        for wave64 in [false, true] {
++            let mut words = [
++                0x4a020081u32, 0xbe8a0380, 0x4e020281, 0x7d840280, 0x880a0a6a,
++                0x8a7e0a7e, 0xbf89fffb, 0x887e0a7e, 0xbe890f0a, 0x7e040209,
++            ];
++            if wave64 {
++                for (i, word) in [(1, 0xbe8a0480), (4, 0x888a0a6a), (5, 0x8afe0a7e), (7, 0x88fe0a7e), (8, 0xbe89100a)] {
++                    words[i] = word;
++                }
++            }
++            let mut code: Vec<u8> = words.iter().flat_map(|w| w.to_le_bytes()).collect();
++            code.extend(encode("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 1), ("VSRC0", 2), ("DONE", 1), ("VM", 1)], None).unwrap());
++            code.extend(encode("S_ENDPGM", "ENC_SOPP", &[], None).unwrap());
++            let opt = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
++            let original = kernel::translate_pixel(&code, opt, &ps_interface()).unwrap();
++            let projected = kernel::translate_pixel_projected_masks(&code, opt, &ps_interface()).unwrap();
++            assert_eq!(original.dxil, projected.dxil, "wave64={wave64}: VCC goes into a whole scalar accumulator");
++        }
++    }
++
+     #[test]
+     fn direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only() {
+         let psi = ps_interface();
+@@ -831,7 +946,16 @@ mod ps_ballot_tests {
+             let opt = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
+             let ps = kernel::translate_pixel(&helper_lane_masks_ps_code(wave64), opt, &psi).expect("translate PS");
+             let px = runner::draw(&vs, &ps.dxil, &layout, &quad, 8, &[], &[], size as u32, [9.0; 4]).unwrap();
++            let projected = kernel::translate_pixel_projected_masks(&helper_lane_masks_ps_code(wave64), opt, &psi).unwrap();
++            let pp = runner::draw(&vs, &projected.dxil, &layout, &quad, 8, &[], &[], size as u32, [9.0; 4]).unwrap();
+             let lanes = if wave64 { 64.0 } else { 32.0 };
++            assert_eq!(px.len(), pp.len());
++            for (i, (reference, candidate)) in px.iter().zip(&pp).enumerate() {
++                // The waterfall iteration count depends on physical wave packing.
++                assert_eq!([candidate[0], candidate[1], candidate[3]], [reference[0], reference[1], reference[3]],
++                    "wave64={wave64} derivatives and coverage at pixel {i}");
++                assert!((1.0..=lanes).contains(&candidate[2]), "wave64={wave64} waterfall at pixel {i}");
++            }
+             let bad: Vec<(usize, usize, [f32; 4])> = (0..size * size)
+                 .filter(|&i| {
+                     let p = px[i];
+diff --git a/crates/xcl/src/gpu/dxil/lower.rs b/crates/xcl/src/gpu/dxil/lower.rs
+index fa2d799..04692b3 100644
+--- a/crates/xcl/src/gpu/dxil/lower.rs
++++ b/crates/xcl/src/gpu/dxil/lower.rs
+@@ -220,6 +220,10 @@ pub struct Lw {
+     pub static_used: Vec<([u32; 4], bool, super::ops::Sampler)>,
+     pub sampler_base: u32,
+     pub exec_cache: HashMap<(Block, Value, Value), Value>,
++    /// Opt-in pixel translation keeps the four unmodified ballot results behind the most
++    /// recent full mask. An exact same-block SSA pair can project its own bit from them.
++    pub project_pixel_masks: bool,
++    pub last_pixel_ballots: Option<(Block, Value, Value, [[Value; 2]; 4])>,
+     /// groupshared exchange words of the split form
+     /// split form: the halves' exchange words (storage, first index) and the lane counter
+     pub xs: Option<(super::ops::GroupShared, u32)>,
+@@ -936,12 +940,19 @@ impl Lw {
+ 
+     /// This lane's bit of a mask (lo, hi).
+     pub fn lane_of(&mut self, lo: Value, hi: Value) -> Value {
+-        if self.wave64 {
+-            self.lanebit(lo, hi)
+-        } else {
+-            let z = self.c(0);
+-            self.lanebit(lo, z)
++        let hi = if self.wave64 { hi } else { self.c(0) };
++        if let Some((b, orig_lo, orig_hi, ballots)) = self.last_pixel_ballots {
++            let key = (self.cur(), lo, hi);
++            if key == (b, orig_lo, orig_hi) {
++                if let Some(&bit) = self.exec_cache.get(&key) {
++                    return bit;
++                }
++                let bit = self.project_quad_ballots(&ballots);
++                self.exec_cache.insert(key, bit);
++                return bit;
++            }
+         }
++        self.lanebit(lo, hi)
+     }
+ 
+     // ------------------------------------------------------------ dispatch
+
+From 2c4fe6f020fbe67cca6b41becb92e90f825fba60 Mon Sep 17 00:00:00 2001
+From: Ramon Victor Cardoso <ramonvc19@gmail.com>
+Date: Wed, 25 Nov 2026 19:47:46 -0300
+Subject: [PATCH 4/5] Recompiler: generalize bitmask and zero-shift folding via
+ known_nonzero_bits
+
+---
+ crates/xcl/src/gpu/dxil/module/opt.rs | 363 +++++++++++++++++++++++---
+ 1 file changed, 323 insertions(+), 40 deletions(-)
+
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index 5e867f5..b7d1ef7 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -105,6 +105,107 @@ impl Module {
+         }
+     }
+ 
++    /// Conservative bitmask of bits that *may* be 1 in `v` (0 bits are guaranteed zero),
++    /// for integer widths `1..=32` up to `depth` instructions deep.
++    fn known_nonzero_bits(&self, v: Value, w: u32, depth: u8) -> u64 {
++        let mask = (1u64 << w) - 1;
++        if let Some(c) = self.const_u64(v) {
++            return c & mask;
++        }
++        if depth == 0 {
++            return mask;
++        }
++        let Value::Inst(j) = v else { return mask };
++        let d = depth - 1;
++        let bound_mask = |upper: u64| if upper == 0 { 0 } else { (u64::MAX >> upper.leading_zeros()) & mask };
++        match &self.insts[j as usize].op {
++            Op::Bin(BinOp::And, x, y, 0) => self.known_nonzero_bits(*x, w, d) & self.known_nonzero_bits(*y, w, d),
++            Op::Bin(BinOp::Or | BinOp::Xor, x, y, 0) => (self.known_nonzero_bits(*x, w, d) | self.known_nonzero_bits(*y, w, d)) & mask,
++            Op::Bin(BinOp::LShr, x, sh, 0) => match self.const_u64(*sh) {
++                Some(s) if s < w as u64 => self.known_nonzero_bits(*x, w, d) >> s,
++                _ => mask,
++            },
++            Op::Bin(BinOp::Shl, x, sh, 0) => match self.const_u64(*sh) {
++                Some(s) if s < w as u64 => (self.known_nonzero_bits(*x, w, d) << s) & mask,
++                _ => mask,
++            },
++            Op::Bin(BinOp::AShr, x, sh, 0) => match self.const_u64(*sh) {
++                Some(s) if s < w as u64 => {
++                    let kx = self.known_nonzero_bits(*x, w, d);
++                    if kx & (1u64 << (w - 1)) == 0 {
++                        kx >> s
++                    } else {
++                        mask
++                    }
++                }
++                _ => mask,
++            },
++            Op::Bin(BinOp::Add, x, y, 0) => {
++                let (kx, ky) = (self.known_nonzero_bits(*x, w, d), self.known_nonzero_bits(*y, w, d));
++                if kx & ky == 0 {
++                    (kx | ky) & mask
++                } else if kx + ky <= mask {
++                    bound_mask(kx + ky)
++                } else {
++                    mask
++                }
++            }
++            Op::Bin(BinOp::Mul, x, y, 0) => {
++                let (kx, ky) = (self.known_nonzero_bits(*x, w, d), self.known_nonzero_bits(*y, w, d));
++                if kx == 0 || ky == 0 {
++                    return 0;
++                }
++                let tz = kx.trailing_zeros() + ky.trailing_zeros();
++                if tz >= w {
++                    return 0;
++                }
++                let low = mask & !((1u64 << tz) - 1);
++                match kx.checked_mul(ky) {
++                    Some(prod) if prod <= mask => bound_mask(prod) & low,
++                    _ => low,
++                }
++            }
++            Op::Bin(BinOp::UDiv, x, y, 0) => match self.const_u64(*y) {
++                Some(div) if div > 0 => bound_mask(self.known_nonzero_bits(*x, w, d) / div),
++                _ => mask,
++            },
++            Op::Bin(BinOp::URem, x, y, 0) => match self.const_u64(*y) {
++                Some(div) if div > 0 => bound_mask(self.known_nonzero_bits(*x, w, d).min(div - 1)),
++                _ => mask,
++            },
++            Op::Select(_, t, f) => (self.known_nonzero_bits(*t, w, d) | self.known_nonzero_bits(*f, w, d)) & mask,
++            Op::Cast(CastOp::ZExt, inner, _) => match self.int_width(self.value_ty(*inner)) {
++                Some(iw) if iw < w => self.known_nonzero_bits(*inner, iw, d) & mask,
++                _ => mask,
++            },
++            Op::Cast(CastOp::Trunc, inner, _) => match self.int_width(self.value_ty(*inner)) {
++                Some(iw) if iw <= 32 => self.known_nonzero_bits(*inner, iw, d) & mask,
++                _ => mask,
++            },
++            Op::Call(f, args) => {
++                let name = &self.funcs[*f as usize].name;
++                if name == "dx.op.binary.i32" && args.len() == 3 && w == 32 {
++                    match self.const_u64(args[0]) {
++                        // UMax: result is either operand, so zero bits in both stay zero.
++                        Some(39) => (self.known_nonzero_bits(args[1], 32, d) | self.known_nonzero_bits(args[2], 32, d)) & mask,
++                        // UMin: result <= min(ka, kb), so bits above the MSB of min(ka, kb) are zero.
++                        Some(40) => {
++                            let upper = self.known_nonzero_bits(args[1], 32, d).min(self.known_nonzero_bits(args[2], 32, d));
++                            bound_mask(upper)
++                        }
++                        _ => mask,
++                    }
++                } else if name == "dx.op.unaryBits.i32" && args.len() == 2 && w == 32 && self.const_u64(args[0]) == Some(31) {
++                    // Countbits on i32 is in 0..=32.
++                    0x3F
++                } else {
++                    mask
++                }
++            }
++            _ => mask,
++        }
++    }
++
+     /// Cheap algebraic & constant simplification on already-resolved operands.
+     fn simplify_op(&mut self, op: &Op, ty: Ty) -> Option<Value> {
+         // Keep 64-bit instructions intact so Int64Ops / Doubles shader flags stay consistent.
+@@ -188,46 +289,41 @@ impl Module {
+                         }
+                     }
+                     BinOp::And => {
+-                        if let Some((v, m)) = cb.map(|m| (a, m)).or_else(|| ca.map(|m| (b, m))) {
+-                            if let Value::Inst(j) = v {
+-                                match self.insts[j as usize].op {
+-                                    Op::Bin(BinOp::LShr, _, sh, 0) => {
+-                                        if let Some(s) = self.const_u64(sh).filter(|&s| s < w as u64) {
+-                                            let known = mask >> s;
+-                                            if known & m == known {
+-                                                return Some(v);
+-                                            }
+-                                            if known & m == 0 {
+-                                                return Some(self.const_int(ty, 0));
+-                                            }
+-                                        }
+-                                    }
+-                                    Op::Bin(BinOp::Shl, _, sh, 0) => {
+-                                        if let Some(s) = self.const_u64(sh).filter(|&s| s < w as u64) {
+-                                            let known = (mask << s) & mask;
+-                                            if known & m == known {
+-                                                return Some(v);
+-                                            }
+-                                            if known & m == 0 {
+-                                                return Some(self.const_int(ty, 0));
+-                                            }
+-                                        }
+-                                    }
+-                                    Op::Bin(BinOp::And, x, y, 0) => {
+-                                        if let Some(c1) = self.const_u64(y).or_else(|| self.const_u64(x)) {
+-                                            if c1 & m == c1 {
+-                                                return Some(v);
+-                                            }
+-                                            if c1 & m == 0 {
+-                                                return Some(self.const_int(ty, 0));
+-                                            }
+-                                        }
+-                                    }
+-                                    Op::Cast(CastOp::ZExt, inner, _) if self.int_width(self.value_ty(inner)) == Some(1) => {
+-                                        return Some(if m & 1 != 0 { v } else { self.const_int(ty, 0) });
+-                                    }
+-                                    _ => {}
+-                                }
++                        let ka = self.known_nonzero_bits(a, w, 4);
++                        let kb = self.known_nonzero_bits(b, w, 4);
++                        if ka & kb == 0 {
++                            return Some(self.const_int(ty, 0));
++                        }
++                        if let Some(m) = cb {
++                            if ka & !m == 0 {
++                                return Some(a);
++                            }
++                        }
++                        if let Some(m) = ca {
++                            if kb & !m == 0 {
++                                return Some(b);
++                            }
++                        }
++                    }
++                    BinOp::LShr => {
++                        if let Some(s) = cb.filter(|&s| s < w as u64) {
++                            if (self.known_nonzero_bits(a, w, 4) >> s) == 0 {
++                                return Some(self.const_int(ty, 0));
++                            }
++                        }
++                    }
++                    BinOp::Shl => {
++                        if let Some(s) = cb.filter(|&s| s < w as u64) {
++                            if ((self.known_nonzero_bits(a, w, 4) << s) & mask) == 0 {
++                                return Some(self.const_int(ty, 0));
++                            }
++                        }
++                    }
++                    BinOp::AShr => {
++                        if let Some(s) = cb.filter(|&s| s < w as u64) {
++                            let ka = self.known_nonzero_bits(a, w, 4);
++                            if ka & (1u64 << (w - 1)) == 0 && (ka >> s) == 0 {
++                                return Some(self.const_int(ty, 0));
+                             }
+                         }
+                     }
+@@ -1401,3 +1497,190 @@ mod tests {
+         assert!(m.uses_well_formed(&order));
+     }
+ }
++
++#[cfg(test)]
++mod known_bits_tests {
++    use super::*;
++    use crate::gpu::dxil::{
++        container::Stage,
++        ops::{Binary, BitCount},
++        shader::Shader,
++        validate,
++    };
++    use crate::gpu::recomp::runner;
++
++    #[test]
++    fn known_nonzero_bits_folds_compound_masks_and_shifts() {
++        let mut m = Module::new();
++        m.define_entry("main");
++        let entry = m.entry_block();
++        let i32t = m.i32();
++        let void = m.void();
++        let src_ty = m.func_ty(i32t, &[]);
++        let sink_ty = m.func_ty(void, &[i32t]);
++        let bin_ty = m.func_ty(i32t, &[i32t, i32t, i32t]);
++        let un_ty = m.func_ty(i32t, &[i32t, i32t]);
++        let src = m.declare("src", src_ty, FnAttrs::NoUnwind);
++        let sink = m.declare("sink", sink_ty, FnAttrs::NoUnwind);
++        let umin_fn = m.declare("dx.op.binary.i32", bin_ty, FnAttrs::ReadNone);
++        let cnt_fn = m.declare("dx.op.unaryBits.i32", un_ty, FnAttrs::ReadNone);
++        m.set_block(entry);
++
++        let x = m.call(src, &[]);
++        let y = m.call(src, &[]);
++        let c0 = m.i32c(0);
++        let c8 = m.i32c(8);
++        let c16 = m.i32c(16);
++        let c24 = m.i32c(24);
++        let c31 = m.i32c(31);
++        let c40 = m.i32c(40);
++        let mff = m.i32c(0xFF);
++        let mff00 = m.i32c(0xFF00);
++        let mlo16 = m.i32c(0xFFFF);
++        let mhi16 = m.i32c(0xFFFF_0000);
++        let c256 = m.i32c(0x100);
++
++        // 1. Multi-hop `or` + `shl` + `and` (packed u16): mask by 0xFFFF is redundant; lshr 16 -> 0.
++        let b0 = m.bin(BinOp::And, x, mff);
++        let b1 = m.bin(BinOp::And, y, mff);
++        let b1_hi = m.bin(BinOp::Shl, b1, c8);
++        let packed = m.bin(BinOp::Or, b0, b1_hi);
++        let packed_keep = m.bin(BinOp::And, packed, mlo16);
++        let packed_shr0 = m.bin(BinOp::LShr, packed, c16);
++        let packed_ashr0 = m.bin(BinOp::AShr, packed, c16);
++
++        // 2. Non-constant disjoint `and`: low-16 value & high-16 value -> 0.
++        let hi_val = m.bin(BinOp::Shl, y, c16);
++        let disjoint = m.bin(BinOp::And, packed, hi_val);
++
++        // 3. `select` of bounded values: redundant mask kept, disjoint shift -> 0.
++        let cond = m.cmp(Pred::Eq, x, c0);
++        let sel = m.select(cond, b0, b1_hi);
++        let sel_keep = m.bin(BinOp::And, sel, mlo16);
++        let sel_shl0 = m.bin(BinOp::Shl, hi_val, c16);
++
++        // 4. `add` of disjoint masks (`b0 + b1_hi`) and bounded `mul` (`b0 * b1` <= 65025 <= 0xFFFF).
++        let add_disj = m.bin(BinOp::Add, b0, b1_hi);
++        let add_keep = m.bin(BinOp::And, add_disj, mlo16);
++        let mul_u16 = m.bin(BinOp::Mul, b0, b1);
++        let mul_zero = m.bin(BinOp::And, mul_u16, mhi16);
++
++        // 5. `dx.op.binary.i32(UMin)` and `dx.op.unaryBits.i32(Countbits)`.
++        let clamped = m.call(umin_fn, &[c40, x, mff]);
++        let clamped_keep = m.bin(BinOp::And, clamped, mff);
++        // Subtle soundness case: umin(x & 0x100, y) can be 0xFF (255) OR 0x100 (256), so & 0xFF MUST NOT fold!
++        let bit8 = m.bin(BinOp::And, x, c256);
++        let clamped_256 = m.call(umin_fn, &[c40, bit8, y]);
++        let clamped_256_mask = m.bin(BinOp::And, clamped_256, mff);
++        let pop = m.call(cnt_fn, &[c31, x]);
++        let pop_zero = m.bin(BinOp::And, pop, mff00);
++
++        // 6. Negative-capable `ashr` MUST NOT fold to 0 when sign bit may be set.
++        let sign_ashr = m.bin(BinOp::AShr, hi_val, c24);
++
++        for v in [
++            packed_keep,
++            packed_shr0,
++            packed_ashr0,
++            disjoint,
++            sel_keep,
++            sel_shl0,
++            add_keep,
++            mul_zero,
++            clamped_keep,
++            clamped_256_mask,
++            pop_zero,
++            sign_ashr,
++        ] {
++            m.call(sink, &[v]);
++        }
++        m.ret();
++        m.optimize();
++
++        let args: Vec<Value> = m.blocks[entry.0 as usize]
++            .iter()
++            .filter_map(|&i| match &m.insts[i as usize].op {
++                Op::Call(f, a) if *f == sink => Some(a[0]),
++                _ => None,
++            })
++            .collect();
++        assert_eq!(args.len(), 12);
++        assert_eq!(args[0], packed, "and(or(x&0xFF, (y&0xFF)<<8), 0xFFFF) -> packed");
++        assert_eq!(m.const_u64(args[1]), Some(0), "lshr(packed16, 16) -> 0");
++        assert_eq!(m.const_u64(args[2]), Some(0), "ashr(packed16, 16) -> 0");
++        assert_eq!(m.const_u64(args[3]), Some(0), "and(packed16, y<<16) -> 0");
++        assert_eq!(args[4], sel, "and(select(c, x&0xFF, (y&0xFF)<<8), 0xFFFF) -> sel");
++        assert_eq!(m.const_u64(args[5]), Some(0), "shl(y<<16, 16) -> 0");
++        assert_eq!(args[6], add_disj, "and((x&0xFF)+((y&0xFF)<<8), 0xFFFF) -> add_disj");
++        assert_eq!(m.const_u64(args[7]), Some(0), "and((x&0xFF)*(y&0xFF), 0xFFFF0000) -> 0");
++        assert_eq!(args[8], clamped, "and(umin(x, 0xFF), 0xFF) -> clamped");
++        assert_eq!(args[9], clamped_256_mask, "and(umin(x&0x100, y), 0xFF) must NOT fold away");
++        assert_eq!(m.const_u64(args[10]), Some(0), "and(countbits(x), 0xFF00) -> 0");
++        assert_eq!(args[11], sign_ashr, "ashr(y<<16, 24) has sign bit unknown and must stay");
++        let order: Vec<u32> = m.block_layout().0.into_iter().map(|b| b as u32).collect();
++        assert!(m.uses_well_formed(&order));
++    }
++
++    #[test]
++    fn known_nonzero_bits_gpu_parity() {
++        let mut s = Shader::new(Stage::Compute, (6, 6));
++        let res = s.raw_uav(1, 0);
++        let mem = s.raw_uav(2, 0);
++        let lane = s.flattened_thread_id_in_group();
++        let c2 = s.m.i32c(2);
++        let c8 = s.m.i32c(8);
++        let c16 = s.m.i32c(16);
++        let c256 = s.m.i32c(0x100);
++        let mff = s.m.i32c(0xFF);
++        let mlo16 = s.m.i32c(0xFFFF);
++        let mhi16 = s.m.i32c(0xFFFF_0000);
++        let off0 = s.m.bin(BinOp::Shl, lane, c2);
++        let b64 = s.m.i32c(64);
++        let idx1 = s.m.bin(BinOp::Add, lane, b64);
++        let off1 = s.m.bin(BinOp::Shl, idx1, c2);
++        let x = s.raw_load(mem, off0, 1)[0];
++        let y = s.raw_load(mem, off1, 1)[0];
++
++        let lo_x = s.m.bin(BinOp::And, x, mff);
++        let lo_y = s.m.bin(BinOp::And, y, mff);
++        let y_sh8 = s.m.bin(BinOp::Shl, lo_y, c8);
++        let packed = s.m.bin(BinOp::Or, lo_x, y_sh8);
++        let o0 = s.m.bin(BinOp::And, packed, mlo16);
++        let o1 = s.m.bin(BinOp::LShr, packed, c16);
++        let mul = s.m.bin(BinOp::Mul, lo_x, lo_y);
++        let o2 = s.m.bin(BinOp::And, mul, mhi16);
++        let bit8 = s.m.bin(BinOp::And, x, c256);
++        let cl = s.binary(Binary::UMin, bit8, y);
++        let o3 = s.m.bin(BinOp::And, cl, mff);
++        let cnt = s.bit_count(BitCount::Countbits, x);
++        let o4 = s.m.bin(BinOp::And, cnt, mlo16);
++
++        for (k, v) in [o0, o1, o2, o3, o4].into_iter().enumerate() {
++            let base = s.m.i32c(64 * k as u32);
++            let slot = s.m.bin(BinOp::Add, base, lane);
++            let off = s.m.bin(BinOp::Shl, slot, c2);
++            s.raw_store(res, off, &[v]);
++        }
++        let dxil = s.finish([32, 1, 1], Some(32));
++        validate::validate(&dxil).expect("known_nonzero_bits GPU shader validates");
++        if !matches!(runner::wave32_supported(), Ok(true)) {
++            runner::skip_test("no wave32");
++            return;
++        }
++        let mut input = vec![0u32; 128];
++        for l in 0..32usize {
++            input[l] = (l as u32).wrapping_mul(0x0101_0107) ^ 0x8000_0100;
++            input[64 + l] = if l % 2 == 0 { 0xFF } else { 0x105 + l as u32 };
++        }
++        let r = runner::run_with(&dxil, &runner::KernelState::default(), &input, &[], &[]).expect("GPU run");
++        for l in 0..32usize {
++            let (xv, yv) = (input[l], input[64 + l]);
++            let want_packed = (xv & 0xFF) | ((yv & 0xFF) << 8);
++            assert_eq!(r.raw[l], want_packed & 0xFFFF, "o0 lane {l}");
++            assert_eq!(r.raw[64 + l], want_packed >> 16, "o1 lane {l}");
++            assert_eq!(r.raw[128 + l], ((xv & 0xFF) * (yv & 0xFF)) & 0xFFFF_0000, "o2 lane {l}");
++            assert_eq!(r.raw[192 + l], (xv & 0x100).min(yv) & 0xFF, "o3 lane {l}");
++            assert_eq!(r.raw[256 + l], xv.count_ones() & 0xFFFF, "o4 lane {l}");
++        }
++    }
++}
+
+From 051bdda602796c47c107419ae5afff8272d5ca2d Mon Sep 17 00:00:00 2001
+From: Emu Synths <emusynths@gmail.com>
+Date: Wed, 25 Nov 2026 13:02:59 -0600
+Subject: [PATCH 5/5] Recompiler: enable scalar reload CSE for direct DXIL
+ vertex and pixel shaders
+
+Enable reload::analyze for Entry::Vertex and Entry::Pixel in the direct DXIL translator. Unlike two-phase Entry::Geometry, vertex and pixel shaders use the same single-entry Cfg::build as compute, so repeated s_load_dword* descriptor reloads can safely reuse their first values and avoid redundant memory-window switches.
+
+Part of #2088
+
+Assisted-by: Antigravity (Gemini 4 Neon)
+Assisted-by: Codex (gpt-6.2-astra)
+(cherry picked from commit 3a71471c80b842d8e6f2bffd74556947fc11921b)
+---
+ crates/xcl/src/gpu/dxil/kernel.rs  |  6 +--
+ crates/xcl/src/gpu/dxil/reload.rs  | 38 +++++++++++++++++
+ crates/xcl/src/gpu/recomp/tests.rs | 68 ++++++++++++++++++++++++++++++
+ 3 files changed, 109 insertions(+), 3 deletions(-)
+
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 04adb0e..4c45055 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -208,8 +208,8 @@ fn translate_on_this_thread(
+         None => Cfg::build(code)?,
+     };
+     let kernel = matches!(entry, Entry::Kernel);
+-    let follow_loads = matches!(entry, Entry::Kernel | Entry::Compute(_));
+     let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(..));
++    let follow_loads = gfx || matches!(entry, Entry::Kernel | Entry::Compute(_));
+     let compute = matches!(entry, Entry::Compute(_));
+     let split = o.wave64 && o.split && !gfx;
+     let leaders: BTreeSet<u64> = cfg.blocks.iter().filter_map(|b| b.insts.first().map(|&i| cfg.insts[i].pc)).collect();
+@@ -334,8 +334,8 @@ fn translate_on_this_thread(
+         lw.edge(Block(0), h0);
+     }
+     let switch = if two_phase { Some(lw.block(None)) } else { None };
+-    // scalar loads the program repeats keep their first values (compute programs and kernels:
+-    // the other stages enter their code by edges the CFG does not hold)
++    // scalar loads the program repeats keep their first values (compute, vertex, pixel and
++    // kernel: geometry enters its GS blocks by edges the CFG does not hold)
+     let reloads = if follow_loads { super::reload::analyze(&cfg) } else { Default::default() };
+     let mut gs_entry: Option<usize> = None;
+     if let Some(p) = &plan {
+diff --git a/crates/xcl/src/gpu/dxil/reload.rs b/crates/xcl/src/gpu/dxil/reload.rs
+index 47beaa5..96dfc2c 100644
+--- a/crates/xcl/src/gpu/dxil/reload.rs
++++ b/crates/xcl/src/gpu/dxil/reload.rs
+@@ -365,6 +365,44 @@ mod tests {
+         assert_eq!(buffer_loads(&[LOAD, ADD, store, LOAD, sum, END]), buffer_loads(&[LOAD, ADD, store, sum, END]) + 1, "a store in between: loaded again");
+     }
+ 
++    #[test]
++    fn graphics_stages_emit_a_repeated_load_once() {
++        use super::super::kernel::{translate_pixel, translate_vertex, KernelOptions};
++        use crate::gpu::recomp::{PsInterface, VsInterface};
++
++        let encode = |insts: &[I]| -> Vec<u8> {
++            insts.iter().flat_map(|(n, e, f)| rdna2::encode(n, e, f, None).unwrap()).collect()
++        };
++        let count_loads = |dxil: &[u8]| -> usize {
++            super::super::validate::validate(dxil).expect("valid DXIL");
++            let dis = super::super::validate::disassemble(dxil).expect("disassemble");
++            dis.lines().filter(|l| l.contains("@dx.op.rawBufferLoad") && l.contains(" = call ")).count()
++        };
++        let opts = KernelOptions { wave64: false, split: false, mem_windows: 4, sampler_base: 0 };
++        let sum: I = ("S_ADD_U32", "ENC_SOP2", &[("SDST", 21), ("SSRC0", 20), ("SSRC1", 12)]);
++        let store: I = ("GLOBAL_STORE_DWORD", "ENC_FLAT_GLBL", &[("ADDR", 0), ("DATA", 2), ("SADDR", 125)]);
++        let once_code = encode(&[LOAD, ADD, END]);
++        let repeat_code = encode(&[LOAD, ADD, LOAD, sum, END]);
++        let store_once_code = encode(&[LOAD, ADD, store, sum, END]);
++        let store_repeat_code = encode(&[LOAD, ADD, store, LOAD, sum, END]);
++
++        let vs = VsInterface::default();
++        let vs_once = count_loads(&translate_vertex(&once_code, opts, &vs).expect("VS once").dxil);
++        let vs_repeat = count_loads(&translate_vertex(&repeat_code, opts, &vs).expect("VS repeat").dxil);
++        assert_eq!(vs_repeat, vs_once, "VS repeated s_load_dwordx4 should reuse cached values");
++        let vs_store_once = count_loads(&translate_vertex(&store_once_code, opts, &vs).expect("VS store once").dxil);
++        let vs_store_repeat = count_loads(&translate_vertex(&store_repeat_code, opts, &vs).expect("VS store repeat").dxil);
++        assert_eq!(vs_store_repeat, vs_store_once + 4, "VS store should invalidate reload across 4 windows");
++
++        let ps = PsInterface::default();
++        let ps_once = count_loads(&translate_pixel(&once_code, opts, &ps).expect("PS once").dxil);
++        let ps_repeat = count_loads(&translate_pixel(&repeat_code, opts, &ps).expect("PS repeat").dxil);
++        assert_eq!(ps_repeat, ps_once, "PS repeated s_load_dwordx4 should reuse cached values");
++        let ps_store_once = count_loads(&translate_pixel(&store_once_code, opts, &ps).expect("PS store once").dxil);
++        let ps_store_repeat = count_loads(&translate_pixel(&store_repeat_code, opts, &ps).expect("PS store repeat").dxil);
++        assert_eq!(ps_store_repeat, ps_store_once + 4, "PS store should invalidate reload across 4 windows");
++    }
++
+     /// Every output operand type of the instruction tables is one `changes` knows: a new one
+     /// must be looked at here, not passed over.
+     #[test]
+diff --git a/crates/xcl/src/gpu/recomp/tests.rs b/crates/xcl/src/gpu/recomp/tests.rs
+index 0b018ed..3e28bc0 100644
+--- a/crates/xcl/src/gpu/recomp/tests.rs
++++ b/crates/xcl/src/gpu/recomp/tests.rs
+@@ -1956,6 +1956,74 @@ fn ps_exp_vm_hlsl_and_direct_dxil_codegen() {
+     }
+ }
+ 
++#[test]
++fn gpu_graphics_scalar_reloads_match_hlsl() {
++    if !gpu_ready() {
++        return;
++    }
++    use super::{PsInterface, VsInterface};
++    use crate::gpu::dxil::kernel::{translate_pixel, translate_vertex, KernelOptions};
++    use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R32G32_FLOAT;
++
++    let load = ("S_LOAD_DWORDX4", "ENC_SMEM", &[("SDATA", 12), ("SBASE", 2), ("OFFSET", 0x40), ("SOFFSET", 125)][..], None);
++    // The repeat must restore a value even after its destination was overwritten.
++    let clobber = ("S_MOV_B32", "ENC_SOP1", &[("SDST", 12), ("SSRC0", 128)][..], None);
++    let vs_code = prog(&[
++        load,
++        ("V_MOV_B32", "ENC_VOP1", &[("VDST", 2), ("SRC0", 14)], None),
++        clobber,
++        load,
++        ("V_ADD_F32", "ENC_VOP2", &[("VDST", 0), ("SRC0", 12), ("VSRC1", 4)], None),
++        ("V_MOV_B32", "ENC_VOP1", &[("VDST", 1), ("SRC0", V + 5)], None),
++        ("V_MOV_B32", "ENC_VOP1", &[("VDST", 3), ("SRC0", 242)], None),
++        ("EXP", "ENC_EXP", &[("TGT", 12), ("EN", 0xF), ("VSRC0", 0), ("VSRC1", 1), ("VSRC2", 2), ("VSRC3", 3), ("DONE", 1)], None),
++    ]);
++    let ps_code = prog(&[
++        load,
++        ("V_MOV_B32", "ENC_VOP1", &[("VDST", 1), ("SRC0", 13)], None),
++        clobber,
++        load,
++        ("V_MOV_B32", "ENC_VOP1", &[("VDST", 0), ("SRC0", 12)], None),
++        ("V_MOV_B32", "ENC_VOP1", &[("VDST", 2), ("SRC0", 14)], None),
++        ("V_MOV_B32", "ENC_VOP1", &[("VDST", 3), ("SRC0", 242)], None),
++        ("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 0xF), ("VSRC0", 0), ("VSRC1", 1), ("VSRC2", 2), ("VSRC3", 3), ("DONE", 1), ("VM", 1)], None),
++    ]);
++    let vsi = VsInterface {
++        inputs: vec![el("POSITION", 0, 0, 3, 0, 3)],
++        outputs: vec![el("SV_Position", 0, 1, 3, 0, 0xF)],
++        attr_base: 4,
++        params: None,
++    };
++    let psi = PsInterface {
++        outputs: vec![el("SV_Target", 0, 64, 3, 0, 0xF)],
++        ..Default::default()
++    };
++    let wave64 = !runner::graphics_wave32();
++    let ko = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
++    let vs_dxil = translate_vertex(&vs_code, ko, &vsi).unwrap().dxil;
++    let ps_dxil = translate_pixel(&ps_code, ko, &psi).unwrap().dxil;
++    let compile = |code: &[u8], mode, profile| {
++        let translated = translate(code, &Options { mode, wave64, ..Default::default() }).unwrap();
++        assert!(translated.complete(), "{:?}", translated.unsupported);
++        super::dxc::compile(&translated.hlsl, "main", profile, &[]).unwrap()
++    };
++    let vs_hlsl = compile(&vs_code, Mode::Vertex(vsi), "vs_6_6");
++    let ps_hlsl = compile(&ps_code, Mode::Pixel(psi), "ps_6_6");
++
++    let verts = [-1.0f32, -1.0, -1.0, 3.0, 3.0, -1.0];
++    let layout = [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }];
++    let clear = [0.0, 0.0, 0.0, 1.0];
++    let mut mem = [0; 20];
++    mem[16..19].copy_from_slice(&[f(1.0), f(0.25), f(0.5)]);
++    let draw = |vs: &[u8], ps: &[u8]| runner::draw(vs, ps, &layout, &verts, 8, &[], &mem, 16, clear).unwrap();
++    let reference = draw(&vs_hlsl, &ps_hlsl);
++    assert_eq!(draw(&vs_dxil, &ps_dxil), reference);
++    for row in reference.chunks_exact(16) {
++        assert!(row[..8].iter().all(|&pixel| pixel == clear), "{row:?}");
++        assert!(row[8..].iter().all(|&pixel| pixel == [1.0, 0.25, 0.5, 1.0]), "{row:?}");
++    }
++}
++
+ /// GPU draw regression for XCL-BT-012 (#1488): verifies all four `EXP` `VM` pixel-survival
+ /// cases on the GPU through both the HLSL and Direct DXIL pixel-shader backends.
+ #[test]

@@ -1,0 +1,69 @@
+{
+  "source_repo": "KhronosGroup/Vulkan-Samples",
+  "revision": "979aefaa5f2f4bd30efe035ca5a39444cc24ab9f",
+  "license": "Apache-2.0",
+  "cases": [
+    {
+      "id": 71,
+      "source": "mlp_combo.frag",
+      "source_sha256": "ff02889b4bfb8fc68f9188cffa82b65aa91a887d55867438907a379877efb7a9",
+      "guest": "071.rdna2.gz",
+      "guest_sha256": "367a4735dedfc9c2f7fd77086192cd85fdaf017d8bdda141fcc4293759f2a65b",
+      "abi": {
+        "sha256": "367a4735dedfc9c2f7fd77086192cd85fdaf017d8bdda141fcc4293759f2a65b",
+        "bytes": 8956,
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "whole": {
+          "sha256": "f6ce46bbcc182665aa803ce9464d7c12425a92793c12db17c663283efd45b61e",
+          "dxil_bytes": 283524
+        },
+        "strict": {
+          "sha256": "acc2807d1fdefccaf752baf1d434db71b30b78bf41cbdf855db2b94bdf82921b",
+          "dxil_bytes": 229892
+        },
+        "compound": {
+          "sha256": "3a3177e1212aa56caa76925358a870b97d8e37375571da95683ada3bc13bad83",
+          "dxil_bytes": 210392
+        }
+      },
+      "source_lf_sha256": "67d467aafa1fecb9cb92816abd313b84d55cb09241877e46d6e5821ee6137764"
+    },
+    {
+      "id": 73,
+      "source": "mlp_morpheus_combo.frag",
+      "source_sha256": "1f5283c8f712b792c12e763849b2f580e8f9ba7464611b1873c0e7803d4c10d5",
+      "guest": "073.rdna2.gz",
+      "guest_sha256": "23844290cd9f354b5fef5d0a863651e58b10c627ea51fba720a4c0baffdc63f5",
+      "abi": {
+        "sha256": "23844290cd9f354b5fef5d0a863651e58b10c627ea51fba720a4c0baffdc63f5",
+        "bytes": 8916,
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "whole": {
+          "sha256": "1b25f995e78ca6af29cbc764b12c09e25bb12f738fc7ac47624af41c7eff3b2a",
+          "dxil_bytes": 284016
+        },
+        "strict": {
+          "sha256": "141fc53f80c9b95e322cb1cefcd7c53efb517caa7b6bdfe6756799e8c7c34eb7",
+          "dxil_bytes": 230636
+        },
+        "compound": {
+          "sha256": "a2b55863f7199687ba84be72da2174dbad441e65c756911410b05f4524feddf0",
+          "dxil_bytes": 210860
+        }
+      },
+      "source_lf_sha256": "5b7966176ba012f865a8bd45bc2b493173e4a994316323f5494eee527d44e752"
+    }
+  ]
+}

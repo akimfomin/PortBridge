@@ -1,0 +1,46 @@
+{
+  "shader": "mlp_combo",
+  "width": 320,
+  "height": 180,
+  "inputs_manifest_sha256": "e5537a4eb0689bbb8c50cc69a3339e391132cbc49fc471b340d88f696503ce2b",
+  "dxil_sha256": {
+    "strict": "acc2807d1fdefccaf752baf1d434db71b30b78bf41cbdf855db2b94bdf82921b",
+    "consumer": "3a3177e1212aa56caa76925358a870b97d8e37375571da95683ada3bc13bad83"
+  },
+  "tests_sha256": "2d6de0d7edde920513f5ef4b8b27517bec0697a5e99a420d31e7227ce56caacd",
+  "guard_sha256": "40c5c35431ae82c6bb16662055680923dc3005e1a857472d304fcec6ffffd245",
+  "vertex_sha256": "4813717b1d633c6f598507e99eb42b34f3ef979a490ed4e5302b533bf66a6b23",
+  "validator_sha256": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3",
+  "warmup": 1,
+  "timed_draws": 4,
+  "rounds": [
+    {
+      "order": [
+        "strict",
+        "consumer"
+      ],
+      "arms": {},
+      "stopped": {
+        "arm": "strict",
+        "guard_exit": 3,
+        "error": "Stopped after the time or system-memory limit"
+      }
+    }
+  ],
+  "source_vulkan_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+  "source_vulkan_vs_cpu": {
+    "pixels": 57600,
+    "bit_equal_pixels": 5142,
+    "discarded_left": 5095,
+    "discarded_right": 5095,
+    "discard_mismatches": 0,
+    "shared_live_pixels": 52505,
+    "alpha_mismatches": 0,
+    "nonfinite_pixels": 0,
+    "live_rgb_max_abs": 4.172325134277344e-07,
+    "live_rgb_mean_abs": 8.524322238826822e-08,
+    "live_rgb_p99_max_abs": 2.980232238769531e-07,
+    "distinct_live_rgb8_left": 19703,
+    "shared_live_rgb_over_1e-4": 0
+  }
+}

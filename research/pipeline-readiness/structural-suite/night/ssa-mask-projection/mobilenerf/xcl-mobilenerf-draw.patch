@@ -1,0 +1,474 @@
+diff --git a/crates/xcl/src/gpu/dxil/aperture_tests.rs b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+new file mode 100644
+index 0000000..9ffa884
+--- /dev/null
++++ b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+@@ -0,0 +1,97 @@
++// SPDX-License-Identifier: GPL-2.0-only
++use crate::gpu::recomp::{runner, IO_UMA_BASE_HI};
++
++/// Draw the pinned Khronos Mobile NeRF PAL pixel program with four real 2D SRVs.
++/// The four 16-byte raw buffer descriptors and four image descriptor offsets come
++/// from the AMD gfx1030 PAL layout and actual resource loads in both modules.
++#[test]
++fn open_mobilenerf_mlp_draw() {
++    use crate::gpu::desc;
++    use std::io::Write;
++    use windows::Win32::Graphics::Direct3D12::*;
++    use windows::Win32::Graphics::Dxgi::Common::*;
++    let Some(dir) = std::env::var_os("PB_NERF_INPUT") else {
++        println!("SKIPPED: public Mobile NeRF feature fixture absent");
++        return;
++    };
++    let dir = std::path::PathBuf::from(dir);
++    let width: u32 = std::env::var("PB_SCENE_SIZE").unwrap().parse().unwrap();
++    let height: u32 = std::env::var("PB_SCENE_HEIGHT").unwrap().parse().unwrap();
++    assert!((8..=640).contains(&width) && (8..=360).contains(&height));
++
++    let specs = [
++        ("features0.rgba32f", DXGI_FORMAT_R32G32B32A32_FLOAT, 16usize),
++        ("features1.rgba32f", DXGI_FORMAT_R32G32B32A32_FLOAT, 16),
++        ("direction.rgba32f", DXGI_FORMAT_R32G32B32A32_FLOAT, 16),
++        ("indices.r32u", DXGI_FORMAT_R32_UINT, 4),
++    ];
++    let mut sgprs = [0u32; crate::gpu::recomp::KERNEL_SGPRS];
++    const WINDOW: usize = 4096;
++    const TABLE: usize = 64;
++    let mut mem = vec![0u32; 4*WINDOW];
++    sgprs[1] = (TABLE*4) as u32;
++    sgprs[IO_UMA_BASE_HI] = 4;
++    let mut textures = Vec::new();
++    for (i, (file, format, texel_size)) in specs.into_iter().enumerate() {
++        let data = std::fs::read(dir.join(file)).unwrap();
++        assert_eq!(data.len(), (width*height) as usize * texel_size);
++        if i == 3 {
++            assert!(data.chunks_exact(4).all(|w| u32::from_le_bytes(w.try_into().unwrap()) < 4));
++        } else {
++            assert!(data.chunks_exact(4).all(|w| f32::from_le_bytes(w.try_into().unwrap()).is_finite()));
++        }
++        let res = D3D12_RESOURCE_DESC {
++            Dimension: D3D12_RESOURCE_DIMENSION_TEXTURE2D, Width: u64::from(width), Height: height,
++            DepthOrArraySize: 1, MipLevels: 1, Format: format,
++            SampleDesc: DXGI_SAMPLE_DESC { Count: 1, Quality: 0 }, ..Default::default()
++        };
++        let mut srv = D3D12_SHADER_RESOURCE_VIEW_DESC {
++            Format: format, ViewDimension: D3D12_SRV_DIMENSION_TEXTURE2D,
++            Shader4ComponentMapping: D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING, ..Default::default()
++        };
++        srv.Anonymous.Texture2D = D3D12_TEX2D_SRV { MipLevels: 1, ..Default::default() };
++        textures.push(runner::ViewTexture { res, srv, data, row_bytes: width as usize * texel_size });
++        let guest = desc::xcl_image_for_view((i*2) as u32, desc::gfx10_format(format).unwrap(),
++            desc::ImageType::D2, width, height, 1, 1);
++        let start = TABLE + 0x100/4 + i*8;
++        mem[start..start+8].copy_from_slice(&guest);
++    }
++    const WORDS: usize = 532;
++    let weights = std::fs::read(dir.join("weights.bin")).unwrap();
++    assert_eq!(weights.len(), 4 * WORDS * 4);
++    for (i, network) in weights.chunks_exact(WORDS*4).enumerate() {
++        let start = 512 + i * WORDS;
++        for (slot, bytes) in mem[start..start+WORDS].iter_mut().zip(network.chunks_exact(4)) {
++            *slot = u32::from_le_bytes(bytes.try_into().unwrap());
++            assert!(f32::from_bits(*slot).is_finite());
++        }
++        // The PAL code's bounds checks compare SRD[2] directly with byte
++        // offsets before a flat load. This descriptor is byte-addressed.
++        let guest = desc::buffer_words((4u64<<32)+(start*4) as u64, 0, (WORDS*4) as u32, 77);
++        let index = TABLE+i*4;
++        mem[index..index+4].copy_from_slice(&guest);
++    }
++    let ps = std::fs::read(std::env::var_os("PB_SCENE_PS").unwrap()).unwrap();
++    // The driver worker reads two prevalidated containers. Validation and vertex
++    // compilation run in separate processes so DXC need not reside during PSO creation.
++    let vs = std::fs::read(std::env::var_os("PB_NERF_VS").unwrap()).unwrap();
++    assert!(ps.starts_with(b"DXBC") && vs.starts_with(b"DXBC"));
++    let clear = [-3.0; 4];
++    println!("nerf validated_inputs_loaded");
++    runner::disable_driver_shader_cache().unwrap();
++    println!("nerf d3d_device_and_cache_ready");
++    let started = std::time::Instant::now();
++    let pixels = runner::draw_gs_views(&vs, None, &ps, &[], &[0.0;6], 8, &[], &sgprs, &mem,
++        &textures, &[], (width,height), clear, Some(WINDOW), None).unwrap();
++    assert_eq!(pixels.len(), (width*height) as usize);
++    println!("scene_native_setup_submit_readback_ms={:.4}", started.elapsed().as_secs_f64()*1000.0);
++    let file = std::fs::OpenOptions::new().write(true).create_new(true)
++        .open(std::env::var_os("PB_SCENE_IMAGE").unwrap()).unwrap();
++    let mut file = std::io::BufWriter::new(file);
++    for pixel in &pixels {
++        for ch in pixel { file.write_all(&ch.to_le_bytes()).unwrap(); }
++    }
++    file.flush().unwrap();
++    println!("nerf adapter={} size={}x{} discarded={} finite={}", runner::adapter().unwrap(), width,height,
++        pixels.iter().filter(|p| **p == clear).count(), pixels.iter().all(|p| p.iter().all(|x| x.is_finite())));
++}
+diff --git a/crates/xcl/src/gpu/dxil/mod.rs b/crates/xcl/src/gpu/dxil/mod.rs
+index a0ec945..7d3cd88 100644
+--- a/crates/xcl/src/gpu/dxil/mod.rs
++++ b/crates/xcl/src/gpu/dxil/mod.rs
+@@ -57,3 +57,6 @@ mod msaa_tests;
+ mod round_tests;
+ #[cfg(test)]
+ mod geometry_tests;
++
++#[cfg(test)]
++mod aperture_tests;
+diff --git a/crates/xcl/src/gpu/recomp/runner.rs b/crates/xcl/src/gpu/recomp/runner.rs
+index 2041690..d242292 100644
+--- a/crates/xcl/src/gpu/recomp/runner.rs
++++ b/crates/xcl/src/gpu/recomp/runner.rs
+@@ -539,6 +539,16 @@ pub fn adapter() -> Result<String, String> {
+     gpu.as_ref().map(|x| x.adapter.clone()).map_err(|x| x.clone())
+ }
+ 
++#[cfg(test)]
++pub(crate) fn disable_driver_shader_cache() -> Result<(), String> {
++    let mut guard = GPU.lock().unwrap();
++    let gpu = guard.get_or_insert_with(init).as_ref().map_err(Clone::clone)?;
++    let device = gpu.dev.cast::<ID3D12Device9>().map_err(e)?;
++    let kinds = D3D12_SHADER_CACHE_KIND_FLAG_IMPLICIT_DRIVER_MANAGED
++        | D3D12_SHADER_CACHE_KIND_FLAG_IMPLICIT_D3D_CACHE_FOR_DRIVER;
++    unsafe { device.ShaderCacheControl(kinds, D3D12_SHADER_CACHE_CONTROL_FLAG_DISABLE) }.map_err(e)
++}
++
+ pub fn wave64_supported() -> Result<bool, String> {
+     let mut g = GPU.lock().unwrap();
+     let gpu = g.get_or_insert_with(init);
+@@ -871,7 +881,7 @@ pub fn draw_gs(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], (size, size), clear, None, None)
+ }
+ 
+ /// `draw_gs` of an indexed triangle list (`indices`).
+@@ -887,7 +897,7 @@ pub fn draw_gs_indexed(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], size, clear)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], (size, size), clear, None, None)
+ }
+ 
+ /// `draw` with textures and samplers in the directly indexed heaps (see `ViewTexture`).
+@@ -905,11 +915,52 @@ pub fn draw_views(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, size, clear)
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, (size, size), clear, None, None)
++}
++
++/// One packed resource with disjoint raw UAV views emulates small console heap windows.
++#[cfg(test)]
++#[allow(clippy::too_many_arguments)]
++pub(crate) fn draw_heap_windows(
++    vs: &[u8],
++    ps: &[u8],
++    layout: &[VertexElement],
++    vertices: &[f32],
++    stride: u32,
++    sgprs: &[u32],
++    mem: &[u32],
++    window_dwords: usize,
++    size: u32,
++    clear: [f32; 4],
++) -> Result<Vec<[f32; 4]>, String> {
++    draw_heap_windows_rect(vs, ps, layout, vertices, stride, sgprs, mem, window_dwords, (size, size), clear)
++}
++
++/// Rectangular offscreen variant used by the licensed open-scene test.
++#[cfg(test)]
++#[allow(clippy::too_many_arguments)]
++pub(crate) fn draw_heap_windows_rect(
++    vs: &[u8],
++    ps: &[u8],
++    layout: &[VertexElement],
++    vertices: &[f32],
++    stride: u32,
++    sgprs: &[u32],
++    mem: &[u32],
++    window_dwords: usize,
++    extent: (u32, u32),
++    clear: [f32; 4],
++) -> Result<Vec<[f32; 4]>, String> {
++    if window_dwords == 0 || !window_dwords.is_multiple_of(64) || mem.is_empty() ||
++        !mem.len().is_multiple_of(window_dwords) || mem.len() / window_dwords > crate::gpu::uma::MAX_HEAP_WINDOWS
++    {
++        return Err("invalid packed draw heap windows".into());
++    }
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], extent, clear, Some(window_dwords), None)
+ }
+ 
+ #[allow(clippy::too_many_arguments)]
+-fn draw_gs_views(
++pub(crate) fn draw_gs_views(
+     vs: &[u8],
+     gs: Option<&[u8]>,
+     ps: &[u8],
+@@ -921,14 +972,19 @@ fn draw_gs_views(
+     mem: &[u32],
+     textures: &[ViewTexture],
+     samplers: &[D3D12_SAMPLER_DESC],
+-    size: u32,
++    extent: (u32, u32),
+     clear: [f32; 4],
++    window_dwords: Option<usize>,
++    native_present_root: Option<&[u8]>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     let mut g = GPU.lock().unwrap();
+     let gpu = g.get_or_insert_with(init).as_mut().map_err(|x| x.clone())?;
+     unsafe {
+         let dev = &gpu.dev;
+-        let rs = root_signature(dev, true)?;
++        let rs: ID3D12RootSignature = match native_present_root {
++            Some(bytes) => dev.CreateRootSignature(0, bytes).map_err(e)?,
++            None => root_signature(dev, true)?,
++        };
+         let names: Vec<std::ffi::CString> = layout.iter().map(|l| std::ffi::CString::new(l.semantic).unwrap()).collect();
+         let elems: Vec<D3D12_INPUT_ELEMENT_DESC> = layout
+             .iter()
+@@ -960,9 +1016,21 @@ fn draw_gs_views(
+         pd.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+         pd.RasterizerState.DepthClipEnable = true.into();
+         pd.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
++        let timed = window_dwords.map(|_| std::time::Instant::now());
+         let pso: ID3D12PipelineState = dev.CreateGraphicsPipelineState(&pd).map_err(|x| format!("CreateGraphicsPipelineState: {x}"))?;
+-        let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, size as i32, size as i32] };
+-        draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear)
++        if let Some(started) = timed {
++            println!("guard fixture native_create_ms={:.3}", started.elapsed().as_secs_f64() * 1000.0);
++        }
++        let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, extent.0 as i32, extent.1 as i32] };
++        let pixels = draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, extent, clear, window_dwords, native_present_root.is_some())?;
++        #[cfg(test)]
++        if window_dwords.is_some() && std::env::var("XCL_READ_GUARD_TEST_PSO_BLOB").as_deref() == Ok("1") {
++            match pso.GetCachedBlob() {
++                Ok(blob) => println!("guard pso_cache_blob_bytes={}", blob.GetBufferSize()),
++                Err(err) => println!("guard pso_cache_blob_unavailable={err}"),
++            }
++        }
++        Ok(pixels)
+     }
+ }
+ 
+@@ -1083,7 +1151,7 @@ pub fn draw_on_multi(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, size, clear)
++    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, (size, size), clear, None, false)
+ }
+ 
+ /// `draw_on_multi`, the draws indexed when there are `indices` (one index buffer for all).
+@@ -1099,8 +1167,10 @@ fn draw_indexed_on(
+     mem: &[u32],
+     textures: &[ViewTexture],
+     samplers: &[D3D12_SAMPLER_DESC],
+-    size: u32,
++    (width, height): (u32, u32),
+     clear: [f32; 4],
++    window_dwords: Option<usize>,
++    native_present: bool,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     unsafe {
+         let queue: ID3D12CommandQueue =
+@@ -1109,8 +1179,8 @@ fn draw_indexed_on(
+ 
+         let tex = D3D12_RESOURCE_DESC {
+             Dimension: D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+-            Width: size as u64,
+-            Height: size,
++            Width: width as u64,
++            Height: height,
+             DepthOrArraySize: 1,
+             MipLevels: 1,
+             Format: DXGI_FORMAT_R32G32B32A32_FLOAT,
+@@ -1177,13 +1247,69 @@ fn draw_indexed_on(
+         ]);
+         list.OMSetRenderTargets(1, Some(&rtv), false, None);
+         list.ClearRenderTargetView(rtv, &clear, None);
+-        list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: size as f32, Height: size as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
+-        list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: size as i32, bottom: size as i32 }]);
+-        let _bound = if textures.is_empty() && samplers.is_empty() { bind_resources(dev, &list, &[], &[]).map(|_| Vec::new())? } else { bind_views(dev, &list, textures, samplers)? };
++        list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: width as f32, Height: height as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
++        list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: width as i32, bottom: height as i32 }]);
++        #[cfg(test)]
++        let root_windows = window_dwords.filter(|_| std::env::var("XCL_READ_GUARD_TEST_ROOT_WINDOWS").as_deref() == Ok("1"));
++        #[cfg(not(test))]
++        let root_windows: Option<usize> = None;
++        let heap_windows = if let Some(words) = window_dwords.filter(|_| root_windows.is_none()) {
++            let heap: ID3D12DescriptorHeap = dev.CreateDescriptorHeap(&D3D12_DESCRIPTOR_HEAP_DESC {
++                Type: D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
++                NumDescriptors: super::MEM_HEAP_BASE + (mem.len() / words) as u32,
++                Flags: D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
++                NodeMask: 0,
++            }).map_err(e)?;
++            let inc = dev.GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) as usize;
++            let first = heap.GetCPUDescriptorHandleForHeapStart().ptr;
++            for window in 0..mem.len() / words {
++                let mut view = raw_window_uav((words * 4) as u64);
++                view.Anonymous.Buffer.FirstElement = (window * words) as u64;
++                dev.CreateUnorderedAccessView(&mem_buf, None::<&ID3D12Resource>, Some(&view),
++                    D3D12_CPU_DESCRIPTOR_HANDLE { ptr: first + (super::MEM_HEAP_BASE as usize + window) * inc });
++            }
++            let samplers: ID3D12DescriptorHeap = dev.CreateDescriptorHeap(&D3D12_DESCRIPTOR_HEAP_DESC {
++                Type: D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
++                NumDescriptors: 1,
++                Flags: D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
++                NodeMask: 0,
++            }).map_err(e)?;
++            list.SetDescriptorHeaps(&[Some(heap.clone()), Some(samplers.clone())]);
++            Some((heap, samplers))
++        } else {
++            None
++        };
++        let _bound = if heap_windows.is_some() {
++            Vec::new()
++        } else if textures.is_empty() && samplers.is_empty() {
++            bind_resources(dev, &list, &[], &[])?;
++            Vec::new()
++        } else {
++            bind_views(dev, &list, textures, samplers)?
++        };
+         list.SetGraphicsRootSignature(rs);
+-        list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress());
+-        list.SetGraphicsRootUnorderedAccessView(1, res_buf.GetGPUVirtualAddress());
+-        list.SetGraphicsRootUnorderedAccessView(2, mem_buf.GetGPUVirtualAddress());
++        if native_present {
++            if draws.len() != 1 || draws[0].sgprs.len() < 126 || textures.len() != 1 {
++                return Err("MiniEngine PresentRS expects one input texture and six display constants".into());
++            }
++            let views: ID3D12DescriptorHeap = _bound.first().ok_or("missing PresentRS texture heap")?.cast().map_err(e)?;
++            let inc = dev.GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) as usize;
++            let base = views.GetCPUDescriptorHandleForHeapStart().ptr;
++            dev.CreateShaderResourceView(None::<&ID3D12Resource>, Some(&textures[0].srv), D3D12_CPU_DESCRIPTOR_HANDLE { ptr: base + inc });
++            list.SetGraphicsRootDescriptorTable(0, views.GetGPUDescriptorHandleForHeapStart());
++            list.SetGraphicsRoot32BitConstants(1, 6, draws[0].sgprs[120..126].as_ptr() as _, 0);
++        } else {
++            list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress());
++            list.SetGraphicsRootUnorderedAccessView(1, res_buf.GetGPUVirtualAddress());
++            list.SetGraphicsRootUnorderedAccessView(2, mem_buf.GetGPUVirtualAddress());
++            #[cfg(test)]
++            if let Some(words) = root_windows {
++                for window in 1..mem.len() / words {
++                    let offset = (window * words * std::mem::size_of::<u32>()) as u64;
++                    list.SetGraphicsRootUnorderedAccessView(2 + window as u32, mem_buf.GetGPUVirtualAddress() + offset);
++                }
++            }
++        }
+         list.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+         let vbv = D3D12_VERTEX_BUFFER_VIEW { BufferLocation: upload.GetGPUVirtualAddress(), SizeInBytes: vb_bytes as u32, StrideInBytes: stride };
+         list.IASetVertexBuffers(0, Some(&[vbv]));
+@@ -1199,8 +1325,30 @@ fn draw_indexed_on(
+             list.IASetIndexBuffer(Some(&D3D12_INDEX_BUFFER_VIEW { BufferLocation: b.GetGPUVirtualAddress(), SizeInBytes: bytes as u32, Format: DXGI_FORMAT_R32_UINT }));
+             Some(b)
+         };
++        #[cfg(test)]
++        let timing = if window_dwords.is_some() {
++            let count = std::env::var("XCL_READ_GUARD_TEST_GPU_DRAWS").ok().map(|value| {
++                value.parse::<u32>().ok().filter(|n| (1..=32).contains(n))
++                    .expect("XCL_READ_GUARD_TEST_GPU_DRAWS must be 1–32")
++            });
++            count.map(|count| -> Result<_, String> {
++                if draws.len() != 1 || !indices.is_empty() {
++                    return Err("read-guard timing requires one non-indexed draw".into());
++                }
++                let mut heap: Option<ID3D12QueryHeap> = None;
++                dev.CreateQueryHeap(&D3D12_QUERY_HEAP_DESC {
++                    Type: D3D12_QUERY_HEAP_TYPE_TIMESTAMP, Count: 2, NodeMask: 0,
++                }, &mut heap).map_err(e)?;
++                let out = buffer(dev, 16, D3D12_HEAP_TYPE_READBACK, D3D12_RESOURCE_STATE_COPY_DEST, false)?;
++                Ok((count, heap.ok_or("draw timestamp heap")?, out))
++            }).transpose()?
++        } else {
++            None
++        };
+         for (k, d) in draws.iter().enumerate() {
+-            list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress() + (k * KERNEL_SGPRS * 4) as u64);
++            if !native_present {
++                list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress() + (k * KERNEL_SGPRS * 4) as u64);
++            }
+             let [left, top, right, bottom] = d.scissor;
+             list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left, top, right, bottom }]);
+             if indices.is_empty() {
+@@ -1209,6 +1357,17 @@ fn draw_indexed_on(
+                 list.DrawIndexedInstanced(indices.len() as u32, 1, 0, 0, 0);
+             }
+         }
++        #[cfg(test)]
++        if let Some((count, heap, out)) = &timing {
++            // The ordinary draw above primes the PSO. The timestamp interval excludes
++            // setup and readback and contains exactly count full-target draws.
++            list.EndQuery(heap, D3D12_QUERY_TYPE_TIMESTAMP, 0);
++            for _ in 0..*count {
++                list.DrawInstanced((vertices.len() as u32 * 4) / stride, 1, 0, 0);
++            }
++            list.EndQuery(heap, D3D12_QUERY_TYPE_TIMESTAMP, 1);
++            list.ResolveQueryData(heap, D3D12_QUERY_TYPE_TIMESTAMP, 0, 2, out, 0);
++        }
+         list.ResourceBarrier(&[transition(&rt, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE)]);
+         let dst = D3D12_TEXTURE_COPY_LOCATION {
+             pResource: transmute_copy(&readback),
+@@ -1224,12 +1383,24 @@ fn draw_indexed_on(
+         list.Close().map_err(e)?;
+         queue.ExecuteCommandLists(&[Some(list.cast().map_err(e)?)]);
+         wait_for_submission(dev, &queue, &fence, 1, "draw")?;
++        #[cfg(test)]
++        if let Some((count, _, out)) = timing {
++            let frequency = queue.GetTimestampFrequency().map_err(e)?;
++            let mut mapped = std::ptr::null_mut();
++            out.Map(0, Some(&D3D12_RANGE { Begin: 0, End: 16 }), Some(&mut mapped)).map_err(e)?;
++            let stamps = std::slice::from_raw_parts(mapped as *const u64, 2);
++            let ticks = stamps[1].checked_sub(stamps[0]);
++            out.Unmap(0, Some(&D3D12_RANGE { Begin: 0, End: 0 }));
++            let ticks = ticks.filter(|&delta| delta != 0 && frequency != 0).ok_or("invalid draw timestamps")?;
++            let ms_per_draw = ticks as f64 * 1000.0 / (frequency as f64 * f64::from(count));
++            println!("guard runtime size={width} height={height} draws={count} ticks={ticks} frequency_hz={frequency} gpu_ms_per_draw={ms_per_draw:.6}");
++        }
+         let mut p = std::ptr::null_mut();
+         readback.Map(0, None, Some(&mut p)).map_err(e)?;
+         let pitch = layout_fp.Footprint.RowPitch as usize;
+-        let mut px = Vec::with_capacity((size * size) as usize);
+-        for y in 0..size as usize {
+-            for x in 0..size as usize {
++        let mut px = Vec::with_capacity((width * height) as usize);
++        for y in 0..height as usize {
++            for x in 0..width as usize {
+                 let q = (p as *const u8).add(y * pitch + x * 16) as *const f32;
+                 px.push([*q, *q.add(1), *q.add(2), *q.add(3)]);
+             }
+@@ -1798,3 +1969,33 @@ fn dispatch_with(
+         Ok((out, ms))
+     }
+ }
++
++
++#[cfg(test)]
++pub(crate) fn measure_aperture_pixel_pso(vs: &[u8], ps: &[u8]) -> Result<(f64, usize), String> {
++    let mut g = GPU.lock().unwrap();
++    let gpu = g.get_or_insert_with(init).as_mut().map_err(|x| x.clone())?;
++    unsafe {
++        let dev = &gpu.dev;
++        let rs = root_signature(dev, true)?;
++        let mut desc = D3D12_GRAPHICS_PIPELINE_STATE_DESC {
++            pRootSignature: transmute_copy(&rs),
++            VS: D3D12_SHADER_BYTECODE { pShaderBytecode: vs.as_ptr().cast(), BytecodeLength: vs.len() },
++            PS: D3D12_SHADER_BYTECODE { pShaderBytecode: ps.as_ptr().cast(), BytecodeLength: ps.len() },
++            SampleMask: u32::MAX,
++            PrimitiveTopologyType: D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
++            NumRenderTargets: 1,
++            SampleDesc: DXGI_SAMPLE_DESC { Count: 1, Quality: 0 },
++            ..Default::default()
++        };
++        desc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL.0 as u8;
++        desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
++        desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
++        desc.RasterizerState.DepthClipEnable = true.into();
++        desc.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
++        let started = std::time::Instant::now();
++        let pso: ID3D12PipelineState = dev.CreateGraphicsPipelineState(&desc).map_err(e)?;
++        let native_ms = started.elapsed().as_secs_f64() * 1000.0;
++        Ok((native_ms, pso.GetCachedBlob().map_err(e)?.GetBufferSize()))
++    }
++}

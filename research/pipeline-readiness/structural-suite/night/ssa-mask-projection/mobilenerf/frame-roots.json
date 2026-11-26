@@ -1,0 +1,43 @@
+{
+  "u0": {
+    "file": "sgprs.bin",
+    "offset_bytes": 0,
+    "bytes": 512
+  },
+  "memory": [
+    {
+      "root": "u2",
+      "file": "guest_mem.bin",
+      "offset_bytes": 0,
+      "bytes": 16384
+    },
+    {
+      "root": "u3",
+      "file": "guest_mem.bin",
+      "offset_bytes": 16384,
+      "bytes": 16384
+    },
+    {
+      "root": "u4",
+      "file": "guest_mem.bin",
+      "offset_bytes": 32768,
+      "bytes": 16384
+    },
+    {
+      "root": "u5",
+      "file": "guest_mem.bin",
+      "offset_bytes": 49152,
+      "bytes": 16384
+    }
+  ],
+  "sampled_images": {
+    "0": "features0.rgba32f",
+    "2": "features1.rgba32f",
+    "4": "direction.rgba32f",
+    "6": "indices.r32u"
+  },
+  "sha256": {
+    "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+    "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+  }
+}

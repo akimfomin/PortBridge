@@ -1,0 +1,131 @@
+{
+  "shader": "mlp_combo",
+  "width": 16,
+  "height": 16,
+  "inputs_manifest_sha256": "a1611180600ec3b667051e94f1e3590fbf7a88c7f894856ede6f304a9e2d0087",
+  "dxil_sha256": {
+    "strict": "acc2807d1fdefccaf752baf1d434db71b30b78bf41cbdf855db2b94bdf82921b",
+    "consumer": "3a3177e1212aa56caa76925358a870b97d8e37375571da95683ada3bc13bad83"
+  },
+  "tests_sha256": "2d6de0d7edde920513f5ef4b8b27517bec0697a5e99a420d31e7227ce56caacd",
+  "guard_sha256": "40c5c35431ae82c6bb16662055680923dc3005e1a857472d304fcec6ffffd245",
+  "vertex_sha256": "4813717b1d633c6f598507e99eb42b34f3ef979a490ed4e5302b533bf66a6b23",
+  "validator_sha256": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3",
+  "warmup": 1,
+  "timed_draws": 0,
+  "rounds": [
+    {
+      "order": [
+        "strict",
+        "consumer"
+      ],
+      "arms": {
+        "strict": {
+          "output_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "vs_cpu": {
+            "pixels": 256,
+            "bit_equal_pixels": 20,
+            "discarded_left": 20,
+            "discarded_right": 20,
+            "discard_mismatches": 0,
+            "shared_live_pixels": 236,
+            "alpha_mismatches": 0,
+            "nonfinite_pixels": 0,
+            "live_rgb_max_abs": 2.980232238769531e-07,
+            "live_rgb_mean_abs": 7.583175675343659e-08,
+            "live_rgb_p99_max_abs": 2.980232238769531e-07,
+            "distinct_live_rgb8_left": 236,
+            "shared_live_rgb_over_1e-4": 0
+          },
+          "vs_source_vulkan": {
+            "pixels": 256,
+            "bit_equal_pixels": 172,
+            "discarded_left": 20,
+            "discarded_right": 20,
+            "discard_mismatches": 0,
+            "shared_live_pixels": 236,
+            "alpha_mismatches": 0,
+            "nonfinite_pixels": 0,
+            "live_rgb_max_abs": 1.7881393432617188e-07,
+            "live_rgb_mean_abs": 1.0697055334425241e-08,
+            "live_rgb_p99_max_abs": 1.579523086547855e-07,
+            "distinct_live_rgb8_left": 236,
+            "shared_live_rgb_over_1e-4": 0
+          },
+          "native_create_ms": 1516.279,
+          "pso_cache_blob_bytes": 322818,
+          "scene_native_setup_submit_readback_ms": 1549.5441,
+          "peak_process_bytes": 240132096
+        },
+        "consumer": {
+          "output_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "vs_cpu": {
+            "pixels": 256,
+            "bit_equal_pixels": 20,
+            "discarded_left": 20,
+            "discarded_right": 20,
+            "discard_mismatches": 0,
+            "shared_live_pixels": 236,
+            "alpha_mismatches": 0,
+            "nonfinite_pixels": 0,
+            "live_rgb_max_abs": 2.980232238769531e-07,
+            "live_rgb_mean_abs": 7.583175675343659e-08,
+            "live_rgb_p99_max_abs": 2.980232238769531e-07,
+            "distinct_live_rgb8_left": 236,
+            "shared_live_rgb_over_1e-4": 0
+          },
+          "vs_source_vulkan": {
+            "pixels": 256,
+            "bit_equal_pixels": 172,
+            "discarded_left": 20,
+            "discarded_right": 20,
+            "discard_mismatches": 0,
+            "shared_live_pixels": 236,
+            "alpha_mismatches": 0,
+            "nonfinite_pixels": 0,
+            "live_rgb_max_abs": 1.7881393432617188e-07,
+            "live_rgb_mean_abs": 1.0697055334425241e-08,
+            "live_rgb_p99_max_abs": 1.579523086547855e-07,
+            "distinct_live_rgb8_left": 236,
+            "shared_live_rgb_over_1e-4": 0
+          },
+          "native_create_ms": 1415.751,
+          "pso_cache_blob_bytes": 296578,
+          "scene_native_setup_submit_readback_ms": 1447.2749,
+          "peak_process_bytes": 230236160
+        }
+      },
+      "paired": {
+        "pixels": 256,
+        "bit_equal_pixels": 256,
+        "discarded_left": 20,
+        "discarded_right": 20,
+        "discard_mismatches": 0,
+        "shared_live_pixels": 236,
+        "alpha_mismatches": 0,
+        "nonfinite_pixels": 0,
+        "live_rgb_max_abs": 0.0,
+        "live_rgb_mean_abs": 0.0,
+        "live_rgb_p99_max_abs": 0.0,
+        "distinct_live_rgb8_left": 236,
+        "shared_live_rgb_over_1e-4": 0
+      }
+    }
+  ],
+  "source_vulkan_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352",
+  "source_vulkan_vs_cpu": {
+    "pixels": 256,
+    "bit_equal_pixels": 20,
+    "discarded_left": 20,
+    "discarded_right": 20,
+    "discard_mismatches": 0,
+    "shared_live_pixels": 236,
+    "alpha_mismatches": 0,
+    "nonfinite_pixels": 0,
+    "live_rgb_max_abs": 2.980232238769531e-07,
+    "live_rgb_mean_abs": 8.389795735730963e-08,
+    "live_rgb_p99_max_abs": 2.980232238769531e-07,
+    "distinct_live_rgb8_left": 236,
+    "shared_live_rgb_over_1e-4": 0
+  }
+}

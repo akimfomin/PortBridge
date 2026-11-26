@@ -1,0 +1,42 @@
+# Projecting observed pixel-mask windows through SSA
+
+XCL's direct DXIL pixel compiler reconstructs a two-word guest wave mask from four hardware votes. On two open Mobile NeRF inference shaders, 32 repeated neural-network activation regions retain the entire reconstruction because values flow through a wordwise union and a control-flow join. The earlier own-bit rule recognizes only the most recent ballot in the current block. On the stronger reference compiler it leaves 91 and 92 complete four-vote reconstructions in the two shaders. [Original fragment programs, licenses, PAL inputs and hashes](guest/manifest.json) · [Prior own-bit rule](https://github.com/akimfomin/xcl/commit/be7722969c6604da56fe553cd8ecb5e3b7ed0f37)
+
+PortBridge now records the exact low/high SSA words at the producer. A later consumer can ask for a single bit, a four-bit window, or wave-wide nonemptiness. For a proven dependency the compiler emits only the integer arithmetic needed by that particular observation. It preserves the original cross-lane operations and their position. The heavy kernels retain one complete scalar-observed reconstruction each, and keep all 1,739 static ballot calls. An intermediate version recognized exact unions but stopped at scalar PHIs. It left 33 complete reconstructions and added roughly 8 KB of DXIL to each heavy shader, which led us to investigate those joins. [Disassembler census](shape.py) · [Heavy shader fingerprints and instruction counts](pinned-shader-shapes.json)
+
+## Output and frame timing
+
+The independent D3D12, Vulkan and CPU readers share the same licensed GPU programs and deterministic feature maps. The workload draws the two genuine Khronos inference stages with four independent weight buffers, per-pixel network selection, discard and nonlinear activation. At 320 × 180, all 57,600 RGBA32F pixels in each Vulkan frame matched across the three XCL variants. Against the original Vulkan source, maximum RGB error was 2.38 × 10⁻⁷ with identical alpha and discard. [Input generation and D3D12 worker](../mobilenerf/README.md) · [Independent Vulkan worker, GPU timestamps and raw per-pipeline receipts](https://github.com/akimfomin/PortBridge/tree/806a4c0dec2364c8881e1efb437964ac4aa42b27/research/pipeline-readiness/structural-suite/night/vulkan/mobile-nerf/translated)
+
+| 320 × 180 fullscreen fragment workload | Complete mask | Earlier strict projection | Compound projection |
+| --- | ---: | ---: | ---: |
+| MLP combo, warmed Vulkan draw (µs) | 297.34 | 193.28–195.07 | 163.46–170.24 |
+| Morpheus, warmed Vulkan draw (µs) | 265.22 | 178.05–184.32 | 156.29–157.31 |
+| MLP combo, NVIDIA fragment executable (bytes) | 475,776 | 428,800 | 409,600 |
+| Morpheus, NVIDIA fragment executable (bytes) | 475,136 | 429,696 | 409,728 |
+| MLP combo, DXIL container (bytes) | 283,524 | 229,892 | 210,392 |
+| Morpheus, DXIL container (bytes) | 284,016 | 230,636 | 210,860 |
+
+The native Khronos shaders complete the same stage in roughly 13–14 µs. All three translated variants still use 128 registers against 56 for native GLSL. The GPU data comes from one RTX 4070 Ti SUPER. The two shaders belong to a single model family. The timings cover a fullscreen inference draw with generated features and weights. They exclude training, geometry, presentation and all other application stages. The shader executable lengths are driver-reported Vulkan fragment-stage statistics. The D3D12 cached PSO blobs and the serialized DXIL have separate measurements.
+
+## Where the rewrite is valid
+
+For returned concrete ballot words `vote[p][h]`, let `p` select the guest member of the four-lane quad, `h` select the 32-bit half, and `k` select a quad in that half. The reference bit at position `4*k+p` is one exactly when `vote[p][h] & (15 << (4*k))` is nonzero. All four member bits reconstructed from those same votes form a precise four-bit window. Full wave nonemptiness is the OR of all participating vote words. Wave32 chooses its imported half, Wave64 includes both halves.
+
+Projecting a bit window distributes over bitwise OR. The implementation records this fact only for actual paired OR definitions. A folded constant cannot establish that both operands are available at the insertion point. A sealed two-predecessor PHI projects its selected incoming value. The low and high halves must name the same two predecessors, including when the incoming arrays use different ordering. A placeholder PHI breaks recursive cycles. A depth bound of 24 restores ordinary extraction further down the graph. Mixed masks, arbitrary scalar readers, unsealed or unmatched joins and unsupported operators continue to read the original words. All newly inserted operations are integer arithmetic or PHIs. Resource loads, memory windows, stores, derivatives, quad and wave operations retain their original instruction and control flow.
+
+Programs that contain both a loop and a scalar population count use the complete reference path. This preserves the original exit counts and the byte-identical reference lowering for this class. The cache identity for the opt-in mode was advanced to v4. [Public opt-in runtime and regressions](https://github.com/akimfomin/xcl/commit/5d04cc10fa11654179d4bde0c1fcdc1d7ffb2cbc)
+
+The proof starts with the ballots returned by the underlying shader API. It does not strengthen guarantees about helper lanes that the API leaves undefined. The runtime option is disabled by default. The experimental compiler preserves an explicit offline reference path, and separates projected bytecode in XCL's translation cache. [Compound compiler patch against the public strict implementation](public-xcl-compiler.patch) · [Strong comparison patch](strong-xcl-compiler.patch)
+
+## Replay the two exact shaders and the corpus
+
+1. Clone XCL and check out upstream `08db8020d323bf478964fcc586152cce54959cfc`. Apply [the five original baseline commits](strong-comparison-baseline.mbox) with `git am`. The resulting tracked tree must be `01647d84289182686829e134a0e374549accf492`. Both comparison arms include Decodere's live-lane handling, ChAlanA's bridged EXEC correction, Ramon Victor Cardoso's known-bit propagation, Emu Synths' scalar reload elimination and PortBridge's earlier strict projection. Repository history and the mbox preserve their attribution. [XCL #2501](https://github.com/xcl-dev/xcl/pull/2501) · [#2503](https://github.com/xcl-dev/xcl/pull/2503) · [#2557](https://github.com/xcl-dev/xcl/pull/2557) · [#2446](https://github.com/xcl-dev/xcl/pull/2446)
+2. Copy [the pinned observer](https://github.com/akimfomin/PortBridge/blob/64280ea4688f152100360403adb33f527f36c0a9/research/pipeline-readiness/structural-suite/night/ssa-mask-projection/observe_pixel.rs) to `crates/xcl/examples/observe_pixel.rs`. Build with `cargo build --locked --release -p xcl --example observe_pixel` and save the resulting baseline executable. Apply `strong-xcl-compiler.patch` with `git apply --index`, verify that `git write-tree` returns `8ea46d941657028a620faeab19359550a8dbc241`, then rebuild the same example and save the candidate separately. Use the same DXC distribution and DXV for both arms.
+3. Run the command below from this evidence directory. The bundled Khronos files retain their source notices and Apache-2.0 license. Each compressed guest stream is fewer than 9 KiB unpacked. The script checks both sources, decompressed bytes, DXIL and standalone DXV. It exercises every full, strict and compound output used by the native Vulkan comparison. [Public guest fixtures](guest) · [Exact-source Vulkan worker](https://github.com/akimfomin/PortBridge/tree/64280ea4688f152100360403adb33f527f36c0a9/research/pipeline-readiness/structural-suite/night/vulkan/mobile-nerf)
+
+```powershell
+python translate_nerf.py --baseline $strictObserver --candidate $compoundObserver --dxc-dir $dxcDir --dxv $dxv --out six-validated-modules
+```
+
+For a broader CPU-only replay, pass the prepared Khronos, raylib, Naga and MiniEngine source manifests to `compare_corpus.py --baseline ... --candidate ... --dxc-dir ... --dxv ... --out ...`. Each input digest and its guest-wave ABI are checked. The full per-pair data includes unchanged modules, code-size regressions and extraction failures. [Paired compiler census](compound-census.json.gz) · [Summary by cohort](compound-census-summary.json) · [Paired compiler driver](compare_corpus.py) · [Licensed source preparation](https://github.com/akimfomin/PortBridge/tree/64280ea4688f152100360403adb33f527f36c0a9/research/pipeline-readiness/corpus)

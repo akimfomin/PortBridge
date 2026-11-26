@@ -1,0 +1,67 @@
+[
+  {
+    "case": "nerf71",
+    "mode": "project",
+    "source": "shaders/mobile_nerf/mlp_combo.frag",
+    "rdna_sha256": "367a4735dedfc9c2f7fd77086192cd85fdaf017d8bdda141fcc4293759f2a65b",
+    "sha256": "3a3177e1212aa56caa76925358a870b97d8e37375571da95683ada3bc13bad83",
+    "dxil_bytes": 210392,
+    "ssa_definitions": 30014,
+    "ballots": 1739,
+    "quad_ops": 1298,
+    "branches": 640,
+    "phis": 1183
+  },
+  {
+    "case": "nerf73",
+    "mode": "project",
+    "source": "shaders/mobile_nerf/mlp_morpheus_combo.frag",
+    "rdna_sha256": "23844290cd9f354b5fef5d0a863651e58b10c627ea51fba720a4c0baffdc63f5",
+    "sha256": "a2b55863f7199687ba84be72da2174dbad441e65c756911410b05f4524feddf0",
+    "dxil_bytes": 210860,
+    "ssa_definitions": 30039,
+    "ballots": 1739,
+    "quad_ops": 1302,
+    "branches": 640,
+    "phis": 1191
+  },
+  {
+    "case": "raylib",
+    "mode": "project",
+    "source": "examples/shaders/resources/shaders/glsl330/raymarching.fs",
+    "rdna_sha256": "428e921c8793609b5614230a6e29bbba4d60231f09980ff2e2e242f916587941",
+    "sha256": "bf2576404b8cb2bd10fa718f993d80eef8fb4b498d48778c51a11b14cbcd73bc",
+    "dxil_bytes": 150028,
+    "ssa_definitions": 22690,
+    "ballots": 546,
+    "quad_ops": 528,
+    "branches": 25,
+    "phis": 316
+  },
+  {
+    "case": "mini",
+    "mode": "project",
+    "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+    "rdna_sha256": "eed563ed07ad92ce2e709ecd2abb997ccd93fbd5ad9698a68fdbe39ff430cd98",
+    "sha256": "25e68aeaf7ccfad4dc8abafc4f538370a471ab989032d8cfe67cb58be64a1ba2",
+    "dxil_bytes": 43856,
+    "ssa_definitions": 5988,
+    "ballots": 193,
+    "quad_ops": 192,
+    "branches": 108,
+    "phis": 150
+  },
+  {
+    "case": "julia",
+    "mode": "project",
+    "source": "examples/shaders/resources/shaders/glsl330/julia_set.fs",
+    "rdna_sha256": "4b609f40c8418e38c339a31d715cc400d2ccd34052242436b1311ae3af470681",
+    "sha256": "14b1430ba2de3e70f6e013eb462a6e859ed19498fb43b2af5c5d6c5e2c0c0bc4",
+    "dxil_bytes": 13068,
+    "ssa_definitions": 1731,
+    "ballots": 31,
+    "quad_ops": 24,
+    "branches": 22,
+    "phis": 174
+  }
+]

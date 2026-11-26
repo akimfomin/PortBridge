@@ -1,0 +1,12 @@
+
+running 1 test
+test gpu::dxil::aperture_tests::open_mobilenerf_mlp_draw ... nerf validated_inputs_loaded
+nerf d3d_device_and_cache_ready
+guard fixture native_create_ms=1516.279
+guard pso_cache_blob_bytes=322818
+scene_native_setup_submit_readback_ms=1549.5441
+nerf adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=16x16 discarded=20 finite=true
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1341 filtered out; finished in 1.75s
+

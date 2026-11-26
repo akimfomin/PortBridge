@@ -1,0 +1,97 @@
+{
+  "llpc_sha256": "928501ebdafcb4c1e20af5c39fed45cd69a402aaa73be453d2d6de50eae9215a",
+  "cases": [
+    {
+      "id": 71,
+      "source": "shaders/mobile_nerf/mlp_combo.frag",
+      "source_sha256": "ff02889b4bfb8fc68f9188cffa82b65aa91a887d55867438907a379877efb7a9",
+      "spirv_sha256": "1546f56af237a64df24488b9fc9cbbde0ced2a5b3a367392cad298e3263a2ddf",
+      "rdna_sha256": "367a4735dedfc9c2f7fd77086192cd85fdaf017d8bdda141fcc4293759f2a65b",
+      "pal_bytes": 8956,
+      "binding_kind_offset_length_dwords": {
+        "4": [
+          "DescriptorBuffer",
+          0,
+          64
+        ],
+        "0": [
+          "DescriptorResource",
+          64,
+          8
+        ],
+        "1": [
+          "DescriptorResource",
+          72,
+          8
+        ],
+        "2": [
+          "DescriptorResource",
+          80,
+          8
+        ],
+        "3": [
+          "DescriptorResource",
+          88,
+          8
+        ]
+      },
+      "table_user_sgpr": 1,
+      "reflected_guest_matches": true,
+      "abi": {
+        "sha256": "367a4735dedfc9c2f7fd77086192cd85fdaf017d8bdda141fcc4293759f2a65b",
+        "bytes": 8956,
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "id": 73,
+      "source": "shaders/mobile_nerf/mlp_morpheus_combo.frag",
+      "source_sha256": "1f5283c8f712b792c12e763849b2f580e8f9ba7464611b1873c0e7803d4c10d5",
+      "spirv_sha256": "338c3ba7ac9983a507ddc34c196796d272cbd4ecc5f35f9a5f6e7ec77b5511e6",
+      "rdna_sha256": "23844290cd9f354b5fef5d0a863651e58b10c627ea51fba720a4c0baffdc63f5",
+      "pal_bytes": 8916,
+      "binding_kind_offset_length_dwords": {
+        "4": [
+          "DescriptorBuffer",
+          0,
+          64
+        ],
+        "0": [
+          "DescriptorResource",
+          64,
+          8
+        ],
+        "1": [
+          "DescriptorResource",
+          72,
+          8
+        ],
+        "2": [
+          "DescriptorResource",
+          80,
+          8
+        ],
+        "3": [
+          "DescriptorResource",
+          88,
+          8
+        ]
+      },
+      "table_user_sgpr": 1,
+      "reflected_guest_matches": true,
+      "abi": {
+        "sha256": "23844290cd9f354b5fef5d0a863651e58b10c627ea51fba720a4c0baffdc63f5",
+        "bytes": 8916,
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    }
+  ]
+}

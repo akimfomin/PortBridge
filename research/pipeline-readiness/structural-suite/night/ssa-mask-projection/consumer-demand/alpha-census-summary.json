@@ -1,0 +1,344 @@
+{
+  "rows": 222,
+  "matched": 202,
+  "changed": 28,
+  "changed_counts": {
+    "ballots": 0,
+    "quad_ops": 0,
+    "branches": 0,
+    "phis": 0
+  },
+  "cohorts": [
+    {
+      "group": "khronos-vulkan-samples",
+      "wave": 64,
+      "valid": 122,
+      "changed": 13,
+      "shrank": 3,
+      "grew": 10,
+      "total_delta_bytes": -16540,
+      "largest_growth": 2164,
+      "maximum_reduction": 12760
+    },
+    {
+      "group": "miniengine",
+      "wave": 64,
+      "valid": 22,
+      "changed": 6,
+      "shrank": 3,
+      "grew": 3,
+      "total_delta_bytes": -10252,
+      "largest_growth": 64,
+      "maximum_reduction": 7668
+    },
+    {
+      "group": "miniengine-display",
+      "wave": 64,
+      "valid": 5,
+      "changed": 2,
+      "shrank": 2,
+      "grew": 0,
+      "total_delta_bytes": -10012,
+      "largest_growth": 0,
+      "maximum_reduction": 7444
+    },
+    {
+      "group": "naga",
+      "wave": 64,
+      "valid": 50,
+      "changed": 5,
+      "shrank": 1,
+      "grew": 4,
+      "total_delta_bytes": 180,
+      "largest_growth": 116,
+      "maximum_reduction": 180
+    },
+    {
+      "group": "raylib-procedural",
+      "wave": 64,
+      "valid": 3,
+      "changed": 2,
+      "shrank": 1,
+      "grew": 1,
+      "total_delta_bytes": -2296,
+      "largest_growth": 60,
+      "maximum_reduction": 2356
+    }
+  ],
+  "worst_size_changes": [
+    {
+      "source": "shaders/mobile_nerf/merged.frag",
+      "group": "khronos-vulkan-samples",
+      "guest_wave": 64,
+      "baseline_bytes": 97596,
+      "candidate_bytes": 99760,
+      "guest_sha256": "3c4ac5d8f6ff188c8afc8b0bf7b5f7f97c10662942c437b4add7dc9829b104af"
+    },
+    {
+      "source": "shaders/mobile_nerf/merged_morpheus.frag",
+      "group": "khronos-vulkan-samples",
+      "guest_wave": 64,
+      "baseline_bytes": 96672,
+      "candidate_bytes": 98836,
+      "guest_sha256": "94f901462271ac9b7d6a2ffe8a7837bd25726aceaa8493a87e734319a8658d41"
+    },
+    {
+      "source": "shaders/mobile_nerf/mlp.frag",
+      "group": "khronos-vulkan-samples",
+      "guest_wave": 64,
+      "baseline_bytes": 99452,
+      "candidate_bytes": 101616,
+      "guest_sha256": "6d0ecf7f73f2d041979a8c48dcc736c423054f8e058df97c764b9b9016d4a6e0"
+    },
+    {
+      "source": "shaders/mobile_nerf/mlp_morpheus.frag",
+      "group": "khronos-vulkan-samples",
+      "guest_wave": 64,
+      "baseline_bytes": 99548,
+      "candidate_bytes": 101712,
+      "guest_sha256": "6af212e0bf47e90a98d1b46da27793d902ae16d9f3423908cbf75eb4870c09f2"
+    },
+    {
+      "source": "shaders/oit_linked_lists/combine.frag",
+      "group": "khronos-vulkan-samples",
+      "guest_wave": 64,
+      "baseline_bytes": 26584,
+      "candidate_bytes": 26980,
+      "guest_sha256": "a4b2ee28606d7f326bf1006a64776c0bbefeda0a62623231a3783f7107e8d5d2"
+    },
+    {
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-large-source.spvasm",
+      "group": "naga",
+      "guest_wave": 64,
+      "baseline_bytes": 31048,
+      "candidate_bytes": 31164,
+      "guest_sha256": "67ff9c43eded44a9c054eaaed6fdc90c40528314589b208968b7604c2c4a3828"
+    },
+    {
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-terrain.spvasm",
+      "group": "naga",
+      "guest_wave": 64,
+      "baseline_bytes": 31048,
+      "candidate_bytes": 31164,
+      "guest_sha256": "67ff9c43eded44a9c054eaaed6fdc90c40528314589b208968b7604c2c4a3828"
+    },
+    {
+      "source": "shaders/fragment_shading_rate/glsl/scene.frag",
+      "group": "khronos-vulkan-samples",
+      "guest_wave": 64,
+      "baseline_bytes": 8564,
+      "candidate_bytes": 8656,
+      "guest_sha256": "325b5dbc99ae84bb680ab5afaabba16a2e36459110822b0e001f968ef9b31ba8"
+    },
+    {
+      "source": "shaders/dynamic_multisample_rasterization/glsl/model.frag",
+      "group": "khronos-vulkan-samples",
+      "guest_wave": 64,
+      "baseline_bytes": 14896,
+      "candidate_bytes": 14972,
+      "guest_sha256": "3e003950292a741eaca8c353b3b12ed86c2fa0f6c0eef02ee59dbf9b94c53aab"
+    },
+    {
+      "source": "naga/tests/out/spv/wgsl-shadow.spvasm",
+      "group": "naga",
+      "guest_wave": 64,
+      "baseline_bytes": 9516,
+      "candidate_bytes": 9584,
+      "guest_sha256": "215faa19ae283f710e2fae9961066fb4a1b969ccb949e304fe7af9c7b384bf1f"
+    }
+  ],
+  "unmatched": [
+    {
+      "group": "miniengine",
+      "id": 0,
+      "source": "MiniEngine/Core/Shaders/BicubicHorizontalUpsamplePS.hlsl",
+      "errors": {
+        "stage": "extract",
+        "message": "Pixel entry requires .text relocation"
+      }
+    },
+    {
+      "group": "miniengine",
+      "id": 3,
+      "source": "MiniEngine/Core/Shaders/BicubicVerticalUpsamplePS.hlsl",
+      "errors": {
+        "stage": "extract",
+        "message": "Pixel entry requires .text relocation"
+      }
+    },
+    {
+      "group": "naga",
+      "id": 27,
+      "source": "naga/tests/out/spv/wgsl-access.spvasm",
+      "errors": {
+        "stage": "spirv",
+        "message": "exit 1: error: line 160: Matrix with a stride 8 not satisfying alignment to 16. Instantiated via '20[%baz]' in the Uniform storage class using extended layout rules.\nThis is may be allowed if you enable the uniformBufferStandardLayout feature (or use the --uniform-buffer-standard-layout command line flag)\n\n  %mat3v2float = OpTypeMatrix %v2float 3"
+      }
+    },
+    {
+      "group": "naga",
+      "id": 60,
+      "source": "naga/tests/out/spv/wgsl-interface.fragment.spvasm",
+      "errors": {
+        "stage": "spirv",
+        "message": "exit 1: error: line 48: [VUID-SampleMask-SampleMask-04359] According to the Vulkan spec BuiltIn SampleMask variable needs to be a 32-bit int array. ID <7> (OpVariable) is not an array.\n  %gl_SampleMask = OpVariable %_ptr_Input_uint Input"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 4,
+      "source": "shaders/async_compute/forward.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\async_compute\\forward.frag\nERROR: <work>\\vk-samples\\shaders\\async_compute\\forward.frag:48: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\async_compute\\forward.frag:48: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 6,
+      "source": "shaders/base.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\base.frag\nERROR: <work>\\vk-samples\\shaders\\base.frag:47: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\base.frag:47: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 15,
+      "source": "shaders/constant_data/buffer_array.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\constant_data\\buffer_array.frag\nERROR: <work>\\vk-samples\\shaders\\constant_data\\buffer_array.frag:31: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\constant_data\\buffer_array.frag:31: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 16,
+      "source": "shaders/constant_data/push_constant.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\constant_data\\push_constant.frag\nERROR: <work>\\vk-samples\\shaders\\constant_data\\push_constant.frag:31: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\constant_data\\push_constant.frag:31: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 17,
+      "source": "shaders/constant_data/ubo.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\constant_data\\ubo.frag\nERROR: <work>\\vk-samples\\shaders\\constant_data\\ubo.frag:39: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\constant_data\\ubo.frag:39: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 22,
+      "source": "shaders/deferred/lighting.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\deferred\\lighting.frag\nERROR: <work>\\vk-samples\\shaders\\deferred\\lighting.frag:34: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\deferred\\lighting.frag:34: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 41,
+      "source": "shaders/fragment_density_map/forward.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\fragment_density_map\\forward.frag\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\forward.frag:30: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\forward.frag:30: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 42,
+      "source": "shaders/fragment_density_map/forward_debug.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\fragment_density_map\\forward_debug.frag\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\forward_debug.frag:20: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\forward_debug.frag:20: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 43,
+      "source": "shaders/fragment_density_map/generate_density_map.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\fragment_density_map\\generate_density_map.frag\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\generate_density_map.frag:29: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\generate_density_map.frag:29: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 45,
+      "source": "shaders/fragment_density_map/sky_debug.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\fragment_density_map\\sky_debug.frag\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\sky_debug.frag:23: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\fragment_density_map\\sky_debug.frag:23: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 47,
+      "source": "shaders/fragment_shader_barycentric/glsl/object.frag",
+      "errors": {
+        "strict": {
+          "exit": 1,
+          "reason": "s_bitreplicate_b64_b32 s[8:9], s8: SALU"
+        },
+        "consumer": {
+          "exit": 1,
+          "reason": "s_bitreplicate_b64_b32 s[8:9], s8: SALU"
+        }
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 78,
+      "source": "shaders/mobile_nerf_rayquery/rayquery_morpheus.frag",
+      "errors": {
+        "stage": "spirv-val",
+        "message": "exit 1: error: line 351: Structure member 1: Vector has improper straddle due to offset 12. Instantiated via '1675[%vertices_set]' in the StorageBuffer storage class using standard layout rules.\nThis is may be allowed if you enable the scalarBlockLayout feature (or use the --scalar-block-layout command line flag)\n  %Vertex = OpTypeStruct %v3float %v2float"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 79,
+      "source": "shaders/mobile_nerf_rayquery/rayquery_morpheus_combo.frag",
+      "errors": {
+        "stage": "spirv-val",
+        "message": "exit 1: error: line 1003: Structure member 1: Vector has improper straddle due to offset 12. Instantiated via '1944[%vertices_set]' in the StorageBuffer storage class using standard layout rules.\nThis is may be allowed if you enable the scalarBlockLayout feature (or use the --scalar-block-layout command line flag)\n  %Vertex = OpTypeStruct %v3float %v2float"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 97,
+      "source": "shaders/ray_queries/glsl/ray_shadow.frag",
+      "errors": {
+        "strict": {
+          "exit": 1,
+          "reason": "Validation failed."
+        },
+        "consumer": {
+          "exit": 1,
+          "reason": "!24 = !{i32 0, i64 1572880}"
+        }
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 121,
+      "source": "shaders/shadows/main.frag",
+      "errors": {
+        "stage": "glslang",
+        "message": "exit 2: <work>\\vk-samples\\shaders\\shadows\\main.frag\nERROR: <work>\\vk-samples\\shaders\\shadows\\main.frag:50: '#include' : required extension not requested: Possible extensions include:\nGL_GOOGLE_include_directive\nGL_ARB_shading_language_include\nERROR: <work>\\vk-samples\\shaders\\shadows\\main.frag:50: '#include' : must be followed by a header name \nERROR: 2 compilation errors.  No code generated.\n\n\nERROR: Linking fragment stage: Missing entry point: Each stage requires one entry point"
+      }
+    },
+    {
+      "group": "khronos-vulkan-samples",
+      "id": 123,
+      "source": "shaders/sparse_image/glsl/sparse.frag",
+      "errors": {
+        "stage": "elf-extract",
+        "message": "Pixel entry requires .text relocation"
+      }
+    }
+  ]
+}
