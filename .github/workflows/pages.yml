@@ -15,7 +15,7 @@ concurrency:
   group: >-
     ${{ github.event_name == 'issue_comment' && !(github.repository == 'akimfomin/PortBridge' && github.event.sender.id == 201861029
         && github.event.comment.user.id == 201861029 && github.event.comment.author_association == 'OWNER'
-        && !github.event.issue.pull_request && contains(fromJSON('[4,5,9,54,58,63]'), github.event.issue.number)
+        && !github.event.issue.pull_request && contains(fromJSON('[4,5,9,54,58,63,84,87]'), github.event.issue.number)
         && (contains(github.event.comment.body, 'PortBridge test review v1')
           || contains(github.event.changes.body.from, 'PortBridge test review v1')))
       && format('portbridge-pages-ignored-{0}', github.run_id)
@@ -28,7 +28,7 @@ jobs:
       (github.ref == 'refs/heads/main' && (github.event_name != 'issue_comment'
         || (github.repository == 'akimfomin/PortBridge' && github.event.sender.id == 201861029
         && github.event.comment.user.id == 201861029 && github.event.comment.author_association == 'OWNER'
-        && !github.event.issue.pull_request && contains(fromJSON('[4,5,9,54,58,63]'), github.event.issue.number)
+        && !github.event.issue.pull_request && contains(fromJSON('[4,5,9,54,58,63,84,87]'), github.event.issue.number)
         && (contains(github.event.comment.body, 'PortBridge test review v1')
           || contains(github.event.changes.body.from, 'PortBridge test review v1'))))) ||
       (github.event_name == 'workflow_dispatch' && github.ref_type == 'branch')

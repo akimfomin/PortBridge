@@ -15,7 +15,7 @@ class LabTest(CatalogFixture):
     def test_tasks_pin_public_sources_and_track_evidence_separately(self):
         payload = build_lab()
         tasks = {task["id"]: task for task in payload["tasks"]}
-        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 14)))
+        self.assertEqual([task["priority"] for task in tasks.values()], list(range(1, 17)))
         combined = tasks["pb-9-continued-first-frame"]
         self.assertEqual((combined["status"], combined["evidence_stage"], combined["adoption"]),
                          ("awaiting_review", "reviewed_gpu", "pending"))
@@ -88,12 +88,13 @@ class LabTest(CatalogFixture):
         self.assertEqual([task["id"] for task in amd["tasks"]],
                          ["continued-511-repeated-draw",
                           "anyxboxx-147-native-wave64-gather", "framelab-12-vulkan-handoff", "xcl-2126-scratch-coverage",
-                          "anyxboxx-133-native-fma", "portbridge-subgroup-wave64"])
+                          "anyxboxx-133-native-fma", "portbridge-subgroup-wave64", "xcl-87-wave32-carry",
+                          "xcl-87-ssa-projection", "anyxboxx-84-gfx103x-pack"])
         self.assertEqual(amd, build_lab(equipment="amd", status="needs_run"))
         self.assertEqual([task["id"] for task in build_lab(status="blocked")["tasks"]], ["pb-9-reforge-present"])
-        self.assertEqual(len(payload["tasks"]), 13)
+        self.assertEqual(len(payload["tasks"]), 16)
         self.assertEqual([task["id"] for task in build_lab(equipment="intel")["tasks"]],
-                         ["xcl-2126-scratch-coverage"])
+                         ["xcl-2126-scratch-coverage", "xcl-87-wave32-carry", "xcl-87-ssa-projection"])
         self.assertEqual(len(build_lab(equipment="nvidia", status="awaiting_review")["tasks"]), 1)
         self.assertEqual([task["id"] for task in build_lab(equipment="cpu", status="needs_run")["tasks"]],
                          ["scarlett-commons-continued-add-basic"])

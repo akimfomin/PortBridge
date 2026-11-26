@@ -9,7 +9,7 @@ from .lab_report_formats import FRAMELAB_DISCUSSION, FRAMELAB_REVISION, FRAMELAB
 from .lab_reports import coverage_cells, has_passing_coverage, read_report_states
 
 
-CHECKED_AT = "2026-11-24T21:00:10Z"
+CHECKED_AT = "2026-11-26T00:58:50Z"
 EQUIPMENT = ("amd", "cpu", "intel", "nvidia")
 STATUSES = ("needs_run", "needs_revision", "awaiting_review", "blocked")
 TASK_ID_PATTERN = r"^[a-z0-9-]{1,80}$"
@@ -54,6 +54,11 @@ SUBGROUP_FIXTURES_SHA = "1bedab24c39d0b3ae325f6f0f6c43e47bbb6430e"
 SUBGROUP_REQUEST = f"{PORTBRIDGE}/issues/63"
 SUBGROUP_REPORT = f"{PORTBRIDGE}/blob/{SUBGROUP_REWRITE_SHA}/research/subgroup-validator"
 FRAMELAB_HANDOFF_HEAD = FRAMELAB_REVISION
+MASK_REQUEST = f"{PORTBRIDGE}/issues/87"
+CARRY_ISSUE = f"{XCL}/issues/2584"
+MASK_EVIDENCE = f"{PORTBRIDGE}/blob/9c2616998e176806565ee1a0076dc4efb7ae4dc1/research/pipeline-readiness/structural-suite/night"
+PACK_REQUEST = f"{PORTBRIDGE}/issues/84"
+PACK_RUNNER_HEAD = "ad753787a803797ead4667331f1ed8cb2580e7ce"
 
 
 def revision(label, label_ru, repository, sha):
@@ -582,6 +587,91 @@ TASKS = (
             "expected": "Все 256 слов для каждого теста совпадут. Если Wave64 недоступен, укажите пропуск.",
             "report": ["Оба коммита, модель видеокарты, драйвер, ОС, SPIRV-Tools и наблюдаемая ширина группы",
                        "Исход обоих тестов и возможное расхождение"],
+        }},
+    },
+    {
+        "id": "xcl-87-wave32-carry", "priority": 14,
+        "title": "Verify XCL pixel carries on Intel or AMD RDNA2",
+        "projects": ["xcl"], "equipment": ["amd", "intel"], "os": ["Windows"],
+        "status": "needs_run", "evidence_stage": "reviewed_gpu", "adoption": "pending", "coverage_policy": "all",
+        "source_url": CARRY_ISSUE, "result_url": MASK_REQUEST, "procedure_url": MASK_REQUEST,
+        "evidence_url": f"{CARRY_ISSUE}#issuecomment-7178879816",
+        "revisions": [revision("PortBridge HLSL carry fix", "Исправление переноса HLSL", "akimfomin/xcl",
+                               "d3e7725f9f48c39c18e7b6e011ec76423edb0004")],
+        "requirements": ["Physical Intel or AMD RDNA2 GPU, Windows D3D12", "Rust release build and DXC"],
+        "why": "The HLSL compiler can lose a carry mask at triangle edges. Intel and RDNA2 coverage remain open.",
+        "evidence": "DarkPanda69 reproduced the baseline failure and verified the correction on RX 9070 XT and RTX 3060.",
+        "steps": ["Use the pinned fix. Select the physical adapter and run the exact HLSL edge test in #87.",
+                  "Check that the draw ran. Report the result and any skipped work in #87."],
+        "expected": "The carry count matches the reference for all 1,024 pixels on the physical GPU.",
+        "report": ["GPU, driver, OS and DXC", "Test outcome and whether a native draw ran"],
+        "translations": {"ru": {
+            "title": "Проверить маску переноса XCL на Intel или AMD RDNA2",
+            "requirements": ["Физическая Intel или AMD RDNA2, Windows D3D12", "Сборка release с Rust и DXC"],
+            "why": "На границе треугольника HLSL-компилятор мог терять маску. Открыты проверки на Intel и RDNA2.",
+            "evidence": "DarkPanda69 воспроизвёл исходную ошибку и подтвердил исправление на RX 9070 XT и RTX 3060.",
+            "steps": ["На закреплённой версии выберите физическую карту и запустите тест HLSL из #87.",
+                      "Проверьте, что отрисовка состоялась. Запишите результат и пропуски в #87."],
+            "expected": "В каждом из 1 024 пикселей число битов переноса совпадает с эталоном.",
+            "report": ["GPU, драйвер, ОС и DXC", "Исход проверки и факт выполнения на физической карте"],
+        }},
+    },
+    {
+        "id": "xcl-87-ssa-projection", "priority": 15,
+        "title": "Compare the opt-in XCL mask projection on an open scene",
+        "projects": ["xcl"], "equipment": ["amd", "intel", "nvidia"], "os": ["Windows"],
+        "status": "needs_run", "evidence_stage": "author_gpu", "adoption": "pending", "coverage_policy": "all",
+        "source_url": MASK_REQUEST, "result_url": MASK_REQUEST,
+        "procedure_url": f"{MASK_EVIDENCE}/ssa-mask-projection/README.md",
+        "evidence_url": f"{MASK_EVIDENCE}/ssa-mask-projection/first-frame/README.md",
+        "revisions": [revision("Opt-in direct-DXIL projection", "Экспериментальная проекция direct DXIL", "akimfomin/xcl",
+                               "be7722969c6604da56fe553cd8ecb5e3b7ed0f37")],
+        "requirements": ["Physical D3D12 GPU", "An openly licensed shader, Rust and DXC"],
+        "why": "Independent image comparisons and timings on other GPUs can establish where the opt-in is useful.",
+        "evidence": "On the PortBridge RTX, raylib's first verified image arrived 99–120 ms sooner. A Microsoft filter gave mixed timings.",
+        "steps": ["Use the pinned direct-DXIL fork and the published scene. Compare projection off/on in fresh processes on the same GPU.",
+                  "Compare images first. Share aggregate timings for identical images, or report the mismatch."],
+        "expected": "Both output images match. A slower or unchanged timed run is also useful.",
+        "report": ["GPU, driver, DXC, OS and scene", "Image comparison and paired timings with units"],
+        "translations": {"ru": {
+            "title": "Сравнить экспериментальную проекцию масок XCL на открытой сцене",
+            "requirements": ["Физическая видеокарта D3D12", "Открытый шейдер, Rust и DXC"],
+            "why": "Независимые сравнения кадров и времени покажут, на каких GPU полезен этот режим.",
+            "evidence": "На RTX PortBridge первый проверенный кадр raylib появился на 99–120 мс раньше. У фильтра Microsoft результаты разошлись.",
+            "steps": ["На закреплённой версии запустите открытую сцену с выключенной и включённой проекцией в отдельных процессах на одной карте.",
+                      "Сначала сравните изображения. При совпадении передайте агрегированные времена, при расхождении укажите ошибку."],
+            "expected": "Изображения совпадают. Отсутствие ускорения и замедление тоже полезно зафиксировать.",
+            "report": ["GPU, драйвер, DXC, ОС и сцена", "Сравнение кадров и парные времена с единицами измерения"],
+        }},
+    },
+    {
+        "id": "anyxboxx-84-gfx103x-pack", "priority": 16,
+        "title": "Measure KainanP’s 16-bit pack cases A1–A4 on RDNA2",
+        "projects": ["anyxboxx"], "equipment": ["amd"], "os": ["Linux"],
+        "status": "needs_run", "evidence_stage": "assembled_offline", "adoption": "pending",
+        "source_url": PACK_REQUEST, "result_url": PACK_REQUEST,
+        "procedure_url": f"{PORTBRIDGE}/blob/{PACK_RUNNER_HEAD}/contrib/rdna2-pack-a1-a4/README.md",
+        "evidence_url": f"{PACK_REQUEST}#issuecomment-7179304828",
+        "revisions": [revision("PortBridge pack runner", "Стенд PortBridge", "akimfomin/PortBridge",
+                               PACK_RUNNER_HEAD),
+                      revision("AnyXboxX inputs referenced by KainanP", "Исходная версия AnyXboxX из запроса KainanP",
+                               "KainanP/AnyXboxX", "40aae0f659d21a3cbc3e9d0a94cb86e6d48225a9")],
+        "requirements": ["Physical gfx1030–gfx1036 RDNA2 GPU, Wave32", "Linux with ROCm/HIP, LLVM AMDGPU assembler and LLD"],
+        "why": "KainanP needs physical pack results to distinguish saturation and truncation in AnyXboxX #232.",
+        "evidence": "KainanP supplied the cases. PortBridge assembled the runner offline. The physical A1–A4 values remain open.",
+        "steps": ["Build the pinned source and run the control and A1–A4 on a physical gfx103x adapter.",
+                  "Share the observed EXEC, control and four result words in #84 with the model, target and tool versions."],
+        "expected": "The control is 01230abc and initial EXEC is ffffffff. Record each measured value even if it differs from a prediction.",
+        "report": ["Physical GPU, gfx target, OS, ROCm and driver", "Control, the four measured A1–A4 words and code-object SHA-256"],
+        "translations": {"ru": {
+            "title": "Измерить варианты упаковки A1–A4 из запроса KainanP на RDNA2",
+            "requirements": ["Физическая RDNA2 gfx1030–gfx1036, Wave32", "Linux с ROCm/HIP, ассемблер LLVM AMDGPU и LLD"],
+            "why": "KainanP уточняет, как на железе AnyXboxX #232 должен обрабатывать переполнение при упаковке 16-битных чисел.",
+            "evidence": "KainanP подготовил примеры, PortBridge собрал стенд без запуска на GPU. Аппаратных значений A1–A4 пока нет.",
+            "steps": ["Соберите закреплённый стенд и выполните контроль и четыре варианта на физической gfx103x.",
+                      "Запишите в #84 начальную EXEC, контроль, четыре значения, модель карты, архитектуру и версии инструментов."],
+            "expected": "Контроль равен 01230abc, начальная EXEC — ffffffff. Запишите каждое измеренное слово, даже если оно отличается от прогноза.",
+            "report": ["GPU, gfx-архитектура, ОС, ROCm и драйвер", "Контроль, четыре измеренных слова A1–A4 и SHA-256 бинарного файла шейдера"],
         }},
     },
 )

@@ -32,6 +32,16 @@ class LabIntakeTest(unittest.TestCase):
         self.assertNotIn("free text", json.dumps(receipt))
         self.assertEqual(receipt["comment"], f"{ISSUE_PREFIX}9#issuecomment-8")
 
+    def test_two_mask_checks_share_an_issue_but_keep_separate_results(self):
+        carry, projection = mapped_tasks(87)
+        self.assertEqual(carry["revisions"][0]["sha"], "d3e7725f9f48c39c18e7b6e011ec76423edb0004")
+        self.assertEqual(projection["revisions"][0]["sha"], "be7722969c6604da56fe553cd8ecb5e3b7ed0f37")
+        for task in (carry, projection):
+            event = event_for(task, 87)
+            receipt = classify_event(event)
+            self.assertEqual([entry["task"] for entry in receipt["entries"]], [task["id"]])
+        self.assertEqual([task["id"] for task in mapped_tasks(84)], ["anyxboxx-84-gfx103x-pack"])
+
     def test_markdown_report_header_still_counts_after_edit(self):
         task = mapped_tasks(54)[0]
         event = event_for(task, 54, action="edited")
