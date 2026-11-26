@@ -1,0 +1,71 @@
+diff --git a/crates/xcl/src/gpu/recomp/runner.rs b/crates/xcl/src/gpu/recomp/runner.rs
+index c6b62ef..ebe8505 100644
+--- a/crates/xcl/src/gpu/recomp/runner.rs
++++ b/crates/xcl/src/gpu/recomp/runner.rs
+@@ -1934,6 +1934,40 @@ fn dispatch_with(
+ }
+ 
+ 
++#[cfg(test)]
++struct PipelineMemorySample {
++    adapter: IDXGIAdapter3,
++}
++
++#[cfg(test)]
++impl PipelineMemorySample {
++    fn open(dev: &ID3D12Device) -> Result<Self, String> {
++        unsafe {
++            let factory: IDXGIFactory4 = CreateDXGIFactory1().map_err(e)?;
++            Ok(Self { adapter: factory.EnumAdapterByLuid(dev.GetAdapterLuid()).map_err(e)? })
++        }
++    }
++
++    fn record(&self, phase: &str) -> Result<(), String> {
++        use windows_sys::Win32::System::ProcessStatus::{K32GetProcessMemoryInfo, PROCESS_MEMORY_COUNTERS_EX};
++        use windows_sys::Win32::System::Threading::GetCurrentProcess;
++        unsafe {
++            let mut local = DXGI_QUERY_VIDEO_MEMORY_INFO::default();
++            let mut nonlocal = DXGI_QUERY_VIDEO_MEMORY_INFO::default();
++            self.adapter.QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &mut local).map_err(e)?;
++            self.adapter.QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_NON_LOCAL, &mut nonlocal).map_err(e)?;
++            let mut process: PROCESS_MEMORY_COUNTERS_EX = std::mem::zeroed();
++            process.cb = std::mem::size_of_val(&process) as u32;
++            if K32GetProcessMemoryInfo(GetCurrentProcess(), (&mut process as *mut PROCESS_MEMORY_COUNTERS_EX).cast(), process.cb) == 0 {
++                return Err(std::io::Error::last_os_error().to_string());
++            }
++            println!("pso_memory phase={phase} local_bytes={} nonlocal_bytes={} local_budget={} nonlocal_budget={} private_bytes={} working_set_bytes={}",
++                     local.CurrentUsage, nonlocal.CurrentUsage, local.Budget, nonlocal.Budget, process.PrivateUsage, process.WorkingSetSize);
++        }
++        Ok(())
++    }
++}
++
+ #[cfg(test)]
+ pub(crate) fn measure_aperture_pixel_pso(vs: &[u8], ps: &[u8]) -> Result<(f64, usize), String> {
+     let mut g = GPU.lock().unwrap();
+@@ -1956,9 +1990,24 @@ pub(crate) fn measure_aperture_pixel_pso(vs: &[u8], ps: &[u8]) -> Result<(f64, u
+         desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+         desc.RasterizerState.DepthClipEnable = true.into();
+         desc.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
++        let meter = PipelineMemorySample::open(dev)?;
++        meter.record("before_create")?;
+         let started = std::time::Instant::now();
+         let pso: ID3D12PipelineState = dev.CreateGraphicsPipelineState(&desc).map_err(e)?;
+         let native_ms = started.elapsed().as_secs_f64() * 1000.0;
+-        Ok((native_ms, pso.GetCachedBlob().map_err(e)?.GetBufferSize()))
++        meter.record("after_create")?;
++        let blob = pso.GetCachedBlob().map_err(e)?;
++        let cache_bytes = blob.GetBufferSize();
++        meter.record("with_blob")?;
++        drop(blob);
++        drop(pso);
++        meter.record("after_release")?;
++        // A single known-size committed resource checks whether this adapter's
++        // accounting sees an ordinary allocation at the sampling points.
++        let calibration = buffer(dev, 16 << 20, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_COMMON, false)?;
++        meter.record("with_16mib_resource")?;
++        drop(calibration);
++        meter.record("after_calibration_release")?;
++        Ok((native_ms, cache_bytes))
+     }
+ }

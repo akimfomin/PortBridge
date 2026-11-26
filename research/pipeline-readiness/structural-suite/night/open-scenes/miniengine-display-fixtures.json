@@ -1,0 +1,126 @@
+{
+  "source": {
+    "repo": "microsoft/DirectX-Graphics-Samples",
+    "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+    "license": "MIT"
+  },
+  "tool_hashes": {
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "dis": "19fe00087c94c32f423eb06343fa31459baed5f3ee8c2f820090d8b0307884ee",
+    "val": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+    "llpc": "928501ebdafcb4c1e20af5c39fed45cd69a402aaa73be453d2d6de50eae9215a",
+    "readobj": "a933bde283b3881ae108e65884c1fd74c293af9fb5fdeca2bf475e8f4a4a9215"
+  },
+  "observations": [
+    {
+      "group": "miniengine-display",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+      "spirv_sha256": "4b0d3d92414a2b0b188703c1696132ae59862feffc2e746cc7b06df72d2bdb17",
+      "bindings": {
+        "ColorTex": 0,
+        "Constants": 16
+      },
+      "native_dxil_sha256": "b1d42541a80123b4e4c390160ffecf8779ec636e63fab6d8199b7825823f19fd",
+      "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+      "rdna": {
+        "bytes": 3276,
+        "sha256": "eed563ed07ad92ce2e709ecd2abb997ccd93fbd5ad9698a68fdbe39ff430cd98",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsamplePS.hlsl",
+      "source_sha256": "47982c1ed360d099f0564dae0d23502e5b00fa4099e21ca9f8ce7a97c18eb0b1",
+      "spirv_sha256": "05cbc6d77cbfe462ac78344c0a4c67b793028858f959dfaa5360f6f88240fd71",
+      "bindings": {
+        "ColorTex": 0,
+        "Constants": 16
+      },
+      "native_dxil_sha256": "0922709cf47720e83eba7bcaada2e02c64c783d53f7f598f6b404eb6c6b15a18",
+      "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+      "rdna": {
+        "bytes": 1060,
+        "sha256": "135d6311f4a340e237ea9a796963237547efe4d97c16d539ae829d0ab6cedba1",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsampleGammaPS.hlsl",
+      "source_sha256": "4ab7d1e3610bd028ab81e8ab892770188df056abca1e1afb8ecb6dbd131d4d5a",
+      "spirv_sha256": "e85a3cebc6cd60b066109f96cdc25bbaa5ec3b7d90fa9d8c7f097cfc82c2367f",
+      "bindings": {
+        "ColorTex": 0,
+        "BilinearClamp": 32,
+        "Constants": 16
+      },
+      "native_dxil_sha256": "999fab2222c900f1191fb348b50bfcdbd7d093ea8e59f5871694cb05ddaef5b5",
+      "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+      "rdna": {
+        "bytes": 988,
+        "sha256": "1b7fa2c4e9f5ffae041811310f63a79d880a84393cca9d032c89e3964dd5ca8d",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/PresentSDRPS.hlsl",
+      "source_sha256": "497933beecc12a137651e9ea691234fd343decdc203f16a47b7457f515e22922",
+      "spirv_sha256": "2c36b6a1ef3a6e6334209b91666b7ba6cfaeefcbe1d6e4904301617ec027831c",
+      "bindings": {
+        "ColorTex": 0
+      },
+      "native_dxil_sha256": "6e14eb60c4c4a9e85583292918261db590fc1f9702014d6a3b1154740a48d45d",
+      "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+      "rdna": {
+        "bytes": 196,
+        "sha256": "20b5f3f6ad750c4d03b8c2aeb4529a0f10b42710ab68bcfd15f7f756edc219ab",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BilinearUpsamplePS.hlsl",
+      "source_sha256": "4659ef2d11e9b8487021dbae855861bb6d1a3e4a84f56872900c137ffe823e13",
+      "spirv_sha256": "6088927ba1713ed08a9f818056784bfff84474651ffc0d20bf4a8083c7d19591",
+      "bindings": {
+        "ColorTex": 0,
+        "BilinearFilter": 32
+      },
+      "native_dxil_sha256": "c11a98b386530cbf3778a4171fa4cb68b5b4c41f988697472a307e36fbeb7724",
+      "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+      "rdna": {
+        "bytes": 220,
+        "sha256": "91183a8c3bc0d663ed90e068e9879abb81a3b93c5de6a07894baf6f92e479d90",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    }
+  ]
+}

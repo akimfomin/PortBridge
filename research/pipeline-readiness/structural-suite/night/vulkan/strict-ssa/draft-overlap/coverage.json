@@ -1,0 +1,93 @@
+{
+  "paired": {
+    "new_stack": {
+      "attempted": 222,
+      "validated": 202,
+      "projection_changed": 38,
+      "unique_pal": 151,
+      "changed_unique_pal": 34,
+      "ballot_count_changes": 0,
+      "dxil_growth": 0
+    },
+    "changes_from_known_bits": [
+      {
+        "group": "khronos-vulkan-samples",
+        "id": 114,
+        "source": "shaders/shader_object/post_process_edge_detection.frag",
+        "before_bytes": {
+          "whole": 5196,
+          "project": 5196
+        },
+        "after_bytes": {
+          "whole": 5144,
+          "project": 5144
+        }
+      },
+      {
+        "group": "naga",
+        "id": 29,
+        "source": "naga/tests/out/spv/wgsl-binding-arrays.spvasm",
+        "before_bytes": {
+          "whole": 47880,
+          "project": 47224
+        },
+        "after_bytes": {
+          "whole": 47876,
+          "project": 47220
+        }
+      },
+      {
+        "group": "naga",
+        "id": 56,
+        "source": "naga/tests/out/spv/wgsl-image.spvasm",
+        "before_bytes": {
+          "whole": 10340,
+          "project": 10340
+        },
+        "after_bytes": {
+          "whole": 10336,
+          "project": 10336
+        }
+      },
+      {
+        "group": "naga",
+        "id": 57,
+        "source": "naga/tests/out/spv/wgsl-image.spvasm",
+        "before_bytes": {
+          "whole": 5264,
+          "project": 5264
+        },
+        "after_bytes": {
+          "whole": 5260,
+          "project": 5260
+        }
+      },
+      {
+        "group": "naga",
+        "id": 59,
+        "source": "naga/tests/out/spv/wgsl-image.spvasm",
+        "before_bytes": {
+          "whole": 4028,
+          "project": 4028
+        },
+        "after_bytes": {
+          "whole": 4024,
+          "project": 4024
+        }
+      }
+    ],
+    "whole_changed_from_stock": 95
+  },
+  "fixed-mini": {
+    "new_stack": {
+      "attempted": 24,
+      "validated": 22,
+      "projection_changed": 12,
+      "unique_pal": 22,
+      "changed_unique_pal": 12,
+      "ballot_count_changes": 0,
+      "dxil_growth": 0
+    },
+    "changes_from_known_bits": []
+  }
+}

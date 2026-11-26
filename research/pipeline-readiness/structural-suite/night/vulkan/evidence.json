@@ -1,0 +1,415 @@
+{
+  "fragment_stages": {
+    "nerf71-local-packed": {
+      "fragment_sha256": "f21c6a310535e72807df364ac36e94c0c61fcd278e8b7d260f4742c8a21c0c58",
+      "spirv_bytes": 449080,
+      "binary_bytes": 243072,
+      "registers": 128,
+      "representations": 0
+    },
+    "nerf71-local": {
+      "fragment_sha256": "5c399c32f32b6503f95319d46e772b19520a22f821fdc49c0bf9fa1bb0c79aef",
+      "spirv_bytes": 497964,
+      "binary_bytes": 238336,
+      "registers": 128,
+      "representations": 0
+    },
+    "nerf71-packed": {
+      "fragment_sha256": "22cc43766a6688f5b8b49436ddd1c374ed291ee2e9bd8420c71c45044e1878fe",
+      "spirv_bytes": 631448,
+      "binary_bytes": 441984,
+      "registers": 128,
+      "representations": 0
+    },
+    "nerf71-whole": {
+      "fragment_sha256": "5082190c872058984863cd955172aa5a2da0705d84f9319c209d075d78e556db",
+      "spirv_bytes": 1115816,
+      "binary_bytes": 455424,
+      "registers": 128,
+      "representations": 0
+    },
+    "nerf73-local-packed": {
+      "fragment_sha256": "7e856ee4b2b6115f2eea220c30c47c38485c04f6a2bb46b93951be238e9f1c6b",
+      "spirv_bytes": 449584,
+      "binary_bytes": 241024,
+      "registers": 127,
+      "representations": 0
+    },
+    "nerf73-local": {
+      "fragment_sha256": "07b4a6c358cb8d85f35a64cf2ad81bd0ab7078680a8e5402575c1d44fe81d5a8",
+      "spirv_bytes": 498468,
+      "binary_bytes": 239616,
+      "registers": 127,
+      "representations": 0
+    },
+    "nerf73-packed": {
+      "fragment_sha256": "4ec1cd98019357e1585bb4d0e30cd8a6b0736f8e4403cfe0d098f77039047d33",
+      "spirv_bytes": 632048,
+      "binary_bytes": 441472,
+      "registers": 128,
+      "representations": 0
+    },
+    "nerf73-whole": {
+      "fragment_sha256": "589a00a0931a1cd3c5885fba16c615a133173d21c046f086c17771982751c7b6",
+      "spirv_bytes": 1116416,
+      "binary_bytes": 454784,
+      "registers": 128,
+      "representations": 0
+    },
+    "ray-local-packed": {
+      "fragment_sha256": "6fb95e94f08deaf0eb0976ebdfc7bd2995accf23ac6adaba46a7cc275e226bb7",
+      "spirv_bytes": 331752,
+      "binary_bytes": 110208,
+      "registers": 168,
+      "representations": 0
+    },
+    "ray-local": {
+      "fragment_sha256": "1ca8405813d7ceddba7adf1583eb7f516b62a16b58e7379a7bebb216ac412c0d",
+      "spirv_bytes": 347988,
+      "binary_bytes": 108288,
+      "registers": 168,
+      "representations": 0
+    },
+    "ray-packed": {
+      "fragment_sha256": "d6ddade36a7cdbf1c7e5aab8518c619751221f1c0baf888bbdfa0d5ce55f61c5",
+      "spirv_bytes": 435900,
+      "binary_bytes": 228736,
+      "registers": 168,
+      "representations": 0
+    },
+    "ray-whole": {
+      "fragment_sha256": "0634013ae82c0b90eb013cee31411064666aeabf6af4984b9dffe99f2348ecaa",
+      "spirv_bytes": 634668,
+      "binary_bytes": 221568,
+      "registers": 168,
+      "representations": 0
+    },
+    "source-000": {
+      "fragment_sha256": "ccf143cc12546ad771c4d3a4d75c9e004a3c41686dd11826cc03c486f1d198b8",
+      "spirv_bytes": 37704,
+      "binary_bytes": 50048,
+      "registers": 128,
+      "representations": 0
+    }
+  },
+  "scenes": {
+    "primary": {
+      "native_gl_median_ms": 0.577536,
+      "native_gl_sha256": "7785d9ef2ca55d94b3bb8b1a862df71064becbd268fc93f11ec7014a45cb7408",
+      "d3d12_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+      "rows": [
+        {
+          "input": "primary-local-capture.json",
+          "mode": "local",
+          "capture": true,
+          "gpu_median_ms": 1.425152,
+          "gpu_range_ms": [
+            1.397888,
+            1.445248
+          ],
+          "captured_stage": {
+            "binary_bytes": 108288,
+            "registers": 168,
+            "representations": 0
+          },
+          "output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+          "vs_native_gl": {
+            "bit_equal_pixels": 34813,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087
+          }
+        },
+        {
+          "input": "primary-local-packed.json",
+          "mode": "local-packed",
+          "capture": false,
+          "gpu_median_ms": 1.34208,
+          "gpu_range_ms": [
+            1.261184,
+            1.388928
+          ],
+          "captured_stage": null,
+          "output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+          "vs_native_gl": {
+            "bit_equal_pixels": 34813,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087
+          }
+        },
+        {
+          "input": "primary-local.json",
+          "mode": "local",
+          "capture": false,
+          "gpu_median_ms": 1.371392,
+          "gpu_range_ms": [
+            1.324416,
+            1.395328
+          ],
+          "captured_stage": null,
+          "output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+          "vs_native_gl": {
+            "bit_equal_pixels": 34813,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087
+          }
+        },
+        {
+          "input": "primary-packed.json",
+          "mode": "packed",
+          "capture": false,
+          "gpu_median_ms": 5.478016,
+          "gpu_range_ms": [
+            5.38688,
+            5.543168
+          ],
+          "captured_stage": null,
+          "output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+          "vs_native_gl": {
+            "bit_equal_pixels": 34813,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087
+          }
+        },
+        {
+          "input": "primary-source-capture.json",
+          "mode": "source",
+          "capture": true,
+          "gpu_median_ms": 0.662016,
+          "gpu_range_ms": [
+            0.621824,
+            0.67712
+          ],
+          "captured_stage": {
+            "binary_bytes": 50048,
+            "registers": 128,
+            "representations": 0
+          },
+          "output_sha256": "4d132c227c5537187bccd095431672bb0a14f4200b002bbf610755eaca273c41",
+          "vs_native_gl": {
+            "bit_equal_pixels": 74814,
+            "pixels": 360000,
+            "mean_abs_rgb": 1.007424426023607e-06,
+            "p50_max_channel_abs": 5.960464477539063e-08,
+            "p99_max_channel_abs": 2.9921531677246094e-05,
+            "max_channel_abs": 0.011120617389678955
+          }
+        },
+        {
+          "input": "primary-whole-capture.json",
+          "mode": "whole",
+          "capture": true,
+          "gpu_median_ms": 5.1712,
+          "gpu_range_ms": [
+            5.127808,
+            5.266944
+          ],
+          "captured_stage": {
+            "binary_bytes": 221568,
+            "registers": 168,
+            "representations": 0
+          },
+          "output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+          "vs_native_gl": {
+            "bit_equal_pixels": 34813,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087
+          }
+        },
+        {
+          "input": "primary-whole.json",
+          "mode": "whole",
+          "capture": false,
+          "gpu_median_ms": 5.245312,
+          "gpu_range_ms": [
+            5.210112,
+            5.270272
+          ],
+          "captured_stage": null,
+          "output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+          "vs_native_gl": {
+            "bit_equal_pixels": 34813,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087
+          }
+        }
+      ]
+    },
+    "secondary": {
+      "native_gl_median_ms": 0.64896,
+      "native_gl_sha256": "4f6a32b195fc47053b522f3165e863b06614fc5400f4067c9c183a03d7eed232",
+      "d3d12_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+      "rows": [
+        {
+          "input": "secondary-local-capture.json",
+          "mode": "local",
+          "capture": true,
+          "gpu_median_ms": 1.451008,
+          "gpu_range_ms": [
+            1.375744,
+            1.495296
+          ],
+          "captured_stage": {
+            "binary_bytes": 108288,
+            "registers": 168,
+            "representations": 0
+          },
+          "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+          "vs_native_gl": {
+            "bit_equal_pixels": 81038,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00018834548345594496,
+            "p50_max_channel_abs": 2.384185791015625e-07,
+            "p99_max_channel_abs": 0.0007754570245742803,
+            "max_channel_abs": 0.05489647388458252
+          }
+        },
+        {
+          "input": "secondary-local-packed.json",
+          "mode": "local-packed",
+          "capture": false,
+          "gpu_median_ms": 1.402496,
+          "gpu_range_ms": [
+            1.3248,
+            1.464064
+          ],
+          "captured_stage": null,
+          "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+          "vs_native_gl": {
+            "bit_equal_pixels": 81038,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00018834548345594496,
+            "p50_max_channel_abs": 2.384185791015625e-07,
+            "p99_max_channel_abs": 0.0007754570245742803,
+            "max_channel_abs": 0.05489647388458252
+          }
+        },
+        {
+          "input": "secondary-local.json",
+          "mode": "local",
+          "capture": false,
+          "gpu_median_ms": 1.519872,
+          "gpu_range_ms": [
+            1.438592,
+            1.532672
+          ],
+          "captured_stage": null,
+          "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+          "vs_native_gl": {
+            "bit_equal_pixels": 81038,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00018834548345594496,
+            "p50_max_channel_abs": 2.384185791015625e-07,
+            "p99_max_channel_abs": 0.0007754570245742803,
+            "max_channel_abs": 0.05489647388458252
+          }
+        },
+        {
+          "input": "secondary-packed.json",
+          "mode": "packed",
+          "capture": false,
+          "gpu_median_ms": 5.50976,
+          "gpu_range_ms": [
+            5.46816,
+            5.55584
+          ],
+          "captured_stage": null,
+          "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+          "vs_native_gl": {
+            "bit_equal_pixels": 81038,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00018834548345594496,
+            "p50_max_channel_abs": 2.384185791015625e-07,
+            "p99_max_channel_abs": 0.0007754570245742803,
+            "max_channel_abs": 0.05489647388458252
+          }
+        },
+        {
+          "input": "secondary-source-capture.json",
+          "mode": "source",
+          "capture": true,
+          "gpu_median_ms": 0.627328,
+          "gpu_range_ms": [
+            0.568832,
+            0.677376
+          ],
+          "captured_stage": {
+            "binary_bytes": 50048,
+            "registers": 128,
+            "representations": 0
+          },
+          "output_sha256": "bf02baf3a01dc62fe4fb12223d6aab2b7b9be8c14a31b64615a1c7993e90dd5c",
+          "vs_native_gl": {
+            "bit_equal_pixels": 130910,
+            "pixels": 360000,
+            "mean_abs_rgb": 7.944722004510738e-07,
+            "p50_max_channel_abs": 5.960464477539063e-08,
+            "p99_max_channel_abs": 2.8431415557861328e-05,
+            "max_channel_abs": 0.0006880760192871094
+          }
+        },
+        {
+          "input": "secondary-whole-capture.json",
+          "mode": "whole",
+          "capture": true,
+          "gpu_median_ms": 5.412736,
+          "gpu_range_ms": [
+            5.404416,
+            5.46304
+          ],
+          "captured_stage": {
+            "binary_bytes": 221568,
+            "registers": 168,
+            "representations": 0
+          },
+          "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+          "vs_native_gl": {
+            "bit_equal_pixels": 81038,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00018834548345594496,
+            "p50_max_channel_abs": 2.384185791015625e-07,
+            "p99_max_channel_abs": 0.0007754570245742803,
+            "max_channel_abs": 0.05489647388458252
+          }
+        },
+        {
+          "input": "secondary-whole.json",
+          "mode": "whole",
+          "capture": false,
+          "gpu_median_ms": 5.532288,
+          "gpu_range_ms": [
+            5.484672,
+            5.595904
+          ],
+          "captured_stage": null,
+          "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+          "vs_native_gl": {
+            "bit_equal_pixels": 81038,
+            "pixels": 360000,
+            "mean_abs_rgb": 0.00018834548345594496,
+            "p50_max_channel_abs": 2.384185791015625e-07,
+            "p99_max_channel_abs": 0.0007754570245742803,
+            "max_channel_abs": 0.05489647388458252
+          }
+        }
+      ]
+    }
+  }
+}

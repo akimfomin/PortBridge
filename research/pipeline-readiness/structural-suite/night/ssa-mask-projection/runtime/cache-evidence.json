@@ -1,0 +1,38 @@
+{
+  "observer_sha256": "cc36fd4bb3e2c01d6cfb820fa94fef970207c9db6dd0ee69d1c648e953405763",
+  "fixture_sha256": "959c3b32bb9f4c78bcc1356baa938b0b9ad8675772389939e3016d105842acc6",
+  "runs": [
+    {
+      "mode": "whole",
+      "warm": false,
+      "sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+      "dxil_bytes": 177584,
+      "cache_entry": "translated/v2/727e946c5059849f/325fdc7c90ef97df_Pixel_0_4_0.bin",
+      "cache_file_count": 1
+    },
+    {
+      "mode": "project",
+      "warm": false,
+      "sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+      "dxil_bytes": 151968,
+      "cache_entry": "translated/v2/7a78f6e32c1e829d/325fdc7c90ef97df_Pixel_0_4_0.bin",
+      "cache_file_count": 2
+    },
+    {
+      "mode": "whole",
+      "warm": true,
+      "sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+      "dxil_bytes": 177584,
+      "cache_entry": "translated/v2/727e946c5059849f/325fdc7c90ef97df_Pixel_0_4_0.bin",
+      "cache_file_count": 2
+    },
+    {
+      "mode": "project",
+      "warm": true,
+      "sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+      "dxil_bytes": 151968,
+      "cache_entry": "translated/v2/7a78f6e32c1e829d/325fdc7c90ef97df_Pixel_0_4_0.bin",
+      "cache_file_count": 2
+    }
+  ]
+}

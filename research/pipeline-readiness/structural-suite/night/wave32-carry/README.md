@@ -11,12 +11,25 @@ Each column covers 2,953 pixels across four triangle geometries. The adapter was
 | Translation | Differing red/green pixels without WQM | With WQM |
 | --- | ---: | ---: |
 | XCL HLSL | 0 | 668 |
+| XCL HLSL with the Wave32 register-width fix | 0 | 0 |
 | Same HLSL with whole-mask reconstruction | 0 | 0 |
 | XCL ordinary direct DXIL | 0 | 0 |
 | PortBridge original lane-local DXIL | 2,951 | 2,953 |
 | PortBridge whole-mask control | 0 | 0 |
 
-For stock HLSL with WQM, the full-screen triangle passed all 1,024 pixels. The two-triangle diagonal differed at 204/1,024, the single edge at 176/496 and the cropped triangle at 288/409. All five translations produced the same coverage for each geometry. This is a correctness measurement on NVIDIA running XCL. Physical RDNA2 guest-hardware comparison and AMD/Intel host results remain open. [Original experiment](../../LANE-MASKS.md) · [Pixel counts and readback digests](pixels.json) · [Raw RGBA32F images](readbacks.zip)
+For stock HLSL with WQM, the full-screen triangle passed all 1,024 pixels. The two-triangle diagonal differed at 204/1,024, the single edge at 176/496 and the cropped triangle at 288/409. All six translations produced the same coverage for each geometry. This is a correctness measurement on NVIDIA running XCL. Physical RDNA2 guest-hardware comparison and AMD/Intel host results remain open. [Original experiment](../../LANE-MASKS.md) · [Pixel counts and readback digests](pixels.json) · [Raw RGBA32F images](readbacks.zip)
+
+## The compiler change
+
+PortBridge changed the backward register liveness analysis to respect the dword written by a Wave32 carry. The original local-ballot admission rule stays in place. The fix can conservatively restore whole-mask reconstruction. It also keeps the existing Wave64 calculation. On the same four geometries, the fixed HLSL returns the expected population at all 5,906 pixel-draws across both WQM settings. Every byte of all eight images agrees with each of the three whole-mask controls in the table. This comparison comes from the original NVIDIA host. Independent measurements on other adapters are welcome.
+
+The XCL patch is commit `ca5b5daa6e07b3488993840d9aec46ccafde0f36` on base `e1d84b7d9153f86a97d2ec5d209d196046fc0bea`. It also applies cleanly to `08db8020d323bf478964fcc586152cce54959cfc`. The targeted CPU suite on the tested base passed 20 tests and ignored one manual benchmark. The two new regressions can be run separately in a checkout after applying the patch. [Compiler fix and tests](xcl-wave32-mask-liveness.patch)
+
+```powershell
+git apply "$fixture/xcl-wave32-mask-liveness.patch"
+cargo test --release --locked -p xcl --lib wave32_carry_into_s20_preserves_a_whole_read_of_s21 -- --nocapture
+cargo test --release --locked -p xcl --lib gpu_wave32_pixel_carry_preserves_adjacent_mask_at_triangle_edges -- --nocapture
+```
 
 ## Reproduce the HLSL comparison
 

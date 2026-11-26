@@ -1,0 +1,360 @@
+diff --git a/crates/xcl/src/gpu/dxil/aperture_tests.rs b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+index 74ac0f4..9b08408 100644
+--- a/crates/xcl/src/gpu/dxil/aperture_tests.rs
++++ b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+@@ -117,3 +117,145 @@ fn aperture_open_pixel_pso() {
+     println!("aperture sample adapter={} native_ms={native_ms:.6} opaque_cache_bytes={cache_bytes} dxil_bytes={}",
+         runner::adapter().unwrap(), ps.len());
+ }
++
++// Corpus receipt: render an external DXV-validated pixel shader using registered
++// PAL scalar words and two interpolated texture coordinates on a full triangle.
++#[test]
++fn open_procedural_pixel_draw() {
++    use std::io::Write;
++    let Some(sgpr_path) = std::env::var_os("PB_SCENE_SGPRS") else {
++        println!("SKIPPED: open scene fixture absent");
++        return;
++    };
++    let ps_path = std::env::var_os("PB_SCENE_PS").expect("PB_SCENE_PS");
++    let image_path = std::env::var_os("PB_SCENE_IMAGE").expect("PB_SCENE_IMAGE");
++    let size: u32 = std::env::var("PB_SCENE_SIZE").expect("PB_SCENE_SIZE").parse().unwrap();
++    let height: u32 = std::env::var("PB_SCENE_HEIGHT").unwrap_or_else(|_| size.to_string()).parse().unwrap();
++    assert!((4..=1280).contains(&size) && (4..=720).contains(&height));
++    let scalar_file = std::fs::read(sgpr_path).unwrap();
++    assert_eq!(scalar_file.len(), crate::gpu::recomp::KERNEL_SGPRS * 4);
++    let sgprs: Vec<u32> = scalar_file.chunks_exact(4)
++        .map(|value| u32::from_le_bytes(value.try_into().unwrap())).collect();
++    assert_eq!(sgprs[IO_UMA_BASE_HI], 4);
++    let ps = std::fs::read(ps_path).unwrap();
++    super::validate::validate(&ps).expect("pixel shader must validate");
++    let vs = dxc::compile(r#"
++        struct V { float4 p: SV_Position; float4 uv: TEXCOORD0; };
++        V main(float2 pos: POSITION) {
++            V v;
++            v.p = float4(pos, 0, 1);
++            v.uv = float4(pos*float2(0.5,-0.5)+0.5, 0, 1);
++            return v;
++        }"#, "main", "vs_6_6", &[]).unwrap();
++    let verts = [-1.0, -1.0, -1.0, 3.0, 3.0, -1.0];
++    let layout = [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }];
++    let clear = [-3.0; 4];
++    runner::disable_driver_shader_cache().expect("cache disable");
++    let started = std::time::Instant::now();
++    let pixels = runner::draw_heap_windows_rect(&vs, &ps, &layout, &verts, 8, &sgprs, &[0; 256], 64, (size, height), clear).unwrap();
++    println!("scene_native_setup_submit_readback_ms={:.4}", started.elapsed().as_secs_f64() * 1000.0);
++    assert_eq!(pixels.len(), (size * height) as usize);
++    assert!(!pixels.contains(&clear), "incomplete coverage");
++    let file = std::fs::OpenOptions::new().write(true).create_new(true).open(image_path).unwrap();
++    let mut out = std::io::BufWriter::new(file);
++    for pixel in &pixels {
++        for channel in pixel {
++            out.write_all(&channel.to_le_bytes()).unwrap();
++        }
++    }
++    out.flush().unwrap();
++    println!("scene adapter={} size={} full_target_pixels={}", runner::adapter().unwrap(), size, pixels.len());
++}
++
++// Use the same texture, topology, constants, viewport, target and readback for a
++// translated PAL shader and the unmodified MiniEngine HLSL with its own PresentRS.
++#[test]
++fn open_miniengine_display_draw() {
++    use crate::gpu::desc;
++    use std::io::Write;
++    use windows::Win32::Graphics::Direct3D12::*;
++    use windows::Win32::Graphics::Dxgi::Common::*;
++
++    let Some(input_path) = std::env::var_os("PB_INPUT_RGBA32F") else {
++        println!("SKIPPED: MiniEngine display fixture absent");
++        return;
++    };
++
++    let value = |name| std::env::var(name).unwrap_or_else(|_| panic!("missing {name}"));
++    let (width, height) = (value("PB_SCENE_SIZE").parse::<u32>().unwrap(), value("PB_SCENE_HEIGHT").parse::<u32>().unwrap());
++    let (tw, th) = (value("PB_TEXTURE_WIDTH").parse::<u32>().unwrap(), value("PB_TEXTURE_HEIGHT").parse::<u32>().unwrap());
++    assert!((4..=1280).contains(&width) && (4..=720).contains(&height));
++    assert!((4..=1280).contains(&tw) && (4..=720).contains(&th));
++    let kind = value("PB_MINI_KIND");
++    assert!(matches!(kind.as_str(), "present" | "bilinear" | "bicubic" | "sharpen"));
++    let data = std::fs::read(input_path).unwrap();
++    assert_eq!(data.len(), (tw * th * 16) as usize);
++    assert!(data.chunks_exact(4).all(|s| f32::from_le_bytes(s.try_into().unwrap()).is_finite()));
++    let tex_format = DXGI_FORMAT_R32G32B32A32_FLOAT;
++    let res = D3D12_RESOURCE_DESC {
++        Dimension: D3D12_RESOURCE_DIMENSION_TEXTURE2D, Width: tw as u64, Height: th,
++        DepthOrArraySize: 1, MipLevels: 1, Format: tex_format,
++        SampleDesc: DXGI_SAMPLE_DESC { Count: 1, Quality: 0 }, ..Default::default()
++    };
++    let mut srv = D3D12_SHADER_RESOURCE_VIEW_DESC {
++        Format: tex_format, ViewDimension: D3D12_SRV_DIMENSION_TEXTURE2D,
++        Shader4ComponentMapping: D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING, ..Default::default()
++    };
++    srv.Anonymous.Texture2D = D3D12_TEX2D_SRV { MipLevels: 1, ..Default::default() };
++    let tex = runner::ViewTexture { res, srv, data, row_bytes: tw as usize * 16 };
++    let mut sgprs = [0u32; crate::gpu::recomp::KERNEL_SGPRS];
++    let mut mem = [0u32; 1024];
++    let table = 16usize;
++    let cb = 128usize;
++    sgprs[1] = (4 * table) as u32;
++    sgprs[IO_UMA_BASE_HI] = 4;
++    let constants = std::fs::read(value("PB_PRESENT_CONSTANTS")).unwrap();
++    assert_eq!(constants.len(), 24);
++    for (i, bytes) in constants.chunks_exact(4).enumerate() {
++        let word = u32::from_le_bytes(bytes.try_into().unwrap());
++        mem[cb + i] = word;
++        sgprs[120 + i] = word;
++    }
++    let format = desc::gfx10_format(tex_format).unwrap();
++    mem[table..table + 8].copy_from_slice(&desc::xcl_image_for_view(0, format, desc::ImageType::D2, tw, th, 1, 1));
++    // These offsets are verified from AMD's PAL pipeline document before launch.
++    let sampler_offset: i32 = value("PB_SAMPLER_OFFSET").parse().unwrap();
++    let cb_offset: i32 = value("PB_CBV_OFFSET").parse().unwrap();
++    let s = [2 | (2 << 3) | (2 << 6), 0xFFF << 12, (1 << 20) | (1 << 22) | (2 << 26), 0];
++    if sampler_offset >= 0 {
++        assert!((8..=48).contains(&sampler_offset));
++        let j = table + sampler_offset as usize;
++        mem[j..j + 4].copy_from_slice(&desc::xcl_sampler_words(&s, 0));
++    }
++    if cb_offset >= 0 {
++        assert!((8..=48).contains(&cb_offset));
++        let j = table + cb_offset as usize;
++        mem[j..j + 4].copy_from_slice(&desc::cbv_words((4u64 << 32) + (cb * 4) as u64, 32));
++    }
++    let ps = std::fs::read(value("PB_SCENE_PS")).unwrap();
++    super::validate::validate(&ps).unwrap();
++    let present_root = std::env::var_os("PB_MINI_NATIVE_ROOT").map(|p| std::fs::read(p).unwrap());
++    let vs = dxc::compile(r#"
++        struct Output { float4 p:SV_Position; float4 uv:TEXCOORD0; };
++        Output main(uint id:SV_VertexID) {
++            float2 pos = id == 0 ? float2(-1,-1) : id == 1 ? float2(-1,3) : float2(3,-1);
++            Output result;
++            result.p = float4(pos,0,1);
++            result.uv = float4(pos*float2(0.5,-0.5)+0.5,0,1);
++            return result;
++        }"#, "main", "vs_6_6", &[]).unwrap();
++    let clear = [-3.0; 4];
++    runner::disable_driver_shader_cache().unwrap();
++    let started = std::time::Instant::now();
++    let pixels = runner::draw_gs_views(&vs, None, &ps, &[], &[0.0; 6], 8, &[], &sgprs, &mem,
++        &[tex], &[desc::sampler_d3d12(&s, false)], (width,height), clear, Some(256), present_root.as_deref()).unwrap();
++    println!("scene_native_setup_submit_readback_ms={:.4}", started.elapsed().as_secs_f64()*1000.0);
++    assert_eq!(pixels.len(), (width*height) as usize);
++    assert!(!pixels.iter().any(|p| p[..3] == clear[..3]));
++    let mut file = std::io::BufWriter::new(std::fs::OpenOptions::new().write(true).create_new(true).open(value("PB_SCENE_IMAGE")).unwrap());
++    for pixel in pixels {
++        for ch in pixel { file.write_all(&ch.to_le_bytes()).unwrap(); }
++    }
++    file.flush().unwrap();
++    println!("display adapter={} size={}x{} kind={}",runner::adapter().unwrap(),width,height,kind);
++}
+diff --git a/crates/xcl/src/gpu/recomp/runner.rs b/crates/xcl/src/gpu/recomp/runner.rs
+index c6b62ef..d242292 100644
+--- a/crates/xcl/src/gpu/recomp/runner.rs
++++ b/crates/xcl/src/gpu/recomp/runner.rs
+@@ -881,7 +881,7 @@ pub fn draw_gs(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, None)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], (size, size), clear, None, None)
+ }
+ 
+ /// `draw_gs` of an indexed triangle list (`indices`).
+@@ -897,7 +897,7 @@ pub fn draw_gs_indexed(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], size, clear, None)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], (size, size), clear, None, None)
+ }
+ 
+ /// `draw` with textures and samplers in the directly indexed heaps (see `ViewTexture`).
+@@ -915,7 +915,7 @@ pub fn draw_views(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, size, clear, None)
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, (size, size), clear, None, None)
+ }
+ 
+ /// One packed resource with disjoint raw UAV views emulates small console heap windows.
+@@ -932,17 +932,35 @@ pub(crate) fn draw_heap_windows(
+     window_dwords: usize,
+     size: u32,
+     clear: [f32; 4],
++) -> Result<Vec<[f32; 4]>, String> {
++    draw_heap_windows_rect(vs, ps, layout, vertices, stride, sgprs, mem, window_dwords, (size, size), clear)
++}
++
++/// Rectangular offscreen variant used by the licensed open-scene test.
++#[cfg(test)]
++#[allow(clippy::too_many_arguments)]
++pub(crate) fn draw_heap_windows_rect(
++    vs: &[u8],
++    ps: &[u8],
++    layout: &[VertexElement],
++    vertices: &[f32],
++    stride: u32,
++    sgprs: &[u32],
++    mem: &[u32],
++    window_dwords: usize,
++    extent: (u32, u32),
++    clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+     if window_dwords == 0 || !window_dwords.is_multiple_of(64) || mem.is_empty() ||
+         !mem.len().is_multiple_of(window_dwords) || mem.len() / window_dwords > crate::gpu::uma::MAX_HEAP_WINDOWS
+     {
+         return Err("invalid packed draw heap windows".into());
+     }
+-    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, Some(window_dwords))
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], extent, clear, Some(window_dwords), None)
+ }
+ 
+ #[allow(clippy::too_many_arguments)]
+-fn draw_gs_views(
++pub(crate) fn draw_gs_views(
+     vs: &[u8],
+     gs: Option<&[u8]>,
+     ps: &[u8],
+@@ -954,15 +972,19 @@ fn draw_gs_views(
+     mem: &[u32],
+     textures: &[ViewTexture],
+     samplers: &[D3D12_SAMPLER_DESC],
+-    size: u32,
++    extent: (u32, u32),
+     clear: [f32; 4],
+     window_dwords: Option<usize>,
++    native_present_root: Option<&[u8]>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     let mut g = GPU.lock().unwrap();
+     let gpu = g.get_or_insert_with(init).as_mut().map_err(|x| x.clone())?;
+     unsafe {
+         let dev = &gpu.dev;
+-        let rs = root_signature(dev, true)?;
++        let rs: ID3D12RootSignature = match native_present_root {
++            Some(bytes) => dev.CreateRootSignature(0, bytes).map_err(e)?,
++            None => root_signature(dev, true)?,
++        };
+         let names: Vec<std::ffi::CString> = layout.iter().map(|l| std::ffi::CString::new(l.semantic).unwrap()).collect();
+         let elems: Vec<D3D12_INPUT_ELEMENT_DESC> = layout
+             .iter()
+@@ -999,8 +1021,8 @@ fn draw_gs_views(
+         if let Some(started) = timed {
+             println!("guard fixture native_create_ms={:.3}", started.elapsed().as_secs_f64() * 1000.0);
+         }
+-        let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, size as i32, size as i32] };
+-        let pixels = draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear, window_dwords)?;
++        let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, extent.0 as i32, extent.1 as i32] };
++        let pixels = draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, extent, clear, window_dwords, native_present_root.is_some())?;
+         #[cfg(test)]
+         if window_dwords.is_some() && std::env::var("XCL_READ_GUARD_TEST_PSO_BLOB").as_deref() == Ok("1") {
+             match pso.GetCachedBlob() {
+@@ -1129,7 +1151,7 @@ pub fn draw_on_multi(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, size, clear, None)
++    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, (size, size), clear, None, false)
+ }
+ 
+ /// `draw_on_multi`, the draws indexed when there are `indices` (one index buffer for all).
+@@ -1145,9 +1167,10 @@ fn draw_indexed_on(
+     mem: &[u32],
+     textures: &[ViewTexture],
+     samplers: &[D3D12_SAMPLER_DESC],
+-    size: u32,
++    (width, height): (u32, u32),
+     clear: [f32; 4],
+     window_dwords: Option<usize>,
++    native_present: bool,
+ ) -> Result<Vec<[f32; 4]>, String> {
+     unsafe {
+         let queue: ID3D12CommandQueue =
+@@ -1156,8 +1179,8 @@ fn draw_indexed_on(
+ 
+         let tex = D3D12_RESOURCE_DESC {
+             Dimension: D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+-            Width: size as u64,
+-            Height: size,
++            Width: width as u64,
++            Height: height,
+             DepthOrArraySize: 1,
+             MipLevels: 1,
+             Format: DXGI_FORMAT_R32G32B32A32_FLOAT,
+@@ -1224,8 +1247,8 @@ fn draw_indexed_on(
+         ]);
+         list.OMSetRenderTargets(1, Some(&rtv), false, None);
+         list.ClearRenderTargetView(rtv, &clear, None);
+-        list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: size as f32, Height: size as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
+-        list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: size as i32, bottom: size as i32 }]);
++        list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: width as f32, Height: height as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
++        list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: width as i32, bottom: height as i32 }]);
+         #[cfg(test)]
+         let root_windows = window_dwords.filter(|_| std::env::var("XCL_READ_GUARD_TEST_ROOT_WINDOWS").as_deref() == Ok("1"));
+         #[cfg(not(test))]
+@@ -1265,14 +1288,26 @@ fn draw_indexed_on(
+             bind_views(dev, &list, textures, samplers)?
+         };
+         list.SetGraphicsRootSignature(rs);
+-        list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress());
+-        list.SetGraphicsRootUnorderedAccessView(1, res_buf.GetGPUVirtualAddress());
+-        list.SetGraphicsRootUnorderedAccessView(2, mem_buf.GetGPUVirtualAddress());
+-        #[cfg(test)]
+-        if let Some(words) = root_windows {
+-            for window in 1..mem.len() / words {
+-                let offset = (window * words * std::mem::size_of::<u32>()) as u64;
+-                list.SetGraphicsRootUnorderedAccessView(2 + window as u32, mem_buf.GetGPUVirtualAddress() + offset);
++        if native_present {
++            if draws.len() != 1 || draws[0].sgprs.len() < 126 || textures.len() != 1 {
++                return Err("MiniEngine PresentRS expects one input texture and six display constants".into());
++            }
++            let views: ID3D12DescriptorHeap = _bound.first().ok_or("missing PresentRS texture heap")?.cast().map_err(e)?;
++            let inc = dev.GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) as usize;
++            let base = views.GetCPUDescriptorHandleForHeapStart().ptr;
++            dev.CreateShaderResourceView(None::<&ID3D12Resource>, Some(&textures[0].srv), D3D12_CPU_DESCRIPTOR_HANDLE { ptr: base + inc });
++            list.SetGraphicsRootDescriptorTable(0, views.GetGPUDescriptorHandleForHeapStart());
++            list.SetGraphicsRoot32BitConstants(1, 6, draws[0].sgprs[120..126].as_ptr() as _, 0);
++        } else {
++            list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress());
++            list.SetGraphicsRootUnorderedAccessView(1, res_buf.GetGPUVirtualAddress());
++            list.SetGraphicsRootUnorderedAccessView(2, mem_buf.GetGPUVirtualAddress());
++            #[cfg(test)]
++            if let Some(words) = root_windows {
++                for window in 1..mem.len() / words {
++                    let offset = (window * words * std::mem::size_of::<u32>()) as u64;
++                    list.SetGraphicsRootUnorderedAccessView(2 + window as u32, mem_buf.GetGPUVirtualAddress() + offset);
++                }
+             }
+         }
+         list.IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+@@ -1311,7 +1346,9 @@ fn draw_indexed_on(
+             None
+         };
+         for (k, d) in draws.iter().enumerate() {
+-            list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress() + (k * KERNEL_SGPRS * 4) as u64);
++            if !native_present {
++                list.SetGraphicsRootUnorderedAccessView(0, io_buf.GetGPUVirtualAddress() + (k * KERNEL_SGPRS * 4) as u64);
++            }
+             let [left, top, right, bottom] = d.scissor;
+             list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left, top, right, bottom }]);
+             if indices.is_empty() {
+@@ -1356,14 +1393,14 @@ fn draw_indexed_on(
+             out.Unmap(0, Some(&D3D12_RANGE { Begin: 0, End: 0 }));
+             let ticks = ticks.filter(|&delta| delta != 0 && frequency != 0).ok_or("invalid draw timestamps")?;
+             let ms_per_draw = ticks as f64 * 1000.0 / (frequency as f64 * f64::from(count));
+-            println!("guard runtime size={size} draws={count} ticks={ticks} frequency_hz={frequency} gpu_ms_per_draw={ms_per_draw:.6}");
++            println!("guard runtime size={width} height={height} draws={count} ticks={ticks} frequency_hz={frequency} gpu_ms_per_draw={ms_per_draw:.6}");
+         }
+         let mut p = std::ptr::null_mut();
+         readback.Map(0, None, Some(&mut p)).map_err(e)?;
+         let pitch = layout_fp.Footprint.RowPitch as usize;
+-        let mut px = Vec::with_capacity((size * size) as usize);
+-        for y in 0..size as usize {
+-            for x in 0..size as usize {
++        let mut px = Vec::with_capacity((width * height) as usize);
++        for y in 0..height as usize {
++            for x in 0..width as usize {
+                 let q = (p as *const u8).add(y * pitch + x * 16) as *const f32;
+                 px.push([*q, *q.add(1), *q.add(2), *q.add(3)]);
+             }

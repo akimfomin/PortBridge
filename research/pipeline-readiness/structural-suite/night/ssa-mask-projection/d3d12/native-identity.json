@@ -1,0 +1,39 @@
+{
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "test": "gpu::dxil::aperture_tests::aperture_open_pixel_pso",
+  "blocks": 4,
+  "tools": {
+    "guard": "40c5c35431ae82c6bb16662055680923dc3005e1a857472d304fcec6ffffd245",
+    "tests": "31b29771836f257fc77f2203a5bcbc4e40ee6f5ddad3ec31667f59547066e1b9",
+    "dxcompiler": "0689e2fee0a1c9df8662a59680469f24e2a3ad7ce6bbbcc9284f7a83172bfc59",
+    "dxil_validator": "64be2368211d257a038a7d4ea6bb3e24c878eb8d588c7b8414fccf759b69c2ac"
+  },
+  "job_cap_mib": 512,
+  "manifest_sha256": "dd8116cf89e857c3720fc7c358e9ececa13c169b77c8c27a0400b8b3c374c103",
+  "cases": [
+    {
+      "id": "nerf71",
+      "varyings": 0,
+      "arms": {
+        "whole": "f6ce46bbcc182665aa803ce9464d7c12425a92793c12db17c663283efd45b61e",
+        "project": "acc2807d1fdefccaf752baf1d434db71b30b78bf41cbdf855db2b94bdf82921b"
+      }
+    },
+    {
+      "id": "nerf73",
+      "varyings": 0,
+      "arms": {
+        "whole": "1b25f995e78ca6af29cbc764b12c09e25bb12f738fc7ac47624af41c7eff3b2a",
+        "project": "141fc53f80c9b95e322cb1cefcd7c53efb517caa7b6bdfe6756799e8c7c34eb7"
+      }
+    },
+    {
+      "id": "ray",
+      "varyings": 0,
+      "arms": {
+        "whole": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a",
+        "project": "28b9ac69e6d8e7af6bc6438d1e152a2109aeaf3ee98edd19317b17d1cf68f1b9"
+      }
+    }
+  ]
+}

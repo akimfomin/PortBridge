@@ -1,0 +1,272 @@
+{
+  "source_tree": "e1d84b7d9153f86a97d2ec5d209d196046fc0bea-plus-ssa",
+  "modes": [
+    "whole",
+    "project"
+  ],
+  "tool_hashes": {
+    "observer": "051a3016325156b3f1a28b7d2723554b8f05f60426025631ff367a325cbbd7f8",
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "dxv": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3"
+  },
+  "input_manifests": [
+    {
+      "file": "open-pixel.json",
+      "sha256": "d46bf1209cf8652b6f81dc2c1618b0a0e8c287692893a06c21457072de3f5e36",
+      "sources": {
+        "miniengine": {
+          "repo": "microsoft/DirectX-Graphics-Samples",
+          "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+          "license": "MIT"
+        },
+        "naga": {
+          "repo": "gfx-rs/wgpu",
+          "commit": "c76dea031c688ecef0050dbf60506fff128fb23f",
+          "license": "MIT OR Apache-2.0"
+        }
+      }
+    },
+    {
+      "file": "khronos-fragment-prep.json",
+      "sha256": "2060270d1251334fdea31bf6abdfe725799598ffe63c62d1d47bcb086839a3b3",
+      "sources": {
+        "repo": "KhronosGroup/Vulkan-Samples",
+        "commit": "979aefaa5f2f4bd30efe035ca5a39444cc24ab9f",
+        "license": "Apache-2.0"
+      }
+    },
+    {
+      "file": "raylib-pixels.json",
+      "sha256": "f1ecc43a3fb7fef7e04f6c7f79793a4449c077ad34e37a9dd5db70d8fd7e7445",
+      "sources": {
+        "repo": "raysan5/raylib",
+        "commit": "7aeef5775435ed9f57890bf3c1b53279f6b0866a",
+        "licenses": {
+          "raymarching": "MIT, Inigo Quilez",
+          "repository": "Zlib"
+        }
+      }
+    },
+    {
+      "file": "miniengine-display.json",
+      "sha256": "0e84b32140b4db820466190dcc98e47e026a63b83ace377556015e2e88eb3f66",
+      "sources": {
+        "repo": "microsoft/DirectX-Graphics-Samples",
+        "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+        "license": "MIT"
+      }
+    }
+  ],
+  "rows": [
+    {
+      "group": "miniengine-display",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "entry": "main",
+      "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+      "id": 0,
+      "rdna": {
+        "bytes": 3276,
+        "sha256": "eed563ed07ad92ce2e709ecd2abb997ccd93fbd5ad9698a68fdbe39ff430cd98",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "whole": {
+          "dxil_bytes": 54628,
+          "dxil_sha256": "87182a787425ba05da6280facbf17e532c7099cc7d1a7909bc7572b6f9f7402e",
+          "observer_wall_ms": 40.7363,
+          "ballots": 193,
+          "quad_reads": 192,
+          "wave_reads": 0,
+          "blocks": 112,
+          "branches": 48,
+          "phis": 150,
+          "instructions": 8304
+        },
+        "project": {
+          "dxil_bytes": 51300,
+          "dxil_sha256": "2cfe436577438bd95cb4263166639d4dc23ef0c9260284c31d3c597bd28cf52b",
+          "observer_wall_ms": 39.2204,
+          "ballots": 193,
+          "quad_reads": 192,
+          "wave_reads": 0,
+          "blocks": 112,
+          "branches": 48,
+          "phis": 150,
+          "instructions": 7619
+        }
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "47982c1ed360d099f0564dae0d23502e5b00fa4099e21ca9f8ce7a97c18eb0b1",
+      "id": 1,
+      "rdna": {
+        "bytes": 1060,
+        "sha256": "135d6311f4a340e237ea9a796963237547efe4d97c16d539ae829d0ab6cedba1",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "project": {
+          "dxil_bytes": 15200,
+          "dxil_sha256": "6ec7d309a547681a99eae9dd6df4c58c2de7d5ca55869324c878bb43f89cef2c",
+          "observer_wall_ms": 25.8529,
+          "ballots": 13,
+          "quad_reads": 12,
+          "wave_reads": 0,
+          "blocks": 112,
+          "branches": 48,
+          "phis": 150,
+          "instructions": 1646
+        },
+        "whole": {
+          "dxil_bytes": 15856,
+          "dxil_sha256": "c2ff8d5f6cdc090b5edfccdda899b45ecb5c2c99d87a680b9f320d4600618bf5",
+          "observer_wall_ms": 25.2631,
+          "ballots": 13,
+          "quad_reads": 12,
+          "wave_reads": 0,
+          "blocks": 112,
+          "branches": 48,
+          "phis": 150,
+          "instructions": 1779
+        }
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsampleGammaPS.hlsl",
+      "entry": "main",
+      "source_sha256": "4ab7d1e3610bd028ab81e8ab892770188df056abca1e1afb8ecb6dbd131d4d5a",
+      "id": 2,
+      "rdna": {
+        "bytes": 988,
+        "sha256": "1b7fa2c4e9f5ffae041811310f63a79d880a84393cca9d032c89e3964dd5ca8d",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "whole": {
+          "dxil_bytes": 18188,
+          "dxil_sha256": "af4a9050ca436bd0bf320c5949f0426e099ae7c46c0cfcfb47020ba89078f580",
+          "observer_wall_ms": 26.7185,
+          "ballots": 61,
+          "quad_reads": 60,
+          "wave_reads": 0,
+          "blocks": 21,
+          "branches": 5,
+          "phis": 21,
+          "instructions": 2574
+        },
+        "project": {
+          "dxil_bytes": 17308,
+          "dxil_sha256": "1c91255d0bab45a27c682f8999fcf01f894a813e26b22a9db4946189d7c0afd6",
+          "observer_wall_ms": 26.2328,
+          "ballots": 61,
+          "quad_reads": 60,
+          "wave_reads": 0,
+          "blocks": 21,
+          "branches": 5,
+          "phis": 21,
+          "instructions": 2395
+        }
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "source": "MiniEngine/Core/Shaders/PresentSDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "497933beecc12a137651e9ea691234fd343decdc203f16a47b7457f515e22922",
+      "id": 3,
+      "rdna": {
+        "bytes": 196,
+        "sha256": "20b5f3f6ad750c4d03b8c2aeb4529a0f10b42710ab68bcfd15f7f756edc219ab",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "project": {
+          "dxil_bytes": 6440,
+          "dxil_sha256": "0cf1d35926c1069c6f0d257acb832545ab32551019ea49243795fe05cfac9a54",
+          "observer_wall_ms": 21.3252,
+          "ballots": 13,
+          "quad_reads": 12,
+          "wave_reads": 0,
+          "blocks": 7,
+          "branches": 3,
+          "phis": 9,
+          "instructions": 462
+        },
+        "whole": {
+          "dxil_bytes": 7040,
+          "dxil_sha256": "23a03d14ee7df0dc7255e2db5feeb11b3ca8677f4a5b0e53e1ef6085a9d2d166",
+          "observer_wall_ms": 21.6227,
+          "ballots": 13,
+          "quad_reads": 12,
+          "wave_reads": 0,
+          "blocks": 7,
+          "branches": 3,
+          "phis": 9,
+          "instructions": 595
+        }
+      }
+    },
+    {
+      "group": "miniengine-display",
+      "source": "MiniEngine/Core/Shaders/BilinearUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "4659ef2d11e9b8487021dbae855861bb6d1a3e4a84f56872900c137ffe823e13",
+      "id": 4,
+      "rdna": {
+        "bytes": 220,
+        "sha256": "91183a8c3bc0d663ed90e068e9879abb81a3b93c5de6a07894baf6f92e479d90",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "whole": {
+          "dxil_bytes": 6360,
+          "dxil_sha256": "5e91f6bf533adaf59844ed77eccc62109e962deb553a5cff73ea2c66e4fb476b",
+          "observer_wall_ms": 20.5029,
+          "ballots": 13,
+          "quad_reads": 12,
+          "wave_reads": 0,
+          "blocks": 8,
+          "branches": 1,
+          "phis": 4,
+          "instructions": 575
+        },
+        "project": {
+          "dxil_bytes": 5764,
+          "dxil_sha256": "74bced34c665902292c8d6a8202db57156c5b3d21cee6db823132c965742303d",
+          "observer_wall_ms": 21.1907,
+          "ballots": 13,
+          "quad_reads": 12,
+          "wave_reads": 0,
+          "blocks": 8,
+          "branches": 1,
+          "phis": 4,
+          "instructions": 442
+        }
+      }
+    }
+  ]
+}

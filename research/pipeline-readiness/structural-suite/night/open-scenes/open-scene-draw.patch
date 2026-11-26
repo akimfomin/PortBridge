@@ -1,0 +1,200 @@
+diff --git a/crates/xcl/src/gpu/dxil/aperture_tests.rs b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+index 74ac0f4..49422d3 100644
+--- a/crates/xcl/src/gpu/dxil/aperture_tests.rs
++++ b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+@@ -117,3 +117,52 @@ fn aperture_open_pixel_pso() {
+     println!("aperture sample adapter={} native_ms={native_ms:.6} opaque_cache_bytes={cache_bytes} dxil_bytes={}",
+         runner::adapter().unwrap(), ps.len());
+ }
++
++// Corpus receipt: render an external DXV-validated pixel shader using registered
++// PAL scalar words and two interpolated texture coordinates on a full triangle.
++#[test]
++fn open_procedural_pixel_draw() {
++    use std::io::Write;
++    let Some(sgpr_path) = std::env::var_os("PB_SCENE_SGPRS") else {
++        println!("SKIPPED: open scene fixture absent");
++        return;
++    };
++    let ps_path = std::env::var_os("PB_SCENE_PS").expect("PB_SCENE_PS");
++    let image_path = std::env::var_os("PB_SCENE_IMAGE").expect("PB_SCENE_IMAGE");
++    let size: u32 = std::env::var("PB_SCENE_SIZE").expect("PB_SCENE_SIZE").parse().unwrap();
++    let height: u32 = std::env::var("PB_SCENE_HEIGHT").unwrap_or_else(|_| size.to_string()).parse().unwrap();
++    assert!((4..=1280).contains(&size) && (4..=720).contains(&height));
++    let scalar_file = std::fs::read(sgpr_path).unwrap();
++    assert_eq!(scalar_file.len(), crate::gpu::recomp::KERNEL_SGPRS * 4);
++    let sgprs: Vec<u32> = scalar_file.chunks_exact(4)
++        .map(|value| u32::from_le_bytes(value.try_into().unwrap())).collect();
++    assert_eq!(sgprs[IO_UMA_BASE_HI], 4);
++    let ps = std::fs::read(ps_path).unwrap();
++    super::validate::validate(&ps).expect("pixel shader must validate");
++    let vs = dxc::compile(r#"
++        struct V { float4 p: SV_Position; float4 uv: TEXCOORD0; };
++        V main(float2 pos: POSITION) {
++            V v;
++            v.p = float4(pos, 0, 1);
++            v.uv = float4(pos*float2(0.5,-0.5)+0.5, 0, 1);
++            return v;
++        }"#, "main", "vs_6_6", &[]).unwrap();
++    let verts = [-1.0, -1.0, -1.0, 3.0, 3.0, -1.0];
++    let layout = [runner::VertexElement { semantic: "POSITION", index: 0, format: DXGI_FORMAT_R32G32_FLOAT, offset: 0 }];
++    let clear = [-3.0; 4];
++    runner::disable_driver_shader_cache().expect("cache disable");
++    let started = std::time::Instant::now();
++    let pixels = runner::draw_heap_windows_rect(&vs, &ps, &layout, &verts, 8, &sgprs, &[0; 256], 64, (size, height), clear).unwrap();
++    println!("scene_native_setup_submit_readback_ms={:.4}", started.elapsed().as_secs_f64() * 1000.0);
++    assert_eq!(pixels.len(), (size * height) as usize);
++    assert!(!pixels.contains(&clear), "incomplete coverage");
++    let file = std::fs::OpenOptions::new().write(true).create_new(true).open(image_path).unwrap();
++    let mut out = std::io::BufWriter::new(file);
++    for pixel in &pixels {
++        for channel in pixel {
++            out.write_all(&channel.to_le_bytes()).unwrap();
++        }
++    }
++    out.flush().unwrap();
++    println!("scene adapter={} size={} full_target_pixels={}", runner::adapter().unwrap(), size, pixels.len());
++}
+diff --git a/crates/xcl/src/gpu/recomp/runner.rs b/crates/xcl/src/gpu/recomp/runner.rs
+index c6b62ef..c5f47ed 100644
+--- a/crates/xcl/src/gpu/recomp/runner.rs
++++ b/crates/xcl/src/gpu/recomp/runner.rs
+@@ -881,7 +881,7 @@ pub fn draw_gs(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, None)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], (size, size), clear, None)
+ }
+ 
+ /// `draw_gs` of an indexed triangle list (`indices`).
+@@ -897,7 +897,7 @@ pub fn draw_gs_indexed(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], size, clear, None)
++    draw_gs_views(vs, gs, ps, layout, vertices, stride, indices, &[], &[], &[], &[], (size, size), clear, None)
+ }
+ 
+ /// `draw` with textures and samplers in the directly indexed heaps (see `ViewTexture`).
+@@ -915,7 +915,7 @@ pub fn draw_views(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, size, clear, None)
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, textures, samplers, (size, size), clear, None)
+ }
+ 
+ /// One packed resource with disjoint raw UAV views emulates small console heap windows.
+@@ -932,13 +932,31 @@ pub(crate) fn draw_heap_windows(
+     window_dwords: usize,
+     size: u32,
+     clear: [f32; 4],
++) -> Result<Vec<[f32; 4]>, String> {
++    draw_heap_windows_rect(vs, ps, layout, vertices, stride, sgprs, mem, window_dwords, (size, size), clear)
++}
++
++/// Rectangular offscreen variant used by the licensed open-scene test.
++#[cfg(test)]
++#[allow(clippy::too_many_arguments)]
++pub(crate) fn draw_heap_windows_rect(
++    vs: &[u8],
++    ps: &[u8],
++    layout: &[VertexElement],
++    vertices: &[f32],
++    stride: u32,
++    sgprs: &[u32],
++    mem: &[u32],
++    window_dwords: usize,
++    extent: (u32, u32),
++    clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+     if window_dwords == 0 || !window_dwords.is_multiple_of(64) || mem.is_empty() ||
+         !mem.len().is_multiple_of(window_dwords) || mem.len() / window_dwords > crate::gpu::uma::MAX_HEAP_WINDOWS
+     {
+         return Err("invalid packed draw heap windows".into());
+     }
+-    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], size, clear, Some(window_dwords))
++    draw_gs_views(vs, None, ps, layout, vertices, stride, &[], sgprs, mem, &[], &[], extent, clear, Some(window_dwords))
+ }
+ 
+ #[allow(clippy::too_many_arguments)]
+@@ -954,7 +972,7 @@ fn draw_gs_views(
+     mem: &[u32],
+     textures: &[ViewTexture],
+     samplers: &[D3D12_SAMPLER_DESC],
+-    size: u32,
++    extent: (u32, u32),
+     clear: [f32; 4],
+     window_dwords: Option<usize>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+@@ -999,8 +1017,8 @@ fn draw_gs_views(
+         if let Some(started) = timed {
+             println!("guard fixture native_create_ms={:.3}", started.elapsed().as_secs_f64() * 1000.0);
+         }
+-        let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, size as i32, size as i32] };
+-        let pixels = draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, size, clear, window_dwords)?;
++        let draw = Draw { sgprs: sgprs.to_vec(), scissor: [0, 0, extent.0 as i32, extent.1 as i32] };
++        let pixels = draw_indexed_on(dev, &pso, &rs, vertices, stride, indices, &[draw], mem, textures, samplers, extent, clear, window_dwords)?;
+         #[cfg(test)]
+         if window_dwords.is_some() && std::env::var("XCL_READ_GUARD_TEST_PSO_BLOB").as_deref() == Ok("1") {
+             match pso.GetCachedBlob() {
+@@ -1129,7 +1147,7 @@ pub fn draw_on_multi(
+     size: u32,
+     clear: [f32; 4],
+ ) -> Result<Vec<[f32; 4]>, String> {
+-    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, size, clear, None)
++    draw_indexed_on(dev, pso, rs, vertices, stride, &[], draws, mem, textures, samplers, (size, size), clear, None)
+ }
+ 
+ /// `draw_on_multi`, the draws indexed when there are `indices` (one index buffer for all).
+@@ -1145,7 +1163,7 @@ fn draw_indexed_on(
+     mem: &[u32],
+     textures: &[ViewTexture],
+     samplers: &[D3D12_SAMPLER_DESC],
+-    size: u32,
++    (width, height): (u32, u32),
+     clear: [f32; 4],
+     window_dwords: Option<usize>,
+ ) -> Result<Vec<[f32; 4]>, String> {
+@@ -1156,8 +1174,8 @@ fn draw_indexed_on(
+ 
+         let tex = D3D12_RESOURCE_DESC {
+             Dimension: D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+-            Width: size as u64,
+-            Height: size,
++            Width: width as u64,
++            Height: height,
+             DepthOrArraySize: 1,
+             MipLevels: 1,
+             Format: DXGI_FORMAT_R32G32B32A32_FLOAT,
+@@ -1224,8 +1242,8 @@ fn draw_indexed_on(
+         ]);
+         list.OMSetRenderTargets(1, Some(&rtv), false, None);
+         list.ClearRenderTargetView(rtv, &clear, None);
+-        list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: size as f32, Height: size as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
+-        list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: size as i32, bottom: size as i32 }]);
++        list.RSSetViewports(&[D3D12_VIEWPORT { TopLeftX: 0.0, TopLeftY: 0.0, Width: width as f32, Height: height as f32, MinDepth: 0.0, MaxDepth: 1.0 }]);
++        list.RSSetScissorRects(&[windows::Win32::Foundation::RECT { left: 0, top: 0, right: width as i32, bottom: height as i32 }]);
+         #[cfg(test)]
+         let root_windows = window_dwords.filter(|_| std::env::var("XCL_READ_GUARD_TEST_ROOT_WINDOWS").as_deref() == Ok("1"));
+         #[cfg(not(test))]
+@@ -1356,14 +1374,14 @@ fn draw_indexed_on(
+             out.Unmap(0, Some(&D3D12_RANGE { Begin: 0, End: 0 }));
+             let ticks = ticks.filter(|&delta| delta != 0 && frequency != 0).ok_or("invalid draw timestamps")?;
+             let ms_per_draw = ticks as f64 * 1000.0 / (frequency as f64 * f64::from(count));
+-            println!("guard runtime size={size} draws={count} ticks={ticks} frequency_hz={frequency} gpu_ms_per_draw={ms_per_draw:.6}");
++            println!("guard runtime size={width} height={height} draws={count} ticks={ticks} frequency_hz={frequency} gpu_ms_per_draw={ms_per_draw:.6}");
+         }
+         let mut p = std::ptr::null_mut();
+         readback.Map(0, None, Some(&mut p)).map_err(e)?;
+         let pitch = layout_fp.Footprint.RowPitch as usize;
+-        let mut px = Vec::with_capacity((size * size) as usize);
+-        for y in 0..size as usize {
+-            for x in 0..size as usize {
++        let mut px = Vec::with_capacity((width * height) as usize);
++        for y in 0..height as usize {
++            for x in 0..width as usize {
+                 let q = (p as *const u8).add(y * pitch + x * 16) as *const f32;
+                 px.push([*q, *q.add(1), *q.add(2), *q.add(3)]);
+             }

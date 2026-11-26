@@ -1,0 +1,31 @@
+diff --git a/research/pipeline-readiness/guarded-test.cpp b/research/pipeline-readiness/guarded-test.cpp
+index 2fc3a6d..d209385 100644
+--- a/research/pipeline-readiness/guarded-test.cpp
++++ b/research/pipeline-readiness/guarded-test.cpp
+@@ -56,12 +56,14 @@ int win_error(const char* step) {
+ }
+ 
+ int wmain(int argc, wchar_t** argv) {
+-    if (argc != 4 || std::wstring_view(argv[1]).find(L'"') != std::wstring_view::npos ||
++    const bool small_job = argc == 5 && std::wstring_view(argv[4]) == L"--512-mib";
++    if ((argc != 4 && !small_job) || std::wstring_view(argv[1]).find(L'"') != std::wstring_view::npos ||
+         std::wstring_view(argv[3]).find_first_not_of(L"abcdefghijklmnopqrstuvwxyz_0123456789:") != std::wstring_view::npos) {
+-        std::fprintf(stderr, "guarded-test EXE NEW_LOG TEST_NAME\n");
++        std::fprintf(stderr, "guarded-test EXE NEW_LOG TEST_NAME [--512-mib]\n");
+         return 2;
+     }
+-    if (!headroom(8 * gib, 6 * gib)) {
++    const SIZE_T job_cap = small_job ? gib / 2 : 2 * gib;
++    if (!headroom(6 * gib + job_cap, 4 * gib + job_cap)) {
+         std::fprintf(stderr, "Insufficient system commit or RAM headroom\n");
+         return 2;
+     }
+@@ -76,7 +78,7 @@ int wmain(int argc, wchar_t** argv) {
+     JOBOBJECT_EXTENDED_LIMIT_INFORMATION limits{};
+     limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE |
+         JOB_OBJECT_LIMIT_PROCESS_MEMORY | JOB_OBJECT_LIMIT_JOB_MEMORY;
+-    limits.ProcessMemoryLimit = limits.JobMemoryLimit = 2 * gib;
++    limits.ProcessMemoryLimit = limits.JobMemoryLimit = job_cap;
+     if (!SetInformationJobObject(job.value, JobObjectExtendedLimitInformation, &limits, sizeof(limits)))
+         return win_error("SetInformationJobObject");
+ 

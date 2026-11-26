@@ -1,0 +1,57 @@
+{
+  "seed": 20261126,
+  "scope": "defined active contributors within one dynamic wave operation",
+  "exhaustive": {
+    "quad_states": 83521,
+    "states_with_different_contributors_q": 83280
+  },
+  "individual_lane_bit_basis": 1008,
+  "waves": [
+    {
+      "host_width": 4,
+      "calls": 2048,
+      "defined_observers": 4632,
+      "undefined_observers": 3560
+    },
+    {
+      "host_width": 8,
+      "calls": 2048,
+      "defined_observers": 9184,
+      "undefined_observers": 7200
+    },
+    {
+      "host_width": 16,
+      "calls": 2048,
+      "defined_observers": 18207,
+      "undefined_observers": 14561
+    },
+    {
+      "host_width": 32,
+      "calls": 2048,
+      "defined_observers": 36443,
+      "undefined_observers": 29093
+    },
+    {
+      "host_width": 64,
+      "calls": 2048,
+      "defined_observers": 72859,
+      "undefined_observers": 58213
+    },
+    {
+      "host_width": 128,
+      "calls": 2048,
+      "defined_observers": 145572,
+      "undefined_observers": 116572
+    }
+  ],
+  "negative_controls": [
+    "host128_low_alias",
+    "host128_high_alias",
+    "representative_only",
+    "unmasked_q",
+    "inactive_quad",
+    "default_helper_consumer",
+    "included_helper_consumer",
+    "undefined_live_input"
+  ]
+}

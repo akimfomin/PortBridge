@@ -1,0 +1,26 @@
+{
+  "exhaustive_nibble_checks": 524288,
+  "random_wave_half_checks": 131072,
+  "participation_lane_checks": 16384,
+  "direct_local_counterexamples_in_broadcast_model": 256,
+  "loop_exit_control": {
+    "32": {
+      "whole_popcount": 32,
+      "single_lane_popcount": 1
+    },
+    "64": {
+      "whole_popcount": 64,
+      "single_lane_popcount": 1
+    }
+  },
+  "wave32_partial_register_control": {
+    "s21_after_odd_lane_carries": "0xaaaaaaaa",
+    "s20_after_separate_zero_carry": "0x0",
+    "expected_whole_s21_popcount": 16,
+    "incorrect_sparse_projection_popcounts": [
+      0,
+      1
+    ]
+  },
+  "same_API_results": "The projection is identical for every possible word returned by each of the four original ballots. The API does not promise any particular helper vote."
+}

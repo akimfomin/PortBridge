@@ -1,0 +1,258 @@
+[
+  {
+    "arm": "project",
+    "view": "primary",
+    "block": 0,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=220221440 peak_job_bytes=221679616",
+    "guard_exit": 0,
+    "log": "00-primary-project-1795651160254935300.log",
+    "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+    "guest_sgpr_sha256": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3",
+    "controls": {
+      "viewEye": [
+        2.5,
+        2.5,
+        3.0
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 1.0,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+    "native_create_ms": 823.121,
+    "gpu_ms_per_draw": 6.2304,
+    "setup_submit_readback_ms": 918.4585
+  },
+  {
+    "arm": "whole",
+    "view": "primary",
+    "block": 0,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=231571456 peak_job_bytes=233029632",
+    "guard_exit": 0,
+    "log": "00-primary-whole-1795651158945422200.log",
+    "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "guest_sgpr_sha256": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3",
+    "controls": {
+      "viewEye": [
+        2.5,
+        2.5,
+        3.0
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 1.0,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+    "native_create_ms": 881.205,
+    "gpu_ms_per_draw": 7.213312,
+    "setup_submit_readback_ms": 984.0892
+  },
+  {
+    "arm": "project",
+    "view": "secondary",
+    "block": 0,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=218980352 peak_job_bytes=220434432",
+    "guard_exit": 0,
+    "log": "00-secondary-project-1795651161512485700.log",
+    "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+    "guest_sgpr_sha256": "919570b79902408a67e110f46e2959f917a80fbac8562082c1f093e5e492e96c",
+    "controls": {
+      "viewEye": [
+        3.0,
+        1.8,
+        3.5
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 2.75,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+    "native_create_ms": 789.484,
+    "gpu_ms_per_draw": 6.546304,
+    "setup_submit_readback_ms": 888.8049
+  },
+  {
+    "arm": "whole",
+    "view": "secondary",
+    "block": 0,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=230203392 peak_job_bytes=231661568",
+    "guard_exit": 0,
+    "log": "00-secondary-whole-1795651162722860300.log",
+    "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "guest_sgpr_sha256": "919570b79902408a67e110f46e2959f917a80fbac8562082c1f093e5e492e96c",
+    "controls": {
+      "viewEye": [
+        3.0,
+        1.8,
+        3.5
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 2.75,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+    "native_create_ms": 880.441,
+    "gpu_ms_per_draw": 7.730304,
+    "setup_submit_readback_ms": 989.5438
+  },
+  {
+    "arm": "project",
+    "view": "primary",
+    "block": 1,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=219488256 peak_job_bytes=220950528",
+    "guard_exit": 0,
+    "log": "01-primary-project-1795651166570575500.log",
+    "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+    "guest_sgpr_sha256": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3",
+    "controls": {
+      "viewEye": [
+        2.5,
+        2.5,
+        3.0
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 1.0,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+    "native_create_ms": 780.151,
+    "gpu_ms_per_draw": 6.094464,
+    "setup_submit_readback_ms": 873.5663
+  },
+  {
+    "arm": "whole",
+    "view": "primary",
+    "block": 1,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=232927232 peak_job_bytes=234389504",
+    "guard_exit": 0,
+    "log": "01-primary-whole-1795651679392880600.log",
+    "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "guest_sgpr_sha256": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3",
+    "controls": {
+      "viewEye": [
+        2.5,
+        2.5,
+        3.0
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 1.0,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+    "native_create_ms": 842.522,
+    "gpu_ms_per_draw": 7.239168,
+    "setup_submit_readback_ms": 944.6861
+  },
+  {
+    "arm": "project",
+    "view": "secondary",
+    "block": 1,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=220901376 peak_job_bytes=222355456",
+    "guard_exit": 0,
+    "log": "01-secondary-project-1795651165369199500.log",
+    "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+    "guest_sgpr_sha256": "919570b79902408a67e110f46e2959f917a80fbac8562082c1f093e5e492e96c",
+    "controls": {
+      "viewEye": [
+        3.0,
+        1.8,
+        3.5
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 2.75,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+    "native_create_ms": 775.193,
+    "gpu_ms_per_draw": 6.389248,
+    "setup_submit_readback_ms": 870.4398
+  },
+  {
+    "arm": "whole",
+    "view": "secondary",
+    "block": 1,
+    "complete": true,
+    "process": "exit=0 peak_process_bytes=230522880 peak_job_bytes=231976960",
+    "guard_exit": 0,
+    "log": "01-secondary-whole-1795651164036744800.log",
+    "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "guest_sgpr_sha256": "919570b79902408a67e110f46e2959f917a80fbac8562082c1f093e5e492e96c",
+    "controls": {
+      "viewEye": [
+        3.0,
+        1.8,
+        3.5
+      ],
+      "viewCenter": [
+        0.0,
+        0.0,
+        0.7
+      ],
+      "runTime": 2.75,
+      "resolution": [
+        800.0,
+        450.0
+      ]
+    },
+    "raw_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+    "native_create_ms": 893.843,
+    "gpu_ms_per_draw": 7.820288,
+    "setup_submit_readback_ms": 1004.371
+  }
+]

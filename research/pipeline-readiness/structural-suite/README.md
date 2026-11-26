@@ -1,5 +1,9 @@
 # XCL structural compiler study
 
+The follow-up found a Wave32 counterexample to the original lane-local eligibility rule. A narrower consumer-side projection preserves the original wave ballots. With three pending XCL optimizations enabled, it reduced draw time by 19.2–19.6% in two 800 × 450 raylib views on an RTX 4070 Ti SUPER. A Microsoft display shader kept its output but showed mixed timings. [Wave32 finding and fix](night/wave32-carry/README.md) · [Projection patch, proof, tests and limitations](night/ssa-mask-projection/README.md)
+
+PortBridge's preflight search for `ballot waveEXEC VCC` surfaced a victory-fork report of 100–130 ms draws in a wave-exit loop and a Belobug fix for scalar VCC bits outside EXEC. Follow-up on VIctory's public fixtures found a divergent loop whose scalar output must count 32 or 64 retired lanes. The projection regression now covers that loop. The teams' original findings and earlier mask-liveness analysis are credited in the source discussions. [victory-fork report](https://github.com/fxceless/victory-fork/pull/196) · [Belobug fix](https://github.com/Belobug/VIctory-Belobug-AMD/pull/83) · [VIctory fixture](https://github.com/Marvisak/VIctory/issues/1498) · [Prior liveness work](https://github.com/Marvisak/VIctory/issues/1482)
+
 UMA Aperture Specialization changed 115 of 194 open pixel entry points under each tested four-window layout. Read Guard Fusion and Root Read Switch Fusion contributed zero additional byte changes in the eight root-window combinations. On two heavy shader entries the three passes together produced no consistent cold compilation gain. A separate reduction in wave mask work cut native pipeline creation by 2.65–2.78× on the same shader inputs. [Lane-local mask evidence](LANE-MASKS.md)
 
 ## Corpus and compiler baseline

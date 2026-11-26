@@ -1,0 +1,313 @@
+{
+  "source": {
+    "repo": "microsoft/DirectX-Graphics-Samples",
+    "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+    "license": "MIT"
+  },
+  "rows": [
+    {
+      "id": 0,
+      "source": "MiniEngine/Core/Shaders/BicubicHorizontalUpsamplePS.hlsl",
+      "spirv_sha256": "1572a008fd414bd8356c1402e99091f1b47ddac817198a65d703e30ec457a070",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "spirv_sha256": "0b1c2bb998fee2497410b1aab88fe18ea6cef17ac989d10fd3a94faa9ed08f89",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "source": "MiniEngine/Core/Shaders/BicubicUpsamplePS.hlsl",
+      "spirv_sha256": "387e17dc85d4d446e524408e6a44701e47154deaf44588d406baabc73997b754",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "source": "MiniEngine/Core/Shaders/BicubicVerticalUpsamplePS.hlsl",
+      "spirv_sha256": "6f1df521a96c6b076bce23139be792f230f84497b2d5f233a772916992ee78ab",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "source": "MiniEngine/Core/Shaders/BilinearUpsamplePS.hlsl",
+      "spirv_sha256": "4503a6c56fd33b46cd08673ca53fa9fd8ddb1c93673799f286a21f844ed61e85",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%BilinearFilter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "source": "MiniEngine/Core/Shaders/BlendUIHDRPS.hlsl",
+      "spirv_sha256": "0ef9e28423a102b1e7ce0ea32b03204d3a8d633d2de41efbbc5217f73a15b2d9",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%Overlay",
+            "%CB0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "source": "MiniEngine/Core/Shaders/BufferCopyPS.hlsl",
+      "spirv_sha256": "07d204d23cf55b76d82d38fef71d891006e78a06f4d65767385e9dce6cf357f0",
+      "overlap": []
+    },
+    {
+      "id": 7,
+      "source": "MiniEngine/Core/Shaders/CompositeHDRPS.hlsl",
+      "spirv_sha256": "7df938dce1a1ca85043e45142930786189d49a8b1adcdd22b1d215869dbf74a5",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%MainBuffer",
+            "%CB0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "source": "MiniEngine/Core/Shaders/CompositeSDRPS.hlsl",
+      "spirv_sha256": "203706f34139403fa8f9ae75217860e7520c35fb1b227e0365d61a5d12084c9f",
+      "overlap": []
+    },
+    {
+      "id": 9,
+      "source": "MiniEngine/Core/Shaders/DownsampleDepthPS.hlsl",
+      "spirv_sha256": "bfee976f3d4c09a6118796cdae235d67f43437045628e05e9c8c8c480d559a8c",
+      "overlap": []
+    },
+    {
+      "id": 10,
+      "source": "MiniEngine/Core/Shaders/LanczosHorizontalPS.hlsl",
+      "spirv_sha256": "c5601d0f4d808a7898f5ad873a624d869fa1505f34b3ff16ed561e39b8581095",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%Source",
+            "%CB0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "source": "MiniEngine/Core/Shaders/LanczosVerticalPS.hlsl",
+      "spirv_sha256": "b22aa523187de0e9e3b7e8753dd4d8ca15eb70f9bd6550098d18a99dd7b1a393",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%Source",
+            "%CB0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "source": "MiniEngine/Core/Shaders/MagnifyPixelsPS.hlsl",
+      "spirv_sha256": "e819595c24d8d9a8dcd31a215d728fe408c85b93c4f4f3b4b3828de669f2357a",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "source": "MiniEngine/Core/Shaders/MotionBlurFinalPassPS.hlsl",
+      "spirv_sha256": "060f42a0841ddab82ce979682f1a2fadd4d3ba798b810a89bda160a25ce8358b",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%VelocityBuffer",
+            "%c0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "source": "MiniEngine/Core/Shaders/ParticlePS.hlsl",
+      "spirv_sha256": "6e99f34746a9f523f7dad9d1c74d36dd3d20fabccadf6539265066f08453263e",
+      "overlap": []
+    },
+    {
+      "id": 15,
+      "source": "MiniEngine/Core/Shaders/PerfGraphPS.hlsl",
+      "spirv_sha256": "2d80f19a3ebbd6534df2798342b8f240fca92e9b272366b4417f31857960852d",
+      "overlap": []
+    },
+    {
+      "id": 16,
+      "source": "MiniEngine/Core/Shaders/PresentHDRPS.hlsl",
+      "spirv_sha256": "a3589340e886cdd63b66b3ef3db82af939837f4151eef7e9576a83ecc0eceec9",
+      "overlap": []
+    },
+    {
+      "id": 17,
+      "source": "MiniEngine/Core/Shaders/PresentSDRPS.hlsl",
+      "spirv_sha256": "2c36b6a1ef3a6e6334209b91666b7ba6cfaeefcbe1d6e4904301617ec027831c",
+      "overlap": []
+    },
+    {
+      "id": 18,
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeHDRPS.hlsl",
+      "spirv_sha256": "34a5c07349150001fbe7d255a5ce3ac4785e9d674fb1e822e246835a1208d194",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%MainBuffer",
+            "%BilinearFilter",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeSDRPS.hlsl",
+      "spirv_sha256": "422fd3aed6dec1348a8261631a8f299495ad528dfc14834cf39cec07857d084f",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%MainBuffer",
+            "%BilinearFilter",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsampleGammaPS.hlsl",
+      "spirv_sha256": "2231db5a79e9156448eac11887d39a73a960771c10b5d54b9bfa20877d194c92",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%BilinearClamp",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsamplePS.hlsl",
+      "spirv_sha256": "7a08d85acdba2fe92da971a63e2e75f7d100ffc53d2a4526d7e120955313ea67",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%ColorTex",
+            "%BilinearClamp",
+            "%Constants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "source": "MiniEngine/Core/Shaders/TextAntialiasPS.hlsl",
+      "spirv_sha256": "6dfbfda1ce69b51ab8ed5b480c2b6a5fcc7e9b268f5b346243bb6decfac4dc77",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%cbFontParams",
+            "%SignedDistanceFieldTex",
+            "%LinearSampler"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "source": "MiniEngine/Core/Shaders/TextShadowPS.hlsl",
+      "spirv_sha256": "6d7c114a9349365f0917631c16f1d6f44d81bb0c7c161c957743d84ac4390fc4",
+      "overlap": [
+        {
+          "set": 0,
+          "binding": 0,
+          "variables": [
+            "%cbFontParams",
+            "%SignedDistanceFieldTex",
+            "%LinearSampler"
+          ]
+        }
+      ]
+    }
+  ],
+  "entries_with_overlapping_decorations": 17
+}

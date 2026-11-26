@@ -1,0 +1,177 @@
+{
+  "profile": "xcl-nerf-roots",
+  "fragment_name": "071-whole-roots.spv",
+  "fragment_sha256": "db57864d278c0b7957970f904576a8c182e98c284b4727f9d2cc7cc8515cad29",
+  "vertex_sha256": "2bd6b18a5864c4fdbe3ac52741a54005c9e00d415e8af08fcf02cd1ed63e9423",
+  "probe_sha256": "aaead7caf912d399120fb632966935453206a48532d7cfff5bc970e8fcec106f",
+  "validator_sha256": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+  "disassembler_sha256": "15ecc45ac85d961b1c87f7587b7869737d1f080f96da2956f24ae4ebfece1e22",
+  "layout": {
+    "capabilities": [
+      "Shader",
+      "Int64",
+      "GroupNonUniform",
+      "GroupNonUniformBallot",
+      "GroupNonUniformQuad",
+      "RuntimeDescriptorArray",
+      "SampledImageArrayNonUniformIndexing",
+      "VulkanMemoryModel",
+      "PhysicalStorageBufferAddresses",
+      "DemoteToHelperInvocation"
+    ],
+    "push_offsets": [
+      0,
+      8,
+      16,
+      24,
+      32
+    ],
+    "resources": [
+      {
+        "set": 0,
+        "binding": 0,
+        "type": "sampled_image_2d",
+        "scalar": "OpTypeInt 32 0"
+      },
+      {
+        "set": 0,
+        "binding": 0,
+        "type": "sampled_image_2d",
+        "scalar": "OpTypeInt 32 1"
+      },
+      {
+        "set": 0,
+        "binding": 0,
+        "type": "sampled_image_2d",
+        "scalar": "OpTypeFloat 32"
+      }
+    ],
+    "varyings": [
+      {
+        "direction": "Output",
+        "location": 0,
+        "float32_components": 4
+      }
+    ],
+    "structure": {
+      "OpLabel": 1000,
+      "OpBitwiseAnd": 4893,
+      "OpGroupNonUniformBallot": 1737,
+      "OpShiftRightLogical": 6847,
+      "OpSelectionMerge": 184,
+      "OpGroupNonUniformQuadBroadcast": 500,
+      "OpBitwiseOr": 8027,
+      "OpShiftLeftLogical": 2585,
+      "OpGroupNonUniformQuadSwap": 798
+    }
+  },
+  "physical_pipeline": {
+    "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "device_id": 9989,
+    "vendor_id": 4318,
+    "layout_profile": "xcl-nerf-roots",
+    "subgroup_size": 32,
+    "driver_version_raw": 2588114944,
+    "api_version_raw": 4211039,
+    "vertex_spirv_bytes": 1328,
+    "fragment_spirv_bytes": 1119532,
+    "pipeline_create_with_capture_us": 1798342,
+    "executables": [
+      {
+        "index": 0,
+        "name": "VS",
+        "description": "Vertex Shader",
+        "stage_flags": 1,
+        "subgroup_size": 32,
+        "statistics": [
+          {
+            "name": "Register Count",
+            "description": "Number of temporary registers used by this shader stage",
+            "format": 2,
+            "value": 16
+          },
+          {
+            "name": "Binary Size",
+            "description": "Size in bytes of the executable for this stage",
+            "format": 2,
+            "value": 768
+          },
+          {
+            "name": "Stack Size",
+            "description": "Size in bytes required for the shader stack",
+            "format": 2,
+            "value": 0
+          },
+          {
+            "name": "Local Memory Size",
+            "description": "Size in bytes required per-thread for local memory",
+            "format": 2,
+            "value": 68719476736
+          },
+          {
+            "name": "Input Count",
+            "description": "Number of scalar inputs used by this shader stage",
+            "format": 2,
+            "value": 1
+          },
+          {
+            "name": "Output Count",
+            "description": "Number of scalar outputs used by this shader stage",
+            "format": 2,
+            "value": 0
+          }
+        ],
+        "internal_representations": []
+      },
+      {
+        "index": 1,
+        "name": "FS",
+        "description": "Fragment Shader",
+        "stage_flags": 16,
+        "subgroup_size": 32,
+        "statistics": [
+          {
+            "name": "Register Count",
+            "description": "Number of temporary registers used by this shader stage",
+            "format": 2,
+            "value": 128
+          },
+          {
+            "name": "Binary Size",
+            "description": "Size in bytes of the executable for this stage",
+            "format": 2,
+            "value": 457984
+          },
+          {
+            "name": "Stack Size",
+            "description": "Size in bytes required for the shader stack",
+            "format": 2,
+            "value": 0
+          },
+          {
+            "name": "Local Memory Size",
+            "description": "Size in bytes required per-thread for local memory",
+            "format": 2,
+            "value": 68719476736
+          },
+          {
+            "name": "Input Count",
+            "description": "Number of scalar inputs used by this shader stage",
+            "format": 2,
+            "value": 3
+          },
+          {
+            "name": "Output Colors",
+            "description": "Number of colors output by the fragment shader",
+            "format": 2,
+            "value": 1
+          }
+        ],
+        "internal_representations": []
+      }
+    ],
+    "worker_commit_limit_bytes": 2147483648,
+    "worker_peak_commit_bytes": 213241856,
+    "worker_peak_working_set_bytes": 232857600
+  }
+}

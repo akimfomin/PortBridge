@@ -1,0 +1,174 @@
+{
+  "native": {
+    "nerf71": {
+      "whole": {
+        "dxil_bytes": 283524,
+        "opaque_cache_bytes": 370786,
+        "native_create_ms": [
+          1628.6845,
+          1597.1394,
+          1626.5754,
+          1600.3165
+        ],
+        "median_native_ms": 1613.4459499999998,
+        "median_peak_process_mib": 237.9375,
+        "median_process_private_create_delta_mib": 130.76953125,
+        "median_dxgi_local_create_delta_mib": 0.0,
+        "median_dxgi_nonlocal_create_delta_mib": 0.0
+      },
+      "project": {
+        "dxil_bytes": 229892,
+        "opaque_cache_bytes": 322674,
+        "native_create_ms": [
+          1448.1996,
+          1447.9473,
+          1452.5804,
+          1439.5118
+        ],
+        "median_native_ms": 1448.0734499999999,
+        "median_peak_process_mib": 223.29296875,
+        "median_process_private_create_delta_mib": 116.228515625,
+        "median_dxgi_local_create_delta_mib": 0.0,
+        "median_dxgi_nonlocal_create_delta_mib": 0.0
+      }
+    },
+    "nerf73": {
+      "whole": {
+        "dxil_bytes": 284016,
+        "opaque_cache_bytes": 372114,
+        "native_create_ms": [
+          1577.0455,
+          1789.7943,
+          1622.775,
+          1582.2264
+        ],
+        "median_native_ms": 1602.5007,
+        "median_peak_process_mib": 237.9375,
+        "median_process_private_create_delta_mib": 130.62109375,
+        "median_dxgi_local_create_delta_mib": 0.0,
+        "median_dxgi_nonlocal_create_delta_mib": 0.0
+      },
+      "project": {
+        "dxil_bytes": 230636,
+        "opaque_cache_bytes": 323042,
+        "native_create_ms": [
+          1432.7545,
+          1581.805,
+          1433.8061,
+          1433.2391
+        ],
+        "median_native_ms": 1433.5226,
+        "median_peak_process_mib": 223.9453125,
+        "median_process_private_create_delta_mib": 116.0078125,
+        "median_dxgi_local_create_delta_mib": 0.0,
+        "median_dxgi_nonlocal_create_delta_mib": 0.0
+      }
+    },
+    "ray": {
+      "whole": {
+        "dxil_bytes": 177688,
+        "opaque_cache_bytes": 207106,
+        "native_create_ms": [
+          854.667,
+          855.2707,
+          841.0386,
+          855.5771
+        ],
+        "median_native_ms": 854.96885,
+        "median_peak_process_mib": 197.62109375,
+        "median_process_private_create_delta_mib": 90.296875,
+        "median_dxgi_local_create_delta_mib": 0.0,
+        "median_dxgi_nonlocal_create_delta_mib": 0.0
+      },
+      "project": {
+        "dxil_bytes": 152076,
+        "opaque_cache_bytes": 186114,
+        "native_create_ms": [
+          786.685,
+          762.0766,
+          752.8782,
+          750.0666
+        ],
+        "median_native_ms": 757.4774,
+        "median_peak_process_mib": 186.2734375,
+        "median_process_private_create_delta_mib": 78.90234375,
+        "median_dxgi_local_create_delta_mib": 0.0,
+        "median_dxgi_nonlocal_create_delta_mib": 0.0
+      }
+    }
+  },
+  "warm": {
+    "clean": {
+      "primary": {
+        "rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+        "whole": {
+          "batch_means_ms": [
+            7.213312,
+            7.239168
+          ],
+          "median_ms": 7.226240000000001
+        },
+        "project": {
+          "batch_means_ms": [
+            6.2304,
+            6.094464
+          ],
+          "median_ms": 6.162432000000001
+        }
+      },
+      "secondary": {
+        "rgba32f_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+        "whole": {
+          "batch_means_ms": [
+            7.730304,
+            7.820288
+          ],
+          "median_ms": 7.775296
+        },
+        "project": {
+          "batch_means_ms": [
+            6.546304,
+            6.389248
+          ],
+          "median_ms": 6.467776000000001
+        }
+      }
+    },
+    "drafts": {
+      "primary": {
+        "rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+        "whole": {
+          "batch_means_ms": [
+            7.35616,
+            7.25504
+          ],
+          "median_ms": 7.3056
+        },
+        "project": {
+          "batch_means_ms": [
+            6.070016,
+            6.066944
+          ],
+          "median_ms": 6.06848
+        }
+      },
+      "secondary": {
+        "rgba32f_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+        "whole": {
+          "batch_means_ms": [
+            7.798144,
+            7.596416
+          ],
+          "median_ms": 7.697279999999999
+        },
+        "project": {
+          "batch_means_ms": [
+            6.402176,
+            6.290304
+          ],
+          "median_ms": 6.34624
+        }
+      }
+    }
+  }
+}

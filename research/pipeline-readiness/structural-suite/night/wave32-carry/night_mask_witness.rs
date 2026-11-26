@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-only
-// A Wave32 register-width witness. Each draw compares a measured scalar popcount
+// A legal wave32 register-alias witness. Each draw compares a measured scalar popcount
 // to its own independent expected value, so hardware-dependent wave packing cancels.
 use std::collections::BTreeMap;
 use std::{env, fs, path::Path};
