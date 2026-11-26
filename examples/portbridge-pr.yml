@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: Read public prior work
-        uses: akimfomin/PortBridge@7642d8288a03d66602db4735b23c1c92071a9ec7
+        uses: akimfomin/PortBridge@c8d4efb1a2b362f4cb4606ea794bba579dfab4ed
         continue-on-error: true
         with:
           pull-request-url: ${{ inputs.pull_request_url || '' }}
