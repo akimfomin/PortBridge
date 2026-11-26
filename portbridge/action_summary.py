@@ -5,11 +5,14 @@ import os
 from pathlib import Path
 import re
 import string
-from urllib.parse import quote
+from urllib.error import HTTPError
+from urllib.parse import quote, urlsplit
+from urllib.request import Request, build_opener
 
 from .catalog import PROBLEM_ID, public_url
 from .discovery_search import key as discovery_source_key
-from .github import PR_URL
+from .github import API, NoRedirect, PR_URL
+from .matching import canonical_url, current_repository
 from .preflight import PUBLIC_BASE, english_text, public_preflight
 
 
@@ -48,6 +51,24 @@ def label(text):
     )
 
 
+def public_pr_head(url):
+    """Resolve a typed URL anonymously without sending PR prose to the renderer."""
+    owner, repo, _, number = urlsplit(url).path.strip("/").split("/")
+    endpoint = f"{API}/repos/{current_repository(f'{owner}/{repo}')}/pulls/{number}"
+    request = Request(endpoint, headers={"User-Agent": "PortBridge receiver", "Accept": "application/vnd.github+json"})
+    with build_opener(NoRedirect()).open(request, timeout=6) as response:
+        data = response.read(EVENT_LIMIT + 1)
+    if len(data) > EVENT_LIMIT:
+        raise ValueError("PR metadata exceeds the limit")
+    pr = json.loads(data)
+    head = pr["head"]["sha"]
+    if (pr["number"] != int(number) or pr["base"]["repo"]["private"] is not False
+            or not PR_URL.fullmatch(pr["html_url"]) or canonical_url(pr["html_url"]) != canonical_url(url)
+            or not re.fullmatch("[0-9a-f]{40}", head)):
+        raise ValueError("Unexpected public PR identity")
+    return head
+
+
 def source_link(title, url, *, discovery=False):
     if not (discovery_source_key(url) if discovery else public_url(url)) or len(url) > 500:
         return None
@@ -64,13 +85,14 @@ def source_group(heading, items, confidence=None):
     return [f"### {heading}", "", *rows, ""] if rows else []
 
 
-def render_report(result, *, source_url=None, event_head=None):
+def render_report(result, *, source_url=None, head=None, event_origin=False):
     lines = ["Review these leads against the target revision and configuration.", ""]
     origin = source_url or result.get("origin_url")
     if origin and PR_URL.fullmatch(origin):
         lines.extend([source_link("Source pull request", origin), ""])
-        if event_head:
-            lines.extend([f"PR event head: `{event_head}`. Catalog evidence may predate this head.", ""])
+        if head:
+            scope = "PR event head" if event_origin else "Public PR head"
+            lines.extend([f"{scope}: `{head}`. Catalog evidence may predate this head.", ""])
     if result.get("catalog_status") in {"partial", "stale", "error", "seed-only"}:
         lines.extend(["The public snapshot may be incomplete.", ""])
     if (result.get("catalog_freshness") or {}).get("age_state") == "stale":
@@ -168,6 +190,7 @@ def summary_result(environ):
     explicit = environ.get("PORTBRIDGE_PR_URL", "").strip()
     if event_name == "pull_request_target" or (not explicit and event_name not in {"pull_request", "workflow_dispatch"}):
         return "skipped", "This summary runs on GitHub pull request events and manual workflow runs.\n"
+    event_origin = not explicit and event_name == "pull_request"
     try:
         if explicit:
             if len(explicit) > 500 or not PR_URL.fullmatch(explicit):
@@ -180,10 +203,21 @@ def summary_result(environ):
         if explicit or event_name == "workflow_dispatch":
             return "invalid_input", "Enter a public GitHub pull request URL in pull_request_url.\n"
         return "invalid_input", "The pull request event could not be read. Continue the usual review.\n"
+    if not event_origin:
+        try:
+            head = public_pr_head(request["url"])
+        except HTTPError as error:
+            with error:
+                code = error.code
+            if code in (404, 410):
+                return "origin_missing", "GitHub could not find a publicly readable pull request at this URL.\n"
+            return "origin_unverified", "GitHub could not verify the public PR. Retry when metadata is available.\n"
+        except (AttributeError, KeyError, OSError, TypeError, ValueError):
+            return "origin_unverified", "GitHub could not verify the public PR. Retry when metadata is available.\n"
     try:
         result = public_preflight(**request, limit=5)
         status = "unavailable" if result.get("catalog_status") == "unavailable" else "reported"
-        return status, render_report(result, source_url=request["url"], event_head=head)
+        return status, render_report(result, source_url=request["url"], head=head, event_origin=event_origin)
     except (AttributeError, KeyError, OSError, TypeError, ValueError):
         return "unavailable", UNAVAILABLE
 

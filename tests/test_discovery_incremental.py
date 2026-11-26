@@ -87,7 +87,8 @@ class DiscoveryIncrementalTest(CatalogFixture):
             self.assertEqual(report["discovery"]["index_source"], "bundled_fallback")
             self.assertEqual(report["discovery"]["technical_recommendations"][0]["id"], "llvm-stack-coloring")
             self.assertFalse(report["discovery"]["automatic_matches"])
-            result = summary({"PORTBRIDGE_PR_URL": PR, "GITHUB_EVENT_NAME": "workflow_dispatch"})
+            with patch("portbridge.action_summary.public_pr_head", return_value="b" * 40):
+                result = summary({"PORTBRIDGE_PR_URL": PR, "GITHUB_EVENT_NAME": "workflow_dispatch"})
             self.assertIn("bundled sources", result)
             self.assertIn("potentially applicable", result)
             self.assertNotIn("First check", result)

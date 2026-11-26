@@ -6,7 +6,7 @@ inputs:
     required: false
 outputs:
   status:
-    description: reported, unavailable, invalid_input, skipped or summary_unavailable
+    description: reported, unavailable, origin_missing, origin_unverified, invalid_input, skipped or summary_unavailable
     value: ${{ steps.summary.outputs.status }}
 runs:
   using: composite

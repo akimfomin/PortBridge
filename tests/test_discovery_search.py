@@ -118,7 +118,8 @@ class DiscoverySearchTest(CatalogFixture):
 
     def test_action_summary_lists_pinned_advisory_candidates(self):
         report = preflight(self.catalog, url=PR)
-        with patch("portbridge.action_summary.public_preflight", return_value=report) as client:
+        with patch("portbridge.action_summary.public_pr_head", return_value="b" * 40), \
+                patch("portbridge.action_summary.public_preflight", return_value=report) as client:
             output = summary({"PORTBRIDGE_PR_URL": PR, "GITHUB_EVENT_NAME": "workflow_dispatch"})
             client.assert_called_once_with(q="", url=PR, limit=5)
         self.assertIn("Historical work in other projects", output)

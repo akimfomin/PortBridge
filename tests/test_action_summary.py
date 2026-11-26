@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase, mock
-from urllib.error import URLError
+from io import BytesIO
+from urllib.error import HTTPError, URLError
 
 from portbridge import action_summary
 
@@ -21,6 +22,9 @@ class ActionSummaryTests(TestCase):
         }
         self.title = "$(example) <script> [link] @everyone"
         self.source = "https://github.com/example/port/pull/42"
+        resolver = mock.patch.object(action_summary, "public_pr_head", return_value="b" * 40)
+        self.resolve = resolver.start()
+        self.addCleanup(resolver.stop)
         self.event.write_text(json.dumps({"pull_request": {
             "title": self.title, "html_url": self.source,
             "body": "Secret body omitted from the summary and query",
@@ -148,6 +152,16 @@ class ActionSummaryTests(TestCase):
         self.assertNotIn("legacy/alias", first)
         self.assertIn(revision, first)
         self.assertNotIn("PR event head", manual)
+        self.assertIn("Public PR head: `" + "b" * 40, manual)
+        self.resolve.assert_called_once_with(self.source)
+
+    def test_missing_public_pr_is_distinct_from_rate_limit_and_empty_result(self):
+        self.resolve.side_effect = [HTTPError(self.source, code, "", {}, None) for code in (404, 403)]
+        env = {**self.env, "PORTBRIDGE_PR_URL": self.source}
+        with mock.patch.object(action_summary, "public_preflight") as preflight:
+            self.assertEqual(action_summary.summary_result(env)[0], "origin_missing")
+            self.assertEqual(action_summary.summary_result(env)[0], "origin_unverified")
+        preflight.assert_not_called()
 
     def test_successful_snapshot_reports_an_unindexed_pull_request(self):
         result = {"origin_url": self.source, "indexed": False, "catalog_status": "ok",
@@ -175,3 +189,20 @@ class ActionSummaryTests(TestCase):
             self.assertEqual(action_summary.main({"GITHUB_EVENT_NAME": "pull_request"}), 0)
         preflight.assert_not_called()
         self.assertIn("The pull request event could not be read", self.report.read_text(encoding="utf-8"))
+
+
+class PublicHeadTest(TestCase):
+    def test_public_metadata_needs_the_same_pr_and_public_repository(self):
+        url = "https://github.com/example/port/pull/42"
+        data = {"number": 42, "base": {"repo": {"private": False}}, "head": {"sha": "a" * 40}, "html_url": url}
+        with mock.patch.object(action_summary, "build_opener") as opener:
+            open_url = opener.return_value.open
+            open_url.side_effect = [BytesIO(json.dumps(obj).encode()) for obj in (
+                data, {**data, "number": 2}, {**data, "base": {"repo": {"private": True}}})]
+            self.assertEqual(action_summary.public_pr_head(url), "a" * 40)
+            for _ in range(2):
+                with self.assertRaises(ValueError):
+                    action_summary.public_pr_head(url)
+        req = open_url.call_args.args[0]
+        self.assertEqual(req.full_url, "https://api.github.com/repos/example/port/pulls/42")
+        self.assertFalse(req.has_header("Authorization"))
