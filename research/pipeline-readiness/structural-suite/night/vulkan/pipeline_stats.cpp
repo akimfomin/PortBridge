@@ -4,6 +4,7 @@
 #define NOMINMAX
 #include <windows.h>
 #include <psapi.h>
+#include <wincrypt.h>
 #include <vulkan/vulkan.h>
 #include <array>
 #include <chrono>
@@ -180,19 +181,24 @@ void report_executables(std::ostream& out, const Pipeline& p) {
     out << "]";
 }
 
+#include "nerf_modules.inl"
+
 void run(const char* vertex_path, const char* fragment_path, const char* requested_device, std::string_view profile,
          const DrawRequest* draw) {
-    if (profile != "source" && profile != "xcl-ray-roots" && profile != "xcl-nerf-roots")
-        throw std::runtime_error("Expected layout profile source, xcl-ray-roots, or xcl-nerf-roots");
-    const bool translated = profile != "source";
-    const bool bindless = profile == "xcl-nerf-roots";
+    const bool native_nerf = profile == "source-nerf";
+    const bool bounded_nerf = profile == "bounded-nerf";
+    if (profile != "source" && !bounded_nerf && !native_nerf && profile != "xcl-ray-roots" && profile != "xcl-nerf-roots")
+        throw std::runtime_error("Unknown pipeline layout profile");
+    const bool translated = bounded_nerf || profile == "xcl-ray-roots" || profile == "xcl-nerf-roots";
+    const bool bindless = bounded_nerf || profile == "xcl-nerf-roots";
     const bool capture = !draw || draw->capture;
-    if (draw && bindless) throw std::runtime_error("Draw supports only the reviewed procedural ray scene");
+    if (draw && bindless && !bounded_nerf) throw std::runtime_error("Draw supports only the reviewed procedural ray scene");
     const uint64_t worker_limit = (translated ? 2048ull : 512ull) * MiB;
     WorkerBudget budget;
     budget.install(worker_limit);
     auto vert = read_module(vertex_path);
     auto frag = read_module(fragment_path);
+    if (bounded_nerf) check_nerf_modules(vert, frag);
     Pipeline p;
     VkApplicationInfo app{VK_STRUCTURE_TYPE_APPLICATION_INFO};
     app.pApplicationName = "PortBridge pipeline executable audit";
@@ -230,6 +236,9 @@ void run(const char* vertex_path, const char* fragment_path, const char* request
     if (bindless && (!observed12.runtimeDescriptorArray || !observed12.shaderSampledImageArrayNonUniformIndexing ||
         !features.features.shaderInt64 || !features.features.shaderSampledImageArrayDynamicIndexing))
         throw std::runtime_error("Converted bindless module requires unsupported indexing or int64");
+    if (native_nerf && (!observed12.runtimeDescriptorArray || !observed12.shaderUniformBufferArrayNonUniformIndexing ||
+                       !features.features.shaderUniformBufferArrayDynamicIndexing))
+        throw std::runtime_error("Mobile NeRF needs nonuniform UBO array indexing");
     VkPhysicalDeviceSubgroupProperties subgroup{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES};
     VkPhysicalDeviceProperties2 physical_props{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2};
     physical_props.pNext = &subgroup;
@@ -242,10 +251,14 @@ void run(const char* vertex_path, const char* fragment_path, const char* request
     VkPhysicalDeviceVulkan13Features enabled13{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES};
     VkPhysicalDeviceFeatures enabled{};
     executable.pNext = &enabled12; enabled12.pNext = &enabled13;
+    if (bounded_nerf && !observed13.robustImageAccess) throw std::runtime_error("Sampled load robustness required");
+    enabled13.robustImageAccess = bounded_nerf;
     enabled12.vulkanMemoryModel = translated;
     enabled12.bufferDeviceAddress = translated;
     enabled13.shaderDemoteToHelperInvocation = translated;
-    enabled12.runtimeDescriptorArray = bindless;
+    enabled12.runtimeDescriptorArray = bindless || native_nerf;
+    enabled12.shaderUniformBufferArrayNonUniformIndexing = native_nerf;
+    enabled.shaderUniformBufferArrayDynamicIndexing = native_nerf;
     enabled12.shaderSampledImageArrayNonUniformIndexing = bindless;
     enabled.shaderInt64 = bindless;
     enabled.shaderSampledImageArrayDynamicIndexing = bindless;
@@ -275,12 +288,27 @@ void run(const char* vertex_path, const char* fragment_path, const char* request
     VkPipelineLayoutCreateInfo layout_info{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
     layout_info.pushConstantRangeCount = 1;
     layout_info.pPushConstantRanges = &push;
+    if (native_nerf) {
+        layout_info.pushConstantRangeCount = 0;
+        std::array<VkDescriptorSetLayoutBinding, 5> bindings{};
+        for (uint32_t i = 0; i < 4; ++i)
+            bindings[i] = {i, VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr};
+        bindings[4] = {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 4, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr};
+        VkDescriptorSetLayoutCreateInfo ds{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+        ds.bindingCount = 5; ds.pBindings = bindings.data();
+        check(vkCreateDescriptorSetLayout(p.device, &ds, nullptr, &p.image_set), "NeRF source set layout");
+        layout_info.setLayoutCount = 1; layout_info.pSetLayouts = &p.image_set;
+    }
     if (bindless) {
         if (props.limits.maxPerStageDescriptorSampledImages < 64 || props.limits.maxDescriptorSetSampledImages < 64)
             throw std::runtime_error("Requested sampled image array exceeds device limits");
         VkDescriptorSetLayoutBinding images{0, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 64, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr};
         VkDescriptorSetLayoutCreateInfo ds{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
-        ds.bindingCount = 1; ds.pBindings = &images;
+        std::array<VkDescriptorSetLayoutBinding, 3> typed{};
+        for (uint32_t i = 0; i < typed.size(); ++i)
+            typed[i] = {i, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 8, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr};
+        ds.bindingCount = bounded_nerf ? static_cast<uint32_t>(typed.size()) : 1;
+        ds.pBindings = bounded_nerf ? typed.data() : &images;
         check(vkCreateDescriptorSetLayout(p.device, &ds, nullptr, &p.image_set), "bindless image set layout");
         layout_info.setLayoutCount = 1;
         layout_info.pSetLayouts = &p.image_set;
@@ -301,6 +329,22 @@ void run(const char* vertex_path, const char* fragment_path, const char* request
     VkRenderPassCreateInfo pass{VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO};
     pass.attachmentCount = 1; pass.pAttachments = &color;
     pass.subpassCount = 1; pass.pSubpasses = &subpass;
+    std::array<VkAttachmentDescription, 5> attachments{color};
+    std::array<VkAttachmentReference, 4> input_refs{};
+    if (native_nerf) {
+        for (uint32_t i = 0; i < 4; ++i) {
+            auto& input = attachments[i + 1];
+            input.format = i == 3 ? VK_FORMAT_R32_UINT : VK_FORMAT_R32G32B32A32_SFLOAT;
+            input.samples = VK_SAMPLE_COUNT_1_BIT;
+            input.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD; input.storeOp = VK_ATTACHMENT_STORE_OP_NONE;
+            input.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            input.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            input.initialLayout = input.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            input_refs[i] = {i + 1, input.initialLayout};
+        }
+        subpass.inputAttachmentCount = 4; subpass.pInputAttachments = input_refs.data();
+        pass.attachmentCount = 5; pass.pAttachments = attachments.data();
+    }
     check(vkCreateRenderPass(p.device, &pass, nullptr, &p.render_pass), "vkCreateRenderPass");
     std::array<VkPipelineShaderStageCreateInfo, 2> stages{};
     for (size_t i = 0; i < stages.size(); ++i) {
@@ -345,7 +389,7 @@ void run(const char* vertex_path, const char* fragment_path, const char* request
         << ",\"vertex_spirv_bytes\":" << vert.size() * 4 << ",\"fragment_spirv_bytes\":" << frag.size() * 4
         << ",\"pipeline_create_us\":" << us << ",\"capture_statistics\":" << (capture ? "true" : "false");
     if (draw) {
-        draw_ray(out, p, physical, family, families[family].timestampValidBits, props.limits.timestampPeriod, extent, *draw, translated);
+        draw_ray(out, p, physical, family, families[family].timestampValidBits, props.limits.timestampPeriod, extent, *draw, translated, native_nerf, bounded_nerf);
     }
     if (capture) {
         out << ",\"pipeline_create_with_capture_us\":" << us << ",\"executables\":";
@@ -372,6 +416,7 @@ int main(int argc, char** argv) {
             draw.registers = argv[5]; draw.output = argv[6];
             if (std::string_view(argv[7]) == "16x16") draw.extent = {16, 16};
             else if (std::string_view(argv[7]) == "96x96") draw.extent = {96, 96};
+            else if (std::string_view(argv[7]) == "320x180") draw.extent = {320, 180};
             else if (std::string_view(argv[7]) != "800x450") throw std::runtime_error("Unsupported draw extent");
             if (argc == 9 && std::string_view(argv[8]) != "capture") throw std::runtime_error("Unknown draw option");
             draw.capture = argc == 9;

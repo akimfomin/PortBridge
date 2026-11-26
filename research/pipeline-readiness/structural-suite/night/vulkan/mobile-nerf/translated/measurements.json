@@ -1,0 +1,3274 @@
+{
+  "renderer_runs": {
+    "71-gamma-frame-ordinary1": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "20ed5b34446b6ee56ebdad547b0c08cbc806a80537ad96bf4508db2b168cc5e1",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 893640,
+        "pipeline_create_us": 1542544,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1252352,
+          1413120,
+          1388544,
+          1361920,
+          1355776
+        ],
+        "gpu_ms_per_draw": [
+          0.156544,
+          0.17664,
+          0.173568,
+          0.17024,
+          0.169472
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 198676480,
+        "worker_peak_working_set_bytes": 211742720
+      },
+      "median_gpu_ms": 0.17024,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-gamma-frame-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "20ed5b34446b6ee56ebdad547b0c08cbc806a80537ad96bf4508db2b168cc5e1",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 893640,
+        "pipeline_create_us": 1892,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1359872,
+          1411072,
+          1307648,
+          1257472,
+          1305600
+        ],
+        "gpu_ms_per_draw": [
+          0.169984,
+          0.176384,
+          0.163456,
+          0.157184,
+          0.1632
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 64024576,
+        "worker_peak_working_set_bytes": 65986560
+      },
+      "median_gpu_ms": 0.163456,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-gamma-frame-typed": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "ab11d670ac348ff60d4de41ffe94c3c0a4a809e54a0629946ea1557706592064",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 952660,
+        "pipeline_create_us": 1840433,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1775616,
+          1461248,
+          1665024,
+          1734656,
+          1619968
+        ],
+        "gpu_ms_per_draw": [
+          0.221952,
+          0.182656,
+          0.208128,
+          0.216832,
+          0.202496
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 207028224,
+        "worker_peak_working_set_bytes": 219779072
+      },
+      "median_gpu_ms": 0.208128,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-gamma-smoke-final": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "dd9519108bf9fee931b4eefbaaa0190dbe0d45d695a6c7fec5dfb24db82d17ea",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "ab11d670ac348ff60d4de41ffe94c3c0a4a809e54a0629946ea1557706592064",
+      "output_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+      "cpu_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+      "native_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 952660,
+        "pipeline_create_us": 1855360,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          141312,
+          141312,
+          116736,
+          92160,
+          91136
+        ],
+        "gpu_ms_per_draw": [
+          0.017664,
+          0.017664,
+          0.014592,
+          0.01152,
+          0.011392
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 197808128,
+        "worker_peak_working_set_bytes": 216039424
+      },
+      "median_gpu_ms": 0.014592,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 172,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352"
+        }
+      }
+    },
+    "71-strict-frame-ordinary1": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "c5caa7dfa2ca35d1985b2b77d8e65b2715517e9182635ff9f4fca295b2da4458",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 967576,
+        "pipeline_create_us": 1641685,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1657856,
+          1298432,
+          1557504,
+          1560576,
+          1959936
+        ],
+        "gpu_ms_per_draw": [
+          0.207232,
+          0.162304,
+          0.194688,
+          0.195072,
+          0.244992
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 205586432,
+        "worker_peak_working_set_bytes": 219463680
+      },
+      "median_gpu_ms": 0.195072,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-strict-frame-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "c5caa7dfa2ca35d1985b2b77d8e65b2715517e9182635ff9f4fca295b2da4458",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 967576,
+        "pipeline_create_us": 2121,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1735680,
+          1436672,
+          1581056,
+          1197056,
+          1546240
+        ],
+        "gpu_ms_per_draw": [
+          0.21696,
+          0.179584,
+          0.197632,
+          0.149632,
+          0.19328
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 64098304,
+        "worker_peak_working_set_bytes": 65855488
+      },
+      "median_gpu_ms": 0.19328,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-strict-frame-typed": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "fddd7f76ea94c8ba6bc217a5d36f35c0e2c5ce182a22bb146b8b765829c7e086",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1026596,
+        "pipeline_create_us": 1948043,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1732608,
+          2185216,
+          1786880,
+          1973248,
+          2215936
+        ],
+        "gpu_ms_per_draw": [
+          0.216576,
+          0.273152,
+          0.22336,
+          0.246656,
+          0.276992
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 223072256,
+        "worker_peak_working_set_bytes": 231354368
+      },
+      "median_gpu_ms": 0.246656,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-strict-smoke-final": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "dd9519108bf9fee931b4eefbaaa0190dbe0d45d695a6c7fec5dfb24db82d17ea",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "fddd7f76ea94c8ba6bc217a5d36f35c0e2c5ce182a22bb146b8b765829c7e086",
+      "output_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+      "cpu_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+      "native_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1026596,
+        "pipeline_create_us": 1948101,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          151552,
+          137216,
+          101376,
+          96256,
+          96032
+        ],
+        "gpu_ms_per_draw": [
+          0.018944,
+          0.017152,
+          0.012672,
+          0.012032,
+          0.012004
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 215961600,
+        "worker_peak_working_set_bytes": 227373056
+      },
+      "median_gpu_ms": 0.012672,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 172,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352"
+        }
+      }
+    },
+    "71-whole-frame-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "8a8b7b9ee6cfb6de5b7d2c7062bf28a0caceb44360b56d440e6861a8bf4a5984",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1155620,
+        "pipeline_create_us": 2480,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          2301952,
+          2697216,
+          2119680,
+          2378752,
+          2509824
+        ],
+        "gpu_ms_per_draw": [
+          0.287744,
+          0.337152,
+          0.26496,
+          0.297344,
+          0.313728
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 64020480,
+        "worker_peak_working_set_bytes": 66789376
+      },
+      "median_gpu_ms": 0.297344,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-whole-frame-typed": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "01e26c7ae50d0ccb682868b9cd2d84893df992c92b659c44daa365665dc13a79",
+      "output_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+      "cpu_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea",
+      "native_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1214640,
+        "pipeline_create_us": 2132079,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          3127296,
+          2678784,
+          2540544,
+          2665472,
+          2872320
+        ],
+        "gpu_ms_per_draw": [
+          0.390912,
+          0.334848,
+          0.317568,
+          0.333184,
+          0.35904
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 234258432,
+        "worker_peak_working_set_bytes": 244838400
+      },
+      "median_gpu_ms": 0.334848,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 3.5762786865234375e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5192,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 3.5762786865234375e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "adfc589dfc13499459dd728615cec6735813cd4134d7200d068eb5639225ebea"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40344,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50",
+          "oracle_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+        }
+      }
+    },
+    "71-whole-smoke-final": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "dd9519108bf9fee931b4eefbaaa0190dbe0d45d695a6c7fec5dfb24db82d17ea",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "01e26c7ae50d0ccb682868b9cd2d84893df992c92b659c44daa365665dc13a79",
+      "output_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+      "cpu_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+      "native_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1214640,
+        "pipeline_create_us": 2206555,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          100352,
+          99328,
+          100352,
+          100352,
+          100352
+        ],
+        "gpu_ms_per_draw": [
+          0.012544,
+          0.012416,
+          0.012544,
+          0.012544,
+          0.012544
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 246296576,
+        "worker_peak_working_set_bytes": 266096640
+      },
+      "median_gpu_ms": 0.012544,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 172,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352"
+        }
+      }
+    },
+    "71-whole-smoke-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_combo.cpu.rgba32f": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "8a8b7b9ee6cfb6de5b7d2c7062bf28a0caceb44360b56d440e6861a8bf4a5984",
+      "output_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+      "cpu_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408",
+      "native_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1155620,
+        "pipeline_create_us": 1944494,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          133120,
+          97280,
+          97216,
+          101376,
+          99136
+        ],
+        "gpu_ms_per_draw": [
+          0.01664,
+          0.01216,
+          0.012152,
+          0.012672,
+          0.012392
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 218333184,
+        "worker_peak_working_set_bytes": 234696704
+      },
+      "median_gpu_ms": 0.012392,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "53ccd147f0f534637dc38e4e2ffc031ca52c03d16cac8fb1ea730e5960b0d408"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 172,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "086bf66e02f2e931a0147f2a0258f545dd30f11536b2afa6a24d8405f918f589",
+          "oracle_sha256": "42a010f0bdbd61eb375455b6d0b113393673fbbbc2899013fa4891c08065e352"
+        }
+      }
+    },
+    "73-gamma-frame-ordinary1": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "d16ba6d95135b2d0d0bc48101358e55df3972975a762f5b7556332ec34e444bb",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 894240,
+        "pipeline_create_us": 1634774,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1250304,
+          1454080,
+          1254400,
+          1202176,
+          1198080
+        ],
+        "gpu_ms_per_draw": [
+          0.156288,
+          0.18176,
+          0.1568,
+          0.150272,
+          0.14976
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 200302592,
+        "worker_peak_working_set_bytes": 212234240
+      },
+      "median_gpu_ms": 0.156288,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-gamma-frame-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "d16ba6d95135b2d0d0bc48101358e55df3972975a762f5b7556332ec34e444bb",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 894240,
+        "pipeline_create_us": 1946,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1258496,
+          1236992,
+          1400832,
+          1339392,
+          1077248
+        ],
+        "gpu_ms_per_draw": [
+          0.157312,
+          0.154624,
+          0.175104,
+          0.167424,
+          0.134656
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 62447616,
+        "worker_peak_working_set_bytes": 65994752
+      },
+      "median_gpu_ms": 0.157312,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-gamma-frame-typed": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "83ef589a44974f89c8155510a0bc5c2ca758c8fee696601f240b2464f5b7e968",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 953260,
+        "pipeline_create_us": 1765803,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1655808,
+          1713152,
+          1671168,
+          1541120,
+          1530880
+        ],
+        "gpu_ms_per_draw": [
+          0.206976,
+          0.214144,
+          0.208896,
+          0.19264,
+          0.19136
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 206991360,
+        "worker_peak_working_set_bytes": 219987968
+      },
+      "median_gpu_ms": 0.206976,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-gamma-smoke-final": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "dd9519108bf9fee931b4eefbaaa0190dbe0d45d695a6c7fec5dfb24db82d17ea",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "83ef589a44974f89c8155510a0bc5c2ca758c8fee696601f240b2464f5b7e968",
+      "output_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+      "cpu_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+      "native_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 953260,
+        "pipeline_create_us": 1799782,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          142336,
+          94208,
+          93184,
+          94208,
+          94208
+        ],
+        "gpu_ms_per_draw": [
+          0.017792,
+          0.011776,
+          0.011648,
+          0.011776,
+          0.011776
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 198381568,
+        "worker_peak_working_set_bytes": 216170496
+      },
+      "median_gpu_ms": 0.011776,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 180,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792"
+        }
+      }
+    },
+    "73-strict-frame-ordinary1": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "bde5f4bc8052a73691a72362bd8997c7a00c76df8507c3940f839b58a68f8d91",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 969072,
+        "pipeline_create_us": 1642506,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1406976,
+          1414144,
+          1453056,
+          1424384,
+          1573888
+        ],
+        "gpu_ms_per_draw": [
+          0.175872,
+          0.176768,
+          0.181632,
+          0.178048,
+          0.196736
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 207736832,
+        "worker_peak_working_set_bytes": 219389952
+      },
+      "median_gpu_ms": 0.178048,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-strict-frame-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "bde5f4bc8052a73691a72362bd8997c7a00c76df8507c3940f839b58a68f8d91",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 969072,
+        "pipeline_create_us": 2021,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1510400,
+          1772544,
+          1368064,
+          1422336,
+          1474560
+        ],
+        "gpu_ms_per_draw": [
+          0.1888,
+          0.221568,
+          0.171008,
+          0.177792,
+          0.18432
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 63881216,
+        "worker_peak_working_set_bytes": 65822720
+      },
+      "median_gpu_ms": 0.18432,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-strict-frame-typed": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "d1e02e8e20b0c835caad408ce7502be0cbfae0f168088118f552e421d96bbcb0",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1028092,
+        "pipeline_create_us": 1964581,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1934336,
+          1716224,
+          1903616,
+          2215936,
+          1833984
+        ],
+        "gpu_ms_per_draw": [
+          0.241792,
+          0.214528,
+          0.237952,
+          0.276992,
+          0.229248
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 222838784,
+        "worker_peak_working_set_bytes": 231628800
+      },
+      "median_gpu_ms": 0.237952,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-strict-smoke-final": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "dd9519108bf9fee931b4eefbaaa0190dbe0d45d695a6c7fec5dfb24db82d17ea",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "d1e02e8e20b0c835caad408ce7502be0cbfae0f168088118f552e421d96bbcb0",
+      "output_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+      "cpu_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+      "native_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1028092,
+        "pipeline_create_us": 1977975,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          98304,
+          98304,
+          98304,
+          98272,
+          98304
+        ],
+        "gpu_ms_per_draw": [
+          0.012288,
+          0.012288,
+          0.012288,
+          0.012284,
+          0.012288
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 213692416,
+        "worker_peak_working_set_bytes": 227246080
+      },
+      "median_gpu_ms": 0.012288,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 180,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792"
+        }
+      }
+    },
+    "73-whole-frame-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "11db5fea6d397353a1a65b18777aaf608245d4e9b81870bfcad4e43f87dffc0a",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1156220,
+        "pipeline_create_us": 2099,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1984512,
+          2121728,
+          2160640,
+          2147328,
+          1981440
+        ],
+        "gpu_ms_per_draw": [
+          0.248064,
+          0.265216,
+          0.27008,
+          0.268416,
+          0.24768
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 64573440,
+        "worker_peak_working_set_bytes": 66412544
+      },
+      "median_gpu_ms": 0.265216,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-whole-frame-typed": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 320,
+      "height": 180,
+      "inputs": {
+        "features0.rgba32f": "86ace1bdb84da4bae486578c1b36b078dff4d614965aa82253d80537e6e7f0c0",
+        "features1.rgba32f": "6f379e5a246318a044d3cb4e459b14cc7c11c4522819b020339247e57cf64c2d",
+        "direction.rgba32f": "6bdbb2f2fe2aa6e06228f531fac7552be33e8f9674ee612e748ff71bd874bc96",
+        "indices.r32u": "0205d81d7f94d64e0493e9f1649bdc7ea9baa690fe453ae2ebe90564f4bc03c9",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d98543b5c5554c49976de735a13cfdc28b4ec25a8a316bf8e6e97244b1e5177c"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "4492aa0c9e3271a4829259b7a1f8cc1b695af84d95c4ed1375e2c9de26b497db",
+      "output_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+      "cpu_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27",
+      "native_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1215240,
+        "pipeline_create_us": 2206258,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          2809856,
+          2338816,
+          2595840,
+          2555904,
+          2324480
+        ],
+        "gpu_ms_per_draw": [
+          0.351232,
+          0.292352,
+          0.32448,
+          0.319488,
+          0.29056
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 234303488,
+        "worker_peak_working_set_bytes": 244486144
+      },
+      "median_gpu_ms": 0.319488,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 4.172325134277344e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 5174,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 4.172325134277344e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "8e05d5337efbcc05e6bf296cac4c02c23fd7b35bfdc4b246d5dc721e430b8c27"
+        },
+        "native": {
+          "pixels": 57600,
+          "exact_alpha": 57600,
+          "exact_clear_rgba": 5095,
+          "exact_pixels": 40232,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 2.384185791015625e-07,
+          "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43",
+          "oracle_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+        }
+      }
+    },
+    "73-whole-smoke-final": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "dd9519108bf9fee931b4eefbaaa0190dbe0d45d695a6c7fec5dfb24db82d17ea",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "4492aa0c9e3271a4829259b7a1f8cc1b695af84d95c4ed1375e2c9de26b497db",
+      "output_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+      "cpu_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+      "native_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1215240,
+        "pipeline_create_us": 2228089,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          160768,
+          104448,
+          104448,
+          104448,
+          104448
+        ],
+        "gpu_ms_per_draw": [
+          0.020096,
+          0.013056,
+          0.013056,
+          0.013056,
+          0.013056
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 224940032,
+        "worker_peak_working_set_bytes": 242675712
+      },
+      "median_gpu_ms": 0.013056,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 180,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792"
+        }
+      }
+    },
+    "73-whole-smoke-ordinary2": {
+      "device": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "shader": "mlp_morpheus_combo",
+      "width": 16,
+      "height": 16,
+      "inputs": {
+        "features0.rgba32f": "43cfde75dea6f6fc8cd02f50e7b75b3f0602b50a5e861a7b55961f95df6a7c41",
+        "features1.rgba32f": "ffb99b38bef136f0113954d7fcd890796c0abbe64c293e7330ad56f98fa075f5",
+        "direction.rgba32f": "273674316e01c774b2da1d7fab1f305b1c1859f1ca03a11aee9f28561c5c9ae9",
+        "indices.r32u": "705d9ec842d442ad795dfafdf275d8cd9205b081e4e041897de70d6d6903c565",
+        "weights.bin": "a178ab11ed1bbbcc61160331c11c8570579c6959648cff95ddb4f10568e1a731",
+        "mlp_morpheus_combo.cpu.rgba32f": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+        "sgprs.bin": "624f3ee536d948e1b553297ba6cc0c3d5050c5fc01b33786bb84e0a52a08e33c",
+        "guest_mem.bin": "d6fbbf86a04494a481f37d71d0ff5c5128a3944c49aa2318427c91d30a99002d"
+      },
+      "worker_sha256": "06f5eb46befe1e15559936d474170fbcd4d61ac2defb4b6c2c7896388f00947a",
+      "vertex_sha256": "f71776a102da871a6d287231e50532d31c40e67b129cafcff3843bea901805eb",
+      "fragment_sha256": "11db5fea6d397353a1a65b18777aaf608245d4e9b81870bfcad4e43f87dffc0a",
+      "output_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+      "cpu_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db",
+      "native_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792",
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1156220,
+        "pipeline_create_us": 1889998,
+        "capture_statistics": false,
+        "width": 16,
+        "height": 16,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          100352,
+          100352,
+          99328,
+          100352,
+          100352
+        ],
+        "gpu_ms_per_draw": [
+          0.012544,
+          0.012544,
+          0.012416,
+          0.012544,
+          0.012544
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 216989696,
+        "worker_peak_working_set_bytes": 235077632
+      },
+      "median_gpu_ms": 0.012544,
+      "metrics": {
+        "alpha_mismatches": 0,
+        "diagnostic_alpha": 0,
+        "max_abs_all": 2.980232238769531e-07,
+        "first_pixel_pairs": [],
+        "cpu": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 20,
+          "live_rgb_p99_abs": 2.384185791015625e-07,
+          "max_abs": 2.980232238769531e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "83e94153766aa4c227383e49c6ee17b039579bfe37e157004d18042381dc83db"
+        },
+        "native": {
+          "pixels": 256,
+          "exact_alpha": 256,
+          "exact_clear_rgba": 20,
+          "exact_pixels": 180,
+          "live_rgb_p99_abs": 1.1920928955078125e-07,
+          "max_abs": 1.7881393432617188e-07,
+          "rgba32f_sha256": "2ff239c1b18414abd939404b5b72276757f4d982b3d0e74b54521133f101364f",
+          "oracle_sha256": "e58675ecd97b26f15754c5bb6f9eee72063f0fe7a6b01ba99ceb48626f79e792"
+        }
+      }
+    },
+    "mlp_combo.frame": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "source-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 46192,
+        "pipeline_create_us": 454,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          110592,
+          108544,
+          107520,
+          106496,
+          107520
+        ],
+        "gpu_ms_per_draw": [
+          0.013824,
+          0.013568,
+          0.01344,
+          0.013312,
+          0.01344
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 536870912,
+        "worker_peak_commit_bytes": 58621952,
+        "worker_peak_working_set_bytes": 62173184
+      },
+      "output_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+    },
+    "mlp_combo.frame2": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "source-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 46192,
+        "pipeline_create_us": 506,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          112640,
+          110592,
+          107520,
+          109568,
+          107520
+        ],
+        "gpu_ms_per_draw": [
+          0.01408,
+          0.013824,
+          0.01344,
+          0.013696,
+          0.01344
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 536870912,
+        "worker_peak_commit_bytes": 58830848,
+        "worker_peak_working_set_bytes": 62169088
+      },
+      "output_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+    },
+    "mlp_morpheus_combo.frame": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "source-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 46672,
+        "pipeline_create_us": 454,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          111616,
+          111616,
+          107520,
+          108544,
+          106496
+        ],
+        "gpu_ms_per_draw": [
+          0.013952,
+          0.013952,
+          0.01344,
+          0.013568,
+          0.013312
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 536870912,
+        "worker_peak_commit_bytes": 60178432,
+        "worker_peak_working_set_bytes": 62205952
+      },
+      "output_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+    },
+    "mlp_morpheus_combo.frame2": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "source-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 46672,
+        "pipeline_create_us": 623,
+        "capture_statistics": false,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          107520,
+          107520,
+          112640,
+          113664,
+          112640
+        ],
+        "gpu_ms_per_draw": [
+          0.01344,
+          0.01344,
+          0.01408,
+          0.014208,
+          0.01408
+        ],
+        "root_and_readback_guards_intact": true,
+        "worker_commit_limit_bytes": 536870912,
+        "worker_peak_commit_bytes": 58298368,
+        "worker_peak_working_set_bytes": 62156800
+      },
+      "output_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+    }
+  },
+  "capture_runs": {
+    "71-gamma-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 893640,
+        "pipeline_create_us": 1939,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1076224,
+          1406976,
+          1337344,
+          1539072,
+          1190912
+        ],
+        "gpu_ms_per_draw": [
+          0.134528,
+          0.175872,
+          0.167168,
+          0.192384,
+          0.148864
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 1939,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 128
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 409600
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 3
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 64331776,
+        "worker_peak_working_set_bytes": 65789952
+      },
+      "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50"
+    },
+    "71-native-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "source-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 46192,
+        "pipeline_create_us": 106050,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          113664,
+          105440,
+          106496,
+          103424,
+          106496
+        ],
+        "gpu_ms_per_draw": [
+          0.014208,
+          0.01318,
+          0.013312,
+          0.012928,
+          0.013312
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 106050,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 56
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 45184
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 4
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 536870912,
+        "worker_peak_commit_bytes": 98234368,
+        "worker_peak_working_set_bytes": 113643520
+      },
+      "rgba32f_sha256": "92c1c317a83e44dec330f6ee512f1ff802a75c34174876a8a2b45189c2db20c1"
+    },
+    "71-strict-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 967576,
+        "pipeline_create_us": 1762,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1809408,
+          1566720,
+          1435648,
+          1510400,
+          1634304
+        ],
+        "gpu_ms_per_draw": [
+          0.226176,
+          0.19584,
+          0.179456,
+          0.1888,
+          0.204288
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 1762,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 128
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 428800
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 3
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 64151552,
+        "worker_peak_working_set_bytes": 65667072
+      },
+      "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50"
+    },
+    "71-whole-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1155620,
+        "pipeline_create_us": 2182,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          2311168,
+          2337792,
+          2092032,
+          2454528,
+          2382848
+        ],
+        "gpu_ms_per_draw": [
+          0.288896,
+          0.292224,
+          0.261504,
+          0.306816,
+          0.297856
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 2182,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 128
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 475776
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 3
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 64663552,
+        "worker_peak_working_set_bytes": 66777088
+      },
+      "rgba32f_sha256": "900580a1036ace71d2740cfd14625c7b93b63954bd44d9cde1f85f165ca1ef50"
+    },
+    "73-gamma-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 894240,
+        "pipeline_create_us": 2017,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1196032,
+          1198080,
+          1422336,
+          1302528,
+          1067008
+        ],
+        "gpu_ms_per_draw": [
+          0.149504,
+          0.14976,
+          0.177792,
+          0.162816,
+          0.133376
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 2017,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 128
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 409728
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 3
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 62693376,
+        "worker_peak_working_set_bytes": 65978368
+      },
+      "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43"
+    },
+    "73-native-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "source-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 46672,
+        "pipeline_create_us": 108463,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          114688,
+          108544,
+          106496,
+          106496,
+          106496
+        ],
+        "gpu_ms_per_draw": [
+          0.014336,
+          0.013568,
+          0.013312,
+          0.013312,
+          0.013312
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 108463,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 56
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 45312
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 4
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 536870912,
+        "worker_peak_commit_bytes": 95399936,
+        "worker_peak_working_set_bytes": 108953600
+      },
+      "rgba32f_sha256": "702c357a6260c79444c44226fb76626216fd063c7aebf9c6972dba759aeb73c1"
+    },
+    "73-strict-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 969072,
+        "pipeline_create_us": 1926,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          1755136,
+          1574912,
+          1594368,
+          1213440,
+          1577984
+        ],
+        "gpu_ms_per_draw": [
+          0.219392,
+          0.196864,
+          0.199296,
+          0.15168,
+          0.197248
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 1926,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 128
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 429696
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 3
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 62410752,
+        "worker_peak_working_set_bytes": 65847296
+      },
+      "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43"
+    },
+    "73-whole-same-pso": {
+      "gpu": {
+        "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "device_id": 9989,
+        "vendor_id": 4318,
+        "layout_profile": "bounded-nerf",
+        "subgroup_size": 32,
+        "driver_version_raw": 2588114944,
+        "api_version_raw": 4211039,
+        "vertex_spirv_bytes": 936,
+        "fragment_spirv_bytes": 1156220,
+        "pipeline_create_us": 2260,
+        "capture_statistics": true,
+        "width": 320,
+        "height": 180,
+        "draws_per_interval": 8,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 1,
+        "gpu_ticks": [
+          2292736,
+          1872896,
+          2488320,
+          2239488,
+          2139136
+        ],
+        "gpu_ms_per_draw": [
+          0.286592,
+          0.234112,
+          0.31104,
+          0.279936,
+          0.267392
+        ],
+        "root_and_readback_guards_intact": true,
+        "pipeline_create_with_capture_us": 2260,
+        "executables": [
+          {
+            "index": 0,
+            "name": "VS",
+            "description": "Vertex Shader",
+            "stage_flags": 1,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 16
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 768
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 1
+              },
+              {
+                "name": "Output Count",
+                "description": "Number of scalar outputs used by this shader stage",
+                "format": 2,
+                "value": 0
+              }
+            ],
+            "internal_representations": []
+          },
+          {
+            "index": 1,
+            "name": "FS",
+            "description": "Fragment Shader",
+            "stage_flags": 16,
+            "subgroup_size": 32,
+            "statistics": [
+              {
+                "name": "Register Count",
+                "description": "Number of temporary registers used by this shader stage",
+                "format": 2,
+                "value": 128
+              },
+              {
+                "name": "Binary Size",
+                "description": "Size in bytes of the executable for this stage",
+                "format": 2,
+                "value": 475136
+              },
+              {
+                "name": "Stack Size",
+                "description": "Size in bytes required for the shader stack",
+                "format": 2,
+                "value": 0
+              },
+              {
+                "name": "Local Memory Size",
+                "description": "Size in bytes required per-thread for local memory",
+                "format": 2,
+                "value": 68719476736
+              },
+              {
+                "name": "Input Count",
+                "description": "Number of scalar inputs used by this shader stage",
+                "format": 2,
+                "value": 3
+              },
+              {
+                "name": "Output Colors",
+                "description": "Number of colors output by the fragment shader",
+                "format": 2,
+                "value": 1
+              }
+            ],
+            "internal_representations": []
+          }
+        ],
+        "worker_commit_limit_bytes": 2147483648,
+        "worker_peak_commit_bytes": 63389696,
+        "worker_peak_working_set_bytes": 66826240
+      },
+      "rgba32f_sha256": "78b1f4bdc3bf1e5fc52eb2da81c5b946fd8c48d65857afd6f2fd408b576cac43"
+    }
+  }
+}

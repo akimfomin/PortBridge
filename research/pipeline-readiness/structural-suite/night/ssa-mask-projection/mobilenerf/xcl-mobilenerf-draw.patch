@@ -1,0 +1,102 @@
+diff --git a/crates/xcl/src/gpu/dxil/aperture_tests.rs b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+index 9b08408..78f0f54 100644
+--- a/crates/xcl/src/gpu/dxil/aperture_tests.rs
++++ b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+@@ -259,3 +259,97 @@ fn open_miniengine_display_draw() {
+     file.flush().unwrap();
+     println!("display adapter={} size={}x{} kind={}",runner::adapter().unwrap(),width,height,kind);
+ }
++
++/// Draw the pinned Khronos Mobile NeRF PAL pixel program with four real 2D SRVs.
++/// The four 16-byte raw buffer descriptors and four image descriptor offsets come
++/// from the AMD gfx1030 PAL layout and actual resource loads in both modules.
++#[test]
++fn open_mobilenerf_mlp_draw() {
++    use crate::gpu::desc;
++    use std::io::Write;
++    use windows::Win32::Graphics::Direct3D12::*;
++    use windows::Win32::Graphics::Dxgi::Common::*;
++    let Some(dir) = std::env::var_os("PB_NERF_INPUT") else {
++        println!("SKIPPED: public Mobile NeRF feature fixture absent");
++        return;
++    };
++    let dir = std::path::PathBuf::from(dir);
++    let width: u32 = std::env::var("PB_SCENE_SIZE").unwrap().parse().unwrap();
++    let height: u32 = std::env::var("PB_SCENE_HEIGHT").unwrap().parse().unwrap();
++    assert!((8..=640).contains(&width) && (8..=360).contains(&height));
++
++    let specs = [
++        ("features0.rgba32f", DXGI_FORMAT_R32G32B32A32_FLOAT, 16usize),
++        ("features1.rgba32f", DXGI_FORMAT_R32G32B32A32_FLOAT, 16),
++        ("direction.rgba32f", DXGI_FORMAT_R32G32B32A32_FLOAT, 16),
++        ("indices.r32u", DXGI_FORMAT_R32_UINT, 4),
++    ];
++    let mut sgprs = [0u32; crate::gpu::recomp::KERNEL_SGPRS];
++    const WINDOW: usize = 4096;
++    const TABLE: usize = 64;
++    let mut mem = vec![0u32; 4*WINDOW];
++    sgprs[1] = (TABLE*4) as u32;
++    sgprs[IO_UMA_BASE_HI] = 4;
++    let mut textures = Vec::new();
++    for (i, (file, format, texel_size)) in specs.into_iter().enumerate() {
++        let data = std::fs::read(dir.join(file)).unwrap();
++        assert_eq!(data.len(), (width*height) as usize * texel_size);
++        if i == 3 {
++            assert!(data.chunks_exact(4).all(|w| u32::from_le_bytes(w.try_into().unwrap()) < 4));
++        } else {
++            assert!(data.chunks_exact(4).all(|w| f32::from_le_bytes(w.try_into().unwrap()).is_finite()));
++        }
++        let res = D3D12_RESOURCE_DESC {
++            Dimension: D3D12_RESOURCE_DIMENSION_TEXTURE2D, Width: u64::from(width), Height: height,
++            DepthOrArraySize: 1, MipLevels: 1, Format: format,
++            SampleDesc: DXGI_SAMPLE_DESC { Count: 1, Quality: 0 }, ..Default::default()
++        };
++        let mut srv = D3D12_SHADER_RESOURCE_VIEW_DESC {
++            Format: format, ViewDimension: D3D12_SRV_DIMENSION_TEXTURE2D,
++            Shader4ComponentMapping: D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING, ..Default::default()
++        };
++        srv.Anonymous.Texture2D = D3D12_TEX2D_SRV { MipLevels: 1, ..Default::default() };
++        textures.push(runner::ViewTexture { res, srv, data, row_bytes: width as usize * texel_size });
++        let guest = desc::xcl_image_for_view((i*2) as u32, desc::gfx10_format(format).unwrap(),
++            desc::ImageType::D2, width, height, 1, 1);
++        let start = TABLE + 0x100/4 + i*8;
++        mem[start..start+8].copy_from_slice(&guest);
++    }
++    const WORDS: usize = 532;
++    let weights = std::fs::read(dir.join("weights.bin")).unwrap();
++    assert_eq!(weights.len(), 4 * WORDS * 4);
++    for (i, network) in weights.chunks_exact(WORDS*4).enumerate() {
++        let start = 512 + i * WORDS;
++        for (slot, bytes) in mem[start..start+WORDS].iter_mut().zip(network.chunks_exact(4)) {
++            *slot = u32::from_le_bytes(bytes.try_into().unwrap());
++            assert!(f32::from_bits(*slot).is_finite());
++        }
++        // The PAL code's bounds checks compare SRD[2] directly with byte
++        // offsets before a flat load. This descriptor is byte-addressed.
++        let guest = desc::buffer_words((4u64<<32)+(start*4) as u64, 0, (WORDS*4) as u32, 77);
++        let index = TABLE+i*4;
++        mem[index..index+4].copy_from_slice(&guest);
++    }
++    let ps = std::fs::read(std::env::var_os("PB_SCENE_PS").unwrap()).unwrap();
++    super::validate::validate(&ps).unwrap();
++    let vs = dxc::compile(r#"
++        float4 main(uint vid:SV_VertexID):SV_Position {
++            return vid == 0 ? float4(-1,-1,0,1) : vid == 1 ? float4(-1,3,0,1) : float4(3,-1,0,1);
++        }"#, "main", "vs_6_6", &[]).unwrap();
++    let clear = [-3.0; 4];
++    runner::disable_driver_shader_cache().unwrap();
++    let started = std::time::Instant::now();
++    let pixels = runner::draw_gs_views(&vs, None, &ps, &[], &[0.0;6], 8, &[], &sgprs, &mem,
++        &textures, &[], (width,height), clear, Some(WINDOW), None).unwrap();
++    assert_eq!(pixels.len(), (width*height) as usize);
++    println!("scene_native_setup_submit_readback_ms={:.4}", started.elapsed().as_secs_f64()*1000.0);
++    let file = std::fs::OpenOptions::new().write(true).create_new(true)
++        .open(std::env::var_os("PB_SCENE_IMAGE").unwrap()).unwrap();
++    let mut file = std::io::BufWriter::new(file);
++    for pixel in &pixels {
++        for ch in pixel { file.write_all(&ch.to_le_bytes()).unwrap(); }
++    }
++    file.flush().unwrap();
++    println!("nerf adapter={} size={}x{} discarded={} finite={}", runner::adapter().unwrap(), width,height,
++        pixels.iter().filter(|p| **p == clear).count(), pixels.iter().all(|p| p.iter().all(|x| x.is_finite())));
++}

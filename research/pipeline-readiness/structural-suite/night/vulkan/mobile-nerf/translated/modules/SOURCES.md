@@ -1,0 +1,6 @@
+# Source notices for the six compressed shader modules
+
+The two original fragment programs come from KhronosGroup/Vulkan-Samples revision 979aefaa5f2f4bd30efe035ca5a39444cc24ab9f. Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved. The source credits Qualcomm contributor Rodrigo Holztrattner for adaptation from the Google Research JAX3D MobileNeRF WebGL implementation to Vulkan. Both original shader headers specify Apache-2.0. [Khronos fragment sources and original notices](https://github.com/KhronosGroup/Vulkan-Samples/tree/979aefaa5f2f4bd30efe035ca5a39444cc24ab9f/shaders/mobile_nerf) · [Apache License 2.0](LICENSE.Khronos)
+
+The modules in this folder are modified computational representations derived through publicly available shader compilers. The GLSL source was compiled to SPIR-V, translated to RDNA2 code, lifted to DirectX IL with XCL under the three comparison settings and translated to Vulkan SPIR-V by dxil-spirv. The separate PortBridge preparation script adapts bindings and bounds the archived programs at reproduction time. Synthetic input textures, network weights and CPU results are generated separately. No game data or trained model asset is included. [Module identities](../modules.json) · [Public conversion tool](https://github.com/HansKristian-Work/dxil-spirv/tree/b540c8a2484eecc7c2155994c806bbd8a8706f41)
+
