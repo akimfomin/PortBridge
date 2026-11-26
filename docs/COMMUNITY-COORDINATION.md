@@ -1,5 +1,11 @@
 # Координация между командами
 
+## Сверка VIctory и AnyXboxX · 27 ноября 2026
+
+- 01:15:37 МСК. akimfomin передал ByFxbian состояние переноса #1316 и ссылку на сравнение шести прогонов. [Сообщение в #1316](https://github.com/fxceless/victory-fork/pull/1316#issuecomment-7204512012)
+- 01:15:38 МСК. В ответ на запрос mauroalvare отправлена проверка актуального дерева Neptune, четырёх открытых изменений и двух принятых ранее. [Сообщение в #409](https://github.com/LooperSalty/AnyXboxX/pull/409#issuecomment-7204512277) · [Сверка исходников](../audit/evidence/anyxboxx-409-after-revert.md)
+- 01:15:39 МСК. akimfomin предложил LeonardoS11 одну добровольную проверку в исходном обсуждении Zignixx. Проверка применима к сборке с #1316. На исходной `nvidia-wip` опция отсутствует. При первой сверке новых игровых измерений или принятого изменения нет. [Предложение](https://github.com/fxceless/victory-fork/issues/1379#issuecomment-7204512623) · [Воспроизведение](../audit/evidence/victory-cbv-ab.md)
+
 ## Аппаратный отчёт XCL · 27 ноября 2026
 
 00:57:22 МСК. DarkPanda69 сообщил свой полный прогон #2889 на RTX 3060 и RX 9070 XT. На NVIDIA первая проверка отклонила корректную отметку упакованного тайла. Этот результат появился до нашего сообщения. [Отчёт DarkPanda69](https://github.com/xcl-dev/xcl/pull/2889#issuecomment-7204220148)
