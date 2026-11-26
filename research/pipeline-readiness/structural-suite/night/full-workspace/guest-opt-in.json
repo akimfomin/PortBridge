@@ -1,0 +1,18 @@
+[
+  {
+    "arm": 0,
+    "exit": 0,
+    "harness_passed": true,
+    "guest_complete": true,
+    "triangle_passed": true,
+    "stages": {}
+  },
+  {
+    "arm": 1,
+    "exit": 0,
+    "harness_passed": true,
+    "guest_complete": true,
+    "triangle_passed": true,
+    "stages": {}
+  }
+]

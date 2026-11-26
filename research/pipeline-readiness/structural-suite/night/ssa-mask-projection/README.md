@@ -6,6 +6,8 @@ The optional runtime implementation is available at a pinned commit in the PortB
 
 PortBridge's direct-DXIL experiment preserves every original quad read and every wave ballot. It changes the arithmetic used by an instruction that reads just its own lane's bit. In an 800 × 450 procedural raylib draw on the RTX 4070 Ti SUPER, the matched Vulkan measurement improved from 5.177 to 4.210 ms for one camera and 5.446 to 4.404 ms for a second. Each resulting image matched its baseline across all 360,000 RGBA32F pixels. These are medians of warmed groups of eight fullscreen draws on one host, with no presentation cost.
 
+The [full workspace test](../full-workspace/README.md) passed on this exact public head, including the synthetic D3D12.X guest triangle. Paired real-title smoke remains outstanding.
+
 ## What changes
 
 XCL's direct pixel backend collects four wave ballots to reconstruct two words of a guest scalar mask. For a mask producer's own-bit consumer in the same basic block, most of this reconstruction can be removed. Each original word contains four hardware carrier bits for each quad. For physical lane `i` within the selected 32-bit word, the baseline spreads the four carrier bits into guest position `i` when any carrier in the corresponding nibble voted for member `i & 3`. Exactly the same bit follows from this expression:

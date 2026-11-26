@@ -1,0 +1,40 @@
+{
+  "sha": "be7722969c6604da56fe553cd8ecb5e3b7ed0f37",
+  "tree": "d13a846ab20b6251def05c2cc8f530e3c32c0117",
+  "phase": "suite",
+  "command": [
+    "cargo",
+    "test",
+    "--workspace",
+    "--locked",
+    "--",
+    "--test-threads=4",
+    "--show-output"
+  ],
+  "env": {
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "xcl_fixture_envs": [],
+    "cwd_checkout": "morning-xcl-ssa-published",
+    "target_dir_name": "morning-xcl-workspace-build",
+    "cargo_build_jobs": 1,
+    "test_threads": 4
+  },
+  "started_unix": 1795653757.6913536,
+  "free_order": [
+    "physical",
+    "system_commit"
+  ],
+  "initial_free_bytes": [
+    15285927936,
+    8141316096
+  ],
+  "exit_code": 0,
+  "bound": null,
+  "duration_seconds": 135.47,
+  "minimum_free_bytes": [
+    11955863552,
+    4148367360
+  ],
+  "min_disk_bytes": 46377078784,
+  "log_sha256": "8aaabad24fbf6e92c3d03dc509da04ff52b60b720fe031bca7462072974f03b6"
+}

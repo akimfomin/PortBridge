@@ -1,0 +1,36 @@
+{
+  "main": "08db8020d323bf478964fcc586152cce54959cfc",
+  "source_url": "https://github.com/xcl-dev/xcl",
+  "fork_url": "https://github.com/akimfomin/xcl",
+  "branches": [
+    {
+      "fork_commit": "d3e7725f9f48c39c18e7b6e011ec76423edb0004",
+      "tree": "3c13951db8df3d728d4ad8e1b5bbec0aebfe4546",
+      "merge_base": "08db8020d323bf478964fcc586152cce54959cfc",
+      "changes": [
+        "README.md",
+        "crates/xcl/src/gpu/recomp/emit.rs",
+        "crates/xcl/src/gpu/recomp/mod.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/src/gpu/recomp/x64_masks.rs"
+      ],
+      "locked_dependencies_unchanged": true,
+      "supplemental_clean_merge_tree": "40d787cd11f1b412d2c2fb021acc255a6f89557c"
+    },
+    {
+      "fork_commit": "be7722969c6604da56fe553cd8ecb5e3b7ed0f37",
+      "tree": "d13a846ab20b6251def05c2cc8f530e3c32c0117",
+      "merge_base": "08db8020d323bf478964fcc586152cce54959cfc",
+      "changes": [
+        "README.md",
+        "crates/xcl/src/gpu/dxil/kernel.rs",
+        "crates/xcl/src/gpu/dxil/lanes.rs",
+        "crates/xcl/src/gpu/dxil/lower.rs",
+        "crates/xcl/src/gpu/recomp/pso.rs"
+      ],
+      "locked_dependencies_unchanged": true,
+      "supplemental_clean_merge_tree": "0d09a7b2ba686ae7343b8647e0dbd8aa6daf298e"
+    }
+  ],
+  "main_at_supplemental_merge_check": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7"
+}
