@@ -1,0 +1,69 @@
+{
+  "measurement_cohort": "Both sources and matched DXIL compared byte for byte, from the same 8 extraction manifests",
+  "strong_baseline_commit": "051bdda602796c47c107419ae5afff8272d5ca2d",
+  "strong_baseline_tree": "01647d84289182686829e134a0e374549accf492",
+  "before_loop_fallback_commit": "072b1f25bed8ef69d976f547d05fcc35f37db101",
+  "before_loop_fallback_tree": "8f6b60c4401157edab802872381970c89962850b",
+  "final_compiler_commit": "af8046887a34745e3fd09427e9a4cd0e21bc176b",
+  "final_tree": "8ea46d941657028a620faeab19359550a8dbc241",
+  "before_tool_hashes": {
+    "baseline": "ed2c60d24f29f07aff54eb78468fceb6df232deb1ab0f4e93f0f0493808be235",
+    "candidate": "eb5b19a2d476f21c50f36775a544b32684abed5dce0b61c99aefe53856a13039",
+    "dxv": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3"
+  },
+  "final_tool_hashes": {
+    "baseline": "ed2c60d24f29f07aff54eb78468fceb6df232deb1ab0f4e93f0f0493808be235",
+    "candidate": "5f249fe296253461017033a25b00b81c8e98b639da1919112182f8799cd62df4",
+    "dxv": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3"
+  },
+  "observations": 440,
+  "unchanged_observation_records_before_vs_after_guard": 440,
+  "matched_translations": 397,
+  "identical_matched_DXIL_pairs_before_vs_after_guard": 397,
+  "normalized_outputs": [
+    {
+      "id": 71,
+      "arm": "whole",
+      "sha256": "f6ce46bbcc182665aa803ce9464d7c12425a92793c12db17c663283efd45b61e",
+      "dxil_bytes": 283524,
+      "standalone_dxv_passed": true
+    },
+    {
+      "id": 71,
+      "arm": "strict",
+      "sha256": "acc2807d1fdefccaf752baf1d434db71b30b78bf41cbdf855db2b94bdf82921b",
+      "dxil_bytes": 229892,
+      "standalone_dxv_passed": true
+    },
+    {
+      "id": 71,
+      "arm": "compound",
+      "sha256": "3a3177e1212aa56caa76925358a870b97d8e37375571da95683ada3bc13bad83",
+      "dxil_bytes": 210392,
+      "standalone_dxv_passed": true
+    },
+    {
+      "id": 73,
+      "arm": "whole",
+      "sha256": "1b25f995e78ca6af29cbc764b12c09e25bb12f738fc7ac47624af41c7eff3b2a",
+      "dxil_bytes": 284016,
+      "standalone_dxv_passed": true
+    },
+    {
+      "id": 73,
+      "arm": "strict",
+      "sha256": "141fc53f80c9b95e322cb1cefcd7c53efb517caa7b6bdfe6756799e8c7c34eb7",
+      "dxil_bytes": 230636,
+      "standalone_dxv_passed": true
+    },
+    {
+      "id": 73,
+      "arm": "compound",
+      "sha256": "a2b55863f7199687ba84be72da2174dbad441e65c756911410b05f4524feddf0",
+      "dxil_bytes": 210860,
+      "standalone_dxv_passed": true
+    }
+  ],
+  "final_compiler_build": "cargo --config profile.dev.package.xcl.codegen-units=97 build --locked --offline -j1 -p xcl --example demand_observer",
+  "independent_reference_full_pixels": "https://github.com/akimfomin/PortBridge/tree/806a4c0dec2364c8881e1efb437964ac4aa42b27/research/pipeline-readiness/structural-suite/night/vulkan/mobile-nerf/translated"
+}

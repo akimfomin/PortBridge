@@ -19,6 +19,10 @@ The independent D3D12, Vulkan and CPU readers share the same licensed GPU progra
 
 The native Khronos shaders complete the same stage in roughly 13–14 µs. All three translated variants still use 128 registers against 56 for native GLSL. The GPU data comes from one RTX 4070 Ti SUPER. The two shaders belong to a single model family. The timings cover a fullscreen inference draw with generated features and weights. They exclude training, geometry, presentation and all other application stages. The shader executable lengths are driver-reported Vulkan fragment-stage statistics. The D3D12 cached PSO blobs and the serialized DXIL have separate measurements.
 
+## Corpus coverage
+
+The final strong compiler matched 397 of 440 attempted configurations across eight preparation manifests. There were 202 Wave64 and 195 Wave32 matched pairs. Compared with the earlier strict projection, the new lowering changed 30 and 28 of those pairs respectively. In total, 34 DXIL containers shrank, 24 grew and 339 stayed byte-identical. The largest increase was 2,316 bytes; the aggregate shrank by 138,288 bytes (4,453,472 to 4,315,184). The static number of ballots, quad operations and branches stayed identical in every pair. PHI counts changed in 15 cases. No frame timing is inferred for the unrendered configurations. Forty-one prepared configurations lacked matching guest inputs and two failed translation or validation in both arms. All 440 observation records, both output hashes for all 397 successful pairs and all six measured heavy DXIL were unchanged by the final counted-loop fallback. [Full corpus](compound-census.json.gz) · [Comparison across the fix](final-replay.json) · [Cohort statistics and exclusions](compound-census-summary.json)
+
 ## Where the rewrite is valid
 
 For returned concrete ballot words `vote[p][h]`, let `p` select the guest member of the four-lane quad, `h` select the 32-bit half, and `k` select a quad in that half. The reference bit at position `4*k+p` is one exactly when `vote[p][h] & (15 << (4*k))` is nonzero. All four member bits reconstructed from those same votes form a precise four-bit window. Full wave nonemptiness is the OR of all participating vote words. Wave32 chooses its imported half, Wave64 includes both halves.
@@ -28,6 +32,8 @@ Projecting a bit window distributes over bitwise OR. The implementation records 
 Programs that contain both a loop and a scalar population count use the complete reference path. This preserves the original exit counts and the byte-identical reference lowering for this class. The cache identity for the opt-in mode was advanced to v4. [Public opt-in runtime and regressions](https://github.com/akimfomin/xcl/commit/5d04cc10fa11654179d4bde0c1fcdc1d7ffb2cbc)
 
 The proof starts with the ballots returned by the underlying shader API. It does not strengthen guarantees about helper lanes that the API leaves undefined. The runtime option is disabled by default. The experimental compiler preserves an explicit offline reference path, and separates projected bytecode in XCL's translation cache. [Compound compiler patch against the public strict implementation](public-xcl-compiler.patch) · [Strong comparison patch](strong-xcl-compiler.patch)
+
+The official Cargo workspace run at the published opt-in runtime revision finished with 1,436 passed, zero failed and 47 ignored. Its output contains 28 explicitly skipped subcases, and the synthetic title completed with zero failures. The first attempt used a fresh Cargo target without its middleware DLL. Building the workspace and repeating the complete suite supplied the required fixture. Both the unreduced scalar loop and the model of the four-bit window passed at the public revision. [Exact build, test commands and diagnostics](public-workspace.json) · [Complete test output](public-workspace.log.gz)
 
 ## Replay the two exact shaders and the corpus
 

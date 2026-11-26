@@ -1,0 +1,130 @@
+{
+  "revision": "5d04cc10fa11654179d4bde0c1fcdc1d7ffb2cbc",
+  "tree": "b93b0ad404430eafe6196abae859d71fd2e1e3e8",
+  "passed": 1436,
+  "failed": 0,
+  "ignored": 47,
+  "explicit_skipped_output_lines": 28,
+  "test_binaries_and_doctests": 37,
+  "test_title": true,
+  "initial_suite": {
+    "sha": "5d04cc10fa11654179d4bde0c1fcdc1d7ffb2cbc",
+    "tree": "b93b0ad404430eafe6196abae859d71fd2e1e3e8",
+    "phase": "suite",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--locked",
+      "--",
+      "--test-threads=4",
+      "--show-output"
+    ],
+    "env": {
+      "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "xcl_fixture_envs": [],
+      "cwd_checkout": "morning-public-compound-tests",
+      "target_dir_name": "night-corpus-build",
+      "cargo_build_jobs": 1,
+      "test_threads": 4
+    },
+    "started_unix": 1795658325.17419,
+    "free_order": [
+      "physical",
+      "system_commit"
+    ],
+    "initial_free_bytes": [
+      15664537600,
+      7834832896
+    ],
+    "exit_code": 101,
+    "bound": null,
+    "duration_seconds": 176.01,
+    "minimum_free_bytes": [
+      12248133632,
+      3619717120
+    ],
+    "min_disk_bytes": 42777010176,
+    "log_sha256": "30671ad91c7b3c23d7ceeffde94be6910ece03ca95d098384cfe65b71fa6c4f2"
+  },
+  "initial_failure": "The initial workspace test ran before the workspace build had installed the synthetic title and middleware DLL. The title test requires both files.",
+  "required_workspace_build": {
+    "sha": "5d04cc10fa11654179d4bde0c1fcdc1d7ffb2cbc",
+    "tree": "b93b0ad404430eafe6196abae859d71fd2e1e3e8",
+    "phase": "build",
+    "command": [
+      "cargo",
+      "build",
+      "--workspace",
+      "--locked"
+    ],
+    "env": {
+      "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "xcl_fixture_envs": [],
+      "cwd_checkout": "morning-public-compound-tests",
+      "target_dir_name": "night-corpus-build",
+      "cargo_build_jobs": 1,
+      "test_threads": 4
+    },
+    "started_unix": 1795658553.749417,
+    "free_order": [
+      "physical",
+      "system_commit"
+    ],
+    "initial_free_bytes": [
+      14520901632,
+      6854565888
+    ],
+    "exit_code": 0,
+    "bound": null,
+    "duration_seconds": 1.21,
+    "minimum_free_bytes": [
+      13999800320,
+      6546378752
+    ],
+    "min_disk_bytes": 42897661952,
+    "log_sha256": "f8a3a0e6a0102c9a4ddaeb82c36c49c95c0b8ff14b36d90b51572c87595fb8ad"
+  },
+  "complete_repeat": {
+    "sha": "5d04cc10fa11654179d4bde0c1fcdc1d7ffb2cbc",
+    "tree": "b93b0ad404430eafe6196abae859d71fd2e1e3e8",
+    "phase": "retry",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--locked",
+      "--",
+      "--test-threads=4",
+      "--show-output"
+    ],
+    "env": {
+      "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "xcl_fixture_envs": [],
+      "cwd_checkout": "morning-public-compound-tests",
+      "target_dir_name": "night-corpus-build",
+      "cargo_build_jobs": 1,
+      "test_threads": 4
+    },
+    "started_unix": 1795658555.116614,
+    "free_order": [
+      "physical",
+      "system_commit"
+    ],
+    "initial_free_bytes": [
+      15275827200,
+      7920103424
+    ],
+    "exit_code": 0,
+    "bound": null,
+    "duration_seconds": 44.04,
+    "minimum_free_bytes": [
+      12798693376,
+      3502157824
+    ],
+    "min_disk_bytes": 42828107776,
+    "log_sha256": "a520c467cbdf9fdfd6a0dc1a03d2dac8850835548329f03e64950b05dc49f6b4"
+  },
+  "published_log": "Paths to local workspaces and user profiles were replaced. Log uses UTF-8 and LF.",
+  "published_log_sha256_uncompressed": "b66ed7415c69d7f02f97f38bba880a0a716856ff894f309dd405195223cb190b"
+}
