@@ -1,0 +1,9 @@
+adapter=NVIDIA GeForce RTX 4070 Ti SUPER vendor=10de device=2705
+tiled_resources_tier=4
+BC1_UNORM shape=512x256x1 grid=1x2x1 total=2 standard=1 packed=0 sub_start=0 packed_start=0 packed_tiles=0 xcl_line_278=n/a PASS
+BC4_UNORM shape=512x256x1 grid=1x2x1 total=2 standard=1 packed=0 sub_start=0 packed_start=0 packed_tiles=0 xcl_line_278=n/a PASS
+BC5_UNORM shape=256x256x1 grid=2x2x1 total=4 standard=1 packed=0 sub_start=0 packed_start=0 packed_tiles=0 xcl_line_278=n/a PASS
+XCL_RGBA8_8 shape=128x128x1 grid=0x0x0 total=1 standard=0 packed=1 sub_start=4294967295 packed_start=0 packed_tiles=1 xcl_line_278=FAIL PASS
+XCL_RGBA8_256 shape=128x128x1 grid=2x2x1 total=4 standard=1 packed=0 sub_start=0 packed_start=0 packed_tiles=0 xcl_line_278=n/a PASS
+XCL_BC1_256 shape=512x256x1 grid=0x0x0 total=1 standard=0 packed=1 sub_start=4294967295 packed_start=0 packed_tiles=1 xcl_line_278=FAIL PASS
+XCL_D32_8 shape=128x128x1 grid=0x0x0 total=1 standard=0 packed=1 sub_start=4294967295 packed_start=0 packed_tiles=1 xcl_line_278=FAIL PASS
