@@ -1,0 +1,14 @@
+{
+  "runtime_xcl_revision": "0c8a01c7fe0e7364803262bbcd700f869776362b",
+  "XCL_DIRECT_PIXEL_MASK_PROJECTION": "1",
+  "offline_arms": {
+    "whole": {
+      "bytes": 177584,
+      "sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e"
+    },
+    "project": {
+      "bytes": 151968,
+      "sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+    }
+  }
+}

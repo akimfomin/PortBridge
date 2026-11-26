@@ -1,0 +1,49 @@
+{
+  "rows": [
+    {
+      "group": "miniengine-display",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+      "spirv_sha256": "4b0d3d92414a2b0b188703c1696132ae59862feffc2e746cc7b06df72d2bdb17",
+      "bindings": {
+        "ColorTex": 0,
+        "Constants": 16
+      },
+      "native_dxil_sha256": "b1d42541a80123b4e4c390160ffecf8779ec636e63fab6d8199b7825823f19fd",
+      "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+      "rdna": {
+        "bytes": 3276,
+        "sha256": "1b271fd66e497d1f7e08005d1bcf155abb2b88cc0d1f52b1732b4982eb47393a",
+        "wave": 32,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "id": 0,
+      "variants": {
+        "whole": {
+          "dxil_sha256": "cd8c54df2b556e381bd9797a160348f22b52d084d8681a1eebce1ccaf9cea8e7",
+          "dxil_bytes": 26156,
+          "hlsl_sha256": "378d8884e87e85fddaa73c4646528fd8e2ce537f66aad327ea7038a61a431577",
+          "local_sites": 46,
+          "quad_sites": 2
+        },
+        "width": {
+          "dxil_sha256": "eeb5458b7fbd9448339a2e9e0ee7d5885b39cfc69439fe47ffc93978ca2a95fc",
+          "dxil_bytes": 31156,
+          "hlsl_sha256": "d47996bc23cf90a53c4288376118a229091169b4df68c3bbc55cce95feedc207",
+          "local_sites": 32,
+          "quad_sites": 16
+        }
+      }
+    }
+  ],
+  "source_tree": "XCL HLSL stock e1d84b7d9153f86a97d2ec5d209d196046fc0bea vs width-only ca5b5daa6e07b3488993840d9aec46ccafde0f36",
+  "tool_hashes": {
+    "emit_wave32_hlsl-stock.exe": "71194c85ab0228214460fdd4d9163c1fe56c8f8110b0ba06e519e9ab72856807",
+    "emit_wave32_hlsl-fixed.exe": "667f1df71f41e42009206a30ccab91c616156ff6f885b4721c7502c9478d1ef3",
+    "dxc.exe": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2"
+  }
+}

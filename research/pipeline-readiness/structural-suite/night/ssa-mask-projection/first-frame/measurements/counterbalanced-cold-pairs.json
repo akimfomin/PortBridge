@@ -1,0 +1,199 @@
+{
+  "xcl_revision_reported": "5ea2b9693158e92f3caab1631829e153abd564e8",
+  "synthetic_fixture_sha256": "959c3b32bb9f4c78bcc1356baa938b0b9ad8675772389939e3016d105842acc6",
+  "source_sha256": "abe2f67f69e9f266404e84a783c69889c257a2571ca05e209b0a55e66a1a647c",
+  "guest_isa_sha256": "428e921c8793609b5614230a6e29bbba4d60231f09980ff2e2e242f916587941",
+  "scene_sha256": "19d02ff9097a489946daf56e816c4af4f3a7d25068b6ddb91ea10b718afb73e7",
+  "sgpr_sha256": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3",
+  "reference_rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+  "expected_dxil_sha256": {
+    "whole": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "project": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+  },
+  "controls": {
+    "viewEye": [
+      2.5,
+      2.5,
+      3.0
+    ],
+    "viewCenter": [
+      0.0,
+      0.0,
+      0.7
+    ],
+    "runTime": 1.0,
+    "resolution": [
+      800.0,
+      450.0
+    ]
+  },
+  "tool_sha256": {
+    "translator": "eaf0d97ab10803ddb083dd0deb3d4cfcde8829768961b12c642ac93fce0772b7",
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "renderer": "c5a51efbd8e47a111748477a94d10bed63492181fc6e8a466705c63f28d49075",
+    "guard": "40c5c35431ae82c6bb16662055680923dc3005e1a857472d304fcec6ffffd245"
+  },
+  "cpu_only": false,
+  "shader_cache": "isolated XCL translated cache per trial, fresh process per arm",
+  "native_cache": "renderer requires device-local D3D12 implicit driver and D3D cache disable",
+  "render_count": 1,
+  "collect_pso_blob": false,
+  "rows": [
+    {
+      "id": "00-cold-project",
+      "mode": "project",
+      "cache": "cold",
+      "draw_requested": true,
+      "qualified": true,
+      "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+      "runtime_process_wall_ms": 80.2602,
+      "runtime_api_ms": 50.5067,
+      "translated_cache_hits": 0,
+      "renderer_adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+      "guest_input_to_verified_image_wall_ms": 1194.493,
+      "render_guard_wall_ms": 1108.9919,
+      "native_create_ms": 749.967,
+      "setup_submit_readback_ms": 791.1612,
+      "peak_render_process_bytes": 219156480,
+      "new_cache_entries": [
+        "translated/v2/d8ea6da5862a5999/325fdc7c90ef97df_Pixel_0_4_0.bin"
+      ],
+      "worker_output": {
+        "runtime.log": [
+          "xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "runtime_api_ms=50.506700 cache_hits=0 cache_misses=0 compilations=0"
+        ],
+        "guard.log": [
+          "exit=0 peak_process_bytes=219156480 peak_job_bytes=220610560"
+        ],
+        "renderer.log": [
+          "running 1 test",
+          "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "guard fixture native_create_ms=749.967",
+          "scene_native_setup_submit_readback_ms=791.1612",
+          "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+          "ok",
+          "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1340 filtered out; finished in 1.04s"
+        ]
+      }
+    },
+    {
+      "id": "00-cold-whole",
+      "mode": "whole",
+      "cache": "cold",
+      "draw_requested": true,
+      "qualified": true,
+      "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+      "runtime_process_wall_ms": 92.5046,
+      "runtime_api_ms": 60.8674,
+      "translated_cache_hits": 0,
+      "renderer_adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+      "guest_input_to_verified_image_wall_ms": 1305.1071,
+      "render_guard_wall_ms": 1207.8789,
+      "native_create_ms": 855.374,
+      "setup_submit_readback_ms": 897.9795,
+      "peak_render_process_bytes": 230174720,
+      "new_cache_entries": [
+        "translated/v2/957cb16d41ea826b/325fdc7c90ef97df_Pixel_0_4_0.bin"
+      ],
+      "worker_output": {
+        "runtime.log": [
+          "xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "runtime_api_ms=60.867400 cache_hits=0 cache_misses=0 compilations=0"
+        ],
+        "guard.log": [
+          "exit=0 peak_process_bytes=230174720 peak_job_bytes=231624704"
+        ],
+        "renderer.log": [
+          "running 1 test",
+          "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "guard fixture native_create_ms=855.374",
+          "scene_native_setup_submit_readback_ms=897.9795",
+          "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+          "ok",
+          "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1340 filtered out; finished in 1.14s"
+        ]
+      }
+    },
+    {
+      "id": "01-cold-whole",
+      "mode": "whole",
+      "cache": "cold",
+      "draw_requested": true,
+      "qualified": true,
+      "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+      "runtime_process_wall_ms": 89.9699,
+      "runtime_api_ms": 57.2822,
+      "translated_cache_hits": 0,
+      "renderer_adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+      "guest_input_to_verified_image_wall_ms": 1291.1054,
+      "render_guard_wall_ms": 1196.5156,
+      "native_create_ms": 839.931,
+      "setup_submit_readback_ms": 882.6713,
+      "peak_render_process_bytes": 232013824,
+      "new_cache_entries": [
+        "translated/v2/957cb16d41ea826b/325fdc7c90ef97df_Pixel_0_4_0.bin"
+      ],
+      "worker_output": {
+        "runtime.log": [
+          "xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "runtime_api_ms=57.282200 cache_hits=0 cache_misses=0 compilations=0"
+        ],
+        "guard.log": [
+          "exit=0 peak_process_bytes=232013824 peak_job_bytes=233463808"
+        ],
+        "renderer.log": [
+          "running 1 test",
+          "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "guard fixture native_create_ms=839.931",
+          "scene_native_setup_submit_readback_ms=882.6713",
+          "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+          "ok",
+          "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1340 filtered out; finished in 1.13s"
+        ]
+      }
+    },
+    {
+      "id": "01-cold-project",
+      "mode": "project",
+      "cache": "cold",
+      "draw_requested": true,
+      "qualified": true,
+      "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+      "runtime_process_wall_ms": 82.9863,
+      "runtime_api_ms": 52.2077,
+      "translated_cache_hits": 0,
+      "renderer_adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+      "guest_input_to_verified_image_wall_ms": 1191.8951,
+      "render_guard_wall_ms": 1104.4068,
+      "native_create_ms": 750.839,
+      "setup_submit_readback_ms": 791.2776,
+      "peak_render_process_bytes": 218456064,
+      "new_cache_entries": [
+        "translated/v2/d8ea6da5862a5999/325fdc7c90ef97df_Pixel_0_4_0.bin"
+      ],
+      "worker_output": {
+        "runtime.log": [
+          "xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "runtime_api_ms=52.207700 cache_hits=0 cache_misses=0 compilations=0"
+        ],
+        "guard.log": [
+          "exit=0 peak_process_bytes=218456064 peak_job_bytes=219914240"
+        ],
+        "renderer.log": [
+          "running 1 test",
+          "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "guard fixture native_create_ms=750.839",
+          "scene_native_setup_submit_readback_ms=791.2776",
+          "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+          "ok",
+          "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1340 filtered out; finished in 1.03s"
+        ]
+      }
+    }
+  ]
+}

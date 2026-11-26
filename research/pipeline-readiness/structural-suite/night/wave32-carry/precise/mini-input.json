@@ -1,0 +1,38 @@
+{
+  "source": {
+    "repo": "microsoft/DirectX-Graphics-Samples",
+    "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+    "license": "MIT"
+  },
+  "tool_hashes": {
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "dis": "19fe00087c94c32f423eb06343fa31459baed5f3ee8c2f820090d8b0307884ee",
+    "val": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+    "llpc": "928501ebdafcb4c1e20af5c39fed45cd69a402aaa73be453d2d6de50eae9215a",
+    "readobj": "a933bde283b3881ae108e65884c1fd74c293af9fb5fdeca2bf475e8f4a4a9215"
+  },
+  "observations": [
+    {
+      "group": "miniengine-display",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+      "spirv_sha256": "4b0d3d92414a2b0b188703c1696132ae59862feffc2e746cc7b06df72d2bdb17",
+      "bindings": {
+        "ColorTex": 0,
+        "Constants": 16
+      },
+      "native_dxil_sha256": "b1d42541a80123b4e4c390160ffecf8779ec636e63fab6d8199b7825823f19fd",
+      "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+      "rdna": {
+        "bytes": 3276,
+        "sha256": "1b271fd66e497d1f7e08005d1bcf155abb2b88cc0d1f52b1732b4982eb47393a",
+        "wave": 32,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    }
+  ]
+}

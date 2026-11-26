@@ -1,0 +1,79 @@
+{
+  "device": {
+    "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "vendor_id": 4318,
+    "device_id": 9989,
+    "driver_version_raw": 2588114944,
+    "subgroup_size": 32
+  },
+  "fragment_stages": {
+    "ray-whole": {
+      "binary_bytes": 221568,
+      "registers": 168,
+      "representations": 0
+    },
+    "ray-project": {
+      "binary_bytes": 197888,
+      "registers": 168,
+      "representations": 0
+    },
+    "071-whole": {
+      "binary_bytes": 457984,
+      "registers": 128,
+      "representations": 0
+    },
+    "071-project": {
+      "binary_bytes": 411264,
+      "registers": 128,
+      "representations": 0
+    },
+    "073-whole": {
+      "binary_bytes": 457216,
+      "registers": 128,
+      "representations": 0
+    },
+    "073-project": {
+      "binary_bytes": 412160,
+      "registers": 128,
+      "representations": 0
+    }
+  },
+  "cameras": {
+    "primary": {
+      "whole": {
+        "median_ms": 5.176704,
+        "range_ms": [
+          5.123968,
+          5.202432
+        ]
+      },
+      "d3d12_vulkan_output_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+      "project": {
+        "median_ms": 4.210048,
+        "range_ms": [
+          4.20096,
+          4.227456
+        ]
+      },
+      "median_time_reduction_fraction": 0.18673194372326496
+    },
+    "secondary": {
+      "whole": {
+        "median_ms": 5.445888,
+        "range_ms": [
+          5.384576,
+          5.506304
+        ]
+      },
+      "d3d12_vulkan_output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df",
+      "project": {
+        "median_ms": 4.403584,
+        "range_ms": [
+          4.385664,
+          4.411008
+        ]
+      },
+      "median_time_reduction_fraction": 0.19139284539087098
+    }
+  }
+}

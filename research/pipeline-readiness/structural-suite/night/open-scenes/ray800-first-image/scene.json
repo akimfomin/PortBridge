@@ -1,0 +1,443 @@
+{
+  "scene": "raymarching",
+  "width": 800,
+  "height": 450,
+  "controls": {
+    "viewEye": [
+      2.5,
+      2.5,
+      3.0
+    ],
+    "viewCenter": [
+      0.0,
+      0.0,
+      0.7
+    ],
+    "runTime": 1.0,
+    "resolution": [
+      800.0,
+      450.0
+    ]
+  },
+  "gl": {
+    "GL_VENDOR": "NVIDIA Corporation",
+    "GL_RENDERER": "NVIDIA GeForce RTX 4070 Ti SUPER/PCIe/SSE2",
+    "GL_VERSION": "3.3.0 NVIDIA 617.14",
+    "first_draw_setup_link_readback_ms": 13.191600002755877,
+    "gpu_ms_per_draw": []
+  },
+  "gl_image": {
+    "sha256": "7785d9ef2ca55d94b3bb8b1a862df71064becbd268fc93f11ec7014a45cb7408",
+    "pixels": 360000,
+    "nonfinite_pixels": 0,
+    "unique_finite_colors": 359435,
+    "rgb_mean": [
+      0.6388391256332397,
+      0.6472543478012085,
+      0.6872509717941284
+    ]
+  },
+  "draws_per_interval": 0,
+  "pairs": [
+    {
+      "order": [
+        "whole",
+        "local"
+      ],
+      "variants": {
+        "whole": {
+          "dxil_sha256": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a",
+          "admission_start_utc": "2026-11-25T23:01:28.589+00:00",
+          "readback_complete_utc": "2026-11-25T23:01:29.834+00:00",
+          "admission_attempts": 1,
+          "stats": {
+            "native_create_ms": 882.609,
+            "pso_cache_blob_bytes": 207158,
+            "scene_native_setup_submit_readback_ms": 927.4733,
+            "peak_process_bytes": 230674432
+          },
+          "image": {
+            "sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359424,
+            "rgb_mean": [
+              0.6388511657714844,
+              0.6472655534744263,
+              0.6872663497924805
+            ]
+          },
+          "vs_gl": {
+            "bit_equal_pixels": 34813,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "rms_rgb": 0.0024998709477513973,
+            "pixels_over_one_8bit_code": 2052,
+            "pixels_over_two_8bit_codes": 1956
+          }
+        },
+        "local": {
+          "dxil_sha256": "35427400606d7e98c740227fa00bd09c3cec95ce39af84f7ab32274e3c3f6c69",
+          "admission_start_utc": "2026-11-25T23:01:30.105+00:00",
+          "readback_complete_utc": "2026-11-25T23:01:33.861+00:00",
+          "admission_attempts": 2,
+          "stats": {
+            "native_create_ms": 377.709,
+            "pso_cache_blob_bytes": 92406,
+            "scene_native_setup_submit_readback_ms": 415.8568,
+            "peak_process_bytes": 199622656
+          },
+          "image": {
+            "sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359424,
+            "rgb_mean": [
+              0.6388511657714844,
+              0.6472655534744263,
+              0.6872663497924805
+            ]
+          },
+          "vs_gl": {
+            "bit_equal_pixels": 34813,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "rms_rgb": 0.0024998709477513973,
+            "pixels_over_one_8bit_code": 2052,
+            "pixels_over_two_8bit_codes": 1956
+          }
+        }
+      },
+      "vs_whole": {
+        "local": {
+          "bit_equal_pixels": 360000,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 0.0,
+          "p99_max_channel_abs": 0.0,
+          "max_channel_abs": 0.0,
+          "mean_abs_rgb": 0.0,
+          "rms_rgb": 0.0,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      }
+    },
+    {
+      "order": [
+        "local",
+        "whole"
+      ],
+      "variants": {
+        "local": {
+          "dxil_sha256": "35427400606d7e98c740227fa00bd09c3cec95ce39af84f7ab32274e3c3f6c69",
+          "admission_start_utc": "2026-11-25T23:01:34.149+00:00",
+          "readback_complete_utc": "2026-11-25T23:01:34.886+00:00",
+          "admission_attempts": 1,
+          "stats": {
+            "native_create_ms": 383.883,
+            "pso_cache_blob_bytes": 92406,
+            "scene_native_setup_submit_readback_ms": 423.3701,
+            "peak_process_bytes": 199258112
+          },
+          "image": {
+            "sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359424,
+            "rgb_mean": [
+              0.6388511657714844,
+              0.6472655534744263,
+              0.6872663497924805
+            ]
+          },
+          "vs_gl": {
+            "bit_equal_pixels": 34813,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "rms_rgb": 0.0024998709477513973,
+            "pixels_over_one_8bit_code": 2052,
+            "pixels_over_two_8bit_codes": 1956
+          }
+        },
+        "whole": {
+          "dxil_sha256": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a",
+          "admission_start_utc": "2026-11-25T23:01:35.089+00:00",
+          "readback_complete_utc": "2026-11-25T23:01:36.315+00:00",
+          "admission_attempts": 1,
+          "stats": {
+            "native_create_ms": 866.99,
+            "pso_cache_blob_bytes": 207158,
+            "scene_native_setup_submit_readback_ms": 912.7311,
+            "peak_process_bytes": 233033728
+          },
+          "image": {
+            "sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359424,
+            "rgb_mean": [
+              0.6388511657714844,
+              0.6472655534744263,
+              0.6872663497924805
+            ]
+          },
+          "vs_gl": {
+            "bit_equal_pixels": 34813,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "rms_rgb": 0.0024998709477513973,
+            "pixels_over_one_8bit_code": 2052,
+            "pixels_over_two_8bit_codes": 1956
+          }
+        }
+      },
+      "vs_whole": {
+        "local": {
+          "bit_equal_pixels": 360000,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 0.0,
+          "p99_max_channel_abs": 0.0,
+          "max_channel_abs": 0.0,
+          "mean_abs_rgb": 0.0,
+          "rms_rgb": 0.0,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      }
+    },
+    {
+      "order": [
+        "whole",
+        "local"
+      ],
+      "variants": {
+        "whole": {
+          "dxil_sha256": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a",
+          "admission_start_utc": "2026-11-25T23:01:36.558+00:00",
+          "readback_complete_utc": "2026-11-25T23:01:37.785+00:00",
+          "admission_attempts": 1,
+          "stats": {
+            "native_create_ms": 866.328,
+            "pso_cache_blob_bytes": 207158,
+            "scene_native_setup_submit_readback_ms": 911.4471,
+            "peak_process_bytes": 230408192
+          },
+          "image": {
+            "sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359424,
+            "rgb_mean": [
+              0.6388511657714844,
+              0.6472655534744263,
+              0.6872663497924805
+            ]
+          },
+          "vs_gl": {
+            "bit_equal_pixels": 34813,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "rms_rgb": 0.0024998709477513973,
+            "pixels_over_one_8bit_code": 2052,
+            "pixels_over_two_8bit_codes": 1956
+          }
+        },
+        "local": {
+          "dxil_sha256": "35427400606d7e98c740227fa00bd09c3cec95ce39af84f7ab32274e3c3f6c69",
+          "admission_start_utc": "2026-11-25T23:01:37.988+00:00",
+          "readback_complete_utc": "2026-11-25T23:01:41.768+00:00",
+          "admission_attempts": 2,
+          "stats": {
+            "native_create_ms": 398.612,
+            "pso_cache_blob_bytes": 92406,
+            "scene_native_setup_submit_readback_ms": 439.7771,
+            "peak_process_bytes": 199004160
+          },
+          "image": {
+            "sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359424,
+            "rgb_mean": [
+              0.6388511657714844,
+              0.6472655534744263,
+              0.6872663497924805
+            ]
+          },
+          "vs_gl": {
+            "bit_equal_pixels": 34813,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 2.980232238769531e-07,
+            "p99_max_channel_abs": 0.001090410947799686,
+            "max_channel_abs": 0.05482393503189087,
+            "mean_abs_rgb": 0.00019374358242170677,
+            "rms_rgb": 0.0024998709477513973,
+            "pixels_over_one_8bit_code": 2052,
+            "pixels_over_two_8bit_codes": 1956
+          }
+        }
+      },
+      "vs_whole": {
+        "local": {
+          "bit_equal_pixels": 360000,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 0.0,
+          "p99_max_channel_abs": 0.0,
+          "max_channel_abs": 0.0,
+          "mean_abs_rgb": 0.0,
+          "rms_rgb": 0.0,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      }
+    }
+  ],
+  "source_sha256": "abe2f67f69e9f266404e84a783c69889c257a2571ca05e209b0a55e66a1a647c",
+  "rdna_sha256": "428e921c8793609b5614230a6e29bbba4d60231f09980ff2e2e242f916587941",
+  "sgprs_sha256": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3",
+  "guarded_stdout": [
+    {
+      "trial": 0,
+      "mode": "whole",
+      "guard": [
+        "exit=0 peak_process_bytes=230674432 peak_job_bytes=232136704"
+      ],
+      "xcl": [
+        "",
+        "running 1 test",
+        "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+        "guard fixture native_create_ms=882.609",
+        "guard pso_cache_blob_bytes=207158",
+        "scene_native_setup_submit_readback_ms=927.4733",
+        "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+        "ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1339 filtered out; finished in 1.17s",
+        ""
+      ]
+    },
+    {
+      "trial": 0,
+      "mode": "local",
+      "guard": [
+        "Insufficient system commit or RAM headroom",
+        "exit=0 peak_process_bytes=199622656 peak_job_bytes=200880128"
+      ],
+      "xcl": [
+        "",
+        "running 1 test",
+        "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+        "guard fixture native_create_ms=377.709",
+        "guard pso_cache_blob_bytes=92406",
+        "scene_native_setup_submit_readback_ms=415.8568",
+        "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+        "ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1339 filtered out; finished in 0.66s",
+        ""
+      ]
+    },
+    {
+      "trial": 1,
+      "mode": "local",
+      "guard": [
+        "exit=0 peak_process_bytes=199258112 peak_job_bytes=200523776"
+      ],
+      "xcl": [
+        "",
+        "running 1 test",
+        "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+        "guard fixture native_create_ms=383.883",
+        "guard pso_cache_blob_bytes=92406",
+        "scene_native_setup_submit_readback_ms=423.3701",
+        "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+        "ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1339 filtered out; finished in 0.67s",
+        ""
+      ]
+    },
+    {
+      "trial": 1,
+      "mode": "whole",
+      "guard": [
+        "exit=0 peak_process_bytes=233033728 peak_job_bytes=234496000"
+      ],
+      "xcl": [
+        "",
+        "running 1 test",
+        "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+        "guard fixture native_create_ms=866.990",
+        "guard pso_cache_blob_bytes=207158",
+        "scene_native_setup_submit_readback_ms=912.7311",
+        "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+        "ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1339 filtered out; finished in 1.15s",
+        ""
+      ]
+    },
+    {
+      "trial": 2,
+      "mode": "whole",
+      "guard": [
+        "exit=0 peak_process_bytes=230408192 peak_job_bytes=231866368"
+      ],
+      "xcl": [
+        "",
+        "running 1 test",
+        "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+        "guard fixture native_create_ms=866.328",
+        "guard pso_cache_blob_bytes=207158",
+        "scene_native_setup_submit_readback_ms=911.4471",
+        "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+        "ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1339 filtered out; finished in 1.15s",
+        ""
+      ]
+    },
+    {
+      "trial": 2,
+      "mode": "local",
+      "guard": [
+        "Insufficient system commit or RAM headroom",
+        "exit=0 peak_process_bytes=199004160 peak_job_bytes=200265728"
+      ],
+      "xcl": [
+        "",
+        "running 1 test",
+        "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+        "guard fixture native_create_ms=398.612",
+        "guard pso_cache_blob_bytes=92406",
+        "scene_native_setup_submit_readback_ms=439.7771",
+        "scene adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800 full_target_pixels=360000",
+        "ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1339 filtered out; finished in 0.69s",
+        ""
+      ]
+    }
+  ],
+  "images": {
+    "gl.png": "0da2e02cba9a00747479b08377bbe31cb3bf07b7f41d2f7cf37c76ecfde2738b",
+    "local.png": "ea20ec514a83f000f72609e09d97922c008774838985fee8c9fedf87c4a6708d",
+    "whole.png": "ea20ec514a83f000f72609e09d97922c008774838985fee8c9fedf87c4a6708d"
+  },
+  "tested_executable_sha256": "ed1cb36747c98d2bc25f500539df98569a1b1de985dccb86565abfa648909d65"
+}

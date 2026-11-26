@@ -1,0 +1,247 @@
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 6ef85ad..292f27e 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -117,7 +117,17 @@ pub fn translate_vertex(code: &[u8], o: KernelOptions, vs: &VsInterface) -> Resu
+ 
+ /// A pixel shader (the recompiler's `Mode::Pixel`; wave-size independent).
+ pub fn translate_pixel(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
+-    translate_entry(code, o, Entry::Pixel(ps.clone()), None, None, 0)
++    translate_entry(code, o, Entry::Pixel(ps.clone(), false), None, None, 0)
++}
++
++/// Pixel translation for an ABI whose IO_UMA_BASE_HI is the supplied base.
++/// Wide arbitrary synthetic or offline input can continue using translate_pixel.
++pub fn translate_pixel_for_uma_aperture(
++    code: &[u8], o: KernelOptions, ps: &PsInterface, base_hi: u32,
++) -> Result<Kernel, String> {
++    let windows = o.mem_windows & !crate::gpu::recomp::HEAP_WINDOWS;
++    let excludes_unit_high = windows > 1 && base_hi >= 2 && base_hi.checked_add(windows).is_some();
++    translate_entry(code, o, Entry::Pixel(ps.clone(), excludes_unit_high), None, None, 0)
+ }
+ 
+ /// A geometry-mode (ES+GS) program: the compute pass that writes one mesh record per
+@@ -133,7 +143,7 @@ pub enum Entry {
+     Compute(CsInterface),
+     Mesh(MsInterface),
+     Vertex(VsInterface),
+-    Pixel(PsInterface),
++    Pixel(PsInterface, bool),
+     Geometry(GsInterface),
+ }
+ 
+@@ -204,7 +214,7 @@ fn translate_on_this_thread(
+     };
+     let kernel = matches!(entry, Entry::Kernel);
+     let follow_loads = matches!(entry, Entry::Kernel | Entry::Compute(_));
+-    let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(_));
++    let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(..));
+     let compute = matches!(entry, Entry::Compute(_));
+     let split = o.wave64 && o.split && !gfx;
+     let leaders: BTreeSet<u64> = cfg.blocks.iter().filter_map(|b| b.insts.first().map(|&i| cfg.insts[i].pc)).collect();
+@@ -252,7 +262,7 @@ fn translate_on_this_thread(
+             lw.setup_vertex(vs, &used);
+             [1, 1, 1]
+         }
+-        Entry::Pixel(ps) => {
++        Entry::Pixel(ps, _) => {
+             lw.setup_lanes_gfx();
+             let modes = crate::gpu::recomp::emit::ps_attr_modes(&cfg.insts, ps.input_ena);
+             lw.setup_pixel(ps, &modes);
+@@ -484,11 +494,11 @@ impl Lw {
+             Entry::Mesh(ms) => Some(ms.clone()),
+             _ => None,
+         };
+-        let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(_));
++        let gfx = matches!(entry, Entry::Vertex(_) | Entry::Pixel(..));
+         let split = split && !gfx;
+         let stage = match entry {
+             Entry::Vertex(_) => Stage::Vertex,
+-            Entry::Pixel(_) => Stage::Pixel,
++            Entry::Pixel(..) => Stage::Pixel,
+             _ => Stage::Compute,
+         };
+         let mut s = Shader::new(stage, (6, 6));
+@@ -513,6 +523,7 @@ impl Lw {
+             half: z,
+             mems,
+             heap_mem,
++            uma_excludes_unit_high: matches!(entry, Entry::Pixel(_, true)),
+             res,
+             fmt_table: None,
+             fmt_desc_cache: HashMap::new(),
+@@ -582,7 +593,7 @@ impl Lw {
+         }
+         lw.static_samplers = crate::gpu::recomp::constant_samplers(insts, leaders);
+         let group_threads: Option<u32> = match entry {
+-            Entry::Vertex(_) | Entry::Pixel(_) => None,
++            Entry::Vertex(_) | Entry::Pixel(..) => None,
+             Entry::Kernel => None,
+             Entry::Compute(cs) => Some(cs.threads.iter().product()),
+             Entry::Mesh(ms) => Some(ms.threads),
+diff --git a/crates/xcl/src/gpu/dxil/lower.rs b/crates/xcl/src/gpu/dxil/lower.rs
+index 5034d31..420f590 100644
+--- a/crates/xcl/src/gpu/dxil/lower.rs
++++ b/crates/xcl/src/gpu/dxil/lower.rs
+@@ -187,6 +187,8 @@ pub struct Lw {
+     /// the windows come from the descriptor heap (`lower_window`; `mems` only counts them):
+     /// Some(globallycoherent)
+     pub heap_mem: Option<bool>,
++    /// With the caller's nonwrapping UMA layout, high words 1 and UINT32_MAX miss.
++    pub uma_excludes_unit_high: bool,
+     pub res: Option<RawUav>,
+     /// the buffer format table (`FMT_INFO`), created on first use
+     pub fmt_table: Option<Value>,
+diff --git a/crates/xcl/src/gpu/dxil/lower_mem.rs b/crates/xcl/src/gpu/dxil/lower_mem.rs
+index cc7cd01..1c87de8 100644
+--- a/crates/xcl/src/gpu/dxil/lower_mem.rs
++++ b/crates/xcl/src/gpu/dxil/lower_mem.rs
+@@ -170,12 +170,19 @@ impl Lw {
+                 _ => {}
+             }
+         }
++        let w = (self.heap_mem.is_some() || self.windowed())
++            .then(|| self.rd(super::lower::VAR_WIN));
++        let window_zero = if self.uma_excludes_unit_high {
++            w.and_then(|w| self.s.m.window_zero_condition(w, self.mems.len() as u32))
++        } else {
++            None
++        };
+         // Descriptor-heap windows (`#1693`, `XCL_HEAP_WINDOWS=1`): single guarded heap lookup
+         // combined with `guard`, stacking cleanly with vector loads/stores & FormatLoad opt.
+         if let Some(coherent) = self.heap_mem {
+             let windows = self.mems.len() as u32;
+-            let w = self.rd(super::lower::VAR_WIN);
+-            let inside = self.cmpc(Pred::ULt, w, windows);
++            let w = w.expect("heap window selector");
++            let inside = window_zero.unwrap_or_else(|| self.cmpc(Pred::ULt, w, windows));
+             let cond = match guard {
+                 Some(g) => self.and(g, inside),
+                 None => inside,
+@@ -184,7 +191,8 @@ impl Lw {
+                 return out_tys.iter().map(|&t| self.s.m.const_int(t, 0)).collect();
+             }
+             if self.s.m.const_u64(cond) == Some(1) {
+-                let i = self.addc(w, crate::gpu::recomp::MEM_HEAP_BASE);
++                let i = if window_zero.is_some() { self.c(crate::gpu::recomp::MEM_HEAP_BASE) }
++                else { self.addc(w, crate::gpu::recomp::MEM_HEAP_BASE) };
+                 let m = self.s.heap_raw_buffer_uav(i, coherent);
+                 let vals = f(self, m);
+                 debug_assert_eq!(vals.len(), out_tys.len());
+@@ -198,7 +206,8 @@ impl Lw {
+             self.s.m.set_block(then);
+             #[cfg(debug_assertions)]
+             self.ssa.begin_log();
+-            let i = self.addc(w, crate::gpu::recomp::MEM_HEAP_BASE);
++            let i = if window_zero.is_some() { self.c(crate::gpu::recomp::MEM_HEAP_BASE) }
++                else { self.addc(w, crate::gpu::recomp::MEM_HEAP_BASE) };
+             let m = self.s.heap_raw_buffer_uav(i, coherent);
+             let vals = f(self, m);
+             #[cfg(debug_assertions)]
+@@ -219,10 +228,15 @@ impl Lw {
+             return out;
+         }
+         // Single window, or window known at translation time: at most one branch for `guard`.
+-        let fixed_mem = if self.mems.len() <= 1 {
++        let fixed_mem = if let Some(c) = window_zero {
++            guard = Some(if let Some(g) = guard {
++                let zero = self.s.m.i1c(false);
++                self.sel(g, c, zero)
++            } else {
++                c
++            });
+             Some(self.mems[0])
+-        } else {
+-            let w = self.rd(super::lower::VAR_WIN);
++        } else if let Some(w) = w {
+             if let Some(k) = self.s.m.const_u64(w) {
+                 if (k as usize) < self.mems.len() {
+                     Some(self.mems[k as usize])
+@@ -232,6 +246,8 @@ impl Lw {
+             } else {
+                 None
+             }
++        } else {
++            Some(self.mems[0])
+         };
+         if let Some(m) = fixed_mem {
+             let Some(cond) = guard else {
+@@ -267,7 +283,7 @@ impl Lw {
+         }
+         // Multi-window dispatch via a single LLVM `switch` (default -> `join` for out-of-range
+         // or inactive lane, matching `#1693` window semantics).
+-        let w = self.rd(super::lower::VAR_WIN);
++        let w = w.expect("multi-window selector");
+         let mems = self.mems.clone();
+         let n = mems.len();
+         let from = self.cur();
+diff --git a/crates/xcl/src/gpu/dxil/lower_window.rs b/crates/xcl/src/gpu/dxil/lower_window.rs
+index 1f41e58..cd9f8a2 100644
+--- a/crates/xcl/src/gpu/dxil/lower_window.rs
++++ b/crates/xcl/src/gpu/dxil/lower_window.rs
+@@ -141,6 +141,27 @@ impl Lw {
+         if !self.windowed() {
+             return;
+         }
++        if !write && self.uma_excludes_unit_high {
++            if self.s.m.const_u64(hi) == Some(0) {
++                let zero = self.c(0);
++                self.wr(VAR_WIN, zero);
++                return;
++            }
++            let invalid = self.c(self.mems.len() as u32);
++            if matches!(self.s.m.const_u64(hi), Some(1 | 0xffff_ffff)) {
++                self.wr(VAR_WIN, invalid);
++                return;
++            }
++            if let Some(nonzero) = self.s.m.unit_high_nonzero(hi) {
++                // Keep the carry. For a legal aperture only high word 0
++                // (the read alias) selects a window in this small domain.
++                let in_window_zero = self.not(nonzero);
++                let zero = self.c(0);
++                let w = self.sel(in_window_zero, zero, invalid);
++                self.wr(VAR_WIN, w);
++                return;
++            }
++        }
+         let base = self.uma_base();
+         let mut w = self.sub(hi, base);
+         if !write {
+diff --git a/crates/xcl/src/gpu/dxil/module.rs b/crates/xcl/src/gpu/dxil/module.rs
+index d72ef6f..e54470b 100644
+--- a/crates/xcl/src/gpu/dxil/module.rs
++++ b/crates/xcl/src/gpu/dxil/module.rs
+@@ -1452,6 +1452,33 @@ impl Module {
+             fields.first().and_then(|&p0| self.const_u64(p0)).is_some_and(|w| w & 0x2000 != 0)
+         })
+     }
++    /// Return the incoming i1 when this i32 is a widened one-bit carry or
++    /// borrow. The subtraction form is the direct address lowering's borrow.
++    pub(super) fn unit_high_nonzero(&self, value: Value) -> Option<Value> {
++        let Value::Inst(i) = value else { return None };
++        if self.int_width(self.insts[i as usize].ty) != Some(32) {
++            return None;
++        }
++        let op = match &self.insts[i as usize].op {
++            Op::Bin(BinOp::Sub, zero, Value::Inst(j), 0) if self.const_u64(*zero) == Some(0) => {
++                &self.insts[*j as usize].op
++            }
++            other => other,
++        };
++        match op {
++            Op::Cast(CastOp::ZExt | CastOp::SExt, bit, _) if self.int_width(self.value_ty(*bit)) == Some(1) => Some(*bit),
++            _ => None,
++        }
++    }
++
++    /// Recognize a selected window that is either window zero or invalid.
++    pub(super) fn window_zero_condition(&self, value: Value, windows: u32) -> Option<Value> {
++        let Value::Inst(i) = value else { return None };
++        let Op::Select(cond, yes, no) = self.insts[i as usize].op else { return None };
++        (self.const_u64(yes) == Some(0) && self.const_u64(no).is_some_and(|v| v >= u64::from(windows)))
++            .then_some(cond)
++    }
++
+     /// The integer value of a constant (zero-extended from its width).
+     pub fn const_u64(&self, v: Value) -> Option<u64> {
+         match v {

@@ -1,0 +1,253 @@
+{
+  "source_tree": "8d1600e5d78fddaf2819483c408e3df677558cf4",
+  "modes": [
+    "whole",
+    "local",
+    "packed",
+    "local-packed"
+  ],
+  "tool_hashes": {
+    "observer": "ae6fead3d419b985f2639616c0c6be3ee1a9bd508452521233c9276549d1b58f",
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "dxv": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3"
+  },
+  "input_manifests": [
+    {
+      "file": "open-pixel.json",
+      "sha256": "d46bf1209cf8652b6f81dc2c1618b0a0e8c287692893a06c21457072de3f5e36",
+      "sources": {
+        "miniengine": {
+          "repo": "microsoft/DirectX-Graphics-Samples",
+          "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+          "license": "MIT"
+        },
+        "naga": {
+          "repo": "gfx-rs/wgpu",
+          "commit": "c76dea031c688ecef0050dbf60506fff128fb23f",
+          "license": "MIT OR Apache-2.0"
+        }
+      }
+    },
+    {
+      "file": "khronos-fragment-prep.json",
+      "sha256": "2060270d1251334fdea31bf6abdfe725799598ffe63c62d1d47bcb086839a3b3",
+      "sources": {
+        "repo": "KhronosGroup/Vulkan-Samples",
+        "commit": "979aefaa5f2f4bd30efe035ca5a39444cc24ab9f",
+        "license": "Apache-2.0"
+      }
+    },
+    {
+      "file": "raylib-pixels.json",
+      "sha256": "f1ecc43a3fb7fef7e04f6c7f79793a4449c077ad34e37a9dd5db70d8fd7e7445",
+      "sources": {
+        "repo": "raysan5/raylib",
+        "commit": "7aeef5775435ed9f57890bf3c1b53279f6b0866a",
+        "licenses": {
+          "raymarching": "MIT, Inigo Quilez",
+          "repository": "Zlib"
+        }
+      }
+    }
+  ],
+  "rows": [
+    {
+      "group": "raylib-procedural",
+      "source": "examples/shaders/resources/shaders/glsl330/raymarching.fs",
+      "entry": "main",
+      "source_sha256": "abe2f67f69e9f266404e84a783c69889c257a2571ca05e209b0a55e66a1a647c",
+      "id": 0,
+      "rdna": {
+        "bytes": 17172,
+        "sha256": "428e921c8793609b5614230a6e29bbba4d60231f09980ff2e2e242f916587941",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "whole": {
+          "dxil_bytes": 177688,
+          "dxil_sha256": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a",
+          "observer_wall_ms": 110.2268,
+          "ballots": 546,
+          "quad_reads": 528,
+          "wave_reads": 30,
+          "blocks": 26,
+          "branches": 14,
+          "phis": 316,
+          "instructions": 28308
+        },
+        "local": {
+          "dxil_bytes": 100196,
+          "dxil_sha256": "35427400606d7e98c740227fa00bd09c3cec95ce39af84f7ab32274e3c3f6c69",
+          "observer_wall_ms": 70.3245,
+          "ballots": 54,
+          "quad_reads": 64,
+          "wave_reads": 30,
+          "blocks": 26,
+          "branches": 14,
+          "phis": 316,
+          "instructions": 15064
+        },
+        "packed": {
+          "dxil_bytes": 130652,
+          "dxil_sha256": "7488251ff253e2c382150f1a5366e23b9d1c3f9cf94bf05a1235dc96e9728ee1",
+          "observer_wall_ms": 84.3246,
+          "ballots": 10,
+          "quad_reads": 528,
+          "wave_reads": 30,
+          "blocks": 26,
+          "branches": 14,
+          "phis": 316,
+          "instructions": 19066
+        },
+        "local-packed": {
+          "dxil_bytes": 96432,
+          "dxil_sha256": "f422f3cdd24c8b2b472cd64356725b704ec6403c7ac1354ecd94923c54b301e6",
+          "observer_wall_ms": 70.523,
+          "ballots": 10,
+          "quad_reads": 64,
+          "wave_reads": 30,
+          "blocks": 26,
+          "branches": 14,
+          "phis": 316,
+          "instructions": 14309
+        }
+      }
+    },
+    {
+      "group": "raylib-procedural",
+      "source": "examples/shaders/resources/shaders/glsl330/julia_set.fs",
+      "entry": "main",
+      "source_sha256": "f6958f9d55cc9fd214b1394edb890d32ccf8376e2597e09e06d3c165eee68a20",
+      "id": 1,
+      "rdna": {
+        "bytes": 1028,
+        "sha256": "4b609f40c8418e38c339a31d715cc400d2ccd34052242436b1311ae3af470681",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "local-packed": {
+          "dxil_bytes": 10780,
+          "dxil_sha256": "6e97ce8311a1cbe9d3fd992a6308a9fefb25f83cd19da6c25c871de29a96a701",
+          "observer_wall_ms": 26.0883,
+          "ballots": 7,
+          "quad_reads": 24,
+          "wave_reads": 0,
+          "blocks": 23,
+          "branches": 11,
+          "phis": 170,
+          "instructions": 1290
+        },
+        "packed": {
+          "dxil_bytes": 10780,
+          "dxil_sha256": "6e97ce8311a1cbe9d3fd992a6308a9fefb25f83cd19da6c25c871de29a96a701",
+          "observer_wall_ms": 25.913,
+          "ballots": 7,
+          "quad_reads": 24,
+          "wave_reads": 0,
+          "blocks": 23,
+          "branches": 11,
+          "phis": 170,
+          "instructions": 1290
+        },
+        "local": {
+          "dxil_bytes": 12764,
+          "dxil_sha256": "cd486826c6c121a52ac8b53f0bf8a186204dd83faec80f6745d7907e7005ffd2",
+          "observer_wall_ms": 25.9743,
+          "ballots": 31,
+          "quad_reads": 24,
+          "wave_reads": 0,
+          "blocks": 23,
+          "branches": 11,
+          "phis": 170,
+          "instructions": 1700
+        },
+        "whole": {
+          "dxil_bytes": 12764,
+          "dxil_sha256": "cd486826c6c121a52ac8b53f0bf8a186204dd83faec80f6745d7907e7005ffd2",
+          "observer_wall_ms": 26.1824,
+          "ballots": 31,
+          "quad_reads": 24,
+          "wave_reads": 0,
+          "blocks": 23,
+          "branches": 11,
+          "phis": 170,
+          "instructions": 1700
+        }
+      }
+    },
+    {
+      "group": "raylib-procedural",
+      "source": "examples/shaders/resources/shaders/glsl330/mandelbrot_set.fs",
+      "entry": "main",
+      "source_sha256": "ff78266547f1f58d2df408250e6d2bf940716b795dad69dc239253ad2461cf9c",
+      "id": 2,
+      "rdna": {
+        "bytes": 460,
+        "sha256": "76e2230fb3898e234e689fa670792876774a966430200a21490e0346306fdb97",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "variants": {
+        "whole": {
+          "dxil_bytes": 5588,
+          "dxil_sha256": "f27237f66ba64cb9aba377cb73c2d3cb43c244a57dcda56a7190a9f86f2b753e",
+          "observer_wall_ms": 22.6641,
+          "ballots": 7,
+          "quad_reads": 4,
+          "wave_reads": 0,
+          "blocks": 11,
+          "branches": 5,
+          "phis": 41,
+          "instructions": 474
+        },
+        "local": {
+          "dxil_bytes": 5588,
+          "dxil_sha256": "f27237f66ba64cb9aba377cb73c2d3cb43c244a57dcda56a7190a9f86f2b753e",
+          "observer_wall_ms": 22.1669,
+          "ballots": 7,
+          "quad_reads": 4,
+          "wave_reads": 0,
+          "blocks": 11,
+          "branches": 5,
+          "phis": 41,
+          "instructions": 474
+        },
+        "packed": {
+          "dxil_bytes": 5344,
+          "dxil_sha256": "36ecdfa5e74233e9b41f4e96cf8ea78202979f37c03ce2c2b6395d4e3cb81351",
+          "observer_wall_ms": 21.8453,
+          "ballots": 3,
+          "quad_reads": 4,
+          "wave_reads": 0,
+          "blocks": 11,
+          "branches": 5,
+          "phis": 41,
+          "instructions": 409
+        },
+        "local-packed": {
+          "dxil_bytes": 5344,
+          "dxil_sha256": "36ecdfa5e74233e9b41f4e96cf8ea78202979f37c03ce2c2b6395d4e3cb81351",
+          "observer_wall_ms": 22.3316,
+          "ballots": 3,
+          "quad_reads": 4,
+          "wave_reads": 0,
+          "blocks": 11,
+          "branches": 5,
+          "phis": 41,
+          "instructions": 409
+        }
+      }
+    }
+  ]
+}

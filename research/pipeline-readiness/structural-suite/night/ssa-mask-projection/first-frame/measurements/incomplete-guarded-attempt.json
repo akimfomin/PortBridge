@@ -1,0 +1,68 @@
+{
+  "xcl_revision_reported": "5ea2b9693158e92f3caab1631829e153abd564e8",
+  "synthetic_fixture_sha256": "959c3b32bb9f4c78bcc1356baa938b0b9ad8675772389939e3016d105842acc6",
+  "source_sha256": "abe2f67f69e9f266404e84a783c69889c257a2571ca05e209b0a55e66a1a647c",
+  "guest_isa_sha256": "428e921c8793609b5614230a6e29bbba4d60231f09980ff2e2e242f916587941",
+  "scene_sha256": "19d02ff9097a489946daf56e816c4af4f3a7d25068b6ddb91ea10b718afb73e7",
+  "sgpr_sha256": "51d00ded0ff9870fc6044beee642d8a6e75f3f172c16d26c75569fb1ce996ad3",
+  "reference_rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+  "expected_dxil_sha256": {
+    "whole": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "project": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+  },
+  "controls": {
+    "viewEye": [
+      2.5,
+      2.5,
+      3.0
+    ],
+    "viewCenter": [
+      0.0,
+      0.0,
+      0.7
+    ],
+    "runTime": 1.0,
+    "resolution": [
+      800.0,
+      450.0
+    ]
+  },
+  "tool_sha256": {
+    "translator": "eaf0d97ab10803ddb083dd0deb3d4cfcde8829768961b12c642ac93fce0772b7",
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "renderer": "c5a51efbd8e47a111748477a94d10bed63492181fc6e8a466705c63f28d49075",
+    "guard": "40c5c35431ae82c6bb16662055680923dc3005e1a857472d304fcec6ffffd245"
+  },
+  "cpu_only": false,
+  "shader_cache": "isolated XCL translated cache per trial, fresh process per arm",
+  "native_cache": "renderer requires device-local D3D12 implicit driver and D3D cache disable",
+  "render_count": 1,
+  "collect_pso_blob": false,
+  "rows": [
+    {
+      "id": "00-cold-whole",
+      "mode": "whole",
+      "cache": "cold",
+      "draw_requested": true,
+      "qualified": false,
+      "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+      "runtime_process_wall_ms": 93.4062,
+      "runtime_api_ms": 62.7207,
+      "translated_cache_hits": 0,
+      "worker_output": {
+        "runtime.log": [
+          "xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5",
+          "runtime_api_ms=62.720700 cache_hits=0 cache_misses=0 compilations=0"
+        ],
+        "guard.log": [
+          "Stopped after the time or system-memory limit"
+        ],
+        "renderer.log": [
+          "running 1 test",
+          "test gpu::dxil::aperture_tests::open_procedural_pixel_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5"
+        ]
+      }
+    }
+  ],
+  "error": "guard.log exit 3: Stopped after the time or system-memory limit\r\n"
+}

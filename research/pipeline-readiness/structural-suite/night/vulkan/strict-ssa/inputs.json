@@ -1,0 +1,87 @@
+{
+  "converter": "b540c8a2484eecc7c2155994c806bbd8a8706f41",
+  "args": [
+    "--root-descriptor",
+    "uav",
+    "0",
+    "0",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "2",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "3",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "4",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "5"
+  ],
+  "modules": [
+    {
+      "workload": "ray",
+      "mode": "whole",
+      "dxil_sha": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+      "dxil_bytes": 177584,
+      "spirv_sha": "a981483e0bc88e483bb8baee47f5d24b6c1dc4cef6c36d967aeff148ab5aee5f",
+      "spirv_bytes": 634124,
+      "blocks": 65,
+      "ballots": 538
+    },
+    {
+      "workload": "ray",
+      "mode": "project",
+      "dxil_sha": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac",
+      "dxil_bytes": 151968,
+      "spirv_sha": "29de25a53be827ed9c8032f48a7b17786e1f3a3611c90e779b2235d085549ad0",
+      "spirv_bytes": 532976,
+      "blocks": 65,
+      "ballots": 538
+    },
+    {
+      "workload": "071",
+      "mode": "whole",
+      "dxil_sha": "0e882871fdffd78eac0e89a1a53628ce87cd54a5bbd6bb8e0cce1c1fd5785ac4",
+      "dxil_bytes": 283496,
+      "spirv_sha": "db57864d278c0b7957970f904576a8c182e98c284b4727f9d2cc7cc8515cad29",
+      "spirv_bytes": 1119532,
+      "blocks": 1000,
+      "ballots": 1737
+    },
+    {
+      "workload": "071",
+      "mode": "project",
+      "dxil_sha": "a45010c296870bf08872bd898fe2064288d4f646af57c7a1f7e36170988ef6e4",
+      "dxil_bytes": 229864,
+      "spirv_sha": "4872e658ede30410d23bf1f9414903ee2b8707f3863097e4cb035ddc8ee64457",
+      "spirv_bytes": 931488,
+      "blocks": 1000,
+      "ballots": 1737
+    },
+    {
+      "workload": "073",
+      "mode": "whole",
+      "dxil_sha": "b6d39c4755807c7827c6f3e350dfc82aecc9e8d3d114d04303a1305ccc707ef2",
+      "dxil_bytes": 283988,
+      "spirv_sha": "ab09076e49fb51f0d62263415b8dfbd0f9eb7b42207f822c51b72ac6ab1d78e1",
+      "spirv_bytes": 1120132,
+      "blocks": 1000,
+      "ballots": 1737
+    },
+    {
+      "workload": "073",
+      "mode": "project",
+      "dxil_sha": "68ad89a01fad1c86af6354366673e1dbe5c4621bd0d6d71435d0359197bc53ec",
+      "dxil_bytes": 230608,
+      "spirv_sha": "8c63a3098d5de16d2344e50bb325f034d8cc1cbf8a7e4a7f437c767e2117ef09",
+      "spirv_bytes": 932984,
+      "blocks": 1000,
+      "ballots": 1737
+    }
+  ]
+}

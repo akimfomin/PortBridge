@@ -1,0 +1,459 @@
+{
+  "stage": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+  "translator_source_tree": "XCL HLSL stock e1d84b7d9153f86a97d2ec5d209d196046fc0bea vs width-only ca5b5daa6e07b3488993840d9aec46ccafde0f36",
+  "translator_tools": {
+    "emit_wave32_hlsl-stock.exe": "71194c85ab0228214460fdd4d9163c1fe56c8f8110b0ba06e519e9ab72856807",
+    "emit_wave32_hlsl-fixed.exe": "667f1df71f41e42009206a30ccab91c616156ff6f885b4721c7502c9478d1ef3",
+    "dxc.exe": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2"
+  },
+  "guard_job_mib": 512,
+  "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+  "rdna_sha256": "1b271fd66e497d1f7e08005d1bcf155abb2b88cc0d1f52b1732b4982eb47393a",
+  "width": 800,
+  "height": 450,
+  "texture_width": 400,
+  "texture_height": 225,
+  "draws": 8,
+  "input_scene_sha256": "7785d9ef2ca55d94b3bb8b1a862df71064becbd268fc93f11ec7014a45cb7408",
+  "input_texture_sha256": "1e65ddc40bca215b873386ab5335ed4ffee73ca9a79c67ee5ae32cc6d81da4ea",
+  "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+  "cpu": {
+    "sha256": "e501ad2c08cf121272e4c147a6880d78f2bce1b64c4cb01621c0b40548f63187",
+    "pixels": 360000,
+    "nonfinite_pixels": 0,
+    "unique_finite_colors": 359983,
+    "rgb_mean": [
+      0.6394216418266296,
+      0.6476291418075562,
+      0.6876813173294067
+    ]
+  },
+  "trials": [
+    {
+      "order": [
+        "native",
+        "whole",
+        "width"
+      ],
+      "variants": {
+        "native": {
+          "dxil_sha256": "b1d42541a80123b4e4c390160ffecf8779ec636e63fab6d8199b7825823f19fd",
+          "image": {
+            "sha256": "e5b8f0ce2185d9126b61c92e2f789b2b5667884e574c89e6390f352b51e18534",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359990,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.6876813173294067
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 14142,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.373861381853068e-07,
+            "rms_rgb": 7.075025748226049e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.012928,
+            "native_create_ms": 17.631,
+            "pso_cache_blob_bytes": 8866,
+            "ticks": 103424,
+            "frequency_hz": 1000000000
+          }
+        },
+        "whole": {
+          "dxil_sha256": "cd8c54df2b556e381bd9797a160348f22b52d084d8681a1eebce1ccaf9cea8e7",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.03648,
+            "native_create_ms": 75.73,
+            "pso_cache_blob_bytes": 27538,
+            "ticks": 291840,
+            "frequency_hz": 1000000000
+          }
+        },
+        "width": {
+          "dxil_sha256": "eeb5458b7fbd9448339a2e9e0ee7d5885b39cfc69439fe47ffc93978ca2a95fc",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.095104,
+            "native_create_ms": 92.454,
+            "pso_cache_blob_bytes": 38466,
+            "ticks": 760832,
+            "frequency_hz": 1000000000
+          }
+        }
+      },
+      "vs_native_rgb": {
+        "whole": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        },
+        "width": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      },
+      "vs_whole_rgba": {
+        "width": {
+          "bit_equal_pixels": 360000,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 0.0,
+          "p99_max_channel_abs": 0.0,
+          "max_channel_abs": 0.0,
+          "mean_abs_rgb": 0.0,
+          "rms_rgb": 0.0,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      }
+    },
+    {
+      "order": [
+        "whole",
+        "width",
+        "native"
+      ],
+      "variants": {
+        "whole": {
+          "dxil_sha256": "cd8c54df2b556e381bd9797a160348f22b52d084d8681a1eebce1ccaf9cea8e7",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.03648,
+            "native_create_ms": 71.977,
+            "pso_cache_blob_bytes": 27538,
+            "ticks": 291840,
+            "frequency_hz": 1000000000
+          }
+        },
+        "width": {
+          "dxil_sha256": "eeb5458b7fbd9448339a2e9e0ee7d5885b39cfc69439fe47ffc93978ca2a95fc",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.107264,
+            "native_create_ms": 92.443,
+            "pso_cache_blob_bytes": 38466,
+            "ticks": 858112,
+            "frequency_hz": 1000000000
+          }
+        },
+        "native": {
+          "dxil_sha256": "b1d42541a80123b4e4c390160ffecf8779ec636e63fab6d8199b7825823f19fd",
+          "image": {
+            "sha256": "e5b8f0ce2185d9126b61c92e2f789b2b5667884e574c89e6390f352b51e18534",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359990,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.6876813173294067
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 14142,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.373861381853068e-07,
+            "rms_rgb": 7.075025748226049e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.013056,
+            "native_create_ms": 17.281,
+            "pso_cache_blob_bytes": 8866,
+            "ticks": 104448,
+            "frequency_hz": 1000000000
+          }
+        }
+      },
+      "vs_native_rgb": {
+        "whole": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        },
+        "width": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      },
+      "vs_whole_rgba": {
+        "width": {
+          "bit_equal_pixels": 360000,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 0.0,
+          "p99_max_channel_abs": 0.0,
+          "max_channel_abs": 0.0,
+          "mean_abs_rgb": 0.0,
+          "rms_rgb": 0.0,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      }
+    },
+    {
+      "order": [
+        "width",
+        "native",
+        "whole"
+      ],
+      "variants": {
+        "width": {
+          "dxil_sha256": "eeb5458b7fbd9448339a2e9e0ee7d5885b39cfc69439fe47ffc93978ca2a95fc",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.167296,
+            "native_create_ms": 92.361,
+            "pso_cache_blob_bytes": 38466,
+            "ticks": 1338368,
+            "frequency_hz": 1000000000
+          }
+        },
+        "native": {
+          "dxil_sha256": "b1d42541a80123b4e4c390160ffecf8779ec636e63fab6d8199b7825823f19fd",
+          "image": {
+            "sha256": "e5b8f0ce2185d9126b61c92e2f789b2b5667884e574c89e6390f352b51e18534",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359990,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.6876813173294067
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 14142,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.373861381853068e-07,
+            "rms_rgb": 7.075025748226049e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.013312,
+            "native_create_ms": 17.542,
+            "pso_cache_blob_bytes": 8866,
+            "ticks": 106496,
+            "frequency_hz": 1000000000
+          }
+        },
+        "whole": {
+          "dxil_sha256": "cd8c54df2b556e381bd9797a160348f22b52d084d8681a1eebce1ccaf9cea8e7",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.03648,
+            "native_create_ms": 90.877,
+            "pso_cache_blob_bytes": 27538,
+            "ticks": 291840,
+            "frequency_hz": 1000000000
+          }
+        }
+      },
+      "vs_native_rgb": {
+        "width": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        },
+        "whole": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      },
+      "vs_whole_rgba": {
+        "width": {
+          "bit_equal_pixels": 360000,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 0.0,
+          "p99_max_channel_abs": 0.0,
+          "max_channel_abs": 0.0,
+          "mean_abs_rgb": 0.0,
+          "rms_rgb": 0.0,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      }
+    }
+  ]
+}

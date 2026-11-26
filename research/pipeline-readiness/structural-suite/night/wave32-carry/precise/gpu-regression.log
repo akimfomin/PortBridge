@@ -1,0 +1,7 @@
+
+running 1 test
+test gpu::recomp::tests::gpu_wave32_pixel_carry_preserves_adjacent_mask_at_triangle_edges ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from [local DXC directory]
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1325 filtered out; finished in 0.25s
+

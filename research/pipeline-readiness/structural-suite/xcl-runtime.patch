@@ -1,0 +1,458 @@
+diff --git a/README.md b/README.md
+index e966a88..3b20790 100644
+--- a/README.md
++++ b/README.md
+@@ -257,6 +257,10 @@ xcl rpf D:\data\shaders.rpf --extract NAME --out folder
+     default.
+ - Translated shaders are reused across XCL rebuilds when the translator sources and DXC
+   toolchain are unchanged; `XCL_TRANSLATED_CACHE=0` disables that disk cache.
++- `XCL_DXIL_PIXEL_READS=1` with `XCL_DIRECT_DXIL=all` opts the ordinary translated graphics path
++  into the proved aperture specialization. It uses a separate translated cache identity.
++  Unsupported apertures retain the generic translation. An invalid-argument rejection of a
++  specialized graphics PSO retries the generic build once.
+ - Direct compute dispatches can split large programs into pipelines built in parallel.
+   `XCL_DIRECT_SPLIT_INSTRUCTIONS` sets the target instructions per piece (default 12500,
+   zero disables splitting). Loops stay in one piece. A strongly connected component over the
+diff --git a/crates/xcl/build.rs b/crates/xcl/build.rs
+index 22b136d..65ab22e 100644
+--- a/crates/xcl/build.rs
++++ b/crates/xcl/build.rs
+@@ -3,7 +3,7 @@ use std::path::{Path, PathBuf};
+ // `pso.rs` also contains cache storage and pipeline setup. Keep it out of the source hash so
+ // those changes do not discard translations; bump this only when its container parsing,
+ // translation options, profiles, or post-translation HLSL changes.
+-const TRANSLATION_GLUE_REVISION: &str = "pso-glue-v2";
++const TRANSLATION_GLUE_REVISION: &str = "pso-glue-v3";
+ 
+ const TRANSLATOR_SOURCES: &[&str] = &[
+     "src/gpu/dxbc.rs",
+diff --git a/crates/xcl/src/gpu/dxil/aperture_tests.rs b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+index 74ac0f4..3a0e685 100644
+--- a/crates/xcl/src/gpu/dxil/aperture_tests.rs
++++ b/crates/xcl/src/gpu/dxil/aperture_tests.rs
+@@ -32,7 +32,7 @@ fn aperture_carry_and_borrow_preserve_window_and_exec() {
+     if !super::graphics::tests::draw_ready() || dxc::location().is_err() {
+         return runner::skip_test("no graphics adapter or DXC");
+     }
+-    let root = std::env::var("XCL_APERTURE_TEST_ROOT").as_deref() != Ok("0");
++    let root = std::env::var("XCL_READ_GUARD_TEST_ROOT_WINDOWS").as_deref() == Ok("1");
+     let opt = KernelOptions { wave64: false, split: false, mem_windows: if root { 4 } else { 4 | HEAP_WINDOWS }, sampler_base: 0 };
+     let vs = dxc::compile("float4 main(float2 p: POSITION): SV_Position {return float4(p, 0, 1);}", "main", "vs_6_6", &[]).unwrap();
+     let verts = [-1.0, -1.0, -1.0, 3.0, 3.0, -1.0];
+diff --git a/crates/xcl/src/gpu/dxil/graphics.rs b/crates/xcl/src/gpu/dxil/graphics.rs
+index af97fdf..49e0f94 100644
+--- a/crates/xcl/src/gpu/dxil/graphics.rs
++++ b/crates/xcl/src/gpu/dxil/graphics.rs
+@@ -977,7 +977,13 @@ impl Shader {
+     }
+ 
+     /// [`Shader::finish_graphics`], or the first builder error.
+-    pub fn try_finish_graphics(mut self, io: GraphicsIo, info: StageInfo) -> Result<Vec<u8>, String> {
++    pub fn try_finish_graphics(self, io: GraphicsIo, info: StageInfo) -> Result<Vec<u8>, String> {
++        self.try_finish_graphics_with_read_options(io, info, super::kernel::PixelReadOptions::default())
++    }
++
++    pub(super) fn try_finish_graphics_with_read_options(
++        mut self, io: GraphicsIo, info: StageInfo, reads: super::kernel::PixelReadOptions,
++    ) -> Result<Vec<u8>, String> {
+         if self.stage != io.stage {
+             return Err(format!("{:?} shader with {:?} I/O", self.stage, io.stage));
+         }
+@@ -989,7 +995,7 @@ impl Shader {
+             self.m.ret();
+         }
+         if self.stage == Stage::Pixel {
+-            self.m.optimize_pixel();
++            self.m.optimize_pixel(reads.fuse_guards, reads.fuse_switches);
+         } else {
+             self.m.optimize();
+         }
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 80a60b6..afe6d70 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -117,17 +117,36 @@ pub fn translate_vertex(code: &[u8], o: KernelOptions, vs: &VsInterface) -> Resu
+ 
+ /// A pixel shader (the recompiler's `Mode::Pixel`; wave-size independent).
+ pub fn translate_pixel(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
+-    translate_entry(code, o, Entry::Pixel(ps.clone(), false), None, None, 0)
++    translate_pixel_with_read_options(code, o, ps, PixelReadOptions::default())
+ }
+ 
+ /// Pixel translation for an ABI whose IO_UMA_BASE_HI is the supplied base.
+-/// Wide arbitrary synthetic or offline input can continue using translate_pixel.
+ pub fn translate_pixel_for_uma_aperture(
+     code: &[u8], o: KernelOptions, ps: &PsInterface, base_hi: u32,
+ ) -> Result<Kernel, String> {
+-    let windows = o.mem_windows & !crate::gpu::recomp::HEAP_WINDOWS;
+-    let excludes_unit_high = windows > 1 && base_hi >= 2 && base_hi.checked_add(windows).is_some();
+-    translate_entry(code, o, Entry::Pixel(ps.clone(), excludes_unit_high), None, None, 0)
++    translate_pixel_with_read_options(code, o, ps, PixelReadOptions {
++        aperture_base_hi: Some(base_hi),
++        ..Default::default()
++    })
++}
++
++#[derive(Debug, Default, Clone, Copy)]
++pub struct PixelReadOptions {
++    /// Present only when the caller binds this base through IO_UMA_BASE_HI.
++    pub aperture_base_hi: Option<u32>,
++    pub fuse_guards: bool,
++    pub fuse_switches: bool,
++}
++
++pub(crate) fn valid_pixel_aperture(windows: u32, base_hi: u32) -> bool {
++    let windows = windows & !crate::gpu::recomp::HEAP_WINDOWS;
++    windows > 1 && base_hi >= 2 && base_hi.checked_add(windows).is_some()
++}
++
++pub fn translate_pixel_with_read_options(
++    code: &[u8], o: KernelOptions, ps: &PsInterface, read: PixelReadOptions,
++) -> Result<Kernel, String> {
++    translate_entry(code, o, Entry::Pixel(ps.clone(), read), None, None, 0)
+ }
+ 
+ /// A geometry-mode (ES+GS) program: the compute pass that writes one mesh record per
+@@ -143,7 +162,7 @@ pub enum Entry {
+     Compute(CsInterface),
+     Mesh(MsInterface),
+     Vertex(VsInterface),
+-    Pixel(PsInterface, bool),
++    Pixel(PsInterface, PixelReadOptions),
+     Geometry(GsInterface),
+ }
+ 
+@@ -507,6 +526,10 @@ impl Lw {
+         if stage == Stage::Pixel && uses_pops(insts) {
+             s.enable_rov();
+         }
++        let pixel_reads = match entry {
++            Entry::Pixel(_, reads) => *reads,
++            _ => PixelReadOptions::default(),
++        };
+         let coherent = cs.is_some() && crate::gpu::recomp::needs_coherent_mem(insts);
+         let (mems, heap_mem) = mem_windows(&mut s, o.mem_windows, coherent);
+         let i32 = s.m.i32();
+@@ -523,7 +546,9 @@ impl Lw {
+             half: z,
+             mems,
+             heap_mem,
+-            uma_excludes_unit_high: matches!(entry, Entry::Pixel(_, true)),
++            uma_excludes_unit_high: pixel_reads.aperture_base_hi
++                .is_some_and(|hi| valid_pixel_aperture(o.mem_windows, hi)),
++            pixel_reads,
+             res,
+             fmt_table: None,
+             fmt_desc_cache: HashMap::new(),
+@@ -632,7 +657,7 @@ impl Lw {
+         let c = if matches!(stage, Stage::Vertex | Stage::Pixel) {
+             let g = self.gfx.take().ok_or("graphics entry without graphics I/O")?;
+             let info = if stage == Stage::Pixel { super::graphics::StageInfo::Pixel { early_depth_stencil: false } } else { super::graphics::StageInfo::Vertex };
+-            self.s.try_finish_graphics(g.io, info)
++            self.s.try_finish_graphics_with_read_options(g.io, info, self.pixel_reads)
+         } else if limit > 0 && (numthreads == [32, 1, 1] || split_tid.is_some()) && hw == 32 {
+             self.s.m.optimize();
+             dispatch_chain = self.s.split_compute(numthreads, split_tid, limit).map(std::sync::Arc::new);
+diff --git a/crates/xcl/src/gpu/dxil/lower.rs b/crates/xcl/src/gpu/dxil/lower.rs
+index 420f590..07a9a91 100644
+--- a/crates/xcl/src/gpu/dxil/lower.rs
++++ b/crates/xcl/src/gpu/dxil/lower.rs
+@@ -189,6 +189,7 @@ pub struct Lw {
+     pub heap_mem: Option<bool>,
+     /// With the caller's nonwrapping UMA layout, high words 1 and UINT32_MAX miss.
+     pub uma_excludes_unit_high: bool,
++    pub(super) pixel_reads: super::kernel::PixelReadOptions,
+     pub res: Option<RawUav>,
+     /// the buffer format table (`FMT_INFO`), created on first use
+     pub fmt_table: Option<Value>,
+diff --git a/crates/xcl/src/gpu/dxil/module/opt.rs b/crates/xcl/src/gpu/dxil/module/opt.rs
+index 18a9db1..836ab26 100644
+--- a/crates/xcl/src/gpu/dxil/module/opt.rs
++++ b/crates/xcl/src/gpu/dxil/module/opt.rs
+@@ -428,14 +428,14 @@ impl Module {
+     ///
+     /// `XCL_DXIL_NO_OPT=phi,cse,dce,merge,read-guards` skips passes, for bisecting.
+     pub fn optimize(&mut self) {
+-        self.optimize_entry(false);
++        self.optimize_entry(false, false);
+     }
+ 
+-    pub(crate) fn optimize_pixel(&mut self) {
+-        self.optimize_entry(true);
++    pub(crate) fn optimize_pixel(&mut self, fuse_guards: bool, fuse_switches: bool) {
++        self.optimize_entry(fuse_guards, fuse_switches);
+     }
+ 
+-    fn optimize_entry(&mut self, pixel: bool) {
++    fn optimize_entry(&mut self, fuse_guards: bool, fuse_switches: bool) {
+         let off = std::env::var("XCL_DXIL_NO_OPT").unwrap_or_default();
+         let skip = |p: &str| off.split(',').any(|x| x.trim() == p || x.trim() == "all");
+         let order: Vec<u32> = self.block_layout().0.into_iter().map(|b| b as u32).collect();
+@@ -639,13 +639,14 @@ impl Module {
+             b.retain(|&i| live[i as usize]);
+         }
+ 
+-        if pixel && !skip("read-guards") && !self.has_rov_handle() && self.fuse_read_guards(&order) {
++        let fuse_guards = fuse_guards && !skip("read-guards");
++        let fuse_switches = fuse_switches && !skip("read-switches");
++        let can_fuse = (fuse_guards || fuse_switches) && !self.has_rov_handle();
++        if can_fuse && fuse_guards && self.fuse_read_guards(&order) {
+             debug_assert!(self.uses_well_formed(&self.block_layout().0
+                 .into_iter().map(|b| b as u32).collect::<Vec<_>>()));
+         }
+-        if pixel && !skip("read-switches") && std::env::var("XCL_DXIL_SWITCH_READ_FUSION").as_deref() == Ok("1")
+-            && !self.has_rov_handle()
+-        {
++        if can_fuse && fuse_switches {
+             let order = self.block_layout().0.into_iter().map(|b| b as u32).collect::<Vec<_>>();
+             if self.fuse_read_switches(&order) {
+                 debug_assert!(self.uses_well_formed(&self.block_layout().0
+diff --git a/crates/xcl/src/gpu/recomp/pso.rs b/crates/xcl/src/gpu/recomp/pso.rs
+index 54ae5dc..11b3123 100644
+--- a/crates/xcl/src/gpu/recomp/pso.rs
++++ b/crates/xcl/src/gpu/recomp/pso.rs
+@@ -150,7 +150,39 @@ fn shader_cache() -> &'static Mutex<ShaderCache> {
+ /// `console_to_dxil_for` with the title's memory windows given (`xcl shaders --precompile`
+ /// fills the caches without a title: the same keys as at its run).
+ pub fn console_to_dxil_in(blob: &[u8], stage: Stage, sampler_base: u32, split_wave64: bool, windows: u32) -> Result<Compiled, String> {
+-    let compile_one = || compile_console_shader(blob, stage, sampler_base, windows, split_wave64);
++    console_to_dxil_routed(blob, stage, sampler_base, split_wave64, windows, None)
++}
++
++pub(crate) fn runtime_pixel_aperture(windows: u32) -> Option<u32> {
++    if !crate::gpu::dxil::kernel::enabled_graphics()
++        || std::env::var("XCL_DXIL_PIXEL_READS").as_deref() != Ok("1")
++    {
++        return None;
++    }
++    let hi = u32::try_from(crate::gpu::uma::get()?.base() >> 32).ok()?;
++    crate::gpu::dxil::kernel::valid_pixel_aperture(windows, hi).then_some(hi)
++}
++
++/// Only ABI graphics callers may supply aperture from the same runtime whose draw
++/// binding fills IO_UMA_BASE_HI. The public explicit-window path is always generic.
++pub(crate) fn console_to_dxil_runtime_pixel(
++    blob: &[u8], sampler_base: u32, split_wave64: bool, windows: u32, aperture: Option<u32>,
++) -> Result<Compiled, String> {
++    let aperture = aperture.filter(|&hi| crate::gpu::dxil::kernel::valid_pixel_aperture(windows, hi));
++    console_to_dxil_routed(blob, Stage::Pixel, sampler_base, split_wave64, windows, aperture)
++}
++
++const PIXEL_READ_CACHE_TAG: u32 = 0x200;
++
++fn shader_window_cache_key(windows: u32, aperture: Option<u32>) -> u32 {
++    windows | if aperture.is_some() { PIXEL_READ_CACHE_TAG } else { 0 }
++}
++
++fn console_to_dxil_routed(
++    blob: &[u8], stage: Stage, sampler_base: u32, split_wave64: bool, windows: u32, aperture: Option<u32>,
++) -> Result<Compiled, String> {
++    let key_windows = shader_window_cache_key(windows, aperture);
++    let compile_one = || compile_console_shader(blob, stage, sampler_base, windows, split_wave64, aperture);
+     if !cache_allowed(stage, |name| std::env::var_os(name).is_some()) {
+         return compile_one().map(|(c, _)| c);
+     }
+@@ -158,13 +190,13 @@ pub fn console_to_dxil_in(blob: &[u8], stage: Stage, sampler_base: u32, split_wa
+         hash: crate::gpu::shader::fnv64(blob),
+         stage,
+         sampler_base,
+-        windows,
++        windows: key_windows,
+         split_wave64,
+         cache_dir: dxc::cache_dir(),
+     };
+     // with `XCL_DIRECT_DXIL` the disk entries live under their own identity (backend tag,
+     // direct translator version, routing mode): never mixed with the HLSL path's entries
+-    let from_disk = || translated::cached(&dxc::cache_dir(), blob, stage, sampler_base, windows, split_wave64, compile_one);
++    let from_disk = || translated::cached(&dxc::cache_dir(), blob, stage, sampler_base, key_windows, split_wave64, compile_one);
+     cached_shader(shader_cache(), key, blob, from_disk).map(|shader| shader.as_ref().clone())
+ }
+ 
+@@ -579,7 +611,9 @@ fn enormous(stage: Stage, hlsl_len: usize) -> bool {
+ // `TRANSLATION_GLUE_REVISION` in build.rs; cache serialization changes need not bump it.
+ /// The program's DXIL, and whether it is an `enormous` one the direct translator made (its
+ /// disk cache entry then follows that translator's version: `translated::cached`).
+-fn compile_console_shader(blob: &[u8], stage: Stage, sampler_base: u32, windows: u32, split_wave64: bool) -> Result<(Compiled, bool), String> {
++fn compile_console_shader(
++    blob: &[u8], stage: Stage, sampler_base: u32, windows: u32, split_wave64: bool, aperture: Option<u32>,
++) -> Result<(Compiled, bool), String> {
+     // `XCL_DIRECT_DXIL=1`: compute shaders through the direct DXIL translator, the HLSL path
+     // for what it cannot translate yet
+     if stage == Stage::Compute && crate::gpu::dxil::kernel::enabled() {
+@@ -601,7 +635,16 @@ fn compile_console_shader(blob: &[u8], stage: Stage, sampler_base: u32, windows:
+         if dxc::defer() {
+             return Err("DXIL not compiled yet".into());
+         }
+-        match direct_graphics(blob, stage, sampler_base, windows) {
++        if let Some(hi) = aperture.filter(|_| stage == Stage::Pixel) {
++            match direct_graphics(blob, stage, sampler_base, windows, Some(hi)) {
++                Ok(c) => {
++                    crate::gpu::dxil::coverage::record_translated("PS");
++                    return Ok((c, false));
++                }
++                Err(e) => direct_fallback("PS read optimization", &e),
++            }
++        }
++        match direct_graphics(blob, stage, sampler_base, windows, None) {
+             Ok(c) => {
+                 crate::gpu::dxil::coverage::record_translated(if stage == Stage::Vertex { "VS" } else { "PS" });
+                 return Ok((c, false));
+@@ -911,7 +954,6 @@ fn cache_allowed(stage: Stage, present: impl Fn(&str) -> bool) -> bool {
+                 "XCL_DEBUG_LOD0",
+                 "XCL_DEBUG_PS_SUB",
+                 "XCL_DEBUG_PS_EXPR",
+-                "XCL_DXIL_SWITCH_READ_FUSION",
+             ]
+             .iter()
+             .any(|name| present(name)))
+@@ -993,7 +1035,9 @@ fn dump_direct(blob: &[u8], dxil: &[u8]) {
+ }
+ 
+ /// A console vertex / pixel shader through the direct DXIL translator.
+-fn direct_graphics(blob: &[u8], stage: Stage, sampler_base: u32, windows: u32) -> Result<Compiled, String> {
++fn direct_graphics(
++    blob: &[u8], stage: Stage, sampler_base: u32, windows: u32, aperture: Option<u32>,
++) -> Result<Compiled, String> {
+     let sh = xbox::parse(blob).ok_or("not a console shader container")?;
+     let want = if stage == Stage::Vertex { 4 } else { 5 };
+     let f = sh.fssm.iter().find(|f| f.stages.first().is_some_and(|s| s.hw == want)).ok_or("no hardware variant")?;
+@@ -1003,7 +1047,12 @@ fn direct_graphics(blob: &[u8], stage: Stage, sampler_base: u32, windows: u32) -
+     let o = crate::gpu::dxil::kernel::KernelOptions { wave64: super::fssm_wave64(f, code), split: false, mem_windows: windows, sampler_base };
+     let k = match (&mode, stage) {
+         (Mode::Vertex(vs), Stage::Vertex) => crate::gpu::dxil::kernel::translate_vertex(code, o, vs)?,
+-        (Mode::Pixel(ps), Stage::Pixel) => crate::gpu::dxil::kernel::translate_pixel(code, o, ps)?,
++        (Mode::Pixel(ps), Stage::Pixel) => crate::gpu::dxil::kernel::translate_pixel_with_read_options(
++            code, o, ps, crate::gpu::dxil::kernel::PixelReadOptions {
++                aperture_base_hi: aperture,
++                ..Default::default()
++            },
++        )?,
+         _ => return Err("the shader stage does not match its slot in the PSO".into()),
+     };
+     dump_direct(blob, &k.dxil);
+@@ -1993,6 +2042,35 @@ mod shader_cache_tests {
+         let _ = std::fs::remove_dir_all(&dir);
+     }
+ 
++    #[test]
++    fn proved_pixel_reads_have_separate_ram_and_disk_keys() {
++        use crate::gpu::dxil::kernel::valid_pixel_aperture;
++        assert!(!valid_pixel_aperture(1, 4));
++        assert!(!valid_pixel_aperture(4, 1));
++        assert!(!valid_pixel_aperture(4, u32::MAX - 3));
++        assert!(valid_pixel_aperture(4, 4));
++        assert!(valid_pixel_aperture(16 | crate::gpu::recomp::HEAP_WINDOWS, 16));
++        assert_eq!(shader_window_cache_key(4, None), 4);
++
++        let cache = Mutex::new(ShaderCache::new(1 << 20));
++        let mut keys = std::collections::HashSet::new();
++        let mut files = std::collections::HashSet::new();
++        for (marker, (windows, proof)) in [
++            (4, None), (4, Some(4)), (4 | crate::gpu::recomp::HEAP_WINDOWS, None),
++            (4 | crate::gpu::recomp::HEAP_WINDOWS, Some(4)),
++        ].into_iter().enumerate() {
++            let mut k = key(1);
++            k.stage = Stage::Pixel;
++            k.windows = shader_window_cache_key(windows, proof);
++            assert!(keys.insert(k.windows));
++            assert!(files.insert(translated::file(&k.cache_dir, 1, b"ps", k.stage, 0, k.windows, false)));
++            let result = cached_shader(&cache, k.clone(), b"ps", || Ok(compiled(marker as u8))).unwrap();
++            assert_eq!(result.dxil, compiled(marker as u8).dxil);
++            let hit = cached_shader(&cache, k, b"ps", || panic!("expected the same cache key")).unwrap();
++            assert_eq!(hit.dxil, result.dxil);
++        }
++    }
++
+     #[test]
+     fn shader_cache_bypasses_debug_overrides() {
+         for name in ["XCL_RECOMP_NO_STRUCTURED", "XCL_RECOMP_WHY", "XCL_X64_ALL_MASKS", "XCL_WAVE64_SPIN", "XCL_DXIL_NO_OPT"] {
+@@ -2005,7 +2083,6 @@ mod shader_cache_tests {
+             "XCL_DEBUG_LOD0",
+             "XCL_DEBUG_PS_SUB",
+             "XCL_DEBUG_PS_EXPR",
+-            "XCL_DXIL_SWITCH_READ_FUSION",
+         ] {
+             assert!(!cache_allowed(Stage::Pixel, |v| v == name));
+             assert!(cache_allowed(Stage::Compute, |v| v == name));
+diff --git a/crates/xcl/src/hle/d3d12x/real.rs b/crates/xcl/src/hle/d3d12x/real.rs
+index 91085d3..c3b4dd3 100644
+--- a/crates/xcl/src/hle/d3d12x/real.rs
++++ b/crates/xcl/src/hle/d3d12x/real.rs
+@@ -4899,6 +4899,15 @@ unsafe fn graphics_blob_key(
+ mod graphics_blob_tests {
+     use super::*;
+ 
++    #[test]
++    fn pixel_read_driver_retry_is_one_shot_and_not_for_device_removal() {
++        assert!(retry_generic_pixel_reads(E_INVALIDARG, true));
++        assert!(!retry_generic_pixel_reads(E_INVALIDARG, false));
++        assert!(!retry_generic_pixel_reads(E_OUTOFMEMORY, true));
++        assert!(!retry_generic_pixel_reads(-2005270523, true)); // DXGI_ERROR_DEVICE_REMOVED
++        assert!(!retry_generic_pixel_reads(S_OK, true));
++    }
++
+     #[test]
+     fn graphics_blob_key_tracks_shaders_samplers_and_state() {
+         unsafe {
+@@ -5106,12 +5115,19 @@ fn create_graphics_pso_cached(
+     }
+ }
+ 
++fn retry_generic_pixel_reads(hr: HRESULT, specialized: bool) -> bool {
++    specialized && hr == E_INVALIDARG
++}
++
+ unsafe fn translated_graphics_pso(this: *mut c_void, f: PsoFn, desc: *const c_void, riid: *const GUID, ppv: *mut *mut c_void) -> Option<HRESULT> {
+-    with_switch_fallback(|| translated_graphics_pso_once(this, f, desc, riid, ppv))
++    with_switch_fallback(|| translated_graphics_pso_once(this, f, desc, riid, ppv, true))
+ }
+ 
+-unsafe fn translated_graphics_pso_once(this: *mut c_void, f: PsoFn, desc: *const c_void, riid: *const GUID, ppv: *mut *mut c_void) -> Option<HRESULT> {
+-    use crate::gpu::recomp::pso::{console_to_dxil_for, is_console, Stage};
++unsafe fn translated_graphics_pso_once(
++    this: *mut c_void, f: PsoFn, desc: *const c_void, riid: *const GUID, ppv: *mut *mut c_void,
++    use_read_opts: bool,
++) -> Option<HRESULT> {
++    use crate::gpu::recomp::pso::{console_to_dxil_for, console_to_dxil_runtime_pixel, is_console, mem_windows, runtime_pixel_aperture, Stage};
+     if !crate::gpu::shader::readable(desc as usize, std::mem::size_of::<D3D12_GRAPHICS_PIPELINE_STATE_DESC>()) {
+         return None;
+     }
+@@ -5145,15 +5161,20 @@ unsafe fn translated_graphics_pso_once(this: *mut c_void, f: PsoFn, desc: *const
+     };
+     let mut samplers = vs_c.samplers;
+     let vs_dxil = vs_c.dxil;
++    let windows = mem_windows();
++    let mut aperture = None;
+     let ps_dxil = match shader_bytes(&d.PS) {
+-        Some(p) if is_console(p) => match console_to_dxil_for(p, Stage::Pixel, samplers.len() as u32, split) {
+-            Ok(b) => {
+-                samplers.extend(b.samplers);
+-                Some(b.dxil)
+-            }
+-            Err(e) => {
+-                note_translation_error(format!("PS: {e}"));
+-                return None;
++        Some(p) if is_console(p) => {
++            aperture = if use_read_opts { runtime_pixel_aperture(windows) } else { None };
++            match console_to_dxil_runtime_pixel(p, samplers.len() as u32, split, windows, aperture) {
++                Ok(b) => {
++                    samplers.extend(b.samplers);
++                    Some(b.dxil)
++                }
++                Err(e) => {
++                    note_translation_error(format!("PS: {e}"));
++                    return None;
++                }
+             }
+         },
+         Some(p) => Some(p.to_vec()),
+@@ -5213,6 +5234,9 @@ unsafe fn translated_graphics_pso_once(this: *mut c_void, f: PsoFn, desc: *const
+     } else if build.reused && from_disk {
+         driver_cache::note(true, None);
+     }
++    if retry_generic_pixel_reads(hr, aperture.is_some()) {
++        return translated_graphics_pso_once(this, f, desc, riid, ppv, false);
++    }
+     if hr < 0 {
+         note_translation_error(format!(
+             "the driver rejected the PSO with the translated shaders ({hr:#x}; topology type {}, {} render targets, DSV format {}, HS {}, GS {})",

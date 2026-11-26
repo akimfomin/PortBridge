@@ -1,0 +1,298 @@
+{
+  "exe": "c201e68ab2e671ad1fe20476d54be7f6a5113e7012803f06166322eaf8636624",
+  "scene": "03edde12da9f800196ee0a2555a1ddf58db92f63ad2212e60d72241b731384af",
+  "scene_cpp": "cc7f726e1170a392bcaa36787b8389e0ea3118fe34b2ddbc8d96de37e56824c8",
+  "ordered_graphics_hpp": "41950ae063b1197b36bb898a7901b0f4da87bbee26fc06ff8926d22014504caa",
+  "vs_ps_hlsl": "2e347e0937449eb7b91b2c494446ddfc3fa97da7157f2e6258258b6866fa581f",
+  "dxc": "b9cff94181248e080804b385da8964b6319fd07760721baa9053a891cf7a727f",
+  "spirv_validator": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+  "campaign": 575,
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "width": 1024,
+  "height": 768,
+  "comparison": "ordered-graphics",
+  "material_recipes": true,
+  "area_nodes": 192,
+  "area_shader": "e70cc69c2da96e8724e18bbe720a4996c69f802b4518dc2158b4bcc531143b66",
+  "area_loop": "unrolled",
+  "frames_compared": 54,
+  "rgba_bytes_compared": 169869312,
+  "input_draws": 49,
+  "input_triangles": 1500224,
+  "reference_sha256": [
+    "9f6e558e85ce36a16d99ea159ba18ff9d11a8dfe3c8f14749f232c15bb77b55c",
+    "7a8aff638f33fe0b959a9b29c663d45a2c3c25f664a38b2a69dd698287d1501b",
+    "9e971129763f2b2302f40517684cc60198f852d3efbf9efe329cc780ccb365fd"
+  ],
+  "mixes": {
+    "record-blocking": {
+      "demand_ms": 11982.64235,
+      "startup_to_frame_ms": 12252.44315,
+      "schedule_to_drained_ms": 12153.42005,
+      "schedule_to_all_frames_ms": 12164.4427,
+      "process_commit_before": 142219264.0,
+      "process_commit_at_frame": 285153280.0,
+      "process_commit_sampled_peak": 292401152.0,
+      "lifetime_peak_commit": 292440064.0,
+      "lifetime_peak_working_set": 261431296.0,
+      "active_at_demand": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elapsed_each_ms": [
+        9594.8537,
+        11931.8919,
+        12285.1922,
+        12175.006,
+        11682.7779,
+        12033.3928
+      ],
+      "first_frame_parallel_native_ms": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "record-ordered": {
+      "demand_ms": 6306.158100000001,
+      "startup_to_frame_ms": 6598.0358,
+      "schedule_to_drained_ms": 6427.41295,
+      "schedule_to_all_frames_ms": 6439.1677500000005,
+      "process_commit_before": 141973504.0,
+      "process_commit_at_frame": 340103168.0,
+      "process_commit_sampled_peak": 351868928.0,
+      "lifetime_peak_commit": 351879168.0,
+      "lifetime_peak_working_set": 319918080.0,
+      "active_at_demand": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elapsed_each_ms": [
+        6239.6751,
+        6069.0041,
+        6824.8974,
+        6259.7598,
+        6441.0956,
+        6352.5564
+      ],
+      "first_frame_parallel_native_ms": [
+        5491.9538,
+        5356.7147,
+        5997.1518,
+        5507.631299999999,
+        5661.549599999999,
+        5575.5022
+      ]
+    },
+    "record-eager": {
+      "demand_ms": 6257.085,
+      "startup_to_frame_ms": 6522.7891500000005,
+      "schedule_to_drained_ms": 6376.7023,
+      "schedule_to_all_frames_ms": 6390.0015,
+      "process_commit_before": 142151680.0,
+      "process_commit_at_frame": 355342336.0,
+      "process_commit_sampled_peak": 372860928.0,
+      "lifetime_peak_commit": 372865024.0,
+      "lifetime_peak_working_set": 336392192.0,
+      "active_at_demand": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elapsed_each_ms": [
+        6227.1116,
+        6222.8203,
+        6515.8689,
+        6350.7242,
+        6287.0584,
+        6199.9409
+      ],
+      "first_frame_parallel_native_ms": [
+        5447.353000000001,
+        5472.809500000001,
+        5756.175899999999,
+        5591.1212,
+        5543.203799999999,
+        5436.8596
+      ]
+    }
+  },
+  "paired_eager_minus_ordered": {
+    "demand_ms": [
+      -12.563500000000204,
+      153.8162000000002,
+      -309.02849999999944,
+      90.96439999999984,
+      -154.03719999999976,
+      -152.6155000000008
+    ],
+    "startup_to_frame_ms": [
+      -22.362200000000485,
+      150.27380000000085,
+      -282.89829999999984,
+      102.70510000000013,
+      -201.79579999999987,
+      -151.88580000000002
+    ],
+    "schedule_to_drained_ms": [
+      -34.6893,
+      162.0050000000001,
+      -317.39789999999994,
+      104.66570000000047,
+      -150.26460000000043,
+      -173.58880000000045
+    ],
+    "schedule_to_all_frames_ms": [
+      -40.080799999999726,
+      164.64310000000023,
+      -317.4935000000005,
+      109.57850000000053,
+      -150.04010000000017,
+      -172.53880000000026
+    ],
+    "process_commit_before": [
+      299008,
+      -1101824,
+      311296,
+      -241664,
+      -327680,
+      786432
+    ],
+    "process_commit_at_frame": [
+      32829440,
+      1097728,
+      -36556800,
+      4354048,
+      -4808704,
+      31739904
+    ],
+    "process_commit_sampled_peak": [
+      45879296,
+      10555392,
+      -17375232,
+      16338944,
+      15568896,
+      29114368
+    ],
+    "lifetime_peak_commit": [
+      45858816,
+      10379264,
+      -17375232,
+      16297984,
+      15568896,
+      29122560
+    ],
+    "lifetime_peak_working_set": [
+      43130880,
+      6963200,
+      -20619264,
+      14536704,
+      13991936,
+      24633344
+    ],
+    "explicit_vk_allocation_total_bytes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "paired_blocking_minus_ordered": {
+    "demand_ms": [
+      3355.1785999999993,
+      5862.8878,
+      5460.2948,
+      5915.2462,
+      5241.6822999999995,
+      5680.836399999999
+    ],
+    "startup_to_frame_ms": [
+      3224.1454999999996,
+      5834.300900000001,
+      5444.3245,
+      5938.0837,
+      5216.459099999999,
+      5666.322899999999
+    ],
+    "schedule_to_drained_ms": [
+      3459.6026999999995,
+      5924.3367,
+      5505.011099999999,
+      5986.480100000001,
+      5325.2807999999995,
+      5731.1361
+    ],
+    "schedule_to_all_frames_ms": [
+      3462.2839000000004,
+      5922.816099999999,
+      5519.7824,
+      5985.7997000000005,
+      5325.8094,
+      5731.1837
+    ],
+    "process_commit_before": [
+      180224,
+      -270336,
+      163840,
+      552960,
+      -114688,
+      819200
+    ],
+    "process_commit_at_frame": [
+      -37912576,
+      -99758080,
+      -70098944,
+      -37748736,
+      -76775424,
+      -33427456
+    ],
+    "process_commit_sampled_peak": [
+      -44568576,
+      -85450752,
+      -68947968,
+      -43515904,
+      -77365248,
+      -41926656
+    ],
+    "lifetime_peak_commit": [
+      -44523520,
+      -85626880,
+      -68939776,
+      -43503616,
+      -77352960,
+      -41902080
+    ],
+    "lifetime_peak_working_set": [
+      -42389504,
+      -84205568,
+      -67354624,
+      -41463808,
+      -75763712,
+      -40103936
+    ],
+    "explicit_vk_allocation_total_bytes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

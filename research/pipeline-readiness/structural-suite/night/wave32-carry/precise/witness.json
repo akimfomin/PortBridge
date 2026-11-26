@@ -1,0 +1,21 @@
+{
+  "base": "e1d84b7d9153f86a97d2ec5d209d196046fc0bea",
+  "width": "ca5b5daa6e07b3488993840d9aec46ccafde0f36",
+  "precise": "ee2a37ca4461193c46eed161ea1d2cda988633d7",
+  "current_upstream": "08db8020d323bf478964fcc586152cce54959cfc",
+  "current_patch": "181bf103bd9c56067c51a4333854bf235711f9b9",
+  "witnesses": [
+    {
+      "shape": "wave32-s21-read",
+      "guest_sha256": "40afa0ba2ec8dce44ccd728121e0b9b5dfe72975bc371608c8604d4e491d261e",
+      "dxil_bytes": 4068,
+      "width_and_precise_dxil_sha256": "33d06926027479c3dbfd998f70fd088f4b6c825ac8d833416b31eb8063fa6c9c"
+    },
+    {
+      "shape": "wave32-s21-read-wqm",
+      "guest_sha256": "3ff2b035400a0f892639edc8350461c0b78e7240d290dc44ae0afc4ace692233",
+      "dxil_bytes": 4088,
+      "width_and_precise_dxil_sha256": "d2344ce01bdb3b71f28640d9429ad62ab4d8540406ba8f7acd40a058a82217f0"
+    }
+  ]
+}

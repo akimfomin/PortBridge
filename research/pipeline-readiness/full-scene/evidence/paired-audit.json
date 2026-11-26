@@ -1,0 +1,260 @@
+{
+  "557": {
+    "baseline": "shared",
+    "candidate": "reserved",
+    "runs": 32,
+    "triangles_per_frame": 1500224,
+    "draws_per_frame": 49,
+    "frames_verified": 96,
+    "reference_rgba_hashes": [
+      "73713bd07657322de62ff57c0f2e99bbd2de819512488ec1b70baed278a44e5d",
+      "7a8aff638f33fe0b959a9b29c663d45a2c3c25f664a38b2a69dd698287d1501b",
+      "9e971129763f2b2302f40517684cc60198f852d3efbf9efe329cc780ccb365fd"
+    ],
+    "executable_sha256": "d6d2a991288d9fa1f3b2e6dcec3bc5f2ee3db40ee0b041ca543151ca10643985",
+    "explicit_vk_allocated_bytes_cumulative": 93016128,
+    "comparisons": {
+      "startup_to_frame_ms": {
+        "baseline_median": 343.7206,
+        "candidate_median": 334.3482,
+        "paired_baseline_minus_candidate_median": 9.216550000000012,
+        "candidate_lower_pairs": 5,
+        "paired_baseline_minus_candidate": [
+          24.461799999999982,
+          84.75659999999999,
+          11.211900000000014,
+          7.22120000000001,
+          -55.68689999999998,
+          -85.5171,
+          -18.41550000000001,
+          54.13409999999999
+        ]
+      },
+      "setup_ms": {
+        "baseline_median": 282.23315,
+        "candidate_median": 274.25685,
+        "paired_baseline_minus_candidate_median": 6.797699999999992,
+        "candidate_lower_pairs": 5,
+        "paired_baseline_minus_candidate": [
+          24.242700000000013,
+          76.39239999999998,
+          6.7309999999999945,
+          6.864399999999989,
+          -59.757799999999975,
+          -84.06589999999997,
+          -19.48679999999996,
+          52.93430000000001
+        ]
+      },
+      "layout_ready_to_first_ms": {
+        "baseline_median": 61.46105,
+        "candidate_median": 60.04485,
+        "paired_baseline_minus_candidate_median": 1.1355499999999985,
+        "candidate_lower_pairs": 7,
+        "paired_baseline_minus_candidate": [
+          0.2190999999999974,
+          8.364200000000011,
+          4.480900000000005,
+          0.3567999999999998,
+          4.070900000000002,
+          -1.4512,
+          1.0713000000000008,
+          1.1997999999999962
+        ]
+      },
+      "demand_ms": {
+        "baseline_median": 60.10095,
+        "candidate_median": 58.7278,
+        "paired_baseline_minus_candidate_median": 0.10330000000000084,
+        "candidate_lower_pairs": 4,
+        "paired_baseline_minus_candidate": [
+          -0.804000000000002,
+          5.875200000000007,
+          3.8560000000000016,
+          -0.10829999999999984,
+          -0.4346999999999994,
+          -1.380900000000004,
+          3.018099999999997,
+          0.3149000000000015
+        ]
+      },
+      "schedule_to_all_frames_ms": {
+        "baseline_median": 99.12594999999999,
+        "candidate_median": 96.3264,
+        "paired_baseline_minus_candidate_median": 2.8967000000000027,
+        "candidate_lower_pairs": 6,
+        "paired_baseline_minus_candidate": [
+          1.2678999999999974,
+          4.525500000000008,
+          4.744700000000009,
+          4.620800000000003,
+          5.51639999999999,
+          -2.0775000000000006,
+          0.7013999999999925,
+          -3.4133999999999958
+        ]
+      },
+      "lifetime_peak_commit": {
+        "baseline_median": 214257664.0,
+        "candidate_median": 212580352.0,
+        "paired_baseline_minus_candidate_median": 2004992.0,
+        "candidate_lower_pairs": 7,
+        "paired_baseline_minus_candidate": [
+          339968,
+          503808,
+          3813376,
+          -585728,
+          2404352,
+          2162688,
+          2473984,
+          1847296
+        ]
+      },
+      "lifetime_peak_working_set": {
+        "baseline_median": 157853696.0,
+        "candidate_median": 157067264.0,
+        "paired_baseline_minus_candidate_median": 819200.0,
+        "candidate_lower_pairs": 6,
+        "paired_baseline_minus_candidate": [
+          1011712,
+          811008,
+          -8192,
+          1327104,
+          -516096,
+          548864,
+          1630208,
+          827392
+        ]
+      }
+    }
+  },
+  "558": {
+    "baseline": "phase-reference",
+    "candidate": "phase-lead",
+    "runs": 16,
+    "triangles_per_frame": 1500224,
+    "draws_per_frame": 49,
+    "frames_verified": 48,
+    "reference_rgba_hashes": [
+      "73713bd07657322de62ff57c0f2e99bbd2de819512488ec1b70baed278a44e5d",
+      "7a8aff638f33fe0b959a9b29c663d45a2c3c25f664a38b2a69dd698287d1501b",
+      "9e971129763f2b2302f40517684cc60198f852d3efbf9efe329cc780ccb365fd"
+    ],
+    "executable_sha256": "463dfc88c3fd05c82e387b492fd7083ff34f6cf62e12802c54ff0dfb1f740ccd",
+    "explicit_vk_allocated_bytes_cumulative": 93016128,
+    "comparisons": {
+      "startup_to_frame_ms": {
+        "baseline_median": 355.11985000000004,
+        "candidate_median": 323.39465,
+        "paired_baseline_minus_candidate_median": 32.069950000000006,
+        "candidate_lower_pairs": 7,
+        "paired_baseline_minus_candidate": [
+          14.546699999999987,
+          33.74989999999997,
+          33.06170000000003,
+          31.07819999999998,
+          -8.414800000000014,
+          68.01799999999997,
+          66.15879999999999,
+          28.7774
+        ]
+      },
+      "setup_ms": {
+        "baseline_median": 286.9773,
+        "candidate_median": 267.00660000000005,
+        "paired_baseline_minus_candidate_median": 24.420499999999976,
+        "candidate_lower_pairs": 7,
+        "paired_baseline_minus_candidate": [
+          6.18610000000001,
+          24.763999999999953,
+          24.774099999999976,
+          11.807799999999986,
+          -11.683299999999974,
+          52.01129999999998,
+          60.41320000000002,
+          24.076999999999998
+        ]
+      },
+      "layout_ready_to_first_ms": {
+        "baseline_median": 65.84255,
+        "candidate_median": 57.147,
+        "paired_baseline_minus_candidate_median": 8.324100000000001,
+        "candidate_lower_pairs": 8,
+        "paired_baseline_minus_candidate": [
+          8.360599999999998,
+          8.9859,
+          8.287600000000005,
+          19.27040000000001,
+          3.268499999999996,
+          16.006699999999995,
+          5.745599999999996,
+          4.700400000000002
+        ]
+      },
+      "demand_ms": {
+        "baseline_median": 50.111999999999995,
+        "candidate_median": 40.3065,
+        "paired_baseline_minus_candidate_median": 8.680999999999997,
+        "candidate_lower_pairs": 8,
+        "paired_baseline_minus_candidate": [
+          7.304699999999997,
+          8.590799999999994,
+          10.508000000000003,
+          12.4221,
+          8.200899999999997,
+          16.773899999999998,
+          8.7712,
+          7.377699999999997
+        ]
+      },
+      "schedule_to_all_frames_ms": {
+        "baseline_median": 102.8752,
+        "candidate_median": 91.8118,
+        "paired_baseline_minus_candidate_median": 10.995049999999999,
+        "candidate_lower_pairs": 8,
+        "paired_baseline_minus_candidate": [
+          10.3763,
+          11.613799999999998,
+          7.331000000000003,
+          19.62079999999999,
+          10.346500000000006,
+          21.298100000000005,
+          16.6678,
+          4.3256000000000085
+        ]
+      },
+      "lifetime_peak_commit": {
+        "baseline_median": 215750656.0,
+        "candidate_median": 215789568.0,
+        "paired_baseline_minus_candidate_median": -114688.0,
+        "candidate_lower_pairs": 3,
+        "paired_baseline_minus_candidate": [
+          622592,
+          -225280,
+          -4096,
+          3735552,
+          -253952,
+          -929792,
+          1531904,
+          -1253376
+        ]
+      },
+      "lifetime_peak_working_set": {
+        "baseline_median": 157200384.0,
+        "candidate_median": 169428992.0,
+        "paired_baseline_minus_candidate_median": -11804672.0,
+        "candidate_lower_pairs": 0,
+        "paired_baseline_minus_candidate": [
+          -13459456,
+          -11710464,
+          -8658944,
+          -11784192,
+          -12623872,
+          -12800000,
+          -11825152,
+          -11673600
+        ]
+      }
+    }
+  }
+}

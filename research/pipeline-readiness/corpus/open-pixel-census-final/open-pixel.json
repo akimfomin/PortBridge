@@ -1,0 +1,4467 @@
+{
+  "sources": {
+    "miniengine": {
+      "repo": "microsoft/DirectX-Graphics-Samples",
+      "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+      "license": "MIT"
+    },
+    "naga": {
+      "repo": "gfx-rs/wgpu",
+      "commit": "c76dea031c688ecef0050dbf60506fff128fb23f",
+      "license": "MIT OR Apache-2.0"
+    }
+  },
+  "tools_sha256": {
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "dxv": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3",
+    "asm": "fa7f63d15e1135c68ad4eafed04d6829e1aa9a1588f13374cedf8706b7e19b52",
+    "val": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+    "llpc": "928501ebdafcb4c1e20af5c39fed45cd69a402aaa73be453d2d6de50eae9215a",
+    "readobj": "2be02994c3c974bf6b50d8bddbf63aa5be1c681b7844ea7bcbb54bda2bc35dda",
+    "xcl": "0e06dd6d3e25f432405633abcfca49fcfeb83640023d23665500c25223b73e50"
+  },
+  "xcl": "8e4c4a63143702d5e5da79484273143e0b76eb92",
+  "scope": "CPU-only XCL DXIL structural comparison. AMD PAL shaders have a synthetic XCL graphics signature; Vulkan resource bindings and output equivalence are outside this probe.",
+  "observations": [
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BicubicHorizontalUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "236686d829f43440164f5fbdb15525d63efcc97c08331ed1d9d3d1f80e5c861a",
+      "spirv": {
+        "bytes": 3400,
+        "sha256": "1572a008fd414bd8356c1402e99091f1b47ddac817198a65d703e30ec457a070"
+      },
+      "error": {
+        "stage": "extract",
+        "message": "Pixel entry requires .text relocation"
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "entry": "main",
+      "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+      "spirv": {
+        "bytes": 7540,
+        "sha256": "0b1c2bb998fee2497410b1aab88fe18ea6cef17ac989d10fd3a94faa9ed08f89"
+      },
+      "rdna": {
+        "bytes": 3272,
+        "sha256": "9155e24c748a65364cea95b8a2885422250faa57eb60d086f61aaa3e11b99b85",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 53748,
+            "sha256": "95517b2540990ebfdbf56039d387910eeb5aaf127edb490e3b692af80c561b99",
+            "blocks": 97,
+            "conditional_branches": 48,
+            "switches": 0,
+            "phis": 144,
+            "raw_loads": 7
+          },
+          "on": {
+            "bytes": 53748,
+            "sha256": "95517b2540990ebfdbf56039d387910eeb5aaf127edb490e3b692af80c561b99",
+            "blocks": 97,
+            "conditional_branches": 48,
+            "switches": 0,
+            "phis": 144,
+            "raw_loads": 7
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 53860,
+            "sha256": "77c34c561f69606cfbac470c7e8ad6548263b6e222a4dac58878160a0f9d5ef8",
+            "blocks": 101,
+            "conditional_branches": 50,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 53860,
+            "sha256": "77c34c561f69606cfbac470c7e8ad6548263b6e222a4dac58878160a0f9d5ef8",
+            "blocks": 101,
+            "conditional_branches": 50,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "47982c1ed360d099f0564dae0d23502e5b00fa4099e21ca9f8ce7a97c18eb0b1",
+      "spirv": {
+        "bytes": 5560,
+        "sha256": "387e17dc85d4d446e524408e6a44701e47154deaf44588d406baabc73997b754"
+      },
+      "rdna": {
+        "bytes": 1060,
+        "sha256": "a50733afd231c6b6822d65c698eac2f0de61baff2125d9e9a080517a2215ed68",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 14980,
+            "sha256": "d225f8408e6b9968ddc13cd8516e04c6b553de46408f4a7fc5cba8f2f579053d",
+            "blocks": 97,
+            "conditional_branches": 48,
+            "switches": 0,
+            "phis": 144,
+            "raw_loads": 7
+          },
+          "on": {
+            "bytes": 14980,
+            "sha256": "d225f8408e6b9968ddc13cd8516e04c6b553de46408f4a7fc5cba8f2f579053d",
+            "blocks": 97,
+            "conditional_branches": 48,
+            "switches": 0,
+            "phis": 144,
+            "raw_loads": 7
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 15120,
+            "sha256": "c4d40ece2a76894453022621a806ee9e106dbb96462b77b9dd9ae1b0220f5db8",
+            "blocks": 101,
+            "conditional_branches": 50,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 15120,
+            "sha256": "c4d40ece2a76894453022621a806ee9e106dbb96462b77b9dd9ae1b0220f5db8",
+            "blocks": 101,
+            "conditional_branches": 50,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BicubicVerticalUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "bb35b6474e675bcfea4f8c4d84ac840f7bf77d0321869a36bb68f9754f1e2e70",
+      "spirv": {
+        "bytes": 3708,
+        "sha256": "6f1df521a96c6b076bce23139be792f230f84497b2d5f233a772916992ee78ab"
+      },
+      "error": {
+        "stage": "extract",
+        "message": "Pixel entry requires .text relocation"
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BilinearUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "4659ef2d11e9b8487021dbae855861bb6d1a3e4a84f56872900c137ffe823e13",
+      "spirv": {
+        "bytes": 1176,
+        "sha256": "4503a6c56fd33b46cd08673ca53fa9fd8ddb1c93673799f286a21f844ed61e85"
+      },
+      "rdna": {
+        "bytes": 220,
+        "sha256": "91183a8c3bc0d663ed90e068e9879abb81a3b93c5de6a07894baf6f92e479d90",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 5880,
+            "sha256": "50d7d96cc2749acc6091d3b880869f025f38ec9e5dcfd107cf733a3c11953610",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 5880,
+            "sha256": "50d7d96cc2749acc6091d3b880869f025f38ec9e5dcfd107cf733a3c11953610",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 5
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5892,
+            "sha256": "84f1f598bfa44377203c09dfdf2892eab36399fd4a09f7351f92e65f492d321b",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 4,
+            "raw_loads": 6
+          },
+          "on": {
+            "bytes": 5892,
+            "sha256": "84f1f598bfa44377203c09dfdf2892eab36399fd4a09f7351f92e65f492d321b",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 4,
+            "raw_loads": 6
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BlendUIHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "45710ea7c9ff03cfac902bf7749766a29d0adfd14a60ccb6dba4c411857c8d89",
+      "spirv": {
+        "bytes": 2360,
+        "sha256": "0ef9e28423a102b1e7ce0ea32b03204d3a8d633d2de41efbbc5217f73a15b2d9"
+      },
+      "rdna": {
+        "bytes": 528,
+        "sha256": "669cc730f38040d8ae282f7bae8da3691b68512a438ee4f9fac7b2129f71d5a6",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8940,
+            "sha256": "7c1bcea99483b8607a42673866df495d170ecf9bc51529e00ad21b41952bec60",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 8940,
+            "sha256": "7c1bcea99483b8607a42673866df495d170ecf9bc51529e00ad21b41952bec60",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 5
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 8952,
+            "sha256": "c695ad06f673165aa5006b170b6097c299bef978ca07a9ad0012d71bd310ea9b",
+            "blocks": 9,
+            "conditional_branches": 4,
+            "switches": 0,
+            "phis": 13,
+            "raw_loads": 6
+          },
+          "on": {
+            "bytes": 8952,
+            "sha256": "c695ad06f673165aa5006b170b6097c299bef978ca07a9ad0012d71bd310ea9b",
+            "blocks": 9,
+            "conditional_branches": 4,
+            "switches": 0,
+            "phis": 13,
+            "raw_loads": 6
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BufferCopyPS.hlsl",
+      "entry": "main",
+      "source_sha256": "ffee21866e9766229dabcbb55494a50ebc46fe450cce3f5e5f40b90a803b2d9b",
+      "spirv": {
+        "bytes": 692,
+        "sha256": "07d204d23cf55b76d82d38fef71d891006e78a06f4d65767385e9dce6cf357f0"
+      },
+      "rdna": {
+        "bytes": 56,
+        "sha256": "8798cbc8c8165e185e1993b3d6b12a0e71fc114cbcbdff829d77c9f848e4b93c",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4088,
+            "sha256": "b93b997750054d275e68e4375f432a413872fde2d479d165673f99e6dc00a452",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 3
+          },
+          "on": {
+            "bytes": 4088,
+            "sha256": "b93b997750054d275e68e4375f432a413872fde2d479d165673f99e6dc00a452",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 3
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4024,
+            "sha256": "444c092fe63040977e02e32f1e2c6371116e8647d5adaf76e824d8abba1b083a",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 4
+          },
+          "on": {
+            "bytes": 4024,
+            "sha256": "444c092fe63040977e02e32f1e2c6371116e8647d5adaf76e824d8abba1b083a",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 4
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/CompositeHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "be930e06134d88dc9653e8a72f8392f6d92e67a66fe553f1e3ba1d24bc4ac61b",
+      "spirv": {
+        "bytes": 2712,
+        "sha256": "7df938dce1a1ca85043e45142930786189d49a8b1adcdd22b1d215869dbf74a5"
+      },
+      "rdna": {
+        "bytes": 768,
+        "sha256": "910323a70b5d486b50316420506092423434a70e9b1a23ebc2f7fa4f55f05f80",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 10464,
+            "sha256": "9b2133e2aa941c8f8bd39c4c5e42e929d13010dfaec8dd9ad2d843194f6c407e",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 21,
+            "raw_loads": 7
+          },
+          "on": {
+            "bytes": 10464,
+            "sha256": "9b2133e2aa941c8f8bd39c4c5e42e929d13010dfaec8dd9ad2d843194f6c407e",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 21,
+            "raw_loads": 7
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 10568,
+            "sha256": "58e51f3508b52dada7e2cb3a2226d7c912f4e42e0777d18d6c9459baaa56b4f0",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 25,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 10568,
+            "sha256": "58e51f3508b52dada7e2cb3a2226d7c912f4e42e0777d18d6c9459baaa56b4f0",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 25,
+            "raw_loads": 8
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/CompositeSDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "6464bac3adfd2de8230815e3aa23d8ef04ec751410ff4a13eee64fa6eda849f1",
+      "spirv": {
+        "bytes": 1320,
+        "sha256": "203706f34139403fa8f9ae75217860e7520c35fb1b227e0365d61a5d12084c9f"
+      },
+      "rdna": {
+        "bytes": 232,
+        "sha256": "3d87b0f43c32c5ec0e677e866cc776d805d62b25f0434054b91b4919bd99cfe1",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 7428,
+            "sha256": "35b3fe21243a7eb5a1bce0937b363d3650a4c0ac2dbd37a1642894c9f6b30629",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 21,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 7428,
+            "sha256": "35b3fe21243a7eb5a1bce0937b363d3650a4c0ac2dbd37a1642894c9f6b30629",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 21,
+            "raw_loads": 5
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 7360,
+            "sha256": "d5ae55576e55b3fd559ffc7e8451285103c18b11198fb0e95ab6b174379fb09b",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 21,
+            "raw_loads": 6
+          },
+          "on": {
+            "bytes": 7360,
+            "sha256": "d5ae55576e55b3fd559ffc7e8451285103c18b11198fb0e95ab6b174379fb09b",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 21,
+            "raw_loads": 6
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/DownsampleDepthPS.hlsl",
+      "entry": "main",
+      "source_sha256": "f7ad685daeac29a9fafb1ba101ec5466882346f36f6dab6e923513e6b247b111",
+      "spirv": {
+        "bytes": 648,
+        "sha256": "bfee976f3d4c09a6118796cdae235d67f43437045628e05e9c8c8c480d559a8c"
+      },
+      "rdna": {
+        "bytes": 104,
+        "sha256": "818b7f0e7ec4150a781d27f7c1cf59aa3d52714bc75511621d7b0861ad2d3585",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": 0
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4380,
+            "sha256": "8716472d95b5d56f10a2e6f37485ab174bec8f731296b9e8c701d66c7fff0a11",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 4380,
+            "sha256": "8716472d95b5d56f10a2e6f37485ab174bec8f731296b9e8c701d66c7fff0a11",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 5
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4392,
+            "sha256": "5263fa0ca668107afe9d79c16878833a35f58f1b58736da0b4b5c945d3854af9",
+            "blocks": 15,
+            "conditional_branches": 7,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 6
+          },
+          "on": {
+            "bytes": 4392,
+            "sha256": "5263fa0ca668107afe9d79c16878833a35f58f1b58736da0b4b5c945d3854af9",
+            "blocks": 15,
+            "conditional_branches": 7,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 6
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/LanczosHorizontalPS.hlsl",
+      "entry": "main",
+      "source_sha256": "0a363db09d10caeb3e2310508f9448a76593ca85324dfe0667f3069746bee8c2",
+      "spirv": {
+        "bytes": 9492,
+        "sha256": "c5601d0f4d808a7898f5ad873a624d869fa1505f34b3ff16ed561e39b8581095"
+      },
+      "rdna": {
+        "bytes": 896,
+        "sha256": "a616ef785f22cd8aea2a20acf0033067925b3c5ed1b1f8a0842c16482a29c890",
+        "wave": 64,
+        "spi_ps_input_ena": 514,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 9860,
+            "sha256": "c20479db1d28c05421326babb1c2a2703b2f44322b5fb77da00dd718d4c8d9a0",
+            "blocks": 61,
+            "conditional_branches": 30,
+            "switches": 0,
+            "phis": 45,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 9860,
+            "sha256": "c20479db1d28c05421326babb1c2a2703b2f44322b5fb77da00dd718d4c8d9a0",
+            "blocks": 61,
+            "conditional_branches": 30,
+            "switches": 0,
+            "phis": 45,
+            "raw_loads": 9
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 9880,
+            "sha256": "06b836e7b3beef72fc89c154992e888ff72f5f84a0628d263bb01c2dac0ea661",
+            "blocks": 63,
+            "conditional_branches": 31,
+            "switches": 0,
+            "phis": 46,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 9880,
+            "sha256": "06b836e7b3beef72fc89c154992e888ff72f5f84a0628d263bb01c2dac0ea661",
+            "blocks": 63,
+            "conditional_branches": 31,
+            "switches": 0,
+            "phis": 46,
+            "raw_loads": 10
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/LanczosVerticalPS.hlsl",
+      "entry": "main",
+      "source_sha256": "db7df1c108da797eec75b8732085ce6cfae20388fb8e0f5ea0fbdae211a07c82",
+      "spirv": {
+        "bytes": 9792,
+        "sha256": "b22aa523187de0e9e3b7e8753dd4d8ca15eb70f9bd6550098d18a99dd7b1a393"
+      },
+      "rdna": {
+        "bytes": 1036,
+        "sha256": "b5d411e7d89243665e584050003ea38f2e4634d8b5fe6c246f3e41927a10ffa4",
+        "wave": 64,
+        "spi_ps_input_ena": 258,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 12540,
+            "sha256": "09138259ee9f91d14f5d2e95f1e86b2a2dd2e4c24492e7b00425c67d7258ce90",
+            "blocks": 61,
+            "conditional_branches": 30,
+            "switches": 0,
+            "phis": 45,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 12540,
+            "sha256": "09138259ee9f91d14f5d2e95f1e86b2a2dd2e4c24492e7b00425c67d7258ce90",
+            "blocks": 61,
+            "conditional_branches": 30,
+            "switches": 0,
+            "phis": 45,
+            "raw_loads": 9
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 12572,
+            "sha256": "914049c60b637f1ac6dfb90bf741318c7fa59d8c8c581da8263eb76981ade17a",
+            "blocks": 63,
+            "conditional_branches": 31,
+            "switches": 0,
+            "phis": 46,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 12572,
+            "sha256": "914049c60b637f1ac6dfb90bf741318c7fa59d8c8c581da8263eb76981ade17a",
+            "blocks": 63,
+            "conditional_branches": 31,
+            "switches": 0,
+            "phis": 46,
+            "raw_loads": 10
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/MagnifyPixelsPS.hlsl",
+      "entry": "main",
+      "source_sha256": "e727e8a182bec2495afb1e41dbb6e7c8e50af2d5e12903bdcdd93b726cb4ee2a",
+      "spirv": {
+        "bytes": 1204,
+        "sha256": "e819595c24d8d9a8dcd31a215d728fe408c85b93c4f4f3b4b3828de669f2357a"
+      },
+      "rdna": {
+        "bytes": 124,
+        "sha256": "f891c43f0348d1fa4a36698c47f44aa221e4685ea93e5e9d418f537e92f97d96",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 3380,
+            "sha256": "aa385b22a0b21c3ec6d1dc59a7970ab3bef8f916a0794f640efef28339d2708d",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 7
+          },
+          "on": {
+            "bytes": 3380,
+            "sha256": "aa385b22a0b21c3ec6d1dc59a7970ab3bef8f916a0794f640efef28339d2708d",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 7
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 3472,
+            "sha256": "ac58c37ff704c6d86f58a1cb803b106ac974a50ee4910e64914244df769e3113",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 5,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 3472,
+            "sha256": "ac58c37ff704c6d86f58a1cb803b106ac974a50ee4910e64914244df769e3113",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 5,
+            "raw_loads": 8
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/MotionBlurFinalPassPS.hlsl",
+      "entry": "main",
+      "source_sha256": "210e15e215e2724974c6adc38e95a267782d319c6d60202ae9243f34b46eae5b",
+      "spirv": {
+        "bytes": 3220,
+        "sha256": "060f42a0841ddab82ce979682f1a2fadd4d3ba798b810a89bda160a25ce8358b"
+      },
+      "rdna": {
+        "bytes": 676,
+        "sha256": "52004a6451e012e556678b096254cd9fe543dcec04ed4ae6c0f0e4c7dc28b54e",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 9720,
+            "sha256": "97a61de1985a399e8d0db71819902701b88ebdff9ca780313ced1a94ad4d7523",
+            "blocks": 22,
+            "conditional_branches": 11,
+            "switches": 0,
+            "phis": 60,
+            "raw_loads": 11
+          },
+          "on": {
+            "bytes": 9720,
+            "sha256": "97a61de1985a399e8d0db71819902701b88ebdff9ca780313ced1a94ad4d7523",
+            "blocks": 22,
+            "conditional_branches": 11,
+            "switches": 0,
+            "phis": 60,
+            "raw_loads": 11
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 10112,
+            "sha256": "91044f5369b063117b4279c785f638d8e9f87161cb35f74b520eafca3fa88865",
+            "blocks": 32,
+            "conditional_branches": 16,
+            "switches": 0,
+            "phis": 70,
+            "raw_loads": 12
+          },
+          "on": {
+            "bytes": 10112,
+            "sha256": "91044f5369b063117b4279c785f638d8e9f87161cb35f74b520eafca3fa88865",
+            "blocks": 32,
+            "conditional_branches": 16,
+            "switches": 0,
+            "phis": 70,
+            "raw_loads": 12
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/ParticlePS.hlsl",
+      "entry": "main",
+      "source_sha256": "5d3708c4dce87a4589916441b5f9d9f6c876d37aa42d95c3e23f459dd15dad59",
+      "spirv": {
+        "bytes": 1880,
+        "sha256": "6e99f34746a9f523f7dad9d1c74d36dd3d20fabccadf6539265066f08453263e"
+      },
+      "rdna": {
+        "bytes": 196,
+        "sha256": "340e7e2717794f9d5f3b6fe74263065adaaae5f1781ae473cd6005ba9f2be995",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 4,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 5604,
+            "sha256": "41e19dd6e62bebad11b0f551658ce511d869b8ca248d46c26a514771376aa87e",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 7
+          },
+          "on": {
+            "bytes": 5604,
+            "sha256": "41e19dd6e62bebad11b0f551658ce511d869b8ca248d46c26a514771376aa87e",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 7
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5692,
+            "sha256": "c2995e74de3ed6f6ef6786e7af1bb0251e9619132a1fa44ef6c050f52f914ebc",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 5692,
+            "sha256": "c2995e74de3ed6f6ef6786e7af1bb0251e9619132a1fa44ef6c050f52f914ebc",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 8
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/PerfGraphPS.hlsl",
+      "entry": "main",
+      "source_sha256": "59f3aefdb9dd94c5b643cb3e0a341a12dc1081101b94f20168ad42f20af7701b",
+      "spirv": {
+        "bytes": 488,
+        "sha256": "2d80f19a3ebbd6534df2798342b8f240fca92e9b272366b4417f31857960852d"
+      },
+      "rdna": {
+        "bytes": 48,
+        "sha256": "f15e05a881484b265869077fdfc07bb0a176238f18bbca40037053adf72fc7cc",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2576,
+            "sha256": "b0e363261f09bfbebcd0984f3a0ffce810a0146d84ec86d79f7298a1ea74fedb",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 2576,
+            "sha256": "b0e363261f09bfbebcd0984f3a0ffce810a0146d84ec86d79f7298a1ea74fedb",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 2488,
+            "sha256": "feae62883fe21b80b4e13fccf1373d7ab45a1c11f75665ca59e02bb57ec99a4d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 2488,
+            "sha256": "feae62883fe21b80b4e13fccf1373d7ab45a1c11f75665ca59e02bb57ec99a4d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/PresentHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "9b576259902886590e520cccdaac0e7719af1b608d12c7c0d0c9adfdd5036b72",
+      "spirv": {
+        "bytes": 1172,
+        "sha256": "a3589340e886cdd63b66b3ef3db82af939837f4151eef7e9576a83ecc0eceec9"
+      },
+      "rdna": {
+        "bytes": 268,
+        "sha256": "b7ac47e2bb474f27f86193e87fd36b79cd5a3c4d1b3d7c62d9bc64f8220dbdc7",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 5064,
+            "sha256": "6c74a49aec5b14b78f06b4ed37e61a0d597a1956ddf9b2576df51b90be73ea6d",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 3
+          },
+          "on": {
+            "bytes": 5064,
+            "sha256": "6c74a49aec5b14b78f06b4ed37e61a0d597a1956ddf9b2576df51b90be73ea6d",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 3
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5000,
+            "sha256": "cc383f41a7bf84ec1433b6d1c7d6c85108fc6187e6a5fd0dfa2522b7f737956d",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 4
+          },
+          "on": {
+            "bytes": 5000,
+            "sha256": "cc383f41a7bf84ec1433b6d1c7d6c85108fc6187e6a5fd0dfa2522b7f737956d",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 4
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/PresentSDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "497933beecc12a137651e9ea691234fd343decdc203f16a47b7457f515e22922",
+      "spirv": {
+        "bytes": 1072,
+        "sha256": "2c36b6a1ef3a6e6334209b91666b7ba6cfaeefcbe1d6e4904301617ec027831c"
+      },
+      "rdna": {
+        "bytes": 196,
+        "sha256": "20b5f3f6ad750c4d03b8c2aeb4529a0f10b42710ab68bcfd15f7f756edc219ab",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 6760,
+            "sha256": "9cb0ff7c6850560d5957ededa84e2f6864b2a45a3289783083c381d09c7ce840",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 3
+          },
+          "on": {
+            "bytes": 6760,
+            "sha256": "9cb0ff7c6850560d5957ededa84e2f6864b2a45a3289783083c381d09c7ce840",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 3
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 6692,
+            "sha256": "49a46894fde93843cbaeb6ec7744004a997151a81bfc86d361f618378ee9b260",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 4
+          },
+          "on": {
+            "bytes": 6692,
+            "sha256": "49a46894fde93843cbaeb6ec7744004a997151a81bfc86d361f618378ee9b260",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 4
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "d1448cb1384b62c29c7bee3f17d4f476c33639c98e69097b5a92d65c954b1ea3",
+      "spirv": {
+        "bytes": 4028,
+        "sha256": "34a5c07349150001fbe7d255a5ce3ac4785e9d674fb1e822e246835a1208d194"
+      },
+      "rdna": {
+        "bytes": 984,
+        "sha256": "f2a47764ad5725c4f33efd74909c0055a8ca27a9289cc1dffa5fe103ae194cd4",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 11872,
+            "sha256": "afcbac2563d4fedd849af9733eadd3dae9beac754f22483306036626c7f8ead9",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 27,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 11872,
+            "sha256": "afcbac2563d4fedd849af9733eadd3dae9beac754f22483306036626c7f8ead9",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 27,
+            "raw_loads": 10
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 12160,
+            "sha256": "9406f0f08758378e8ae46b27e37720b34416d08d25cd3217fa4f0221bdf8c65b",
+            "blocks": 25,
+            "conditional_branches": 12,
+            "switches": 0,
+            "phis": 34,
+            "raw_loads": 11
+          },
+          "on": {
+            "bytes": 12160,
+            "sha256": "9406f0f08758378e8ae46b27e37720b34416d08d25cd3217fa4f0221bdf8c65b",
+            "blocks": 25,
+            "conditional_branches": 12,
+            "switches": 0,
+            "phis": 34,
+            "raw_loads": 11
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeSDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "d1dbae63483874d4fb96623a6dfa2da04b9c28d536e6ba60c90339a820489245",
+      "spirv": {
+        "bytes": 2732,
+        "sha256": "422fd3aed6dec1348a8261631a8f299495ad528dfc14834cf39cec07857d084f"
+      },
+      "rdna": {
+        "bytes": 464,
+        "sha256": "c1da108765c757f8aad78bd8069102d73905ebeeac17baef0bb9140d4bd29e89",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8736,
+            "sha256": "51a25152d2ec06cb5cfd1d6a199c70dfec581febb73ba632625fd04549240e49",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 27,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 8736,
+            "sha256": "51a25152d2ec06cb5cfd1d6a199c70dfec581febb73ba632625fd04549240e49",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 27,
+            "raw_loads": 9
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 8932,
+            "sha256": "faabb112000ff60a32c11ff9736f5d923411ccc2c932082c1ce0e77856702007",
+            "blocks": 23,
+            "conditional_branches": 11,
+            "switches": 0,
+            "phis": 33,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 8932,
+            "sha256": "faabb112000ff60a32c11ff9736f5d923411ccc2c932082c1ce0e77856702007",
+            "blocks": 23,
+            "conditional_branches": 11,
+            "switches": 0,
+            "phis": 33,
+            "raw_loads": 10
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsampleGammaPS.hlsl",
+      "entry": "main",
+      "source_sha256": "4ab7d1e3610bd028ab81e8ab892770188df056abca1e1afb8ecb6dbd131d4d5a",
+      "spirv": {
+        "bytes": 2916,
+        "sha256": "2231db5a79e9156448eac11887d39a73a960771c10b5d54b9bfa20877d194c92"
+      },
+      "rdna": {
+        "bytes": 1008,
+        "sha256": "2e4aa1bb301473b8b7fc42ad7dfa8fe95e112866064048cf3fe6c02999d90708",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 17448,
+            "sha256": "37ede5af01906a4ec11481bf1d6004da0863263a29b8fe533cb7e46591ec0e0e",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 15,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 17448,
+            "sha256": "37ede5af01906a4ec11481bf1d6004da0863263a29b8fe533cb7e46591ec0e0e",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 15,
+            "raw_loads": 8
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 17672,
+            "sha256": "2bf87d3c751e0d5eae17105b375b765f1f52ba76363c107a47d454a76273406a",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 22,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 17672,
+            "sha256": "2bf87d3c751e0d5eae17105b375b765f1f52ba76363c107a47d454a76273406a",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 22,
+            "raw_loads": 9
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "1ba64878c9476729c9bb50db8e36c4453ec9c459db145301416ab21cc727df24",
+      "spirv": {
+        "bytes": 2388,
+        "sha256": "7a08d85acdba2fe92da971a63e2e75f7d100ffc53d2a4526d7e120955313ea67"
+      },
+      "rdna": {
+        "bytes": 408,
+        "sha256": "b1a063dbe051760b03c2560a16ee17b1928bf455231b3c771c9ce4728f5c7b76",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 7220,
+            "sha256": "ac093d366816a76a269dcccfd2994e00cfc635b79c3df47e7857381679553253",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 15,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 7220,
+            "sha256": "ac093d366816a76a269dcccfd2994e00cfc635b79c3df47e7857381679553253",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 15,
+            "raw_loads": 8
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 7412,
+            "sha256": "157827851d911d7a28248325652583aad9a2833dbcd3caacc32873cd51ff7e41",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 22,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 7412,
+            "sha256": "157827851d911d7a28248325652583aad9a2833dbcd3caacc32873cd51ff7e41",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 22,
+            "raw_loads": 9
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/TextAntialiasPS.hlsl",
+      "entry": "main",
+      "source_sha256": "931e23000e3bbf1dbe4b3b8c1bd9d81f23b1014302bcd7d3ac3525539d7cf84a",
+      "spirv": {
+        "bytes": 1676,
+        "sha256": "6dfbfda1ce69b51ab8ed5b480c2b6a5fcc7e9b268f5b346243bb6decfac4dc77"
+      },
+      "rdna": {
+        "bytes": 156,
+        "sha256": "a820879ad8f5c14ac17c6e42d5a7d145cda58e9f8c26e28a777710388090d1fb",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 3592,
+            "sha256": "d8b3fc8efdcfe4f57f4e2a27ae513dc3b84fb9f5452cb69c0e8cd30744dca5ef",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 3592,
+            "sha256": "d8b3fc8efdcfe4f57f4e2a27ae513dc3b84fb9f5452cb69c0e8cd30744dca5ef",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 3852,
+            "sha256": "dc0258a0dedd4b4b487fe7c6232cc1bca7d57ac2fffc4924e082775e66c06b97",
+            "blocks": 9,
+            "conditional_branches": 4,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 3852,
+            "sha256": "dc0258a0dedd4b4b487fe7c6232cc1bca7d57ac2fffc4924e082775e66c06b97",
+            "blocks": 9,
+            "conditional_branches": 4,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 10
+          }
+        }
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/TextShadowPS.hlsl",
+      "entry": "main",
+      "source_sha256": "88659a2edf3a911cdba7179ba7ce7d7a4cf44209abb0783466e0e627299a8aa8",
+      "spirv": {
+        "bytes": 2160,
+        "sha256": "6d7c114a9349365f0917631c16f1d6f44d81bb0c7c161c957743d84ac4390fc4"
+      },
+      "rdna": {
+        "bytes": 220,
+        "sha256": "9b1303c1b71880bd724646ee4c037091a6e3e508c07aa2d581667a1ba8b0cc9b",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 3936,
+            "sha256": "3e608fe35b4a4bf6a382441c18572b63686515cc898ddc0349c89c899416fcd4",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 3936,
+            "sha256": "3e608fe35b4a4bf6a382441c18572b63686515cc898ddc0349c89c899416fcd4",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4220,
+            "sha256": "81c5bc96422b38b6327a21be485fa70848f70a18e8af76cfad8363ad619e7e72",
+            "blocks": 9,
+            "conditional_branches": 4,
+            "switches": 0,
+            "phis": 10,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 4220,
+            "sha256": "81c5bc96422b38b6327a21be485fa70848f70a18e8af76cfad8363ad619e7e72",
+            "blocks": 9,
+            "conditional_branches": 4,
+            "switches": 0,
+            "phis": 10,
+            "raw_loads": 10
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-6438-conflicting-idents.spvasm",
+      "entry": "fs",
+      "source_sha256": "5364cb39dcfdb819f8c6f74416ebc3d7c57e9b316d6ed5b29e39973887552ece",
+      "spirv": {
+        "bytes": 844,
+        "sha256": "7e5b560b6b7301ec83d9235ad064633b7db3ba3b94bbe0f4f68fe4ddb4803549"
+      },
+      "rdna": {
+        "bytes": 20,
+        "sha256": "e96aafa2516c3339999290c52d5c03f41b99fb1f03030c5fdc9278cb18e62d21",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1988,
+            "sha256": "45691f497f89cb1829d7a9e7e065f338aed6f5aab66acc0d8e5c5dd2a4b41731",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1988,
+            "sha256": "45691f497f89cb1829d7a9e7e065f338aed6f5aab66acc0d8e5c5dd2a4b41731",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1896,
+            "sha256": "2bc8b5a9f2410dd68f58c02142624f899d7f0aacc04dbc27059e963fe2d46c0a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1896,
+            "sha256": "2bc8b5a9f2410dd68f58c02142624f899d7f0aacc04dbc27059e963fe2d46c0a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-7048-multiple-dynamic-2.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "0591c382494186326beaf7b9d880bd2fc109fdf4a1299685622bdd4eb3017fb9",
+      "spirv": {
+        "bytes": 696,
+        "sha256": "fa7fb8fc7d2f44b6118495776c4de372c64ca2687a187db18070714dc834aa13"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-7048-multiple-dynamic-3.spvasm",
+      "entry": "main",
+      "source_sha256": "d6b7cc863c6c36eb9486511302a900631c6cca539fbbb20ff860526ccf8d053c",
+      "spirv": {
+        "bytes": 1988,
+        "sha256": "d6d204081d5cb762a436552c5d42acf883a83821a6baea05c1872ec8b90f8195"
+      },
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-access.spvasm",
+      "entry": "foo_frag",
+      "source_sha256": "db68b25d1b467e3216130896aa05f51c364f573a89e29ddd9286e44bfd50b23b",
+      "error": {
+        "stage": "spirv",
+        "message": "exit 1: error: line 160: Matrix with a stride 8 not satisfying alignment to 16. Instantiated via '20[%baz]' in the Uniform storage class using extended layout rules.\nThis is may be allowed if you enable the uniformBufferStandardLayout feature (or use the --uniform-buffer-standard-layout command line flag)\n\n  %mat3v2float = OpTypeMatrix %v2float 3"
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-array-in-function-return-type.spvasm",
+      "entry": "main",
+      "source_sha256": "6c38e2a2c768e6f6df3496b8c6aefb27d9ed7665daddc6e1fb0c1762d95b78ec",
+      "spirv": {
+        "bytes": 772,
+        "sha256": "2500326bb0830d743d88b94164cf305fa74a36b4693dfba34f0893f0b2182e7e"
+      },
+      "rdna": {
+        "bytes": 24,
+        "sha256": "d472b7254bde23d31bfb8e569032f3fcb9c6ba073aa0a3f3539b43303706f531",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2012,
+            "sha256": "0b50b253295b90eda9b67df3266de0d4dc8d2f0b94ca4cd28d3f6641226c8f91",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2012,
+            "sha256": "0b50b253295b90eda9b67df3266de0d4dc8d2f0b94ca4cd28d3f6641226c8f91",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1924,
+            "sha256": "72005a67683138ad0a290db60c010f8a12cda973ead11ea4988c7337afe32abd",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1924,
+            "sha256": "72005a67683138ad0a290db60c010f8a12cda973ead11ea4988c7337afe32abd",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-binding-arrays.spvasm",
+      "entry": "main",
+      "source_sha256": "8d34aca9a2052a91310964b8fb2193ccf4c46f796330ba9a3bad155bab9c5a97",
+      "spirv": {
+        "bytes": 9344,
+        "sha256": "2cacde89bbe2c31fb979d8083e1d85325318f6829fe65d1badaf19e413868bc3"
+      },
+      "rdna": {
+        "bytes": 2524,
+        "sha256": "ef8b83ac60058e422265579747b3ee122fc83eb55cca918fb4932390d98bbcb0",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 38628,
+            "sha256": "78ae628ae7e0e482900ffc5620ba145b6b3e5b47548ca68e45a464c01560b123",
+            "blocks": 128,
+            "conditional_branches": 69,
+            "switches": 0,
+            "phis": 209,
+            "raw_loads": 60
+          },
+          "on": {
+            "bytes": 38608,
+            "sha256": "ec9ce961ad478988a3858a71914d2e02a0dffba7c2dff3dca436dfe101ff6b89",
+            "blocks": 124,
+            "conditional_branches": 67,
+            "switches": 0,
+            "phis": 209,
+            "raw_loads": 60
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 42800,
+            "sha256": "282f989abbba29c991ceed6383f6ef9a32bb4a6d4d55d51bd53d296bed50687f",
+            "blocks": 200,
+            "conditional_branches": 105,
+            "switches": 0,
+            "phis": 285,
+            "raw_loads": 61
+          },
+          "on": {
+            "bytes": 42800,
+            "sha256": "282f989abbba29c991ceed6383f6ef9a32bb4a6d4d55d51bd53d296bed50687f",
+            "blocks": 200,
+            "conditional_branches": 105,
+            "switches": 0,
+            "phis": 285,
+            "raw_loads": 61
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-binding-buffer-arrays.spvasm",
+      "entry": "main",
+      "source_sha256": "bcd3f80db49c460e893470d4a4ddf2783215223384489e644e17157f256d14ef",
+      "spirv": {
+        "bytes": 1852,
+        "sha256": "43638d62a23f701c4187b768abc9cad6fc8d6327eb8eb1721977ad42a04375c5"
+      },
+      "rdna": {
+        "bytes": 200,
+        "sha256": "8267a353decca6707c2d85d1fc0ac820f7b4283b401ab852a31c52282aaa4f15",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4144,
+            "sha256": "760082195d7d436716970e4a7132a99188fd7337a7722989831be5f92eacc915",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 4144,
+            "sha256": "760082195d7d436716970e4a7132a99188fd7337a7722989831be5f92eacc915",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 8
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4624,
+            "sha256": "32224d809b7965169a8b52f4b3a8c08bc2baab46827fe6916c3b995f4294fcfe",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 7,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 4624,
+            "sha256": "32224d809b7965169a8b52f4b3a8c08bc2baab46827fe6916c3b995f4294fcfe",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 7,
+            "raw_loads": 9
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-restrict-depth.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "0d73556f5a3f66b5a0fbc66eaa65317e235ba2af7154dbc0d4295555579dbd81",
+      "spirv": {
+        "bytes": 4108,
+        "sha256": "1b6e965777df9ac136591748850f419519a43693e341d0042cd91dc3431fec5c"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-restrict.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "9b13501f8beee1599b44e5ad3ebc809ecaa2e855252ae379c96116d9828c8c9f",
+      "spirv": {
+        "bytes": 8792,
+        "sha256": "951def8ead614e911d8762517c8577b82e1186af2b56eaaa59c444b75abd89b4"
+      },
+      "rdna": {
+        "bytes": 104,
+        "sha256": "5cb09267f4badfdb41ba6037891afe6c0e9058a20fd164cd7d48cbe6ce06e74f",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4980,
+            "sha256": "39d02d97aaeb9b281aa32e01ff8a6226affa199ff7eb096a6ede8e738d548cf9",
+            "blocks": 31,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 4980,
+            "sha256": "39d02d97aaeb9b281aa32e01ff8a6226affa199ff7eb096a6ede8e738d548cf9",
+            "blocks": 31,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5096,
+            "sha256": "d92f45e5964f44783b1fcb819ad3e2be28758ee3d45fa353025678931ee7c137",
+            "blocks": 35,
+            "conditional_branches": 17,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 5096,
+            "sha256": "d92f45e5964f44783b1fcb819ad3e2be28758ee3d45fa353025678931ee7c137",
+            "blocks": 35,
+            "conditional_branches": 17,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 10
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-rzsw-depth.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "2c66ed555ad22a6d15dcc20cb36f1e0f28aab16bbdac4bcdf3c446f5d1539f0b",
+      "spirv": {
+        "bytes": 4340,
+        "sha256": "110c3146c44547cf5de299a0d6df4479a8b24da0b647f2a21dea6efde9e7a6ff"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-rzsw.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "96544b4e62442aa39dafa9856ad58717d93a7621dd9efdf6b1167cefccbe87e8",
+      "spirv": {
+        "bytes": 9116,
+        "sha256": "7d8a1e8fe95cc4ef432fc503a0b662aa04d899aa1c94c4c5e365881619c9c689"
+      },
+      "rdna": {
+        "bytes": 104,
+        "sha256": "5cb09267f4badfdb41ba6037891afe6c0e9058a20fd164cd7d48cbe6ce06e74f",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4980,
+            "sha256": "39d02d97aaeb9b281aa32e01ff8a6226affa199ff7eb096a6ede8e738d548cf9",
+            "blocks": 31,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 4980,
+            "sha256": "39d02d97aaeb9b281aa32e01ff8a6226affa199ff7eb096a6ede8e738d548cf9",
+            "blocks": 31,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 9
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5096,
+            "sha256": "d92f45e5964f44783b1fcb819ad3e2be28758ee3d45fa353025678931ee7c137",
+            "blocks": 35,
+            "conditional_branches": 17,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 5096,
+            "sha256": "d92f45e5964f44783b1fcb819ad3e2be28758ee3d45fa353025678931ee7c137",
+            "blocks": 35,
+            "conditional_branches": 17,
+            "switches": 0,
+            "phis": 12,
+            "raw_loads": 10
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-large-source.spvasm",
+      "entry": "gen_terrain_fragment",
+      "source_sha256": "6917c24d9d6b7a55f4f2392c6e72095b62745269eaf934fbb2b89429976daee0",
+      "spirv": {
+        "bytes": 1522716,
+        "sha256": "be398e948e609e3a768008f2458335970ffeef443a434a4cb48a8dd6be26c83b"
+      },
+      "rdna": {
+        "bytes": 4824,
+        "sha256": "67ff9c43eded44a9c054eaaed6fdc90c40528314589b208968b7604c2c4a3828",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 3,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 31612,
+            "sha256": "279ec4710ab57566c5ae6d2525fae73dac5c992115ace7f37c3f88dcb3d177a3",
+            "blocks": 25,
+            "conditional_branches": 14,
+            "switches": 0,
+            "phis": 140,
+            "raw_loads": 7
+          },
+          "on": {
+            "bytes": 31612,
+            "sha256": "279ec4710ab57566c5ae6d2525fae73dac5c992115ace7f37c3f88dcb3d177a3",
+            "blocks": 25,
+            "conditional_branches": 14,
+            "switches": 0,
+            "phis": 140,
+            "raw_loads": 7
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 31988,
+            "sha256": "e22120c5b091e4a203b0fb2ada169956c162a7383f733714527e7e74df2bbbff",
+            "blocks": 33,
+            "conditional_branches": 18,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 31988,
+            "sha256": "e22120c5b091e4a203b0fb2ada169956c162a7383f733714527e7e74df2bbbff",
+            "blocks": 33,
+            "conditional_branches": 18,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-large-source.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "6917c24d9d6b7a55f4f2392c6e72095b62745269eaf934fbb2b89429976daee0",
+      "spirv": {
+        "bytes": 1522716,
+        "sha256": "be398e948e609e3a768008f2458335970ffeef443a434a4cb48a8dd6be26c83b"
+      },
+      "rdna": {
+        "bytes": 496,
+        "sha256": "5dbb3d95ae6f6facc08b5b3e8789a46d3009e02718d013c335c4c13edbee8d7d",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 5324,
+            "sha256": "a2f08df00d532c77c57587a16c11e57d63d5f59831267703de5650b0c2e5b623",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 5324,
+            "sha256": "a2f08df00d532c77c57587a16c11e57d63d5f59831267703de5650b0c2e5b623",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 10
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5748,
+            "sha256": "e21c6366621cea4b2ef35fb3cee7e42e80dffa5dc728feec14dde08256e14c00",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 11
+          },
+          "on": {
+            "bytes": 5748,
+            "sha256": "e21c6366621cea4b2ef35fb3cee7e42e80dffa5dc728feec14dde08256e14c00",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 11
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-simple.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "437ef2c33e379078866b5f67e72da774e0bab83d8d0248d49091d055daa5e80b",
+      "spirv": {
+        "bytes": 3820,
+        "sha256": "69ceb27d2d5c145117ecf77b95fad558ebf7fe585bf4219e6acd4dfaa834b2d7"
+      },
+      "rdna": {
+        "bytes": 96,
+        "sha256": "9b129168a470ff781bb87d036018d5efbabed6832449b89ebca17340c57f18fe",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2868,
+            "sha256": "76ed9b550b51d7218a5ffec58488d72fb8a4c2b038d298519698c48e5ffc6252",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 10,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 2868,
+            "sha256": "76ed9b550b51d7218a5ffec58488d72fb8a4c2b038d298519698c48e5ffc6252",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 10,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 2780,
+            "sha256": "8994f620368d7245de07c60aa8c751edfe210d4f06cab76e70267a0ad4e92d64",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 10,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 2780,
+            "sha256": "8994f620368d7245de07c60aa8c751edfe210d4f06cab76e70267a0ad4e92d64",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 10,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-terrain.spvasm",
+      "entry": "gen_terrain_fragment",
+      "source_sha256": "9edfd45c70e1d969272dd683c52a3248841e689d38fd59db478bbd43cd3c5ec2",
+      "spirv": {
+        "bytes": 30180,
+        "sha256": "38bc34240cdfb3648cd3260416fa66037a78aea875e684f8dad0212ea301560f"
+      },
+      "rdna": {
+        "bytes": 4824,
+        "sha256": "67ff9c43eded44a9c054eaaed6fdc90c40528314589b208968b7604c2c4a3828",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 3,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 31612,
+            "sha256": "279ec4710ab57566c5ae6d2525fae73dac5c992115ace7f37c3f88dcb3d177a3",
+            "blocks": 25,
+            "conditional_branches": 14,
+            "switches": 0,
+            "phis": 140,
+            "raw_loads": 7
+          },
+          "on": {
+            "bytes": 31612,
+            "sha256": "279ec4710ab57566c5ae6d2525fae73dac5c992115ace7f37c3f88dcb3d177a3",
+            "blocks": 25,
+            "conditional_branches": 14,
+            "switches": 0,
+            "phis": 140,
+            "raw_loads": 7
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 31988,
+            "sha256": "e22120c5b091e4a203b0fb2ada169956c162a7383f733714527e7e74df2bbbff",
+            "blocks": 33,
+            "conditional_branches": 18,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 31988,
+            "sha256": "e22120c5b091e4a203b0fb2ada169956c162a7383f733714527e7e74df2bbbff",
+            "blocks": 33,
+            "conditional_branches": 18,
+            "switches": 0,
+            "phis": 147,
+            "raw_loads": 8
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-terrain.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "9edfd45c70e1d969272dd683c52a3248841e689d38fd59db478bbd43cd3c5ec2",
+      "spirv": {
+        "bytes": 30180,
+        "sha256": "38bc34240cdfb3648cd3260416fa66037a78aea875e684f8dad0212ea301560f"
+      },
+      "rdna": {
+        "bytes": 496,
+        "sha256": "5dbb3d95ae6f6facc08b5b3e8789a46d3009e02718d013c335c4c13edbee8d7d",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 5324,
+            "sha256": "a2f08df00d532c77c57587a16c11e57d63d5f59831267703de5650b0c2e5b623",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 10
+          },
+          "on": {
+            "bytes": 5324,
+            "sha256": "a2f08df00d532c77c57587a16c11e57d63d5f59831267703de5650b0c2e5b623",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 10
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5748,
+            "sha256": "e21c6366621cea4b2ef35fb3cee7e42e80dffa5dc728feec14dde08256e14c00",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 11
+          },
+          "on": {
+            "bytes": 5748,
+            "sha256": "e21c6366621cea4b2ef35fb3cee7e42e80dffa5dc728feec14dde08256e14c00",
+            "blocks": 11,
+            "conditional_branches": 5,
+            "switches": 0,
+            "phis": 9,
+            "raw_loads": 11
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-dualsource.spvasm",
+      "entry": "main",
+      "source_sha256": "490210c8bdbb25e1786f0c6772231ad70ed54820b3b4abaf65ea12d6793f5629",
+      "spirv": {
+        "bytes": 640,
+        "sha256": "549f49a1ca12438b7486127d6f05612b7bce79dc9339c984cb89b4e800d28b38"
+      },
+      "rdna": {
+        "bytes": 44,
+        "sha256": "14aa0ad2275912e13fa27c8f0e249a5a013e9a8607f011d9895e9fed631f9a85",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2056,
+            "sha256": "f105ebea2289e96edf1bccc8770b0a52455154c7426c6f7cb63505c8dc1273b3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2056,
+            "sha256": "f105ebea2289e96edf1bccc8770b0a52455154c7426c6f7cb63505c8dc1273b3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1964,
+            "sha256": "517108c6fcdadb0dd297aade0e068b0d30cd1967f199fd661783a220181af9ef",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1964,
+            "sha256": "517108c6fcdadb0dd297aade0e068b0d30cd1967f199fd661783a220181af9ef",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-early-depth-test-conservative.spvasm",
+      "entry": "main",
+      "source_sha256": "5227e3a35c53b67261b93d928bebad75a9362512a71f4793ca546c3512865225",
+      "spirv": {
+        "bytes": 408,
+        "sha256": "854b183b031814bc094f0a3a50332249b2d934d2f8c8c31ae1159c673a6d4260"
+      },
+      "rdna": {
+        "bytes": 12,
+        "sha256": "4b807a223cb56440f35159c2f122c1d448dac41ee98d68907dc5778f95492835",
+        "wave": 64,
+        "spi_ps_input_ena": 1025,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": 1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "94a628530515b7d8ad5df6b10155fb83d03911c5b68735fd75b12508409b819d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "94a628530515b7d8ad5df6b10155fb83d03911c5b68735fd75b12508409b819d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1780,
+            "sha256": "6ef00274dfa46f03ee1d759832e6154456a5091a50253db2d4ea5e1ec7562bc2",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1780,
+            "sha256": "6ef00274dfa46f03ee1d759832e6154456a5091a50253db2d4ea5e1ec7562bc2",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-early-depth-test-force.spvasm",
+      "entry": "main",
+      "source_sha256": "cc0568879cd4111be5a1b7f2eb2af85cbf07b1447a45f8d9651d56ab99773115",
+      "spirv": {
+        "bytes": 364,
+        "sha256": "d3f673f7abff2006fc1722c4131493f058db0ac1c078e14c73e0c87835a895ec"
+      },
+      "rdna": {
+        "bytes": 44,
+        "sha256": "14aa0ad2275912e13fa27c8f0e249a5a013e9a8607f011d9895e9fed631f9a85",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2056,
+            "sha256": "f105ebea2289e96edf1bccc8770b0a52455154c7426c6f7cb63505c8dc1273b3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2056,
+            "sha256": "f105ebea2289e96edf1bccc8770b0a52455154c7426c6f7cb63505c8dc1273b3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1964,
+            "sha256": "517108c6fcdadb0dd297aade0e068b0d30cd1967f199fd661783a220181af9ef",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1964,
+            "sha256": "517108c6fcdadb0dd297aade0e068b0d30cd1967f199fd661783a220181af9ef",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-extra.spvasm",
+      "entry": "main",
+      "source_sha256": "3371fe600fa436cf3213f57fda9421c09a6b9dee375625cd01b13a7fbf116034",
+      "spirv": {
+        "bytes": 1088,
+        "sha256": "953a78bb76a5e4ee6dc9ead6f4a1c479f99301c0e04d93e93544f80caf5f7d81"
+      },
+      "rdna": {
+        "bytes": 80,
+        "sha256": "502ff5441743639643f996068c01090ae1f2849abed5eabb32f921882fb341cf",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 3636,
+            "sha256": "0659848eebf98db3e332e83ae2bcd9e890cf388eb57ee8f0a4a7c6062c69531a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 2
+          },
+          "on": {
+            "bytes": 3636,
+            "sha256": "0659848eebf98db3e332e83ae2bcd9e890cf388eb57ee8f0a4a7c6062c69531a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 2
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 3552,
+            "sha256": "134df39c9361ecb18544394eba4b3265af82245093acb0cd2e0ad681ffb91d46",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 2
+          },
+          "on": {
+            "bytes": 3552,
+            "sha256": "134df39c9361ecb18544394eba4b3265af82245093acb0cd2e0ad681ffb91d46",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 2
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_direct",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "spirv": {
+        "bytes": 14208,
+        "sha256": "422b5f59193dc4fa3f030f6f6f7de99ae26d784311da02116b19675c74c117dc"
+      },
+      "rdna": {
+        "bytes": 424,
+        "sha256": "ae263f2dc155df4743e1e61aa471ef50c7142b75a261748ddc864514042ff0c9",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8052,
+            "sha256": "199aad4d7e34765791c59dfd002ecf3e658fff2432d3c64a1bef85bafc8a775f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8052,
+            "sha256": "199aad4d7e34765791c59dfd002ecf3e658fff2432d3c64a1bef85bafc8a775f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 7972,
+            "sha256": "21f045ec43237fa4406d3188bb541c212fceee4f15d0f9752f5f628fcf66aa5f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 7972,
+            "sha256": "21f045ec43237fa4406d3188bb541c212fceee4f15d0f9752f5f628fcf66aa5f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_struct",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "spirv": {
+        "bytes": 14208,
+        "sha256": "422b5f59193dc4fa3f030f6f6f7de99ae26d784311da02116b19675c74c117dc"
+      },
+      "rdna": {
+        "bytes": 424,
+        "sha256": "ae263f2dc155df4743e1e61aa471ef50c7142b75a261748ddc864514042ff0c9",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8052,
+            "sha256": "199aad4d7e34765791c59dfd002ecf3e658fff2432d3c64a1bef85bafc8a775f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8052,
+            "sha256": "199aad4d7e34765791c59dfd002ecf3e658fff2432d3c64a1bef85bafc8a775f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 7972,
+            "sha256": "21f045ec43237fa4406d3188bb541c212fceee4f15d0f9752f5f628fcf66aa5f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 7972,
+            "sha256": "21f045ec43237fa4406d3188bb541c212fceee4f15d0f9752f5f628fcf66aa5f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_copy_input",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "spirv": {
+        "bytes": 14208,
+        "sha256": "422b5f59193dc4fa3f030f6f6f7de99ae26d784311da02116b19675c74c117dc"
+      },
+      "rdna": {
+        "bytes": 424,
+        "sha256": "ae263f2dc155df4743e1e61aa471ef50c7142b75a261748ddc864514042ff0c9",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8052,
+            "sha256": "199aad4d7e34765791c59dfd002ecf3e658fff2432d3c64a1bef85bafc8a775f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8052,
+            "sha256": "199aad4d7e34765791c59dfd002ecf3e658fff2432d3c64a1bef85bafc8a775f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 7972,
+            "sha256": "21f045ec43237fa4406d3188bb541c212fceee4f15d0f9752f5f628fcf66aa5f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 7972,
+            "sha256": "21f045ec43237fa4406d3188bb541c212fceee4f15d0f9752f5f628fcf66aa5f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_return_partial",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "spirv": {
+        "bytes": 14208,
+        "sha256": "422b5f59193dc4fa3f030f6f6f7de99ae26d784311da02116b19675c74c117dc"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "0b1caf5276c1bf12ed90fb801321afd43ea7cc2aec80278fbdb091d07b75f756",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2060,
+            "sha256": "7d0059d0574fcfd96e41594e3964cfe9746c2849f0e6639be6e96b8b794d2bca",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2060,
+            "sha256": "7d0059d0574fcfd96e41594e3964cfe9746c2849f0e6639be6e96b8b794d2bca",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1968,
+            "sha256": "9a14a9498b3b756a24a1e2a31afc55048202af21f77384fb93a24e5d95478f2e",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1968,
+            "sha256": "9a14a9498b3b756a24a1e2a31afc55048202af21f77384fb93a24e5d95478f2e",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_component_access",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "spirv": {
+        "bytes": 14208,
+        "sha256": "422b5f59193dc4fa3f030f6f6f7de99ae26d784311da02116b19675c74c117dc"
+      },
+      "rdna": {
+        "bytes": 128,
+        "sha256": "07ea51024ac97f30f8a1bb20f3542384235023b8bc2cb31a71022616ff896d1e",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4448,
+            "sha256": "d51fccc1c69d46984df13978efbd6bd04f0e3219bf75d67581055f9d0282177c",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 4448,
+            "sha256": "d51fccc1c69d46984df13978efbd6bd04f0e3219bf75d67581055f9d0282177c",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4368,
+            "sha256": "9ab93a3d45c96be489758fb898f8501e5b3279e46cabf47639456f115bc49a9b",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 4368,
+            "sha256": "9ab93a3d45c96be489758fb898f8501e5b3279e46cabf47639456f115bc49a9b",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_direct",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "spirv": {
+        "bytes": 14668,
+        "sha256": "92ac3711bc1dd3a0a00d0c9acda987e7d3c1430c4f618f740fed2874fb1403b2"
+      },
+      "rdna": {
+        "bytes": 352,
+        "sha256": "cd5f180a95acb3949e7098e58d92ec4e1c2aa3274759634d49919ea4a748bfdd",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8892,
+            "sha256": "af6081e64fcb874fe49e9f1ed51c55b314af04cd356ed9a9de247ff9258f626c",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8892,
+            "sha256": "af6081e64fcb874fe49e9f1ed51c55b314af04cd356ed9a9de247ff9258f626c",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 8808,
+            "sha256": "b4e4c063c6435969abb7aed8b0d7c965c62d89f636bebebc8f28e2689324001a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8808,
+            "sha256": "b4e4c063c6435969abb7aed8b0d7c965c62d89f636bebebc8f28e2689324001a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_struct",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "spirv": {
+        "bytes": 14668,
+        "sha256": "92ac3711bc1dd3a0a00d0c9acda987e7d3c1430c4f618f740fed2874fb1403b2"
+      },
+      "rdna": {
+        "bytes": 352,
+        "sha256": "6c60fc18a52d878797403d4cc747fb8b7438e73eedd256a2ef0b7cc9ad11067c",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8888,
+            "sha256": "fbbd988067d821fbf05751c0124e0a884828062fbc76d80bdeae965ecb3a9fa3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8888,
+            "sha256": "fbbd988067d821fbf05751c0124e0a884828062fbc76d80bdeae965ecb3a9fa3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 8796,
+            "sha256": "42aa029c4c2677332f9e85516ae009dd8acbbf7661a3ab6f36c832783ef4089f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8796,
+            "sha256": "42aa029c4c2677332f9e85516ae009dd8acbbf7661a3ab6f36c832783ef4089f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_copy_input",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "spirv": {
+        "bytes": 14668,
+        "sha256": "92ac3711bc1dd3a0a00d0c9acda987e7d3c1430c4f618f740fed2874fb1403b2"
+      },
+      "rdna": {
+        "bytes": 352,
+        "sha256": "6c60fc18a52d878797403d4cc747fb8b7438e73eedd256a2ef0b7cc9ad11067c",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 8888,
+            "sha256": "fbbd988067d821fbf05751c0124e0a884828062fbc76d80bdeae965ecb3a9fa3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8888,
+            "sha256": "fbbd988067d821fbf05751c0124e0a884828062fbc76d80bdeae965ecb3a9fa3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 8796,
+            "sha256": "42aa029c4c2677332f9e85516ae009dd8acbbf7661a3ab6f36c832783ef4089f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 8796,
+            "sha256": "42aa029c4c2677332f9e85516ae009dd8acbbf7661a3ab6f36c832783ef4089f",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_return_partial",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "spirv": {
+        "bytes": 14668,
+        "sha256": "92ac3711bc1dd3a0a00d0c9acda987e7d3c1430c4f618f740fed2874fb1403b2"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "3472f15ffc90943fc4c4c19d2d1d41984b5c6e2287247fd708b1a310f5038700",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_component_access",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "spirv": {
+        "bytes": 14668,
+        "sha256": "92ac3711bc1dd3a0a00d0c9acda987e7d3c1430c4f618f740fed2874fb1403b2"
+      },
+      "rdna": {
+        "bytes": 108,
+        "sha256": "23ce48b1d0d4445754f3eb712711d93fe59c10a32de3aa6cbea0adc6bd102109",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4596,
+            "sha256": "ec0708f1c645e54206c010dd2ea1825f4401c2de394261c2507d56edd61d3bb7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 4596,
+            "sha256": "ec0708f1c645e54206c010dd2ea1825f4401c2de394261c2507d56edd61d3bb7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4512,
+            "sha256": "9280d1e2f3a40a37a24767aa48bf0b6b7c948b8d86863f1ce81af7b5fac13b3b",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          },
+          "on": {
+            "bytes": 4512,
+            "sha256": "9280d1e2f3a40a37a24767aa48bf0b6b7c948b8d86863f1ce81af7b5fac13b3b",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 1
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-fragment-output.spvasm",
+      "entry": "main_vec4vec3",
+      "source_sha256": "72103895aa23b6d3d42ec79a4965202303341af75bba53bd930239f45fda9039",
+      "spirv": {
+        "bytes": 2816,
+        "sha256": "05df12ed066dd0400c9461d78269f4d5695356ab0430499223eaea5a87f6a735"
+      },
+      "rdna": {
+        "bytes": 56,
+        "sha256": "bb99387729b5e106ef7da021d4cf44ec6d1b682556f6ce70aa3f1a4dfde3edd8",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 63,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2856,
+            "sha256": "bbbc6491c3d4878e6017d2085f9f58fe155663d24f9e76692475d54dc40b9be4",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2856,
+            "sha256": "bbbc6491c3d4878e6017d2085f9f58fe155663d24f9e76692475d54dc40b9be4",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 2764,
+            "sha256": "8ed4168bfd0cc23921ecba9e6f970a4e3a656624f17d41353b3b16373b5aeed2",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2764,
+            "sha256": "8ed4168bfd0cc23921ecba9e6f970a4e3a656624f17d41353b3b16373b5aeed2",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-fragment-output.spvasm",
+      "entry": "main_vec2scalar",
+      "source_sha256": "72103895aa23b6d3d42ec79a4965202303341af75bba53bd930239f45fda9039",
+      "spirv": {
+        "bytes": 2816,
+        "sha256": "05df12ed066dd0400c9461d78269f4d5695356ab0430499223eaea5a87f6a735"
+      },
+      "rdna": {
+        "bytes": 56,
+        "sha256": "9701ad58151c57d854487b176eeafa76b908e8930b1ede595a75a418e7a5d59b",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 63,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2856,
+            "sha256": "bbbc6491c3d4878e6017d2085f9f58fe155663d24f9e76692475d54dc40b9be4",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2856,
+            "sha256": "bbbc6491c3d4878e6017d2085f9f58fe155663d24f9e76692475d54dc40b9be4",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 2764,
+            "sha256": "8ed4168bfd0cc23921ecba9e6f970a4e3a656624f17d41353b3b16373b5aeed2",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 2764,
+            "sha256": "8ed4168bfd0cc23921ecba9e6f970a4e3a656624f17d41353b3b16373b5aeed2",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "texture_sample",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "spirv": {
+        "bytes": 25076,
+        "sha256": "0b05d9588e3e47fb0ff565bb41c02f6f71fd36baa336ae8e0a3280a3a2e4a1a1"
+      },
+      "rdna": {
+        "bytes": 712,
+        "sha256": "6a6bd276cc4748a7f5d622494401a5e6f60d878cfbee4d3f5b4cb71531d10429",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 9284,
+            "sha256": "73e65fbf803b1233576c6f291dd89f4c14a83bafc96bc49ee9f4f515cfbf443d",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 24,
+            "raw_loads": 11
+          },
+          "on": {
+            "bytes": 9284,
+            "sha256": "73e65fbf803b1233576c6f291dd89f4c14a83bafc96bc49ee9f4f515cfbf443d",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 24,
+            "raw_loads": 11
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 9424,
+            "sha256": "1595b8fdf0abb0104ce28334e034a2316b527f8fd1723eb27483ba8a2088cfd8",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 34,
+            "raw_loads": 12
+          },
+          "on": {
+            "bytes": 9424,
+            "sha256": "1595b8fdf0abb0104ce28334e034a2316b527f8fd1723eb27483ba8a2088cfd8",
+            "blocks": 17,
+            "conditional_branches": 8,
+            "switches": 0,
+            "phis": 34,
+            "raw_loads": 12
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "texture_sample_comparison",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "spirv": {
+        "bytes": 25076,
+        "sha256": "0b05d9588e3e47fb0ff565bb41c02f6f71fd36baa336ae8e0a3280a3a2e4a1a1"
+      },
+      "rdna": {
+        "bytes": 196,
+        "sha256": "f2727ff4671b4336a6ef2ad4cfa2dd3bb5c94e4d1c23db24a4bf730b3d3252fb",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4168,
+            "sha256": "eeba8f838253a3815675ca5a5407bb3de483722eb2966cd56da2e95fce62da1d",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 8
+          },
+          "on": {
+            "bytes": 4168,
+            "sha256": "eeba8f838253a3815675ca5a5407bb3de483722eb2966cd56da2e95fce62da1d",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 3,
+            "raw_loads": 8
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4340,
+            "sha256": "602420a9190694ff4e0d02d73a162f7a5b62ac9f2e29e8360142db411d112314",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 13,
+            "raw_loads": 9
+          },
+          "on": {
+            "bytes": 4340,
+            "sha256": "602420a9190694ff4e0d02d73a162f7a5b62ac9f2e29e8360142db411d112314",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 13,
+            "raw_loads": 9
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "gather",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "spirv": {
+        "bytes": 25076,
+        "sha256": "0b05d9588e3e47fb0ff565bb41c02f6f71fd36baa336ae8e0a3280a3a2e4a1a1"
+      },
+      "rdna": {
+        "bytes": 276,
+        "sha256": "747f209343ff781ace0d5fe08c60cfaab010602df0804d6734477d2be5bdf5f1",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 5116,
+            "sha256": "ee0799c2f2b4831e3700e7c5fd82c602a993c70bc6203b8d4c82bcdcea5669cc",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 24,
+            "raw_loads": 12
+          },
+          "on": {
+            "bytes": 5116,
+            "sha256": "ee0799c2f2b4831e3700e7c5fd82c602a993c70bc6203b8d4c82bcdcea5669cc",
+            "blocks": 13,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 24,
+            "raw_loads": 12
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5312,
+            "sha256": "69f6a1f12c14be9e3a79bac8d9360ed86b33fc47935c369497004c3134d8958c",
+            "blocks": 19,
+            "conditional_branches": 9,
+            "switches": 0,
+            "phis": 33,
+            "raw_loads": 13
+          },
+          "on": {
+            "bytes": 5312,
+            "sha256": "69f6a1f12c14be9e3a79bac8d9360ed86b33fc47935c369497004c3134d8958c",
+            "blocks": 19,
+            "conditional_branches": 9,
+            "switches": 0,
+            "phis": 33,
+            "raw_loads": 13
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "depth_no_comparison",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "spirv": {
+        "bytes": 25076,
+        "sha256": "0b05d9588e3e47fb0ff565bb41c02f6f71fd36baa336ae8e0a3280a3a2e4a1a1"
+      },
+      "rdna": {
+        "bytes": 132,
+        "sha256": "c8fb80befd14af422e180d43ca60c9b7de0c9a4c03eca47228d570046a7ce66c",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 3440,
+            "sha256": "5a8ed1f88ff19429b8947f91323de59af5804fe1c23ca89d06c9ed6296efe3a3",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 5,
+            "raw_loads": 4
+          },
+          "on": {
+            "bytes": 3440,
+            "sha256": "5a8ed1f88ff19429b8947f91323de59af5804fe1c23ca89d06c9ed6296efe3a3",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 5,
+            "raw_loads": 4
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 3460,
+            "sha256": "522b1c450ac2eeb845be2f5b4f3ec553fcf44856d6922ac18f9916c9c72126fb",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 8,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 3460,
+            "sha256": "522b1c450ac2eeb845be2f5b4f3ec553fcf44856d6922ac18f9916c9c72126fb",
+            "blocks": 7,
+            "conditional_branches": 3,
+            "switches": 0,
+            "phis": 8,
+            "raw_loads": 5
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-interface.fragment.spvasm",
+      "entry": "fragment",
+      "source_sha256": "548e5f0b2b45da40cd475c2a348fe11756540d488a6b47262f8dc61b6b544d66",
+      "error": {
+        "stage": "spirv",
+        "message": "exit 1: error: line 48: [VUID-SampleMask-SampleMask-04359] According to the Vulkan spec BuiltIn SampleMask variable needs to be a 32-bit int array. ID <7> (OpVariable) is not an array.\n  %gl_SampleMask = OpVariable %_ptr_Input_uint Input"
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-interpolate.spvasm",
+      "entry": "frag_main",
+      "source_sha256": "944c7e4eea7609973992ce6683ba5f420f036ddc47f75de1439c66750deee7ee",
+      "spirv": {
+        "bytes": 6872,
+        "sha256": "604d0f9c3166e6bad5865fdcfc07f5feeff5a88688a3b745e8eec369caf9e04e"
+      },
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-interpolate_compat.spvasm",
+      "entry": "frag_main",
+      "source_sha256": "7b257dcd8c98ebb2347b45f5903d0f301de8536f84044693ba12b8561d8fdbeb",
+      "spirv": {
+        "bytes": 6740,
+        "sha256": "e844e90fb04709190aba00dafc017a3f61fc75e936b5cb145b7fb845b78858c4"
+      },
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-math-functions.spvasm",
+      "entry": "main",
+      "source_sha256": "44124ec5e6b7af11bd1dc374ff2fa44b813ad1528eca29a427aca68b8d34b86c",
+      "spirv": {
+        "bytes": 2124,
+        "sha256": "7010c2491e508756027cb782f67b9ef9305a0c91270d055da3d4a4f05c8cccb8"
+      },
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-multiview.spvasm",
+      "entry": "main",
+      "source_sha256": "c04b2026b8a736f55ea099459e5648cb554f6aa29f9ba445fed0d474463504fc",
+      "spirv": {
+        "bytes": 296,
+        "sha256": "9df2dd54abdccd9e4c9dab77f9db4952b483332e3a8b38798911c5a45323274c"
+      },
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1860,
+            "sha256": "3fc8880e3f5df164c2b21de76a4eedf130b3efd38cc362efab50c9d700d045f9",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1772,
+            "sha256": "6b10ef4c18bacc541c298b405bd7118518448cc15805a698cadb88ed8306e27d",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-quad.spvasm",
+      "entry": "frag_main",
+      "source_sha256": "4654d75a72966756d47aa687a2135f89fb48073f43916aca1334ad171d025cf8",
+      "spirv": {
+        "bytes": 2944,
+        "sha256": "da168c556f622e16fa3e72a8bf64abc132adc471348a6312e152aeb7da44c91c"
+      },
+      "rdna": {
+        "bytes": 156,
+        "sha256": "a8549544eaf5f11510b52d253a5418ee39158ed408f039b449efec6943f89858",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 4776,
+            "sha256": "ff3450a2ceb38366dc5dee9f5700cfd565c7cef55ae1ab0041209374f2ca11e8",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 5,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 4776,
+            "sha256": "ff3450a2ceb38366dc5dee9f5700cfd565c7cef55ae1ab0041209374f2ca11e8",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 5,
+            "raw_loads": 5
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 4796,
+            "sha256": "d5ee95f7fc1127e551054cc2a869e627cee08bcf325b4f8ec70dceca118720a9",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 6
+          },
+          "on": {
+            "bytes": 4796,
+            "sha256": "d5ee95f7fc1127e551054cc2a869e627cee08bcf325b4f8ec70dceca118720a9",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 6,
+            "raw_loads": 6
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-quad.spvasm",
+      "entry": "fs_extra",
+      "source_sha256": "4654d75a72966756d47aa687a2135f89fb48073f43916aca1334ad171d025cf8",
+      "spirv": {
+        "bytes": 2944,
+        "sha256": "da168c556f622e16fa3e72a8bf64abc132adc471348a6312e152aeb7da44c91c"
+      },
+      "rdna": {
+        "bytes": 20,
+        "sha256": "02fd3a03f02e7522a8f5738903d85efa9f9eb9cc238b5f2652bd41675dedcbd3",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1988,
+            "sha256": "a19e46be45d803bcbcb5078213103387ad887dc4850f22005724e0218315c7c5",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1988,
+            "sha256": "a19e46be45d803bcbcb5078213103387ad887dc4850f22005724e0218315c7c5",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1896,
+            "sha256": "acae4ddeff45a310f72721cc0f56e16eba9f6c58746d1045b1e34f7afdf94b55",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1896,
+            "sha256": "acae4ddeff45a310f72721cc0f56e16eba9f6c58746d1045b1e34f7afdf94b55",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-separate-entry-points.fragment.spvasm",
+      "entry": "fragment",
+      "source_sha256": "7ab44c79cc25fcb6416a0f93148eac65bc166ad5ed0d3ea58121267511518638",
+      "spirv": {
+        "bytes": 408,
+        "sha256": "39d2ab9966b7a057790bc25e14b6f66589b36ded61e7ac5d71bf20183dec0290"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-shadow.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "948ad97009d64770ea04a5b0122252d6dcb75ff41977a82e01b3d7efff545522",
+      "spirv": {
+        "bytes": 12524,
+        "sha256": "88a220e0045c12dce8f3741bbfe8857fb6fad31dad39953f2417352014052d3f"
+      },
+      "rdna": {
+        "bytes": 588,
+        "sha256": "215faa19ae283f710e2fae9961066fb4a1b969ccb949e304fe7af9c7b384bf1f",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 7436,
+            "sha256": "0ef4fcf5b5a88dd810a90d4ece5be26de61c3f98056ec88f51fb2adfa0761ee6",
+            "blocks": 11,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 35,
+            "raw_loads": 18
+          },
+          "on": {
+            "bytes": 7436,
+            "sha256": "0ef4fcf5b5a88dd810a90d4ece5be26de61c3f98056ec88f51fb2adfa0761ee6",
+            "blocks": 11,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 35,
+            "raw_loads": 18
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 8244,
+            "sha256": "e19f368c8d8dea82c338ca1131d5c5bf268e3d474888220ceaef39e5e3c7197a",
+            "blocks": 29,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 63,
+            "raw_loads": 19
+          },
+          "on": {
+            "bytes": 8244,
+            "sha256": "e19f368c8d8dea82c338ca1131d5c5bf268e3d474888220ceaef39e5e3c7197a",
+            "blocks": 29,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 63,
+            "raw_loads": 19
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-shadow.spvasm",
+      "entry": "fs_main_without_storage",
+      "source_sha256": "948ad97009d64770ea04a5b0122252d6dcb75ff41977a82e01b3d7efff545522",
+      "spirv": {
+        "bytes": 12524,
+        "sha256": "88a220e0045c12dce8f3741bbfe8857fb6fad31dad39953f2417352014052d3f"
+      },
+      "rdna": {
+        "bytes": 588,
+        "sha256": "0dde5e15939a83e46c36b9f4495f6cf9ff56ef4bc3422dfa9522ecced9e177f4",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 7412,
+            "sha256": "4b4797a8afbb1e183c0f2977a2675603db1bfe427e0f09701757a0a5c48a4307",
+            "blocks": 11,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 35,
+            "raw_loads": 17
+          },
+          "on": {
+            "bytes": 7412,
+            "sha256": "4b4797a8afbb1e183c0f2977a2675603db1bfe427e0f09701757a0a5c48a4307",
+            "blocks": 11,
+            "conditional_branches": 6,
+            "switches": 0,
+            "phis": 35,
+            "raw_loads": 17
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 8220,
+            "sha256": "b632490105ed459aec879f551f541ac4c47c4285475e0bb7997beb930eacb7fb",
+            "blocks": 29,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 63,
+            "raw_loads": 18
+          },
+          "on": {
+            "bytes": 8220,
+            "sha256": "b632490105ed459aec879f551f541ac4c47c4285475e0bb7997beb930eacb7fb",
+            "blocks": 29,
+            "conditional_branches": 15,
+            "switches": 0,
+            "phis": 63,
+            "raw_loads": 18
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-skybox.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "6eda6ba243d935b29a7bc45a3d6eb744be0b4a9993401e06bd6bc74a97bfa626",
+      "spirv": {
+        "bytes": 2572,
+        "sha256": "713475550f3d45fd2349b2ece70e056e469fdad3ac0d512da3fe2c336e7d67c8"
+      },
+      "rdna": {
+        "bytes": 160,
+        "sha256": "2deba3e2b6d6a0aa727092544884d963cf78c47bb32713db052b176a5c2bce7b",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 3904,
+            "sha256": "8afb128ea16e650f507867e696366bd944435586e4765bbb7c6ec57389503767",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 3904,
+            "sha256": "8afb128ea16e650f507867e696366bd944435586e4765bbb7c6ec57389503767",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 5
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 3972,
+            "sha256": "b267103e28482ba958e582de5df25134b3b926669f5cccc4d7eee1601441baf6",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 4,
+            "raw_loads": 6
+          },
+          "on": {
+            "bytes": 3972,
+            "sha256": "b267103e28482ba958e582de5df25134b3b926669f5cccc4d7eee1601441baf6",
+            "blocks": 5,
+            "conditional_branches": 2,
+            "switches": 0,
+            "phis": 4,
+            "raw_loads": 6
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-sprite.spvasm",
+      "entry": "main",
+      "source_sha256": "528c2b7e0bfa860c61042216873392618dab9d2f37d74f4f6f719da2d29b747d",
+      "spirv": {
+        "bytes": 608,
+        "sha256": "a838375e5c591beba3b766ff9ea35b88326bba1866e3929ac719152a0990c305"
+      },
+      "rdna": {
+        "bytes": 92,
+        "sha256": "4b5cc2e6959800ec4cfea96df02b95babd8aba84de6c999df4f6d7463ee698c5",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 3204,
+            "sha256": "13c6e4a0e59b5a073ea77c6724f878907a05287011ca1aeb4ccd936f76f0b27a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 3204,
+            "sha256": "13c6e4a0e59b5a073ea77c6724f878907a05287011ca1aeb4ccd936f76f0b27a",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 5
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 3216,
+            "sha256": "064b7d4e6e0225a4f08e643b85715a7a23e5e70fa232a02e0d93683ee2663240",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 1,
+            "raw_loads": 6
+          },
+          "on": {
+            "bytes": 3216,
+            "sha256": "064b7d4e6e0225a4f08e643b85715a7a23e5e70fa232a02e0d93683ee2663240",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 1,
+            "raw_loads": 6
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-standard.spvasm",
+      "entry": "derivatives",
+      "source_sha256": "c8829021df8d36202a69b374da60b2ff8c2bbaedc39f15389ada9132e0ec3463",
+      "spirv": {
+        "bytes": 896,
+        "sha256": "37e64f0cc417f9f628ffeab76fe736585aa21bb33d9e75d0995d77e73fc73ffb"
+      },
+      "rdna": {
+        "bytes": 204,
+        "sha256": "e53818a34f40efdd108f1d12e4150efaebef6453edafc53f8601afb92217537f",
+        "wave": 64,
+        "spi_ps_input_ena": 3841,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 5520,
+            "sha256": "c24ec06f538f501bc53836ad505f8dcc4d8237bfbb48ea42d3b9e69ac18632ed",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 5520,
+            "sha256": "c24ec06f538f501bc53836ad505f8dcc4d8237bfbb48ea42d3b9e69ac18632ed",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 5428,
+            "sha256": "a2701f2232aeeae02e04ddb87613ed3299439a6b9018c13cee3de96416fc6267",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 5428,
+            "sha256": "a2701f2232aeeae02e04ddb87613ed3299439a6b9018c13cee3de96416fc6267",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-struct-layout.spvasm",
+      "entry": "no_padding_frag",
+      "source_sha256": "d3c15b7e7eeeae2e75c526dc5f27261ef5d85f5a2057424b99764b8deff33b03",
+      "spirv": {
+        "bytes": 2580,
+        "sha256": "988a52ac78d9defefff34791e55a1d9262fb96fb949c3d5d064f81970f13ceae"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-struct-layout.spvasm",
+      "entry": "needs_padding_frag",
+      "source_sha256": "d3c15b7e7eeeae2e75c526dc5f27261ef5d85f5a2057424b99764b8deff33b03",
+      "spirv": {
+        "bytes": 2580,
+        "sha256": "988a52ac78d9defefff34791e55a1d9262fb96fb949c3d5d064f81970f13ceae"
+      },
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1960,
+            "sha256": "2755609446885254c596efcd4490590a5cd4c3d82cadbb8dfbcb93926a6df3f1",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          },
+          "on": {
+            "bytes": 1872,
+            "sha256": "864197d0e155e42f33f6a935eab6ca99cd5412544f9608793f4f34a4cea2a0b7",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 0
+          }
+        }
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-texture-arg.spvasm",
+      "entry": "main",
+      "source_sha256": "b16ffa4f4f50ed0f290b8789584476a1b8aaae48af37d2ded61045ec2f99ebe5",
+      "spirv": {
+        "bytes": 1260,
+        "sha256": "3c83c8ccbfb1b78dbc7135332509982882efdb2727bd53b28b55f74e63baf959"
+      },
+      "rdna": {
+        "bytes": 76,
+        "sha256": "709d913ef14faf0c94cafc928f2a970320e5df16213d24195b914d8446810e7b",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "pairs": {
+        "1": {
+          "off": {
+            "bytes": 2948,
+            "sha256": "20bed0756c74e40eab89b941df6f65f573addf1e85c247d4f0579cd246f1cba3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 4
+          },
+          "on": {
+            "bytes": 2948,
+            "sha256": "20bed0756c74e40eab89b941df6f65f573addf1e85c247d4f0579cd246f1cba3",
+            "blocks": 1,
+            "conditional_branches": 0,
+            "switches": 0,
+            "phis": 0,
+            "raw_loads": 4
+          }
+        },
+        "4": {
+          "off": {
+            "bytes": 2964,
+            "sha256": "48719c976211637953f569320076a09055ca6dc24f1d055da08c0a671df7e8ee",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 1,
+            "raw_loads": 5
+          },
+          "on": {
+            "bytes": 2964,
+            "sha256": "48719c976211637953f569320076a09055ca6dc24f1d055da08c0a671df7e8ee",
+            "blocks": 3,
+            "conditional_branches": 1,
+            "switches": 0,
+            "phis": 1,
+            "raw_loads": 5
+          }
+        }
+      }
+    }
+  ]
+}

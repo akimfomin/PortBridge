@@ -1,0 +1,128 @@
+{
+  "source": {
+    "repo": "raysan5/raylib",
+    "commit": "7aeef5775435ed9f57890bf3c1b53279f6b0866a",
+    "licenses": {
+      "raymarching": "MIT, Inigo Quilez",
+      "repository": "Zlib"
+    }
+  },
+  "tool_hashes": {
+    "glslang": "0cdda442db2f496074da1e1b2dc5a9386f0d6822a80856c23ed7c6f7120abbd9",
+    "val": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+    "llpc": "928501ebdafcb4c1e20af5c39fed45cd69a402aaa73be453d2d6de50eae9215a",
+    "readobj": "a933bde283b3881ae108e65884c1fd74c293af9fb5fdeca2bf475e8f4a4a9215"
+  },
+  "observations": [
+    {
+      "group": "raylib-procedural",
+      "entry": "main",
+      "source": "examples/shaders/resources/shaders/glsl330/raymarching.fs",
+      "source_sha256": "abe2f67f69e9f266404e84a783c69889c257a2571ca05e209b0a55e66a1a647c",
+      "vulkan_glsl_sha256": "e39906075aca04df493a9ef4fd9f768536ed2f1f155ee72f80cbb978acb91871",
+      "spirv_sha256": "ccf143cc12546ad771c4d3a4d75c9e004a3c41686dd11826cc03c486f1d198b8",
+      "elf_sha256": "8a67a7a928153ade39fc912a3ea22b233ab359600b9cffeebc2dc8adb963a76c",
+      "fields": [
+        [
+          "viewEye",
+          "vec3",
+          0
+        ],
+        [
+          "viewCenter",
+          "vec3",
+          16
+        ],
+        [
+          "runTime",
+          "float",
+          28
+        ],
+        [
+          "resolution",
+          "vec2",
+          32
+        ]
+      ],
+      "rdna": {
+        "bytes": 17172,
+        "sha256": "428e921c8793609b5614230a6e29bbba4d60231f09980ff2e2e242f916587941",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "raylib-procedural",
+      "entry": "main",
+      "source": "examples/shaders/resources/shaders/glsl330/julia_set.fs",
+      "source_sha256": "f6958f9d55cc9fd214b1394edb890d32ccf8376e2597e09e06d3c165eee68a20",
+      "vulkan_glsl_sha256": "b0ef29796090e382726f9758b4736647ff321fd231922e54249f0eb52282b608",
+      "spirv_sha256": "4fe654ce59c1a0ffc97895258646d84b54975d4aaf863289dd6afee4dd9afe19",
+      "elf_sha256": "de6f8317924d1f4ed879dc91d4f485df13b5e321b68da570d398811c61058669",
+      "fields": [
+        [
+          "c",
+          "vec2",
+          0
+        ],
+        [
+          "offset",
+          "vec2",
+          8
+        ],
+        [
+          "zoom",
+          "float",
+          16
+        ]
+      ],
+      "rdna": {
+        "bytes": 1028,
+        "sha256": "4b609f40c8418e38c339a31d715cc400d2ccd34052242436b1311ae3af470681",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "raylib-procedural",
+      "entry": "main",
+      "source": "examples/shaders/resources/shaders/glsl330/mandelbrot_set.fs",
+      "source_sha256": "ff78266547f1f58d2df408250e6d2bf940716b795dad69dc239253ad2461cf9c",
+      "vulkan_glsl_sha256": "ebd67b1524236a6a7ef63744d2b4940cd6b7d51d74f7da4f7ff1cf049d809b8a",
+      "spirv_sha256": "957d0b1d333cf72b6be85b1f78e8363d09f3797379939b9ac6df5276fe12383e",
+      "elf_sha256": "12b8bf2d390f24d2d0adc64b54b936c37bad0a8769997853892a0aa8c5bca863",
+      "fields": [
+        [
+          "offset",
+          "vec2",
+          0
+        ],
+        [
+          "zoom",
+          "float",
+          8
+        ],
+        [
+          "maxIterations",
+          "int",
+          12
+        ]
+      ],
+      "rdna": {
+        "bytes": 460,
+        "sha256": "76e2230fb3898e234e689fa670792876774a966430200a21490e0346306fdb97",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    }
+  ]
+}

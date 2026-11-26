@@ -1,0 +1,482 @@
+{
+  "source": {
+    "repo": "microsoft/DirectX-Graphics-Samples",
+    "commit": "68a2b1e97f71642924e74c7757ca21756ad221b5",
+    "license": "MIT"
+  },
+  "tool_hashes": {
+    "dxc": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+    "dis": "19fe00087c94c32f423eb06343fa31459baed5f3ee8c2f820090d8b0307884ee",
+    "val": "979f97800b0374d5b25b472247edcab848af7aaaa968f0c19eafd7dd491f3d7b",
+    "llpc": "928501ebdafcb4c1e20af5c39fed45cd69a402aaa73be453d2d6de50eae9215a",
+    "readobj": "a933bde283b3881ae108e65884c1fd74c293af9fb5fdeca2bf475e8f4a4a9215"
+  },
+  "observations": [
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicHorizontalUpsamplePS.hlsl",
+      "source_sha256": "236686d829f43440164f5fbdb15525d63efcc97c08331ed1d9d3d1f80e5c861a",
+      "error": {
+        "stage": "prepare",
+        "message": "Pixel entry requires .text relocation"
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+      "spirv_sha256": "4b0d3d92414a2b0b188703c1696132ae59862feffc2e746cc7b06df72d2bdb17",
+      "bindings": {
+        "ColorTex": 0,
+        "Constants": 16
+      },
+      "rdna": {
+        "bytes": 3276,
+        "sha256": "eed563ed07ad92ce2e709ecd2abb997ccd93fbd5ad9698a68fdbe39ff430cd98",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsamplePS.hlsl",
+      "source_sha256": "47982c1ed360d099f0564dae0d23502e5b00fa4099e21ca9f8ce7a97c18eb0b1",
+      "spirv_sha256": "05cbc6d77cbfe462ac78344c0a4c67b793028858f959dfaa5360f6f88240fd71",
+      "bindings": {
+        "ColorTex": 0,
+        "Constants": 16
+      },
+      "rdna": {
+        "bytes": 1060,
+        "sha256": "135d6311f4a340e237ea9a796963237547efe4d97c16d539ae829d0ab6cedba1",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BicubicVerticalUpsamplePS.hlsl",
+      "source_sha256": "bb35b6474e675bcfea4f8c4d84ac840f7bf77d0321869a36bb68f9754f1e2e70",
+      "error": {
+        "stage": "prepare",
+        "message": "Pixel entry requires .text relocation"
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BilinearUpsamplePS.hlsl",
+      "source_sha256": "4659ef2d11e9b8487021dbae855861bb6d1a3e4a84f56872900c137ffe823e13",
+      "spirv_sha256": "6088927ba1713ed08a9f818056784bfff84474651ffc0d20bf4a8083c7d19591",
+      "bindings": {
+        "ColorTex": 0,
+        "BilinearFilter": 32
+      },
+      "rdna": {
+        "bytes": 220,
+        "sha256": "91183a8c3bc0d663ed90e068e9879abb81a3b93c5de6a07894baf6f92e479d90",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BlendUIHDRPS.hlsl",
+      "source_sha256": "45710ea7c9ff03cfac902bf7749766a29d0adfd14a60ccb6dba4c411857c8d89",
+      "spirv_sha256": "8efeb4a7ab85a83438839a9a1f704a28c9be9ead5af8a7adc5088102b12fab2c",
+      "bindings": {
+        "Overlay": 0,
+        "CB0": 16
+      },
+      "rdna": {
+        "bytes": 528,
+        "sha256": "b3a210d46132ce934debe551fd3a1ba6fc5fade7bc5c80d34633597fd83a22e7",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/BufferCopyPS.hlsl",
+      "source_sha256": "ffee21866e9766229dabcbb55494a50ebc46fe450cce3f5e5f40b90a803b2d9b",
+      "spirv_sha256": "07d204d23cf55b76d82d38fef71d891006e78a06f4d65767385e9dce6cf357f0",
+      "bindings": {
+        "ColorTex": 0
+      },
+      "rdna": {
+        "bytes": 56,
+        "sha256": "8798cbc8c8165e185e1993b3d6b12a0e71fc114cbcbdff829d77c9f848e4b93c",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/CompositeHDRPS.hlsl",
+      "source_sha256": "be930e06134d88dc9653e8a72f8392f6d92e67a66fe553f1e3ba1d24bc4ac61b",
+      "spirv_sha256": "7c854e7f6da762ab59bdc209cf300c2e1a4b363c6b3e93d7f320fa1ef692644b",
+      "bindings": {
+        "MainBuffer": 0,
+        "OverlayBuffer": 1,
+        "CB0": 16
+      },
+      "rdna": {
+        "bytes": 756,
+        "sha256": "e3aecac7f8e0cb9040fda29fe15d10bb930e816fc719b80f41faf938ece3a734",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/CompositeSDRPS.hlsl",
+      "source_sha256": "6464bac3adfd2de8230815e3aa23d8ef04ec751410ff4a13eee64fa6eda849f1",
+      "spirv_sha256": "203706f34139403fa8f9ae75217860e7520c35fb1b227e0365d61a5d12084c9f",
+      "bindings": {
+        "MainBuffer": 0,
+        "OverlayBuffer": 1
+      },
+      "rdna": {
+        "bytes": 232,
+        "sha256": "3d87b0f43c32c5ec0e677e866cc776d805d62b25f0434054b91b4919bd99cfe1",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/DownsampleDepthPS.hlsl",
+      "source_sha256": "f7ad685daeac29a9fafb1ba101ec5466882346f36f6dab6e923513e6b247b111",
+      "spirv_sha256": "bfee976f3d4c09a6118796cdae235d67f43437045628e05e9c8c8c480d559a8c",
+      "bindings": {
+        "DepthBuffer": 0
+      },
+      "rdna": {
+        "bytes": 104,
+        "sha256": "818b7f0e7ec4150a781d27f7c1cf59aa3d52714bc75511621d7b0861ad2d3585",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": 0
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/LanczosHorizontalPS.hlsl",
+      "source_sha256": "0a363db09d10caeb3e2310508f9448a76593ca85324dfe0667f3069746bee8c2",
+      "spirv_sha256": "2c2b60e2b0e0126f1c71653e1c2b340c83b19d60ef4e480f24c7a64ea6704508",
+      "bindings": {
+        "Source": 0,
+        "CB0": 16
+      },
+      "rdna": {
+        "bytes": 896,
+        "sha256": "f6ee71c1faf7619c2145b2c6d489509f9e53e0866d986569bb7b639096f5bcc0",
+        "wave": 64,
+        "spi_ps_input_ena": 514,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/LanczosVerticalPS.hlsl",
+      "source_sha256": "db7df1c108da797eec75b8732085ce6cfae20388fb8e0f5ea0fbdae211a07c82",
+      "spirv_sha256": "9d901614bb13290256abba1c4e136820c6bd45234d41960c05ce82d8f3eece49",
+      "bindings": {
+        "Source": 0,
+        "CB0": 16
+      },
+      "rdna": {
+        "bytes": 1036,
+        "sha256": "818f4c936161efc486b6bf88a6d2951157a415c74e48fa2853344706d83a16da",
+        "wave": 64,
+        "spi_ps_input_ena": 258,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/MagnifyPixelsPS.hlsl",
+      "source_sha256": "e727e8a182bec2495afb1e41dbb6e7c8e50af2d5e12903bdcdd93b726cb4ee2a",
+      "spirv_sha256": "9dfb7d99b2f3c39831466a52bd7872c20d84b24676f2bd0fac7857bf5e9e264d",
+      "bindings": {
+        "ColorTex": 0,
+        "PointSampler": 33,
+        "Constants": 16
+      },
+      "rdna": {
+        "bytes": 104,
+        "sha256": "f63299064b64d22ee6df909f64af21e287b6a2896619066ed5e752cba3b0485a",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/MotionBlurFinalPassPS.hlsl",
+      "source_sha256": "210e15e215e2724974c6adc38e95a267782d319c6d60202ae9243f34b46eae5b",
+      "spirv_sha256": "9a9f19a006d55c0dbdb6d601423a8deba8dbf333966dbcbde331794d9dc72d43",
+      "bindings": {
+        "VelocityBuffer": 0,
+        "PrepBuffer": 1,
+        "LinearSampler": 34,
+        "c0": 16
+      },
+      "rdna": {
+        "bytes": 676,
+        "sha256": "8e856c58197bf4369f69a6660fc0258b760bc6995fd5afd302b5fdc8c11ab2fb",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/ParticlePS.hlsl",
+      "source_sha256": "5d3708c4dce87a4589916441b5f9d9f6c876d37aa42d95c3e23f459dd15dad59",
+      "spirv_sha256": "7ef06a2d64849a243e408e2b052a8949429224e3f444e0ecfc713159f19c82db",
+      "bindings": {
+        "gSampLinearBorder": 32,
+        "ColorTex": 1,
+        "LinearDepthTex": 2
+      },
+      "rdna": {
+        "bytes": 196,
+        "sha256": "340e7e2717794f9d5f3b6fe74263065adaaae5f1781ae473cd6005ba9f2be995",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 4,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/PerfGraphPS.hlsl",
+      "source_sha256": "59f3aefdb9dd94c5b643cb3e0a341a12dc1081101b94f20168ad42f20af7701b",
+      "spirv_sha256": "2d80f19a3ebbd6534df2798342b8f240fca92e9b272366b4417f31857960852d",
+      "bindings": {},
+      "rdna": {
+        "bytes": 48,
+        "sha256": "f15e05a881484b265869077fdfc07bb0a176238f18bbca40037053adf72fc7cc",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/PresentHDRPS.hlsl",
+      "source_sha256": "9b576259902886590e520cccdaac0e7719af1b608d12c7c0d0c9adfdd5036b72",
+      "spirv_sha256": "a3589340e886cdd63b66b3ef3db82af939837f4151eef7e9576a83ecc0eceec9",
+      "bindings": {
+        "MainBuffer": 0
+      },
+      "rdna": {
+        "bytes": 268,
+        "sha256": "b7ac47e2bb474f27f86193e87fd36b79cd5a3c4d1b3d7c62d9bc64f8220dbdc7",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/PresentSDRPS.hlsl",
+      "source_sha256": "497933beecc12a137651e9ea691234fd343decdc203f16a47b7457f515e22922",
+      "spirv_sha256": "2c36b6a1ef3a6e6334209b91666b7ba6cfaeefcbe1d6e4904301617ec027831c",
+      "bindings": {
+        "ColorTex": 0
+      },
+      "rdna": {
+        "bytes": 196,
+        "sha256": "20b5f3f6ad750c4d03b8c2aeb4529a0f10b42710ab68bcfd15f7f756edc219ab",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeHDRPS.hlsl",
+      "source_sha256": "d1448cb1384b62c29c7bee3f17d4f476c33639c98e69097b5a92d65c954b1ea3",
+      "spirv_sha256": "df332e898bbd357692bfb2b4c299d9469cc2587f41c1f384343c088ecff12012",
+      "bindings": {
+        "MainBuffer": 0,
+        "OverlayBuffer": 1,
+        "BilinearFilter": 32,
+        "Constants": 16
+      },
+      "rdna": {
+        "bytes": 964,
+        "sha256": "22ba440c76293ddfb1d8ee320a8177f7017154071aa7d3bd75f76d16d2f97bb9",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeSDRPS.hlsl",
+      "source_sha256": "d1dbae63483874d4fb96623a6dfa2da04b9c28d536e6ba60c90339a820489245",
+      "spirv_sha256": "8e54d82f9f034953115d861cecb3278561a3a74666de332bfe3fe11db2cc6dd2",
+      "bindings": {
+        "MainBuffer": 0,
+        "OverlayBuffer": 1,
+        "BilinearFilter": 32,
+        "Constants": 16
+      },
+      "rdna": {
+        "bytes": 428,
+        "sha256": "3528b46bd3f92b525d6cd16e91749658b0c555ed2cce0e71c07ee9848538e938",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsampleGammaPS.hlsl",
+      "source_sha256": "4ab7d1e3610bd028ab81e8ab892770188df056abca1e1afb8ecb6dbd131d4d5a",
+      "spirv_sha256": "e85a3cebc6cd60b066109f96cdc25bbaa5ec3b7d90fa9d8c7f097cfc82c2367f",
+      "bindings": {
+        "ColorTex": 0,
+        "BilinearClamp": 32,
+        "Constants": 16
+      },
+      "rdna": {
+        "bytes": 988,
+        "sha256": "1b7fa2c4e9f5ffae041811310f63a79d880a84393cca9d032c89e3964dd5ca8d",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsamplePS.hlsl",
+      "source_sha256": "1ba64878c9476729c9bb50db8e36c4453ec9c459db145301416ab21cc727df24",
+      "spirv_sha256": "261757caac179fd9df7385347537e4c355f00f66d74d7b961bebdaed2f18a9ad",
+      "bindings": {
+        "ColorTex": 0,
+        "BilinearClamp": 32,
+        "Constants": 16
+      },
+      "rdna": {
+        "bytes": 388,
+        "sha256": "af8e884b3b79b7505d15a1981d3e8c727467d613cb8ec50de35073f781a00690",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/TextAntialiasPS.hlsl",
+      "source_sha256": "931e23000e3bbf1dbe4b3b8c1bd9d81f23b1014302bcd7d3ac3525539d7cf84a",
+      "spirv_sha256": "2296ed6a4f72c5363160965cd2974bd4bb09a2bd254d55dd555734095da2bae4",
+      "bindings": {
+        "cbFontParams": 16,
+        "SignedDistanceFieldTex": 0,
+        "LinearSampler": 32
+      },
+      "rdna": {
+        "bytes": 132,
+        "sha256": "063a288efa156a8ebd94666aa5ea498d358f9383b48bc597d6f9ecfdf3c52d32",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    },
+    {
+      "group": "miniengine-corrected",
+      "entry": "main",
+      "source": "MiniEngine/Core/Shaders/TextShadowPS.hlsl",
+      "source_sha256": "88659a2edf3a911cdba7179ba7ce7d7a4cf44209abb0783466e0e627299a8aa8",
+      "spirv_sha256": "8301447a8cc3289e2bc0ba7ef37acb0dbd2d42f20d135e06f732a140109dac17",
+      "bindings": {
+        "cbFontParams": 16,
+        "SignedDistanceFieldTex": 0,
+        "LinearSampler": 32
+      },
+      "rdna": {
+        "bytes": 204,
+        "sha256": "d20f9428706e1277a86cf7573e53a2e8b68069e20bd9280b4a66c6bd3bbb0256",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      }
+    }
+  ]
+}

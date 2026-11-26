@@ -1,0 +1,38 @@
+{
+  "converter_commit": "b540c8a2484eecc7c2155994c806bbd8a8706f41",
+  "converter_sha256": "f6dd13627ae1a2994c4dfc2d47ca2d9292ab7028cc421b39cde65bbc307fae2b",
+  "arguments": [
+    "--root-descriptor",
+    "uav",
+    "0",
+    "0",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "2",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "3",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "4",
+    "--root-descriptor",
+    "uav",
+    "0",
+    "5"
+  ],
+  "checked_modules": [
+    {
+      "name": "whole",
+      "dxil": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a",
+      "spirv": "0634013ae82c0b90eb013cee31411064666aeabf6af4984b9dffe99f2348ecaa"
+    },
+    {
+      "name": "local",
+      "dxil": "35427400606d7e98c740227fa00bd09c3cec95ce39af84f7ab32274e3c3f6c69",
+      "spirv": "1ca8405813d7ceddba7adf1583eb7f516b62a16b58e7379a7bebb216ac412c0d"
+    }
+  ]
+}

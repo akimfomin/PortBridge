@@ -1,0 +1,576 @@
+{
+  "compiler": "ed8baf5de7bfe73208974d08a570acc95f978437",
+  "observer_sha256": "0696ae14dea972499250e9a4ab1de1c7bebe05079fad4c6186a40f77c570cfdd",
+  "blocks": [
+    {
+      "name": "khronos-vulkan-samples-071",
+      "block": 0,
+      "arms": {
+        "project": {
+          "ns": [
+            58543300,
+            60243900,
+            61740700,
+            62141000,
+            65222200,
+            59786500,
+            60243700
+          ],
+          "median_ns": 60243900,
+          "dxil_sha256": "a45010c296870bf08872bd898fe2064288d4f646af57c7a1f7e36170988ef6e4"
+        },
+        "whole": {
+          "ns": [
+            68754700,
+            67599700,
+            66355700,
+            67794400,
+            67842900,
+            67502400,
+            67984100
+          ],
+          "median_ns": 67794400,
+          "dxil_sha256": "0e882871fdffd78eac0e89a1a53628ce87cd54a5bbd6bb8e0cce1c1fd5785ac4"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-000",
+      "block": 0,
+      "arms": {
+        "whole": {
+          "ns": [
+            51802700,
+            52541000,
+            56548400,
+            52462100,
+            52556300,
+            53474900,
+            54046500
+          ],
+          "median_ns": 52556300,
+          "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e"
+        },
+        "project": {
+          "ns": [
+            48302500,
+            46810900,
+            48883100,
+            47673400,
+            47554600,
+            46871100,
+            48737700
+          ],
+          "median_ns": 47673400,
+          "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+        }
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-073",
+      "block": 0,
+      "arms": {
+        "project": {
+          "ns": [
+            61999600,
+            59278900,
+            59804800,
+            59463500,
+            62119300,
+            60274700,
+            61371000
+          ],
+          "median_ns": 60274700,
+          "dxil_sha256": "68ad89a01fad1c86af6354366673e1dbe5c4621bd0d6d71435d0359197bc53ec"
+        },
+        "whole": {
+          "ns": [
+            68555800,
+            66775100,
+            67972700,
+            69692200,
+            68661100,
+            69145800,
+            68161600
+          ],
+          "median_ns": 68555800,
+          "dxil_sha256": "b6d39c4755807c7827c6f3e350dfc82aecc9e8d3d114d04303a1305ccc707ef2"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-001",
+      "block": 0,
+      "arms": {
+        "project": {
+          "ns": [
+            3926800,
+            3835200,
+            3775400,
+            4411900,
+            3783400,
+            4050300,
+            3557400
+          ],
+          "median_ns": 3835200,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        },
+        "whole": {
+          "ns": [
+            3759700,
+            3929600,
+            3613200,
+            3650300,
+            3618800,
+            3576300,
+            4011600
+          ],
+          "median_ns": 3650300,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-001",
+      "block": 1,
+      "arms": {
+        "whole": {
+          "ns": [
+            3787900,
+            3909200,
+            3766800,
+            5478200,
+            5026300,
+            4112100,
+            4047700
+          ],
+          "median_ns": 4047700,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        },
+        "project": {
+          "ns": [
+            3556000,
+            3505300,
+            3598000,
+            3543300,
+            3569900,
+            3838700,
+            3693400
+          ],
+          "median_ns": 3569900,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        }
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-073",
+      "block": 1,
+      "arms": {
+        "whole": {
+          "ns": [
+            69252200,
+            69258700,
+            69288900,
+            68317200,
+            68973700,
+            66750500,
+            66800200
+          ],
+          "median_ns": 68973700,
+          "dxil_sha256": "b6d39c4755807c7827c6f3e350dfc82aecc9e8d3d114d04303a1305ccc707ef2"
+        },
+        "project": {
+          "ns": [
+            57939800,
+            58762900,
+            58481900,
+            61360100,
+            60291900,
+            59832100,
+            60914400
+          ],
+          "median_ns": 59832100,
+          "dxil_sha256": "68ad89a01fad1c86af6354366673e1dbe5c4621bd0d6d71435d0359197bc53ec"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-000",
+      "block": 1,
+      "arms": {
+        "project": {
+          "ns": [
+            50096800,
+            50374100,
+            48788700,
+            49141700,
+            45677800,
+            47965200,
+            47878300
+          ],
+          "median_ns": 48788700,
+          "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+        },
+        "whole": {
+          "ns": [
+            57267600,
+            55115100,
+            53774700,
+            53502700,
+            54572200,
+            53471200,
+            52321900
+          ],
+          "median_ns": 53774700,
+          "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e"
+        }
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-071",
+      "block": 1,
+      "arms": {
+        "whole": {
+          "ns": [
+            66382300,
+            66394100,
+            68168100,
+            68424900,
+            68245800,
+            68830400,
+            67052200
+          ],
+          "median_ns": 68168100,
+          "dxil_sha256": "0e882871fdffd78eac0e89a1a53628ce87cd54a5bbd6bb8e0cce1c1fd5785ac4"
+        },
+        "project": {
+          "ns": [
+            60194700,
+            59656100,
+            58549800,
+            59141200,
+            61907500,
+            61405600,
+            58796900
+          ],
+          "median_ns": 59656100,
+          "dxil_sha256": "a45010c296870bf08872bd898fe2064288d4f646af57c7a1f7e36170988ef6e4"
+        }
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-071",
+      "block": 2,
+      "arms": {
+        "project": {
+          "ns": [
+            58424900,
+            57383100,
+            59458700,
+            58851300,
+            60533700,
+            58115400,
+            58902400
+          ],
+          "median_ns": 58851300,
+          "dxil_sha256": "a45010c296870bf08872bd898fe2064288d4f646af57c7a1f7e36170988ef6e4"
+        },
+        "whole": {
+          "ns": [
+            69338500,
+            66000700,
+            66634100,
+            69415500,
+            69032700,
+            68948500,
+            66447500
+          ],
+          "median_ns": 68948500,
+          "dxil_sha256": "0e882871fdffd78eac0e89a1a53628ce87cd54a5bbd6bb8e0cce1c1fd5785ac4"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-000",
+      "block": 2,
+      "arms": {
+        "whole": {
+          "ns": [
+            54358100,
+            54569900,
+            53888500,
+            52766000,
+            54270800,
+            53550300,
+            53727400
+          ],
+          "median_ns": 53888500,
+          "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e"
+        },
+        "project": {
+          "ns": [
+            50213700,
+            47716200,
+            48454400,
+            50133400,
+            49556400,
+            49573800,
+            47170300
+          ],
+          "median_ns": 49556400,
+          "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+        }
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-073",
+      "block": 2,
+      "arms": {
+        "project": {
+          "ns": [
+            57210800,
+            59882200,
+            60933700,
+            59762100,
+            58367300,
+            63420000,
+            67482200
+          ],
+          "median_ns": 59882200,
+          "dxil_sha256": "68ad89a01fad1c86af6354366673e1dbe5c4621bd0d6d71435d0359197bc53ec"
+        },
+        "whole": {
+          "ns": [
+            74206700,
+            69146100,
+            67358900,
+            65866800,
+            69099300,
+            68312900,
+            65668700
+          ],
+          "median_ns": 68312900,
+          "dxil_sha256": "b6d39c4755807c7827c6f3e350dfc82aecc9e8d3d114d04303a1305ccc707ef2"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-001",
+      "block": 2,
+      "arms": {
+        "project": {
+          "ns": [
+            3622400,
+            3493700,
+            3670500,
+            3737200,
+            3625600,
+            3805600,
+            3696700
+          ],
+          "median_ns": 3670500,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        },
+        "whole": {
+          "ns": [
+            3563900,
+            3667100,
+            3706600,
+            4084400,
+            3637000,
+            3645700,
+            4079500
+          ],
+          "median_ns": 3667100,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-001",
+      "block": 3,
+      "arms": {
+        "whole": {
+          "ns": [
+            3731500,
+            3554300,
+            3615300,
+            3529900,
+            3586800,
+            3682500,
+            3798700
+          ],
+          "median_ns": 3615300,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        },
+        "project": {
+          "ns": [
+            3958100,
+            3598500,
+            3887500,
+            3726600,
+            3990600,
+            3743600,
+            3897500
+          ],
+          "median_ns": 3887500,
+          "dxil_sha256": "3859896d354aea6ada1ccc04c63ec65f0a5c48498f7ab47e8067a3d86c00e320"
+        }
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-073",
+      "block": 3,
+      "arms": {
+        "whole": {
+          "ns": [
+            68495000,
+            68505400,
+            67062600,
+            66511400,
+            67779900,
+            67623600,
+            66075300
+          ],
+          "median_ns": 67623600,
+          "dxil_sha256": "b6d39c4755807c7827c6f3e350dfc82aecc9e8d3d114d04303a1305ccc707ef2"
+        },
+        "project": {
+          "ns": [
+            62833300,
+            59179600,
+            61386200,
+            59473000,
+            59437700,
+            59313900,
+            59418000
+          ],
+          "median_ns": 59437700,
+          "dxil_sha256": "68ad89a01fad1c86af6354366673e1dbe5c4621bd0d6d71435d0359197bc53ec"
+        }
+      }
+    },
+    {
+      "name": "raylib-procedural-000",
+      "block": 3,
+      "arms": {
+        "project": {
+          "ns": [
+            48080500,
+            50000200,
+            49301000,
+            47751600,
+            46542300,
+            48203200,
+            47222300
+          ],
+          "median_ns": 48080500,
+          "dxil_sha256": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+        },
+        "whole": {
+          "ns": [
+            54219900,
+            54666200,
+            55139300,
+            55493500,
+            54646000,
+            53628300,
+            54123900
+          ],
+          "median_ns": 54646000,
+          "dxil_sha256": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e"
+        }
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-071",
+      "block": 3,
+      "arms": {
+        "whole": {
+          "ns": [
+            69575300,
+            68990300,
+            68385900,
+            68593300,
+            67934700,
+            70678700,
+            69789200
+          ],
+          "median_ns": 68990300,
+          "dxil_sha256": "0e882871fdffd78eac0e89a1a53628ce87cd54a5bbd6bb8e0cce1c1fd5785ac4"
+        },
+        "project": {
+          "ns": [
+            60707700,
+            59805000,
+            61413800,
+            61437700,
+            60198100,
+            62248200,
+            59104900
+          ],
+          "median_ns": 60707700,
+          "dxil_sha256": "a45010c296870bf08872bd898fe2064288d4f646af57c7a1f7e36170988ef6e4"
+        }
+      }
+    }
+  ],
+  "summaries": [
+    {
+      "name": "khronos-vulkan-samples-071",
+      "blocks": 4,
+      "whole": {
+        "median_of_block_medians_ms": 68.5583,
+        "min_ms": 67.7944,
+        "max_ms": 68.9903
+      },
+      "project": {
+        "median_of_block_medians_ms": 59.95,
+        "min_ms": 58.8513,
+        "max_ms": 60.7077
+      }
+    },
+    {
+      "name": "khronos-vulkan-samples-073",
+      "blocks": 4,
+      "whole": {
+        "median_of_block_medians_ms": 68.43435,
+        "min_ms": 67.6236,
+        "max_ms": 68.9737
+      },
+      "project": {
+        "median_of_block_medians_ms": 59.85715,
+        "min_ms": 59.4377,
+        "max_ms": 60.2747
+      }
+    },
+    {
+      "name": "raylib-procedural-000",
+      "blocks": 4,
+      "whole": {
+        "median_of_block_medians_ms": 53.8316,
+        "min_ms": 52.5563,
+        "max_ms": 54.646
+      },
+      "project": {
+        "median_of_block_medians_ms": 48.4346,
+        "min_ms": 47.6734,
+        "max_ms": 49.5564
+      }
+    },
+    {
+      "name": "raylib-procedural-001",
+      "blocks": 4,
+      "whole": {
+        "median_of_block_medians_ms": 3.6587,
+        "min_ms": 3.6153,
+        "max_ms": 4.0477
+      },
+      "project": {
+        "median_of_block_medians_ms": 3.75285,
+        "min_ms": 3.5699,
+        "max_ms": 3.8875
+      }
+    }
+  ]
+}

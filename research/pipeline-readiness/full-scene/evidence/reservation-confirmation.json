@@ -1,0 +1,156 @@
+{
+  "exe": "d6d2a991288d9fa1f3b2e6dcec3bc5f2ee3db40ee0b041ca543151ca10643985",
+  "scene": "03edde12da9f800196ee0a2555a1ddf58db92f63ad2212e60d72241b731384af",
+  "vs_ps_hlsl": "5861d471bf02e673efc3780b255153c94fdb4e1433c5aa3cf61bc6902acb613d",
+  "dxc": "b9cff94181248e080804b385da8964b6319fd07760721baa9053a891cf7a727f",
+  "spirv_validator": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+  "campaign": 557,
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "width": 1024,
+  "height": 768,
+  "frames_compared": 96,
+  "rgba_bytes_compared": 301989888,
+  "input_draws": 49,
+  "input_triangles": 1500224,
+  "reference_sha256": [
+    "73713bd07657322de62ff57c0f2e99bbd2de819512488ec1b70baed278a44e5d",
+    "7a8aff638f33fe0b959a9b29c663d45a2c3c25f664a38b2a69dd698287d1501b",
+    "9e971129763f2b2302f40517684cc60198f852d3efbf9efe329cc780ccb365fd"
+  ],
+  "mixes": {
+    "shared": {
+      "demand_ms": 60.10095,
+      "startup_to_frame_ms": 343.7206,
+      "schedule_to_drained_ms": 61.483900000000006,
+      "schedule_to_all_frames_ms": 99.12594999999999,
+      "process_commit_before": 141137920.0,
+      "process_commit_at_frame": 207906816.0,
+      "process_commit_sampled_peak": 214218752.0,
+      "lifetime_peak_commit": 214257664.0,
+      "lifetime_peak_working_set": 157853696.0,
+      "active_at_demand": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "elapsed_each_ms": [
+        59.6842,
+        62.0504,
+        61.7192,
+        59.4841,
+        56.3729,
+        59.3829,
+        60.5177,
+        61.6789
+      ]
+    },
+    "reserved": {
+      "demand_ms": 58.7278,
+      "startup_to_frame_ms": 334.3482,
+      "schedule_to_drained_ms": 60.0565,
+      "schedule_to_all_frames_ms": 96.3264,
+      "process_commit_before": 141240320.0,
+      "process_commit_at_frame": 206229504.0,
+      "process_commit_sampled_peak": 212541440.0,
+      "lifetime_peak_commit": 212580352.0,
+      "lifetime_peak_working_set": 157067264.0,
+      "active_at_demand": [
+        1,
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        1
+      ],
+      "elapsed_each_ms": [
+        60.4882,
+        56.1752,
+        57.8632,
+        59.5924,
+        56.8076,
+        60.7638,
+        57.4996,
+        61.364
+      ]
+    },
+    "critical-first": {
+      "demand_ms": 48.9644,
+      "startup_to_frame_ms": 340.67965000000004,
+      "schedule_to_drained_ms": 48.9808,
+      "schedule_to_all_frames_ms": 87.3361,
+      "process_commit_before": 141238272.0,
+      "process_commit_at_frame": 210493440.0,
+      "process_commit_sampled_peak": 216803328.0,
+      "lifetime_peak_commit": 216834048.0,
+      "lifetime_peak_working_set": 157505536.0,
+      "active_at_demand": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elapsed_each_ms": [
+        48.2505,
+        52.2954,
+        48.5379,
+        48.8866,
+        49.0422,
+        47.6955,
+        50.9096,
+        49.5199
+      ]
+    },
+    "warm": {
+      "demand_ms": 20.3568,
+      "startup_to_frame_ms": 392.06399999999996,
+      "schedule_to_drained_ms": 20.84405,
+      "schedule_to_all_frames_ms": 58.54885,
+      "process_commit_before": 166217728.0,
+      "process_commit_at_frame": 180097024.0,
+      "process_commit_sampled_peak": 186408960.0,
+      "lifetime_peak_commit": 186578944.0,
+      "lifetime_peak_working_set": 153362432.0,
+      "active_at_demand": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "elapsed_each_ms": [
+        22.0288,
+        21.2419,
+        13.6659,
+        20.1165,
+        24.031,
+        12.2586,
+        20.1557,
+        20.5579
+      ]
+    }
+  },
+  "paired_shared_minus_reserved_ms": [
+    -0.804000000000002,
+    5.875200000000007,
+    3.8560000000000016,
+    -0.10829999999999984,
+    -0.4346999999999994,
+    -1.380900000000004,
+    3.018099999999997,
+    0.3149000000000015
+  ]
+}

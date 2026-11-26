@@ -1,0 +1,231 @@
+{
+  "exe": "463dfc88c3fd05c82e387b492fd7083ff34f6cf62e12802c54ff0dfb1f740ccd",
+  "scene": "03edde12da9f800196ee0a2555a1ddf58db92f63ad2212e60d72241b731384af",
+  "vs_ps_hlsl": "5861d471bf02e673efc3780b255153c94fdb4e1433c5aa3cf61bc6902acb613d",
+  "dxc": "b9cff94181248e080804b385da8964b6319fd07760721baa9053a891cf7a727f",
+  "spirv_validator": "55ef7f8f17e177012446ebd723ce56482ba9c17167a3776f784ddf0b70a42bed",
+  "campaign": 558,
+  "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+  "width": 1024,
+  "height": 768,
+  "comparison": "upload-overlap",
+  "frames_compared": 48,
+  "rgba_bytes_compared": 150994944,
+  "input_draws": 49,
+  "input_triangles": 1500224,
+  "reference_sha256": [
+    "73713bd07657322de62ff57c0f2e99bbd2de819512488ec1b70baed278a44e5d",
+    "7a8aff638f33fe0b959a9b29c663d45a2c3c25f664a38b2a69dd698287d1501b",
+    "9e971129763f2b2302f40517684cc60198f852d3efbf9efe329cc780ccb365fd"
+  ],
+  "mixes": {
+    "phase-reference": {
+      "demand_ms": 50.111999999999995,
+      "startup_to_frame_ms": 355.11985000000004,
+      "schedule_to_drained_ms": 65.8545,
+      "schedule_to_all_frames_ms": 102.8752,
+      "process_commit_before": 92049408.0,
+      "process_commit_at_frame": 209397760.0,
+      "process_commit_sampled_peak": 215709696.0,
+      "lifetime_peak_commit": 215750656.0,
+      "lifetime_peak_working_set": 157200384.0,
+      "active_at_demand": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elapsed_each_ms": [
+        46.3846,
+        49.6305,
+        50.8556,
+        53.3223,
+        46.7926,
+        55.4914,
+        49.0366,
+        50.5935
+      ],
+      "overlapping_per_run": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "phase-lead": {
+      "demand_ms": 40.3065,
+      "startup_to_frame_ms": 323.39465,
+      "schedule_to_drained_ms": 57.171350000000004,
+      "schedule_to_all_frames_ms": 91.8118,
+      "process_commit_before": 92047360.0,
+      "process_commit_at_frame": 209430528.0,
+      "process_commit_sampled_peak": 215740416.0,
+      "lifetime_peak_commit": 215789568.0,
+      "lifetime_peak_working_set": 169428992.0,
+      "active_at_demand": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "elapsed_each_ms": [
+        39.0799,
+        41.0397,
+        40.3476,
+        40.9002,
+        38.5917,
+        38.7175,
+        40.2654,
+        43.2158
+      ],
+      "overlapping_per_run": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          3
+        ]
+      ]
+    }
+  },
+  "paired_reference_minus_lead": {
+    "demand_ms": [
+      7.304699999999997,
+      8.590799999999994,
+      10.508000000000003,
+      12.4221,
+      8.200899999999997,
+      16.773899999999998,
+      8.7712,
+      7.377699999999997
+    ],
+    "startup_to_frame_ms": [
+      14.546699999999987,
+      33.74989999999997,
+      33.06170000000003,
+      31.07819999999998,
+      -8.414800000000014,
+      68.01799999999997,
+      66.15879999999999,
+      28.7774
+    ],
+    "schedule_to_drained_ms": [
+      8.3581,
+      8.986300000000007,
+      8.288199999999996,
+      19.269900000000007,
+      3.2683000000000035,
+      16.009199999999993,
+      5.721599999999995,
+      4.697199999999995
+    ],
+    "schedule_to_all_frames_ms": [
+      10.3763,
+      11.613799999999998,
+      7.331000000000003,
+      19.62079999999999,
+      10.346500000000006,
+      21.298100000000005,
+      16.6678,
+      4.3256000000000085
+    ],
+    "process_commit_before": [
+      81920,
+      36864,
+      208896,
+      -229376,
+      348160,
+      -139264,
+      -196608,
+      -98304
+    ],
+    "process_commit_at_frame": [
+      643072,
+      -229376,
+      16384,
+      3702784,
+      -221184,
+      -921600,
+      1515520,
+      -1298432
+    ],
+    "process_commit_sampled_peak": [
+      643072,
+      -225280,
+      12288,
+      3702784,
+      -225280,
+      -921600,
+      1515520,
+      -1294336
+    ],
+    "lifetime_peak_commit": [
+      622592,
+      -225280,
+      -4096,
+      3735552,
+      -253952,
+      -929792,
+      1531904,
+      -1253376
+    ],
+    "lifetime_peak_working_set": [
+      -13459456,
+      -11710464,
+      -8658944,
+      -11784192,
+      -12623872,
+      -12800000,
+      -11825152,
+      -11673600
+    ],
+    "explicit_vk_allocation_total_bytes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

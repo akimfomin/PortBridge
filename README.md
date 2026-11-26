@@ -32,6 +32,11 @@ The exact AnyXboxX search links the earlier RDNA2 evidence and the new CPU corre
 
 ## PortBridge research
 
+- **Wave32 carry fix.** DarkPanda69 reproduced the HLSL error and verified the PortBridge fix on RX 9070 XT and RTX 3060. The patch awaits XCL review. The earlier Lane-local Masks experiment was withdrawn. [Independent results](https://github.com/xcl-dev/xcl/issues/2584#issuecomment-7178879816) · [Fork patch](https://github.com/akimfomin/xcl/commit/d3e7725f9f48c39c18e7b6e011ec76423edb0004)
+- Pixel mask projection lowered GPU draw time by 19% on two views of an open raylib scene on an RTX 4070 Ti SUPER. Both images matched the baseline bit for bit. A Microsoft display filter showed mixed timings. The opt-in XCL patch, its proof and measurements are available for review. [Code and reproduction](research/pipeline-readiness/structural-suite/night/ssa-mask-projection/README.md)
+- [Cold graphics pipeline readiness](research/pipeline-readiness/ORDERED-GRAPHICS.md) cut recording-to-first-image time from 11.98 to 6.31 seconds on an open Vulkan scene with identical output. The report includes the exact eager baseline, memory cost, and the related XCL findings.
+
+- [Cold pipeline readiness](research/pipeline-readiness) is the active study. It measures how compilation delays the first correct output and tests whether preserving memory headroom for required work helps.
 - [Observation-scoped GPU readbacks](research/readback-epochs) reuses already observed bytes and tests packed selective readback against bounded exact-range staging. [Ecosystem evidence](docs/READBACK-2026-11-25.md)
 - [Portable Vulkan mipmaps](research/mipmap-contract) demonstrates a lane-numbering assumption in NVIDIA's fast shader, a guarded correction, and matched physical output.
 - [Adaptive shader dispatch](research/adaptive-switch-dispatch) partitions large sparse switches. The study compares a flat switch, a fixed-size range tree, and a table where the case bodies allow one.

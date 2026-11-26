@@ -1,0 +1,59 @@
+{
+  "renderer_runs": 6,
+  "pairs": [
+    {
+      "order": [
+        "whole",
+        "project"
+      ],
+      "outer_wall_saving_ms": 120.0004
+    },
+    {
+      "order": [
+        "project",
+        "whole"
+      ],
+      "outer_wall_saving_ms": 110.6141
+    },
+    {
+      "order": [
+        "whole",
+        "project"
+      ],
+      "outer_wall_saving_ms": 99.2103
+    }
+  ],
+  "medians": {
+    "runtime_api_ms": {
+      "whole": 57.2822,
+      "project": 52.1184
+    },
+    "native_create_ms": {
+      "whole": 855.374,
+      "project": 750.839
+    },
+    "setup_submit_readback_ms": {
+      "whole": 897.9795,
+      "project": 791.2776
+    },
+    "guest_input_to_verified_image_wall_ms": {
+      "whole": 1305.1071,
+      "project": 1194.493
+    }
+  },
+  "raw_frames_rehashed": 6,
+  "rgba32f_sha256": "3bdf7492ada35017f67fd89c256cb994251a249a5a567d225b177f06cbfc36ae",
+  "expected_dxil_sha256": {
+    "whole": "caa6ff6a03fcb0c2f9a61d5f1ec26a0d42e0a8a909196631c59efd1e0b37a38e",
+    "project": "3b6f5479d4be663afee49e7db539de93b03b22f906d1a6731a4ce4677de02eac"
+  },
+  "live_runtime_check": {
+    "revision": "0c8a01c7fe0e7364803262bbcd700f869776362b",
+    "observer_sha256": "cc36fd4bb3e2c01d6cfb820fa94fef970207c9db6dd0ee69d1c648e953405763",
+    "matched_modes": [
+      "whole",
+      "project"
+    ],
+    "new_gpu_runs": 0
+  }
+}

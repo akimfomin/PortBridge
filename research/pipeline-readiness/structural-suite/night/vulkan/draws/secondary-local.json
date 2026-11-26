@@ -1,0 +1,110 @@
+{
+  "scene_controls": {
+    "viewEye": [
+      3.0,
+      1.8,
+      3.5
+    ],
+    "viewCenter": [
+      0.0,
+      0.0,
+      0.7
+    ],
+    "runTime": 2.75,
+    "resolution": [
+      800.0,
+      450.0
+    ]
+  },
+  "references": {
+    "gl": "4f6a32b195fc47053b522f3165e863b06614fc5400f4067c9c183a03d7eed232",
+    "sgprs": "919570b79902408a67e110f46e2959f917a80fbac8562082c1f093e5e492e96c"
+  },
+  "fragment": "ray-local-roots.spv",
+  "fragment_sha256": "1ca8405813d7ceddba7adf1583eb7f516b62a16b58e7379a7bebb216ac412c0d",
+  "vertex_sha256": "2bd6b18a5864c4fdbe3ac52741a54005c9e00d415e8af08fcf02cd1ed63e9423",
+  "worker_sha256": "f43b10a05afedfb75da8fad2d5cd70e1c2aa24508820fa14961993332982f18b",
+  "layout": {
+    "capabilities": [
+      "Shader",
+      "GroupNonUniform",
+      "GroupNonUniformBallot",
+      "GroupNonUniformShuffle",
+      "GroupNonUniformQuad",
+      "VulkanMemoryModel",
+      "PhysicalStorageBufferAddresses",
+      "DemoteToHelperInvocation"
+    ],
+    "push_offsets": [
+      0,
+      8,
+      16,
+      24,
+      32
+    ],
+    "resources": []
+  },
+  "physical_access": {
+    "read_only": true,
+    "statically_loaded_sgpr_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "static_load_instructions": 12
+  },
+  "draw": {
+    "adapter": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "device_id": 9989,
+    "vendor_id": 4318,
+    "layout_profile": "xcl-ray-roots",
+    "subgroup_size": 32,
+    "driver_version_raw": 2588114944,
+    "api_version_raw": 4211039,
+    "vertex_spirv_bytes": 1328,
+    "fragment_spirv_bytes": 347988,
+    "pipeline_create_us": 978,
+    "capture_statistics": false,
+    "width": 800,
+    "height": 450,
+    "draws_per_interval": 8,
+    "timestamp_valid_bits": 64,
+    "timestamp_period_ns": 1,
+    "gpu_ticks": [
+      12158976,
+      11508736,
+      12261376,
+      12255232,
+      11797504
+    ],
+    "gpu_ms_per_draw": [
+      1.51987,
+      1.43859,
+      1.53267,
+      1.5319,
+      1.47469
+    ],
+    "root_and_readback_guards_intact": true,
+    "worker_commit_limit_bytes": 2147483648,
+    "worker_peak_commit_bytes": 74199040,
+    "worker_peak_working_set_bytes": 68800512
+  },
+  "vs_native_gl": {
+    "bit_equal_pixels": 81038,
+    "pixels": 360000,
+    "mean_abs_rgb": 0.00018834548345594496,
+    "p50_max_channel_abs": 2.384185791015625e-07,
+    "p99_max_channel_abs": 0.0007754570245742803,
+    "max_channel_abs": 0.05489647388458252
+  },
+  "output_sha256": "11903b0a3f58ac37643bad11b4d9e4cab5b437e3858715ac38e211943e8882df"
+}

@@ -1,0 +1,27 @@
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 6ef85ad..b64a945 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -117,7 +117,21 @@ pub fn translate_vertex(code: &[u8], o: KernelOptions, vs: &VsInterface) -> Resu
+ 
+ /// A pixel shader (the recompiler's `Mode::Pixel`; wave-size independent).
+ pub fn translate_pixel(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
+-    translate_entry(code, o, Entry::Pixel(ps.clone()), None, None, 0)
++    let kernel = translate_entry(code, o, Entry::Pixel(ps.clone()), None, None, 0)?;
++    #[cfg(test)]
++    if let Some(out) = std::env::var_os("XCL_OPEN_PS_DUMP") {
++        use std::hash::{DefaultHasher, Hash, Hasher};
++        let mut hash = DefaultHasher::new();
++        code.hash(&mut hash);
++        format!("{o:?}{ps:?}").hash(&mut hash);
++        let test = std::thread::current();
++        let test = test.name().unwrap_or("unnamed").replace("::", "--");
++        let base = std::path::PathBuf::from(out).join(format!("{test}--{:016x}", hash.finish()));
++        std::fs::write(base.with_extension("rdna2"), code).expect("write fixture RDNA");
++        std::fs::write(base.with_extension("dxil"), &kernel.dxil).expect("write translated fixture");
++        std::fs::write(base.with_extension("abi"), format!("{o:?}\n{ps:?}\n")).expect("write fixture ABI");
++    }
++    Ok(kernel)
+ }
+ 
+ /// A geometry-mode (ES+GS) program: the compute pass that writes one mesh record per

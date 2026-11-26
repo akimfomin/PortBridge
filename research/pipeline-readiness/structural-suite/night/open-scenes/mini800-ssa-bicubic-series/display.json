@@ -1,0 +1,240 @@
+{
+  "stage": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+  "guard_job_mib": 512,
+  "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+  "rdna_sha256": "eed563ed07ad92ce2e709ecd2abb997ccd93fbd5ad9698a68fdbe39ff430cd98",
+  "width": 800,
+  "height": 450,
+  "texture_width": 400,
+  "texture_height": 225,
+  "draws": 16,
+  "input_scene_sha256": "7785d9ef2ca55d94b3bb8b1a862df71064becbd268fc93f11ec7014a45cb7408",
+  "input_texture_sha256": "1e65ddc40bca215b873386ab5335ed4ffee73ca9a79c67ee5ae32cc6d81da4ea",
+  "rootsig_sha256": "15964ae0173f5763601a16f6afa36ffc40947d5d51fd00361dcd316f8fd41659",
+  "cpu": {
+    "sha256": "e501ad2c08cf121272e4c147a6880d78f2bce1b64c4cb01621c0b40548f63187",
+    "pixels": 360000,
+    "nonfinite_pixels": 0,
+    "unique_finite_colors": 359983,
+    "rgb_mean": [
+      0.6394216418266296,
+      0.6476291418075562,
+      0.6876813173294067
+    ]
+  },
+  "trials": [
+    {
+      "order": [
+        "native",
+        "whole",
+        "project"
+      ],
+      "variants": {
+        "native": {
+          "dxil_sha256": "b1d42541a80123b4e4c390160ffecf8779ec636e63fab6d8199b7825823f19fd",
+          "image": {
+            "sha256": "e5b8f0ce2185d9126b61c92e2f789b2b5667884e574c89e6390f352b51e18534",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359990,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.6876813173294067
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 14142,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.373861381853068e-07,
+            "rms_rgb": 7.075025748226049e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.012928,
+            "native_create_ms": 17.502,
+            "pso_cache_blob_bytes": 8866,
+            "ticks": 206848,
+            "frequency_hz": 1000000000
+          },
+          "guard_stdout": [
+            "exit=0 peak_process_bytes=152137728 peak_job_bytes=153403392"
+          ],
+          "xcl_stdout": [
+            "",
+            "running 1 test",
+            "test gpu::dxil::aperture_tests::open_miniengine_display_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+            "guard fixture native_create_ms=17.502",
+            "guard runtime size=800 height=450 draws=16 ticks=206848 frequency_hz=1000000000 gpu_ms_per_draw=0.012928",
+            "guard pso_cache_blob_bytes=8866",
+            "scene_native_setup_submit_readback_ms=56.6011",
+            "display adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800x450 kind=bicubic",
+            "ok",
+            "",
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1340 filtered out; finished in 0.31s",
+            ""
+          ]
+        },
+        "whole": {
+          "dxil_sha256": "87182a787425ba05da6280facbf17e532c7099cc7d1a7909bc7572b6f9f7402e",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.241216,
+            "native_create_ms": 238.0,
+            "pso_cache_blob_bytes": 59010,
+            "ticks": 3859456,
+            "frequency_hz": 1000000000
+          },
+          "guard_stdout": [
+            "exit=0 peak_process_bytes=189939712 peak_job_bytes=191201280"
+          ],
+          "xcl_stdout": [
+            "",
+            "running 1 test",
+            "test gpu::dxil::aperture_tests::open_miniengine_display_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+            "guard fixture native_create_ms=238.000",
+            "guard runtime size=800 height=450 draws=16 ticks=3859456 frequency_hz=1000000000 gpu_ms_per_draw=0.241216",
+            "guard pso_cache_blob_bytes=59010",
+            "scene_native_setup_submit_readback_ms=282.2147",
+            "display adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800x450 kind=bicubic",
+            "ok",
+            "",
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1340 filtered out; finished in 0.53s",
+            ""
+          ]
+        },
+        "project": {
+          "dxil_sha256": "2cfe436577438bd95cb4263166639d4dc23ef0c9260284c31d3c597bd28cf52b",
+          "image": {
+            "sha256": "749df55927a2038f23f27e0c36c785602c0bb1f5eb98c5ca75500b962037697e",
+            "pixels": 360000,
+            "nonfinite_pixels": 0,
+            "unique_finite_colors": 359985,
+            "rgb_mean": [
+              0.6394216418266296,
+              0.6476292014122009,
+              0.687681257724762
+            ]
+          },
+          "vs_cpu_rgb": {
+            "bit_equal_pixels": 11885,
+            "both_finite_pixels": 360000,
+            "p50_max_channel_abs": 1.7881393432617188e-07,
+            "p99_max_channel_abs": 3.516674041748047e-06,
+            "max_channel_abs": 2.1278858184814453e-05,
+            "mean_abs_rgb": 3.385799971443635e-07,
+            "rms_rgb": 7.076837814626072e-07,
+            "pixels_over_one_8bit_code": 0,
+            "pixels_over_two_8bit_codes": 0
+          },
+          "stats": {
+            "gpu_ms_per_draw": 0.211328,
+            "native_create_ms": 224.81,
+            "pso_cache_blob_bytes": 61986,
+            "ticks": 3381248,
+            "frequency_hz": 1000000000
+          },
+          "guard_stdout": [
+            "exit=0 peak_process_bytes=171978752 peak_job_bytes=173240320"
+          ],
+          "xcl_stdout": [
+            "",
+            "running 1 test",
+            "test gpu::dxil::aperture_tests::open_miniengine_display_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>",
+            "guard fixture native_create_ms=224.810",
+            "guard runtime size=800 height=450 draws=16 ticks=3381248 frequency_hz=1000000000 gpu_ms_per_draw=0.211328",
+            "guard pso_cache_blob_bytes=61986",
+            "scene_native_setup_submit_readback_ms=268.9049",
+            "display adapter=NVIDIA GeForce RTX 4070 Ti SUPER size=800x450 kind=bicubic",
+            "ok",
+            "",
+            "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1340 filtered out; finished in 0.52s",
+            ""
+          ]
+        }
+      },
+      "vs_native_rgb": {
+        "whole": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        },
+        "project": {
+          "bit_equal_pixels": 48080,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 5.960464477539063e-08,
+          "p99_max_channel_abs": 1.1920928955078125e-07,
+          "max_channel_abs": 2.384185791015625e-07,
+          "mean_abs_rgb": 2.9979342663729634e-08,
+          "rms_rgb": 4.499038415553721e-08,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      },
+      "vs_whole_rgba": {
+        "project": {
+          "bit_equal_pixels": 360000,
+          "both_finite_pixels": 360000,
+          "p50_max_channel_abs": 0.0,
+          "p99_max_channel_abs": 0.0,
+          "max_channel_abs": 0.0,
+          "mean_abs_rgb": 0.0,
+          "rms_rgb": 0.0,
+          "pixels_over_one_8bit_code": 0,
+          "pixels_over_two_8bit_codes": 0
+        }
+      }
+    }
+  ],
+  "additional_arms_outside_completed_trials": [
+    {
+      "trial_mode": "01-whole",
+      "guard_stdout": [
+        "Stopped after the time or system-memory limit"
+      ],
+      "xcl_stdout": [
+        "",
+        "running 1 test",
+        "test gpu::dxil::aperture_tests::open_miniengine_display_draw ... xcl: DXC: dxcompiler 1.9.2609.5 (01b62ad4), dxil 1.9.2609.5, from <DXC directory>"
+      ]
+    }
+  ],
+  "test_executable_sha256": "da3f75bac0ff448f8628b78a66f4d89bf4025d9389556ad92bc195d7090e0218",
+  "input_source": "../ray800-primary/scene.json",
+  "images": {
+    "native.png": "283761d948cbd4f2721d906027fc32460415bc45dfada5028362ac76e234b7e4",
+    "project.png": "a8836d188546e80ceaccc7fee8a358dc6b0ffaaef75ccd27a6b98389664a928d",
+    "whole.png": "a8836d188546e80ceaccc7fee8a358dc6b0ffaaef75ccd27a6b98389664a928d"
+  }
+}

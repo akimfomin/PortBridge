@@ -1,0 +1,330 @@
+diff --git a/crates/xcl/src/gpu/dxil/kernel.rs b/crates/xcl/src/gpu/dxil/kernel.rs
+index 80a60b6..778d89c 100644
+--- a/crates/xcl/src/gpu/dxil/kernel.rs
++++ b/crates/xcl/src/gpu/dxil/kernel.rs
+@@ -117,17 +117,31 @@ pub fn translate_vertex(code: &[u8], o: KernelOptions, vs: &VsInterface) -> Resu
+ 
+ /// A pixel shader (the recompiler's `Mode::Pixel`; wave-size independent).
+ pub fn translate_pixel(code: &[u8], o: KernelOptions, ps: &PsInterface) -> Result<Kernel, String> {
+-    translate_entry(code, o, Entry::Pixel(ps.clone(), false), None, None, 0)
++    translate_entry(code, o, Entry::Pixel(ps.clone(), PixelProofs::default()), None, None, 0)
+ }
+ 
+ /// Pixel translation for an ABI whose IO_UMA_BASE_HI is the supplied base.
+ /// Wide arbitrary synthetic or offline input can continue using translate_pixel.
+ pub fn translate_pixel_for_uma_aperture(
+     code: &[u8], o: KernelOptions, ps: &PsInterface, base_hi: u32,
++) -> Result<Kernel, String> {
++    translate_pixel_with_proofs(code, o, ps, Some(base_hi), false)
++}
++
++/// Offline experiment for pixel masks consumed only one lane at a time.
++pub fn translate_pixel_for_lane_local_masks(
++    code: &[u8], o: KernelOptions, ps: &PsInterface, base_hi: Option<u32>,
++) -> Result<Kernel, String> {
++    translate_pixel_with_proofs(code, o, ps, base_hi, true)
++}
++
++fn translate_pixel_with_proofs(
++    code: &[u8], o: KernelOptions, ps: &PsInterface, base_hi: Option<u32>, lane_local_masks: bool,
+ ) -> Result<Kernel, String> {
+     let windows = o.mem_windows & !crate::gpu::recomp::HEAP_WINDOWS;
+-    let excludes_unit_high = windows > 1 && base_hi >= 2 && base_hi.checked_add(windows).is_some();
+-    translate_entry(code, o, Entry::Pixel(ps.clone(), excludes_unit_high), None, None, 0)
++    let excludes_unit_high = windows > 1 && base_hi.is_some_and(|base| base >= 2 && base.checked_add(windows).is_some());
++    let proofs = PixelProofs { excludes_unit_high, lane_local_masks };
++    translate_entry(code, o, Entry::Pixel(ps.clone(), proofs), None, None, 0)
+ }
+ 
+ /// A geometry-mode (ES+GS) program: the compute pass that writes one mesh record per
+@@ -143,10 +157,17 @@ pub enum Entry {
+     Compute(CsInterface),
+     Mesh(MsInterface),
+     Vertex(VsInterface),
+-    Pixel(PsInterface, bool),
++    Pixel(PsInterface, PixelProofs),
+     Geometry(GsInterface),
+ }
+ 
++/// Optional constraints and lowering choices for a pixel entry.
++#[derive(Clone, Copy, Default)]
++pub struct PixelProofs {
++    excludes_unit_high: bool,
++    lane_local_masks: bool,
++}
++
+ /// A compute-mode program (the CS ABI of `cs`).
+ pub fn translate_compute(code: &[u8], o: KernelOptions, cs: &CsInterface) -> Result<Kernel, String> {
+     translate_compute_on(code, o, cs, true)
+@@ -502,6 +523,10 @@ impl Lw {
+             _ => Stage::Compute,
+         };
+         let mut s = Shader::new(stage, (6, 6));
++        let pixel = match entry {
++            Entry::Pixel(_, proofs) => *proofs,
++            _ => PixelProofs::default(),
++        };
+         let io = s.raw_uav(0, 0);
+         let res = if kernel || ms.is_some() || matches!(entry, Entry::Geometry(_)) { Some(s.raw_uav(1, 0)) } else { None };
+         if stage == Stage::Pixel && uses_pops(insts) {
+@@ -523,7 +548,7 @@ impl Lw {
+             half: z,
+             mems,
+             heap_mem,
+-            uma_excludes_unit_high: matches!(entry, Entry::Pixel(_, true)),
++            uma_excludes_unit_high: pixel.excludes_unit_high,
+             res,
+             fmt_table: None,
+             fmt_desc_cache: HashMap::new(),
+@@ -602,7 +627,7 @@ impl Lw {
+         if let (Some(t), true) = (group_threads, split) {
+             lw.waves = t.div_ceil(64).max(1);
+         }
+-        if split && std::env::var_os("XCL_X64_ALL_MASKS").is_none() {
++        if pixel.lane_local_masks || (split && std::env::var_os("XCL_X64_ALL_MASKS").is_none()) {
+             lw.whole_live = crate::gpu::recomp::x64_masks::by_pc(insts, kernel);
+         }
+         lw.setup_storage(uses_lds, if split { slot } else { 1 });
+diff --git a/crates/xcl/src/gpu/dxil/lanes.rs b/crates/xcl/src/gpu/dxil/lanes.rs
+index 4ee59b5..0428f6d 100644
+--- a/crates/xcl/src/gpu/dxil/lanes.rs
++++ b/crates/xcl/src/gpu/dxil/lanes.rs
+@@ -500,6 +500,21 @@ impl Lw {
+         (m0, m1)
+     }
+ 
++    /// For a mask with no whole-value readers, each pixel can write its own EXEC-gated bit
++    /// directly, including on a helper lane. The other bits of HLSL `ballot_px_local` are dead.
++    pub fn pixel_lane_mask(&mut self, cond: Value) -> (Value, Value) {
++        let z = self.c(0);
++        let one = self.c(1);
++        let own_bit = self.bin(BinOp::Shl, one, self.lane31);
++        let own = self.sel(cond, own_bit, z);
++        if self.wave64 {
++            let upper = self.upper;
++            (self.sel(upper, z, own), self.sel(upper, own, z))
++        } else {
++            (own, z)
++        }
++    }
++
+     /// Pixel-shader ballot including helper lanes (parity with HLSL `ballot_px` in
+     /// `recomp/emit.rs`): each quad collects its 4 bits through `QuadReadAcross*`
+     /// (which see helper lanes) and feeds them to [`Lw::ballot_ps_quad`]. Entry `EXEC` in
+@@ -630,7 +645,8 @@ impl Lw {
+ 
+ #[cfg(test)]
+ mod ps_ballot_tests {
+-    use super::super::kernel::{self, KernelOptions};
++    use super::super::kernel::{self, Entry, KernelOptions, PixelProofs};
++    use super::Lw;
+     use super::super::validate;
+     use crate::gpu::dxbc::SigElement;
+     use crate::gpu::rdna2::encode;
+@@ -698,6 +714,26 @@ mod ps_ballot_tests {
+         ps_code
+     }
+ 
++    #[test]
++    fn direct_ps_lane_local_mask_places_both_halves() {
++        for wave64 in [false, true] {
++            let options = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
++            let mut lw = Lw::new(&[], &Default::default(), options, &Entry::Pixel(ps_interface(), PixelProofs::default()));
++            for hardware_lane in 0..64u32 {
++                lw.lane31 = lw.c(hardware_lane & 31);
++                let upper = wave64 && hardware_lane >= 32;
++                lw.upper = lw.b(upper);
++                for enabled in [false, true] {
++                    let cond = lw.b(enabled);
++                    let (lo, hi) = lw.pixel_lane_mask(cond);
++                    let bit = u64::from(enabled) << (hardware_lane & 31);
++                    assert_eq!(lw.s.m.const_u64(lo), Some(if upper { 0 } else { bit }));
++                    assert_eq!(lw.s.m.const_u64(hi), Some(if upper { bit } else { 0 }));
++                }
++            }
++        }
++    }
++
+     #[test]
+     fn direct_ps_ballot_uses_quad_ops_and_keeps_entry_exec_live_only() {
+         let psi = ps_interface();
+@@ -711,19 +747,30 @@ mod ps_ballot_tests {
+             assert!(dis.contains("dx.op.quadReadLaneAt.i32"), "wave64 {wave64}: PS VOPC must quad-read VGPR operands via quadReadLaneAt:\n{dis}");
+             assert!(!dis.contains("dx.op.quadOp"), "wave64 {wave64}: PS VOPC must not emit quadOp on compare results (#134):\n{dis}");
+ 
+-            // Standalone VOPC with no DPP / readfirstlane (so `rla` is never called):
+-            // proves VOPC itself emits the 4 VGPR operand `quadReadLaneAt` reads and zero `quadOp`.
++            // Without DPP / readfirstlane, the compare emits no quad reads when its only
++            // reader is V_CNDMASK, and still reads the four inputs when a scalar consumes VCC.
+             let mut vopc_only = Vec::new();
+             vopc_only.extend(encode(if wave64 { "S_WQM_B64" } else { "S_WQM_B32" }, "ENC_SOP1", &[("SDST", 126), ("SSRC0", 126)], None).unwrap());
+             vopc_only.extend(encode("V_CMP_LT_F32", "ENC_VOPC", &[("SRC0", 128), ("VSRC1", 2)], None).unwrap());
++            let mut whole_mask = vopc_only.clone();
++            whole_mask.extend(encode(if wave64 { "S_AND_SAVEEXEC_B64" } else { "S_AND_SAVEEXEC_B32" }, "ENC_SOP1", &[("SDST", 20), ("SSRC0", 106)], None).unwrap());
++            let tail_start = vopc_only.len();
+             vopc_only.extend(encode("V_CNDMASK_B32", "ENC_VOP2", &[("VDST", 4), ("SRC0", 128), ("VSRC1", 2)], None).unwrap());
+             vopc_only.extend(encode("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 0xF), ("VSRC0", 4), ("VSRC1", 3), ("VSRC2", 2), ("VSRC3", 3), ("DONE", 1), ("VM", 1)], None).unwrap());
+             vopc_only.extend(encode("S_ENDPGM", "ENC_SOPP", &[], None).unwrap());
+-            let kv = kernel::translate_pixel(&vopc_only, opt, &psi).expect("translate VOPC-only PS");
++            let base = kernel::translate_pixel(&vopc_only, opt, &psi).expect("translate original VOPC-only PS");
++            let base_dis = validate::disassemble(&base.dxil).expect("disassemble original VOPC-only PS");
++            assert_eq!(base_dis.matches("call i32 @dx.op.quadReadLaneAt.i32(").count(), 4, "wave64 {wave64}: original PS must still use whole ballots:\n{base_dis}");
++            let kv = kernel::translate_pixel_for_lane_local_masks(&vopc_only, opt, &psi, None).expect("translate VOPC-only PS");
+             validate::validate(&kv.dxil).expect("validate VOPC-only PS");
+             let vdis = validate::disassemble(&kv.dxil).expect("disassemble VOPC-only PS");
+-            assert_eq!(vdis.matches("call i32 @dx.op.quadReadLaneAt.i32(").count(), 4, "wave64 {wave64}: expected 4 operand quad reads for V_CMP_LT_F32(0, v2):\n{vdis}");
+-            assert!(!vdis.contains("dx.op.quadOp"), "wave64 {wave64}: VOPC-only PS must not emit quadOp:\n{vdis}");
++            assert!(!vdis.contains("dx.op.quad") && vdis.matches("call %dx.types.fouri32 @dx.op.waveActiveBallot(").count() == 1,
++                "wave64 {wave64}: VOPC read only by V_CNDMASK must use only the entry EXEC ballot:\n{vdis}");
++            whole_mask.extend(&vopc_only[tail_start..]);
++            let kwh = kernel::translate_pixel_for_lane_local_masks(&whole_mask, opt, &psi, None).expect("translate whole-mask PS");
++            let whdis = validate::disassemble(&kwh.dxil).expect("disassemble whole-mask PS");
++            assert_eq!(whdis.matches("call i32 @dx.op.quadReadLaneAt.i32(").count(), 4, "wave64 {wave64}: whole VCC read must keep all four operand reads:\n{whdis}");
++            assert!(!whdis.contains("dx.op.quadOp"), "wave64 {wave64}: whole-mask VOPC must quad-read its inputs:\n{whdis}");
+ 
+             // Entry EXEC alone (no post-entry ballot) must stay live-lanes-only (no quad reads).
+             let mut trivial = Vec::new();
+@@ -758,18 +805,26 @@ mod ps_ballot_tests {
+     }
+ 
+     #[test]
+-    fn direct_ps_non_vopc_carry_ballot_uses_quad_op() {
++    fn direct_ps_only_whole_carry_ballots_use_quad_ops() {
+         let psi = ps_interface();
+         let mut code = Vec::new();
+         code.extend(encode("S_WQM_B32", "ENC_SOP1", &[("SDST", 126), ("SSRC0", 126)], None).unwrap());
+         code.extend(encode("V_ADD_CO_U32", "VOP3_SDST_ENC", &[("VDST", 4), ("SDST", 106), ("SRC0", V + 2), ("SRC1", V + 3)], None).unwrap());
++        let mut whole_carry = code.clone();
++        whole_carry.extend(encode("S_AND_SAVEEXEC_B32", "ENC_SOP1", &[("SDST", 20), ("SSRC0", 106)], None).unwrap());
++        let tail_start = code.len();
+         code.extend(encode("V_CNDMASK_B32", "ENC_VOP2", &[("VDST", 5), ("SRC0", 128), ("VSRC1", 4)], None).unwrap());
+         code.extend(encode("EXP", "ENC_EXP", &[("TGT", 0), ("EN", 0xF), ("VSRC0", 5), ("VSRC1", 3), ("VSRC2", 2), ("VSRC3", 3), ("DONE", 1), ("VM", 1)], None).unwrap());
+         code.extend(encode("S_ENDPGM", "ENC_SOPP", &[], None).unwrap());
+-        let k = kernel::translate_pixel(&code, KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 }, &psi).expect("translate carry PS");
++        let opt = KernelOptions { wave64: false, split: false, mem_windows: 1, sampler_base: 0 };
++        let k = kernel::translate_pixel_for_lane_local_masks(&code, opt, &psi, None).expect("translate carry PS");
+         validate::validate(&k.dxil).expect("validate carry PS");
+         let dis = validate::disassemble(&k.dxil).expect("disassemble carry PS");
+-        assert!(dis.contains("dx.op.quadOp.i32"), "non-VOPC PS carry ballot must preserve helper lanes via quadOp:\n{dis}");
++        assert!(!dis.contains("dx.op.quad"), "an own-lane carry needs no quad reads:\n{dis}");
++        whole_carry.extend(&code[tail_start..]);
++        let k = kernel::translate_pixel_for_lane_local_masks(&whole_carry, opt, &psi, None).expect("translate whole carry PS");
++        let dis = validate::disassemble(&k.dxil).expect("disassemble whole carry PS");
++        assert!(dis.contains("dx.op.quadOp.i32"), "whole non-VOPC PS carry ballot must preserve helper lanes via quadOp:\n{dis}");
+     }
+ 
+     #[test]
+@@ -795,9 +850,21 @@ mod ps_ballot_tests {
+         let size = 32usize;
+         for wave64 in [true, false] {
+             let opt = KernelOptions { wave64, split: false, mem_windows: 1, sampler_base: 0 };
+-            let ps = kernel::translate_pixel(&helper_lane_masks_ps_code(wave64), opt, &psi).expect("translate PS");
++            let code = helper_lane_masks_ps_code(wave64);
++            let ps = kernel::translate_pixel(&code, opt, &psi).expect("translate PS");
+             let px = runner::draw(&vs, &ps.dxil, &layout, &quad, 8, &[], &[], size as u32, [9.0; 4]).unwrap();
++            let local_ps = kernel::translate_pixel_for_lane_local_masks(&code, opt, &psi, None).expect("translate lane-local PS");
++            assert_ne!(local_ps.dxil, ps.dxil, "test must exercise the lane-local path");
++            let local_px = runner::draw(&vs, &local_ps.dxil, &layout, &quad, 8, &[], &[], size as u32, [9.0; 4]).unwrap();
+             let lanes = if wave64 { 64.0 } else { 32.0 };
++            assert_eq!(px.len(), local_px.len());
++            for (i, (baseline, candidate)) in px.iter().zip(&local_px).enumerate() {
++                // Channel 2 counts waterfall iterations, which depends on hardware wave packing.
++                for k in [0, 1, 3] {
++                    assert_eq!(candidate[k], baseline[k], "wave64 {wave64}, pixel {i}, channel {k}");
++                }
++                assert!((1.0..=lanes).contains(&candidate[2]), "wave64 {wave64}, pixel {i}: invalid waterfall count");
++            }
+             let bad: Vec<(usize, usize, [f32; 4])> = (0..size * size)
+                 .filter(|&i| {
+                     let p = px[i];
+diff --git a/crates/xcl/src/gpu/dxil/lower.rs b/crates/xcl/src/gpu/dxil/lower.rs
+index 420f590..ba41734 100644
+--- a/crates/xcl/src/gpu/dxil/lower.rs
++++ b/crates/xcl/src/gpu/dxil/lower.rs
+@@ -250,7 +250,7 @@ pub struct Lw {
+     pub gfx: Option<super::lower_gfx::GfxCtx>,
+     /// a wave32 program in 64-lane hardware: this hardware half is the upper one (i1)
+     pub gfx_half: Option<Value>,
+-    /// split form: SGPRs whole-live after each instruction (`recomp::x64_masks::by_pc`)
++    /// Split form and pixels: SGPRs whole-live after each instruction (`recomp::x64_masks::by_pc`).
+     pub whole_live: std::collections::BTreeMap<u64, u128>,
+     /// set when an exchange was needed where it is not supported
+     pub exchange_error: Option<String>,
+@@ -907,25 +907,28 @@ impl Lw {
+         }
+     }
+ 
++    /// No read can observe this mask except for its own lane's bit (cndmask or carry-in).
++    pub fn mask_value_is_lane_local(&self, dst: &Dst) -> bool {
++        match *dst {
++            Dst::S(n) => n < 126 && self.whole_live.get(&self.pc).is_some_and(|live| live & (3u128 << n) == 0),
++            Dst::Null | Dst::V(_) => false,
++        }
++    }
++
+     /// Lane mask from a per-lane condition (inactive lanes give 0) into a register (pair).
+     pub fn write_mask(&mut self, dst: &Dst, cond: Value) {
+         let a = self.act();
+         let c = self.land(a, cond);
++        let local = self.mask_value_is_lane_local(dst);
+         // split form: a mask only ever read lane by lane (or going nowhere, or 0 anyway)
+         // needs only this half's word (`recomp::x64_masks`, the HLSL `xcl_x_ballot_local`)
+-        let local = self.split
+-            && (self.local_masks
+-                || self.s.m.const_u64(cond) == Some(0)
+-                || match *dst {
+-                    Dst::S(n) => n < 126 && self.whole_live.get(&self.pc).is_some_and(|live| live & (3u128 << n) == 0),
+-                    Dst::Null => true,
+-                    Dst::V(_) => false,
+-                });
+-        let (lo, hi) = if local {
++        let (lo, hi) = if self.split && (self.local_masks || matches!(dst, Dst::Null) || self.s.m.const_u64(cond) == Some(0) || local) {
+             let w = self.s.wave_ballot(c)[0];
+             let z = self.c(0);
+             let u = self.upper;
+             (self.sel(u, z, w), self.sel(u, w, z))
++        } else if local && self.gfx.as_ref().is_some_and(|g| g.ps.is_some()) {
++            self.pixel_lane_mask(c)
+         } else {
+             self.ballot(c)
+         };
+diff --git a/crates/xcl/src/gpu/dxil/lower_valu.rs b/crates/xcl/src/gpu/dxil/lower_valu.rs
+index 08e15a5..e08a0dc 100644
+--- a/crates/xcl/src/gpu/dxil/lower_valu.rs
++++ b/crates/xcl/src/gpu/dxil/lower_valu.rs
+@@ -1231,16 +1231,17 @@ impl Lw {
+         };
+         // Pixel shaders (#134): quad-read the compare's VGPR operands rather than its
+         // predicate result (AMD RDNA2/3/4 amdxc64 crashes on quadOp of values derived
+-        // from WaveReadLaneAt, such as v_readfirstlane waterfall loops).
+-        if self.gfx.as_ref().is_some_and(|g| g.ps.is_some())
++        // from WaveReadLaneAt, such as v_readfirstlane waterfall loops). A mask read
++        // lane by lane needs neither form of quad read.
++        let dst = self.vopc_dst(d, cmpx, outs);
++        let quad_compare = self.gfx.as_ref().is_some_and(|g| g.ps.is_some())
+             && d.variant == Variant::Plain
+             && self.guard_override.is_none()
+-            && opn != "f"
+-        {
+-            let dst = self.vopc_dst(d, cmpx, outs);
+-            if matches!(dst, Dst::Null) && matches!(ty, "f32" | "i32" | "u32") {
+-                return Ok(());
+-            }
++            && opn != "f";
++        if quad_compare && matches!(dst, Dst::Null) && matches!(ty, "f32" | "i32" | "u32") {
++            return Ok(());
++        }
++        if quad_compare && !self.mask_value_is_lane_local(&dst) {
+             let is_vgpr = |o: &Operand| match o.field {
+                 Some("LITERAL") | None => false,
+                 Some(f) => {
+@@ -1285,7 +1286,8 @@ impl Lw {
+             return Ok(());
+         }
+         let cond = self.vopc_cond(d, opn, ty, ua, ub, m)?;
+-        self.vopc_write(d, cmpx, outs, cond)
++        self.write_mask(&dst, cond);
++        Ok(())
+     }
+ 
+     fn vopc_cond(&mut self, d: &Decoded, opn: &str, ty: &str, ua: Value, ub: Value, m: &Mods) -> LResult<Value> {

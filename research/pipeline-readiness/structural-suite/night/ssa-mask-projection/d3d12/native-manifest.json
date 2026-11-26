@@ -1,0 +1,47 @@
+{
+  "xcl_state": "08db802+#2501+#2503+#2557+strict-SSA",
+  "cases": [
+    {
+      "id": "nerf71",
+      "varyings": 0,
+      "arms": {
+        "whole": {
+          "file": "nerf71-whole.dxil",
+          "sha256": "f6ce46bbcc182665aa803ce9464d7c12425a92793c12db17c663283efd45b61e"
+        },
+        "project": {
+          "file": "nerf71-project.dxil",
+          "sha256": "acc2807d1fdefccaf752baf1d434db71b30b78bf41cbdf855db2b94bdf82921b"
+        }
+      }
+    },
+    {
+      "id": "nerf73",
+      "varyings": 0,
+      "arms": {
+        "whole": {
+          "file": "nerf73-whole.dxil",
+          "sha256": "1b25f995e78ca6af29cbc764b12c09e25bb12f738fc7ac47624af41c7eff3b2a"
+        },
+        "project": {
+          "file": "nerf73-project.dxil",
+          "sha256": "141fc53f80c9b95e322cb1cefcd7c53efb517caa7b6bdfe6756799e8c7c34eb7"
+        }
+      }
+    },
+    {
+      "id": "ray",
+      "varyings": 0,
+      "arms": {
+        "whole": {
+          "file": "ray-whole.dxil",
+          "sha256": "b5090c3052626faecf1786657a743de03ff7f4207958ccfbcb047ae1ac29e73a"
+        },
+        "project": {
+          "file": "ray-project.dxil",
+          "sha256": "28b9ac69e6d8e7af6bc6438d1e152a2109aeaf3ee98edd19317b17d1cf68f1b9"
+        }
+      }
+    }
+  ]
+}

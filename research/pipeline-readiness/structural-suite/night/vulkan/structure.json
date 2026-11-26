@@ -1,0 +1,145 @@
+{
+  "nerf71-local-packed-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 650,
+    "OpShiftRightLogical": 598,
+    "OpGroupNonUniformBallot": 3,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 132,
+    "OpBitwiseOr": 202,
+    "OpShiftLeftLogical": 142,
+    "OpGroupNonUniformBitwiseOr": 66
+  },
+  "nerf71-local-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 1012,
+    "OpGroupNonUniformBallot": 135,
+    "OpShiftRightLogical": 1224,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 132,
+    "OpBitwiseOr": 928,
+    "OpShiftLeftLogical": 307
+  },
+  "nerf71-packed-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 1184,
+    "OpShiftRightLogical": 730,
+    "OpGroupNonUniformBallot": 3,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 500,
+    "OpBitwiseOr": 1405,
+    "OpShiftLeftLogical": 1213,
+    "OpGroupNonUniformBitwiseOr": 868,
+    "OpGroupNonUniformQuadSwap": 798
+  },
+  "nerf71-whole-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 4893,
+    "OpGroupNonUniformBallot": 1739,
+    "OpShiftRightLogical": 6847,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 500,
+    "OpBitwiseOr": 8027,
+    "OpShiftLeftLogical": 2585,
+    "OpGroupNonUniformQuadSwap": 798
+  },
+  "nerf73-local-packed-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 650,
+    "OpShiftRightLogical": 598,
+    "OpGroupNonUniformBallot": 3,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 132,
+    "OpBitwiseOr": 202,
+    "OpShiftLeftLogical": 142,
+    "OpGroupNonUniformBitwiseOr": 66
+  },
+  "nerf73-local-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 1012,
+    "OpGroupNonUniformBallot": 135,
+    "OpShiftRightLogical": 1224,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 132,
+    "OpBitwiseOr": 928,
+    "OpShiftLeftLogical": 307
+  },
+  "nerf73-packed-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 1184,
+    "OpShiftRightLogical": 730,
+    "OpGroupNonUniformBallot": 3,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 504,
+    "OpBitwiseOr": 1405,
+    "OpShiftLeftLogical": 1213,
+    "OpGroupNonUniformBitwiseOr": 868,
+    "OpGroupNonUniformQuadSwap": 798
+  },
+  "nerf73-whole-roots.spv": {
+    "OpLabel": 991,
+    "OpBitwiseAnd": 4893,
+    "OpGroupNonUniformBallot": 1739,
+    "OpShiftRightLogical": 6847,
+    "OpSelectionMerge": 184,
+    "OpGroupNonUniformQuadBroadcast": 504,
+    "OpBitwiseOr": 8027,
+    "OpShiftLeftLogical": 2585,
+    "OpGroupNonUniformQuadSwap": 798
+  },
+  "ray-local-packed-roots.spv": {
+    "OpLabel": 65,
+    "OpBitwiseAnd": 246,
+    "OpShiftRightLogical": 193,
+    "OpGroupNonUniformBallot": 10,
+    "OpBitwiseOr": 83,
+    "OpShiftLeftLogical": 46,
+    "OpGroupNonUniformQuadBroadcast": 64,
+    "OpGroupNonUniformBitwiseOr": 22,
+    "OpSelectionMerge": 16,
+    "OpLoopMerge": 4,
+    "OpGroupNonUniformShuffle": 30
+  },
+  "ray-local-roots.spv": {
+    "OpLabel": 65,
+    "OpBitwiseAnd": 366,
+    "OpGroupNonUniformBallot": 54,
+    "OpShiftRightLogical": 401,
+    "OpBitwiseOr": 325,
+    "OpShiftLeftLogical": 101,
+    "OpGroupNonUniformQuadBroadcast": 64,
+    "OpSelectionMerge": 16,
+    "OpLoopMerge": 4,
+    "OpGroupNonUniformShuffle": 30
+  },
+  "ray-packed-roots.spv": {
+    "OpLabel": 65,
+    "OpBitwiseAnd": 377,
+    "OpShiftRightLogical": 201,
+    "OpGroupNonUniformBallot": 10,
+    "OpBitwiseOr": 452,
+    "OpGroupNonUniformQuadBroadcast": 528,
+    "OpShiftLeftLogical": 537,
+    "OpGroupNonUniformBitwiseOr": 268,
+    "OpSelectionMerge": 16,
+    "OpLoopMerge": 4,
+    "OpGroupNonUniformShuffle": 30
+  },
+  "ray-whole-roots.spv": {
+    "OpLabel": 65,
+    "OpBitwiseAnd": 1850,
+    "OpGroupNonUniformBallot": 546,
+    "OpShiftRightLogical": 2746,
+    "OpBitwiseOr": 3400,
+    "OpGroupNonUniformQuadBroadcast": 528,
+    "OpShiftLeftLogical": 1207,
+    "OpSelectionMerge": 16,
+    "OpLoopMerge": 4,
+    "OpGroupNonUniformShuffle": 30
+  },
+  "source.spv": {
+    "OpLabel": 64,
+    "OpSelectionMerge": 8,
+    "OpLoopMerge": 3
+  }
+}

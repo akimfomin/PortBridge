@@ -1,0 +1,2388 @@
+{
+  "base_xcl": "8e4c4a63143702d5e5da79484273143e0b76eb92",
+  "window_layout": "four root UAVs",
+  "switch": "XCL_DXIL_SWITCH_READ_FUSION=1",
+  "corpus_manifest_sha256": "d46bf1209cf8652b6f81dc2c1618b0a0e8c287692893a06c21457072de3f5e36",
+  "test_executable_sha256": "417a4d2472b6f7facfc71d007ece543368e8c3cfd6dbc5b8e37bd04c260dba6f",
+  "prototype_patch_sha256": "c901a9cf6900b2f2ac59c62d113366dc60397b3c036a1d665aa9bcdda4836c0c",
+  "dxc_sha256": "aa7965b3763d9c710baaa5a28cedcc633449962a75d1391d161a85304a41b3e2",
+  "dxv_sha256": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3",
+  "observations": [
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsampleGammaPS.hlsl",
+      "entry": "main",
+      "source_sha256": "9e8435492201a084d261e7ec8e0ce2acba62c16fb076c7f8d1b392ab72ad2a1a",
+      "rdna": {
+        "bytes": 3272,
+        "sha256": "9155e24c748a65364cea95b8a2885422250faa57eb60d086f61aaa3e11b99b85",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 54432,
+        "sha256": "b17a08c575fdd2039ee2022b9e2adf7f6d17801f504d3a68c944e1f0be92ee2f",
+        "blocks": 107,
+        "conditional_branches": 48,
+        "switches": 2,
+        "phis": 147,
+        "raw_loads": 14
+      },
+      "on": {
+        "bytes": 54432,
+        "sha256": "b17a08c575fdd2039ee2022b9e2adf7f6d17801f504d3a68c944e1f0be92ee2f",
+        "blocks": 107,
+        "conditional_branches": 48,
+        "switches": 2,
+        "phis": 147,
+        "raw_loads": 14
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BicubicUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "47982c1ed360d099f0564dae0d23502e5b00fa4099e21ca9f8ce7a97c18eb0b1",
+      "rdna": {
+        "bytes": 1060,
+        "sha256": "a50733afd231c6b6822d65c698eac2f0de61baff2125d9e9a080517a2215ed68",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 15668,
+        "sha256": "bbb1dbc4bbb77fa8ef532b61f4725a973668c8fd009cde8026a9ddb9d0ce20e9",
+        "blocks": 107,
+        "conditional_branches": 48,
+        "switches": 2,
+        "phis": 147,
+        "raw_loads": 14
+      },
+      "on": {
+        "bytes": 15668,
+        "sha256": "bbb1dbc4bbb77fa8ef532b61f4725a973668c8fd009cde8026a9ddb9d0ce20e9",
+        "blocks": 107,
+        "conditional_branches": 48,
+        "switches": 2,
+        "phis": 147,
+        "raw_loads": 14
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BilinearUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "4659ef2d11e9b8487021dbae855861bb6d1a3e4a84f56872900c137ffe823e13",
+      "rdna": {
+        "bytes": 220,
+        "sha256": "91183a8c3bc0d663ed90e068e9879abb81a3b93c5de6a07894baf6f92e479d90",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 6360,
+        "sha256": "5e91f6bf533adaf59844ed77eccc62109e962deb553a5cff73ea2c66e4fb476b",
+        "blocks": 8,
+        "conditional_branches": 1,
+        "switches": 1,
+        "phis": 4,
+        "raw_loads": 9
+      },
+      "on": {
+        "bytes": 6360,
+        "sha256": "5e91f6bf533adaf59844ed77eccc62109e962deb553a5cff73ea2c66e4fb476b",
+        "blocks": 8,
+        "conditional_branches": 1,
+        "switches": 1,
+        "phis": 4,
+        "raw_loads": 9
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BlendUIHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "45710ea7c9ff03cfac902bf7749766a29d0adfd14a60ccb6dba4c411857c8d89",
+      "rdna": {
+        "bytes": 528,
+        "sha256": "669cc730f38040d8ae282f7bae8da3691b68512a438ee4f9fac7b2129f71d5a6",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 9428,
+        "sha256": "36ee0b11a14250b047b3f378df50878b7f8c0b48fb4acd334b7ae470a3beac37",
+        "blocks": 12,
+        "conditional_branches": 3,
+        "switches": 1,
+        "phis": 13,
+        "raw_loads": 9
+      },
+      "on": {
+        "bytes": 9428,
+        "sha256": "36ee0b11a14250b047b3f378df50878b7f8c0b48fb4acd334b7ae470a3beac37",
+        "blocks": 12,
+        "conditional_branches": 3,
+        "switches": 1,
+        "phis": 13,
+        "raw_loads": 9
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/BufferCopyPS.hlsl",
+      "entry": "main",
+      "source_sha256": "ffee21866e9766229dabcbb55494a50ebc46fe450cce3f5e5f40b90a803b2d9b",
+      "rdna": {
+        "bytes": 56,
+        "sha256": "8798cbc8c8165e185e1993b3d6b12a0e71fc114cbcbdff829d77c9f848e4b93c",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 4372,
+        "sha256": "333936a0efe8da8f27d0732401856f030939fe8f1267f87604cc8099985ceb30",
+        "blocks": 7,
+        "conditional_branches": 3,
+        "switches": 0,
+        "phis": 12,
+        "raw_loads": 4
+      },
+      "on": {
+        "bytes": 4372,
+        "sha256": "333936a0efe8da8f27d0732401856f030939fe8f1267f87604cc8099985ceb30",
+        "blocks": 7,
+        "conditional_branches": 3,
+        "switches": 0,
+        "phis": 12,
+        "raw_loads": 4
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/CompositeHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "be930e06134d88dc9653e8a72f8392f6d92e67a66fe553f1e3ba1d24bc4ac61b",
+      "rdna": {
+        "bytes": 768,
+        "sha256": "910323a70b5d486b50316420506092423434a70e9b1a23ebc2f7fa4f55f05f80",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 11172,
+        "sha256": "29a813974e52e711d60d935609eb5cb918b2b7488f169c4e38e341398954582a",
+        "blocks": 23,
+        "conditional_branches": 6,
+        "switches": 2,
+        "phis": 25,
+        "raw_loads": 17
+      },
+      "on": {
+        "bytes": 11172,
+        "sha256": "29a813974e52e711d60d935609eb5cb918b2b7488f169c4e38e341398954582a",
+        "blocks": 23,
+        "conditional_branches": 6,
+        "switches": 2,
+        "phis": 25,
+        "raw_loads": 17
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/CompositeSDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "6464bac3adfd2de8230815e3aa23d8ef04ec751410ff4a13eee64fa6eda849f1",
+      "rdna": {
+        "bytes": 232,
+        "sha256": "3d87b0f43c32c5ec0e677e866cc776d805d62b25f0434054b91b4919bd99cfe1",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 7704,
+        "sha256": "fcd66133a8e464a8a2ca37118527f29215f2ab4c31efc3e32f7dd0367ff604f4",
+        "blocks": 13,
+        "conditional_branches": 6,
+        "switches": 0,
+        "phis": 21,
+        "raw_loads": 6
+      },
+      "on": {
+        "bytes": 7704,
+        "sha256": "fcd66133a8e464a8a2ca37118527f29215f2ab4c31efc3e32f7dd0367ff604f4",
+        "blocks": 13,
+        "conditional_branches": 6,
+        "switches": 0,
+        "phis": 21,
+        "raw_loads": 6
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/DownsampleDepthPS.hlsl",
+      "entry": "main",
+      "source_sha256": "f7ad685daeac29a9fafb1ba101ec5466882346f36f6dab6e923513e6b247b111",
+      "rdna": {
+        "bytes": 104,
+        "sha256": "818b7f0e7ec4150a781d27f7c1cf59aa3d52714bc75511621d7b0861ad2d3585",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": 0
+      },
+      "off": {
+        "bytes": 4944,
+        "sha256": "751740606d5f3b630d1a542d8cb0fe586097d8393ed6f7088cd5fe8c96133222",
+        "blocks": 18,
+        "conditional_branches": 6,
+        "switches": 1,
+        "phis": 6,
+        "raw_loads": 12
+      },
+      "on": {
+        "bytes": 4944,
+        "sha256": "751740606d5f3b630d1a542d8cb0fe586097d8393ed6f7088cd5fe8c96133222",
+        "blocks": 18,
+        "conditional_branches": 6,
+        "switches": 1,
+        "phis": 6,
+        "raw_loads": 12
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/LanczosHorizontalPS.hlsl",
+      "entry": "main",
+      "source_sha256": "0a363db09d10caeb3e2310508f9448a76593ca85324dfe0667f3069746bee8c2",
+      "rdna": {
+        "bytes": 896,
+        "sha256": "a616ef785f22cd8aea2a20acf0033067925b3c5ed1b1f8a0842c16482a29c890",
+        "wave": 64,
+        "spi_ps_input_ena": 514,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 10352,
+        "sha256": "f1c1650e5ffd572af467b54af386403107733fd4fde308156d60d9f2faaa3be8",
+        "blocks": 66,
+        "conditional_branches": 30,
+        "switches": 1,
+        "phis": 46,
+        "raw_loads": 13
+      },
+      "on": {
+        "bytes": 10352,
+        "sha256": "f1c1650e5ffd572af467b54af386403107733fd4fde308156d60d9f2faaa3be8",
+        "blocks": 66,
+        "conditional_branches": 30,
+        "switches": 1,
+        "phis": 46,
+        "raw_loads": 13
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/LanczosVerticalPS.hlsl",
+      "entry": "main",
+      "source_sha256": "db7df1c108da797eec75b8732085ce6cfae20388fb8e0f5ea0fbdae211a07c82",
+      "rdna": {
+        "bytes": 1036,
+        "sha256": "b5d411e7d89243665e584050003ea38f2e4634d8b5fe6c246f3e41927a10ffa4",
+        "wave": 64,
+        "spi_ps_input_ena": 258,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 13052,
+        "sha256": "319342bd39ae42e41223bcad86b0bee5b5c2e7ae3c931a919eeb8f3c6689c18e",
+        "blocks": 66,
+        "conditional_branches": 30,
+        "switches": 1,
+        "phis": 46,
+        "raw_loads": 13
+      },
+      "on": {
+        "bytes": 13052,
+        "sha256": "319342bd39ae42e41223bcad86b0bee5b5c2e7ae3c931a919eeb8f3c6689c18e",
+        "blocks": 66,
+        "conditional_branches": 30,
+        "switches": 1,
+        "phis": 46,
+        "raw_loads": 13
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/MagnifyPixelsPS.hlsl",
+      "entry": "main",
+      "source_sha256": "e727e8a182bec2495afb1e41dbb6e7c8e50af2d5e12903bdcdd93b726cb4ee2a",
+      "rdna": {
+        "bytes": 124,
+        "sha256": "f891c43f0348d1fa4a36698c47f44aa221e4685ea93e5e9d418f537e92f97d96",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 3980,
+        "sha256": "7b21e374cfe2676a9648fff808fa52dcee91c78527256cf2ca489fa84c766323",
+        "blocks": 13,
+        "conditional_branches": 1,
+        "switches": 2,
+        "phis": 5,
+        "raw_loads": 14
+      },
+      "on": {
+        "bytes": 3980,
+        "sha256": "7b21e374cfe2676a9648fff808fa52dcee91c78527256cf2ca489fa84c766323",
+        "blocks": 13,
+        "conditional_branches": 1,
+        "switches": 2,
+        "phis": 5,
+        "raw_loads": 14
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/MotionBlurFinalPassPS.hlsl",
+      "entry": "main",
+      "source_sha256": "210e15e215e2724974c6adc38e95a267782d319c6d60202ae9243f34b46eae5b",
+      "rdna": {
+        "bytes": 676,
+        "sha256": "52004a6451e012e556678b096254cd9fe543dcec04ed4ae6c0f0e4c7dc28b54e",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 11020,
+        "sha256": "fd46f5bbb87006ae041c54084c2ab4664dea143ed226563c30d59bfe0e43e8f7",
+        "blocks": 47,
+        "conditional_branches": 11,
+        "switches": 5,
+        "phis": 70,
+        "raw_loads": 33
+      },
+      "on": {
+        "bytes": 11020,
+        "sha256": "fd46f5bbb87006ae041c54084c2ab4664dea143ed226563c30d59bfe0e43e8f7",
+        "blocks": 47,
+        "conditional_branches": 11,
+        "switches": 5,
+        "phis": 70,
+        "raw_loads": 33
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/ParticlePS.hlsl",
+      "entry": "main",
+      "source_sha256": "5d3708c4dce87a4589916441b5f9d9f6c876d37aa42d95c3e23f459dd15dad59",
+      "rdna": {
+        "bytes": 196,
+        "sha256": "340e7e2717794f9d5f3b6fe74263065adaaae5f1781ae473cd6005ba9f2be995",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 4,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 6276,
+        "sha256": "93398987d3e64bbbd3b84dbb286e5d4107ab3af5835962653f768f62ea02699b",
+        "blocks": 17,
+        "conditional_branches": 3,
+        "switches": 2,
+        "phis": 6,
+        "raw_loads": 17
+      },
+      "on": {
+        "bytes": 6276,
+        "sha256": "93398987d3e64bbbd3b84dbb286e5d4107ab3af5835962653f768f62ea02699b",
+        "blocks": 17,
+        "conditional_branches": 3,
+        "switches": 2,
+        "phis": 6,
+        "raw_loads": 17
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/PerfGraphPS.hlsl",
+      "entry": "main",
+      "source_sha256": "59f3aefdb9dd94c5b643cb3e0a341a12dc1081101b94f20168ad42f20af7701b",
+      "rdna": {
+        "bytes": 48,
+        "sha256": "f15e05a881484b265869077fdfc07bb0a176238f18bbca40037053adf72fc7cc",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2844,
+        "sha256": "00d9a62b889b1f02060e307a9aea3663b55347c0796790ab34f04d64f5668bed",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 2844,
+        "sha256": "00d9a62b889b1f02060e307a9aea3663b55347c0796790ab34f04d64f5668bed",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/PresentHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "9b576259902886590e520cccdaac0e7719af1b608d12c7c0d0c9adfdd5036b72",
+      "rdna": {
+        "bytes": 268,
+        "sha256": "b7ac47e2bb474f27f86193e87fd36b79cd5a3c4d1b3d7c62d9bc64f8220dbdc7",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 5344,
+        "sha256": "ceb01b3d83c5fd21576e55c6e125bc92f7f9bd8a1eb837b4a39c1d62d049b27e",
+        "blocks": 7,
+        "conditional_branches": 3,
+        "switches": 0,
+        "phis": 9,
+        "raw_loads": 4
+      },
+      "on": {
+        "bytes": 5344,
+        "sha256": "ceb01b3d83c5fd21576e55c6e125bc92f7f9bd8a1eb837b4a39c1d62d049b27e",
+        "blocks": 7,
+        "conditional_branches": 3,
+        "switches": 0,
+        "phis": 9,
+        "raw_loads": 4
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/PresentSDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "497933beecc12a137651e9ea691234fd343decdc203f16a47b7457f515e22922",
+      "rdna": {
+        "bytes": 196,
+        "sha256": "20b5f3f6ad750c4d03b8c2aeb4529a0f10b42710ab68bcfd15f7f756edc219ab",
+        "wave": 64,
+        "spi_ps_input_ena": 769,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 7040,
+        "sha256": "23a03d14ee7df0dc7255e2db5feeb11b3ca8677f4a5b0e53e1ef6085a9d2d166",
+        "blocks": 7,
+        "conditional_branches": 3,
+        "switches": 0,
+        "phis": 9,
+        "raw_loads": 4
+      },
+      "on": {
+        "bytes": 7040,
+        "sha256": "23a03d14ee7df0dc7255e2db5feeb11b3ca8677f4a5b0e53e1ef6085a9d2d166",
+        "blocks": 7,
+        "conditional_branches": 3,
+        "switches": 0,
+        "phis": 9,
+        "raw_loads": 4
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeHDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "d1448cb1384b62c29c7bee3f17d4f476c33639c98e69097b5a92d65c954b1ea3",
+      "rdna": {
+        "bytes": 984,
+        "sha256": "f2a47764ad5725c4f33efd74909c0055a8ca27a9289cc1dffa5fe103ae194cd4",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 12900,
+        "sha256": "dedab211b1034e45479ac429ff478191d0a4e986d0d1bf88496d7116a270b8aa",
+        "blocks": 37,
+        "conditional_branches": 8,
+        "switches": 4,
+        "phis": 34,
+        "raw_loads": 26
+      },
+      "on": {
+        "bytes": 12900,
+        "sha256": "dedab211b1034e45479ac429ff478191d0a4e986d0d1bf88496d7116a270b8aa",
+        "blocks": 37,
+        "conditional_branches": 8,
+        "switches": 4,
+        "phis": 34,
+        "raw_loads": 26
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/ScaleAndCompositeSDRPS.hlsl",
+      "entry": "main",
+      "source_sha256": "d1dbae63483874d4fb96623a6dfa2da04b9c28d536e6ba60c90339a820489245",
+      "rdna": {
+        "bytes": 464,
+        "sha256": "c1da108765c757f8aad78bd8069102d73905ebeeac17baef0bb9140d4bd29e89",
+        "wave": 64,
+        "spi_ps_input_ena": 770,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 9596,
+        "sha256": "fee08caabd5a29b946299c0d9da40a389167f5f54931da38188e4ce89d28325c",
+        "blocks": 32,
+        "conditional_branches": 8,
+        "switches": 3,
+        "phis": 33,
+        "raw_loads": 22
+      },
+      "on": {
+        "bytes": 9596,
+        "sha256": "fee08caabd5a29b946299c0d9da40a389167f5f54931da38188e4ce89d28325c",
+        "blocks": 32,
+        "conditional_branches": 8,
+        "switches": 3,
+        "phis": 33,
+        "raw_loads": 22
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsampleGammaPS.hlsl",
+      "entry": "main",
+      "source_sha256": "4ab7d1e3610bd028ab81e8ab892770188df056abca1e1afb8ecb6dbd131d4d5a",
+      "rdna": {
+        "bytes": 1008,
+        "sha256": "2e4aa1bb301473b8b7fc42ad7dfa8fe95e112866064048cf3fe6c02999d90708",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 18312,
+        "sha256": "f14df580a5b9bafa0c84a2d4a96859c4e2fef7d32fbed11fa22752ba545dbbce",
+        "blocks": 26,
+        "conditional_branches": 5,
+        "switches": 3,
+        "phis": 22,
+        "raw_loads": 18
+      },
+      "on": {
+        "bytes": 18312,
+        "sha256": "f14df580a5b9bafa0c84a2d4a96859c4e2fef7d32fbed11fa22752ba545dbbce",
+        "blocks": 26,
+        "conditional_branches": 5,
+        "switches": 3,
+        "phis": 22,
+        "raw_loads": 18
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/SharpeningUpsamplePS.hlsl",
+      "entry": "main",
+      "source_sha256": "1ba64878c9476729c9bb50db8e36c4453ec9c459db145301416ab21cc727df24",
+      "rdna": {
+        "bytes": 408,
+        "sha256": "b1a063dbe051760b03c2560a16ee17b1928bf455231b3c771c9ce4728f5c7b76",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 8032,
+        "sha256": "f27072e72f509e75801625d29022eda498192208f891e0dbe5479ced6b846157",
+        "blocks": 26,
+        "conditional_branches": 5,
+        "switches": 3,
+        "phis": 22,
+        "raw_loads": 18
+      },
+      "on": {
+        "bytes": 8032,
+        "sha256": "f27072e72f509e75801625d29022eda498192208f891e0dbe5479ced6b846157",
+        "blocks": 26,
+        "conditional_branches": 5,
+        "switches": 3,
+        "phis": 22,
+        "raw_loads": 18
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/TextAntialiasPS.hlsl",
+      "entry": "main",
+      "source_sha256": "931e23000e3bbf1dbe4b3b8c1bd9d81f23b1014302bcd7d3ac3525539d7cf84a",
+      "rdna": {
+        "bytes": 156,
+        "sha256": "a820879ad8f5c14ac17c6e42d5a7d145cda58e9f8c26e28a777710388090d1fb",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 4484,
+        "sha256": "492b8536ae3e7a8dd5f7e3323c0421fc47733c335cd736132f566d7c3922974f",
+        "blocks": 21,
+        "conditional_branches": 0,
+        "switches": 4,
+        "phis": 6,
+        "raw_loads": 22
+      },
+      "on": {
+        "bytes": 4484,
+        "sha256": "492b8536ae3e7a8dd5f7e3323c0421fc47733c335cd736132f566d7c3922974f",
+        "blocks": 21,
+        "conditional_branches": 0,
+        "switches": 4,
+        "phis": 6,
+        "raw_loads": 22
+      }
+    },
+    {
+      "group": "miniengine",
+      "source": "MiniEngine/Core/Shaders/TextShadowPS.hlsl",
+      "entry": "main",
+      "source_sha256": "88659a2edf3a911cdba7179ba7ce7d7a4cf44209abb0783466e0e627299a8aa8",
+      "rdna": {
+        "bytes": 220,
+        "sha256": "9b1303c1b71880bd724646ee4c037091a6e3e508c07aa2d581667a1ba8b0cc9b",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 4912,
+        "sha256": "9dadf469444796d9f08ba577091d62890bad952c6ef6b105ae9062949682aa05",
+        "blocks": 21,
+        "conditional_branches": 0,
+        "switches": 4,
+        "phis": 10,
+        "raw_loads": 22
+      },
+      "on": {
+        "bytes": 4912,
+        "sha256": "9dadf469444796d9f08ba577091d62890bad952c6ef6b105ae9062949682aa05",
+        "blocks": 21,
+        "conditional_branches": 0,
+        "switches": 4,
+        "phis": 10,
+        "raw_loads": 22
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-6438-conflicting-idents.spvasm",
+      "entry": "fs",
+      "source_sha256": "5364cb39dcfdb819f8c6f74416ebc3d7c57e9b316d6ed5b29e39973887552ece",
+      "rdna": {
+        "bytes": 20,
+        "sha256": "e96aafa2516c3339999290c52d5c03f41b99fb1f03030c5fdc9278cb18e62d21",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2248,
+        "sha256": "6d80304cbba5271fe353b0b2c3b58e7a1519d427f683c2de0bc49e64c8c388dc",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2248,
+        "sha256": "6d80304cbba5271fe353b0b2c3b58e7a1519d427f683c2de0bc49e64c8c388dc",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-7048-multiple-dynamic-2.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "0591c382494186326beaf7b9d880bd2fc109fdf4a1299685622bdd4eb3017fb9",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-7048-multiple-dynamic-3.spvasm",
+      "entry": "main",
+      "source_sha256": "d6b7cc863c6c36eb9486511302a900631c6cca539fbbb20ff860526ccf8d053c",
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-array-in-function-return-type.spvasm",
+      "entry": "main",
+      "source_sha256": "6c38e2a2c768e6f6df3496b8c6aefb27d9ed7665daddc6e1fb0c1762d95b78ec",
+      "rdna": {
+        "bytes": 24,
+        "sha256": "d472b7254bde23d31bfb8e569032f3fcb9c6ba073aa0a3f3539b43303706f531",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2268,
+        "sha256": "a29be79f7009b78d2bd4bfd15f019f30db754fc9f05965e9e24071e3df8df521",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2268,
+        "sha256": "a29be79f7009b78d2bd4bfd15f019f30db754fc9f05965e9e24071e3df8df521",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-binding-arrays.spvasm",
+      "entry": "main",
+      "source_sha256": "8d34aca9a2052a91310964b8fb2193ccf4c46f796330ba9a3bad155bab9c5a97",
+      "rdna": {
+        "bytes": 2524,
+        "sha256": "ef8b83ac60058e422265579747b3ee122fc83eb55cca918fb4932390d98bbcb0",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 47548,
+        "sha256": "e883fdf118425e5ba8148bcf9dce23d8d50594c0359ffd48ec5145e8d351c936",
+        "blocks": 320,
+        "conditional_branches": 65,
+        "switches": 40,
+        "phis": 285,
+        "raw_loads": 235
+      },
+      "on": {
+        "bytes": 47548,
+        "sha256": "e883fdf118425e5ba8148bcf9dce23d8d50594c0359ffd48ec5145e8d351c936",
+        "blocks": 320,
+        "conditional_branches": 65,
+        "switches": 40,
+        "phis": 285,
+        "raw_loads": 235
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-binding-buffer-arrays.spvasm",
+      "entry": "main",
+      "source_sha256": "bcd3f80db49c460e893470d4a4ddf2783215223384489e644e17157f256d14ef",
+      "rdna": {
+        "bytes": 200,
+        "sha256": "8267a353decca6707c2d85d1fc0ac820f7b4283b401ab852a31c52282aaa4f15",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 5224,
+        "sha256": "1d090944b1047de6f2cfa4ce0cfb381fcda1b0caa50c377532f3580ae24d2e27",
+        "blocks": 26,
+        "conditional_branches": 0,
+        "switches": 5,
+        "phis": 7,
+        "raw_loads": 24
+      },
+      "on": {
+        "bytes": 5224,
+        "sha256": "1d090944b1047de6f2cfa4ce0cfb381fcda1b0caa50c377532f3580ae24d2e27",
+        "blocks": 26,
+        "conditional_branches": 0,
+        "switches": 5,
+        "phis": 7,
+        "raw_loads": 24
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-restrict-depth.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "0d73556f5a3f66b5a0fbc66eaa65317e235ba2af7154dbc0d4295555579dbd81",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-restrict.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "9b13501f8beee1599b44e5ad3ebc809ecaa2e855252ae379c96116d9828c8c9f",
+      "rdna": {
+        "bytes": 104,
+        "sha256": "5cb09267f4badfdb41ba6037891afe6c0e9058a20fd164cd7d48cbe6ce06e74f",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 6140,
+        "sha256": "737f1f55918bf10f6d1186a6b5ca09e064e9bcb41cae485fe862f1938ce4d650",
+        "blocks": 41,
+        "conditional_branches": 15,
+        "switches": 2,
+        "phis": 12,
+        "raw_loads": 34
+      },
+      "on": {
+        "bytes": 6140,
+        "sha256": "737f1f55918bf10f6d1186a6b5ca09e064e9bcb41cae485fe862f1938ce4d650",
+        "blocks": 41,
+        "conditional_branches": 15,
+        "switches": 2,
+        "phis": 12,
+        "raw_loads": 34
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-rzsw-depth.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "2c66ed555ad22a6d15dcc20cb36f1e0f28aab16bbdac4bcdf3c446f5d1539f0b",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-bounds-check-image-rzsw.spvasm",
+      "entry": "fragment_shader",
+      "source_sha256": "96544b4e62442aa39dafa9856ad58717d93a7621dd9efdf6b1167cefccbe87e8",
+      "rdna": {
+        "bytes": 104,
+        "sha256": "5cb09267f4badfdb41ba6037891afe6c0e9058a20fd164cd7d48cbe6ce06e74f",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 6140,
+        "sha256": "737f1f55918bf10f6d1186a6b5ca09e064e9bcb41cae485fe862f1938ce4d650",
+        "blocks": 41,
+        "conditional_branches": 15,
+        "switches": 2,
+        "phis": 12,
+        "raw_loads": 34
+      },
+      "on": {
+        "bytes": 6140,
+        "sha256": "737f1f55918bf10f6d1186a6b5ca09e064e9bcb41cae485fe862f1938ce4d650",
+        "blocks": 41,
+        "conditional_branches": 15,
+        "switches": 2,
+        "phis": 12,
+        "raw_loads": 34
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-large-source.spvasm",
+      "entry": "gen_terrain_fragment",
+      "source_sha256": "6917c24d9d6b7a55f4f2392c6e72095b62745269eaf934fbb2b89429976daee0",
+      "rdna": {
+        "bytes": 4824,
+        "sha256": "67ff9c43eded44a9c054eaaed6fdc90c40528314589b208968b7604c2c4a3828",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 3,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 32624,
+        "sha256": "6da85dc7258e431bd9cfc4ff9911c06ef503aa2cabf36e27f34dddc26b69658c",
+        "blocks": 45,
+        "conditional_branches": 14,
+        "switches": 4,
+        "phis": 147,
+        "raw_loads": 20
+      },
+      "on": {
+        "bytes": 32624,
+        "sha256": "6da85dc7258e431bd9cfc4ff9911c06ef503aa2cabf36e27f34dddc26b69658c",
+        "blocks": 45,
+        "conditional_branches": 14,
+        "switches": 4,
+        "phis": 147,
+        "raw_loads": 20
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-large-source.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "6917c24d9d6b7a55f4f2392c6e72095b62745269eaf934fbb2b89429976daee0",
+      "rdna": {
+        "bytes": 496,
+        "sha256": "5dbb3d95ae6f6facc08b5b3e8789a46d3009e02718d013c335c4c13edbee8d7d",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 6372,
+        "sha256": "05e57eaf89986791cc0532b295022cee6f22348f8d858f1c369cc3a11b7590e0",
+        "blocks": 26,
+        "conditional_branches": 0,
+        "switches": 5,
+        "phis": 9,
+        "raw_loads": 26
+      },
+      "on": {
+        "bytes": 6372,
+        "sha256": "05e57eaf89986791cc0532b295022cee6f22348f8d858f1c369cc3a11b7590e0",
+        "blocks": 26,
+        "conditional_branches": 0,
+        "switches": 5,
+        "phis": 9,
+        "raw_loads": 26
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-simple.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "437ef2c33e379078866b5f67e72da774e0bab83d8d0248d49091d055daa5e80b",
+      "rdna": {
+        "bytes": 96,
+        "sha256": "9b129168a470ff781bb87d036018d5efbabed6832449b89ebca17340c57f18fe",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 3132,
+        "sha256": "d3072a2b8fb182dacc084554004712ba5b98c979e3f3077b6848be4d48ede4a1",
+        "blocks": 5,
+        "conditional_branches": 2,
+        "switches": 0,
+        "phis": 10,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 3132,
+        "sha256": "d3072a2b8fb182dacc084554004712ba5b98c979e3f3077b6848be4d48ede4a1",
+        "blocks": 5,
+        "conditional_branches": 2,
+        "switches": 0,
+        "phis": 10,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-terrain.spvasm",
+      "entry": "gen_terrain_fragment",
+      "source_sha256": "9edfd45c70e1d969272dd683c52a3248841e689d38fd59db478bbd43cd3c5ec2",
+      "rdna": {
+        "bytes": 4824,
+        "sha256": "67ff9c43eded44a9c054eaaed6fdc90c40528314589b208968b7604c2c4a3828",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 3,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 32624,
+        "sha256": "6da85dc7258e431bd9cfc4ff9911c06ef503aa2cabf36e27f34dddc26b69658c",
+        "blocks": 45,
+        "conditional_branches": 14,
+        "switches": 4,
+        "phis": 147,
+        "raw_loads": 20
+      },
+      "on": {
+        "bytes": 32624,
+        "sha256": "6da85dc7258e431bd9cfc4ff9911c06ef503aa2cabf36e27f34dddc26b69658c",
+        "blocks": 45,
+        "conditional_branches": 14,
+        "switches": 4,
+        "phis": 147,
+        "raw_loads": 20
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-debug-symbol-terrain.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "9edfd45c70e1d969272dd683c52a3248841e689d38fd59db478bbd43cd3c5ec2",
+      "rdna": {
+        "bytes": 496,
+        "sha256": "5dbb3d95ae6f6facc08b5b3e8789a46d3009e02718d013c335c4c13edbee8d7d",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 6372,
+        "sha256": "05e57eaf89986791cc0532b295022cee6f22348f8d858f1c369cc3a11b7590e0",
+        "blocks": 26,
+        "conditional_branches": 0,
+        "switches": 5,
+        "phis": 9,
+        "raw_loads": 26
+      },
+      "on": {
+        "bytes": 6372,
+        "sha256": "05e57eaf89986791cc0532b295022cee6f22348f8d858f1c369cc3a11b7590e0",
+        "blocks": 26,
+        "conditional_branches": 0,
+        "switches": 5,
+        "phis": 9,
+        "raw_loads": 26
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-dualsource.spvasm",
+      "entry": "main",
+      "source_sha256": "490210c8bdbb25e1786f0c6772231ad70ed54820b3b4abaf65ea12d6793f5629",
+      "rdna": {
+        "bytes": 44,
+        "sha256": "14aa0ad2275912e13fa27c8f0e249a5a013e9a8607f011d9895e9fed631f9a85",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2312,
+        "sha256": "f77b4fbf10fd937c2f536a8db80cb58c3b25cd751521848c647cb39413434b64",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2312,
+        "sha256": "f77b4fbf10fd937c2f536a8db80cb58c3b25cd751521848c647cb39413434b64",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-early-depth-test-conservative.spvasm",
+      "entry": "main",
+      "source_sha256": "5227e3a35c53b67261b93d928bebad75a9362512a71f4793ca546c3512865225",
+      "rdna": {
+        "bytes": 12,
+        "sha256": "4b807a223cb56440f35159c2f122c1d448dac41ee98d68907dc5778f95492835",
+        "wave": 64,
+        "spi_ps_input_ena": 1025,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": 1
+      },
+      "off": {
+        "bytes": 2124,
+        "sha256": "d9dfa3a40b091dc7569a406487e66e2e53c57ab839a1147a494889d97bcfa87b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2124,
+        "sha256": "d9dfa3a40b091dc7569a406487e66e2e53c57ab839a1147a494889d97bcfa87b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-early-depth-test-force.spvasm",
+      "entry": "main",
+      "source_sha256": "cc0568879cd4111be5a1b7f2eb2af85cbf07b1447a45f8d9651d56ab99773115",
+      "rdna": {
+        "bytes": 44,
+        "sha256": "14aa0ad2275912e13fa27c8f0e249a5a013e9a8607f011d9895e9fed631f9a85",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2312,
+        "sha256": "f77b4fbf10fd937c2f536a8db80cb58c3b25cd751521848c647cb39413434b64",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2312,
+        "sha256": "f77b4fbf10fd937c2f536a8db80cb58c3b25cd751521848c647cb39413434b64",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-extra.spvasm",
+      "entry": "main",
+      "source_sha256": "3371fe600fa436cf3213f57fda9421c09a6b9dee375625cd01b13a7fbf116034",
+      "rdna": {
+        "bytes": 80,
+        "sha256": "502ff5441743639643f996068c01090ae1f2849abed5eabb32f921882fb341cf",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 3900,
+        "sha256": "6414b3d36e8b00b7f80820fd6a092fafebbb61e89282535db0916da5abe114be",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 2
+      },
+      "on": {
+        "bytes": 3900,
+        "sha256": "6414b3d36e8b00b7f80820fd6a092fafebbb61e89282535db0916da5abe114be",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 2
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_direct",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "rdna": {
+        "bytes": 424,
+        "sha256": "ae263f2dc155df4743e1e61aa471ef50c7142b75a261748ddc864514042ff0c9",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 8360,
+        "sha256": "5b2b90dfcb0ed230d9a9dca887fa627a66ea6d3a3dcd4bd62526f8b2fe06c773",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 8360,
+        "sha256": "5b2b90dfcb0ed230d9a9dca887fa627a66ea6d3a3dcd4bd62526f8b2fe06c773",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_struct",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "rdna": {
+        "bytes": 424,
+        "sha256": "ae263f2dc155df4743e1e61aa471ef50c7142b75a261748ddc864514042ff0c9",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 8360,
+        "sha256": "5b2b90dfcb0ed230d9a9dca887fa627a66ea6d3a3dcd4bd62526f8b2fe06c773",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 8360,
+        "sha256": "5b2b90dfcb0ed230d9a9dca887fa627a66ea6d3a3dcd4bd62526f8b2fe06c773",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_copy_input",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "rdna": {
+        "bytes": 424,
+        "sha256": "ae263f2dc155df4743e1e61aa471ef50c7142b75a261748ddc864514042ff0c9",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 8360,
+        "sha256": "5b2b90dfcb0ed230d9a9dca887fa627a66ea6d3a3dcd4bd62526f8b2fe06c773",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 8360,
+        "sha256": "5b2b90dfcb0ed230d9a9dca887fa627a66ea6d3a3dcd4bd62526f8b2fe06c773",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_return_partial",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "0b1caf5276c1bf12ed90fb801321afd43ea7cc2aec80278fbdb091d07b75f756",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2316,
+        "sha256": "d6a3c5c1ec7826f767587eb7567496ed5542623336e25e741ed6e5e71332a8d3",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2316,
+        "sha256": "d6a3c5c1ec7826f767587eb7567496ed5542623336e25e741ed6e5e71332a8d3",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-native.spvasm",
+      "entry": "test_component_access",
+      "source_sha256": "23c89a1df81f2612719b1f87bc74bef6f82a518cf3f6ff9f50c4b6d0d075221c",
+      "rdna": {
+        "bytes": 128,
+        "sha256": "07ea51024ac97f30f8a1bb20f3542384235023b8bc2cb31a71022616ff896d1e",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 4736,
+        "sha256": "5a2d5b9983fda2fcb4a2827df8060b84d64c2d1c0cea52a723bebe8e6a7a7dfc",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 4736,
+        "sha256": "5a2d5b9983fda2fcb4a2827df8060b84d64c2d1c0cea52a723bebe8e6a7a7dfc",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_direct",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "rdna": {
+        "bytes": 352,
+        "sha256": "cd5f180a95acb3949e7098e58d92ec4e1c2aa3274759634d49919ea4a748bfdd",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 9188,
+        "sha256": "fb123fee12bc11c9aa3837bfc73ef838088a16c717721a081b34f1d76dc6305d",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 9188,
+        "sha256": "fb123fee12bc11c9aa3837bfc73ef838088a16c717721a081b34f1d76dc6305d",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_struct",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "rdna": {
+        "bytes": 352,
+        "sha256": "6c60fc18a52d878797403d4cc747fb8b7438e73eedd256a2ef0b7cc9ad11067c",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 9192,
+        "sha256": "6ce68299ff45a686e94fd84107001131170a33dc3f9307f79e7c9fc30cf9132c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 9192,
+        "sha256": "6ce68299ff45a686e94fd84107001131170a33dc3f9307f79e7c9fc30cf9132c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_copy_input",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "rdna": {
+        "bytes": 352,
+        "sha256": "6c60fc18a52d878797403d4cc747fb8b7438e73eedd256a2ef0b7cc9ad11067c",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 8,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 9192,
+        "sha256": "6ce68299ff45a686e94fd84107001131170a33dc3f9307f79e7c9fc30cf9132c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 9192,
+        "sha256": "6ce68299ff45a686e94fd84107001131170a33dc3f9307f79e7c9fc30cf9132c",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_return_partial",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "3472f15ffc90943fc4c4c19d2d1d41984b5c6e2287247fd708b1a310f5038700",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-f16-polyfill.spvasm",
+      "entry": "test_component_access",
+      "source_sha256": "4e0ce652e26bba7b9f777d1a4a4edd2f74012ec7cb035cba56dcd9619388e4b2",
+      "rdna": {
+        "bytes": 108,
+        "sha256": "23ce48b1d0d4445754f3eb712711d93fe59c10a32de3aa6cbea0adc6bd102109",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 255,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 4872,
+        "sha256": "249d0f7a1d69ab3f39b89f124e0a55bbca40c84ad3137ed73b17e102d20564d4",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      },
+      "on": {
+        "bytes": 4872,
+        "sha256": "249d0f7a1d69ab3f39b89f124e0a55bbca40c84ad3137ed73b17e102d20564d4",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 1
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-fragment-output.spvasm",
+      "entry": "main_vec4vec3",
+      "source_sha256": "72103895aa23b6d3d42ec79a4965202303341af75bba53bd930239f45fda9039",
+      "rdna": {
+        "bytes": 56,
+        "sha256": "bb99387729b5e106ef7da021d4cf44ec6d1b682556f6ce70aa3f1a4dfde3edd8",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 63,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 3120,
+        "sha256": "be69b5b873148dddb6b9e17002bf753cdfcccf8a08587ad23b0899a0c1c67d3b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 3120,
+        "sha256": "be69b5b873148dddb6b9e17002bf753cdfcccf8a08587ad23b0899a0c1c67d3b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-fragment-output.spvasm",
+      "entry": "main_vec2scalar",
+      "source_sha256": "72103895aa23b6d3d42ec79a4965202303341af75bba53bd930239f45fda9039",
+      "rdna": {
+        "bytes": 56,
+        "sha256": "9701ad58151c57d854487b176eeafa76b908e8930b1ede595a75a418e7a5d59b",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 63,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 3120,
+        "sha256": "be69b5b873148dddb6b9e17002bf753cdfcccf8a08587ad23b0899a0c1c67d3b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 3120,
+        "sha256": "be69b5b873148dddb6b9e17002bf753cdfcccf8a08587ad23b0899a0c1c67d3b",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "texture_sample",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "rdna": {
+        "bytes": 712,
+        "sha256": "6a6bd276cc4748a7f5d622494401a5e6f60d878cfbee4d3f5b4cb71531d10429",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 10300,
+        "sha256": "2f7634142e1c846da24475f5c49a0a338aeeb400b3398263712dadafc871dc26",
+        "blocks": 23,
+        "conditional_branches": 6,
+        "switches": 2,
+        "phis": 34,
+        "raw_loads": 30
+      },
+      "on": {
+        "bytes": 10300,
+        "sha256": "2f7634142e1c846da24475f5c49a0a338aeeb400b3398263712dadafc871dc26",
+        "blocks": 23,
+        "conditional_branches": 6,
+        "switches": 2,
+        "phis": 34,
+        "raw_loads": 30
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "texture_sample_comparison",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "rdna": {
+        "bytes": 196,
+        "sha256": "f2727ff4671b4336a6ef2ad4cfa2dd3bb5c94e4d1c23db24a4bf730b3d3252fb",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 5256,
+        "sha256": "ed30069006a7198c221970790c49bd2d5053b2e903708425fb35a64ede8e3e6c",
+        "blocks": 22,
+        "conditional_branches": 3,
+        "switches": 3,
+        "phis": 13,
+        "raw_loads": 30
+      },
+      "on": {
+        "bytes": 5256,
+        "sha256": "ed30069006a7198c221970790c49bd2d5053b2e903708425fb35a64ede8e3e6c",
+        "blocks": 22,
+        "conditional_branches": 3,
+        "switches": 3,
+        "phis": 13,
+        "raw_loads": 30
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "gather",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "rdna": {
+        "bytes": 276,
+        "sha256": "747f209343ff781ace0d5fe08c60cfaab010602df0804d6734477d2be5bdf5f1",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 6120,
+        "sha256": "80bcae936f625c7395d650db607a37a704e99f04aaa2338f5e5e6d9a528cfe2d",
+        "blocks": 28,
+        "conditional_branches": 6,
+        "switches": 3,
+        "phis": 33,
+        "raw_loads": 31
+      },
+      "on": {
+        "bytes": 6120,
+        "sha256": "80bcae936f625c7395d650db607a37a704e99f04aaa2338f5e5e6d9a528cfe2d",
+        "blocks": 28,
+        "conditional_branches": 6,
+        "switches": 3,
+        "phis": 33,
+        "raw_loads": 31
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-image.spvasm",
+      "entry": "depth_no_comparison",
+      "source_sha256": "929a3ea4d3cda70dbb45dbe5c10ec76a1633aaf519079eaeb1dfe7be29ec7b5d",
+      "rdna": {
+        "bytes": 132,
+        "sha256": "c8fb80befd14af422e180d43ca60c9b7de0c9a4c03eca47228d570046a7ce66c",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 4016,
+        "sha256": "ad447f92a95aa0eeee5e9bb8ee84619ad5bf619c6f658625a38c8a49ac6a2918",
+        "blocks": 10,
+        "conditional_branches": 2,
+        "switches": 1,
+        "phis": 8,
+        "raw_loads": 11
+      },
+      "on": {
+        "bytes": 4016,
+        "sha256": "ad447f92a95aa0eeee5e9bb8ee84619ad5bf619c6f658625a38c8a49ac6a2918",
+        "blocks": 10,
+        "conditional_branches": 2,
+        "switches": 1,
+        "phis": 8,
+        "raw_loads": 11
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-interpolate.spvasm",
+      "entry": "frag_main",
+      "source_sha256": "944c7e4eea7609973992ce6683ba5f420f036ddc47f75de1439c66750deee7ee",
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-interpolate_compat.spvasm",
+      "entry": "frag_main",
+      "source_sha256": "7b257dcd8c98ebb2347b45f5903d0f301de8536f84044693ba12b8561d8fdbeb",
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-math-functions.spvasm",
+      "entry": "main",
+      "source_sha256": "44124ec5e6b7af11bd1dc374ff2fa44b813ad1528eca29a427aca68b8d34b86c",
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-multiview.spvasm",
+      "entry": "main",
+      "source_sha256": "c04b2026b8a736f55ea099459e5648cb554f6aa29f9ba445fed0d474463504fc",
+      "rdna": {
+        "bytes": 4,
+        "sha256": "5d23efb9ff5b4e69cf3f83191a5a7383a9ab20b542cb275e09757cc2ec136c3a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 0,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2124,
+        "sha256": "3c212a2bad522ee1fe42e437728e3a55f4be05ba4d1e4bbf7ce7f3aba89baed5",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-quad.spvasm",
+      "entry": "frag_main",
+      "source_sha256": "4654d75a72966756d47aa687a2135f89fb48073f43916aca1334ad171d025cf8",
+      "rdna": {
+        "bytes": 156,
+        "sha256": "a8549544eaf5f11510b52d253a5418ee39158ed408f039b449efec6943f89858",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 5272,
+        "sha256": "47cddcd629f59587e9deb05e9fbf425c4ae48982ffbcff0995ebe5f3d1381bc6",
+        "blocks": 8,
+        "conditional_branches": 1,
+        "switches": 1,
+        "phis": 6,
+        "raw_loads": 9
+      },
+      "on": {
+        "bytes": 5272,
+        "sha256": "47cddcd629f59587e9deb05e9fbf425c4ae48982ffbcff0995ebe5f3d1381bc6",
+        "blocks": 8,
+        "conditional_branches": 1,
+        "switches": 1,
+        "phis": 6,
+        "raw_loads": 9
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-quad.spvasm",
+      "entry": "fs_extra",
+      "source_sha256": "4654d75a72966756d47aa687a2135f89fb48073f43916aca1334ad171d025cf8",
+      "rdna": {
+        "bytes": 20,
+        "sha256": "02fd3a03f02e7522a8f5738903d85efa9f9eb9cc238b5f2652bd41675dedcbd3",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2248,
+        "sha256": "48341ec1ddecc022f3229089d6bb991357c6bb710f243ed008758549899d9a69",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2248,
+        "sha256": "48341ec1ddecc022f3229089d6bb991357c6bb710f243ed008758549899d9a69",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-separate-entry-points.fragment.spvasm",
+      "entry": "fragment",
+      "source_sha256": "7ab44c79cc25fcb6416a0f93148eac65bc166ad5ed0d3ea58121267511518638",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-shadow.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "948ad97009d64770ea04a5b0122252d6dcb75ff41977a82e01b3d7efff545522",
+      "rdna": {
+        "bytes": 588,
+        "sha256": "215faa19ae283f710e2fae9961066fb4a1b969ccb949e304fe7af9c7b384bf1f",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 9492,
+        "sha256": "553b7c2334c5978da4994684853c50c2318fdfc05c2f62862f309c098fd5d85e",
+        "blocks": 56,
+        "conditional_branches": 6,
+        "switches": 9,
+        "phis": 63,
+        "raw_loads": 46
+      },
+      "on": {
+        "bytes": 9492,
+        "sha256": "553b7c2334c5978da4994684853c50c2318fdfc05c2f62862f309c098fd5d85e",
+        "blocks": 56,
+        "conditional_branches": 6,
+        "switches": 9,
+        "phis": 63,
+        "raw_loads": 46
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-shadow.spvasm",
+      "entry": "fs_main_without_storage",
+      "source_sha256": "948ad97009d64770ea04a5b0122252d6dcb75ff41977a82e01b3d7efff545522",
+      "rdna": {
+        "bytes": 588,
+        "sha256": "0dde5e15939a83e46c36b9f4495f6cf9ff56ef4bc3422dfa9522ecced9e177f4",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 2,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 9468,
+        "sha256": "2cd9f2e72462ebbfdaf8108599da660a7d8da330763c96f093c7fc2ce9b53662",
+        "blocks": 56,
+        "conditional_branches": 6,
+        "switches": 9,
+        "phis": 63,
+        "raw_loads": 45
+      },
+      "on": {
+        "bytes": 9468,
+        "sha256": "2cd9f2e72462ebbfdaf8108599da660a7d8da330763c96f093c7fc2ce9b53662",
+        "blocks": 56,
+        "conditional_branches": 6,
+        "switches": 9,
+        "phis": 63,
+        "raw_loads": 45
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-skybox.spvasm",
+      "entry": "fs_main",
+      "source_sha256": "6eda6ba243d935b29a7bc45a3d6eb744be0b4a9993401e06bd6bc74a97bfa626",
+      "rdna": {
+        "bytes": 160,
+        "sha256": "2deba3e2b6d6a0aa727092544884d963cf78c47bb32713db052b176a5c2bce7b",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 4596,
+        "sha256": "e373476d7c3b7e04ab2767015001bbd4184bf94fc3265fcdda52f6115acdf543",
+        "blocks": 11,
+        "conditional_branches": 0,
+        "switches": 2,
+        "phis": 4,
+        "raw_loads": 15
+      },
+      "on": {
+        "bytes": 4596,
+        "sha256": "e373476d7c3b7e04ab2767015001bbd4184bf94fc3265fcdda52f6115acdf543",
+        "blocks": 11,
+        "conditional_branches": 0,
+        "switches": 2,
+        "phis": 4,
+        "raw_loads": 15
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-sprite.spvasm",
+      "entry": "main",
+      "source_sha256": "528c2b7e0bfa860c61042216873392618dab9d2f37d74f4f6f719da2d29b747d",
+      "rdna": {
+        "bytes": 92,
+        "sha256": "4b5cc2e6959800ec4cfea96df02b95babd8aba84de6c999df4f6d7463ee698c5",
+        "wave": 64,
+        "spi_ps_input_ena": 2,
+        "interpolants": 1,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 3692,
+        "sha256": "bd750d67abb77cb50f5b27888bff0f62b62d06249737cb51987c1b401a8905e9",
+        "blocks": 6,
+        "conditional_branches": 0,
+        "switches": 1,
+        "phis": 1,
+        "raw_loads": 9
+      },
+      "on": {
+        "bytes": 3692,
+        "sha256": "bd750d67abb77cb50f5b27888bff0f62b62d06249737cb51987c1b401a8905e9",
+        "blocks": 6,
+        "conditional_branches": 0,
+        "switches": 1,
+        "phis": 1,
+        "raw_loads": 9
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-standard.spvasm",
+      "entry": "derivatives",
+      "source_sha256": "c8829021df8d36202a69b374da60b2ff8c2bbaedc39f15389ada9132e0ec3463",
+      "rdna": {
+        "bytes": 204,
+        "sha256": "e53818a34f40efdd108f1d12e4150efaebef6453edafc53f8601afb92217537f",
+        "wave": 64,
+        "spi_ps_input_ena": 3841,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 5772,
+        "sha256": "1607bd1311e427d82ea13fd1f028870a15e3fc4d1785571fcb12bd08dbbef3b8",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 5772,
+        "sha256": "1607bd1311e427d82ea13fd1f028870a15e3fc4d1785571fcb12bd08dbbef3b8",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-struct-layout.spvasm",
+      "entry": "no_padding_frag",
+      "source_sha256": "d3c15b7e7eeeae2e75c526dc5f27261ef5d85f5a2057424b99764b8deff33b03",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-struct-layout.spvasm",
+      "entry": "needs_padding_frag",
+      "source_sha256": "d3c15b7e7eeeae2e75c526dc5f27261ef5d85f5a2057424b99764b8deff33b03",
+      "rdna": {
+        "bytes": 16,
+        "sha256": "d3afd462dbf59b17dcf59c63eeb4d80f3e9f8dc1a7e8ef168608288367b7b73a",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      },
+      "on": {
+        "bytes": 2224,
+        "sha256": "a0162086549c3a7e8e91b61f17b01db48bae0ea15de4f76635269032fc12f938",
+        "blocks": 1,
+        "conditional_branches": 0,
+        "switches": 0,
+        "phis": 0,
+        "raw_loads": 0
+      }
+    },
+    {
+      "group": "naga",
+      "source": "naga/tests/out/spv/wgsl-texture-arg.spvasm",
+      "entry": "main",
+      "source_sha256": "b16ffa4f4f50ed0f290b8789584476a1b8aaae48af37d2ded61045ec2f99ebe5",
+      "rdna": {
+        "bytes": 76,
+        "sha256": "709d913ef14faf0c94cafc928f2a970320e5df16213d24195b914d8446810e7b",
+        "wave": 64,
+        "spi_ps_input_ena": 1,
+        "interpolants": 0,
+        "color_mask": 1,
+        "depth_mode": -1
+      },
+      "off": {
+        "bytes": 3436,
+        "sha256": "181d5b6ec39d5046ebcd2f69e31e4012312b5e0a65a0da665d4bb263ff39e30b",
+        "blocks": 6,
+        "conditional_branches": 0,
+        "switches": 1,
+        "phis": 1,
+        "raw_loads": 8
+      },
+      "on": {
+        "bytes": 3436,
+        "sha256": "181d5b6ec39d5046ebcd2f69e31e4012312b5e0a65a0da665d4bb263ff39e30b",
+        "blocks": 6,
+        "conditional_branches": 0,
+        "switches": 1,
+        "phis": 1,
+        "raw_loads": 8
+      }
+    }
+  ]
+}

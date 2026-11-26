@@ -1,0 +1,38 @@
+{
+  "validator": "DXV x64 from DXC v1.9.2602",
+  "sha256": "91c1d4a6e0efb6ff1d89f648ac0621b9b1f91230d4d74ace00907e0e0794b7c3",
+  "validations": [
+    {
+      "path": "071-local.dxil",
+      "sha256": "c9709020b6112ebf2de62cc9859a82c5b0358fc1e4ea489064c9b8f4404473f7",
+      "exit_code": 0,
+      "output": [
+        "Validation succeeded."
+      ]
+    },
+    {
+      "path": "071-whole.dxil",
+      "sha256": "afa36112828b4cf1e1cb35440377af329293de1cdfbdbf044a68274412c574e0",
+      "exit_code": 0,
+      "output": [
+        "Validation succeeded."
+      ]
+    },
+    {
+      "path": "073-local.dxil",
+      "sha256": "d977010a9e36228186489dd0a1fb8ed55b63da662ef8103003053490f71c792f",
+      "exit_code": 0,
+      "output": [
+        "Validation succeeded."
+      ]
+    },
+    {
+      "path": "073-whole.dxil",
+      "sha256": "90af112263dac7525b74c5f5e31e5732e118cdf7be15534ae2ae034b7547e2d8",
+      "exit_code": 0,
+      "output": [
+        "Validation succeeded."
+      ]
+    }
+  ]
+}
