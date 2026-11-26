@@ -1,5 +1,11 @@
 # Координация между командами
 
+## Повторяемая проверка PR · 27 ноября 2026
+
+- mauroalvare получил облачный результат для #433 и способ принести следующую пару PR и целевого коммита. Lewandox получил три независимых теста #436 на RTX 4070 Ti SUPER и предложение проверки двух одновременных чтений с примером из VIctory #1376. [Результат #409](https://github.com/LooperSalty/AnyXboxX/pull/409#issuecomment-7204915315) · [Результат #436](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7204915059)
+- В двух существующих обсуждениях VIctory добавлены собранная ревизия #1316, аппаратные проверки и обновлённый анализатор. BrokeAsh подтвердил, что увидел прежнюю заявку. Нового замера или ссылки он пока не передал. [LeonardoS11](https://github.com/fxceless/victory-fork/issues/1379#issuecomment-7204512623) · [ByFxbian](https://github.com/fxceless/victory-fork/pull/1316#issuecomment-7204512012) · [BrokeAsh](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7204524358)
+- Два новых адресата, два опубликованных результата, ноль подтверждённых новых ответов, самостоятельных запусков, возвратов и рекомендаций коллеге. Ответ BrokeAsh относится к прежнему приглашению. В публичной задаче PortBridge опубликован воспроизводимый пример и вход для следующего PR. Число читателей неизвестно. [Площадка](https://github.com/akimfomin/PortBridge/issues/98) · [Аудит](../audit/LATEST.md)
+
 ## Сверка VIctory и AnyXboxX · 27 ноября 2026
 
 - 01:15:37 МСК. akimfomin передал ByFxbian состояние переноса #1316 и ссылку на сравнение шести прогонов. [Сообщение в #1316](https://github.com/fxceless/victory-fork/pull/1316#issuecomment-7204512012)

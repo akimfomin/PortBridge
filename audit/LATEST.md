@@ -1,4 +1,28 @@
-# PortBridge · VIctory NVIDIA и база AnyXboxX
+# PortBridge · Самостоятельная проверка совместимости PR
+
+## Итог 27 ноября 2026
+
+**AnyXboxX.** В main PortBridge добавлена проверка публичного PR против указанного коммита. Для #433 она нашла один конфликт в `draw.rs` и дала точную ссылку на изменённый тест. На той же базе #436 слился чисто, а #429 не изменил дерево. Для #433 смысл теста после слияния определён вручную: новый список должен видеть текущие константы, а прежние дескрипторы должны оставаться доступны до завершения работы. [Код #96](https://github.com/akimfomin/PortBridge/pull/96) · [Публичный прогон GitHub](https://github.com/akimfomin/PortBridge/actions/runs/45906366457#summary-140203952342) · [Вход для автора](https://github.com/akimfomin/PortBridge/issues/98)
+
+Первый облачный запуск не получил метаданные через GitHub API. В #97 сравнение переведено на публичный Git. Проверка повторного чтения PR защищает от смены головы между запросами. После исправления облачный результат совпал с локальным. На Windows полный набор для main дал 288 проходов, а для ветки аудита с контролями захватов и автономности — 291. Сохранены [первый запуск](https://github.com/akimfomin/PortBridge/actions/runs/45905990241), [исправление](https://github.com/akimfomin/PortBridge/pull/97) и [точный main](https://github.com/akimfomin/PortBridge/commit/84311ecee759ae3031a4616df9d736699929701d).
+
+**Физическая проверка #436.** На RTX 4070 Ti SUPER три теста проходят на точном PR. В синтетическом тесте 128 чтений используют два выделения буферов. Очередной тест должен проверить два чтения до завершения первого GPU-задания с различимыми данными. Для него есть подходящий контроль свежести данных из VIctory #1376. Измерения отданы Lewandox. [Команда, ревизия и границы замера](evidence/anyxboxx-409-after-revert.md#independent-gpu-check-for-436) · [Ответ в PR](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7204915059)
+
+**VIctory.** Собрана и физически проверена ревизия #1316 `c5b08986a571f4befb6806ca94b8ab7ce8c58dba` с обоими положениями флага. На ранее проверенной `nvidia-wip` флаг отсутствует. Синтетический стенд показал 10,977 → 0,172 мс подготовки в сценарии с высоким повтором и почти нулевой выигрыш подготовки при уникальных источниках. Контроль шести 90-секундных захватов проходит. Анализатор отклоняет короткую запись, разные процессы и цепочки кадров, разрыв времён и отсутствие ON-счётчиков. Игровой замер и проверка картинки остаются открыты. Инструкции обновлены в двух существующих сообщениях. [Воспроизведение](evidence/victory-cbv-ab.md) · [LeonardoS11 и Zignixx](https://github.com/fxceless/victory-fork/issues/1379#issuecomment-7204512623) · [ByFxbian](https://github.com/fxceless/victory-fork/pull/1316#issuecomment-7204512012)
+
+**Воронка.** Два новых предметных предложения опубликованы для двух уникальных участников AnyXboxX. Каждому оставлен готовый результат в его рабочем обсуждении. Чтение и применение не подтверждены. Новых ответов, самостоятельных запусков внешним участником, повторных задач и рекомендаций коллегам к моменту проверки нет. В VIctory обновлены два прежних сообщения, без нового приглашения. BrokeAsh ответил на прежнее приглашение «Yeah sec». Данных для разбора пока нет. Публичная площадка одна, GitHub Issues PortBridge. Статистика читателей не предоставлена. [mauroalvare](https://github.com/LooperSalty/AnyXboxX/pull/409#issuecomment-7204915315) · [Lewandox](https://github.com/LooperSalty/AnyXboxX/pull/436#issuecomment-7204915059) · [BrokeAsh](https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7204524358) · [Публичный пример](https://github.com/akimfomin/PortBridge/issues/98)
+
+**Отбор адресатов.** В XCL #2898 автор itsSio уже приложил сопоставимые OFF и ON на RTX 5080 и тест сжатия размещения по пулам. В Continued #2405 проверка относится к конкретным требованиям типов памяти Vulkan на Intel Arc. Наш нативный D3D12 стенд её не воспроизводит. В VIctory #1384 n-romanovich уже сделал упрощение проверки списков из запроса #1379 и приложил тесты. Общий случай жизненного цикла чтений из VIctory #1376 использован в отчёте для AnyXboxX #436. [XCL](https://github.com/xcl-dev/xcl/pull/2898) · [Continued](https://github.com/ubiquitarianism/leonida/pull/2405) · [VIctory](https://github.com/fxceless/victory-fork/pull/1384)
+
+**Автономность.** GitHub Pages собрал, опубликовал и проверил main после #96. По публичной истории GitHub после начала наблюдения в 00:07 МСК ещё не было запуска по расписанию. Публикация после push в недельный счёт не включена. [Выкладка после #96](https://github.com/akimfomin/PortBridge/actions/runs/45905731911) · [Плановые запуски](https://github.com/akimfomin/PortBridge/actions/workflows/pages.yml?query=branch%3Amain+event%3Aschedule)
+
+```sh
+python -B -m unittest discover -s tests -p 'test_cbv_ab.py' -v
+python -B -m unittest discover -s tests -p 'test_merge_check.py' -v
+python -B -m portbridge.merge_check https://github.com/LooperSalty/AnyXboxX/pull/433 15024d54e690743604a67287f0e3f3f30adbaba8
+```
+
+## Предыдущая итерация · VIctory NVIDIA и база AnyXboxX
 
 **VIctory.** Самая близкая к игре среди проверенных здесь веток — `nvidia-wip` Zignixx. В его серии замеров на RTX 5080 пролог Series S ускорился с 77,7 до примерно 39 мс на кадр. Это измерение команды на конкретной сцене. Независимый сравнительный прогон LeonardoS11 на RTX 3080 Ti дал 64–73 мс на ветке против 99–116 мс на его сборке. В текущей ревизии `90fe3144a4c5fe8ca4e6ce1b5f0e42f4fb28696b` Zignixx добавил ранний отказ для завышенного масштаба Series S. Отдельный прогон с повышенным внутренним разрешением нельзя выводить из строки с unset scale. [RTX 5080](https://github.com/fxceless/victory-fork/issues/1379) · [Независимый прогон](https://github.com/fxceless/victory-fork/issues/1379#issuecomment-7203857811) · [Изменение масштабирования](https://github.com/fxceless/victory-fork/issues/1379#issuecomment-7204175309)
 

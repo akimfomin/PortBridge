@@ -7,6 +7,10 @@ on:
         description: Public GitHub pull request URL
         required: true
         type: string
+      target_revision:
+        description: Optional 40-character receiving SHA in the same public repository
+        required: false
+        type: string
 
 permissions: {}
 
@@ -14,7 +18,7 @@ jobs:
   prior-work:
     if: github.repository == 'akimfomin/PortBridge' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 4
     permissions:
       contents: read
     steps:
@@ -28,3 +32,9 @@ jobs:
         uses: ./
         with:
           pull-request-url: ${{ inputs.pull_request_url }}
+      - name: Compare against the pinned receiving revision
+        if: inputs.target_revision != ''
+        env:
+          PORTBRIDGE_PR_URL: ${{ inputs.pull_request_url }}
+          PORTBRIDGE_TARGET_SHA: ${{ inputs.target_revision }}
+        run: python -B -m portbridge.merge_check

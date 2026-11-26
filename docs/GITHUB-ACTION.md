@@ -1,5 +1,19 @@
 # Optional PortBridge check for pull requests
 
+## Check a PR against a receiving commit
+
+Use the existing **PortBridge one-PR pilot** workflow with the PR URL and optional **target_revision**. The target is a full 40-character commit SHA in the same public repository as the PR. The workflow owner can run it from GitHub. Anyone with Git and Python can run the same check locally without a GitHub token or installation in the receiving repository.
+
+```sh
+git clone https://github.com/akimfomin/PortBridge.git
+cd PortBridge
+python -B -m portbridge.merge_check https://github.com/LooperSalty/AnyXboxX/pull/433 15024d54e690743604a67287f0e3f3f30adbaba8
+```
+
+Git reads both public revisions in a temporary bare repository and compares their trees. A result can be **conflict**, **clean merge**, **no tree changes** or **unverified**. The report pins both revisions, links conflicting source files that are present on the target and surfaces changed test files as candidates. Catalog evidence may predate the PR head. Resolve any conflict and run the linked test with its negative control on the resulting revision. Which behavior matters and whether it passed are decisions for the PR author. The workflow fetches source as Git objects and runs no code from the PR. [AnyXboxX technical discussion](https://github.com/LooperSalty/AnyXboxX/pull/409#issuecomment-7204512277)
+
+For a hosted check without workflow access, open a PortBridge issue with just the public PR URL and receiving SHA. A maintainer can run it and link the result. For a private repository use your team's local review process. GitHub API rate limits, a moving PR head and unavailable Git history produce an unverified result.
+
 A maintainer can install the [pinned workflow](../examples/portbridge-pr.yml) in any selected repository. It looks up an ordinary public PR URL against the published PortBridge snapshot and posts a summary in **Actions**. For an automatic PR event, open **Checks → prior-work → Summary**. Select the linked sources to inspect their revision, scope and limits.
 
 ## Install or try a single PR
