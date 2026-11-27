@@ -12,6 +12,12 @@ Post the result or a link to it in the request. Include the tested commit, hardw
 2. When a volunteer has already replied, coordinate in the request. If a separate invitation would help, review the current text, apply the `notify-testers` approval label and manually run **PortBridge test invitations** on `main` with the request number. For a task with a receiving PR, the recorded revision must still be its open head. Read the workflow result before following up.
 3. Keep discussions and outcomes in the request. If someone asks to stop receiving invitations, honor that request before any further contact.
 
+### Turn a discovered source into a Lab check
+
+In Radar, open an implementation or test candidate with two exact revisions and a source line. A reviewer can call the existing local Exchange's `lab-action` with `action=prepare`, or run `python -m portbridge.lab_workflow --db CATALOG --exchange-db EXCHANGE prepare --file REVIEW.json`. Use the reviewer token configured for local Exchange. The JSON takes `request_id`, `candidate`, `generation`, `note` (why the receiving code could use this test), `expected` (one observable), `control` (one outcome that would disprove it), and `share_public: true` to approve including that text in the public draft.
+
+The resulting Lab draft keeps both revisions, the source line and its license. A reviewer can then queue it through the existing Lab workflow. A changed or closed receiving PR requires a fresh check. A useful result needs a separate report, independent review, and a receiving-project decision to receive adoption credit.
+
 ## По-русски
 
 Допустим, тест уже прошёл на NVIDIA, а нужен ещё прогон на AMD. Нажмите **Запросить тест** в готовой карточке или опишите новый тест. Укажите нужное железо, точную версию кода и ожидаемый результат. Для конкретной модели можно указать, например, `amd: RX 9070 XT`. Отправьте запрос на GitHub. [Открыть Test Lab](https://akimfomin.github.io/PortBridge/?lang=ru#/lab)

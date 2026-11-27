@@ -42,6 +42,7 @@ GENERAL_SOURCE_TERMS = {"d3d12", "dxgi", "vulkan", "shader", "spirv", "wave32", 
 
 # Keep established keys for saved plans and topics while using verified current API names.
 REPOSITORY_MOVES = {
+    "ubiquitarianism/leonida": "ProjectLeonida/mandy",  # GitHub repository 1469441675
     "ivall/xcl": "xcl-dev/xcl",  # GitHub repository 1465852099
     "fxceless/victory-gta6": "fxceless/victory-fork",  # GitHub repository 1470579726
     "designwithtommy/neonbridge": "DesignWithTommy/i95",  # GitHub repository 1469440034

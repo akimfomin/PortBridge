@@ -5,16 +5,17 @@ import re
 import time
 from urllib.parse import urlsplit
 
+from . import code_search
 from .catalog import public_url
 from .exchange import Conflict, PermissionDenied
 from .github import TOKEN_PATTERN
 from .identity import stable_id
-from .matching import canonical_url
-from .radar_scan import HASH, candidate, draft_task, expire_claims, record_candidate
+from .matching import canonical_url, source_revision, source_url_aliases
+from .radar_scan import HASH, candidate, draft_task, expire_claims, record_candidate, save_draft
 from .radar_store import (KEY, SCHEMA, TASK_TYPES, active_claim, encode, event, phase,
                           public_task_rows, recent, timestamp)
 
-REVIEW_ACTIONS = {"queue", "review", "recheck", "deliver", "adopt", "decline", "withdraw_task"}
+REVIEW_ACTIONS = {"prepare", "queue", "review", "recheck", "deliver", "adopt", "decline", "withdraw_task"}
 AUTHOR_ACTIONS = {"propose", "claim", "release", "submit", "correct", "withdraw_report", "profile"}
 OUTCOMES = ("PASS", "FAIL", "SKIP", "ERROR")
 EQUIPMENT = ("amd", "nvidia", "intel", "cpu")
@@ -155,6 +156,77 @@ def propose(db, args, now):
     return task["id"], card["id"]
 
 
+def current_receiver(db, target):
+    aliases = source_url_aliases(target["url"])
+    observed = db.execute(f"""SELECT status,metadata FROM observations
+                          WHERE lower(url) IN ({','.join('?' for _ in aliases)})
+                          ORDER BY fetched_at DESC LIMIT 1""", aliases).fetchone()
+    metadata = json.loads(observed["metadata"]) if observed else {}
+    if (not observed or observed["status"] != "open" or metadata.get("draft")
+            or source_revision({"metadata": metadata}) != target.get("revision")):
+        raise Conflict("The receiving revision changed or the task closed")
+
+
+def current_donor(db, donor):
+    path = urlsplit(donor["url"]).path.split("/", 5)[-1]
+    reference = {"repo": donor["project"], "revision": donor["revision"], "path": path}
+    saved = db.execute("SELECT value FROM settings WHERE key=?",
+                       (code_search.CACHE_PREFIX + code_search._key(reference),)).fetchone()
+    if not saved:
+        raise Conflict("The comparison source is no longer indexed")
+    row = json.loads(saved["value"])
+    if (not code_search._sensible(row) or any(row[key] != value for key, value in reference.items())
+            or row["license"] != donor["license"] or row["license_url"] != donor["license_url"]
+            or not any(donor["line"] in positions for positions in row["terms"].values())):
+        raise Conflict("The indexed comparison or its license changed")
+
+
+def prepare(db, actor, args, now):
+    fields = {"request_id", "candidate", "generation", "expected", "control", "note", "share_public"}
+    if args.keys() - fields or args.get("share_public") is not True:
+        raise ValueError("Approve publication of the source review scope and control")
+    if not isinstance(args.get("candidate"), str) or not re.fullmatch(
+            r"radar:[a-f0-9]{32}", args["candidate"]):
+        raise ValueError("Use a Radar candidate and a scoped source check")
+    saved = db.execute("SELECT * FROM radar_candidates WHERE id=?", (args["candidate"],)).fetchone()
+    if saved is None:
+        raise LookupError("Unknown Radar candidate")
+    card = json.loads(saved["payload"])
+    if (saved["generation"] != args.get("generation") or saved["state"] != "candidate"
+            or card["kind"] != "source_code" or not recent(card, now)):
+        raise Conflict("Use a current, unreviewed source-code candidate")
+    target, donor = card["sources"]
+    pins = [target.get("revision"), donor.get("revision")]
+    if any(not isinstance(pin, str) or not HASH.fullmatch(pin) for pin in pins):
+        raise Conflict("A source check requires both exact revisions")
+    donor_path = urlsplit(donor["url"])
+    base = f"/{donor['project']}/blob/{pins[1]}/"
+    if (donor.get("source_role") == "normative_rule" or not donor.get("license")
+            or not public_url(donor.get("license_url", "")) or not public_url(donor["url"])
+            or type(donor.get("line")) is not int or donor["line"] <= 0
+            or donor_path.fragment != f"L{donor['line']}"
+            or not donor_path.path.startswith(base) or not urlsplit(donor["license_url"]).path.startswith(base)
+            or not donor_path.path.endswith((".c", ".cpp", ".h", ".hpp", ".rs", ".py"))):
+        raise Conflict("A source comparison requires a line in a licensed code file")
+    current_receiver(db, target)
+    current_donor(db, donor)
+    expected = text(args.get("expected"), "expected observable", 500)
+    control = text(args.get("control"), "opposite control", 500)
+    note = text(args.get("note"), "review scope and applicability", 400)
+    if any(code_search.PRIVATE_TEXT.search(value) for value in (expected, control, note)):
+        raise ValueError("Use public source and control descriptions")
+    draft = draft_task(card)
+    draft["expected"] = expected
+    draft["criteria"]["fail"] = control
+    draft["source_review"] = {"scope": note, "control": control, "evidence_stage": card["evidence_status"],
+                              "license": donor["license"], "license_url": donor["license_url"]}
+    draft["steps"].insert(0, f"Check whether the receiving source has the same condition: {note}")
+    draft["prompt"] += f"\nScope: {note}\nExpected: {expected}\nOpposite control: {control}"
+    if not save_draft(db, card, draft, now, actor=actor):
+        raise Conflict("A Lab draft already exists for this generation")
+    return {"task": draft["id"], "candidate": card["id"], "state": "draft"}
+
+
 def apply(catalog, exchange, token, action, args, *, now=None):
     if action not in REVIEW_ACTIONS | AUTHOR_ACTIONS or not isinstance(args, dict):
         raise ValueError("Unknown Lab action")
@@ -168,7 +240,7 @@ def apply(catalog, exchange, token, action, args, *, now=None):
         raise ValueError("Provide a stable request_id of 8 to 80 characters")
     ident = args.get("task")
     event_id = stable_id("radar-event", actor, action, ident, None, request)
-    input_id = stable_id("lab-request", args)
+    input_id = stable_id("lab-request", encode(args) if action == "prepare" else args)
     with catalog.connect() as db:
         db.executescript(SCHEMA)
         db.execute("BEGIN IMMEDIATE")
@@ -185,8 +257,16 @@ def apply(catalog, exchange, token, action, args, *, now=None):
         elif action == "propose":
             task_id, candidate_id = propose(db, args, now)
             result = {"task": task_id, "state": "draft"}
+        elif action == "prepare":
+            result = prepare(db, actor, args, now)
+            candidate_id = result["candidate"]
         else:
             task = lookup_task(db, ident)
+            if (action not in {"release", "withdraw_report", "withdraw_task"}
+                    and json.loads(task["payload"]).get("source_review")):
+                target, donor = json.loads(task["candidate_payload"])["sources"]
+                current_receiver(db, target)
+                current_donor(db, donor)
             candidate_id = task["candidate"]
             result = act(db, task, actor, now, action, args)
         event(db, actor=actor, action=action, now=now, task=ident, candidate=None,
@@ -219,8 +299,8 @@ def act(db, task, actor, now, action, args):
     report_id = None
     details = {}
     if action == "queue":
-        _, card = pinned_task(task, now)
-        if state != "draft" or card["confidence"] == "research":
+        draft, card = pinned_task(task, now)
+        if state != "draft" or (card["confidence"] == "research" and not draft.get("source_review")):
             raise Conflict("Only pinned drafts with an actionable link may be queued")
         details["note"] = text(args.get("note"), "review note", 300)
         state = "queued"

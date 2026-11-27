@@ -69,7 +69,8 @@ class DiscoveryLinkTests(CatalogFixture):
         self.assertEqual((result["lookups"], repeat["lookups"], repeat["cache_hits"]), (1, 0, 1))
         self.assertEqual(result["top5"][0]["url"], EXTERNAL)
         row = self.catalog.observations(kind="pr")[0]
-        self.assertEqual(row["metadata"]["technical"]["references"], [PEER])
+        self.assertEqual(row["metadata"]["technical"]["references"],
+                         ["https://github.com/ProjectLeonida/mandy/pull/23"])
         self.assertFalse(lookup_plan([row], {self.project["repo"].lower()}))
         self.assertEqual(discover(origin_url=PR, index=cached_index(self.catalog))["subject"], result["subject"])
 

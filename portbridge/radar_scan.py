@@ -22,7 +22,8 @@ from .radar_store import SCHEMA, encode, epoch, event, recent
 MAX_EVENTS = 96
 MAX_PAIRS_PER_EVENT = 4
 HORIZON = 7 * 86400
-POLICY_VERSION = 1
+POLICY_VERSION = 2
+CODE_ORIGINS = {"pr", "issue", "commit"}
 HASH = re.compile(r"^[a-f0-9]{40,64}$")
 PORT_WORDS = re.compile(r"\b(?:perf|optim[iz]|latency|fast path|evict|decommit|budget|cache|trim)", re.I)
 TEST_WORDS = re.compile(r"\b(?:test|repro|regression|readback|validation)", re.I)
@@ -59,7 +60,8 @@ def evidence_source(row, role, projects):
 def candidate(origin, peer, kind, confidence, signals, reason):
     pair = sorted((origin["source_id"], peer["source_id"]))
     ident = stable_id("radar", *pair)
-    version = stable_id("radar-revision", ident, origin["revision"], peer["revision"], kind)
+    proof = [peer.get("line"), peer.get("license"), peer.get("license_url")] if kind == "source_code" else []
+    version = stable_id("radar-revision", ident, origin["revision"], peer["revision"], kind, *proof)
     consoles = sorted(set(origin.get("consoles", []) + peer.get("consoles", [])))
     return {
         "id": ident, "generation": version, "kind": kind, "confidence": confidence, "consoles": consoles,
@@ -191,6 +193,17 @@ def expire_claims(db, now):
               candidate=claim["candidate"], details={"claim_actor": claim["actor"], "round": claim["round"]})
 
 
+def save_draft(db, card, draft, now, *, actor="system"):
+    changed = db.execute("""INSERT INTO radar_tasks VALUES(?,?,?,'draft',1,?)
+                 ON CONFLICT(id) DO UPDATE SET generation=excluded.generation,state='draft',round=1,payload=excluded.payload
+                 WHERE radar_tasks.generation != excluded.generation""",
+                (draft["id"], card["id"], card["generation"], encode(draft)))
+    if changed.rowcount:
+        event(db, actor=actor, action="draft_created", now=now, task=draft["id"], candidate=card["id"],
+              details={"generation": draft["generation"], "source_revisions": draft["revisions"]})
+    return bool(changed.rowcount)
+
+
 def record_candidate(db, card, now):
     identifier = card["id"]
     current = db.execute("SELECT * FROM radar_candidates WHERE id=?", (identifier,)).fetchone()
@@ -213,14 +226,7 @@ def record_candidate(db, card, now):
         db.execute("UPDATE radar_tasks SET state='stale' WHERE candidate=? AND generation!=?",
                    (identifier, card["generation"]))
     if card["confidence"] == "high" and card["sources"][0]["status"] == "open" and recent(card, now):
-        draft = draft_task(card)
-        changed = db.execute("""INSERT INTO radar_tasks VALUES(?,?,?,'draft',1,?)
-                     ON CONFLICT(id) DO UPDATE SET generation=excluded.generation,state='draft',round=1,payload=excluded.payload
-                     WHERE radar_tasks.generation != excluded.generation""",
-                    (draft["id"], identifier, card["generation"], encode(draft)))
-        if changed.rowcount:
-            event(db, actor="system", action="draft_created", now=now, task=draft["id"], candidate=identifier,
-                  details={"generation": draft["generation"], "source_revisions": draft["revisions"]})
+        save_draft(db, card, draft_task(card), now)
     return 0 if current and current["generation"] == card["generation"] else 1
 
 
@@ -243,8 +249,7 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
     apply_cached(rows, cached)
     codes = code_search.projection(catalog)
     code_revisions = {(row["repo"], row["revision"], row["path"]) for row in codes["files"]}
-    code_digest = sha256(encode([[row[key] for key in ("repo", "revision", "path", "sha256", "license")]
-                                 for row in codes["files"]]).encode()).hexdigest() if code_revisions else ""
+    code_digest = sha256(code_search.snapshot_bytes(codes)).hexdigest() if code_revisions else ""
 
     def input_fingerprint(url, row):
         revision, digest = external.get(url, (None, ""))
@@ -287,13 +292,14 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
             ranked = [card for card in ranked if card is not None]
         matches = discover(origin_url=row["url"], index=discovery)
         ranked.extend(historical(row, matches, project_map))
-        if codes["files"] and subject_kind(row["title"]) == "implementation":
+        if codes["files"] and row["kind"] in CODE_ORIGINS and subject_kind(row["title"]) == "implementation":
             origin = evidence_source(row, "target", project_map)
             for lead in code_search.lookup(codes, code_search.observation_query(row), origin_url=row["url"], limit=1):
                 peer = {"role": "historical", "url": lead["url"], "source_id": source_id(lead["url"]),
                         "project": lead["repo"], "status": "reference", "title": lead["path"],
-                        "revision": lead["revision"], "license": lead["license"], "consoles": [],
-                        "checked_at": None}
+                        "revision": lead["revision"], "license": lead["license"], "license_url": lead["license_url"],
+                        "line": lead["line"], "source_role": lead.get("source_role", "source_reference"),
+                        "consoles": [], "checked_at": None}
                 ranked.append({**candidate(origin, peer, "source_code", "research", lead["signals"],
                                            "A pinned public file overlaps the technical query. Compare the cited lines."),
                                "next_step": lead["next_step"]})
@@ -325,7 +331,8 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
                 if not observed:
                     ref["fresh"] = False
                     continue
-                if ref["revision"] != source_revision(observed) or ref["status"] != observed["status"]:
+                if (ref["revision"] != source_revision(observed) or ref["status"] != observed["status"]
+                        or card["kind"] == "source_code" and observed["kind"] not in CODE_ORIGINS):
                     invalid = True
                 ref.update(evidence_source(observed, ref["role"], project_map))
             if invalid:

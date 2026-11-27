@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timezone
 from unittest.mock import patch
 
+from portbridge import code_search
 from portbridge.catalog import ReadOnlyCatalog
 from portbridge.community import filter_impact, people
 from portbridge.exchange import Conflict, Exchange, PermissionDenied
@@ -85,6 +86,62 @@ class RadarWorkflowTest(CatalogFixture):
                     if candidate["kind"] == "shared_mechanism")
         self.assertEqual((card["confidence"], card["signals"]), ("research", ["bvh/node-fetch"]))
         self.assertIsNone(card.get("task_id"))
+
+    def test_indexed_source_review_prepares_one_draft_without_adoption_credit(self):
+        donor = "https://github.com/Example/Graphics/blob/" + "e" * 40
+        reference = {"repo": "Example/Graphics", "revision": "e" * 40, "path": "tests/cache.cpp",
+                     "license": "MIT", "license_url": donor + "/LICENSE"}
+        item = {**self.rows[0], "url": LEFT.replace("9991", "9998"), "source_id": "9998",
+                "title": "Preserve CreateGraphicsPipelineState across fresh launches",
+                "metadata": {"head_sha": "f" * 40, "technical": {}}}
+        ci = {**item, "kind": "test", "url": LEFT.replace("/pull/9991", "/actions/runs/9988"), "source_id": "9988"}
+        self.catalog.record_sync({"items": [ci, item]}, update_health=False)
+        fixture = b"int CreateGraphicsPipelineState(Cache* cache) { return replay_pipeline_key(cache); }\n"
+        with patch.object(code_search, "references", return_value=[reference]):
+            code_search.refresh(self.catalog, fetch=lambda _: fixture)
+            refresh(self.catalog, now=NOW)
+            card, = [card for card in radar_view(self.catalog, NOW)["candidates"]
+                     if card["kind"] == "source_code"]
+        self.assertEqual(card["target_url"], item["url"])
+        self.assertEqual(card["evidence_status"], "source_found")
+        self.assertIsNone(card["task_id"])
+        args = {"request_id": "source-prepare-1", "candidate": card["id"], "generation": card["generation"],
+                "note": "Both paths persist a D3D12 pipeline across launches.",
+                "expected": "Read the same pipeline key in a fresh process.",
+                "control": "Start with an empty cache and expect a miss.", "share_public": True}
+        with self.assertRaises(PermissionDenied):
+            apply(self.catalog, self.exchange, self.second, "prepare", args, now=NOW)
+        with self.assertRaises(ValueError):
+            apply(self.catalog, self.exchange, self.reviewer, "prepare", {**args, "share_public": False}, now=NOW)
+        with self.assertRaises(ValueError):
+            apply(self.catalog, self.exchange, self.reviewer, "prepare", {**args, "note": "C:\\Users\\Example"}, now=NOW)
+        created = apply(self.catalog, self.exchange, self.reviewer, "prepare", args, now=NOW)
+        repeated = dict(reversed(list(args.items())))
+        self.assertEqual(apply(self.catalog, self.exchange, self.reviewer, "prepare", repeated, now=NOW), created)
+        with self.assertRaises(Conflict):
+            apply(self.catalog, self.exchange, self.reviewer, "prepare",
+                  {**args, "request_id": "source-prepare-2"}, now=NOW)
+        task = build_lab(self.catalog, task=created["task"], now=NOW)["tasks"][0]
+        self.assertEqual((task["workflow_state"], task["adoption"]), ("draft", "pending"))
+        self.assertEqual(task["source_review"]["license_url"], donor + "/LICENSE")
+        self.assertIn(args["control"], task["prompt"])
+        self.assertNotIn("radar_findings", preflight(self.catalog, url=item["url"]))
+        self.assertFalse(filter_impact(people(self.catalog, now=NOW)[1], target=item["url"])["stories"])
+        queued = self.act(self.reviewer, "queue", task=created["task"], note=args["note"])
+        self.assertEqual(queued["state"], "queued")
+        self.assertEqual(self.act(self.second, "claim", task=created["task"])["state"], "claimed")
+        with patch.object(code_search, "references", return_value=[{**reference, "revision": "a" * 40}]):
+            code_search.refresh(self.catalog, fetch=lambda _: fixture)
+        with self.assertRaisesRegex(Conflict, "no longer indexed"):
+            self.act(self.second, "submit", task=created["task"], report={})
+
+        self.catalog.record_sync({"items": [{**item, "updated_at": timestamp(NOW + 1),
+                                             "metadata": {"head_sha": "a" * 40}}]}, update_health=False)
+        with self.assertRaises(Conflict):
+            apply(self.catalog, self.exchange, self.reviewer, "prepare",
+                  {**args, "request_id": "source-prepare-3"}, now=NOW + 1)
+        with self.assertRaisesRegex(Conflict, "receiving revision changed"):
+            self.act(self.second, "submit", task=created["task"], now=NOW + 1, report={})
 
     def test_unpinned_discovery_card_expires_even_with_fresh_receiver(self):
         source = {"html_url": "https://github.com/gfx-rs/wgpu/pull/123", "title": "Memory budget",

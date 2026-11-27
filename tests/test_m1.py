@@ -186,7 +186,7 @@ class M1RecoveryTest(CatalogFixture):
     def test_disabled_pr_and_incomplete_page_are_reported_without_losing_data(self):
         def read(request, timeout):
             url = request.full_url
-            if url.endswith("/repos/ubiquitarianism/leonida"):
+            if url.endswith("/repos/ProjectLeonida/mandy"):
                 return Response({"id": 22, "private": False, "has_pull_requests": False})
             if "/pulls?" in url:
                 raise http_error(404)
@@ -206,6 +206,17 @@ class M1RecoveryTest(CatalogFixture):
         self.assertEqual(source["sync_status"], "stale")
         self.assertEqual(source["errors"][0]["reason"], "incomplete_page")
         self.assertEqual(self.catalog.health()["observation_count"], 1)
+
+    def test_continued_move_uses_the_new_endpoint_and_keeps_old_source_keys(self):
+        from portbridge.code_search import _manifest
+        from portbridge.matching import current_repository
+        old, new = "ubiquitarianism/leonida", "ProjectLeonida/mandy"
+        self.assertEqual(current_repository(old), new)
+        self.assertEqual(repository_id(old), repository_id(new))
+        self.assertEqual(source_id(f"https://github.com/{old}/pull/7"), source_id(f"https://github.com/{new}/pull/7"))
+        specs = {row["repo"]: row for row in _manifest()}
+        self.assertNotIn(old, specs)
+        self.assertIn("runtime/test", specs[new]["directories"])
 
     def test_source_context_is_bounded_and_keeps_history_without_raw_body(self):
         url = "https://github.com/ubiquitarianism/leonida/pull/81"

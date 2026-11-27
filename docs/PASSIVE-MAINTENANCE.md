@@ -59,7 +59,7 @@ To roll back a deployment, retain the last known-good code SHA, its successful A
 
 ### Observe the first week
 
-After a successful scheduled deployment verifies the live generation, GitHub retains a dated `portbridge-scheduled-publication-v1` receipt for 30 days. The receipt records the release revision, run and attempt, UTC verification time and both expected digests. Run `python audit/m6_autonomy.py --since YYYY-MM-DDTHH:MM:SSZ` using the actual rollout time in the [release handoff](https://github.com/akimfomin/PortBridge/blob/audit/review/audit/LATEST.md). The report lists scheduled runs without a success receipt, the longest verified-publication gap and counts for seven consecutive 24-hour intervals. It tracks publication delivery. Individual sources can lag even when delivery succeeds.
+After a successful scheduled deployment verifies the live generation, GitHub retains a dated `portbridge-scheduled-publication-v1` receipt for 30 days. For each observed run, download and unzip the receipt and save its JSON as `ARTIFACT_ID.json` in a local directory. Run `python audit/m6_autonomy.py --since YYYY-MM-DDTHH:MM:SSZ --receipts RECEIPT_DIR` using the rollout time in the [release handoff](https://github.com/akimfomin/PortBridge/blob/audit/review/audit/LATEST.md). The report compares expected slots at minutes 13 and 43 with recorded schedule events. It matches downloaded receipts to the current run attempt and measures gaps using the actual verification time. If REST is limited, pass `--snapshot` with saved public `runs` and `artifacts` arrays. A separate source freshness check remains necessary.
 
 ## Коротко по-русски
 
