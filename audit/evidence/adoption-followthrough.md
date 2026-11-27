@@ -125,6 +125,30 @@ print("2 targeted vectors, 100000 deterministic random vectors: PASS")
 
 XCL #2931. Автор [свёл независимые замеры](https://github.com/xcl-dev/xcl/pull/2931#issuecomment-7207276633): создаваемые рабочие потоки сократились примерно с 640 до 4, процесс использовал примерно на 10 МиБ меньше пиковой выделенной памяти, холодное время остаётся примерно тем же. В #2939 ettehn проверил другой механизм и дал физический результат в одном синтетическом случае. [Первичный результат](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207407756) · [Дополнительная проверка PortBridge](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207445228)
 
+### Принятая правка VIctory #1419 и независимый прогон
+
+ByFxbian [прямо подтвердил](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7207518729), что изменил PR по замечанию PortBridge. На [head `8d1162e31491ca8c462356e921b31f39ee99d58d`](https://github.com/fxceless/victory-fork/commit/8d1162e31491ca8c462356e921b31f39ee99d58d) разрешён только наблюдавшийся непосредственный вызов с записью нуля в двухбитное поле округления FP16/FP64. Прочие изменения MODE по-прежнему отвергаются. Диагностика разделена на неподдержанное выходное значение, модификаторы, запись EXEC и неподдержанный код операции. Автор проверил обновление на RTX 3070.
+
+PortBridge проверил тот же точный head на физической RTX 4070 Ti SUPER, драйвер 617.14, Windows 11 28000.3501, Rust 1.100.0 gnullvm, LLVM-MinGW, набор DXC 1.9.2609.5. Только публичные синтетические программы, без игровой нагрузки.
+
+```powershell
+$env:VICTORY_WAVE_PAIRS='1'
+$env:VICTORY_WAVE_PAIRS_FP32='non-ieee-rne-ftz'
+$env:VICTORY_SHADER_OPT='127'
+$env:VICTORY_GROUP_SYNC='2'
+$env:VICTORY_WAVE_WHY='1'
+cargo test --locked --release -p victory-shader --features host --lib paired_fp32 -- --include-ignored --nocapture --test-threads=1
+```
+
+| Синтетическая проверка | Побитовые сравнения на GPU | Результат |
+| --- | ---: | --- |
+| `nvidia_paired_fp32_min_max` | 20 | PASS |
+| `nvidia_paired_fp32_mode_writes` | 3 | PASS, также пройдены пять проверок отказа компилятора |
+| `nvidia_paired_fp32_ordered_sum` | 14 | PASS |
+| `paired_fp32_refuses_an_unconfirmed_guest_mode` | — | PASS, проверка отказа без подтверждённого режима |
+
+Во всех GPU-случаях диагностика показала `paired=true threads=[32, 1, 1]`, DXIL валидирован. Итог `4 passed; 0 failed; 0 ignored; 260 filtered out`, 4,78 секунды. SHA-256 локального файла тестов `f494ee32b387bf03167b8bfdb23d2d707f2484962c28286e797c2f8d5105d799`. Первый прогон с одним указанием режима дал три отказа и не обеспечил запуск нужного пути. Явное включение парного режима и заданной маски оптимизаций устранило это отличие постановки. Состояние двух программ воды и результата изображения остаётся открытым. [Независимый отчёт PortBridge в PR](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7207563987)
+
 ### Continued и Mac
 
 У контрольных версий Continued `b4b7756e8c64e7ae8b310288d543db0e428c0796` и `d1dff7949be62b6609c3c2ca937df7f50fbf1305` совпадает Git blob шейдера `9763e233f63689b87d664c15a37dbe72c99913e4`. Различаются Git blobs оболочки проверки и C++ исполняемого теста. Принимающий прогон должен указать чистый build, точный драйвер и строку с гранью 4. [Рецепт и доказательства](https://github.com/akimfomin/PortBridge/issues/111#issuecomment-7207400733)
