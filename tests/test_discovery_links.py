@@ -60,7 +60,7 @@ class DiscoveryLinkTests(CatalogFixture):
                 return data, {}
             params = parse_qs(urlsplit(path).query)
             self.assertIn('"updatetilemappings"', params["q"][0])
-            self.assertEqual(params["per_page"], ["5"])
+            self.assertEqual(params["per_page"], ["15"])
             return {"items": [{"html_url": EXTERNAL, "state": "closed", "title": "Tiled image remapping"}]}, {}
         with patch("portbridge.github._Sync._request", side_effect=request):
             result = search_link(self.catalog, PR)
