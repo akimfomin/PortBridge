@@ -52,6 +52,28 @@ python -I ftreport.py summarize example.ftlog --skip 0 --from-mark b --until-mar
 
 Both windows passed the tool's checks. The count uses BM-v1's strict threshold, with a separate metric for median-relative stutters. Record the original time origin and window definitions. Do not infer that an interval-based capture has counted idle time before its first present. [Versioned specification](https://github.com/leixner/frametime-report/blob/2e637f41d10371f542d1fe8eb9c54499e5d267ff/SPEC.md) · [Lab discussion](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206945697)
 
-## Outstanding adoption checks
+## Вторая волна контактов
+
+| Кому | Что было сделано до сообщения | Публичный итог |
+| --- | --- | --- |
+| nidscode, Vice-Tay | Проверка слияния AnyXboxX #466 и готовый Lab #109 для стенда с 16 ГБ | [Предложение](https://github.com/TaynanGT/Vice-Tay/issues/97#issuecomment-7207146355) |
+| KainanP, AnyXboxX | Закреплены отдельно база сравнения одной правки и более поздняя принимающая версия | [Возврат результата](https://github.com/LooperSalty/AnyXboxX/pull/466#issuecomment-7207175840) |
+| Endoykoo, новый публичный форк | Сверены два разных отрезка исходного отчёта. 270 секунд относятся ко всему запуску | [Предложение](https://github.com/4lwayz/portwatch-vi/issues/240#issuecomment-7207156664) |
+| denisngeu, Glc6 | Отдельно отмечены первая неудачная и вторая удачная попытки загрузки. Производительность относится к успешной попытке | [Предложение](https://github.com/4lwayz/portwatch-vi/issues/237#issuecomment-7207160665) |
+| leixner, frametime-report | Воспроизведено ложное совпадение фаз и проверен способ его избежать в выпущенной версии | [Обсуждение](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7207165350) |
+
+На момент повторного чтения все пять сообщений видны в GitHub. В этих ветках нет ответов на новые предложения. Также проверены #98, #99, #106 и #107 PortBridge, ответы PortWatch и KLBF. Новое самостоятельное использование пока не подтверждено. Ранее независимые результаты сохраняются в предыдущих разделах. Плановые обновления проверяются по фактическим выпускам. [Последний найденный успешный запуск по расписанию](https://github.com/akimfomin/PortBridge/actions/runs/45917400112)
+
+### Воспроизведение
+
+```sh
+python -B -m portbridge.merge_check https://github.com/LooperSalty/AnyXboxX/pull/466 5a08a334ef216eff98d2c7d9a9166f94c9ef70ed
+```
+
+Ожидается `clean merge`, `head=02bc88444ba29bfe47d44b2c76537839117ab2aa`, `merge_base=b6d86cf8226b718d1efd80da1131945840d6820d`, один изменённый исходник `shadow.rs`. Тест рядом с кодом назван `window_budget_counts_the_copies_that_cannot_go`. Ранний блок `shadow::window_tests` и аппаратный прогон с Watch/High описаны в карточке. По этому пункту PortBridge выполнил Git-проверку и сверку исходника. [Форма и полный рецепт](https://github.com/akimfomin/PortBridge/issues/109#issuecomment-7207139616)
+
+Для сравнения фаз сохраните скрипт из комментария к #99 как `compare_capture_phases.py` и скачайте [ftreport.py v0.3.0 на точной ревизии](https://github.com/leixner/frametime-report/blob/2e637f41d10371f542d1fe8eb9c54499e5d267ff/ftreport.py). Запустите `python -I compare_capture_phases.py ftreport.py`. Оба отрезка валидны, по 200 секунд. У первого 9,99 FPS, p95 100 мс и одна пауза больше 200 мс. У второго 10,00 FPS, p95 125 мс и ни одной такой паузы. При равном `scene` вывод `like for like`. После добавления отдельного имени прогретой сцены вывод `NOT like for like (differs in scene)`. Для настоящего холодного старта отдельно фиксируется начало отсчёта и состояние кэша. [Скрипт, результаты и форма ответа](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7207139869)
+
+## Earlier outstanding adoption checks
 
 Three new addressed offers were posted to HabibUrRehmanBhattii, Solarthis and Epic-Y. A current upstream decision and a ready input are linked from each. Follow-up replies from a new participant or acceptance of the PortWatch/FrameLab integration have not yet been observed. The GitHub Action, MCP and bare tools still have separate evidence from their technical readiness. No external repository received an installation.

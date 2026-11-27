@@ -1,5 +1,10 @@
 # Координация между командами
 
+## 27 ноября 2026 · Связали проверки AnyXboxX, Vice-Tay и PortWatch
+
+- **nidscode и KainanP.** На открытый запрос AnyXboxX #466 подготовлен самостоятельный Test Lab #109. PortBridge проверил слияние на точной принимающей версии. Автору замера Vice-Tay с 16 ГБ предложен один добровольный синтетический тест. Результат проверки слияния и ссылку на задачу получил PR AnyXboxX. Отклики на момент сверки отсутствуют. [Vice-Tay](https://github.com/TaynanGT/Vice-Tay/issues/97#issuecomment-7207146355) · [AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/466#issuecomment-7207175840) · [Lab](https://github.com/akimfomin/PortBridge/issues/109#issuecomment-7207139616)
+- **Endoykoo, denisngeu и leixner.** Оставлены адресные примеры применения одной проверенной методики к трём разным задачам. Endoykoo предложено оставить раздельными подвижный и неподвижный отрезки. denisngeu предложено сохранить отказ первой загрузки отдельно от замеров второй. leixner получил воспроизведение сравнения разных фаз и проверенный обход в текущей версии. Новый независимый результат или согласие на интеграцию пока не получены. [Endoykoo](https://github.com/4lwayz/portwatch-vi/issues/240#issuecomment-7207156664) · [denisngeu](https://github.com/4lwayz/portwatch-vi/issues/237#issuecomment-7207160665) · [leixner](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7207165350)
+
 ## 27 ноября 2026 · Ответы на 50 обращений
 
 - Перечитаны все 50 исходных публикаций. Точные ссылки на более поздние ответы, ревью и самостоятельные замеры собраны в [аудите](../audit/evidence/adoption-followthrough.md). В пяти случаях участники применили проверку, предложенную PortBridge. Установка и ежедневное применение учитываются по отдельному подтверждению.
