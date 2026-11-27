@@ -18,6 +18,7 @@ LEFT JOIN discovery_query AS cache ON cache.query=job.query
 """
 DUE = "(result.url IS NULL OR cache.retry_at IS NULL OR cache.retry_at<=?)"
 LOCAL_BATCH = 120
+RESULT_TTL = 24 * 3600
 
 
 def schedule(db, jobs, now):
@@ -53,7 +54,7 @@ def ready(db, now):
 def fresh_results(db, now):
     """Let Radar discover changed search output even after the originating batch has finished."""
     return db.execute("""
-        SELECT result.url,result.revision,cache.items
+        SELECT result.url,result.revision,cache.items,cache.retrieved
         FROM discovery_observation AS result JOIN discovery_query AS cache USING (query)
         WHERE cache.status IN ('available','partial') AND cache.retrieved>?
             AND cache.items!='[]'

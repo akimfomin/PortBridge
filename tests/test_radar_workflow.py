@@ -14,7 +14,7 @@ from portbridge.lab_workflow import apply, dashboard
 from portbridge.mcp import PortBridgeMCP
 from portbridge.preflight import preflight
 from portbridge.radar_scan import classify, refresh
-from portbridge.radar_store import radar_view, timestamp
+from portbridge.radar_store import radar_view, recent, timestamp
 from test_portbridge import CatalogFixture
 
 LEFT = "https://github.com/LooperSalty/AnyXboxX/pull/9991"
@@ -85,6 +85,21 @@ class RadarWorkflowTest(CatalogFixture):
                     if candidate["kind"] == "shared_mechanism")
         self.assertEqual((card["confidence"], card["signals"]), ("research", ["bvh/node-fetch"]))
         self.assertIsNone(card.get("task_id"))
+
+    def test_unpinned_discovery_card_expires_even_with_fresh_receiver(self):
+        source = {"html_url": "https://github.com/gfx-rs/wgpu/pull/123", "title": "Memory budget",
+                  "state": "open", "updated_at": timestamp(NOW)}
+        with patch("portbridge.radar_scan.sample", return_value=0), patch(
+                "portbridge.discovery_scan._Sync._request", return_value=({"items": [source]}, {})):
+            refresh(self.catalog, online_discovery=True, now=NOW)
+        card = next(c for c in radar_view(self.catalog, NOW)["candidates"] if c["kind"] == "historical_source")
+        self.assertEqual(card["age_state"], "fresh")
+        target, peer = card["sources"]
+        self.assertTrue(peer["checked_at"])
+        card["sources"] = [target, {**peer, "checked_at": timestamp(NOW - 86401)}]
+        self.assertFalse(recent(card, NOW))
+        card["sources"] = [target, {**peer, "revision": "f" * 40, "checked_at": None}]
+        self.assertTrue(recent(card, NOW))
 
     def test_claim_release_expiry_concurrency_and_stale_pins(self):
         self.act(self.reviewer,"queue",note="Visible source-backed check")

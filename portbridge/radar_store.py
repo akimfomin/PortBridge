@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import json
 import re
 
+from .discovery_queue import RESULT_TTL
 from .identity import stable_id
 
 SCHEMA = """
@@ -88,9 +89,12 @@ def phase(db, task, status, now):
 
 
 def recent(candidate, now):
-    # A historical, pinned external revision does not have a mutable tracked head.
     tracked = [x for x in candidate["sources"] if x["role"] != "historical"]
-    return bool(tracked and all(x.get("fresh") and epoch(x.get("checked_at")) >= now - SOURCE_TTL for x in tracked))
+    if not tracked or any(not x.get("fresh") or epoch(x.get("checked_at")) < now - SOURCE_TTL for x in tracked):
+        return False
+    # Pinned historical revisions are immutable. A search result without a pin can age out.
+    return all(epoch(x.get("checked_at")) > now - RESULT_TTL for x in candidate["sources"]
+               if x["role"] == "historical" and not x.get("revision"))
 
 
 def report_count(db, task):

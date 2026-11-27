@@ -27,11 +27,14 @@ PRIORITY_PROJECTS = frozenset({
 })
 MAX_LOOKUPS = 5
 PAGE_SIZE = 5
-SCHEDULED_PAGE_SIZE = 15
-TTL = 24 * 3600
+FETCH_SIZE = 15
+TTL = discovery_queue.RESULT_TTL
 FAILURE_TTL = 15 * 60
 BATCH_SECONDS = 14
-QUERY_VERSION = "m21-v1"
+QUERY_VERSION = "m21-v2"
+BROAD_FAILURE = re.compile(
+    r"(?:0x[0-9a-f]+|dxgi_error_device_(?:hung|removed|reset)|vk_error_device_lost|device loss|status_access_violation)"
+)
 
 EXTERNAL = (
     "doitsujin/dxvk", "HansKristian-Work/vkd3d-proton", "KhronosGroup/Vulkan-ValidationLayers",
@@ -66,8 +69,9 @@ def subject(observation):
         values = metadata.get(name)
         if isinstance(values, list):
             options.extend(term.casefold() for term in values[:limit] if stored_cue(term))
-    if options:
-        return options[0]
+    concrete = next((term for term in options if not BROAD_FAILURE.fullmatch(term)), "")
+    if concrete:
+        return concrete
     # Short fixed conjunctions match signs of the mechanism even when the title's
     # prose differs from documentation or an older tracker.
     tokens = set(re.findall(r"[a-z0-9]+", title.casefold()))
@@ -82,9 +86,12 @@ def subject(observation):
     # recovered from old rows without guessing a term from free-form prose.
     terms = metadata.get("terms")
     if isinstance(terms, list):
-        return next((term.casefold() for term in terms[:SIGNATURE_LIMIT] if isinstance(term, str)
-                     and " " in term and TECHNICAL_TERM.fullmatch(term)), "")
-    return ""
+        concrete = next((term.casefold() for term in terms[:SIGNATURE_LIMIT] if isinstance(term, str)
+                         and " " in term and TECHNICAL_TERM.fullmatch(term)
+                         and not BROAD_FAILURE.fullmatch(term.casefold())), "")
+        if concrete:
+            return concrete
+    return options[0] if options else ""
 
 
 def source_repo(url):
@@ -93,7 +100,7 @@ def source_repo(url):
 
 def source_results(rows):
     seen = set()
-    for raw in rows[:SCHEDULED_PAGE_SIZE]:
+    for raw in rows[:FETCH_SIZE]:
         row = result_entry(raw)
         if not row or (repo := source_repo(row["url"])) not in EXTERNAL_NAMES:
             continue
@@ -148,11 +155,15 @@ def cached_index(catalog, *, origin_urls=None):
             continue
         if retrieved + TTL <= now and status in {"available", "partial"}:
             status = "stale"
-        checked_on = datetime.fromtimestamp(retrieved, timezone.utc).date().isoformat()
-        automatic[key(url)] = {"status": status, "reason": reason or None, "subject": term, "matches": [
-            {**item, "retrieved_on": checked_on, "retrieval_status": status} for item in json.loads(items)
+        checked_at = datetime.fromtimestamp(retrieved, timezone.utc)
+        checked_on = checked_at.date().isoformat()
+        matches = [
+            {**item, "retrieved_on": checked_on, "retrieved_at": checked_at.isoformat(timespec="seconds"),
+             "retrieval_status": status} for item in json.loads(items)
             if key(item["url"]) != key(url)
-        ]}
+        ]
+        automatic[key(url)] = {"status": status, "reason": reason or None, "subject": term,
+                               "matches": matches[:PAGE_SIZE] if origin_urls is None else matches}
     return {**index, "automatic": automatic} if automatic else index
 
 
@@ -166,18 +177,18 @@ def acquire(db, lease):
     return True
 
 
-def fetch(client, term, *, family="xbox-series", page_size=PAGE_SIZE):
+def fetch(client, term, *, family="xbox-series"):
     targets = XBOX_PEERS if family=="ps5" else PS5_PEERS
     qualifier = " ".join(f"repo:{repo}" for repo in (*EXTERNAL,*targets))
     literal = f'"{term}"' if term not in {"dxgi budget", "adapter performance", "compute subobject"} else term
     query = f"{literal} is:public {qualifier}"
-    data, _ = client._request(f"{API}/search/issues?{urlencode({'q': query, 'per_page': page_size})}", "search", None)
+    data, _ = client._request(f"{API}/search/issues?{urlencode({'q': query, 'per_page': FETCH_SIZE})}", "search", None)
     if not isinstance(data, dict) or not isinstance(data.get("items"), list):
         raise Unavailable("Invalid Discovery search response", reason="invalid_payload")
     return ("partial" if data.get("incomplete_results") else "available"), list(source_results(data["items"]))
 
 
-def lookup_plan(observations, known, *, requested_url=None):
+def lookup_plan(observations, known, *, requested_url=None, scheduled=False):
     plan = {}
     for observation in observations:
         url = observation["url"]
@@ -186,22 +197,21 @@ def lookup_plan(observations, known, *, requested_url=None):
                 or (not explicit and (observation["status"] != "open" or source_repo(url) not in known))):
             continue
         term = subject(observation)
-        if term or explicit:
+        if explicit or (term and (not scheduled or not BROAD_FAILURE.fullmatch(term))):
             plan.setdefault(url.lower(), (source_revision(observation) or observation.get("updated_at"), term))
     return plan
 
 
-def query_for(url, term, *, scheduled):
+def query_for(url, term):
     family = "ps5" if "ps5" in console_families(url) else "xbox-series"
-    version = f"{QUERY_VERSION}-bulk" if scheduled else QUERY_VERSION
-    return f"{version}:{family}:{term}"
+    return f"{QUERY_VERSION}:{family}:{term}"
 
 
 def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, requested_url=None, scheduled=False):
     if type(max_lookups) is not int or not 1 <= max_lookups <= MAX_LOOKUPS:
         raise ValueError(f"Use 1 to {MAX_LOOKUPS} Discovery lookups per batch")
     known = {row["repo"].lower() for row in catalog.projects()}
-    plan = lookup_plan(observations, known, requested_url=requested_url)
+    plan = lookup_plan(observations, known, requested_url=requested_url, scheduled=scheduled)
     report = {"status": "offline" if not online else "complete", "eligible": sum(bool(term) for _, term in plan.values()),
               "lookups": 0, "cache_hits": 0, "origins": []}
     if not online:
@@ -215,7 +225,7 @@ def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, reques
         try:
             client = _Sync(db, False, anonymous=True, time_budget=BATCH_SECONDS)
             policy = json.loads((DATA / "people_policy.json").read_bytes())
-            jobs = {url: (revision, query_for(url, term, scheduled=scheduled), int(source_repo(url) in PRIORITY_PROJECTS))
+            jobs = {url: (revision, query_for(url, term), int(source_repo(url) in PRIORITY_PROJECTS))
                     for url, (revision, term) in plan.items()}
             if scheduled:
                 discovery_queue.schedule(db, jobs, time.time())
@@ -240,8 +250,7 @@ def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, reques
                 else:
                     report["lookups"] += 1
                     try:
-                        status, items = fetch(client, term, family=family,
-                                              page_size=SCHEDULED_PAGE_SIZE if scheduled else PAGE_SIZE)
+                        status, items = fetch(client, term, family=family)
                     except Unavailable as error:
                         if not error.attempted:
                             report["lookups"] -= 1

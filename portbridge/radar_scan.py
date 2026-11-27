@@ -139,7 +139,7 @@ def historical(row, result, projects):
     for lead in result["automatic_matches"][:2]:
         b = {"role": "historical", "url": lead["source"], "source_id": source_id(lead["source"]),
              "project": lead["project"], "status": lead["state"], "title": lead["title"], "revision": None,
-             "consoles": console_families(lead["source"])}
+             "checked_at": lead.get("retrieved_at"), "consoles": console_families(lead["source"])}
         yield candidate(a, b, "historical_source", "research", [],
                         "Discovery retrieved a public source. Applicability needs a source review.")
 
@@ -236,8 +236,8 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
         db.executescript(SCHEMA)
         known = {row["url"]: row["fingerprint"] for row in db.execute("SELECT url,fingerprint FROM radar_seen")}
         has_discovery = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='discovery_query'").fetchone()
-        external = {canonical_url(url): (revision, sha256(items.encode()).hexdigest())
-                    for url, revision, items in fresh_results(db, time.time() - TTL)} if has_discovery else {}
+        external = {canonical_url(url): (revision, sha256(encode((items, retrieved)).encode()).hexdigest())
+                    for url, revision, items, retrieved in fresh_results(db, time.time() - TTL)} if has_discovery else {}
         cached = {row["revision"]: (row["digest"],row["checked"]) for row in db.execute("SELECT * FROM radar_patch_cache")}
     apply_cached(rows, cached)
     def input_fingerprint(url, row):
