@@ -1,5 +1,12 @@
 # Координация между командами
 
+## 27 ноября 2026 · Core Mission II
+
+- 5headsmartbtw сам подал задачу FrameLab. PortBridge сверил две ревизии, девять конфликтов и отличия установленных компонентов. Отправлен разбор пакета с последовательностью проверок. [Заявка](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7212427397) · [Ответ](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7218025721)
+- pigalot опубликовал физический контроль на RTX 5090. PortBridge проверил арифметический эталон CPU и вернул автору следующий контроль. [Аппаратный источник](https://github.com/R0Y00/Xbox2Windows/issues/3052) · [Передача](https://github.com/R0Y00/Xbox2Windows/issues/3052#issuecomment-7217818302) · [Открытая задача Lab](https://github.com/akimfomin/PortBridge/issues/121)
+- itbegoose самостоятельно проверил библиотеку конвейеров на RX 6700 XT. TaynanGT использовал положительный результат как контроль для расследования другого сброса. [Прогон](https://github.com/akimfomin/PortBridge/issues/118#issuecomment-7211372031) · [Применение](https://github.com/TaynanGT/Vice-Tay/issues/138#issuecomment-7211509472)
+- Исправление UwUCammie после прогона согласованного контроля влито leixner во frametime-report. PortWatch рассматривается отдельно. [Внешний PR](https://github.com/leixner/frametime-report/pull/1)
+
 ## 27 ноября 2026 · Автоматическая находка и два повторных участника
 
 - Автоматический Radar связал Xbox2Windows #2997 с аппаратным эталоном AnyPS5 #501 до ручной проверки. PortBridge сверил результат на CPU и вернул автору два конкретных контроля для его DXIL-теста. Команда независимо влила своё исправление. PortBridge открыл [Lab #121](https://github.com/akimfomin/PortBridge/issues/121) для аппаратной проверки, которую автору пришлось пропустить. [Передача](https://github.com/R0Y00/Xbox2Windows/issues/2997#issuecomment-7209763531)

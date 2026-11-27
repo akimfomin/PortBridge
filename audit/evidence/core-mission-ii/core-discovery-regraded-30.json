@@ -1,0 +1,424 @@
+{
+  "schema": "portbridge-discovery-independent-labels-v1",
+  "origin_file": "core-discovery-frozen-30.json",
+  "origin_file_sha256": "9ea36d060a71c6410ddd435fba5a7fa633ebbc16b57f217cd49e8ba8a5c6c2db",
+  "method": "Original 7 labels retained. All 23 previously unknown origins were checked against GitHub PR metadata and scope, with bounded source review. Unknown is excluded from precision/recall. Author hints, same-project, already-known adaptation, and documentation-only negatives are tracked independently from external positives. No retrieval output accessed. No physical tests performed. One live head differs from the freeze and is not promoted.",
+  "counts": {
+    "unknown": 12,
+    "verified_author_hint": 5,
+    "same_project_history": 6,
+    "documented_negative_control": 5,
+    "positive_external": 2
+  },
+  "cases": [
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1427",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "Frozen head differs; live PR is not a fair substitute for the original input.",
+      "sources": [
+        "https://github.com/fxceless/victory-fork/pull/1427/files",
+        "https://github.com/fxceless/victory-fork/commit/f5399389661c8a8353f35b87553672ba3edaac5d"
+      ],
+      "outcome": "pin_drift",
+      "frozen_head_sha": "f5399389661c8a8353f35b87553672ba3edaac5d",
+      "reviewed_head_sha": "3a3463bbee55f5ab5509679a67e533a56b3e539a",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1426",
+      "grade": "verified_author_hint",
+      "decision": "Disable the collected early-pipelines scheduling history without deleting or disabling the shader cache or native pipeline library. Check old history stays intact, then isolate same-cache startup order.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/43"
+      ],
+      "note": "Source explicitly linked in the origin. No cross-fork visual validation is claimed.",
+      "prior_grade": "verified_author_hint",
+      "review": "carried_from_prior_independent_labels"
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1425",
+      "grade": "verified_author_hint",
+      "decision": "Reuse the card-room retry test across later(), partly(), and recheck(). Ensure a stale retry does not remove the hold for a newer descriptor generation.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/81",
+        "https://github.com/DoubleGhosty/cool_fox/commit/ebf9299d"
+      ],
+      "note": "The origin description already names both sources. Classify declared adaptation, not a novel find.",
+      "prior_grade": "verified_author_hint",
+      "review": "carried_from_prior_independent_labels"
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1424",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "Closed unmerged; earlier in-project parallelization is mentioned but no actionable external counterpart was verified for the specific threshold and scoped workload.",
+      "sources": [
+        "https://github.com/fxceless/victory-fork/pull/1424/files"
+      ],
+      "outcome": "manual_search_unresolved",
+      "frozen_head_sha": "2892ad207c197c5d4cc586981f3f6bf7bfdcc588",
+      "reviewed_head_sha": "2892ad207c197c5d4cc586981f3f6bf7bfdcc588",
+      "reviewed_current_state": "closed"
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1422",
+      "prior_grade": "unknown",
+      "grade": "verified_author_hint",
+      "decision": "The author already points to Dawn residency. Its 95% budget-cap calculation corroborates the default; test reserve handling independently, since equal budget percentages do not establish equal adapter behavior.",
+      "sources": [
+        "https://github.com/fxceless/victory-fork/pull/1422/files",
+        "https://github.com/google/dawn/blob/d444f169d886d6bce5df8fcef0734069ae2f0580/src/dawn/native/d3d12/ResidencyManagerD3D12.cpp#L151-L169"
+      ],
+      "outcome": "code_verified_author_reference",
+      "frozen_head_sha": "d1528e7ffa2beb7a125d1603a40f7ed246a48a1c",
+      "reviewed_head_sha": "d1528e7ffa2beb7a125d1603a40f7ed246a48a1c",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/140",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "Excluded from technical grading because it is a defensive host-profiler input validation change.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/140/files"
+      ],
+      "outcome": "outside_acceptance_scope",
+      "frozen_head_sha": "fa2f5fe035b884a5a6325e7666c1fd207c3e56e3",
+      "reviewed_head_sha": "fa2f5fe035b884a5a6325e7666c1fd207c3e56e3",
+      "reviewed_current_state": "closed"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/137",
+      "prior_grade": "unknown",
+      "grade": "verified_author_hint",
+      "decision": "The origin discloses provenance. Reuse the bounded queue-coverage test: submit 32,771 sparse writes against a 32,768-entry queue and assert every original range remains covered after compaction.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/137/files",
+        "https://github.com/fxceless/victory-fork/pull/896/files",
+        "https://github.com/edsuuu/VI-BR-PORT/commit/87dc3075c735acf9032cc41629ea44bbc6f0d0c8"
+      ],
+      "outcome": "already_adapted",
+      "frozen_head_sha": "53a1f1628991de0dc514863b5d0c755e3e24b1f9",
+      "reviewed_head_sha": "53a1f1628991de0dc514863b5d0c755e3e24b1f9",
+      "reviewed_current_state": "merged"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/136",
+      "prior_grade": "unknown",
+      "grade": "same_project_history",
+      "decision": "The antecedent is in the same project. Compare an allow-listed program, an unlisted program, and the unset/off controls before proposing a port; a global route switch would conflate the two paths.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/136/files",
+        "https://github.com/TaynanGT/Vice-Tay/pull/132/files"
+      ],
+      "outcome": "declared_same_project_predecessor",
+      "frozen_head_sha": "37e9f34821e41a3e16495f4e94d8d4f2f09a4041",
+      "reviewed_head_sha": "37e9f34821e41a3e16495f4e94d8d4f2f09a4041",
+      "reviewed_current_state": "merged"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/135",
+      "grade": "same_project_history",
+      "decision": "Validate launcher cold/warm, explicit skip, and failed-pretranslation continuation with a stand-in executable.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/131"
+      ],
+      "note": "Named by the origin, inside the receiver. Exclude from cross-project novelty and recall.",
+      "prior_grade": "same_project_history",
+      "review": "carried_from_prior_independent_labels"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/134",
+      "prior_grade": "unknown",
+      "grade": "documented_negative_control",
+      "decision": "The change documents an already published same-project preset comparison. A cross-project performance patch is irrelevant to the task.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/134/files",
+        "https://github.com/TaynanGT/Vice-Tay/pull/129/files"
+      ],
+      "outcome": "docs_only",
+      "frozen_head_sha": "47d0a97caf476eaec424e7b4dc2f93144a506c13",
+      "reviewed_head_sha": "47d0a97caf476eaec424e7b4dc2f93144a506c13",
+      "reviewed_current_state": "merged"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2949",
+      "grade": "positive_external",
+      "decision": "Add a two-mode check using a path whose OEM and ANSI encodings differ. GetDiskFreeSpaceA must convert via the current process file API mode and find the same path as GetDiskFreeSpaceW in BOTH modes; restore process mode afterward. Avoid conflating GetDiskFreeSpaceExA fallback with the narrower API.",
+      "sources": [
+        "https://github.com/wine-mirror/wine/blob/wine-11.0/dlls/kernelbase/volume.c#L706-L714",
+        "https://github.com/wine-mirror/wine/blob/wine-11.0/dlls/kernelbase/file.c#L427-L439",
+        "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-setfileapistooem"
+      ],
+      "author_hint_sources": [
+        "https://github.com/CryingLaughing/xcl/commit/848e6cba"
+      ],
+      "note": "The origin already has an OEM-vs-Wide test and names the independent fork's one-line fix. Wine/mode-switch evidence covers the additional ANSI/OEM transition. The expected search entity is independent implementation or public API contract with equivalent detail.",
+      "prior_grade": "positive_external",
+      "review": "carried_from_prior_independent_labels"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2947",
+      "prior_grade": "unknown",
+      "grade": "same_project_history",
+      "decision": "Retest AMD/RDNA2 compile behavior against the shader-stage-specific loop-budget change. The apparent device-loss similarity to RTX 5080 in #2929/#2930 is a separate DXIL-shape regression with a different tested lever.",
+      "sources": [
+        "https://github.com/xcl-dev/xcl/pull/2947/files",
+        "https://github.com/xcl-dev/xcl/pull/2865/files",
+        "https://github.com/xcl-dev/xcl/pull/2929/files"
+      ],
+      "outcome": "same_symptom_different_mechanism",
+      "frozen_head_sha": "bfb40311710ab82b54c043a3e447830dcd63e112",
+      "reviewed_head_sha": "bfb40311710ab82b54c043a3e447830dcd63e112",
+      "reviewed_current_state": "merged"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2936",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "Logical parking, GPU completion and releasing allocator memory are distinct. D3D12Multithreading offers a fence-reuse boundary reference; it does not establish that early allocator disposal or an alternate implementation is applicable to this parking path.",
+      "sources": [
+        "https://github.com/xcl-dev/xcl/pull/2936/files",
+        "https://github.com/microsoft/DirectX-Graphics-Samples/blob/e0ecd0260f2de818400224045a122a4d53861fe4/Samples/Desktop/D3D12Multithreading/src/D3D12Multithreading.cpp#L831-L855"
+      ],
+      "outcome": "related_reference_not_solution",
+      "frozen_head_sha": "cae11a796aa424700977d6d5b28082fc5ebe172e",
+      "reviewed_head_sha": "cae11a796aa424700977d6d5b28082fc5ebe172e",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2930",
+      "prior_grade": "unknown",
+      "grade": "same_project_history",
+      "decision": "The alternative #2929 has the identical diff; the revert targets #2247. Use the paired RTX 5080 reproduction and treat the closed duplicate as lineage, not an independent fix.",
+      "sources": [
+        "https://github.com/xcl-dev/xcl/pull/2930/files",
+        "https://github.com/xcl-dev/xcl/pull/2929/files",
+        "https://github.com/xcl-dev/xcl/pull/2247/files",
+        "https://github.com/xcl-dev/xcl/issues/1452#issuecomment-7205972665"
+      ],
+      "outcome": "duplicate_revert",
+      "frozen_head_sha": "4e008ce538c1371e7563e08772d81a5d1cffb28e",
+      "reviewed_head_sha": "4e008ce538c1371e7563e08772d81a5d1cffb28e",
+      "reviewed_current_state": "closed"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2929",
+      "prior_grade": "unknown",
+      "grade": "same_project_history",
+      "decision": "The alternative #2930 has the identical diff; both revert the #2247 pixel-shader prelude shape change. Do not recommend transferring the reverted form or infer applicability to AMD RDNA2.",
+      "sources": [
+        "https://github.com/xcl-dev/xcl/pull/2929/files",
+        "https://github.com/xcl-dev/xcl/pull/2930/files",
+        "https://github.com/xcl-dev/xcl/pull/2247/files"
+      ],
+      "outcome": "duplicate_revert",
+      "frozen_head_sha": "a87d3c2ac52bac1e7d2df4e6050171fb2dee0887",
+      "reviewed_head_sha": "a87d3c2ac52bac1e7d2df4e6050171fb2dee0887",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2432",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "This adds same-project XGameSave diagnostics to distinguish a missing save call from a failed call. No equivalent external diagnostic was verified from public source.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/pull/2432/files",
+        "https://github.com/ubiquitarianism/leonida/issues/1608"
+      ],
+      "outcome": "manual_search_unresolved",
+      "frozen_head_sha": "2bf19e69082eb8b4c1ce6dc27ca90f043cfa0c61",
+      "reviewed_head_sha": "2bf19e69082eb8b4c1ce6dc27ca90f043cfa0c61",
+      "reviewed_current_state": "merged"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2431",
+      "grade": "documented_negative_control",
+      "decision": "Check the edit against the receiving repository's existing code. This is wording about existing file advancement, duplicated format documentation, and a truncated prose fragment.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/pull/2431/files"
+      ],
+      "note": "The public diff changes only docs/animation.md. A datastream overread patch elsewhere is a hard negative and not useful here. This does not assert the entire world contains no equivalent tool.",
+      "prior_grade": "documented_negative_control",
+      "review": "carried_from_prior_independent_labels"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2430",
+      "prior_grade": "unknown",
+      "grade": "documented_negative_control",
+      "decision": "Documentation/link consolidation; there is no implementation change for discovery to explain or carry.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/pull/2430/files"
+      ],
+      "outcome": "docs_only",
+      "frozen_head_sha": "1bde4706b1b1bec8ab88425f126cbb9129e91086",
+      "reviewed_head_sha": "1bde4706b1b1bec8ab88425f126cbb9129e91086",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2429",
+      "grade": "documented_negative_control",
+      "decision": "Check that the documentation points to the current receiving-repo code and removes a truncated merge fragment.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/pull/2429/files"
+      ],
+      "note": "The public diff changes only docs/restofworld.md and asks for existing links, not decoder changes. A cross-project mesh decoding feature would not answer this review.",
+      "prior_grade": "documented_negative_control",
+      "review": "carried_from_prior_independent_labels"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2428",
+      "prior_grade": "unknown",
+      "grade": "documented_negative_control",
+      "decision": "This change updates linked documentation and flags without implementing a runtime path.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/pull/2428/files"
+      ],
+      "outcome": "docs_only",
+      "frozen_head_sha": "a1a17f8d0dafac1084d0dbc0bd8d2b7e08a16fea",
+      "reviewed_head_sha": "a1a17f8d0dafac1084d0dbc0bd8d2b7e08a16fea",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/481",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "The origin names a VIctory-7900XTX base and three independent options. The stated build comparison is not an exact individual patch or equivalent measurement, so external transfer remains unverified.",
+      "sources": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/481/files",
+        "https://github.com/avatarmanz/VIctory-7900XTX/commit/c9c932cb"
+      ],
+      "outcome": "declared_provenance_not_validated",
+      "frozen_head_sha": "fe3330814d5be71edd1cb8127266c109b5d081b7",
+      "reviewed_head_sha": "fe3330814d5be71edd1cb8127266c109b5d081b7",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/480",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "Preserving indirect work across a proven non-storing compute dispatch is distinct from deleting a redundant UAV barrier or narrowing a producer scope. The nearby patches do not prove this dispatch classification safe.",
+      "sources": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/480/files",
+        "https://github.com/LooperSalty/AnyXboxX/pull/474/files",
+        "https://github.com/LooperSalty/AnyXboxX/pull/475/files"
+      ],
+      "outcome": "hard_confounders_only",
+      "frozen_head_sha": "23ff3392e861f5d33a6729299e7eb919b9bbea51",
+      "reviewed_head_sha": "23ff3392e861f5d33a6729299e7eb919b9bbea51",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/477",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "The patch covers BVH staging/reclamation, a fence boundary and low-budget fallback; a matched external code path with the same constraints was not verified.",
+      "sources": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/477/files"
+      ],
+      "outcome": "manual_search_unresolved",
+      "frozen_head_sha": "a58deb9ece461979f9dbf0f5492a1e7812f52712",
+      "reviewed_head_sha": "a58deb9ece461979f9dbf0f5492a1e7812f52712",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/475",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "The ambient gather pass narrows synchronization in its own compute path. The broad UAV reduction in #474 is a look-alike; it does not prove the shader-local producer/consumer scope.",
+      "sources": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/475/files",
+        "https://github.com/LooperSalty/AnyXboxX/pull/474/files"
+      ],
+      "outcome": "hard_confounders_only",
+      "frozen_head_sha": "b38e40ad2fb3e2d74f9ad4caa20def050cba83ef",
+      "reviewed_head_sha": "b38e40ad2fb3e2d74f9ad4caa20def050cba83ef",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/474",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "The D3D12 UAV rule is relevant but cannot certify three removals without each path's producer-consumer proof. The #475 pass-local edit is not equivalent.",
+      "sources": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/474/files",
+        "https://github.com/LooperSalty/AnyXboxX/pull/475/files",
+        "https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_resource_uav_barrier"
+      ],
+      "outcome": "related_reference_not_solution",
+      "frozen_head_sha": "b6b8c72ce4f7b4779b649673cb19d88b498b42c6",
+      "reviewed_head_sha": "b6b8c72ce4f7b4779b649673cb19d88b498b42c6",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2579",
+      "prior_grade": "unknown",
+      "grade": "verified_author_hint",
+      "decision": "The author already names FreeBSD. Its implementation provides a concrete invalid timestamp boundary test. The Windows whole-second path must be assessed separately before claiming subsecond equivalence.",
+      "sources": [
+        "https://github.com/KytyPS5/KytyPS5/pull/2579/files",
+        "https://github.com/freebsd/freebsd-src/blob/c7b2fd667952a2c7347b290922f1dededbbc620c/sys/kern/vfs_syscalls.c#L3287-L3306",
+        "https://github.com/freebsd/freebsd-src/blob/c7b2fd667952a2c7347b290922f1dededbbc620c/sys/kern/vfs_syscalls.c#L3400-L3420"
+      ],
+      "outcome": "code_verified_author_reference",
+      "frozen_head_sha": "da36d053cc5c0d706bc671c8067c0070603f89ba",
+      "reviewed_head_sha": "da36d053cc5c0d706bc671c8067c0070603f89ba",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2578",
+      "prior_grade": "unknown",
+      "grade": "same_project_history",
+      "decision": "The new public wrapper forwards to the existing local setter and shares its precedence. Reuse the pinned round-trip test and its invalid option control before planning outside adaptation.",
+      "sources": [
+        "https://github.com/KytyPS5/KytyPS5/pull/2578/files",
+        "https://github.com/KytyPS5/KytyPS5/pull/2578/files"
+      ],
+      "outcome": "same_project_reuse",
+      "frozen_head_sha": "435678bbf34cf322bd2da9740291a9ff1ccac810",
+      "reviewed_head_sha": "435678bbf34cf322bd2da9740291a9ff1ccac810",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2577",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "The patch adds a successful stub rather than ownership/destruction; no matched independent public contract was verified for handle lifecycle.",
+      "sources": [
+        "https://github.com/KytyPS5/KytyPS5/pull/2577/files"
+      ],
+      "outcome": "manual_search_unresolved",
+      "frozen_head_sha": "e68e434dbee5a506e83aeebd040bb9df52cec343",
+      "reviewed_head_sha": "e68e434dbee5a506e83aeebd040bb9df52cec343",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2576",
+      "prior_grade": "unknown",
+      "grade": "unknown",
+      "decision": "A packet-size result depends on contiguous-register packing in this implementation. A sufficient published independent implementation/test was not verified.",
+      "sources": [
+        "https://github.com/KytyPS5/KytyPS5/pull/2576/files"
+      ],
+      "outcome": "manual_search_unresolved",
+      "frozen_head_sha": "26a6eb6bd43310b8129ecb899eaa4f844264d2b4",
+      "reviewed_head_sha": "26a6eb6bd43310b8129ecb899eaa4f844264d2b4",
+      "reviewed_current_state": "open"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2575",
+      "grade": "positive_external",
+      "decision": "Add INPUT_ATTACHMENT to the view-format feature matrix, testing COLOR_ATTACHMENT or DEPTH_STENCIL_ATTACHMENT independently of the COLOR_ATTACHMENT usage bit. Under test, one override with SAMPLED remaining succeeds; a zero mask exercises a distinct validation error. Use override bits within the parent image's allowed usage. Verify against the supported Vulkan version/extension before proposing runtime behavior.",
+      "sources": [
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/v1.4.350/tests/unit/image.cpp#L1114-L1133",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/v1.4.350/tests/unit/image.cpp#L1249-L1263",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/3701",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/v1.4.350/chapters/resources.adoc#L6151-L6167"
+      ],
+      "note": "The PR's mapping covers six other usage bits but not INPUT_ATTACHMENT. the historical issue reproduces validation remaining after stripping COLOR_ATTACHMENT on the same packed view format. Treat port/adaptation as a suggestion, not verified project behavior.",
+      "prior_grade": "positive_external",
+      "review": "carried_from_prior_independent_labels"
+    }
+  ]
+}

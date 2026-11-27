@@ -1,0 +1,50 @@
+{
+  "schema": "portbridge-discovery-contrast-cases-v1",
+  "basis": "Purposive adversarial controls. Keep separate from prospectively selected quality denominator. Product ranking was not observed. A related source is not evidence that receiving and sending implementations are interchangeable.",
+  "cases": [
+    {
+      "origin": "https://github.com/fxceless/victory-fork/pull/1461",
+      "origin_head_sha": "21f03cebc2cf7f3ef9ce64af93c3e642d5c64f78",
+      "external_case": "https://github.com/TaynanGT/Vice-Tay/pull/158",
+      "external_head_sha": "e1788e62cd8a226557fabfd1b7c0e34725e4071d",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/blob/7fa0e958e8947f5351e28b437214af675fb9cd03/crates/victory-gpu/examples/lut3d_probe.rs#L609-L641",
+      "output_source": "https://github.com/trustno1-coder/VIctory-NVIDIA/blob/7fa0e958e8947f5351e28b437214af675fb9cd03/crates/victory-gpu/examples/lut3d_probe.rs#L687-L707",
+      "grade": "positive_external",
+      "relation": "same_observed_failure_two_different_remedies",
+      "decision": "Compare normal cached loads, deterministic initial sampler order, and driver rebuild in fresh process pairs on the same synthetic 64-sample 3D LUT. The paired Vice-Tay report observed 3 distinct cached results after the order changed and all 64 after rebuild. A test can compare image correctness against rebuild cost, with empty-cache control. Do not infer the cause inside the driver.",
+      "novelty": "External oracle not named in the origin. Prior-art validation only: the receiving author already implemented a different workaround. Historical sequence and PortBridge lead time unproven."
+    },
+    {
+      "origin": "https://github.com/TaynanGT/Vice-Tay/pull/137",
+      "external_case": "https://github.com/edsuuu/VI-BR-PORT/commit/87dc3075c735acf9032cc41629ea44bbc6f0d0c8",
+      "source": "https://github.com/fxceless/victory-fork/pull/896/files",
+      "grade": "verified_author_hint",
+      "relation": "already_adapted_declared_lineage",
+      "decision": "Check exact three-project provenance and the over-capacity range coverage test. Suppress as a novel transfer to Vice-Tay because the receiving PR already adapted it."
+    },
+    {
+      "origin": "https://github.com/xcl-dev/xcl/pull/2947",
+      "external_case": "https://github.com/xcl-dev/xcl/pull/2929",
+      "source": "https://github.com/xcl-dev/xcl/pull/2865/files",
+      "grade": "same_project_history",
+      "relation": "similar_device_loss_different_root_cause",
+      "decision": "Separate the AMD RDNA2 compilation fallback and stage-specific loop guard from the NVIDIA RTX 5080 PRELUDE DXIL-shape revert. No recommendation to reuse either technical remedy for the other."
+    },
+    {
+      "origin": "https://github.com/xcl-dev/xcl/pull/2930",
+      "external_case": "https://github.com/xcl-dev/xcl/pull/2929",
+      "source": "https://github.com/xcl-dev/xcl/pull/2247/files",
+      "grade": "same_project_history",
+      "relation": "closed_duplicates_revert_same_change",
+      "decision": "Exactly identical returned PR diffs; record one mechanism and a rejected prior DXIL shape, rather than two independent corroborating fixes."
+    },
+    {
+      "origin": "https://github.com/boykopovar/AnyPS5/pull/27799",
+      "external_case": null,
+      "source": "https://github.com/boykopovar/AnyPS5/pull/27799/files",
+      "grade": "documented_negative_control",
+      "relation": "documentation_mentions_real_patches",
+      "decision": "Filter technical patch suggestions for a documentation-only merge despite real, relevant-sounding GPU operation terms."
+    }
+  ]
+}

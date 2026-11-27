@@ -1,0 +1,32 @@
+[
+  {
+    "id": "nvidia-wip-dathinel-19",
+    "public_at": "2026-11-26T07:00:21Z",
+    "origin": "https://github.com/trustno1-coder/VIctory-NVIDIA/commit/c05b44b34a52a22092e3fddcbd1d2e850561d61b",
+    "external_at": "2026-11-27T00:16:16Z",
+    "external": "https://github.com/Dathinel/victory-4gb/pull/19",
+    "portbridge_at": null,
+    "portbridge_receipt": null,
+    "limits": "The start time is the checked public source commit's committer time. The target PR credits that exact SHA."
+  },
+  {
+    "id": "marvisak-belobug-565",
+    "public_at": "2026-11-26T18:50:04Z",
+    "origin": "https://github.com/Marvisak/VIctory/pull/3333",
+    "external_at": "2026-11-27T11:41:57Z",
+    "external": "https://github.com/Belobug/VIctory-Belobug-AMD/pull/565",
+    "portbridge_at": null,
+    "portbridge_receipt": null,
+    "limits": "PR opening times. Adaptation credited by the receiving author."
+  },
+  {
+    "id": "nvidia-wip-vice-tay-158",
+    "public_at": null,
+    "origin": "https://github.com/trustno1-coder/VIctory-NVIDIA/commit/9d6300f",
+    "external_at": "2026-11-27T04:41:11Z",
+    "external": "https://github.com/TaynanGT/Vice-Tay/pull/158",
+    "portbridge_at": null,
+    "portbridge_receipt": null,
+    "limits": "Use the first verified availability of the exact origin before computing a time interval. Ingestion of target is not a recommendation."
+  }
+]

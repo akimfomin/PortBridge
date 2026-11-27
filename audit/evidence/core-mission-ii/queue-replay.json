@@ -1,0 +1,621 @@
+{
+  "checkpoint": "45970589550 / artifact 15184528001",
+  "observations": 33335,
+  "captured": {
+    "ready_origins": 3503,
+    "ready_topics": 736,
+    "remote_topics": 726,
+    "cache_ready_origins": 152,
+    "fresh_leading_origins": 0,
+    "fresh_leading_remote_topics": 0,
+    "oldest_ready_seconds": 15614,
+    "oldest_remote_ready_seconds": 15614
+  },
+  "actual_jobs": {
+    "jobs": 3526,
+    "ready": 3503,
+    "pending": 3503
+  },
+  "old": {
+    "newest_20_first_batch": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "newest_20_topics": [
+      "m21-v2:xbox-series:id3d12heap",
+      "m21-v2:xbox-series:access violation",
+      "m21-v2:xbox-series:executeindirect",
+      "m21-v2:xbox-series:creategraphicspipelinestate",
+      "m21-v2:xbox-series:s_and_b32",
+      "m21-v2:xbox-series:id3d12commandlist",
+      "m21-v2:xbox-series:v_mul_f16",
+      "m21-v2:xbox-series:ds_bpermute",
+      "m21-v2:xbox-series:id3d12resource",
+      "m21-v2:xbox-series:updatetilemappings",
+      "m21-v2:xbox-series:black screen",
+      "m21-v2:xbox-series:v_dot4_i32_i8",
+      "m21-v2:xbox-series:dxgi_format_r8g8b8a8_unorm",
+      "m21-v2:xbox-series:vkcmddrawmeshtasksindirect",
+      "m21-v2:xbox-series:vk_layer_message_id_filter",
+      "m21-v2:xbox-series:pipeline cache",
+      "m21-v2:ps5:image_sample_cube_offset",
+      "m21-v2:xbox-series:id3d12graphicscommandlist10",
+      "m21-v2:xbox-series:v_interp_p1_f32",
+      "m21-v2:xbox-series:mesh shader"
+    ],
+    "expected_fresh_leading_remote_topics": 419,
+    "before": {
+      "ready_origins": 3503,
+      "ready_topics": 736,
+      "remote_topics": 726,
+      "cache_ready_origins": 152,
+      "fresh_leading_origins": 0,
+      "fresh_leading_remote_topics": 0,
+      "oldest_ready_seconds": 17414,
+      "oldest_remote_ready_seconds": 17414
+    },
+    "batches": [
+      {
+        "at": "2026-11-27T09:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 17,
+        "oldest_remote_ready_seconds": 17414,
+        "planning_ms": 1.63,
+        "topics": [
+          "m21-v2:ps5:opgroupnonuniformumin",
+          "m21-v2:ps5:vkwaitforfences",
+          "m21-v2:ps5:vkallocatememory",
+          "m21-v2:ps5:ds_ordered_count",
+          "m21-v2:ps5:vk_layer_message_id_filter"
+        ]
+      },
+      {
+        "at": "2026-11-27T10:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 10,
+        "oldest_remote_ready_seconds": 19214,
+        "planning_ms": 1.54,
+        "topics": [
+          "m21-v2:ps5:opatomicload",
+          "m21-v2:ps5:s_bfe_u32",
+          "m21-v2:ps5:image_sample_lz",
+          "m21-v2:ps5:texture upload",
+          "m21-v2:ps5:vkcmdfillbuffer"
+        ]
+      },
+      {
+        "at": "2026-11-27T10:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 21,
+        "oldest_remote_ready_seconds": 21014,
+        "planning_ms": 1.57,
+        "topics": [
+          "m21-v2:ps5:v_fma_f32",
+          "m21-v2:ps5:image_sample_l",
+          "m21-v2:ps5:image_sample_d_cl",
+          "m21-v2:ps5:vuid-layer-layer-04272",
+          "m21-v2:ps5:vuid-vkshadermodulecreateinfo-pcode-08737"
+        ]
+      },
+      {
+        "at": "2026-11-27T11:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 8,
+        "oldest_remote_ready_seconds": 22814,
+        "planning_ms": 1.53,
+        "topics": [
+          "m21-v2:ps5:v_cvt_u16_f16",
+          "m21-v2:ps5:vkcmd",
+          "m21-v2:ps5:vkcmdcopybuffer",
+          "m21-v2:ps5:vkgetpipelinekeykhr",
+          "m21-v2:ps5:v_writelane_b32"
+        ]
+      },
+      {
+        "at": "2026-11-27T11:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 19,
+        "oldest_remote_ready_seconds": 24614,
+        "planning_ms": 1.59,
+        "topics": [
+          "m21-v2:ps5:vkqueuesubmit",
+          "m21-v2:ps5:v_cvt_f16_u16",
+          "m21-v2:ps5:v_cvt_f16_i16",
+          "m21-v2:ps5:vkdevicewaitidle",
+          "m21-v2:ps5:vuid-vkcreatedevice-ppenabledextensionnames-01387"
+        ]
+      },
+      {
+        "at": "2026-11-27T12:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 9,
+        "oldest_remote_ready_seconds": 26414,
+        "planning_ms": 1.71,
+        "topics": [
+          "m21-v2:ps5:vuid-vkdevicecreateinfo-stype-unique",
+          "m21-v2:ps5:v_add_f32",
+          "m21-v2:ps5:vkcmdbeginrenderpass",
+          "m21-v2:ps5:vk_false",
+          "m21-v2:ps5:v_add_f16"
+        ]
+      },
+      {
+        "at": "2026-11-27T12:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 16,
+        "oldest_remote_ready_seconds": 28214,
+        "planning_ms": 1.53,
+        "topics": [
+          "m21-v2:ps5:vk_driver_id_moltenvk",
+          "m21-v2:ps5:vuid-vkcmddraw-none-07629",
+          "m21-v2:ps5:image_store_float_rounding",
+          "m21-v2:ps5:image_store_mip",
+          "m21-v2:ps5:v_readfirstlane_b32"
+        ]
+      },
+      {
+        "at": "2026-11-27T13:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 9,
+        "oldest_remote_ready_seconds": 30014,
+        "planning_ms": 1.51,
+        "topics": [
+          "m21-v2:ps5:ds_append",
+          "m21-v2:ps5:vk_physical_device_type_integrated_gpu",
+          "m21-v2:ps5:descriptor heap",
+          "m21-v2:ps5:vk_header_version",
+          "m21-v2:ps5:image_atomic_swap"
+        ]
+      },
+      {
+        "at": "2026-11-27T13:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 13,
+        "oldest_remote_ready_seconds": 31814,
+        "planning_ms": 1.51,
+        "topics": [
+          "m21-v2:ps5:v_readlane_b32",
+          "m21-v2:ps5:vk_dynamic_state_stencil_reference",
+          "m21-v2:ps5:image_load_mip",
+          "m21-v2:ps5:v_bfe_u32",
+          "m21-v2:ps5:typed buffer"
+        ]
+      },
+      {
+        "at": "2026-11-27T14:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 12,
+        "oldest_remote_ready_seconds": 33614,
+        "planning_ms": 1.52,
+        "topics": [
+          "m21-v2:ps5:vk_driver_id_amd_proprietary",
+          "m21-v2:ps5:data race",
+          "m21-v2:ps5:s_setpc_b64",
+          "m21-v2:ps5:s_lshr_b32",
+          "m21-v2:ps5:vk_add_layer_path"
+        ]
+      },
+      {
+        "at": "2026-11-27T14:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 13,
+        "oldest_remote_ready_seconds": 35414,
+        "planning_ms": 1.55,
+        "topics": [
+          "m21-v2:ps5:v_fma_f64",
+          "m21-v2:ps5:image_sample_b",
+          "m21-v2:ps5:device lost",
+          "m21-v2:ps5:v_cvt_f32_f16",
+          "m21-v2:ps5:image_load_pck2"
+        ]
+      },
+      {
+        "at": "2026-11-27T15:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 17,
+        "oldest_remote_ready_seconds": 37214,
+        "planning_ms": 1.52,
+        "topics": [
+          "m21-v2:ps5:subgroup size",
+          "m21-v2:ps5:vkgetfencestatus",
+          "m21-v2:ps5:access violation",
+          "m21-v2:ps5:image_store_pck",
+          "m21-v2:ps5:v_fma_mixlo_f16"
+        ]
+      },
+      {
+        "at": "2026-11-27T15:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 7,
+        "oldest_remote_ready_seconds": 39014,
+        "planning_ms": 1.6,
+        "topics": [
+          "m21-v2:ps5:vuid-vkimagecreateinfo-imagecreatemaxmiplevels-02251",
+          "m21-v2:ps5:vuid-vkimagecreateinfo-samples-02258",
+          "m21-v2:ps5:vuid-vkcreatedescriptorsetlayout-support-09582",
+          "m21-v2:ps5:vk_memory_heap_device_local_bit",
+          "m21-v2:ps5:image_sample_lz_o"
+        ]
+      },
+      {
+        "at": "2026-11-27T16:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 27,
+        "oldest_remote_ready_seconds": 40814,
+        "planning_ms": 1.55,
+        "topics": [
+          "m21-v2:ps5:image_gather4_lz",
+          "m21-v2:ps5:vkgetdeviceprocaddr",
+          "m21-v2:ps5:vkcreatecomputepipelines",
+          "m21-v2:ps5:image_gather4_l",
+          "m21-v2:ps5:v_min3_i32"
+        ]
+      },
+      {
+        "at": "2026-11-27T16:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 19,
+        "oldest_remote_ready_seconds": 42614,
+        "planning_ms": 1.6,
+        "topics": [
+          "m21-v2:ps5:vkfreememory",
+          "m21-v2:ps5:vuid-vkgraphicspipelinecreateinfo-pstages-06894",
+          "m21-v2:ps5:vk_format_r4g4b4a4_unorm_pack16",
+          "m21-v2:ps5:vk_driver_id_intel_proprietary_windows",
+          "m21-v2:ps5:vk_driver_id_mesa_radv"
+        ]
+      },
+      {
+        "at": "2026-11-27T17:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 15,
+        "oldest_remote_ready_seconds": 44414,
+        "planning_ms": 1.63,
+        "topics": [
+          "m21-v2:ps5:vkcmdsetdepthbias2ext",
+          "m21-v2:ps5:buffer overflow",
+          "m21-v2:ps5:v_dot2_i32_i16",
+          "m21-v2:ps5:opgroupnonuniformshuffle",
+          "m21-v2:ps5:v_exp_f32"
+        ]
+      }
+    ],
+    "fresh_leader_queries": 80,
+    "origins_processed": 232
+  },
+  "new": {
+    "newest_20_first_batch": [
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      1,
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5
+    ],
+    "newest_20_topics": [
+      "m21-v2:xbox-series:id3d12heap",
+      "m21-v2:xbox-series:access violation",
+      "m21-v2:xbox-series:executeindirect",
+      "m21-v2:xbox-series:creategraphicspipelinestate",
+      "m21-v2:xbox-series:s_and_b32",
+      "m21-v2:xbox-series:id3d12commandlist",
+      "m21-v2:xbox-series:v_mul_f16",
+      "m21-v2:xbox-series:ds_bpermute",
+      "m21-v2:xbox-series:id3d12resource",
+      "m21-v2:xbox-series:updatetilemappings",
+      "m21-v2:xbox-series:black screen",
+      "m21-v2:xbox-series:v_dot4_i32_i8",
+      "m21-v2:xbox-series:dxgi_format_r8g8b8a8_unorm",
+      "m21-v2:xbox-series:vkcmddrawmeshtasksindirect",
+      "m21-v2:xbox-series:vk_layer_message_id_filter",
+      "m21-v2:xbox-series:pipeline cache",
+      "m21-v2:ps5:image_sample_cube_offset",
+      "m21-v2:xbox-series:id3d12graphicscommandlist10",
+      "m21-v2:xbox-series:v_interp_p1_f32",
+      "m21-v2:xbox-series:mesh shader"
+    ],
+    "expected_fresh_leading_remote_topics": 419,
+    "before": {
+      "ready_origins": 3503,
+      "ready_topics": 736,
+      "remote_topics": 726,
+      "cache_ready_origins": 152,
+      "fresh_leading_origins": 1236,
+      "fresh_leading_remote_topics": 419,
+      "oldest_ready_seconds": 17414,
+      "oldest_remote_ready_seconds": 17414
+    },
+    "batches": [
+      {
+        "at": "2026-11-27T09:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 17414,
+        "planning_ms": 6.07,
+        "topics": [
+          "m21-v2:xbox-series:id3d12resource",
+          "m21-v2:xbox-series:id3d12heap",
+          "m21-v2:xbox-series:access violation",
+          "m21-v2:xbox-series:executeindirect",
+          "m21-v2:xbox-series:creategraphicspipelinestate"
+        ]
+      },
+      {
+        "at": "2026-11-27T10:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 19214,
+        "planning_ms": 5.64,
+        "topics": [
+          "m21-v2:xbox-series:root signature",
+          "m21-v2:xbox-series:s_and_b32",
+          "m21-v2:xbox-series:id3d12commandlist",
+          "m21-v2:xbox-series:v_mul_f16",
+          "m21-v2:xbox-series:ds_bpermute"
+        ]
+      },
+      {
+        "at": "2026-11-27T10:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 21014,
+        "planning_ms": 5.84,
+        "topics": [
+          "m21-v2:xbox-series:v_div_fmas_f32",
+          "m21-v2:xbox-series:updatetilemappings",
+          "m21-v2:xbox-series:black screen",
+          "m21-v2:xbox-series:v_dot4_i32_i8",
+          "m21-v2:xbox-series:dxgi_format_r8g8b8a8_unorm"
+        ]
+      },
+      {
+        "at": "2026-11-27T11:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 22814,
+        "planning_ms": 5.65,
+        "topics": [
+          "m21-v2:xbox-series:device lost",
+          "m21-v2:xbox-series:vkcmddrawmeshtasksindirect",
+          "m21-v2:xbox-series:vk_layer_message_id_filter",
+          "m21-v2:xbox-series:pipeline cache",
+          "m21-v2:ps5:image_sample_cube_offset"
+        ]
+      },
+      {
+        "at": "2026-11-27T11:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 24614,
+        "planning_ms": 5.62,
+        "topics": [
+          "m21-v2:xbox-series:v_qsad_pk_u16_u8",
+          "m21-v2:xbox-series:id3d12graphicscommandlist10",
+          "m21-v2:xbox-series:v_interp_p1_f32",
+          "m21-v2:xbox-series:mesh shader",
+          "m21-v2:xbox-series:image_load_mip"
+        ]
+      },
+      {
+        "at": "2026-11-27T12:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 26414,
+        "planning_ms": 5.59,
+        "topics": [
+          "m21-v2:xbox-series:v_add_co_ci_u32",
+          "m21-v2:xbox-series:v_mac_legacy_f32",
+          "m21-v2:ps5:vk_layer_path",
+          "m21-v2:xbox-series:s_bitreplicate_b64_b32",
+          "m21-v2:xbox-series:d3d12_heap_flag_none"
+        ]
+      },
+      {
+        "at": "2026-11-27T12:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 28214,
+        "planning_ms": 5.54,
+        "topics": [
+          "m21-v2:xbox-series:pipeline state",
+          "m21-v2:xbox-series:ds_bpermute_b32",
+          "m21-v2:xbox-series:vkcreatecomputepipelines",
+          "m21-v2:xbox-series:v_cvt_f32_i32",
+          "m21-v2:xbox-series:id3d12commandallocator"
+        ]
+      },
+      {
+        "at": "2026-11-27T13:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 30014,
+        "planning_ms": 5.46,
+        "topics": [
+          "m21-v2:xbox-series:s_bitset0_b32",
+          "m21-v2:ps5:v_readlane_b32",
+          "m21-v2:xbox-series:s_brev_b64",
+          "m21-v2:xbox-series:v_med3_f32",
+          "m21-v2:xbox-series:id3d12graphicscommandlist6"
+        ]
+      },
+      {
+        "at": "2026-11-27T13:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 61,
+        "oldest_remote_ready_seconds": 31814,
+        "planning_ms": 5.53,
+        "topics": [
+          "m21-v2:xbox-series:s_load_b64",
+          "m21-v2:xbox-series:v_mad_legacy_f32",
+          "m21-v2:xbox-series:vkcreate",
+          "m21-v2:xbox-series:d3d12_heap_type_gpu_upload",
+          "m21-v2:xbox-series:s_bfe_u32"
+        ]
+      },
+      {
+        "at": "2026-11-27T14:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 31,
+        "oldest_remote_ready_seconds": 33614,
+        "planning_ms": 5.71,
+        "topics": [
+          "m21-v2:xbox-series:v_add_nc_i32",
+          "m21-v2:xbox-series:d3d12_heap_type_custom",
+          "m21-v2:ps5:vkcmdresetquerypool",
+          "m21-v2:xbox-series:ds_swizzle_b32",
+          "m21-v2:xbox-series:image_sample_d"
+        ]
+      },
+      {
+        "at": "2026-11-27T14:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 39,
+        "oldest_remote_ready_seconds": 35414,
+        "planning_ms": 5.63,
+        "topics": [
+          "m21-v2:xbox-series:s_and_saveexec_b32",
+          "m21-v2:xbox-series:s_getpc_b64",
+          "m21-v2:xbox-series:id3d12device3",
+          "m21-v2:ps5:vk_khronos_validation_validate_sync",
+          "m21-v2:xbox-series:image_sample_lz"
+        ]
+      },
+      {
+        "at": "2026-11-27T15:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 119,
+        "oldest_remote_ready_seconds": 37214,
+        "planning_ms": 5.29,
+        "topics": [
+          "m21-v2:xbox-series:d3d12_feature_architecture1",
+          "m21-v2:ps5:image_load_mip",
+          "m21-v2:xbox-series:descriptor heap",
+          "m21-v2:xbox-series:v_cvt_f32_f64",
+          "m21-v2:xbox-series:getcopyablefootprints"
+        ]
+      },
+      {
+        "at": "2026-11-27T15:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 64,
+        "oldest_remote_ready_seconds": 39014,
+        "planning_ms": 5.28,
+        "topics": [
+          "m21-v2:ps5:depth test",
+          "m21-v2:xbox-series:id3d12queryheap",
+          "m21-v2:xbox-series:ds_write_b32",
+          "m21-v2:xbox-series:memory budget",
+          "m21-v2:ps5:pipeline cache"
+        ]
+      },
+      {
+        "at": "2026-11-27T16:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 61,
+        "oldest_remote_ready_seconds": 40814,
+        "planning_ms": 5.34,
+        "topics": [
+          "m21-v2:ps5:vkcmd",
+          "m21-v2:xbox-series:s_setpc_b64",
+          "m21-v2:xbox-series:v_fma_f16",
+          "m21-v2:xbox-series:dispatchmesh",
+          "m21-v2:xbox-series:v_permlanex16_b32"
+        ]
+      },
+      {
+        "at": "2026-11-27T16:40:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 77,
+        "oldest_remote_ready_seconds": 42614,
+        "planning_ms": 5.14,
+        "topics": [
+          "m21-v2:ps5:vk_format_e5b9g9r9_ufloat_pack32",
+          "m21-v2:xbox-series:r9g9b9e5",
+          "m21-v2:xbox-series:id3d12device1",
+          "m21-v2:xbox-series:texture uploads",
+          "m21-v2:xbox-series:copytextureregion"
+        ]
+      },
+      {
+        "at": "2026-11-27T17:10:22+00:00",
+        "remote_queries": 5,
+        "fresh_leader_queries": 5,
+        "origins_processed": 120,
+        "oldest_remote_ready_seconds": 44414,
+        "planning_ms": 5.35,
+        "topics": [
+          "m21-v2:xbox-series:v_dot8_u32_u4",
+          "m21-v2:xbox-series:command list",
+          "m21-v2:xbox-series:id3d12device10",
+          "m21-v2:ps5:frame pacing",
+          "m21-v2:ps5:black screen"
+        ]
+      }
+    ],
+    "fresh_leader_queries": 80,
+    "origins_processed": 1532
+  }
+}

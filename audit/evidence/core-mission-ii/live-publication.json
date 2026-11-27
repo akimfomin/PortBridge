@@ -1,0 +1,50 @@
+{
+  "product_sha": "d3a3d6df989e69ac0d331a243cdb99e9c7ee0607",
+  "workflow_event": "push",
+  "workflow": "https://github.com/akimfomin/PortBridge/actions/runs/45996932489",
+  "github_pages_status": "success",
+  "verify_github_pages_status": "success",
+  "generated_at": "2026-11-27T12:19:47+00:00",
+  "source_file": {
+    "url": "https://akimfomin.github.io/PortBridge/data/source-code-909a639fa7b1695b42d3bc8b.json",
+    "sha256": "909a639fa7b1695b42d3bc8b9d313d26764d32254480dcbe985215a24ca58a6c",
+    "indexed": 16,
+    "expected": 16
+  },
+  "partner_items": 25,
+  "lab_tasks": 16,
+  "health_status": "partial",
+  "mcp_url": {
+    "origin": "https://github.com/xcl-dev/xcl/pull/2949",
+    "status": "found",
+    "first_source": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernelbase/volume.c#L704"
+  },
+  "cloud_queue": {
+    "eligible": 3552,
+    "github_searches": 5,
+    "cache_hits": 115,
+    "ready_before": 3529,
+    "ready_after": 3409,
+    "topics_before": 741,
+    "topics_after": 737,
+    "network_topics_before": 731,
+    "network_topics_after": 726,
+    "oldest_ready_seconds_before": 26945,
+    "oldest_ready_seconds_after": 26950
+  },
+  "chrome": {
+    "home": "https://akimfomin.github.io/PortBridge/",
+    "status": "PortBridge is open for shared testing.",
+    "freshness": "partial / last successful refresh displayed",
+    "verified_home_case": "Dathinel: six synthetic RTX 3050 Laptop tests returned to the VIctory PR",
+    "candidate_label": "The mechanism or text overlaps. A common cause or transferable fix is unverified.",
+    "ordinary_search": "https://akimfomin.github.io/PortBridge/#/sources?q=https%3A%2F%2Fgithub.com%2Fxcl-dev%2Fxcl%2Fpull%2F2322",
+    "ordinary_search_result": "https://github.com/llvm/llvm-project/blob/87f0227cb60147a26a1eeb4fb06e3b505e9c7261/llvm/lib/CodeGen/StackColoring.cpp#L8",
+    "lab": "https://akimfomin.github.io/PortBridge/#/lab",
+    "agent_onboarding": "https://akimfomin.github.io/PortBridge/start.html",
+    "agent_setup_links": [
+      "https://github.com/akimfomin/PortBridge/blob/main/docs/QUICKSTART.md#connect-codex-or-claude-code",
+      "https://github.com/akimfomin/PortBridge/blob/main/docs/GITHUB-ACTION.md"
+    ]
+  }
+}

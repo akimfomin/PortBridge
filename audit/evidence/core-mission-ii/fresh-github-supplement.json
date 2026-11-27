@@ -1,0 +1,71 @@
+{
+  "schema": "portbridge-discovery-independent-github-supplement-v1",
+  "method": "Second-pass review of promising ordinary GitHub results. The preset prospective labels and expected-source recall remain fixed. Additional independently useful tests from another ranking are reported here, not used to enlarge the prospective denominator after retrieval. All matches are source-based; no hardware test rerun.",
+  "cases": [
+    {
+      "origin": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "source_pr": "https://github.com/fxceless/victory-fork/pull/1140",
+      "rank": 1,
+      "source": "https://github.com/fxceless/victory-fork/blob/40ca6144f1111e471a931d24453eb924c219c002/crates/victory-shader/src/emit/wave64_tests.rs#L1192-L1278",
+      "verdict": "actionable_external_test",
+      "decision": "Reuse the lane-private slot hardware control and the shared atomic refusal. This is a common fork family and the prior proof has a different acceptance domain; do not transplant on PR titles alone."
+    },
+    {
+      "origin": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+      "source_pr": "https://github.com/vitutu1/victory-perf/pull/17",
+      "rank": 1,
+      "source": "https://github.com/vitutu1/victory-perf/blob/a13e1e3e3c70eaaa86dac12166a51a3c892ec13b/crates/victory-shader/src/emit/bitcode/opt.rs#L4416-L4453",
+      "verdict": "actionable_external_test",
+      "decision": "Exercise speculative resource-call, uniformity, discard, and signed-GEP negative cases from the matched optimization family. Same code family is not independent validation; the other result at rank four also has related work but different pass assignments."
+    },
+    {
+      "origin": "https://github.com/fxceless/victory-fork/pull/1465",
+      "source_pr": "https://github.com/Marvisak/VIctory/pull/2557",
+      "rank": 2,
+      "source": "https://github.com/Marvisak/VIctory/blob/a6419befe4e56a5adc5c4ae411bfc18f0ff57128/crates/victory-hle/src/modules/gameinput.rs#L1809-L1848",
+      "verdict": "actionable_external_test",
+      "decision": "Compare the explicit polling-fallback path with the genuinely functioning v0 callback implementation. A synthetic test must show a new reading after successful registration, or a cleared token after refusal; success with no delivered callbacks was the shared failure. The reference platform version must be verified separately."
+    },
+    {
+      "origin": "https://github.com/TaynanGT/Vice-Tay/pull/243",
+      "source_pr": "https://github.com/TaynanGT/Vice-Tay/pull/237",
+      "rank": 1,
+      "source": "https://github.com/TaynanGT/Vice-Tay/blob/ff04a4bf7d6b5d9c8830162d655ae90fad3b5a0a/scripts/measure-frames.ps1#L20-L46",
+      "verdict": "same_project_history",
+      "decision": "Use the already merged wrapped-record script behavior as a before/after baseline, not an external transfer."
+    },
+    {
+      "origin": "https://github.com/xcl-dev/xcl/pull/2988",
+      "source_pr": "https://github.com/xcl-dev/xcl/pull/1931",
+      "rank": 2,
+      "source": "https://github.com/xcl-dev/xcl/blob/e870dd2b576ffd81fd07471e3881c200c3cb39ad/crates/xcl/src/hle/d3d12x/pso_async.rs#L514-L552",
+      "verdict": "same_project_history",
+      "decision": "Check shared wait-budget depletion and refill before interpreting the new graphics gameplay policy. Earlier control is for compute and does not establish graphics visual-equivalence."
+    },
+    {
+      "origin": "https://github.com/ubiquitarianism/leonida/pull/2461",
+      "source_pr": "https://github.com/Ludacris897/xcl/pull/8",
+      "rank": 2,
+      "source": "https://github.com/Ludacris897/xcl/blob/f0e6e58196634f3984e6901ecb7ac04ac7fd4b8c/crates/xcl/src/hle/d3d12x/cpu_writes.rs#L224-L262",
+      "verdict": "useful_architecture_contrast",
+      "decision": "The D3D12 fork checks that an unrelated queue remains able to publish a completed write. The Continued PR preserves a global retirement prefix and checks against publishing ranges early. Compare both invariants before considering queue-local publication; architecture difference rules out direct patch transfer."
+    },
+    {
+      "origin": "https://github.com/LooperSalty/AnyXboxX/pull/491",
+      "source_pr": "https://github.com/avatarmanz/VIctory-7900XTX/pull/364",
+      "rank": 1,
+      "alternative_same_head_at_rank_2": "https://github.com/Sr-0w/Victory-Native/pull/2",
+      "source_head_sha": "58ed36cd1b60df5975741c03d8c8e13ae0e73c5c",
+      "verdict": "different_mechanism_duplicate_lineage",
+      "decision": "Both results are the exact same commit about journaling writes into private BVH arenas. The origin changes page placement and packing. Keep separate correctness/performance experiments and count the two search hits as one lineage."
+    },
+    {
+      "origin": "https://github.com/ubiquitarianism/leonida/pull/2439",
+      "source_pr": "https://github.com/Yharnam-Hunters/Paleblood/pull/332",
+      "rank": 2,
+      "source": "https://github.com/Yharnam-Hunters/Paleblood/pull/332/files",
+      "verdict": "different_mechanism",
+      "decision": "It supports fixed-format MTBUF and explicitly defers destination swizzles, while the origin changes descriptor-selected format only and preserves swizzles. The same words typed load and components are not a valid transfer."
+    }
+  ]
+}

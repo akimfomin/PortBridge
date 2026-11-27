@@ -1,0 +1,258 @@
+{
+  "schema": "portbridge-discovery-independent-github-rest-v1",
+  "method": "One ordinary best-match GitHub Search Issues endpoint query scoped to public pull requests per frozen origin, built using technical terms from each origin rather than expected source links. First five returned links, preserving origin if the search returned it. Successful rerun after adapting the connector response parser; first attempts are not claimed as additional search coverage. Live results are not a historical index replay. Code-only links are outside this endpoint's document types.",
+  "retrieved_at": "2026-11-27T12:08:37.496Z",
+  "rows": [
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "query": "\"wave64\" \"wave32\" \"lds\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 459,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/fxceless/victory-fork/pull/1140",
+        "https://github.com/HumanlyDev/HUMAN/pull/24",
+        "https://github.com/edsuuu/VI-BR-PORT/pull/5",
+        "https://github.com/Marvisak/VIctory/pull/189",
+        "https://github.com/Marvisak/VIctory/pull/3406"
+      ]
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/491",
+      "query": "\"BVH\" \"arena\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 266,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/avatarmanz/VIctory-7900XTX/pull/364",
+        "https://github.com/Sr-0w/Victory-Native/pull/2",
+        "https://github.com/LooperSalty/AnyXboxX/pull/491",
+        "https://github.com/amirhshashemi-bit/FIGHTROOM/pull/1",
+        "https://github.com/LooperSalty/AnyXboxX/pull/477"
+      ]
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+      "query": "\"dxil\" \"licm\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 16,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/vitutu1/victory-perf/pull/17",
+        "https://github.com/TaynanGT/Vice-Tay/pull/193",
+        "https://github.com/PastiiJay/klbf-lab/pull/41",
+        "https://github.com/fxceless/victory-fork/pull/1126",
+        "https://github.com/edsuuu/VI-BR-PORT/pull/4"
+      ]
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/243",
+      "query": "\"wrapped\" \"frame reports\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 2836,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/237",
+        "https://github.com/TaynanGT/Vice-Tay/pull/243",
+        "https://github.com/wieslawsoltes/FerroUI/pull/1370",
+        "https://github.com/palantir/witchcraft-go-logging/pull/636",
+        "https://github.com/tangency-labs/solidcraft/pull/22544"
+      ]
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1443",
+      "query": "\"descriptor table\" \"scratch\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 1167,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/fxceless/victory-fork/pull/1443",
+        "https://github.com/fxceless/victory-fork/pull/144",
+        "https://github.com/fxceless/victory-fork/pull/1316",
+        "https://github.com/jtrudeau1530/VIctory-7900XTX/pull/32",
+        "https://github.com/fxceless/victory-fork/pull/742"
+      ]
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1465",
+      "query": "\"RegisterReadingCallback\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 8,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/pedrocalazans05/xcl/pull/15",
+        "https://github.com/Marvisak/VIctory/pull/2557",
+        "https://github.com/fxceless/victory-fork/pull/1465",
+        "https://github.com/omonkeyz/xbox-emulator/pull/326",
+        "https://github.com/R0Y00/Xbox2Windows/pull/1874"
+      ]
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2988",
+      "query": "\"pso\" \"frame budget\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 64,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/xcl-dev/xcl/pull/2988",
+        "https://github.com/xcl-dev/xcl/pull/1931",
+        "https://github.com/ufoptg/xcl/pull/230",
+        "https://github.com/xcl-dev/xcl/pull/2001",
+        "https://github.com/Marvisak/VIctory/pull/1898"
+      ]
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3001",
+      "query": "\"compute pso\" \"nonzero\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 8,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/xcl-dev/xcl/pull/3001",
+        "https://github.com/xcl-dev/xcl/pull/2297",
+        "https://github.com/xcl-dev/xcl/pull/828",
+        "https://github.com/xcl-dev/xcl/pull/2816",
+        "https://github.com/xcl-dev/xcl/pull/1193"
+      ]
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2439",
+      "query": "\"typed load\" \"components\" \"spirv\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 12,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/ubiquitarianism/leonida/pull/2439",
+        "https://github.com/Yharnam-Hunters/Paleblood/pull/332",
+        "https://github.com/Yharnam-Hunters/Paleblood/pull/1269",
+        "https://github.com/ykauttiz/Kautrix/pull/13",
+        "https://github.com/ubiquitarianism/leonida/pull/154"
+      ]
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2461",
+      "query": "\"writeback\" \"fence\" \"batches\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 188,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/ubiquitarianism/leonida/pull/2461",
+        "https://github.com/Ludacris897/xcl/pull/8",
+        "https://github.com/boykopovar/AnyPS5/pull/26632",
+        "https://github.com/boykopovar/AnyPS5/pull/22190",
+        "https://github.com/ubiquitarianism/leonida/pull/1836"
+      ]
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2583",
+      "query": "\"system overlay\" \"element\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 2471,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/KytyPS5/KytyPS5/pull/2583",
+        "https://github.com/Lyraedan/Oxygen_Not_Included_Together/pull/250",
+        "https://github.com/excalidraw/excalidraw/pull/12297",
+        "https://github.com/n8n-io/n8n/pull/45126",
+        "https://github.com/tuna-os/tromso/pull/509"
+      ]
+    },
+    {
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27752",
+      "query": "\"ContentSearchUtilities\" \"guest pointers\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 1,
+      "incomplete_results": false,
+      "raw_link_count": 1,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/boykopovar/AnyPS5/pull/27752"
+      ]
+    },
+    {
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27799",
+      "query": "\"cube face\" \"debt\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 143,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/boykopovar/AnyPS5/pull/27778",
+        "https://github.com/boykopovar/AnyPS5/pull/27714",
+        "https://github.com/boykopovar/AnyPS5/pull/24087",
+        "https://github.com/boykopovar/AnyPS5/pull/27255",
+        "https://github.com/boykopovar/AnyPS5/pull/27715"
+      ]
+    },
+    {
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3025",
+      "query": "\"byte-address\" \"heap descriptor\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 149,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/Marvisak/VIctory/pull/2178",
+        "https://github.com/Marvisak/VIctory/pull/984",
+        "https://github.com/R0Y00/Xbox2Windows/pull/3025",
+        "https://github.com/boykopovar/AnyPS5/pull/9508",
+        "https://github.com/ubiquitarianism/leonida/pull/1148"
+      ]
+    },
+    {
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3051",
+      "query": "\"bit scans\" \"direct compute\" in:title,body is:public is:pull-request",
+      "request_count": 1,
+      "api_total": 7,
+      "incomplete_results": false,
+      "raw_link_count": 5,
+      "status": "ok",
+      "error": null,
+      "top5": [
+        "https://github.com/R0Y00/Xbox2Windows/pull/3051",
+        "https://github.com/cslib-community/cslib-frontier/pull/1592",
+        "https://github.com/Layr-Labs/dcp/pull/848",
+        "https://github.com/Layr-Labs/dcp/pull/986",
+        "https://github.com/Layr-Labs/dcp/pull/981"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "schema": "portbridge-independent-prospective-v2",
+  "rule": "For each named repository and UTC window, freeze the newest non-draft PR by creation before the cutoff. Eligible PRs include all states. Take REST listing pages in descending order; stop after covering the early boundary or three pages of 30. Do not replace a missing stratum. This is separate from a manually selected contrast set. No retrieval output consulted.",
+  "captured_at": "2026-11-27T11:58:37.546771+00:00",
+  "windows": [
+    [
+      "2026-11-27T04:00:00Z",
+      "2026-11-27T08:00:00Z"
+    ],
+    [
+      "2026-11-27T08:00:00Z",
+      "2026-11-27T11:55:00Z"
+    ]
+  ],
+  "origins": [
+    {
+      "repository": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "number": 489,
+      "created_at": "2026-11-27T07:57:24Z",
+      "head_sha": "d944f53edc0a559d9235b8911667f339bba249b6",
+      "title": "fix(victory-shader): prove lane-private LDS stacks for wave64-to-wave32 lowering",
+      "body_sha256": "8cf17e85621e31e27c026c45e01d4c2a12dd010858ee63ff8ed8b59d4cb21c03",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ]
+    },
+    {
+      "repository": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/491",
+      "number": 491,
+      "created_at": "2026-11-27T08:05:02Z",
+      "head_sha": "c769cb53ee40a2d21f018292f7af9083cfa65ef2",
+      "title": "perf(victory-gpu): pack BVH pages lowest-arena-first and contiguously",
+      "body_sha256": "2e8eef7a2a5494d5e62d4c83ab9ae92bcce0a830f88a7e0257dc8435c6bc8828",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    },
+    {
+      "repository": "TaynanGT/Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+      "number": 193,
+      "created_at": "2026-11-27T07:47:46Z",
+      "head_sha": "173bde063c28c9b23c7e5cf308b319d2e46eaccc",
+      "title": "perf(shader): add DXIL folds, pure LICM, local/LDS forwarding, and barrier dedup",
+      "body_sha256": "71b6ebb8568a1832a2783947fb73c8e8a35e401b59fa0710ecf9b12a27f30833",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ]
+    },
+    {
+      "repository": "TaynanGT/Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/243",
+      "number": 243,
+      "created_at": "2026-11-27T11:49:23Z",
+      "head_sha": "cad05b61924ec9b769f58cda6b791c01dfde15f4",
+      "title": "Read the full header of wrapped frame reports",
+      "body_sha256": "b6b71411652a276a5e3c0b94c8695ff1be6457079d9040f40a603676793be68a",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    },
+    {
+      "repository": "fxceless/victory-fork",
+      "url": "https://github.com/fxceless/victory-fork/pull/1443",
+      "number": 1443,
+      "created_at": "2026-11-27T07:39:32Z",
+      "head_sha": "7a61bf0e6313fe40aead25c40f0cef335a1c6866",
+      "title": "GPU: reuse descriptor table scratch buffers and stack roots in bind",
+      "body_sha256": "15c5b96b39486602e784df01594097473d6f5220b90a8dfc6302ed010e823115",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ]
+    },
+    {
+      "repository": "fxceless/victory-fork",
+      "url": "https://github.com/fxceless/victory-fork/pull/1465",
+      "number": 1465,
+      "created_at": "2026-11-27T11:54:47Z",
+      "head_sha": "3276d58be5b41dd4af968147e7ad0129a2e9267a",
+      "title": "HLE/gameinput: a reading-callback registration is refused like the platform",
+      "body_sha256": "a41aae15135e8299f6b9f6d0bf9f5fe326fc5222d9f4da6dfafa402d53aa469e",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    },
+    {
+      "repository": "xcl-dev/xcl",
+      "url": "https://github.com/xcl-dev/xcl/pull/2988",
+      "number": 2988,
+      "created_at": "2026-11-27T07:41:10Z",
+      "head_sha": "6f5e03cf268b24e716b3f3438ae0bf435b7deb4b",
+      "title": "D3D12.X: add opt-in gameplay graphics PSO frame budget, scale workers, and log slow compile hashes",
+      "body_sha256": "e6972d69fb961ec0a17ed8bf21c0472dc4f264e41b62a70a27dce4b45f175bc0",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ]
+    },
+    {
+      "repository": "xcl-dev/xcl",
+      "url": "https://github.com/xcl-dev/xcl/pull/3001",
+      "number": 3001,
+      "created_at": "2026-11-27T11:32:50Z",
+      "head_sha": "894ae3beebaa32baac2f381fd077ce6897b30bc1",
+      "title": "Shaders: record and precompile nonzero compute PSO flags (#2995)",
+      "body_sha256": "66f4e5645bb5599a055003aff516000f9b163711d930e3619886206bd8b0def0",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    },
+    {
+      "repository": "ubiquitarianism/leonida",
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2439",
+      "number": 2439,
+      "created_at": "2026-11-27T07:58:35Z",
+      "head_sha": "53d138d2d177f6492527e2a34b20be4ee86a2b1b",
+      "title": "rdna2spirv: decode only the components a typed load writes; fconst is an OpConstant (SHADER-FORMAT-DECODE-ONE-COMPONENT)",
+      "body_sha256": "4a1189231598c41133be7a280ca053e4f2330e7b8ea552e765da75634b325800",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ]
+    },
+    {
+      "repository": "ubiquitarianism/leonida",
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2461",
+      "number": 2461,
+      "created_at": "2026-11-27T11:40:25Z",
+      "head_sha": "78158bab98b6d9f22b58e2fd12401b4a0a1a4c53",
+      "title": "d3d12: keep title writeback fenced past 64 pending batches (RT-TITLE-WRITEBACK-FENCE-OVERFLOW)",
+      "body_sha256": "187148c1c05ddb1c052c600b37d06c8a6ad003a6b4affa7faf24ae0adf8e32ae",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    },
+    {
+      "repository": "KytyPS5/KytyPS5",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2583",
+      "number": 2583,
+      "created_at": "2026-11-27T08:18:13Z",
+      "head_sha": "e031e582820ba026137e88b80ea6b7dd9b8e5558",
+      "title": " system ui: add an element framework for the system overlay",
+      "body_sha256": "a50fc715721bdddf885bcf4fac5711ae359f124d6db6520d2f920a6ed295158a",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    },
+    {
+      "repository": "boykopovar/AnyPS5",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27752",
+      "number": 27752,
+      "created_at": "2026-11-27T07:52:41Z",
+      "head_sha": "2918a41fd3a2c4f057f528408bd82605a74db54d",
+      "title": "fix(libSceJsc): validate guest pointers in ContentSearchUtilities exports",
+      "body_sha256": "239db7e540beda1ff3793e4919e65dfdf737c11cc46582288281fac390d29ea1",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ]
+    },
+    {
+      "repository": "boykopovar/AnyPS5",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27799",
+      "number": 27799,
+      "created_at": "2026-11-27T11:40:35Z",
+      "head_sha": "bbc7b24a1984e6632b5f4444e79e21af500279aa",
+      "title": "docs(debt): merge the two cube-face fragments into one",
+      "body_sha256": "7bf4898afb363cbd5760b4fd46c779dc740a3aee9ce3f1513093d59c471acf1a",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    },
+    {
+      "repository": "R0Y00/Xbox2Windows",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3025",
+      "number": 3025,
+      "created_at": "2026-11-27T07:24:24Z",
+      "head_sha": "837728ddfa9f612ca4c73817055b5ba72fdbd318",
+      "title": "native: read the byte-address rewrite of a GPU-selected heap descriptor",
+      "body_sha256": "b3bd463c8f9e3ddb39a8c01c6242c4d2b4c1ca6e438f9bdb1650d5efb361f4c7",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ]
+    },
+    {
+      "repository": "R0Y00/Xbox2Windows",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3051",
+      "number": 3051,
+      "created_at": "2026-11-27T11:37:47Z",
+      "head_sha": "44f24d710fec93c2b02672767b010b3d443e69f3",
+      "title": "shader: lower 32-bit bit counts and scans in the direct compute path",
+      "body_sha256": "d21c3a6107a0a3d449dc52d937af5adfd49eef8b2ff29e790366c9644814024d",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "repository": "LooperSalty/AnyXboxX",
+      "listed": 30,
+      "selected": 2
+    },
+    {
+      "repository": "TaynanGT/Vice-Tay",
+      "listed": 90,
+      "selected": 2
+    },
+    {
+      "repository": "fxceless/victory-fork",
+      "listed": 60,
+      "selected": 2
+    },
+    {
+      "repository": "xcl-dev/xcl",
+      "listed": 60,
+      "selected": 2
+    },
+    {
+      "repository": "ubiquitarianism/leonida",
+      "listed": 30,
+      "selected": 2
+    },
+    {
+      "repository": "KytyPS5/KytyPS5",
+      "listed": 30,
+      "selected": 1
+    },
+    {
+      "repository": "boykopovar/AnyPS5",
+      "listed": 90,
+      "selected": 2
+    },
+    {
+      "repository": "R0Y00/Xbox2Windows",
+      "listed": 60,
+      "selected": 2
+    }
+  ]
+}

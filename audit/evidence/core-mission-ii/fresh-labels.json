@@ -1,0 +1,329 @@
+{
+  "schema": "portbridge-discovery-independent-labels-v1",
+  "origin_file": "fresh-origins.json",
+  "origin_file_sha256": "625f6ece7793e59e299d7bccf41c3a0e516b72984e1a5912c34ff446fa29fc57",
+  "method": "Ground truth manually labeled independently of retrieval output, against preexisting public pinned sources. Positives require a concrete decision permitted by a prior source implementation or test. An external test pattern is not proof of implementation equivalence. Unknown excludes unresolved and out-of-scope cases from quality metrics. No tests run on external hardware.",
+  "counts": {
+    "unknown": 9,
+    "positive_external": 3,
+    "documented_negative_control": 1,
+    "same_project_history": 1,
+    "verified_author_hint": 1
+  },
+  "cases": [
+    {
+      "repository": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "number": 489,
+      "created_at": "2026-11-27T07:57:24Z",
+      "head_sha": "d944f53edc0a559d9235b8911667f339bba249b6",
+      "title": "fix(victory-shader): prove lane-private LDS stacks for wave64-to-wave32 lowering",
+      "body_sha256": "8cf17e85621e31e27c026c45e01d4c2a12dd010858ee63ff8ed8b59d4cb21c03",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ],
+      "reviewed_head_sha": "d944f53edc0a559d9235b8911667f339bba249b6",
+      "grade": "unknown",
+      "decision": "No independently verified replacement for the exact lane-private LDS proof. Treat a generic wave-width feature or barrier pass as a confounder. Correctness depends on isolation over all participating lanes and rejection of shared or inconclusive regions.",
+      "sources": [],
+      "outcome": "confounder_only",
+      "signals": []
+    },
+    {
+      "repository": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/491",
+      "number": 491,
+      "created_at": "2026-11-27T08:05:02Z",
+      "head_sha": "c769cb53ee40a2d21f018292f7af9083cfa65ef2",
+      "title": "perf(victory-gpu): pack BVH pages lowest-arena-first and contiguously",
+      "body_sha256": "2e8eef7a2a5494d5e62d4c83ab9ae92bcce0a830f88a7e0257dc8435c6bc8828",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "c769cb53ee40a2d21f018292f7af9083cfa65ef2",
+      "grade": "unknown",
+      "decision": "No independently verified allocator shares the 64 KiB BVH page-table and residency contract. Generic contiguous allocation cannot establish equivalent arena layout or performance; use the origin's per-arena metrics and keep allocation behavior separate from traversal shader tuning.",
+      "sources": [],
+      "outcome": "unresolved_external_analogue",
+      "signals": []
+    },
+    {
+      "repository": "TaynanGT/Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+      "number": 193,
+      "created_at": "2026-11-27T07:47:46Z",
+      "head_sha": "173bde063c28c9b23c7e5cf308b319d2e46eaccc",
+      "title": "perf(shader): add DXIL folds, pure LICM, local/LDS forwarding, and barrier dedup",
+      "body_sha256": "71b6ebb8568a1832a2783947fb73c8e8a35e401b59fa0710ecf9b12a27f30833",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ],
+      "reviewed_head_sha": "173bde063c28c9b23c7e5cf308b319d2e46eaccc",
+      "grade": "positive_external",
+      "decision": "Use LLVM's permission check as a test oracle, not a source transplant. It admits promotion when instructions are safe to speculate or guaranteed to execute. Reproduce a zero-iteration/conditional-entry loop with a non-speculatable instruction and a pure invariant control; the target's DXIL/CALL and discard rules still need their own tests.",
+      "sources": [
+        "https://github.com/llvm/llvm-project/blob/7ea8afa0a9ff7a59f79f0b4c70121d4cf4b0e4c9/llvm/lib/Transforms/Scalar/LICM.cpp#L1460-L1475"
+      ],
+      "outcome": "new_code_oracle",
+      "signals": [
+        "licm",
+        "speculation",
+        "natural loops"
+      ]
+    },
+    {
+      "repository": "TaynanGT/Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/243",
+      "number": 243,
+      "created_at": "2026-11-27T11:49:23Z",
+      "head_sha": "cad05b61924ec9b769f58cda6b791c01dfde15f4",
+      "title": "Read the full header of wrapped frame reports",
+      "body_sha256": "b6b71411652a276a5e3c0b94c8695ff1be6457079d9040f40a603676793be68a",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "cad05b61924ec9b769f58cda6b791c01dfde15f4",
+      "grade": "unknown",
+      "decision": "The source's own PowerShell tests already cover wrapped timing fields and adjacent reports. No safely applicable cross-project test for the exact frame-report grammar was verified.",
+      "sources": [],
+      "outcome": "unresolved_external_analogue",
+      "signals": []
+    },
+    {
+      "repository": "fxceless/victory-fork",
+      "url": "https://github.com/fxceless/victory-fork/pull/1443",
+      "number": 1443,
+      "created_at": "2026-11-27T07:39:32Z",
+      "head_sha": "7a61bf0e6313fe40aead25c40f0cef335a1c6866",
+      "title": "GPU: reuse descriptor table scratch buffers and stack roots in bind",
+      "body_sha256": "15c5b96b39486602e784df01594097473d6f5220b90a8dfc6302ed010e823115",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ],
+      "reviewed_head_sha": "7a61bf0e6313fe40aead25c40f0cef335a1c6866",
+      "grade": "unknown",
+      "decision": "Public D3D12 root-budget constraints can justify testing 64 one-DWORD values and 32 two-DWORD root descriptors separately. They are a reference for local scratch bounds, not prior code proving that pooling per-stage scratch preserves lifetime.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/windows/win32/direct3d12/root-signature-limits#memory-limits-and-costs"
+      ],
+      "outcome": "reference_only",
+      "signals": []
+    },
+    {
+      "repository": "fxceless/victory-fork",
+      "url": "https://github.com/fxceless/victory-fork/pull/1465",
+      "number": 1465,
+      "created_at": "2026-11-27T11:54:47Z",
+      "head_sha": "3276d58be5b41dd4af968147e7ad0129a2e9267a",
+      "title": "HLE/gameinput: a reading-callback registration is refused like the platform",
+      "body_sha256": "a41aae15135e8299f6b9f6d0bf9f5fe326fc5222d9f4da6dfafa402d53aa469e",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "3276d58be5b41dd4af968147e7ad0129a2e9267a",
+      "grade": "unknown",
+      "decision": "The public API documents a zeroed token on failure but does not claim every GameInput version refuses registration. The author's concrete Windows observation and subsequent fallback make a meaningful local compatibility test, not a transferable universal E_NOTIMPL policy.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/gaming/gdk/docs/reference/input/gameinput/interfaces/igameinput/methods/igameinput_registerreadingcallback#parameters"
+      ],
+      "outcome": "reference_only",
+      "signals": []
+    },
+    {
+      "repository": "xcl-dev/xcl",
+      "url": "https://github.com/xcl-dev/xcl/pull/2988",
+      "number": 2988,
+      "created_at": "2026-11-27T07:41:10Z",
+      "head_sha": "6f5e03cf268b24e716b3f3438ae0bf435b7deb4b",
+      "title": "D3D12.X: add opt-in gameplay graphics PSO frame budget, scale workers, and log slow compile hashes",
+      "body_sha256": "e6972d69fb961ec0a17ed8bf21c0472dc4f264e41b62a70a27dce4b45f175bc0",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ],
+      "reviewed_head_sha": "6f5e03cf268b24e716b3f3438ae0bf435b7deb4b",
+      "grade": "unknown",
+      "decision": "No external patch was verified for this exact split boot/gameplay frame budget and stand-in behavior. Scheduling-history opt-out is a plausible false match: it changes queue order, not the total per-frame wait budget.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/43/files"
+      ],
+      "outcome": "confounder_only",
+      "signals": []
+    },
+    {
+      "repository": "xcl-dev/xcl",
+      "url": "https://github.com/xcl-dev/xcl/pull/3001",
+      "number": 3001,
+      "created_at": "2026-11-27T11:32:50Z",
+      "head_sha": "894ae3beebaa32baac2f381fd077ce6897b30bc1",
+      "title": "Shaders: record and precompile nonzero compute PSO flags (#2995)",
+      "body_sha256": "66f4e5645bb5599a055003aff516000f9b163711d930e3619886206bd8b0def0",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "894ae3beebaa32baac2f381fd077ce6897b30bc1",
+      "grade": "positive_external",
+      "decision": "Use the Continued checker as a source for a process-boundary verification, with a synthetic compute pipeline and D3D12-specific observable. Precompile one accepted nonzero flags variant, start a fresh process, demand a confirmed populated cache hit for that variant, and require a miss for the same descriptor in an empty control cache. Vulkan application-feedback and D3D12 driver cache signals are distinct; this transfers the test pattern, not the API or patch.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/blob/95267b8c7bba786e356bef364dc25862a26ebab8/scripts/check_precompile_verify.py#L114-L170"
+      ],
+      "outcome": "new_code_test",
+      "signals": [
+        "offline compute",
+        "cached pso",
+        "driver-confirmed cache hit"
+      ]
+    },
+    {
+      "repository": "ubiquitarianism/leonida",
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2439",
+      "number": 2439,
+      "created_at": "2026-11-27T07:58:35Z",
+      "head_sha": "53d138d2d177f6492527e2a34b20be4ee86a2b1b",
+      "title": "rdna2spirv: decode only the components a typed load writes; fconst is an OpConstant (SHADER-FORMAT-DECODE-ONE-COMPONENT)",
+      "body_sha256": "4a1189231598c41133be7a280ca053e4f2330e7b8ea552e765da75634b325800",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ],
+      "reviewed_head_sha": "53d138d2d177f6492527e2a34b20be4ee86a2b1b",
+      "grade": "unknown",
+      "decision": "No independently verified implementation shares the RDNA format component selector and reserved-constant cases. Counts or IR size alone are insufficient; check the existing swizzled/constant selector regression when evaluating apparent matches.",
+      "sources": [],
+      "outcome": "unresolved_external_analogue",
+      "signals": []
+    },
+    {
+      "repository": "ubiquitarianism/leonida",
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2461",
+      "number": 2461,
+      "created_at": "2026-11-27T11:40:25Z",
+      "head_sha": "78158bab98b6d9f22b58e2fd12401b4a0a1a4c53",
+      "title": "d3d12: keep title writeback fenced past 64 pending batches (RT-TITLE-WRITEBACK-FENCE-OVERFLOW)",
+      "body_sha256": "187148c1c05ddb1c052c600b37d06c8a6ad003a6b4affa7faf24ae0adf8e32ae",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "78158bab98b6d9f22b58e2fd12401b4a0a1a4c53",
+      "grade": "positive_external",
+      "decision": "Khronos CTS gives a reusable, game-free wait-before-signal construction. Use its explicit host-release pattern as a control around the local 64-pending-batch threshold. The acceptance remains a local ordering assertion: no early CPU-visible page change and all pages present after release. The upstream test does not diagnose the original application-level writeback code.",
+      "sources": [
+        "https://github.com/KhronosGroup/VK-GL-CTS/blob/vulkan-cts-1.3.9.0/external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp#L1665-L1706"
+      ],
+      "outcome": "new_code_test",
+      "signals": [
+        "timeline semaphore",
+        "queue submission",
+        "wait before signal",
+        "retirement"
+      ]
+    },
+    {
+      "repository": "KytyPS5/KytyPS5",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2583",
+      "number": 2583,
+      "created_at": "2026-11-27T08:18:13Z",
+      "head_sha": "e031e582820ba026137e88b80ea6b7dd9b8e5558",
+      "title": " system ui: add an element framework for the system overlay",
+      "body_sha256": "a50fc715721bdddf885bcf4fac5711ae359f124d6db6520d2f920a6ed295158a",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "e031e582820ba026137e88b80ea6b7dd9b8e5558",
+      "grade": "unknown",
+      "decision": "An overlay element framework may share generic layout and retained-state ideas with many UI libraries; no exact code or test was independently shown to reduce a specific receiving task.",
+      "sources": [],
+      "outcome": "unresolved_external_analogue",
+      "signals": []
+    },
+    {
+      "repository": "boykopovar/AnyPS5",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27752",
+      "number": 27752,
+      "created_at": "2026-11-27T07:52:41Z",
+      "head_sha": "2918a41fd3a2c4f057f528408bd82605a74db54d",
+      "title": "fix(libSceJsc): validate guest pointers in ContentSearchUtilities exports",
+      "body_sha256": "239db7e540beda1ff3793e4919e65dfdf737c11cc46582288281fac390d29ea1",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ],
+      "reviewed_head_sha": "2918a41fd3a2c4f057f528408bd82605a74db54d",
+      "grade": "unknown",
+      "decision": "Sampled under the selection rule but excluded from technical grading as a defensive input-validation change.",
+      "sources": [],
+      "outcome": "out_of_scope",
+      "signals": []
+    },
+    {
+      "repository": "boykopovar/AnyPS5",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27799",
+      "number": 27799,
+      "created_at": "2026-11-27T11:40:35Z",
+      "head_sha": "bbc7b24a1984e6632b5f4444e79e21af500279aa",
+      "title": "docs(debt): merge the two cube-face fragments into one",
+      "body_sha256": "7bf4898afb363cbd5760b4fd46c779dc740a3aee9ce3f1513093d59c471acf1a",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "bbc7b24a1984e6632b5f4444e79e21af500279aa",
+      "grade": "documented_negative_control",
+      "decision": "This merges two documentation debt entries. Existing shader fixes mentioned in those entries should not be surfaced as a proposed runtime change for this documentation-only task.",
+      "sources": [],
+      "outcome": "docs_only",
+      "signals": []
+    },
+    {
+      "repository": "R0Y00/Xbox2Windows",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3025",
+      "number": 3025,
+      "created_at": "2026-11-27T07:24:24Z",
+      "head_sha": "837728ddfa9f612ca4c73817055b5ba72fdbd318",
+      "title": "native: read the byte-address rewrite of a GPU-selected heap descriptor",
+      "body_sha256": "b3bd463c8f9e3ddb39a8c01c6242c4d2b4c1ca6e438f9bdb1650d5efb361f4c7",
+      "window": [
+        "2026-11-27T04:00:00Z",
+        "2026-11-27T08:00:00Z"
+      ],
+      "reviewed_head_sha": "837728ddfa9f612ca4c73817055b5ba72fdbd318",
+      "grade": "same_project_history",
+      "decision": "The author supplies the same-project antecedent. Use the pinned raw-buffer view-binding change to check whether all descriptor words refer to one GPU heap load and whether the HLSL route remains unchanged.",
+      "sources": [
+        "https://github.com/R0Y00/Xbox2Windows/pull/2972/files"
+      ],
+      "outcome": "declared_same_project_predecessor",
+      "signals": []
+    },
+    {
+      "repository": "R0Y00/Xbox2Windows",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3051",
+      "number": 3051,
+      "created_at": "2026-11-27T11:37:47Z",
+      "head_sha": "44f24d710fec93c2b02672767b010b3d443e69f3",
+      "title": "shader: lower 32-bit bit counts and scans in the direct compute path",
+      "body_sha256": "d21c3a6107a0a3d449dc52d937af5adfd49eef8b2ff29e790366c9644814024d",
+      "window": [
+        "2026-11-27T08:00:00Z",
+        "2026-11-27T11:55:00Z"
+      ],
+      "reviewed_head_sha": "44f24d710fec93c2b02672767b010b3d443e69f3",
+      "grade": "verified_author_hint",
+      "decision": "The author specifically invokes dxc as the oracle. The pinned DXC implementation shows the MSB distance conversion and no-match sentinel. Use zero, bit 31 set and signed extrema to distinguish a double correction from the intended native DXIL distance and leave 64-bit cases out.",
+      "sources": [
+        "https://github.com/microsoft/DirectXShaderCompiler/blob/d53cf6e13f0d44305000e49f42341dbb6d8c31a1/lib/HLSL/HLOperationLower.cpp#L2146-L2180"
+      ],
+      "outcome": "code_verified_author_reference",
+      "signals": []
+    }
+  ]
+}

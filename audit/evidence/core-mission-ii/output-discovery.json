@@ -1,0 +1,867 @@
+{
+  "origins": 45,
+  "unsupported": [],
+  "seconds": 1.439,
+  "cases": [
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1427",
+      "head_sha": "f5399389661c8a8353f35b87553672ba3edaac5d",
+      "indexed": true,
+      "body_sha256": "df9c622f14e999ac2dabcb5e1114fbde864dc0312d0da45e8696827763f5e144",
+      "top5": [
+        "https://github.com/Marvisak/VIctory/pull/2577"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L1053",
+          "signals": [
+            "allocations",
+            "avoid",
+            "gpu"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1426",
+      "head_sha": "a33d6f187cbd6e867ba7e740117a88500d686570",
+      "indexed": true,
+      "body_sha256": "f64dfba5bca6124889fa184c15168596fa0bde3f294175439383196c271555f8",
+      "top5": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/43"
+      ],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2949",
+      "head_sha": "ae5bbe4e7947b167ee2f045e5d441060e9a85653",
+      "indexed": true,
+      "body_sha256": "cd62d20d887c72a034e51de4f6fdf968a848c28c5913161769f9fb6c2721ac2d",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernelbase/volume.c#L704",
+          "signals": [
+            "disk",
+            "getdiskfreespacea",
+            "getdiskfreespacew",
+            "space"
+          ]
+        },
+        {
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernel32/tests/volume.c#L2095",
+          "signals": [
+            "disk",
+            "free",
+            "space"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2947",
+      "head_sha": "bfb40311710ab82b54c043a3e447830dcd63e112",
+      "indexed": true,
+      "body_sha256": "53fedd871ffe4ae79c9d49e892dd3ce8a87699440d9546249dc680f4f5742cfe",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2936",
+      "head_sha": "cae11a796aa424700977d6d5b28082fc5ebe172e",
+      "indexed": true,
+      "body_sha256": "8420288111a72f6ba23cb1576d03aad3388839cee6bbead6ccf60ad49af787c2",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2930",
+      "head_sha": "4e008ce538c1371e7563e08772d81a5d1cffb28e",
+      "indexed": true,
+      "body_sha256": "fc95e17af2e1d083c11ec469a719fcefe1f84b09c6cd7d2e5bbeb55af793fa12",
+      "top5": [
+        "https://github.com/Marvisak/VIctory/pull/3365",
+        "https://github.com/LooperSalty/AnyXboxX/issues/482",
+        "https://github.com/R0Y00/Xbox2Windows/issues/2945",
+        "https://github.com/R0Y00/Xbox2Windows/issues/2963",
+        "https://github.com/R0Y00/Xbox2Windows/issues/3019"
+      ],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2929",
+      "head_sha": "a87d3c2ac52bac1e7d2df4e6050171fb2dee0887",
+      "indexed": true,
+      "body_sha256": "731fb828ff5e6ed1cdd76f68a735ed1d5818e75295e74f4879dbdef94f9d2d2b",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2432",
+      "head_sha": "2bf19e69082eb8b4c1ce6dc27ca90f043cfa0c61",
+      "indexed": true,
+      "body_sha256": "f1bdd422a44da09b04ccc38b8133ad9794f395f6b69cf7d80b0c17cc221ac191",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2431",
+      "head_sha": "fabad1570531b7b4a5719bdd1f007b2d46d47897",
+      "indexed": true,
+      "body_sha256": "225ff2e8e9bd0aba92a289ceb0a3c5b54bd1848ecb4bd840f6aafef70148280d",
+      "top5": [],
+      "source_code_status": null,
+      "code_top5": [],
+      "snapshot_reads": 9,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2430",
+      "head_sha": "1bde4706b1b1bec8ab88425f126cbb9129e91086",
+      "indexed": true,
+      "body_sha256": "61009f4f68a5c7aa3b071b6eddfb000361a89bd7613868b65485a3cc3e844838",
+      "top5": [],
+      "source_code_status": null,
+      "code_top5": [],
+      "snapshot_reads": 9,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2429",
+      "head_sha": "f6397802c5f59ddaae37f8a9f733555f3fa35c3d",
+      "indexed": true,
+      "body_sha256": "50dc151061a5ee978dde99160a0b9668d7b99627e66023d744de2c8fe7099371",
+      "top5": [],
+      "source_code_status": null,
+      "code_top5": [],
+      "snapshot_reads": 9,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2428",
+      "head_sha": "a1a17f8d0dafac1084d0dbc0bd8d2b7e08a16fea",
+      "indexed": true,
+      "body_sha256": "0c91269e80485e024d79549001cae40a9c875c7759f2dd3d0d7221ece5dc84d7",
+      "top5": [],
+      "source_code_status": null,
+      "code_top5": [],
+      "snapshot_reads": 9,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1425",
+      "head_sha": "d7d7b530f6ac5517a2323a5602cba832532a2fe9",
+      "indexed": true,
+      "body_sha256": "d80ecb6c86723dcb83c85b89e0a917760d380389d6f8187665c7add0b1a94f7b",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/481",
+      "head_sha": "fe3330814d5be71edd1cb8127266c109b5d081b7",
+      "indexed": true,
+      "body_sha256": "1dc8a3871745c0da58234e8053492ea80c493007c109f197cb1bbb0179928981",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/480",
+      "head_sha": "23ff3392e861f5d33a6729299e7eb919b9bbea51",
+      "indexed": true,
+      "body_sha256": "795e3f02f6dbf4758cd111da66297ec5c828cb650af0a53bdeab808ebaa4abdc",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L536",
+          "signals": [
+            "atomic",
+            "execute",
+            "executeindirect",
+            "indirect"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L4265",
+          "signals": [
+            "clamp",
+            "dispatches",
+            "executeindirect"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L17960",
+          "signals": [
+            "executeindirect"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/477",
+      "head_sha": "a58deb9ece461979f9dbf0f5492a1e7812f52712",
+      "indexed": true,
+      "body_sha256": "327445375ee79b2d7723f3906d6ce0ac24f2cf57e8d2a5109373f85f7f93aa00",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/475",
+      "head_sha": "b38e40ad2fb3e2d74f9ad4caa20def050cba83ef",
+      "indexed": true,
+      "body_sha256": "7fce8dcfe157ffa85e11447fb77f6882278481d809fe17cf645f99cba3b0ca2e",
+      "top5": [
+        "https://github.com/Belobug/VIctory-Belobug-AMD/pull/100",
+        "https://github.com/JMAN730/project-flamingo/issues/163",
+        "https://github.com/fxceless/victory-fork/pull/479",
+        "https://github.com/fxceless/victory-fork/pull/540",
+        "https://github.com/fxceless/victory-fork/pull/583"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L502",
+          "signals": [
+            "depth",
+            "gpu",
+            "id3d12resource"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L497",
+          "signals": [
+            "barriers",
+            "id3d12resource"
+          ]
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L89",
+          "signals": [
+            "cache",
+            "depth",
+            "tile"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/474",
+      "head_sha": "b6b8c72ce4f7b4779b649673cb19d88b498b42c6",
+      "indexed": true,
+      "body_sha256": "1a54b242d31c8abc19722ed7f010d8c2b3d7ca936750e4bcdb53e3b258175c78",
+      "top5": [
+        "https://github.com/Marvisak/VIctory/pull/2168",
+        "https://github.com/vitutu1/victory-perf/commit/0a9408dc1e4e32763991cea872067fbbe2fa3216"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L661",
+          "signals": [
+            "barrier",
+            "d3d12_barrier_group",
+            "group"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L13879",
+          "signals": [
+            "d3d12_barrier_sync_none"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L4192",
+          "signals": [
+            "executeindirect"
+          ]
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L42",
+          "signals": [
+            "d12",
+            "gpu",
+            "uav"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L12183",
+          "signals": [
+            "barrier",
+            "barriers",
+            "scope"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2579",
+      "head_sha": "da36d053cc5c0d706bc671c8067c0070603f89ba",
+      "indexed": true,
+      "body_sha256": "4b192f86afbf4efd1ccb8de11ee3e7e6ec247bea6cd8ddee19e182d07c79c8e5",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2578",
+      "head_sha": "435678bbf34cf322bd2da9740291a9ff1ccac810",
+      "indexed": true,
+      "body_sha256": "c78476effd8001ebd5a7330f07dfa3726977bc85eff2983bda04e036ee04d115",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2577",
+      "head_sha": "e68e434dbee5a506e83aeebd040bb9df52cec343",
+      "indexed": true,
+      "body_sha256": "13ee5e1cf8cda63f0f6fd32c3e83b975ced90f3c8b8b4d758de18624408e89d4",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2576",
+      "head_sha": "26a6eb6bd43310b8129ecb899eaa4f844264d2b4",
+      "indexed": true,
+      "body_sha256": "862f2254abba2ba681a6c9f1f6e7b0f559e945d6b5c26cde59cd1c322f6adefe",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2575",
+      "head_sha": "f6a5ba00e1626dbc274cc2137b057e0e83598230",
+      "indexed": true,
+      "body_sha256": "3162a79767823dbb51debd1c68ea69c13dedf712ad2e7f2c58e85bafe68cdb39",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L4112",
+          "signals": [
+            "pack32",
+            "ufloat",
+            "vk_format_e5b9g9r9_ufloat_pack32"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L5350",
+          "signals": [
+            "pack32",
+            "ufloat",
+            "vk_format_e5b9g9r9_ufloat_pack32"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L7179",
+          "signals": [
+            "pack32",
+            "ufloat",
+            "vk_format_e5b9g9r9_ufloat_pack32"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L2721",
+          "signals": [
+            "pack32",
+            "ufloat",
+            "vk_format_e5b9g9r9_ufloat_pack32"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L15833",
+          "signals": [
+            "vk_format_e5b9g9r9_ufloat_pack32"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1424",
+      "head_sha": "2892ad207c197c5d4cc586981f3f6bf7bfdcc588",
+      "indexed": true,
+      "body_sha256": "8f4fbefc56bcf94b754f8d382fabaebfac96d17cf8d00809fa984a52d051e4ea",
+      "top5": [
+        "https://github.com/Marvisak/VIctory/issues/1633",
+        "https://github.com/Marvisak/VIctory/pull/3289",
+        "https://github.com/Marvisak/VIctory/pull/436",
+        "https://github.com/Marvisak/VIctory/pull/464",
+        "https://github.com/R0Y00/Xbox2Windows/pull/3028"
+      ],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1422",
+      "head_sha": "d1528e7ffa2beb7a125d1603a40f7ed246a48a1c",
+      "indexed": true,
+      "body_sha256": "a1ab713fd0fd9fe8655817af54a8d0bd81f78a0658385eca299ea7d42781a8b6",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/140",
+      "head_sha": "fa2f5fe035b884a5a6325e7666c1fd207c3e56e3",
+      "indexed": true,
+      "body_sha256": "42e4895e51c1a01fde96202f1839f7f83bb23ed4cce86dc2a18d51fac1bc66eb",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L1580",
+          "signals": [
+            "access",
+            "outside",
+            "where"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/137",
+      "head_sha": "53a1f1628991de0dc514863b5d0c755e3e24b1f9",
+      "indexed": true,
+      "body_sha256": "e50f7522a072a33739e6f527d098cbccaac0691933a6fca9ccbe44f9021366b6",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/136",
+      "head_sha": "37e9f34821e41a3e16495f4e94d8d4f2f09a4041",
+      "indexed": true,
+      "body_sha256": "7dd7701f3f1bbe5e14eb0542d59f5a1fdc0f33cf689e2776b1f382c670a59e68",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/135",
+      "head_sha": "78dfb60fa7bfa7aeef9670d0e70a868922495082",
+      "indexed": true,
+      "body_sha256": "b1bf227b82531b7f3d070f8e5dca4ff45994c27176693f8d9b7d8ce68d3133a6",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/134",
+      "head_sha": "47d0a97caf476eaec424e7b4dc2f93144a506c13",
+      "indexed": true,
+      "body_sha256": "ddac8bb0e0ae98805085834b8b9b10d29a69771e37eae806a12dc35996cc40f2",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "head_sha": "d944f53edc0a559d9235b8911667f339bba249b6",
+      "indexed": true,
+      "body_sha256": "8cf17e85621e31e27c026c45e01d4c2a12dd010858ee63ff8ed8b59d4cb21c03",
+      "top5": [
+        "https://github.com/xcl-dev/xcl/pull/1658",
+        "https://github.com/Batushn/KestrelX/issues/1",
+        "https://github.com/Belobug/VIctory-Belobug-AMD/pull/221",
+        "https://github.com/Marvisak/VIctory/issues/1870",
+        "https://github.com/Marvisak/VIctory/pull/632"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L3220",
+          "signals": [
+            "wavesize"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/491",
+      "head_sha": "c769cb53ee40a2d21f018292f7af9083cfa65ef2",
+      "indexed": true,
+      "body_sha256": "2e8eef7a2a5494d5e62d4c83ab9ae92bcce0a830f88a7e0257dc8435c6bc8828",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L514",
+          "signals": [
+            "gpu",
+            "heap",
+            "id3d12queryheap"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L17695",
+          "signals": [
+            "id3d12queryheap"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L2643",
+          "signals": [
+            "id3d12queryheap"
+          ]
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L42",
+          "signals": [
+            "d12",
+            "gpu",
+            "heap",
+            "id3"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+      "head_sha": "173bde063c28c9b23c7e5cf308b319d2e46eaccc",
+      "indexed": true,
+      "body_sha256": "71b6ebb8568a1832a2783947fb73c8e8a35e401b59fa0710ecf9b12a27f30833",
+      "top5": [
+        "https://github.com/edsuuu/VI-BR-PORT/pull/4",
+        "https://github.com/PastiiJay/klbf-lab/pull/41",
+        "https://github.com/fxceless/victory-fork/pull/1126",
+        "https://github.com/vitutu1/victory-perf/pull/17"
+      ],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/243",
+      "head_sha": "cad05b61924ec9b769f58cda6b791c01dfde15f4",
+      "indexed": true,
+      "body_sha256": "b6b71411652a276a5e3c0b94c8695ff1be6457079d9040f40a603676793be68a",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L448",
+          "signals": [
+            "frame",
+            "read",
+            "wrapped"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1443",
+      "head_sha": "7a61bf0e6313fe40aead25c40f0cef335a1c6866",
+      "indexed": true,
+      "body_sha256": "15c5b96b39486602e784df01594097473d6f5220b90a8dfc6302ed010e823115",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L428",
+          "signals": [
+            "descriptor",
+            "gpu",
+            "table"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1465",
+      "head_sha": "3276d58be5b41dd4af968147e7ad0129a2e9267a",
+      "indexed": true,
+      "body_sha256": "a41aae15135e8299f6b9f6d0bf9f5fe326fc5222d9f4da6dfafa402d53aa469e",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2988",
+      "head_sha": "6f5e03cf268b24e716b3f3438ae0bf435b7deb4b",
+      "indexed": true,
+      "body_sha256": "e6972d69fb961ec0a17ed8bf21c0472dc4f264e41b62a70a27dce4b45f175bc0",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3001",
+      "head_sha": "894ae3beebaa32baac2f381fd077ce6897b30bc1",
+      "indexed": true,
+      "body_sha256": "66f4e5645bb5599a055003aff516000f9b163711d930e3619886206bd8b0def0",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_pipeline_state_stream.h#L50",
+          "signals": [
+            "d12",
+            "d3d12_pipeline_state_flags",
+            "desc",
+            "state"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/cache.c#L1829",
+          "signals": [
+            "d3d12_compute_pipeline_state_desc",
+            "desc"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L2589",
+          "signals": [
+            "d3d12_pipeline_state_flags"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L34",
+          "signals": [
+            "d12",
+            "record",
+            "state"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2439",
+      "head_sha": "53d138d2d177f6492527e2a34b20be4ee86a2b1b",
+      "indexed": true,
+      "body_sha256": "4a1189231598c41133be7a280ca053e4f2330e7b8ea552e765da75634b325800",
+      "top5": [
+        "https://github.com/JMAN730/project-flamingo/issues/274",
+        "https://github.com/JMAN730/project-flamingo/issues/281",
+        "https://github.com/JMAN730/project-flamingo/pull/2",
+        "https://github.com/LooperSalty/AnyXboxX/pull/275",
+        "https://github.com/Marvisak/VIctory/issues/823"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L176",
+          "signals": [
+            "create",
+            "pipelines",
+            "vkcreatecomputepipelines"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L3581",
+          "signals": [
+            "vkcreatecomputepipelines"
+          ]
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L46",
+          "signals": [
+            "load",
+            "typed",
+            "uav"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L91",
+          "signals": [
+            "buffer",
+            "create",
+            "decode"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2461",
+      "head_sha": "78158bab98b6d9f22b58e2fd12401b4a0a1a4c53",
+      "indexed": true,
+      "body_sha256": "187148c1c05ddb1c052c600b37d06c8a6ad003a6b4affa7faf24ae0adf8e32ae",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2583",
+      "head_sha": "e031e582820ba026137e88b80ea6b7dd9b8e5558",
+      "indexed": true,
+      "body_sha256": "a50fc715721bdddf885bcf4fac5711ae359f124d6db6520d2f920a6ed295158a",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27752",
+      "head_sha": "2918a41fd3a2c4f057f528408bd82605a74db54d",
+      "indexed": true,
+      "body_sha256": "239db7e540beda1ff3793e4919e65dfdf737c11cc46582288281fac390d29ea1",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27799",
+      "head_sha": "bbc7b24a1984e6632b5f4444e79e21af500279aa",
+      "indexed": true,
+      "body_sha256": "7bf4898afb363cbd5760b4fd46c779dc740a3aee9ce3f1513093d59c471acf1a",
+      "top5": [],
+      "source_code_status": null,
+      "code_top5": [],
+      "snapshot_reads": 9,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3025",
+      "head_sha": "837728ddfa9f612ca4c73817055b5ba72fdbd318",
+      "indexed": true,
+      "body_sha256": "b3bd463c8f9e3ddb39a8c01c6242c4d2b4c1ca6e438f9bdb1650d5efb361f4c7",
+      "top5": [
+        "https://github.com/Marvisak/VIctory/issues/2867",
+        "https://github.com/Marvisak/VIctory/pull/1385",
+        "https://github.com/Marvisak/VIctory/pull/1597",
+        "https://github.com/xcl-dev/xcl/issues/159",
+        "https://github.com/JMAN730/project-flamingo/issues/176"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L52",
+          "signals": [
+            "address",
+            "gpu",
+            "heap",
+            "max"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L428",
+          "signals": [
+            "descriptor",
+            "gpu",
+            "heap"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L956",
+          "signals": [
+            "descriptor",
+            "heap",
+            "read"
+          ]
+        },
+        {
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernelbase/file.c#L873",
+          "signals": [
+            "address",
+            "descriptor",
+            "read"
+          ]
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3051",
+      "head_sha": "44f24d710fec93c2b02672767b010b3d443e69f3",
+      "indexed": true,
+      "body_sha256": "d21c3a6107a0a3d449dc52d937af5adfd49eef8b2ff29e790366c9644814024d",
+      "top5": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/119",
+        "https://github.com/Marvisak/VIctory/pull/1381",
+        "https://github.com/Marvisak/VIctory/pull/148",
+        "https://github.com/boykopovar/AnyPS5/pull/528",
+        "https://github.com/fxceless/victory-fork/pull/636"
+      ],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    }
+  ]
+}
