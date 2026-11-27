@@ -1,5 +1,13 @@
 # PortBridge · Продолжение Growth & Adoption
 
+## Активная эксплуатация · 28 ноября 2026, МСК
+
+- **VIctory.** Передали тест из Vice-Tay #258 для следующей проверки RDNA4 в VIctory #2122. Каталог получил точную строку и границы применимости. Обычный Discovery до ручного разбора вернул пустую выдачу на 3 из 3 выбранных PR. [Передача](https://github.com/Marvisak/VIctory/pull/2122#issuecomment-7228701565) · [PR #130](https://github.com/akimfomin/PortBridge/pull/130)
+- **AnyXboxX.** Проверили применение трёх файлов звуковой правки Vice-Tay на точной версии AnyXboxX. Передали вывод. Сборка и решение о включении открыты. [Проверка](evidence/active-operations/anyxboxx-dsp-apply.json) · [Обсуждение](https://github.com/LooperSalty/AnyXboxX/issues/534#issuecomment-7228738668)
+- **Test Lab.** Независимый тест kevincommits прошёл на T4 на обеих версиях Continued. Осталась проверка на V100 в двух режимах запуска. У проверенного с PortWatch исправления подтверждён внешний выпуск v0.4.1. [Обновление Lab](https://github.com/akimfomin/PortBridge/issues/111#issuecomment-7228677883) · [Подтверждение выпуска](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7212770717)
+
+[Операционный журнал, исходные выдачи и воспроизведение](evidence/active-operations/assessment.md)
+
 ## Radar, Lab и автономная публикация · 27 ноября 2026, МСК
 
 - Слит [PR #129](https://github.com/akimfomin/PortBridge/pull/129). Найденный Radar исходник можно подготовить для Lab с двумя актуальными ревизиями и отрицательным контролем. GitHub проверил 319 тестов, полную перестройку индекса и экспорт. Возвратили пять файлов Continued после переноса репозитория. [Главная ветка](https://github.com/akimfomin/PortBridge/commit/984f19a579da1fc4cd95baf2f3e4b3b5c2f330ae) · [Облачная проверка](https://github.com/akimfomin/PortBridge/actions/runs/46062387889)

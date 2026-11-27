@@ -1,0 +1,59 @@
+{
+  "https://github.com/Marvisak/VIctory/pull/2122": {
+    "url": "https://github.com/Marvisak/VIctory/pull/2122",
+    "revision": "bf526d765fc16ac3ae190deee355fb83acdafd77",
+    "subject": "",
+    "status": "no_subject",
+    "search_issue": null,
+    "lookups": 0,
+    "cache_hits": 0,
+    "top5": [],
+    "explanation": "No supported technical subject was found in the PR title or stored metadata. No external search ran.",
+    "source_code": {
+      "status": "not_indexed",
+      "indexed_files": 0,
+      "expected_files": 16,
+      "matches": [],
+      "scope": "pinned_public_files",
+      "confidence": "candidate"
+    }
+  },
+  "https://github.com/TaynanGT/Vice-Tay/pull/258": {
+    "url": "https://github.com/TaynanGT/Vice-Tay/pull/258",
+    "revision": "17da1d006dc5ed13916434fff74e99f7c3af15a5",
+    "subject": "",
+    "status": "no_subject",
+    "search_issue": null,
+    "lookups": 0,
+    "cache_hits": 0,
+    "top5": [],
+    "explanation": "No supported technical subject was found in the PR title or stored metadata. No external search ran.",
+    "source_code": {
+      "status": "not_indexed",
+      "indexed_files": 0,
+      "expected_files": 16,
+      "matches": [],
+      "scope": "pinned_public_files",
+      "confidence": "candidate"
+    }
+  },
+  "https://github.com/TaynanGT/Vice-Tay/pull/293": {
+    "url": "https://github.com/TaynanGT/Vice-Tay/pull/293",
+    "revision": "f141088e75bd8191bf9f6f991cca02ba73cb3b25",
+    "subject": "",
+    "status": "no_subject",
+    "search_issue": null,
+    "lookups": 0,
+    "cache_hits": 0,
+    "top5": [],
+    "explanation": "No supported technical subject was found in the PR title or stored metadata. No external search ran.",
+    "source_code": {
+      "status": "not_indexed",
+      "indexed_files": 0,
+      "expected_files": 16,
+      "matches": [],
+      "scope": "pinned_public_files",
+      "confidence": "candidate"
+    }
+  }
+}

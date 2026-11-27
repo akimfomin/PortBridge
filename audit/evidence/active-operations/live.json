@@ -1,0 +1,13 @@
+{
+  "main_sha": "0107bd3e60c80969f39b86258f52f300a8c3c998",
+  "run": "https://github.com/akimfomin/PortBridge/actions/runs/46073139665/attempts/2",
+  "generated_at": "2026-11-27T22:00:18+00:00",
+  "entry": "vice-tay-rdna4-buffer-size-clamps",
+  "reviewed_on": "2026-11-28",
+  "source": "https://github.com/TaynanGT/Vice-Tay/blob/927da4079031d74cc987de30a3c00af28a2bf631/crates/victory-shader/src/emit/size_tests.rs#L556",
+  "license_url": "https://github.com/TaynanGT/Vice-Tay/blob/927da4079031d74cc987de30a3c00af28a2bf631/LICENSE",
+  "snapshot": "https://akimfomin.github.io/PortBridge/data/discovery-bef7e142e4048235ad4c96af.json",
+  "discovery_sha256": "bef7e142e4048235ad4c96af8c787672d9a85ac9176e8867cd1befdde1e2b010",
+  "observations": 37502,
+  "lab_tasks": 16
+}

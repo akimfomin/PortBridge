@@ -1,5 +1,12 @@
 # Координация между командами
 
+## Активная эксплуатация · 28 ноября 2026
+
+- VIctory получил точный тест Vice-Tay и предложение дополнить проверку DXIL структурированным буфером. AnyXboxX получил проверку трёх файлов звуковой правки на точной ревизии. Решения обеих принимающих команд пока открыты. [VIctory](https://github.com/Marvisak/VIctory/pull/2122#issuecomment-7228701565) · [AnyXboxX](https://github.com/LooperSalty/AnyXboxX/issues/534#issuecomment-7228738668)
+- kevincommits самостоятельно выполнил дополнение по Continued на Tesla T4 и отправил вывод разработчикам. PortBridge уточнил оставшийся запрос на V100. leixner подтвердил выпуск независимого исправления UwUCammie в frametime-report v0.4.1, после проверки в цепочке Test Lab и PortWatch. [Отчёт kevincommits](https://github.com/ProjectLeonida/mandy/issues/1492#issuecomment-7220191428) · [Lab](https://github.com/akimfomin/PortBridge/issues/111#issuecomment-7228677883) · [Выпуск](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7212770717)
+Один новый адресный запрос внутри PortBridge отправлен says112, у которого есть публичный Vulkan-прогон на Linux и Tesla V100 PCIe с веткой драйвера 580. В заявке отдельно сохраняются PCIe и исходный SXM2. Ответа пока нет. [Публичный стенд](https://github.com/JustVugg/colibri/issues/2608#issuecomment-6703554394) · [Приглашение в Lab](https://github.com/akimfomin/PortBridge/issues/111#issuecomment-7228899849)
+
+
 ## XCL / VIctory · PipelineLibrary · 27 ноября 2026
 
 Сверили две опубликованные проверки статических сэмплеров. KyleS98 сообщил о смене результата PipelineLibrary на RTX 3090 Ti, UncommonDLL получил ожидаемый результат самостоятельного теста на RTX 5070 Ti. В XCL предложили зафиксировать одну конфигурацию и сопоставить оба пути кэша с результатом без кэша при изменении порядка создания сэмплеров. На этом этапе у PortBridge есть отправленное сравнение и критерий решения. Ответа автора и нового замера пока нет. [Обсуждение XCL](https://github.com/xcl-dev/xcl/issues/3044#issuecomment-7227504938)

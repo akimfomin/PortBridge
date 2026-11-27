@@ -1,0 +1,35 @@
+{
+  "target": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+  "donor_base": "877a40e891d04635e988303499382eae7eaebc2c",
+  "donor_head": "f141088e75bd8191bf9f6f991cca02ba73cb3b25",
+  "donor_merge": "e45051afa41b76bba1bcd0c439384b3660f93255",
+  "apply_check": "pass",
+  "apply": "pass",
+  "tests": "not run",
+  "files": [
+    {
+      "path": "third_party/victory/crates/victory-hle/src/modules/dsp.rs",
+      "base_matches_donor": true,
+      "added": false,
+      "result_matches_donor_head": true,
+      "result_matches_donor_merge": true,
+      "after_sha256": "71b2f9a25b400e38c6d142fb07e603496c4d666474af41896d8ea49ad4bfe5d8"
+    },
+    {
+      "path": "third_party/victory/crates/victory-hle/src/modules/dsp_convolve.rs",
+      "base_matches_donor": true,
+      "added": true,
+      "result_matches_donor_head": true,
+      "result_matches_donor_merge": true,
+      "after_sha256": "ce8d39fa6eac8ab7142125db8159ce288f2e05413453b581fb59e449d0ae982e"
+    },
+    {
+      "path": "third_party/victory/crates/victory-hle/src/modules/mod.rs",
+      "base_matches_donor": false,
+      "added": false,
+      "result_matches_donor_head": false,
+      "result_matches_donor_merge": false,
+      "after_sha256": "1e8452db8c007d0d59d56d873d67b5bc75bf2c2026397ff2e523f0d83e6b28aa"
+    }
+  ]
+}
