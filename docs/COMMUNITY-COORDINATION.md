@@ -1,5 +1,11 @@
 # Координация между командами
 
+## Решения по открытым передачам · 28 ноября 2026
+
+- AnyXboxX получил измерение с контролем до и после и вопрос о конкретном объёме первого PR. Команда пока не ответила. Следующий подтверждающий факт — решение сопровождающего о переносе, затем результат штатных тестов принимающей ветки. [Измерение](https://github.com/akimfomin/PortBridge/tree/4bee4dccb04995c86a5c9a31ab83967fabff8e9b/audit/evidence/decision-followthrough/anyxboxx-dsp) · [Передача](https://github.com/LooperSalty/AnyXboxX/issues/534#issuecomment-7229136745)
+- В Continued исходный отчёт 31415-n уже приняли в #1494. Открытый #1969 решает, как его документировать. PortBridge передал контроль kevincommits с T4 в этот PR. Новая формулировка ещё не принята. Для диагноза нужен результат запуска на V100. [Принятый исходный отчёт](https://github.com/ProjectLeonida/mandy/pull/1494) · [Передача в PR](https://github.com/ProjectLeonida/mandy/pull/1969#issuecomment-7229168123)
+- VIctory #2122 сливается без конфликтов с текущим main. Есть три одобрения и более ранняя сводка о готовности. Решение команды ждём по самому PR. Предложенный PortBridge тест структурированного буфера остаётся самостоятельным дополнением. [Статус Git](../audit/evidence/decision-followthrough/victory-2122.json) · [Предложение](https://github.com/Marvisak/VIctory/pull/2122#issuecomment-7228701565)
+
 ## Активная эксплуатация · 28 ноября 2026
 
 - VIctory получил точный тест Vice-Tay и предложение дополнить проверку DXIL структурированным буфером. AnyXboxX получил проверку трёх файлов звуковой правки на точной ревизии. Решения обеих принимающих команд пока открыты. [VIctory](https://github.com/Marvisak/VIctory/pull/2122#issuecomment-7228701565) · [AnyXboxX](https://github.com/LooperSalty/AnyXboxX/issues/534#issuecomment-7228738668)

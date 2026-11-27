@@ -1,0 +1,25 @@
+{
+  "pr_state": "open",
+  "pr_merged": false,
+  "github_mergeable": true,
+  "comparison": {
+    "url": "https://github.com/Marvisak/VIctory/pull/2122",
+    "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+    "status": "clean merge",
+    "conflicts": [],
+    "changed_files": [
+      "crates/victory-shader/src/emit/lower.rs",
+      "crates/victory-shader/src/emit/lower/tests/size_handles.rs",
+      "crates/victory-shader/src/emit/stride_tests.rs"
+    ],
+    "changed_tests": [
+      "crates/victory-shader/src/emit/lower/tests/size_handles.rs",
+      "crates/victory-shader/src/emit/stride_tests.rs"
+    ],
+    "head": "bf526d765fc16ac3ae190deee355fb83acdafd77",
+    "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+    "file_evidence": [],
+    "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/63bcca43c6a00a758510398fa43096ce7e4f7df0",
+    "head_url": "https://github.com/Marvisak/VIctory/pull/2122/commits/bf526d765fc16ac3ae190deee355fb83acdafd77"
+  }
+}
