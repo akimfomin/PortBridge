@@ -140,6 +140,69 @@ class CodeDiscoveryTests(CatalogFixture):
         self.assertEqual(fallback[0]["repo"], "Elsewhere/Graphics")
         self.assertIn("diagnostic ID was not found", fallback[0]["next_step"])
 
+    def test_vulkan_refpage_marks_the_actual_definition_without_explaining_performance(self):
+        ref = {**self.ref, "path": "chapters/commands.adoc"}
+        source = (b"Previous work can call flink:vkCmdExecuteCommands.\n\n"
+                  b"[open,refpage='vkCmdExecuteCommands',desc='Run commands',type='protos']\n--\n"
+                  b"The command records execution in the primary command buffer.\n")
+        indexed = code_search.index_file(ref, source)
+        index = {"version": code_search.SCHEMA_VERSION, "files": [indexed]}
+        hits = code_search.lookup(index, "Is vkCmdExecuteCommands allowed here?", origin_url=self.url)
+        self.assertEqual([hit["line"] for hit in hits], [3])
+        self.assertFalse(code_search.lookup(index, "vkCmdExecuteCommands causes a latency regression",
+                                            origin_url=self.url))
+        self.assertFalse(code_search.lookup(index, "Fence returns early\nvkCmdExecuteCommands",
+                                            origin_url=self.url))
+        for path, body in (
+                ("guide.md", source),
+                (ref["path"], b"----\n" + source + b"----\n"),
+                (ref["path"], b"////\n" + source + b"////\n"),
+                (ref["path"], b"++++\n" + source + b"++++\n"),
+                (ref["path"], source.replace(b"'vkCmd", b'"vkCmd')),
+                (ref["path"], source.replace(b"']\n", b"'\n"))):
+            self.assertFalse(code_search.lookup(
+                {**index, "files": [code_search.index_file({**ref, "path": path}, body)]},
+                "vkCmdExecuteCommands", origin_url=self.url))
+
+    def test_exact_vulkan_rule_outranks_mentions_and_ignores_examples(self):
+        rule = "VUID-RuntimeSpirv-OpEntryPoint-07754"
+        repo = "KhronosGroup/Vulkan-Docs"
+        ref = {**self.ref, "repo": repo, "path": "appendices/spirvenv.adoc",
+               "license_url": self.ref["license_url"].replace("Example/Graphics", repo)}
+        document = ("----\n" + f"  * [[{rule}]]\n" + "----\n\n" +
+                    f"  * [[{rule}]]\n    Verify the interface component width.\n")
+        exact = code_search.index_file(ref, document.encode())
+        mention = code_search.index_file(self.ref, f'CheckRule(" {rule} ");'.encode())
+        index = {"version": code_search.SCHEMA_VERSION, "files": [mention, exact]}
+        hits = code_search.lookup(index, rule, origin_url=self.url)
+        self.assertEqual([(x["source_role"], x["line"]) for x in hits],
+                         [("normative_rule", 5), ("exact_diagnostic", 1)])
+        focused = code_search.index_file(self.ref, b"void vkCmdExecuteCommands();")
+        unrelated = f"vkCmdExecuteCommands command buffer usage\nReference for other platforms: {rule}"
+        hits = code_search.lookup({**index, "files": [exact, focused]}, unrelated, origin_url=self.url,
+                                  strict_context=True)
+        self.assertEqual([x["repo"] for x in hits], [self.ref["repo"]])
+        related = "VUID-vkCmdExecuteCommands-pCommandBuffers-00001"
+        focused = code_search.index_file(self.ref, f'CheckRule("{related}");'.encode())
+        hits = code_search.lookup({**index, "files": [exact, focused]},
+                                  f"vkCmdExecuteCommands command buffer usage\n{related} {rule}", origin_url=self.url,
+                                  strict_context=True)
+        self.assertEqual([x["repo"] for x in hits], [self.ref["repo"]])
+
+    def test_directx_capability_needs_a_focused_request_and_active_prose(self):
+        name = "UnrestrictedBufferTextureCopyPitchSupported"
+        repo = "microsoft/DirectX-Specs"
+        ref = {**self.ref, "repo": repo, "path": "d3d/conformance.md",
+               "license_url": self.ref["license_url"].replace("Example/Graphics", repo)}
+        statement = f"Support is reported via `{name}` in the capabilities structure."
+        document = (f"```markdown\n{statement}\n```\n\n"
+                    f"> {statement}\n    {statement}\n{statement}\n")
+        index = {"version": code_search.SCHEMA_VERSION,
+                 "files": [code_search.index_file(ref, document.encode())]}
+        hits = code_search.lookup(index, f"Check {name}", origin_url=self.url)
+        self.assertEqual([hit["line"] for hit in hits], [7])
+        self.assertFalse(code_search.lookup(index, f"Unrelated GPU hang\n{name}", origin_url=self.url))
+
     def test_scope_selects_only_regular_bounded_source_files(self):
         group = {"directories": ["gpu"], "limit": 2}
         entry = {"type": "blob", "mode": "100644", "size": 200, "sha": "a" * 40}
@@ -192,3 +255,26 @@ class CodeDiscoveryTests(CatalogFixture):
             self.assertEqual(errors, [{"scope": group["repo"], "reason": "ValueError"}])
             code_search._discover_scopes(self.catalog, fetch)
         self.assertEqual(fetch.call_count, 2)
+
+    def test_embedded_shader_keeps_standard_subgroup_names_only(self):
+        literal = (b'// gl_SubgroupID gl_SubgroupInvocationID\n'
+                   b'/* example shader "gl_SubgroupID gl_SubgroupInvocationID" */\n'
+                   b'std::string shader = "gl_SubgroupID gl_SubgroupInvocationID OtherLiteralContent";')
+        row = code_search.index_file(self.ref, literal)
+        self.assertNotIn("otherliteralcontent", row["terms"])
+        symbols = code_search.public_symbols(
+            "The pair gl_SubgroupID gl_SubgroupInvocationID. https://example.test/gl_SubgroupSize"
+        )
+        self.assertEqual(symbols, ["gl_SubgroupID", "gl_SubgroupInvocationID"])
+        index = {"version": code_search.SCHEMA_VERSION, "files": [row]}
+        self.assertEqual(code_search.lookup(index, " ".join(symbols), origin_url=self.url)[0]["line"], 3)
+
+    def test_diagnostic_keeps_a_corroborated_shader_fixture(self):
+        diagnostic = "VUID-vkCmdDraw-None-00001"
+        values = "gl_SubgroupID gl_SubgroupInvocationID"
+        documentation = code_search.index_file({**self.ref, "path": "docs/shaders.adoc"},
+                                               f"* {diagnostic}\n".encode())
+        fixture = code_search.index_file(self.ref, f'const char *shader = "{values}";'.encode())
+        index = {"version": code_search.SCHEMA_VERSION, "files": [fixture, documentation]}
+        results = code_search.lookup(index, f"Check subgroup output\n{diagnostic} {values}", origin_url=self.url)
+        self.assertEqual([row["path"] for row in results], ["docs/shaders.adoc", self.ref["path"]])
