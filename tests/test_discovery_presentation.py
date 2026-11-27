@@ -103,9 +103,10 @@ class DiscoveryPresentationTest(CatalogFixture):
                 result = discover(origin_url=PR, index=index)
                 self.assertEqual((result["status"], result["scan_status"], result["scan_reason"]), (expected, status, reason))
                 self.assertIn(message, result["empty_reason"])
-        for url in (PR.replace("pull", "issues"), PR.replace("pull/99999", "commit/" + "a" * 40)):
-            report = discover(origin_url=url)
-            self.assertNotIn("--url", report["empty_reason"])
+        issue = discover(origin_url=PR.replace("/pull/", "/issues/"))
+        commit = discover(origin_url=PR.replace("pull/99999", "commit/" + "a" * 40))
+        self.assertIn("discovery_scan --online --url", issue["empty_reason"])
+        self.assertNotIn("--url", commit["empty_reason"])
 
     def test_mcp_and_snapshot_outage_retell_the_available_evidence(self):
         mcp = PortBridgeMCP(self.catalog)
