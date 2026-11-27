@@ -1,0 +1,208 @@
+{
+  "title": "Public issue URLs and the Windows 10 D3D12 heap-indexing control",
+  "baseline_commit": "0107bd3e60c80969f39b86258f52f300a8c3c998",
+  "candidate_commit": "5e19265df8ace0b21a444cfc37530d1ca5e39333",
+  "pull_request": "https://github.com/akimfomin/PortBridge/pull/131",
+  "reproduction": "python -m portbridge.discovery_scan --online --url https://github.com/Marvisak/VIctory/issues/3618",
+  "original_cli": "Rejected issue URLs before any HTTP request.",
+  "issue_url_support_only": {
+    "victory": {
+      "url": "https://github.com/Marvisak/VIctory/issues/3618",
+      "revision": null,
+      "subject": "root signature",
+      "status": "available",
+      "search_issue": null,
+      "lookups": 1,
+      "cache_hits": 0,
+      "top5": [
+        {
+          "url": "https://github.com/gfx-rs/wgpu/issues/6809",
+          "title": "Use Root Signature 1.1 on DX12",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/llvm/llvm-project/issues/149560",
+          "title": "[HLSL][RootSignature] Add Root Signature object manipulation options",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/llvm/llvm-project/issues/152526",
+          "title": "[DirectX][objdump] Add textual dumping of root signatures",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3512",
+          "title": "d3d12core: ID3D12PipelineState::GetCachedBlob(NULL) writes through the null pointer (0xC0000005)",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/microsoft/DirectXShaderCompiler/issues/5476",
+          "title": "[MacOS only] dxc dump nothing when -fcgl with root signature",
+          "route": "github",
+          "evidence_status": "source_found"
+        }
+      ],
+      "explanation": "Open each source to compare the mechanism and revision.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    "anyXboxX": {
+      "url": "https://github.com/LooperSalty/AnyXboxX/issues/559",
+      "revision": null,
+      "subject": "root signature",
+      "status": "available",
+      "search_issue": null,
+      "lookups": 0,
+      "cache_hits": 1,
+      "top5": [
+        {
+          "url": "https://github.com/gfx-rs/wgpu/issues/6809",
+          "title": "Use Root Signature 1.1 on DX12",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/llvm/llvm-project/issues/149560",
+          "title": "[HLSL][RootSignature] Add Root Signature object manipulation options",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/llvm/llvm-project/issues/152526",
+          "title": "[DirectX][objdump] Add textual dumping of root signatures",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3512",
+          "title": "d3d12core: ID3D12PipelineState::GetCachedBlob(NULL) writes through the null pointer (0xC0000005)",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/microsoft/DirectXShaderCompiler/issues/5476",
+          "title": "[MacOS only] dxc dump nothing when -fcgl with root signature",
+          "route": "github",
+          "evidence_status": "source_found"
+        }
+      ],
+      "explanation": "Open each source to compare the mechanism and revision.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    }
+  },
+  "after_reviewed_source_added": {
+    "url": "https://github.com/Marvisak/VIctory/issues/3618",
+    "revision": null,
+    "subject": "root signature",
+    "status": "available",
+    "search_issue": null,
+    "lookups": 0,
+    "cache_hits": 1,
+    "top5": [
+      {
+        "url": "https://github.com/Marvisak/VIctory/blob/124356508350020912e09a43c12aef8c62505875/crates/victory-shader/src/emit/agility.rs#L422-L470",
+        "title": "VIctory Agility SDK smoke test for D3D12 heap-indexed root signatures",
+        "route": "catalog",
+        "evidence_status": "potentially_applicable"
+      },
+      {
+        "url": "https://github.com/gfx-rs/wgpu/issues/6809",
+        "title": "Use Root Signature 1.1 on DX12",
+        "route": "github",
+        "evidence_status": "source_found"
+      },
+      {
+        "url": "https://github.com/llvm/llvm-project/issues/149560",
+        "title": "[HLSL][RootSignature] Add Root Signature object manipulation options",
+        "route": "github",
+        "evidence_status": "source_found"
+      },
+      {
+        "url": "https://github.com/llvm/llvm-project/issues/152526",
+        "title": "[DirectX][objdump] Add textual dumping of root signatures",
+        "route": "github",
+        "evidence_status": "source_found"
+      },
+      {
+        "url": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3512",
+        "title": "d3d12core: ID3D12PipelineState::GetCachedBlob(NULL) writes through the null pointer (0xC0000005)",
+        "route": "github",
+        "evidence_status": "source_found"
+      }
+    ],
+    "explanation": "Open each source to compare the mechanism and revision.",
+    "source_code": {
+      "status": "not_indexed",
+      "indexed_files": 0,
+      "expected_files": 16,
+      "matches": [],
+      "scope": "pinned_public_files",
+      "confidence": "candidate"
+    }
+  },
+  "reviewed_source_kind": "Manually examined and pinned. No automatic useful match on either fresh issue was observed.",
+  "references": {
+    "victory_issue": "https://github.com/Marvisak/VIctory/issues/3618",
+    "anyxboxx_issue": "https://github.com/LooperSalty/AnyXboxX/issues/559",
+    "anyxboxx_decision": "https://github.com/LooperSalty/AnyXboxX/issues/559#issuecomment-7229522232",
+    "independent_warp_controls": "https://github.com/Marvisak/VIctory/issues/3618#issuecomment-7229683462",
+    "alternative_fix": "https://github.com/Marvisak/VIctory/pull/463",
+    "device_factory_fix": "https://github.com/Marvisak/VIctory/pull/969",
+    "microsoft_runtime_setup": "https://devblogs.microsoft.com/directx/gettingstarted-dx12agility/",
+    "continued_review": "https://github.com/ProjectLeonida/mandy/pull/2379#issuecomment-7229606837"
+  },
+  "validation": {
+    "local_tests_passed": 321,
+    "local_export": "pass",
+    "local_release_gate": "pass",
+    "cloud_preview": "https://github.com/akimfomin/PortBridge/actions/runs/46079738266",
+    "scheduled_receipt_seen": "https://github.com/akimfomin/PortBridge/actions/runs/46052874542",
+    "cloud_preview_status": "passed build, tests, indexing, export and release gate",
+    "github_pages_deploy": "https://github.com/akimfomin/PortBridge/actions/runs/46079903862",
+    "live_preflight": {
+      "result": "pass",
+      "command": "python -m portbridge.preflight --url <public GitHub issue URL>",
+      "output": "https://github.com/Marvisak/VIctory/issues/3618 => https://github.com/Marvisak/VIctory/blob/124356508350020912e09a43c12aef8c62505875/crates/victory-shader/src/emit/agility.rs#L422-L470 potentially_applicable\r\nhttps://github.com/LooperSalty/AnyXboxX/issues/559 => https://github.com/Marvisak/VIctory/blob/124356508350020912e09a43c12aef8c62505875/crates/victory-shader/src/emit/agility.rs#L422-L470 source_found\r\npublished_discovery_cases 16"
+    }
+  },
+  "scope_limit": "PortBridge reviewed public source and recorded prior measurements. The standalone Windows 10 measurements belong to the external contributors. No title run or new Vega 8 measurement was performed by PortBridge.",
+  "release_commit": "f9da51bbef688d4b71beea8c6d8b77f6a3705a84",
+  "hardware_case_status": {
+    "victory": "open; third-party synthetic Agility SDK/WARP controls supplied in the issue",
+    "anyxboxx": "closed after diagnosis; no receiving implementation confirmed from the issue"
+  },
+  "texture_pool_followthrough": {
+    "pr": "https://github.com/LooperSalty/AnyXboxX/pull/550",
+    "revision": "a088a1c4675574bc2d3f949c504fd41c8690ea77",
+    "maintainer_review": "https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7228409980",
+    "portbridge_review": "https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7229819508",
+    "upstream_status": "open at handoff",
+    "fixture": "anyxboxx-550-pool-pressure.py",
+    "result": "{'busy_8gb_old': [4, 8, 12, 16, 20], 'busy_8gb_no_increase': [4, 4, 4, 4, 4], 'busy_8gb_over_line': [4, 2, 2, 2, 2], 'busy_8gb_pressure': [4, 2, 2, 2, 2], 'roomy_12gb': 64, 'near_line_12gb': 9}",
+    "scope": "Deterministic arithmetic model. The 12 GiB physical check and upstream runtime integration are unverified."
+  },
+  "memory_followthrough": {
+    "accepted": "https://github.com/LooperSalty/AnyXboxX/commit/09275ac5c700cf1b0de7fb601187012f518e3368",
+    "benchmark": "https://github.com/Marvisak/VIctory/issues/3505#issuecomment-7222271132",
+    "timing_diagnostics": "https://github.com/Marvisak/VIctory/issues/3505#issuecomment-7229547670",
+    "decision": "The merged arena-accounting fix corrects synthetic churn. The author states arenas remain alive through a game session. The old in-game six-minute growth remains unresolved. Use full DRED only for diagnostic attribution and reserve normal mode for frame-time comparisons."
+  },
+  "automatic_scope_limit": "The Xbox-origin online query uses the external repository allowlist plus PS5 peers. VIctory and AnyXboxX are outside that online query scope."
+}
