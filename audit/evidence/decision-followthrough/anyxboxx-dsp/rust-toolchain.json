@@ -1,0 +1,1 @@
+{"version": "1.100.1 (20ddd0171 2026-11-25)", "target": "x86_64-pc-windows-gnu", "sha256": {"rustc": "d22d212fae56034ed225dc690816add8c5c66e79ef9b1bf2099487abec7a7e35", "rust-std": "3a0f58898d137dd68c8cfc3533989914420d7f4135cde62fbefec2d9a83058d6", "rust-mingw": "57952de9d26e918229a67875aac81729e18932592af6c21a2de1224594da63a6"}}
