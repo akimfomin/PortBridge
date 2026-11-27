@@ -1,0 +1,43 @@
+{
+  "urls": {
+    "site": "https://akimfomin.github.io/PortBridge/data/site.json",
+    "health": "https://akimfomin.github.io/PortBridge/data/health.json",
+    "radar": "https://akimfomin.github.io/PortBridge/data/radar.json",
+    "source-code": "https://akimfomin.github.io/PortBridge/data/source-code.json",
+    "lab": "https://akimfomin.github.io/PortBridge/data/lab.json"
+  },
+  "generated_at": "2026-11-27T20:22:56+00:00",
+  "observation_count": 36889,
+  "source_totals": {
+    "age": {
+      "fresh": 42,
+      "stale": 7
+    },
+    "availability": {
+      "public": 40,
+      "unavailable": 7,
+      "archived": 2
+    },
+    "collection": {
+      "ok": 40,
+      "unavailable": 7,
+      "partial": 1,
+      "stale": 1
+    }
+  },
+  "radar_count": 360,
+  "ci_candidates": 27,
+  "ci_active": 0,
+  "source_files": 71,
+  "expected_files": 71,
+  "continued_files": [
+    "runtime/test/fixtures/tiny_async.cpp",
+    "runtime/test/image_memory_test.cpp",
+    "runtime/test/vk_descriptor_bench.cpp",
+    "runtime/test/xbox_present_test.cpp",
+    "scripts/bench_wave64.py"
+  ],
+  "lab_tasks": 16,
+  "publication_run": "https://github.com/akimfomin/PortBridge/actions/runs/46062598352",
+  "main_sha": "984f19a579da1fc4cd95baf2f3e4b3b5c2f330ae"
+}

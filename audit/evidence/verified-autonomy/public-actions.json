@@ -1,0 +1,60 @@
+{
+  "runs": [
+    {
+      "id": 45917400112,
+      "run_attempt": 1,
+      "head_sha": "2166a90e424aa8897d3dfcb02eb5bb994f069bd4",
+      "created_at": "2026-11-27T00:33:22Z",
+      "html_url": "https://github.com/akimfomin/PortBridge/actions/runs/45917400112",
+      "conclusion": "success",
+      "head_branch": "main",
+      "event": "schedule"
+    },
+    {
+      "id": 45970589550,
+      "run_attempt": 1,
+      "head_sha": "9fc05e1f3fe7e1bfd63e9dbd0c44f7f3c2946012",
+      "created_at": "2026-11-27T09:03:57Z",
+      "html_url": "https://github.com/akimfomin/PortBridge/actions/runs/45970589550",
+      "conclusion": "success",
+      "head_branch": "main",
+      "event": "schedule"
+    },
+    {
+      "id": 46052874542,
+      "run_attempt": 1,
+      "head_sha": "88d02b3a39757ffefb3b9eebe6847085643f30b6",
+      "created_at": "2026-11-27T18:54:27Z",
+      "html_url": "https://github.com/akimfomin/PortBridge/actions/runs/46052874542",
+      "conclusion": "success",
+      "head_branch": "main",
+      "event": "schedule"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 15162839029,
+      "name": "portbridge-scheduled-publication-v1",
+      "expired": false,
+      "workflow_run": {
+        "id": 45917400112
+      }
+    },
+    {
+      "id": 15185851570,
+      "name": "portbridge-scheduled-publication-v1",
+      "expired": false,
+      "workflow_run": {
+        "id": 45970589550
+      }
+    },
+    {
+      "id": 15225312671,
+      "name": "portbridge-scheduled-publication-v1",
+      "expired": false,
+      "workflow_run": {
+        "id": 46052874542
+      }
+    }
+  ]
+}

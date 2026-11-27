@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/akimfomin/PortBridge/actions/runs/46052874542/artifacts/15225881395",
+  "producer_sha": "88d02b3a39757ffefb3b9eebe6847085643f30b6",
+  "archive_sha256": "a969a2c38e59262f01ca3f9e9c4793533a234a4ca8869a19ab051968eb724af3",
+  "sqlite_sha256": "2f1b0198f7fbd2c1b12cec4b9850ebc66321e9432b1b904421e05755f9d288ed",
+  "observation_identity_sha256": "e4f6caa8e8ecade47babd834d40e22518d0fb14c0fc11af3892874f7942eaa95",
+  "before": 36367,
+  "restored": 36367,
+  "reverified": 36367,
+  "discovery_jobs": 3676,
+  "sqlite_integrity": "ok"
+}

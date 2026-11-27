@@ -1,0 +1,141 @@
+{
+  "checked_at": "2026-11-27T18:59:46Z",
+  "total": 360,
+  "ci_source_candidates": [
+    {
+      "id": "radar:0e48ef59306899f34acedd085b14bdf0",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/46043156180",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:256c60e9302bccbb55c68d2a261e3802",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/46043098282",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:31053dcf155e2d15ef04a3a3f9600ad8",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/46042963554",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:4890f5b325abdf091daa88285ba97fbd",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/46043155996",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:987b2aa6d988077be4e2ada426849ab1",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/46042902842",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:a17dac14619539507c1274d31e9ab2cc",
+      "url": "https://github.com/xcl-dev/xcl/actions/runs/46042948946",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:a25afc3d35c5eaff1a97e4add8ae9ba2",
+      "url": "https://github.com/xcl-dev/xcl/actions/runs/46042945351",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:a722a35e919b31312991542acbf5f562",
+      "url": "https://github.com/xcl-dev/xcl/actions/runs/46043011142",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:cb68c0756db524798261e806eee77a57",
+      "url": "https://github.com/xcl-dev/xcl/actions/runs/46042921000",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:e4cdc9dbe98f48a5bd82bec2c3ab4289",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/46043038781",
+      "state": "candidate"
+    },
+    {
+      "id": "radar:267b848a555b562f78b1863afe5faf10",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/46043072426",
+      "state": "stale"
+    },
+    {
+      "id": "radar:2e88539f6d8029c96aa2c295b6025b1f",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/46043146560",
+      "state": "stale"
+    },
+    {
+      "id": "radar:dbb546f42a38866e1ad613bc24c3abda",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/46043176358",
+      "state": "stale"
+    },
+    {
+      "id": "radar:1171c265f2a34d3c2885744ee68c5b8f",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45999633720",
+      "state": "stale"
+    },
+    {
+      "id": "radar:22e9b42f4e36a9c2bda7d8106cddef41",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/45999210538",
+      "state": "stale"
+    },
+    {
+      "id": "radar:423d94dbd2d5a4ebb75d59ef1383c813",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45999366878",
+      "state": "stale"
+    },
+    {
+      "id": "radar:87fda5b3389785c381fa4d0071c27a2b",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45999634566",
+      "state": "stale"
+    },
+    {
+      "id": "radar:91558af332fb3d67c5ef1e9930f2f5e7",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45999605636",
+      "state": "stale"
+    },
+    {
+      "id": "radar:c3503b3fc8c624ad9eb091d471edadd9",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45999744661",
+      "state": "stale"
+    },
+    {
+      "id": "radar:d3fa72b25b8d575d0a1bbec683422abd",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/45994365071",
+      "state": "stale"
+    },
+    {
+      "id": "radar:e20d28e74240a5bc7b7a8fd772f670a5",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/45999503784",
+      "state": "stale"
+    },
+    {
+      "id": "radar:ed5852271068d6bc3860ff2b9f8729e7",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/45998782496",
+      "state": "stale"
+    },
+    {
+      "id": "radar:efa106d21f905f123ed6468a436ef5d8",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/45996610131",
+      "state": "stale"
+    },
+    {
+      "id": "radar:288bdc2eb8a94ca9ce9359a913362e5e",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45996885735",
+      "state": "stale"
+    },
+    {
+      "id": "radar:28900e48829e8810446240d0a7b233e7",
+      "url": "https://github.com/R0Y00/Xbox2Windows/actions/runs/45995914045",
+      "state": "stale"
+    },
+    {
+      "id": "radar:f045ab64725f30f491864b605adbf31e",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45997027510",
+      "state": "stale"
+    },
+    {
+      "id": "radar:f04c95d7154ff8430afc683f2e2dbbd8",
+      "url": "https://github.com/boykopovar/AnyPS5/actions/runs/45996883361",
+      "state": "stale"
+    }
+  ]
+}

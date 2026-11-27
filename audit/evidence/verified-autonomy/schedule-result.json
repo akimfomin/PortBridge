@@ -1,0 +1,59 @@
+{
+  "start_utc": "2026-11-26T21:07:00+00:00",
+  "end_utc": "2026-12-03T21:07:00+00:00",
+  "elapsed_days": 0.92,
+  "expected_slots_elapsed": 44,
+  "scheduled_runs": 3,
+  "verified_publications": [
+    {
+      "at": "2026-11-27T00:42:42+00:00",
+      "triggered_at": "2026-11-27T00:33:22Z",
+      "url": "https://github.com/akimfomin/PortBridge/actions/runs/45917400112",
+      "sha": "2166a90e424aa8897d3dfcb02eb5bb994f069bd4",
+      "artifact_id": 15162839029,
+      "attempt": 1
+    },
+    {
+      "at": "2026-11-27T09:10:59+00:00",
+      "triggered_at": "2026-11-27T09:03:57Z",
+      "url": "https://github.com/akimfomin/PortBridge/actions/runs/45970589550",
+      "sha": "9fc05e1f3fe7e1bfd63e9dbd0c44f7f3c2946012",
+      "artifact_id": 15185851570,
+      "attempt": 1
+    },
+    {
+      "at": "2026-11-27T19:01:53+00:00",
+      "triggered_at": "2026-11-27T18:54:27Z",
+      "url": "https://github.com/akimfomin/PortBridge/actions/runs/46052874542",
+      "sha": "88d02b3a39757ffefb3b9eebe6847085643f30b6",
+      "artifact_id": 15225312671,
+      "attempt": 1
+    }
+  ],
+  "successful_run_with_listed_artifact_only": [],
+  "verified_after_window": [],
+  "scheduled_without_success_receipt": [],
+  "verified_per_24h": [
+    3,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "longest_observed_gap_hours": 9.85,
+  "seven_intervals_observed": false,
+  "live_assets": {
+    "site": {
+      "sha256": "b0eb9095c7a7eafb120c732bbecf6d7c005b964ef19ff7dbcb2a73adccd2b3ef",
+      "receipt_sha256": "b0eb9095c7a7eafb120c732bbecf6d7c005b964ef19ff7dbcb2a73adccd2b3ef",
+      "match": true
+    },
+    "lab": {
+      "sha256": "7b59e091a6f4af333cd2698cc155f171b494a03cbec02308c2f07bae778383a7",
+      "receipt_sha256": "7b59e091a6f4af333cd2698cc155f171b494a03cbec02308c2f07bae778383a7",
+      "match": true
+    }
+  }
+}
