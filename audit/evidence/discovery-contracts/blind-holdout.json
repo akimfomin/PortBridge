@@ -1,0 +1,113 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T19:38:00.207163+00:00",
+  "method": "Retrospective public GitHub reports, including open and resolved reports. Selected by verified primary source and exact diagnostic before any ranking was inspected. Exact positive requires the cited clause and matching command or structure context. Scope negatives to exact normative diagnosis and keep generic API references separate from proof of the crash mechanism.",
+  "cases": [
+    {
+      "origin": "https://github.com/shader-slang/slang/issues/14593",
+      "title": "Vulkan validation error for a cube array texture with -emit-spirv-via-glsl",
+      "created_at": "2026-11-18T15:05:54Z",
+      "updated_at": "2026-11-18T18:29:56Z",
+      "state": "open",
+      "stratum": "exact_vuid_common_dispatch",
+      "grade": "positive_external",
+      "mechanism": "Image-view dimensionality and arrayedness must match the compute shader's image type.",
+      "decision": "Compare the emitted SPIR-V image type and the VkImageView descriptor for the exact dispatched binding. Determine whether the fixture must create an array view even when it has one cube, or whether the compiler emitted the wrong type.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/commonvalidity/draw_dispatch_common.adoc",
+          "lines": [
+            324,
+            327
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/draw_dispatch_common.adoc#L324-L327",
+          "note": "The shared graphics/compute clause is instantiated for vkCmdDispatch and cites the SPIR-V dimensionality rules. It establishes the exact check without blaming Slang or the fixture.",
+          "source_sha256": "8c26962bdaf318d9c596ff011aae3267eb2d0c069c07fb5a3148d341952c261b",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "c44afe8a3d8e822c54f7b989e9678f9259833fe6756a14acbb732adc800ca65f",
+      "vuid": "VUID-vkCmdDispatch-viewType-07752"
+    },
+    {
+      "origin": "https://github.com/flightlessmango/MangoHud/issues/1717",
+      "title": "Validation error reported from VK_LAYER_KHRONOS_validation when creating swapchain",
+      "created_at": "2025-06-11T00:36:57Z",
+      "updated_at": "2025-12-05T15:15:33Z",
+      "state": "closed",
+      "stratum": "exact_vuid_named_structure",
+      "grade": "positive_external",
+      "mechanism": "Swapchain creation present mode is restricted to the surface's enumerated modes.",
+      "decision": "Log the modes returned for the exact physical device and surface. Validate the selected mode against that list and choose a supported fallback if the preference is unavailable.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            6162,
+            6165
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6162-L6165",
+          "note": "Exact structure-member contract in the WSI chapter, independent of the Vulkan layer's hook.",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "e3bcde89b9bbde482d7af585789a4005aced5578d26d7bbaada375a981413c5e",
+      "vuid": "VUID-VkSwapchainCreateInfoKHR-presentMode-01281"
+    },
+    {
+      "origin": "https://github.com/godotengine/godot/issues/102358",
+      "title": "Vulkan validation errors on startup in vkCmdCopyBufferToImage",
+      "created_at": "2025-02-03T12:22:37Z",
+      "updated_at": "2025-05-13T17:09:04Z",
+      "state": "open",
+      "stratum": "exact_vuid_common_copy",
+      "grade": "positive_external",
+      "mechanism": "Vulkan buffer-to-image copies are constrained by the command pool queue family's transfer granularity.",
+      "decision": "Use a queue family and copy region whose imageOffset and imageExtent obey its reported minImageTransferGranularity. Compare a complete subresource copy with the reported partial-slice copy on the same queue.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/commonvalidity/copy_buffer_to_image_command_buffer_common.adoc",
+          "lines": [
+            32,
+            36
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/copy_buffer_to_image_command_buffer_common.adoc#L32-L36",
+          "note": "Specific to the startup copy error. A different draw VUID mentioned in a linked issue does not explain the copy diagnostic.",
+          "source_sha256": "8bcde05ba7aca80ad04a42b7a6f29b79fb82a03712603c19d6f03e6b7d820cc6",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "89524270d78c63bee9acd3385d2919cf9ae85e63d75fbba85bbe6d20e937b7fd",
+      "vuid": "VUID-vkCmdCopyBufferToImage-imageOffset-07738"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/12257",
+      "title": "Segfault in `vkCmdBeginRendering` after updating Vulkan SDK",
+      "created_at": "2026-05-13T13:49:25Z",
+      "updated_at": "2026-05-13T17:58:31Z",
+      "state": "closed",
+      "stratum": "negative_stability",
+      "grade": "negative_scoped",
+      "mechanism": "Dynamic rendering call reaches a layer-internal crash following an SDK update, without a reported VUID.",
+      "decision": "Use the reported validation-layer versions and isolate the SDK regression with a minimized legal test. A generic vkCmdBeginRendering requirement cannot by itself identify the cause of the SIGSEGV.",
+      "sources": [],
+      "body_sha256": "797d21a34c4233b56f32c84a171147e3160a2cfafe2cb4786b61257332bf53da"
+    }
+  ]
+}

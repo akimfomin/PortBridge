@@ -1,0 +1,183 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T19:25:23.747645+00:00",
+  "method": "Open public graphics engineering tasks selected independent of implementation and ranked output. Exact diagnostics count only if the specific normative predicate is cited. A positive requires an actionable external source on the mechanism; unrelated sources are incorrect. Negative claims are limited to the supplied public report. Independent on issue identities; stable old specification cases intentionally serve as controls alongside newer reports.",
+  "cases": [
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16315",
+      "title": "Vulkan validation error when creating a 3D texture for compute shader writing + sampling with SDL3 GPU",
+      "created_at": "2026-09-14T09:57:44Z",
+      "updated_at": "2026-11-16T00:38:07Z",
+      "state": "open",
+      "stratum": "exact_vuid",
+      "grade": "positive_external",
+      "mechanism": "Image-layout transitions must describe the preceding layout of the selected subresources.",
+      "decision": "Check the tracked 3D texture subresource layout before the transition. Use the actual previous layout, or UNDEFINED only when discarding the old contents is intentional.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/commonvalidity/image_memory_barrier_common.adoc",
+          "lines": [
+            11,
+            14
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/image_memory_barrier_common.adoc#L11-L14",
+          "note": "Instantiated by VkImageMemoryBarrier in the synchronization chapter. The clause answers the layout invariant, not which SDL transition broke it.",
+          "source_sha256": "161ec12e34b1be8f73ae4c4206b4ee8f5490b43230cfbd25d28dad7e7646078b",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "addb777da30f14cf8a54df9b232b1a153dbbb798fa5fd9622653075559578b26"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/12635",
+      "title": "Move RT validation to GPU-AV",
+      "created_at": "2026-07-07T12:41:07Z",
+      "updated_at": "2026-10-21T09:01:46Z",
+      "state": "open",
+      "stratum": "exact_vuid",
+      "grade": "positive_external",
+      "mechanism": "Ray-tracing acceleration structure UPDATE requires matching prior primitive counts.",
+      "decision": "Tie the validation to the prior successful build and compare each geometry's range primitiveCount before accepting UPDATE.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/commonvalidity/build_acceleration_structure_common.adoc",
+          "lines": [
+            256,
+            264
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/build_acceleration_structure_common.adoc#L256-L264",
+          "note": "Instantiated by vkCmdBuildAccelerationStructuresKHR. Normative precondition for the requested migration to GPU-assisted validation.",
+          "source_sha256": "73647af961bf887882a54e6357fe528718f63f2ad1d0993853534a34019c2d40",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "3427b41cfbd125dbed6835fcc2f648b42bfcf8d92431e994c5d81e2fe78754d3"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/11420",
+      "title": "missing VUs for externally synchronized",
+      "created_at": "2026-01-08T19:41:11Z",
+      "updated_at": "2026-01-27T00:09:48Z",
+      "state": "open",
+      "stratum": "exact_vuid",
+      "grade": "positive_external",
+      "mechanism": "Creation flag controls externally synchronized host access to a Vulkan pipeline cache.",
+      "decision": "Guard use of the same externally synchronized cache with host synchronization; classify this as flag-dependent and preserve the VUID scope of vkCreateGraphicsPipelines.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/pipelines.adoc",
+          "lines": [
+            2081,
+            2085
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L2081-L2085",
+          "note": "Direct normative applicability, without claiming this graphics VUID also applies to merge operations.",
+          "source_sha256": "18b25c16c23d77eee3faecd020c159801c0646853c7203d790d5b09c7ebacc56",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "a71f4c8f04a1b26c0a27c5806fd4f3dfc856c527dc11b3db4515f5c5c6e825de"
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/1167",
+      "title": "Support for D3D12CheckFeatureSupport (updated to report up to D3D12_FEATURE_DATA_D3D12_OPTIONS15)",
+      "created_at": "2022-07-15T06:52:05Z",
+      "updated_at": "2022-11-06T20:29:58Z",
+      "state": "open",
+      "stratum": "external_implementation",
+      "grade": "positive_external",
+      "mechanism": "D3D12 OPTIONS15 consumer behavior when CheckFeatureSupport fails.",
+      "decision": "Use the public helper as a runnable contract reference for the absent-capability case; it zeroes the options fields on failure. Separately check backend coverage before exposing any capability.",
+      "sources": [
+        {
+          "repo": "microsoft/DirectX-Headers",
+          "revision": "61c7718954ec73dbdd43c723240fe1a0452a3724",
+          "license": "MIT",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/LICENSE",
+          "path": "include/directx/d3dx12_check_feature_support.h",
+          "lines": [
+            626,
+            629
+          ],
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L626-L629",
+          "note": "Primary DirectX-Headers consumer implementation. The probe behavior is independently useful even if support in the issue project has since landed.",
+          "source_sha256": "82109e9666135f7eb275921d34e47662ddb9a4b6e5612df1a99ed4805a5f0b28",
+          "license_sha256": "903df5512f7d02609fed0c780a9b704f5a3eeb6e4d84ebe42a29845c81899a3c"
+        }
+      ],
+      "body_sha256": "3fe7269f0f540dda4e04d827d148f3da3f19b76eefaa1c0c7633a783b160954c"
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/14809",
+      "title": "GPU: STORAGE_READ vs SAMPLER",
+      "created_at": "2026-01-12T14:38:43Z",
+      "updated_at": "2026-05-24T15:44:12Z",
+      "state": "open",
+      "stratum": "external_rule",
+      "grade": "positive_external",
+      "mechanism": "Typed UAV reads have separate D3D12 format capability predicates.",
+      "decision": "Keep storage reads distinct from sampled texture support in the capability matrix. Query TypedUAVLoadAdditionalFormats and the relevant per-format D3D12_FORMAT_SUPPORT2_UAV_TYPED_LOAD bit.",
+      "sources": [
+        {
+          "repo": "MicrosoftDocs/win32",
+          "revision": "bc82a65f74ef2c4f2f44a3d7db5f7cfebfdc3583",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/MicrosoftDocs/win32/blob/bc82a65f74ef2c4f2f44a3d7db5f7cfebfdc3583/LICENSE",
+          "path": "desktop-src/direct3d12/typed-unordered-access-view-loads.md",
+          "lines": [
+            79,
+            95
+          ],
+          "url": "https://github.com/MicrosoftDocs/win32/blob/bc82a65f74ef2c4f2f44a3d7db5f7cfebfdc3583/desktop-src/direct3d12/typed-unordered-access-view-loads.md#L79-L95",
+          "note": "Primary D3D12 guidance for typed UAV loads. Does not claim Metal/Vulkan equivalence or depth format support.",
+          "source_sha256": "dbdec03e6bc4eba701ac9d4e4f3cff74566f17fbc9d21c85f78962157589ba5e",
+          "license_sha256": "7183ef9749eb9b75e710a81a4c812a9405cc184f087500581a973e5929ac3f5e"
+        }
+      ],
+      "body_sha256": "9312dd50dbb4cacb49599bd3dcdda1e1db367ca21a852964347577cb49106c58"
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3474",
+      "title": "Resonance: A Plague Tale Legacy - Deterministic 0xC0000005 crash in Chapter 11-5 (C_FURNACE / CP_MOVING_PLATFORM_START) on RADV GFX1201",
+      "created_at": "2026-11-10T00:52:50Z",
+      "updated_at": "2026-11-11T20:35:34Z",
+      "state": "open",
+      "stratum": "negative_stability",
+      "grade": "negative_scoped",
+      "mechanism": "An application-specific deterministic crash does not establish a backend mechanism.",
+      "decision": "Abstain from a fix or normative attribution without identifying the failing operation, a regression range or evidence that can distinguish the proposed mechanism.",
+      "sources": [],
+      "body_sha256": "903bf78f06460a31fcdc361ccc3f87306b7be741affbbea587973f03bada9afa"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2675",
+      "title": "[mvk-error] VK_ERROR_DEVICE_LOST: Lost VkDevice after MTLCommandBuffer \"vkQueueSubmit MTLCommandBuffer on Queue 0-0\" execution failed (code 4): Ignored (for causing prior/excessive GPU errors)",
+      "created_at": "2025-12-15T11:30:24Z",
+      "updated_at": "2025-12-31T00:00:43Z",
+      "state": "open",
+      "stratum": "negative_stability",
+      "grade": "negative_scoped",
+      "mechanism": "Vulkan device loss reported after a Metal command buffer error is a catch-all symptom.",
+      "decision": "Abstain from proposing a generic vkQueueSubmit contract as the fix. First correlate the failing commands and driver/backend/configuration differences.",
+      "sources": [],
+      "body_sha256": "b9579999ac6914a77cbb9219a06faba32af03157c5f84feb4a5f190513cd2aef"
+    }
+  ]
+}

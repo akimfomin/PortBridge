@@ -1,0 +1,172 @@
+[
+  {
+    "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/13491",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": {
+        "rank": 1,
+        "line": 96,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96",
+          "line": 96
+        }
+      ]
+    },
+    "compact": {
+      "hit": {
+        "rank": 1,
+        "line": 96,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96",
+          "line": 96,
+          "source_role": "normative_rule"
+        }
+      ]
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 0.68,
+      "research": 2.64
+    },
+    "combined": {
+      "hit": {
+        "rank": 1,
+        "line": 96,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96"
+      },
+      "candidates": [
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2922",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": {
+        "rank": 1,
+        "line": 4942,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942",
+          "line": 4942
+        }
+      ]
+    },
+    "compact": {
+      "hit": {
+        "rank": 1,
+        "line": 4942,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942",
+          "line": 4942,
+          "source_role": "normative_rule"
+        }
+      ]
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 0.78,
+      "research": 2.52
+    },
+    "combined": {
+      "hit": {
+        "rank": 1,
+        "line": 4942,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942"
+      },
+      "candidates": [
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/libsdl-org/SDL/issues/16823",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": null,
+      "candidates": []
+    },
+    "compact": {
+      "hit": null,
+      "candidates": []
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 4.99,
+      "research": 1.02
+    },
+    "combined": {
+      "hit": null,
+      "candidates": []
+    }
+  },
+  {
+    "origin": "https://github.com/gfx-rs/wgpu/issues/10125",
+    "grade": "negative_scoped",
+    "baseline": {
+      "hit": null,
+      "candidates": []
+    },
+    "compact": {
+      "hit": null,
+      "candidates": []
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 1.35,
+      "research": 1.29
+    },
+    "combined": {
+      "hit": null,
+      "candidates": []
+    }
+  },
+  {
+    "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3444",
+    "grade": "negative_scoped",
+    "baseline": {
+      "hit": null,
+      "candidates": []
+    },
+    "compact": {
+      "hit": null,
+      "candidates": []
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 6.32,
+      "research": 1.22
+    },
+    "combined": {
+      "hit": null,
+      "candidates": []
+    }
+  }
+]

@@ -1,0 +1,231 @@
+[
+  {
+    "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1698",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/subgroups.cpp#L290",
+          "line": 290
+        }
+      ]
+    },
+    "compact": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/subgroups.cpp#L290",
+          "line": 290,
+          "source_role": "exact_diagnostic"
+        }
+      ]
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 0.69,
+      "research": 1.41
+    },
+    "combined": {
+      "hit": null,
+      "candidates": [
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/subgroups.cpp#L290"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/gfx-rs/wgpu/issues/7696",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": null,
+      "candidates": []
+    },
+    "compact": {
+      "hit": null,
+      "candidates": []
+    },
+    "research": {
+      "hit": {
+        "rank": 2,
+        "line": 4033,
+        "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4033"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/appendices/spirvenv.adoc#L478",
+          "line": 478,
+          "source_role": "normative_rule"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4033",
+          "line": 4033,
+          "source_role": "exact_diagnostic"
+        }
+      ]
+    },
+    "time_ms": {
+      "baseline": 1.29,
+      "research": 3.07
+    },
+    "combined": {
+      "hit": {
+        "rank": 2,
+        "line": 4033,
+        "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4033"
+      },
+      "candidates": [
+        "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4033",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/appendices/spirvenv.adoc#L478"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/gfx-rs/wgpu/issues/9880",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/command.cpp#L412",
+          "line": 412
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L45",
+          "line": 45
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/vertexpostproc.adoc#L1991",
+          "line": 1991
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6047",
+          "line": 6047
+        }
+      ]
+    },
+    "compact": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/vertexpostproc.adoc#L1991",
+          "line": 1991,
+          "source_role": "normative_rule"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6047",
+          "line": 6047,
+          "source_role": "normative_rule"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/command.cpp#L412",
+          "line": 412,
+          "source_role": "exact_diagnostic"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L45",
+          "line": 45,
+          "source_role": "exact_diagnostic"
+        }
+      ]
+    },
+    "research": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/push_constants_common.adoc#L7",
+          "line": 7,
+          "source_role": "normative_rule",
+          "rule_id": "VUID-vkCmdPushConstants-offset-01795",
+          "context_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/descriptorsets.adoc#L5235"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/buffer_usage_flags_common.adoc#L15",
+          "line": 15,
+          "source_role": "normative_rule",
+          "rule_id": "VUID-VkBufferCreateInfo-None-09500",
+          "context_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L192"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/appendices/spirvenv.adoc#L1085",
+          "line": 1085,
+          "source_role": "normative_rule"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/copy_image_common.adoc#L340",
+          "line": 340,
+          "source_role": "normative_rule",
+          "rule_id": "VUID-vkCmdCopyImage-srcImage-01728",
+          "context_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/copies.adoc#L368"
+        }
+      ]
+    },
+    "time_ms": {
+      "baseline": 1.11,
+      "research": 7.29
+    },
+    "combined": {
+      "hit": null,
+      "candidates": [
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/appendices/spirvenv.adoc#L1085",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/buffer_usage_flags_common.adoc#L15",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/copy_image_common.adoc#L340",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/push_constants_common.adoc#L7",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6047",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/vertexpostproc.adoc#L1991",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/command.cpp#L412",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L45"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/gfx-rs/wgpu/issues/9306",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": null,
+      "candidates": []
+    },
+    "compact": {
+      "hit": null,
+      "candidates": []
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 2.94,
+      "research": 0.07
+    },
+    "combined": {
+      "hit": null,
+      "candidates": []
+    }
+  },
+  {
+    "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1749",
+    "grade": "negative_scoped",
+    "baseline": {
+      "hit": null,
+      "candidates": []
+    },
+    "compact": {
+      "hit": null,
+      "candidates": []
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 8.22,
+      "research": 1.37
+    },
+    "combined": {
+      "hit": null,
+      "candidates": []
+    }
+  }
+]

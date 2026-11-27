@@ -76,7 +76,9 @@ def grade(matches, sources):
                 if all(found[field] == expected[field] for field in ("path", "revision", "license"))
                 and found["repo"].casefold() == expected["repo"].casefold()
                 and expected["lines"][0] <= found["line"] <= expected["lines"][1]), None)
-    return {"hit": hit, "candidates": [{field: match[field] for field in ("url", "line")} for match in matches]}
+    fields = ("url", "line", "source_role", "rule_id", "context_url")
+    return {"hit": hit, "candidates": [{field: match[field] for field in fields if field in match}
+                                      for match in matches]}
 
 
 if __name__ == "__main__":

@@ -1,0 +1,145 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T19:42:56.322846+00:00",
+  "method": "Retrospective reports from four teams. Freeze before rankings. Count the primary exact diagnostic by case and account for additional normative clauses as secondary diagnostics, without increasing the case denominator. Correct localization determines the next check; it does not establish a project-specific root cause. Negatives are scoped to exact normative localization.",
+  "cases": [
+    {
+      "origin": "https://github.com/godotengine/godot/issues/118930",
+      "title": "Godot throw GPU validation errors when using 3D meshes with `--gpu-validation` on Vulkan",
+      "created_at": "2026-04-24T21:31:18Z",
+      "updated_at": "2026-04-30T16:00:56Z",
+      "state": "closed",
+      "stratum": "exact_vuid_template_sampler",
+      "grade": "positive_external",
+      "mechanism": "Filtering capability depends on the image view's format features and the sampler's filtering and comparison modes.",
+      "decision": "Inspect the exact bound view and sampler from the reported draw. If the VUID conditions hold and linear filtering is unsupported, choose a filterable format or the nearest filter. Otherwise investigate the validation result.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/commonvalidity/draw_dispatch_common.adoc",
+          "lines": [
+            7,
+            17
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/draw_dispatch_common.adoc#L7-L17",
+          "note": "The shared draw and dispatch clause specializes to vkCmdDrawIndexed. It tests the reported view/sampler combination and includes the comparison mode exception.",
+          "source_sha256": "8c26962bdaf318d9c596ff011aae3267eb2d0c069c07fb5a3148d341952c261b",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "8c70be537c56220610d9a974d11c1c9621a6f77a8b8b8fd04ed9322667a55671",
+      "vuid": "VUID-vkCmdDrawIndexed-magFilter-04553"
+    },
+    {
+      "origin": "https://github.com/bevyengine/bevy/issues/22733",
+      "title": "Vulkan validation errors: VUID-VkPresentInfoKHR-pImageIndices-01430 and VUID-vkAcquireNextImageKHR-semaphore-01286",
+      "created_at": "2026-01-29T02:11:18Z",
+      "updated_at": "2026-08-22T15:16:58Z",
+      "state": "closed",
+      "stratum": "exact_vuid_named_wsi",
+      "grade": "positive_external",
+      "mechanism": "The reported WSI diagnostics independently constrain the present image and acquisition semaphore.",
+      "decision": "Check the image index and layout for that exact swapchain at present time. Separately trace the acquisition semaphore state and avoid reusing a signaled semaphore. Neither predicate proves which implementation caused the state.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            7531,
+            7539
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L7531-L7539",
+          "note": "Primary diagnostic, paired with the acquired-image and present-layout requirements.",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            6894,
+            6895
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6894-L6895",
+          "note": "Second diagnostic from the same report, requiring an unsignaled non-null acquire semaphore.",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "42665de07505194e8200b5c5d7224c414de129ecd9504c7e142d8a6eb20600ce",
+      "vuid": "VUID-VkPresentInfoKHR-pImageIndices-01430"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/4058",
+      "title": "False positive VUID-VkRenderingAttachmentInfo-imageView-06130",
+      "created_at": "2022-04-27T10:34:05Z",
+      "updated_at": "2022-04-28T13:55:30Z",
+      "state": "closed",
+      "stratum": "exact_vuid_named_renderpass",
+      "grade": "positive_external",
+      "mechanism": "The integer color-attachment resolve rule is scoped to color formats.",
+      "decision": "Before applying these two color-resolve clauses, distinguish a color attachment from depth/stencil. For a depth/stencil attachment, investigate its own resolve requirements.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/renderpass.adoc",
+          "lines": [
+            1158,
+            1162
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L1158-L1162",
+          "note": "Primary rule for integer color attachments; the report provides an example of incorrectly extending it to stencil.",
+          "source_sha256": "68415ea53e029a2dd98c861ac5d03b90db1153f6697bcb5a3086749e165d394a",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/renderpass.adoc",
+          "lines": [
+            1153,
+            1157
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L1153-L1157",
+          "note": "Companion clause for non-integer color attachments, also mentioned by the report.",
+          "source_sha256": "68415ea53e029a2dd98c861ac5d03b90db1153f6697bcb5a3086749e165d394a",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "0eabd37738c1c40b2a861ac06a8894fc74c9bf5e9a5ba3b685ac3a4b530ab53a",
+      "vuid": "VUID-VkRenderingAttachmentInfo-imageView-06130"
+    },
+    {
+      "origin": "https://github.com/baldurk/renderdoc/issues/3643",
+      "title": "RenderDoc 1.39 closing connection during Vulkan capture inspection",
+      "created_at": "2025-07-13T06:06:31Z",
+      "updated_at": "2025-11-17T06:52:47Z",
+      "state": "closed",
+      "stratum": "negative_stability",
+      "grade": "negative_scoped",
+      "mechanism": "The report identifies device loss during capture replay and gives a RenderDoc version range, without a primary exact validation diagnostic in the issue body.",
+      "decision": "Use the observed good and bad RenderDoc versions to isolate the replay change. Do not assign an arbitrary vkCmdDrawIndexed usage clause as the cause of the replay error.",
+      "sources": [],
+      "body_sha256": "f38e30641bd8b69106f72be0c22a5072d861d9db95dc28962f779282f2a804d2"
+    }
+  ]
+}

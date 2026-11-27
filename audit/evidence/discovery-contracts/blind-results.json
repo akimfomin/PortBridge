@@ -1,0 +1,281 @@
+[
+  {
+    "origin": "https://github.com/shader-slang/slang/issues/14593",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L1195",
+          "line": 1195
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/textures.adoc#L456",
+          "line": 456
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L7123",
+          "line": 7123
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4191",
+          "line": 4191
+        }
+      ]
+    },
+    "compact": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L1195",
+          "line": 1195,
+          "source_role": "source_reference"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/textures.adoc#L456",
+          "line": 456,
+          "source_role": "source_reference"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L7123",
+          "line": 7123,
+          "source_role": "source_reference"
+        }
+      ]
+    },
+    "research": {
+      "hit": {
+        "rank": 1,
+        "line": 324,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/draw_dispatch_common.adoc#L324"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/draw_dispatch_common.adoc#L324",
+          "line": 324,
+          "source_role": "normative_rule",
+          "rule_id": "VUID-vkCmdDispatch-viewType-07752",
+          "context_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/dispatch.adoc#L39"
+        }
+      ]
+    },
+    "time_ms": {
+      "baseline": 2.15,
+      "research": 3.56
+    },
+    "combined": {
+      "hit": {
+        "rank": 1,
+        "line": 324,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/draw_dispatch_common.adoc#L324"
+      },
+      "candidates": [
+        "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L7123",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/draw_dispatch_common.adoc#L324",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L1195",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/textures.adoc#L456"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/flightlessmango/MangoHud/issues/1717",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": {
+        "rank": 1,
+        "line": 6162,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6162"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6162",
+          "line": 6162
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L3883",
+          "line": 3883
+        }
+      ]
+    },
+    "compact": {
+      "hit": {
+        "rank": 1,
+        "line": 6162,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6162"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6162",
+          "line": 6162,
+          "source_role": "normative_rule"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L3883",
+          "line": 3883,
+          "source_role": "exact_diagnostic"
+        }
+      ]
+    },
+    "research": {
+      "hit": null,
+      "candidates": []
+    },
+    "time_ms": {
+      "baseline": 0.84,
+      "research": 1.54
+    },
+    "combined": {
+      "hit": {
+        "rank": 1,
+        "line": 6162,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6162"
+      },
+      "candidates": [
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6162",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L3883"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/godotengine/godot/issues/102358",
+    "grade": "positive_external",
+    "baseline": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L2274",
+          "line": 2274
+        },
+        {
+          "url": "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/runtime/test/vk_descriptor_bench.cpp#L1323",
+          "line": 1323
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L627",
+          "line": 627
+        },
+        {
+          "url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/synchronization/vktGlobalPriorityQueueTests.cpp#L738",
+          "line": 738
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptors.cpp#L5133",
+          "line": 5133
+        }
+      ]
+    },
+    "compact": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L2274",
+          "line": 2274,
+          "source_role": "source_reference"
+        },
+        {
+          "url": "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/runtime/test/vk_descriptor_bench.cpp#L1323",
+          "line": 1323,
+          "source_role": "source_reference"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L627",
+          "line": 627,
+          "source_role": "source_reference"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/synchronization/vktGlobalPriorityQueueTests.cpp#L738",
+          "line": 738,
+          "source_role": "source_reference"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptors.cpp#L5133",
+          "line": 5133,
+          "source_role": "source_reference"
+        }
+      ]
+    },
+    "research": {
+      "hit": {
+        "rank": 1,
+        "line": 32,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/copy_buffer_to_image_command_buffer_common.adoc#L32"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/copy_buffer_to_image_command_buffer_common.adoc#L32",
+          "line": 32,
+          "source_role": "normative_rule",
+          "rule_id": "VUID-vkCmdCopyBufferToImage-imageOffset-07738",
+          "context_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/copies.adoc#L999"
+        }
+      ]
+    },
+    "time_ms": {
+      "baseline": 19.1,
+      "research": 3.67
+    },
+    "combined": {
+      "hit": {
+        "rank": 1,
+        "line": 32,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/copy_buffer_to_image_command_buffer_common.adoc#L32"
+      },
+      "candidates": [
+        "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L627",
+        "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/synchronization/vktGlobalPriorityQueueTests.cpp#L738",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/copy_buffer_to_image_command_buffer_common.adoc#L32",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L2274",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptors.cpp#L5133",
+        "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/runtime/test/vk_descriptor_bench.cpp#L1323"
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/12257",
+    "grade": "negative_scoped",
+    "baseline": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L13",
+          "line": 13
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L391",
+          "line": 391
+        }
+      ]
+    },
+    "compact": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L391",
+          "line": 391,
+          "source_role": "source_reference"
+        }
+      ]
+    },
+    "research": {
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L13",
+          "line": 13,
+          "source_role": "api_contract"
+        }
+      ]
+    },
+    "time_ms": {
+      "baseline": 1.35,
+      "research": 2.18
+    },
+    "combined": {
+      "hit": null,
+      "candidates": [
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L391",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L13"
+      ]
+    }
+  }
+]
