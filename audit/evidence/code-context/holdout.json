@@ -1,0 +1,138 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "method": "Retrospective purposive held-out benchmark. Chosen against publicly pinned corpus paths and original public reports before observing any baseline or candidate retrieval output. All five origins are absent from the previous assessment files. Both historical antecedent links predate their origin issues and corroborate the later pins. The positives score any expected exact license path, revision and anchor range in the first five candidates. Negatives are scoped to rejecting a quoted mechanism or wrong comparable operation, and require manual adjudication. A raw candidate is not automatically a false transfer. This sample does not support ecosystem-wide estimates.",
+  "cases": [
+    {
+      "origin": "https://github.com/xcl-dev/xcl/issues/810",
+      "title": "Tests: pls_quota expects ERROR_PATH_NOT_FOUND for a missing path below S:\\, Wine returns ERROR_FILE_NOT_FOUND",
+      "created_at": "2026-11-24T05:43:44Z",
+      "grade": "positive_external",
+      "mechanism": "GetDiskFreeSpaceExW propagates the Win32 result of opening the translated directory before it queries free-space information.",
+      "decision": "Inspect the path-conversion and directory-open error split, then isolate the translated path with an independent Win32 probe. This Wine source does not establish which numeric error Windows returns.",
+      "sources": [
+        {
+          "repo": "wine-mirror/wine",
+          "revision": "db11d0fe6a169c457e23d007e20404643d067aa8",
+          "path": "dlls/kernelbase/volume.c",
+          "lines": [
+            91,
+            108
+          ],
+          "license": "LGPL-2.1-or-later",
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernelbase/volume.c#L91-L108",
+          "note": "Helper branches between path conversion and NtOpenFile status."
+        },
+        {
+          "repo": "wine-mirror/wine",
+          "revision": "db11d0fe6a169c457e23d007e20404643d067aa8",
+          "path": "dlls/kernelbase/volume.c",
+          "lines": [
+            615,
+            630
+          ],
+          "license": "LGPL-2.1-or-later",
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernelbase/volume.c#L615-L630",
+          "note": "Exact wide-character API delegates to helper and returns early on its failure."
+        }
+      ],
+      "older_reference": "The pinned Wine 11.0 revision predates the issue.",
+      "body_sha256": "34f962e899f7610b11398ce5eb2503b368762d0f93f402bf44cefa97c717e93b"
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/14518",
+      "title": "Feature Request: Add depth texture copying support in SDL_CopyGPUTextureToTexture",
+      "created_at": "2025-11-24T09:05:41Z",
+      "grade": "positive_external",
+      "mechanism": "Depth/stencil and color copies require matching supported formats and feature/queue checks before the fast image-copy path can be taken.",
+      "decision": "Check true source/destination aspects before any copy, separate matching depth→depth from cross-aspect conversions, and test a feature-off fallback. The vkd3d implementation is a design analogue rather than a prescription for SDL.",
+      "sources": [
+        {
+          "repo": "HansKristian-Work/vkd3d-proton",
+          "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+          "path": "libs/vkd3d/command.c",
+          "lines": [
+            9802,
+            9857
+          ],
+          "license": "LGPL-2.1-or-later",
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L9802-L9857",
+          "note": "Includes the format table, maintenance8 gate and subsequent copy-path selection."
+        }
+      ],
+      "older_reference": "https://github.com/HansKristian-Work/vkd3d-proton/blob/6d97b022a1c501b8574a2dd5d9e0446c83055043/libs/vkd3d/command.c#L8213-L8258",
+      "body_sha256": "a5ba113bf9416d85d2b0235b8c8f76d4f83a41a521f2c305bdfd5a52746cc944"
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/945",
+      "title": "Aliasing Barrier problem in Horizon Zero Dawn",
+      "created_at": "2021-12-17T00:37:20Z",
+      "grade": "positive_external",
+      "mechanism": "A Vulkan image transition from VK_IMAGE_LAYOUT_UNDEFINED permits discarding prior contents, which explains a bad read after a preservation-required alias transition.",
+      "decision": "Check whether the translated barrier is incorrectly marking a preservation-required image as undefined, and verify an earlier render survives the alias sequence. This spec explains the defective consequence without identifying the correct D3D12 fix.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "path": "chapters/resources.adoc",
+          "lines": [
+            5365,
+            5371
+          ],
+          "license": "CC-BY-4.0",
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L5365-L5371",
+          "note": "Normative undefined-old-layout consequence."
+        }
+      ],
+      "older_reference": "https://github.com/KhronosGroup/Vulkan-Docs/blob/3a4dc41cc86b4215e9995f20f2be744a106887d5/chapters/resources.txt#L2968-L2974",
+      "body_sha256": "086ebc496fe030a408c1c3fee55f21a391b64f79a8c4b2e3536b386c254b8b1e"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/9015",
+      "title": "Spurious VUID-vkCmdSetDescriptorBufferOffsetsEXT-pOffsets-08063 error",
+      "created_at": "2024-12-12T15:22:01Z",
+      "grade": "scoped_negative",
+      "mechanism": "A push-descriptor-only layout has reported byte size zero; the complaint is a spurious offset error, distinct from intentionally overrunning a live descriptor buffer.",
+      "decision": "An exact VUID match for out-of-range ordinary descriptors is non-equivalent. Accept an answer only if it exercises a push-only zero-size layout or explains that distinct condition.",
+      "sources": [],
+      "foils": [
+        {
+          "repo": "KhronosGroup/Vulkan-ValidationLayers",
+          "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+          "path": "tests/unit/descriptor_buffer.cpp",
+          "lines": [
+            895,
+            910
+          ],
+          "license": "Apache-2.0",
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptor_buffer.cpp#L895-L910",
+          "note": "Exact VUID for a real out-of-range condition after deleting a larger alias. Same-repository filter may suppress it."
+        }
+      ],
+      "body_sha256": "b1994f930342c36300c27cc23e6104dc262e9b1cafb8ae5b4007e8a51e4c705f"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/10125",
+      "title": "Detect union of copy regions",
+      "created_at": "2025-05-19T01:57:12Z",
+      "grade": "scoped_negative",
+      "mechanism": "Checking a union of actual aliased image-copy memory ranges differs from comparing rectangles or same-subresource coordinates.",
+      "decision": "A byte-overlap decision for arbitrary optimally tiled aliased images needs a valid mapping from subresources to memory. An image-layout clause or geometric overlap check does not supply that map. Relevant terms alone do not establish an applicable implementation.",
+      "sources": [],
+      "foils": [
+        {
+          "repo": "HansKristian-Work/vkd3d-proton",
+          "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+          "path": "libs/vkd3d/command.c",
+          "lines": [
+            9841,
+            9868
+          ],
+          "license": "LGPL-2.1-or-later",
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L9841-L9868",
+          "note": "A caller-supplied overlapping_subresource boolean selects GENERAL layout. It does not compute actual byte ranges."
+        }
+      ],
+      "body_sha256": "098317027eed82609205d8f8d06cd76a2aac5cf0000274c809d84f9d5971adf3"
+    }
+  ]
+}

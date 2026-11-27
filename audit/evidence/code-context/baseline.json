@@ -1,0 +1,236 @@
+{
+  "index_files": 16,
+  "output": [
+    {
+      "origin": "https://github.com/xcl-dev/xcl/issues/810",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernel32/tests/volume.c#L180",
+          "line": 180,
+          "signals": [
+            "error_file_not_found",
+            "error_path_not_found",
+            "found",
+            "path",
+            "wine"
+          ]
+        },
+        {
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernelbase/file.c#L1328",
+          "line": 1328,
+          "signals": [
+            "error_file_not_found",
+            "error_path_not_found",
+            "found"
+          ]
+        },
+        {
+          "url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/dlls/kernelbase/volume.c#L731",
+          "line": 731,
+          "signals": [
+            "disk",
+            "error_path_not_found",
+            "found",
+            "space"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L9378",
+          "line": 9378,
+          "signals": [
+            "below",
+            "returns",
+            "space"
+          ]
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/14518",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L44",
+          "line": 44,
+          "signals": [
+            "aspect",
+            "bit",
+            "buffer",
+            "command",
+            "copy",
+            "depth",
+            "gpu",
+            "stencil",
+            "vk_image_aspect_depth_bit",
+            "vk_image_aspect_stencil_bit"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4617",
+          "line": 4617,
+          "signals": [
+            "color",
+            "vk_image_aspect_color_bit",
+            "vk_image_aspect_depth_bit",
+            "vk_image_aspect_stencil_bit"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L5624",
+          "line": 5624,
+          "signals": [
+            "feature",
+            "vk_image_aspect_depth_bit",
+            "vk_image_aspect_stencil_bit"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptor_buffer.cpp#L337",
+          "line": 337,
+          "signals": [
+            "aspect",
+            "depth",
+            "stencil",
+            "vk_image_aspect_depth_bit"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L10577",
+          "line": 10577,
+          "signals": [
+            "vkimage"
+          ]
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/945",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L5357",
+          "line": 5357,
+          "signals": [
+            "vk_image_layout_undefined",
+            "vkimagelayout"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L4752",
+          "line": 4752,
+          "signals": [
+            "barrier",
+            "undefined",
+            "vk_image_layout_undefined"
+          ]
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_pipeline_state_stream.h#L41",
+          "line": 41,
+          "signals": [
+            "d12",
+            "layout",
+            "state"
+          ]
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/9015",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L7944",
+          "line": 7944,
+          "signals": [
+            "vkcmdsetdescriptorbufferoffsetsext"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L36",
+          "line": 36,
+          "signals": [
+            "binding",
+            "buffer",
+            "descriptor",
+            "ext",
+            "vkbuffer"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L7444",
+          "line": 7444,
+          "signals": [
+            "vk_descriptor_binding_variable_descriptor_count_bit"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L119",
+          "line": 119,
+          "signals": [
+            "buffer",
+            "cmd",
+            "command",
+            "ext",
+            "object"
+          ]
+        },
+        {
+          "url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/include/llvm/IR/Instructions.h#L1128",
+          "line": 1128,
+          "signals": [
+            "bit",
+            "layout",
+            "offsets",
+            "variable"
+          ]
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/10125",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L36",
+          "line": 36,
+          "signals": [
+            "buffer",
+            "vkbuffer"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L4858",
+          "line": 4858,
+          "signals": [
+            "vkcopyimagetobufferinfo2"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L2832",
+          "line": 2832,
+          "signals": [
+            "copy",
+            "detect",
+            "resolve"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L390",
+          "line": 390,
+          "signals": [
+            "buffer",
+            "copy",
+            "resolve"
+          ]
+        }
+      ]
+    }
+  ]
+}

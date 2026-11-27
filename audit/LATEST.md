@@ -1,5 +1,10 @@
 # PortBridge · Продолжение Growth & Adoption
 
+## Поиск по техническим признакам · 27 ноября 2026, МСК
+
+- Проверочная ветка нашла точные строки в трёх примерах разработки. На независимых задачах результат остался 0/3. Дополнительные совпадения ухудшили выдачу в двух случаях. Прошли 310 тестов и проверка экспорта. [Обе выдачи и код](evidence/code-context/assessment.md)
+- Xbox2Windows внедрил исправление округления. Получен независимый результат на RTX 4060 Laptop. Lab обновлён до слитой ревизии. jstrdev получил отдельную задачу для Intel Arc B580, аппаратный результат ожидается. [Исправление](https://github.com/R0Y00/Xbox2Windows/pull/3058) · [Lab #121](https://github.com/akimfomin/PortBridge/issues/121)
+
 ## Core Mission II · 27 ноября 2026, МСК
 
 - **Выпуск.** [PR #123](https://github.com/akimfomin/PortBridge/pull/123) влит в main как `d3a3d6df989e69ac0d331a243cdb99e9c7ee0607`. База `9fc05e1f3fe7e1bfd63e9dbd0c44f7f3c2946012`. В Windows и GitHub прошли 309 тестов. Проверка экспорта и сверка Pages прошли. На [живом сайте](https://akimfomin.github.io/PortBridge/) проверены три входа, Test Lab, партнёрская лента и поиск через настоящий MCP. [Точная облачная сборка](https://github.com/akimfomin/PortBridge/actions/runs/45996932489) · [Факты после выпуска](evidence/core-mission-ii/live-publication.json)
