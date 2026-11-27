@@ -2,7 +2,7 @@
 
 **Общий рабочий штаб для команд совместимости Xbox Series с ПК.**
 
-[Прогресс команд](https://akimfomin.github.io/PortBridge/?lang=ru) · [Найти тест под свой компьютер](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) · [Запросить тест](https://github.com/akimfomin/PortBridge/issues/new?template=test-request.yml) · [Дать задачу агенту](docs/AGENT-PROMPT.md) · [English](README.md)
+[Прогресс команд](https://akimfomin.github.io/PortBridge/?lang=ru) · [Найти тест под свой компьютер](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) · [Запросить тест](https://github.com/akimfomin/PortBridge/issues/new?template=test-request.yml) · [Дать задачу агенту](docs/AGENT-PROMPT.md) · [Как помочь проекту](https://github.com/akimfomin/PortBridge/issues/112) · [English](README.md)
 
 После разделения Leonida работа продолжилась в разных репозиториях. Поэтому одна команда может уже исправить ошибку, другая — проверить тот же случай, а третья — начать разбор заново. PortBridge находит эту связь, помогает перенести полезную проверку или правку и сохраняет исходные ссылки, версии и авторство.
 
