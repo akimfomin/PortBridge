@@ -42,6 +42,17 @@ class DiscoverySearchTest(CatalogFixture):
         unresolved = [case for case in index["cases"] if case["verdict"] == "no_transfer_found"]
         self.assertEqual(len(unresolved), 2)
 
+    def test_reviewed_rdna4_handoff_has_a_pinned_test_and_no_automatic_claim(self):
+        origin = "https://github.com/Marvisak/VIctory/pull/2122"
+        report = discover(origin_url=origin, after="2026-11-27")
+        self.assertEqual(report["case"]["primary"], "vice-tay-rdna4-buffer-size-clamps")
+        self.assertEqual(report["automatic_matches"], [])
+        self.assertEqual(report["matches"][0]["source"],
+                         "https://github.com/TaynanGT/Vice-Tay/blob/"
+                         "927da4079031d74cc987de30a3c00af28a2bf631/"
+                         "crates/victory-shader/src/emit/size_tests.rs#L556")
+        self.assertEqual(report["matches"][0]["evidence_status"], "potentially_applicable")
+
     def test_exact_source_and_filters_keep_diagnostic_and_closed_states(self):
         url = "https://github.com/gfx-rs/wgpu/pull/10155"
         report = discover(url, project="wgpu", status="closed", kind="pr", platform="vulkan")

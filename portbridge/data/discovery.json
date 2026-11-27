@@ -145,6 +145,14 @@
       "release": "vulkan-sdk-1.3.280.0",
       "license": "Apache-2.0",
       "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/8506077b9a25a00684e8be24b779733ae1405a54/LICENSE.txt"
+    },
+    "vice-tay-258": {
+      "name": "Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay",
+      "revision": "927da4079031d74cc987de30a3c00af28a2bf631",
+      "release": "PR #258 merge",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/TaynanGT/Vice-Tay/blob/927da4079031d74cc987de30a3c00af28a2bf631/LICENSE"
     }
   },
   "facets": {
@@ -986,6 +994,43 @@
         "artem-lunarg"
       ],
       "supplemental": true
+    },
+    {
+      "id": "vice-tay-rdna4-buffer-size-clamps",
+      "project": "vice-tay-258",
+      "kind": "test",
+      "title": "Vice-Tay DXIL regression for separate buffer size and load handles on RDNA4",
+      "title_ru": "Тест Vice-Tay на раздельное чтение размера и данных буфера в DXIL",
+      "source": "https://github.com/TaynanGT/Vice-Tay/blob/927da4079031d74cc987de30a3c00af28a2bf631/crates/victory-shader/src/emit/size_tests.rs#L556",
+      "state": "reference",
+      "reviewed_on": "2026-11-28",
+      "topics": [
+        "shader-compiler",
+        "structured-stride"
+      ],
+      "symbols": [
+        "dx.op.getDimensions",
+        "dx.op.rawBufferLoad",
+        "VICTORY_VIEW_LIMIT",
+        "Tag::Clamp"
+      ],
+      "platforms": [
+        "Direct3D 12",
+        "DXIL",
+        "Windows",
+        "AMD RDNA4"
+      ],
+      "problem": "Check that distinct handles for a buffer size query and a load survive DXIL optimization.",
+      "similarity": "VIctory #2122 separates size queries from loads. Vice-Tay asserts the operands stay separate with a view index limit.",
+      "differences": "Vice-Tay also prevents reuse of certain size queries and clamps. The VIctory hardware fixture covers a raw buffer.",
+      "limits": "The AMD results cover Vice-Tay at the reported revisions and driver. The proposed control is untested on the VIctory branch.",
+      "adaptation": "Adapt the emitted DXIL assertions to a structured buffer alongside the raw-buffer hardware check.",
+      "test": "Toggle the heap clamp and compare handles and clamp operands after optimization. Report AMD and WARP hardware checks separately.",
+      "authors": [
+        "Vladimir-Human",
+        "TaynanGT"
+      ],
+      "supplemental": true
     }
   ],
   "cases": [
@@ -1154,6 +1199,17 @@
       ],
       "verdict": "candidate",
       "conclusion": "Use contract and field-preservation reference on two controlled queues."
+    },
+    {
+      "id": "victory-rdna4-buffer-size-clamps",
+      "origin_url": "https://github.com/Marvisak/VIctory/pull/2122",
+      "title": "Check a buffer size query and a load after DXIL optimization",
+      "state": "open",
+      "query": "dx.op.getDimensions dx.op.rawBufferLoad VICTORY_VIEW_LIMIT Tag::Clamp",
+      "primary": "vice-tay-rdna4-buffer-size-clamps",
+      "related": [],
+      "verdict": "candidate",
+      "conclusion": "Use the Vice-Tay DXIL test as a template for the structured-buffer follow-up. Applicability remains to be tested on VIctory."
     }
   ]
 }

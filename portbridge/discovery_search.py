@@ -87,7 +87,7 @@ def discovery_index():
                      "consoles": console_families(source["url"]),
                      "translations": {"ru": russian[item["id"]]},
                      "revision": source["revision"], "license": source["license"], "license_url": source["license_url"],
-                     "reviewed_on": raw["reviewed_at"][:10],
+                     "reviewed_on": date_filter(item.get("reviewed_on")) or raw["reviewed_at"][:10],
                      "features": {"title": primary, "symbols": symbols, "context": context}})
     if len({row["id"] for row in rows}) != len(rows):
         raise ValueError("Duplicate Discovery source ID")
