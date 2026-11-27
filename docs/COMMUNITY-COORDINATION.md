@@ -1,5 +1,13 @@
 # Координация между командами
 
+## 27 ноября 2026 · Поддержка сообщества
+
+- В [закреплённом английском обращении основателя](https://github.com/akimfomin/PortBridge/issues/112) доступны один вход для новой задачи, короткая команда для агента и ссылки на независимые результаты. Ссылка из обоих README опубликована в [PR #113](https://github.com/akimfomin/PortBridge/pull/113).
+- **KainanP** получил просьбу порекомендовать PortBridge одному коллеге с открытым PR или аппаратным вопросом. **ByFxbian** получил просьбу поделиться одним приглашением в подходящем канале, если местные правила разрешают. [AnyXboxX](https://github.com/akimfomin/PortBridge/issues/112#issuecomment-7208265663) · [VIctory](https://github.com/akimfomin/PortBridge/issues/112#issuecomment-7208281379)
+- **halfwave50 и pragyaangaur** получили предложение дать добровольцам путь из README к проверкам Apple Silicon. **leixner** получил готовый текст ссылки из frametime-report, по которой пользователь может принести агрегаты на независимое сравнение. [Mac](https://github.com/akimfomin/PortBridge/issues/110#issuecomment-7208281147) · [frametime-report](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7208265912)
+- **oni-swr и ettehn** получили сводку их независимых проверок XCL на AMD и NVIDIA и приглашение передать следующую задачу. Результат AMD принадлежит oni-swr. [Lab #114](https://github.com/akimfomin/PortBridge/issues/114)
+- На момент проверки все пять обращений видны на GitHub. Подтверждений прочтения, передачи, новых задач или добавления ссылок у этих адресатов пока нет. Прежние предложения PortWatch остаются в [Toolkit #55](https://github.com/4lwayz/portwatch-vi/issues/55) и [сравнении #233](https://github.com/4lwayz/portwatch-vi/issues/233).
+
 ## 27 ноября 2026 · VIctory и AnyXboxX
 
 - **spk-c** получил проверенную инструкцию и локальный скрипт сравнения работы с текстурами для своей ветки. Пока есть синтетическая проверка скрипта. [VIctory #1418](https://github.com/fxceless/victory-fork/issues/1418#issuecomment-7208127401)
