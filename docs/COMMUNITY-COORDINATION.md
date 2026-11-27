@@ -2,7 +2,7 @@
 
 ## 27 ноября 2026 · XCL, VIctory и AnyXboxX
 
-- **ettehn** включил предложенный PortBridge случай равного размера разных данных в локальный тест XCL. На RTX 5070 Ti Laptop прошли 4 проверки. PortBridge независимо воспроизвёл нативное различие на RTX 4070 Ti SUPER и сохранил команды и исходники. [Результат ettehn](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207601447) · [Наше воспроизведение](../audit/evidence/adoption-followthrough.md#xcl-2939-нативная-проверка-на-второй-карте)
+- **ettehn** включил предложенный PortBridge случай равного размера разных данных в локальный тест XCL. На RTX 5070 Ti Laptop прошли 4 проверки. **CryingLaughing** самостоятельно воспроизвёл случай в XCL на RTX 4080 и опубликовал исходник наблюдателя и результаты 1 600 вызовов. PortBridge отдельно подтвердил на RTX 4070 Ti SUPER, что успешный первый результат позволяет пропустить второй вызов в минимальном примере. Результат и авторство возвращены в исходное обсуждение. [Результат ettehn](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207601447) · [Результат CryingLaughing](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207685075) · [Наше воспроизведение](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207445228)
 - **B0rm0t0s** и **Ym1r1710** привели сходные сбои VIctory. Автору исходной заявки оставлен первый точный коммит для проверки по его предложению разделить историю. [VIctory #1420](https://github.com/fxceless/victory-fork/issues/1420#issuecomment-7207661854)
 - **Hailey-Ross** в AnyXboxX получил один чёткий контроль размера интерфейса. Он опирается на принятую настройку разрешения AnyXboxX и исследование слоёв VIctory. [AnyXboxX #479](https://github.com/LooperSalty/AnyXboxX/issues/479#issuecomment-7207672836)
 
