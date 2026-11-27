@@ -1,0 +1,29 @@
+{
+  "receiving": "https://github.com/ProjectLeonida/mandy/pull/2405",
+  "head": "f0b86e19380c8af09569161e1a0bc0243125a738",
+  "base": "fac8b4bb903b6988bd616e8874e77fa026858ffb",
+  "observed_portbridge_main": "f9da51bbef688d4b71beea8c6d8b77f6a3705a84",
+  "discovery_query": "python -m portbridge.preflight --url https://github.com/ProjectLeonida/mandy/pull/2405",
+  "observed_candidates": [
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/260",
+      "basis": "technical_signal",
+      "assessment": "Native D3D12 reserved window sharing. Does not select Vulkan memory types for reused heaps."
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2638",
+      "basis": "technical_signal",
+      "assessment": "D3D12 queue and fence lifetime. Does not address resource-specific Vulkan memory type selection."
+    }
+  ],
+  "reproduction": "python audit/evidence/decision-followthrough/continued-2405-tile-types.py",
+  "observed_output": "{'first_old': 'queue_validation_rejected', 'first_patched': 'eligible', 'existing_backing_type': 1, 'second_same_heap': 'queue_validation_rejected', 'second_with_overlap': 'eligible', 'second_separate_heap': 'eligible', 'resource_disjoint_from_probe': 'resource_creation_rejected', 'compatible_reuse_after_guard': 'eligible', 'incompatible_reuse_after_guard': 'heap_rejected'}",
+  "scope": "Python model of selected buffer allocation branches and validation, no Vulkan commands or physical GPU test. Rejecting B and reading back A are proposed acceptance checks.",
+  "sources": {
+    "existing_compatible_control": "https://github.com/ProjectLeonida/mandy/pull/2405#issuecomment-7204997731",
+    "khronos": "https://github.com/KhronosGroup/Vulkan-Docs/issues/2506#issuecomment-2754781384",
+    "lab": "https://github.com/akimfomin/PortBridge/issues/117",
+    "published_handoff": "https://github.com/ProjectLeonida/mandy/pull/2405#issuecomment-7229987775"
+  },
+  "receiving_status": "open, awaiting author or maintainer decision"
+}

@@ -1,5 +1,12 @@
 # PortBridge · Продолжение Growth & Adoption
 
+## Continued · повторное использование памяти двух буферов · 28 ноября 2026, МСК
+
+- По публичному входу PortBridge для Continued #2405 появились два кандидата по общему API. Vice-Tay #260 проверяет совместное использование 64 КиБ тайлов в нативном D3D12. XCL #2638 меняет время жизни очередей и fences. Оба относятся к разреженной памяти, а выбор допустимого типа памяти Vulkan для второго буфера остаётся отдельной задачей. [Vice-Tay #260](https://github.com/TaynanGT/Vice-Tay/pull/260) · [XCL #2638](https://github.com/xcl-dev/xcl/pull/2638)
+- На ревизии `f0b86e19380c8af09569161e1a0bc0243125a738` модель сверила два сценария. Совместимый второй буфер может переиспользовать уже выделенную память. Для несовместимого буфера отдельная область проходит проверку, а общая отклоняется. Проверка помечает различие между ветвями выбора памяти и фактическим исполнением драйвера. [Модель](evidence/decision-followthrough/continued-2405-tile-types.py) · [Исходные данные](evidence/decision-followthrough/continued-2405-tile-types.json)
+- Добавили несовместимый случай к проверке ecox982745 и передали авторам #2405. Предложили проверять чтение первого буфера после отклонения второго. Изменение кода командой и физическая проверка Arc A770 пока открыты. [Первичная проверка ecox982745](https://github.com/ProjectLeonida/mandy/pull/2405#issuecomment-7204997731) · [Передача PortBridge](https://github.com/ProjectLeonida/mandy/pull/2405#issuecomment-7229987775) · [Lab](https://github.com/akimfomin/PortBridge/issues/117)
+- AnyXboxX #550 остаётся на прежней ревизии, новых ответов на проверку PortBridge пока нет. Continued #2379 тоже остаётся открытым. [AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/550) · [Continued](https://github.com/ProjectLeonida/mandy/pull/2379)
+
 ## Поиск по задачам GitHub и проверка памяти AnyXboxX · 28 ноября 2026, МСК
 
 - Ссылки на обычные задачи GitHub теперь принимает та же команда, что и ссылки на PR. На VIctory #3618 сделан один внешний поисковый запрос. Следующая задача AnyXboxX #559 использовала тот же результат из кэша. Автоматическая пятёрка не дала применимой проверки. Проверенный вручную тест из VIctory #969 добавлен в каталог. На VIctory #3618 он возвращается первым. [PR #131](https://github.com/akimfomin/PortBridge/pull/131) · [Результаты и команды](evidence/decision-followthrough/discovery-issues-2026-11-28.json)
