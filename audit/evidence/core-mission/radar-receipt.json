@@ -1,0 +1,53 @@
+{
+  "snapshot": "https://akimfomin.github.io/PortBridge/data/radar-78c1fefb1c02c53eedca4e72.json",
+  "snapshot_sha256": "78c1fefb1c02c53eedca4e724ad2bbde8382eaa7a12ae3374d1b830d44e75c8b",
+  "checked_at": "2026-11-27T03:51:39Z",
+  "candidate": {
+    "id": "radar:0252e326b5ca0dd216bbee781c0fcac0",
+    "kind": "shared_signal",
+    "confidence": "research",
+    "target_url": "https://github.com/R0Y00/Xbox2Windows/issues/2997",
+    "target_revision": null,
+    "projects": [
+      "xbox2windows",
+      "anyps5"
+    ],
+    "sources": [
+      {
+        "author": "legacy-code-archaeologist",
+        "checked_at": "2026-11-27T03:51:06+00:00",
+        "consoles": [
+          "xbox-series"
+        ],
+        "fresh": true,
+        "project": "xbox2windows",
+        "revision": null,
+        "role": "target",
+        "source_id": "source:8b5aeeca05e5df6a5a39f11e3dc1f8c4",
+        "status": "open",
+        "title": "cpp-migration: lower v_cvt_pk_u8_f32 in the direct C++ compute path",
+        "url": "https://github.com/R0Y00/Xbox2Windows/issues/2997"
+      },
+      {
+        "author": "adriadam10",
+        "checked_at": "2026-11-27T00:40:29+00:00",
+        "consoles": [
+          "ps5"
+        ],
+        "fresh": true,
+        "project": "anyps5",
+        "revision": null,
+        "role": "comparison",
+        "source_id": "source:9859d881510b5bcd6bb5f03f6615b08c",
+        "status": "merged",
+        "title": "fix(shader): v_mullit_f32 legacy rules, v_cvt_pk_u8_f32 rounding and VOP3 neg/abs",
+        "url": "https://github.com/boykopovar/AnyPS5/pull/501"
+      }
+    ],
+    "signals": [
+      "v_cvt_pk_u8_f32"
+    ],
+    "state": "candidate",
+    "updated_at": "2026-11-27T03:51:18Z"
+  }
+}

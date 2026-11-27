@@ -1,0 +1,307 @@
+{
+  "schema": "portbridge-discovery-prospective-selection-v1",
+  "origin_created_no_later_than": "2026-11-27T04:00:00Z",
+  "selection": "For each repository list the public /pulls?state=all&sort=created&direction=desc&per_page=40. Select the first five created at or before the cutoff that are not drafts and are absent from earlier audit markdown, audit inputs JSON and tests/fixtures/discovery*.json. This cutoff selects the origins. The body SHA and updated_at pin the actual acquisition, which may follow that cutoff. Selection made before viewing rankings or choosing expected labels.",
+  "origins": [
+    {
+      "repo": "fxceless/victory-fork",
+      "listing_position": 6,
+      "url": "https://github.com/fxceless/victory-fork/pull/1427",
+      "created_at": "2026-11-27T03:41:23Z",
+      "updated_at": "2026-11-27T03:41:23Z",
+      "head_sha": "f5399389661c8a8353f35b87553672ba3edaac5d",
+      "body_sha256": "df9c622f14e999ac2dabcb5e1114fbde864dc0312d0da45e8696827763f5e144",
+      "title": "GPU: avoid Vec allocations in Shadow::card_merge_relay when skip is empty"
+    },
+    {
+      "repo": "fxceless/victory-fork",
+      "listing_position": 7,
+      "url": "https://github.com/fxceless/victory-fork/pull/1426",
+      "created_at": "2026-11-27T02:50:17Z",
+      "updated_at": "2026-11-27T02:50:17Z",
+      "head_sha": "a33d6f187cbd6e867ba7e740117a88500d686570",
+      "body_sha256": "f64dfba5bca6124889fa184c15168596fa0bde3f294175439383196c271555f8",
+      "title": "GPU: allow disabling saved pipeline scheduling history"
+    },
+    {
+      "repo": "fxceless/victory-fork",
+      "listing_position": 8,
+      "url": "https://github.com/fxceless/victory-fork/pull/1425",
+      "created_at": "2026-11-27T02:33:44Z",
+      "updated_at": "2026-11-27T04:20:56Z",
+      "head_sha": "d7d7b530f6ac5517a2323a5602cba832532a2fe9",
+      "body_sha256": "d80ecb6c86723dcb83c85b89e0a917760d380389d6f8187665c7add0b1a94f7b",
+      "title": "GPU: preserve texture retry deadlines after card memory holds"
+    },
+    {
+      "repo": "fxceless/victory-fork",
+      "listing_position": 9,
+      "url": "https://github.com/fxceless/victory-fork/pull/1424",
+      "created_at": "2026-11-27T02:27:26Z",
+      "updated_at": "2026-11-27T04:18:11Z",
+      "head_sha": "2892ad207c197c5d4cc586981f3f6bf7bfdcc588",
+      "body_sha256": "8f4fbefc56bcf94b754f8d382fabaebfac96d17cf8d00809fa984a52d051e4ea",
+      "title": "processor side: the copies a submission makes, and the pages it looks at, on more than one thread"
+    },
+    {
+      "repo": "fxceless/victory-fork",
+      "listing_position": 10,
+      "url": "https://github.com/fxceless/victory-fork/pull/1422",
+      "created_at": "2026-11-27T01:46:55Z",
+      "updated_at": "2026-11-27T01:46:55Z",
+      "head_sha": "d1528e7ffa2beb7a125d1603a40f7ed246a48a1c",
+      "body_sha256": "a1ab713fd0fd9fe8655817af54a8d0bd81f78a0658385eca299ea7d42781a8b6",
+      "title": "GPU: a skin bake's own sources are uploaded while the card's budget holds them, not only under the texture line"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "listing_position": 12,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/140",
+      "created_at": "2026-11-27T03:58:02Z",
+      "updated_at": "2026-11-27T04:07:43Z",
+      "head_sha": "fa2f5fe035b884a5a6325e7666c1fd207c3e56e3",
+      "body_sha256": "42e4895e51c1a01fde96202f1839f7f83bb23ed4cce86dc2a18d51fac1bc66eb",
+      "title": "Stop the unwind where RtlVirtualUnwind would read outside the stack"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "listing_position": 13,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/137",
+      "created_at": "2026-11-27T03:47:05Z",
+      "updated_at": "2026-11-27T03:55:14Z",
+      "head_sha": "53a1f1628991de0dc514863b5d0c755e3e24b1f9",
+      "body_sha256": "e50f7522a072a33739e6f527d098cbccaac0691933a6fca9ccbe44f9021366b6",
+      "title": "Keep pending texture changes when queues fill"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "listing_position": 14,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/136",
+      "created_at": "2026-11-27T03:43:27Z",
+      "updated_at": "2026-11-27T03:47:52Z",
+      "head_sha": "37e9f34821e41a3e16495f4e94d8d4f2f09a4041",
+      "body_sha256": "7dd7701f3f1bbe5e14eb0542d59f5a1fdc0f33cf689e2776b1f382c670a59e68",
+      "title": "Keep the driver loop available outside the wave-wide allowlist"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "listing_position": 15,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/135",
+      "created_at": "2026-11-27T03:43:26Z",
+      "updated_at": "2026-11-27T03:48:44Z",
+      "head_sha": "78dfb60fa7bfa7aeef9670d0e70a868922495082",
+      "body_sha256": "b1bf227b82531b7f3d070f8e5dca4ff45994c27176693f8d9b7d8ce68d3133a6",
+      "title": "Translate shaders before launching with a cold cache"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "listing_position": 16,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/134",
+      "created_at": "2026-11-27T03:43:26Z",
+      "updated_at": "2026-11-27T03:47:45Z",
+      "head_sha": "47d0a97caf476eaec424e7b4dc2f93144a506c13",
+      "body_sha256": "ddac8bb0e0ae98805085834b8b9b10d29a69771e37eae806a12dc35996cc40f2",
+      "title": "Document the matched RTX 3080 preset comparison"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "listing_position": 4,
+      "url": "https://github.com/xcl-dev/xcl/pull/2949",
+      "created_at": "2026-11-27T03:39:22Z",
+      "updated_at": "2026-11-27T04:20:34Z",
+      "head_sha": "ae5bbe4e7947b167ee2f045e5d441060e9a85653",
+      "body_sha256": "cd62d20d887c72a034e51de4f6fdf968a848c28c5913161769f9fb6c2721ac2d",
+      "title": "VFS: GetDiskFreeSpaceA decodes OEM paths when the file APIs are OEM"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "listing_position": 5,
+      "url": "https://github.com/xcl-dev/xcl/pull/2947",
+      "created_at": "2026-11-27T03:34:32Z",
+      "updated_at": "2026-11-27T03:51:19Z",
+      "head_sha": "bfb40311710ab82b54c043a3e447830dcd63e112",
+      "body_sha256": "53fedd871ffe4ae79c9d49e892dd3ce8a87699440d9546249dc680f4f5742cfe",
+      "title": "Recompiler: keep compute shaders on single loop budget to avoid AMD LLPC crash"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "listing_position": 9,
+      "url": "https://github.com/xcl-dev/xcl/pull/2936",
+      "created_at": "2026-11-27T01:15:50Z",
+      "updated_at": "2026-11-27T02:01:08Z",
+      "head_sha": "cae11a796aa424700977d6d5b28082fc5ebe172e",
+      "body_sha256": "8420288111a72f6ba23cb1576d03aad3388839cee6bbead6ccf60ad49af787c2",
+      "title": "D3D12.X: segments parked as spares stop holding their PC allocator (~4 GB less non-local memory)"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "listing_position": 14,
+      "url": "https://github.com/xcl-dev/xcl/pull/2930",
+      "created_at": "2026-11-27T00:33:04Z",
+      "updated_at": "2026-11-27T00:48:04Z",
+      "head_sha": "4e008ce538c1371e7563e08772d81a5d1cffb28e",
+      "body_sha256": "fc95e17af2e1d083c11ec469a719fcefe1f84b09c6cd7d2e5bbeb55af793fa12",
+      "title": "Recompiler: revert the select() form of pixel-shader rla() (#1452)"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "listing_position": 15,
+      "url": "https://github.com/xcl-dev/xcl/pull/2929",
+      "created_at": "2026-11-27T00:29:43Z",
+      "updated_at": "2026-11-27T03:34:55Z",
+      "head_sha": "a87d3c2ac52bac1e7d2df4e6050171fb2dee0887",
+      "body_sha256": "731fb828ff5e6ed1cdd76f68a735ed1d5818e75295e74f4879dbdef94f9d2d2b",
+      "title": "Revert \"Recompiler: eliminate local array and branches in pixel-shader PRELUDE::rla()\" (#2247)"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "listing_position": 1,
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2432",
+      "created_at": "2026-11-27T03:28:22Z",
+      "updated_at": "2026-11-27T03:28:22Z",
+      "head_sha": "2bf19e69082eb8b4c1ce6dc27ca90f043cfa0c61",
+      "body_sha256": "f1bdd422a44da09b04ccc38b8133ad9794f395f6b69cf7d80b0c17cc221ac191",
+      "title": "xgameruntime: LEONIDA_TRACE_XGAMESAVE logs every XGameSave call"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "listing_position": 2,
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2431",
+      "created_at": "2026-11-27T03:17:55Z",
+      "updated_at": "2026-11-27T03:17:55Z",
+      "head_sha": "fabad1570531b7b4a5719bdd1f007b2d46d47897",
+      "body_sha256": "225ff2e8e9bd0aba92a289ceb0a3c5b54bd1848ecb4bd840f6aafef70148280d",
+      "title": "docs(animation): clean stale rpf9_carve overread note and merge-duplicated fragments"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "listing_position": 3,
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2430",
+      "created_at": "2026-11-27T03:17:51Z",
+      "updated_at": "2026-11-27T03:17:51Z",
+      "head_sha": "1bde4706b1b1bec8ab88425f126cbb9129e91086",
+      "body_sha256": "61009f4f68a5c7aa3b071b6eddfb000361a89bd7613868b65485a3cc3e844838",
+      "title": "docs(story): remove stale duplicate normals row and sync decoder status and CLI flags"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "listing_position": 4,
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2429",
+      "created_at": "2026-11-27T03:17:47Z",
+      "updated_at": "2026-11-27T03:17:47Z",
+      "head_sha": "f6397802c5f59ddaae37f8a9f733555f3fa35c3d",
+      "body_sha256": "50dc151061a5ee978dde99160a0b9668d7b99627e66023d744de2c8fe7099371",
+      "title": "docs(restofworld): clean truncated merge remnant and update decoder status links"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "listing_position": 5,
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2428",
+      "created_at": "2026-11-27T03:17:42Z",
+      "updated_at": "2026-11-27T03:17:42Z",
+      "head_sha": "a1a17f8d0dafac1084d0dbc0bd8d2b7e08a16fea",
+      "body_sha256": "0c91269e80485e024d79549001cae40a9c875c7759f2dd3d0d7221ece5dc84d7",
+      "title": "docs(gamedata): remove merge-duplicated Timecycle, Fog Volume, and Dirt blocks"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "listing_position": 2,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/481",
+      "created_at": "2026-11-27T02:20:52Z",
+      "updated_at": "2026-11-27T02:38:01Z",
+      "head_sha": "fe3330814d5be71edd1cb8127266c109b5d081b7",
+      "body_sha256": "1dc8a3871745c0da58234e8053492ea80c493007c109f197cb1bbb0179928981",
+      "title": "perf: a fill behind a copy at its place takes the copy's upload bytes (VICTORY_FILL_AFTER_COPY, off by default)"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "listing_position": 3,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/480",
+      "created_at": "2026-11-27T02:08:40Z",
+      "updated_at": "2026-11-27T02:08:40Z",
+      "head_sha": "23ff3392e861f5d33a6729299e7eb919b9bbea51",
+      "body_sha256": "795e3f02f6dbf4758cd111da66297ec5c828cb650af0a53bdeab808ebaa4abdc",
+      "title": "perf(victory-gpu): preserve indirect clamp batch across non-storing compute dispatches"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "listing_position": 4,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/477",
+      "created_at": "2026-11-27T01:33:13Z",
+      "updated_at": "2026-11-27T02:15:50Z",
+      "head_sha": "a58deb9ece461979f9dbf0f5492a1e7812f52712",
+      "body_sha256": "327445375ee79b2d7723f3906d6ce0ac24f2cf57e8d2a5109373f85f7f93aa00",
+      "title": "perf(victory-gpu): direct BVH arena staging, partial updates, and fence-safe reclamation"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "listing_position": 6,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/475",
+      "created_at": "2026-11-27T01:19:52Z",
+      "updated_at": "2026-11-27T02:11:09Z",
+      "head_sha": "b38e40ad2fb3e2d74f9ad4caa20def050cba83ef",
+      "body_sha256": "7fce8dcfe157ffa85e11447fb77f6882278481d809fe17cf645f99cba3b0ca2e",
+      "title": "perf(victory-gpu): tile ambient gather in groupshared, cache coarse depth in raise, and scope UAV barriers"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "listing_position": 7,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/474",
+      "created_at": "2026-11-27T01:13:28Z",
+      "updated_at": "2026-11-27T01:22:59Z",
+      "head_sha": "b6b8c72ce4f7b4779b649673cb19d88b498b42c6",
+      "body_sha256": "1a54b242d31c8abc19722ed7f010d8c2b3d7ca936750e4bcdb53e3b258175c78",
+      "title": "perf(victory-gpu): filter non-UAV barriers, scope buffer UAV barriers, and deduplicate consecutive UAV waits"
+    },
+    {
+      "repo": "KytyPS5/KytyPS5",
+      "listing_position": 1,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2579",
+      "created_at": "2026-11-27T02:00:39Z",
+      "updated_at": "2026-11-27T02:04:49Z",
+      "head_sha": "da36d053cc5c0d706bc671c8067c0070603f89ba",
+      "body_sha256": "4b192f86afbf4efd1ccb8de11ee3e7e6ec247bea6cd8ddee19e182d07c79c8e5",
+      "title": "kernel: implement sceKernelUtimes"
+    },
+    {
+      "repo": "KytyPS5/KytyPS5",
+      "listing_position": 2,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2578",
+      "created_at": "2026-11-27T01:50:28Z",
+      "updated_at": "2026-11-27T01:55:13Z",
+      "head_sha": "435678bbf34cf322bd2da9740291a9ff1ccac810",
+      "body_sha256": "c78476effd8001ebd5a7330f07dfa3726977bc85eff2983bda04e036ee04d115",
+      "title": "kernel: export the Posix solosched attribute setter"
+    },
+    {
+      "repo": "KytyPS5/KytyPS5",
+      "listing_position": 3,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2577",
+      "created_at": "2026-11-27T01:37:27Z",
+      "updated_at": "2026-11-27T01:40:42Z",
+      "head_sha": "e68e434dbee5a506e83aeebd040bb9df52cec343",
+      "body_sha256": "13ee5e1cf8cda63f0f6fd32c3e83b975ced90f3c8b8b4d758de18624408e89d4",
+      "title": "audio: add the AudioPropagation source destroy export"
+    },
+    {
+      "repo": "KytyPS5/KytyPS5",
+      "listing_position": 4,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2576",
+      "created_at": "2026-11-27T01:31:04Z",
+      "updated_at": "2026-11-27T01:35:24Z",
+      "head_sha": "26a6eb6bd43310b8129ecb899eaa4f844264d2b4",
+      "body_sha256": "862f2254abba2ba681a6c9f1f6e7b0f559e945d6b5c26cde59cd1c322f6adefe",
+      "title": "agc: return the Sh register-list size Returnal queries"
+    },
+    {
+      "repo": "KytyPS5/KytyPS5",
+      "listing_position": 5,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2575",
+      "created_at": "2026-11-27T00:37:54Z",
+      "updated_at": "2026-11-27T03:33:39Z",
+      "head_sha": "f6a5ba00e1626dbc274cc2137b057e0e83598230",
+      "body_sha256": "3162a79767823dbb51debd1c68ea69c13dedf712ad2e7f2c58e85bafe68cdb39",
+      "title": "Mask unsupported image view usage flags"
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # Координация между командами
 
+## 27 ноября 2026 · Автоматическая находка и два повторных участника
+
+- Автоматический Radar связал Xbox2Windows #2997 с аппаратным эталоном AnyPS5 #501 до ручной проверки. PortBridge сверил результат на CPU и вернул автору два конкретных контроля для его DXIL-теста. Команда независимо влила своё исправление. PortBridge открыл [Lab #121](https://github.com/akimfomin/PortBridge/issues/121) для аппаратной проверки, которую автору пришлось пропустить. [Передача](https://github.com/R0Y00/Xbox2Windows/issues/2997#issuecomment-7209763531)
+- KytyPS5 #2575 получил ссылки на две проверки Khronos и предложение проверить недостающий флаг и пустую маску. Совпадение независимо найдено вручную. [Ревью](https://github.com/KytyPS5/KytyPS5/pull/2575#issuecomment-7209869941)
+- Lyrnc вернулся через #84 и сам со своим Claude Code выполнил аппаратную проверку RDNA2. PortBridge вернул результаты KainanP. [Отчёт](https://github.com/akimfomin/PortBridge/issues/84#issuecomment-7209858671) · [Передача](https://github.com/akimfomin/PortBridge/issues/84#issuecomment-7209941581)
+- UwUCammie откликнулся на открытый тест Lab #99, воспроизвёл проблему на Linux, открыл исправление и сам связал его с PortWatch. [Отчёт](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7209848773) · [Возврат в PortWatch](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7209852692)
+- У Vice-Tay один первоначальный удачный запуск сменился повторным сбросом. PortBridge обновил ссылку в #118, TaynanGT готовит лог действующего режима. [Уточнение](https://github.com/TaynanGT/Vice-Tay/issues/138#issuecomment-7209753118)
+
 ## 27 ноября 2026 · Открытый набор
 
 - Публиковать подходящий запрос рядом с исходной задачей. Указать проблему, оборудование или ОС, одну ссылку на шаги для человека или агента и место для отчёта. В [#112](https://github.com/akimfomin/PortBridge/issues/112) участник может взять тест или явно согласиться получать подходящие предложения в будущем.

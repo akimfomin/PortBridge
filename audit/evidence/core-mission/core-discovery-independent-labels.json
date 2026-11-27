@@ -1,0 +1,172 @@
+{
+  "schema": "portbridge-discovery-independent-labels-v1",
+  "origin_file": "core-discovery-frozen-30.json",
+  "origin_file_sha256": "9ea36d060a71c6410ddd435fba5a7fa633ebbc16b57f217cd49e8ba8a5c6c2db",
+  "method": "Bounded purposive manual review after selection and without access to candidate outputs. Positive sources require verified applicability to the proposed test, not merely an overlapping symptom. Author hints and same-repo history are scored separately. Remaining origins are unknown and are excluded from labeled precision/recall; their results still require later independent review. These labels do not constitute a completed 30-case quality benchmark.",
+  "cases": [
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1427",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1426",
+      "grade": "verified_author_hint",
+      "decision": "Disable the collected early-pipelines scheduling history without deleting or disabling the shader cache or native pipeline library. Check old history stays intact, then isolate same-cache startup order.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/43"
+      ],
+      "note": "Source explicitly linked in the origin. No cross-fork visual validation is claimed."
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1425",
+      "grade": "verified_author_hint",
+      "decision": "Reuse the card-room retry test across later(), partly(), and recheck(). Ensure a stale retry does not remove the hold for a newer descriptor generation.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/81",
+        "https://github.com/DoubleGhosty/cool_fox/commit/ebf9299d"
+      ],
+      "note": "The origin description already names both sources. Classify declared adaptation, not a novel find."
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1424",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1422",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/140",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/137",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/136",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/135",
+      "grade": "same_project_history",
+      "decision": "Validate launcher cold/warm, explicit skip, and failed-pretranslation continuation with a stand-in executable.",
+      "sources": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/131"
+      ],
+      "note": "Named by the origin, inside the receiver. Exclude from cross-project novelty and recall."
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/134",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2949",
+      "grade": "positive_external",
+      "decision": "Add a two-mode check using a path whose OEM and ANSI encodings differ. GetDiskFreeSpaceA must convert via the current process file API mode and find the same path as GetDiskFreeSpaceW in BOTH modes; restore process mode afterward. Avoid conflating GetDiskFreeSpaceExA fallback with the narrower API.",
+      "sources": [
+        "https://github.com/wine-mirror/wine/blob/wine-11.0/dlls/kernelbase/volume.c#L706-L714",
+        "https://github.com/wine-mirror/wine/blob/wine-11.0/dlls/kernelbase/file.c#L427-L439",
+        "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-setfileapistooem"
+      ],
+      "author_hint_sources": [
+        "https://github.com/CryingLaughing/xcl/commit/848e6cba"
+      ],
+      "note": "The origin already has an OEM-vs-Wide test and names the independent fork's one-line fix. Wine/mode-switch evidence covers the additional ANSI/OEM transition. The expected search entity is independent implementation or public API contract with equivalent detail."
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2947",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2936",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2930",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2929",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2432",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2431",
+      "grade": "documented_negative_control",
+      "decision": "Check the edit against the receiving repository's existing code. This is wording about existing file advancement, duplicated format documentation, and a truncated prose fragment.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/pull/2431/files"
+      ],
+      "note": "The public diff changes only docs/animation.md. A datastream overread patch elsewhere is a hard negative and not useful here. This does not assert the entire world contains no equivalent tool."
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2430",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2429",
+      "grade": "documented_negative_control",
+      "decision": "Check that the documentation points to the current receiving-repo code and removes a truncated merge fragment.",
+      "sources": [
+        "https://github.com/ubiquitarianism/leonida/pull/2429/files"
+      ],
+      "note": "The public diff changes only docs/restofworld.md and asks for existing links, not decoder changes. A cross-project mesh decoding feature would not answer this review."
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2428",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/481",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/480",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/477",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/475",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/474",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2579",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2578",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2577",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2576",
+      "grade": "unknown"
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2575",
+      "grade": "positive_external",
+      "decision": "Add INPUT_ATTACHMENT to the view-format feature matrix, testing COLOR_ATTACHMENT or DEPTH_STENCIL_ATTACHMENT independently of the COLOR_ATTACHMENT usage bit. Under test, one override with SAMPLED remaining succeeds; a zero mask exercises a distinct validation error. Use override bits within the parent image's allowed usage. Verify against the supported Vulkan version/extension before proposing runtime behavior.",
+      "sources": [
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/v1.4.350/tests/unit/image.cpp#L1114-L1133",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/v1.4.350/tests/unit/image.cpp#L1249-L1263",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/3701",
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/v1.4.350/chapters/resources.adoc#L6151-L6167"
+      ],
+      "note": "The PR's mapping covers six other usage bits but not INPUT_ATTACHMENT. the historical issue reproduces validation remaining after stripping COLOR_ATTACHMENT on the same packed view format. Treat port/adaptation as a suggestion, not verified project behavior."
+    }
+  ]
+}

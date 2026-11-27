@@ -1,0 +1,59 @@
+[
+  {
+    "case": "kyty",
+    "query": "\"E5B9G9R9\" \"VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT\" is:public",
+    "top5": [
+      {
+        "url": "https://github.com/libretro/RetroArch/issues/7887",
+        "title": "Vulkan crashes "
+      },
+      {
+        "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/3701",
+        "title": "VkImageViewUsageCreateInfo errors"
+      },
+      {
+        "url": "https://github.com/expipiplus1/vulkan/issues/48",
+        "title": "VK_INCOMPATIBLE_DRIVER_ERROR on nixos"
+      },
+      {
+        "url": "https://github.com/iree-org/iree/issues/60",
+        "title": "vkCreateDevice: pCreateInfo->pQueueCreateInfos[0].queueCount (=2) is not less than or equal to available queue count"
+      },
+      {
+        "url": "https://github.com/Nadrin/Quartz/issues/4",
+        "title": "Black screen when load the examples"
+      }
+    ]
+  },
+  {
+    "case": "xcl",
+    "query": "\"GetDiskFreeSpaceA\" \"AreFileApisANSI\" is:public",
+    "top5": [
+      {
+        "url": "https://github.com/ranveersoni98/Xenora/issues/611",
+        "title": "Hosted runtime: kernel32 services sqlite3 needs outside #535 (locks, file-API mode, disk space, heap checks)"
+      },
+      {
+        "url": "https://github.com/jobucaldas/xboxnative/issues/169",
+        "title": "[x86] 32-bit (PE32) game support: stages, what is merged, what is open"
+      },
+      {
+        "url": "https://github.com/taviso/loadlibrary/issues/118",
+        "title": "Trace/breakpoint trap - error/unknown symbol"
+      },
+      {
+        "url": "https://github.com/ALTaleX531/OpenGlass/issues/281",
+        "title": "OpenGlass Compatibility Issue on Windows Server 2022"
+      },
+      {
+        "url": "https://github.com/KasimAhmic/lib-native/issues/4",
+        "title": "Fully implement Kernel32.dll"
+      }
+    ]
+  },
+  {
+    "case": "memory",
+    "query": "\"CopyMemoryToMemoryX\" \"PAGE_READONLY\" is:public",
+    "top5": []
+  }
+]

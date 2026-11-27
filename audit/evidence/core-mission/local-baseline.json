@@ -1,0 +1,362 @@
+{
+  "indexed": 23615,
+  "totals": {
+    "ran": 30,
+    "with_leads": 6,
+    "links": 15,
+    "verified_author_hint_available": 2,
+    "verified_author_hint_hit": 0,
+    "positive_external_available": 2,
+    "positive_external_hit": 0,
+    "negative_available": 2,
+    "negative_with_leads": 0
+  },
+  "cases": [
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1427",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [
+        {
+          "url": "https://github.com/Marvisak/VIctory/pull/2577",
+          "basis": "technical_terms",
+          "signals": [
+            "vec",
+            "allocations",
+            "avoid"
+          ],
+          "score": 0.4389
+        }
+      ],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1426",
+      "grade": "verified_author_hint",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1425",
+      "grade": "verified_author_hint",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1424",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1422",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/140",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/137",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [
+        {
+          "url": "https://github.com/fxceless/victory-fork/pull/896",
+          "basis": "reference",
+          "signals": [],
+          "score": 1.0
+        }
+      ],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/136",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/135",
+      "grade": "same_project_history",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/134",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2949",
+      "grade": "positive_external",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2947",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2936",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2930",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [
+        {
+          "url": "https://github.com/Marvisak/VIctory/pull/3365",
+          "basis": "technical_signal",
+          "signals": [
+            "v_cvt_f16_f32",
+            "v_mul_f16",
+            "v_pk_mul_f16"
+          ],
+          "score": 0.9
+        },
+        {
+          "url": "https://github.com/boykopovar/AnyPS5/pull/317",
+          "basis": "technical_signal",
+          "signals": [
+            "v_cvt_f16_f32",
+            "v_mul_f16"
+          ],
+          "score": 0.86
+        },
+        {
+          "url": "https://github.com/R0Y00/Xbox2Windows/issues/2945",
+          "basis": "technical_signal",
+          "signals": [
+            "v_cvt_f16_f32",
+            "v_mul_f16"
+          ],
+          "score": 0.86
+        },
+        {
+          "url": "https://github.com/R0Y00/Xbox2Windows/issues/2963",
+          "basis": "technical_signal",
+          "signals": [
+            "v_cvt_f16_f32",
+            "v_mul_f16"
+          ],
+          "score": 0.86
+        },
+        {
+          "url": "https://github.com/R0Y00/Xbox2Windows/pull/2738",
+          "basis": "technical_signal",
+          "signals": [
+            "v_mul_f16",
+            "v_pk_mul_f16"
+          ],
+          "score": 0.86
+        }
+      ],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2929",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [
+        {
+          "url": "https://github.com/R0Y00/Xbox2Windows/issues/2379",
+          "basis": "technical_signal",
+          "signals": [
+            "0x887a0005"
+          ],
+          "score": 0.82
+        }
+      ],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2432",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2431",
+      "grade": "documented_negative_control",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2430",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2429",
+      "grade": "documented_negative_control",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2428",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/481",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/480",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/477",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/475",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [
+        {
+          "url": "https://github.com/Belobug/VIctory-Belobug-AMD/pull/100",
+          "basis": "technical_signal",
+          "signals": [
+            "id3d12resource"
+          ],
+          "score": 0.82
+        },
+        {
+          "url": "https://github.com/fxceless/victory-fork/pull/479",
+          "basis": "technical_signal",
+          "signals": [
+            "id3d12resource"
+          ],
+          "score": 0.82
+        },
+        {
+          "url": "https://github.com/fxceless/victory-fork/pull/540",
+          "basis": "technical_signal",
+          "signals": [
+            "id3d12resource"
+          ],
+          "score": 0.82
+        },
+        {
+          "url": "https://github.com/fxceless/victory-fork/pull/583",
+          "basis": "technical_signal",
+          "signals": [
+            "id3d12resource"
+          ],
+          "score": 0.82
+        },
+        {
+          "url": "https://github.com/fxceless/victory-fork/pull/787",
+          "basis": "technical_signal",
+          "signals": [
+            "id3d12resource"
+          ],
+          "score": 0.82
+        }
+      ],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/474",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [
+        {
+          "url": "https://github.com/Marvisak/VIctory/pull/2168",
+          "basis": "technical_terms",
+          "signals": [
+            "scope",
+            "barriers",
+            "uav"
+          ],
+          "score": 0.5759
+        },
+        {
+          "url": "https://github.com/vitutu1/victory-perf/commit/0a9408dc1e4e32763991cea872067fbbe2fa3216",
+          "basis": "technical_terms",
+          "signals": [
+            "deduplicate",
+            "barriers",
+            "uav"
+          ],
+          "score": 0.4609
+        }
+      ],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2579",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2578",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2577",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2576",
+      "grade": "unknown",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2575",
+      "grade": "positive_external",
+      "status": "replayed",
+      "top5": [],
+      "expected_links_seen": 0
+    }
+  ]
+}
