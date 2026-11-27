@@ -1,0 +1,156 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T18:18:13.865609+00:00",
+  "method": "Retrospective independent set frozen without inspecting ranker output. Open public items disjoint from tracked past audits and both Mission 4 sets. Four positive technical checks require a relevant implementation or real test range, including two embedded SPIR-V fixtures. A reference with only the exact VUID and no corresponding operation or actual test does not satisfy these labels. Countdown, timing terms, related allocations or graphics code without a decision are insufficient. One scoped noise control checks behavior on a general timing symptom. This evaluates source applicability as a check, not implementation transfer or adoption.",
+  "cases": [
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1698",
+      "title": "64-bit subgroup operations do not work, despite shaderSubgroupExtendedTypes being advertised",
+      "created_at": "2022-08-24T08:43:38Z",
+      "updated_at": "2022-08-24T08:43:38Z",
+      "state": "open",
+      "stratum": "cross_project",
+      "grade": "positive_external",
+      "mechanism": "The MoltenVK report asks whether advertised subgroup extended types imply that 64-bit integer subgroup arithmetic can run.",
+      "decision": "Check shaderInt64 and shaderSubgroupExtendedTypes separately. The independently implemented Vulkan CTS gates 64-bit subgroup arithmetic on both claims. It is an applicability check for the reported device, not proof of a backend fix.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/VK-GL-CTS",
+          "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+          "license": "Apache-2.0",
+          "license_path": "external/vulkancts/LICENSE",
+          "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE",
+          "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsTestsUtils.cpp",
+          "lines": [
+            1788,
+            1792
+          ],
+          "url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/subgroups/vktSubgroupsTestsUtils.cpp#L1788-L1792",
+          "note": "Exact TYPE_INT64 and TYPE_UINT64 condition in the shared CTS format gate.",
+          "source_sha256": "3ec6545b00a07cad88b39acf0fd583f382816fbd68e3b9747647e8a4ea76bd18",
+          "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "body_sha256": "07cb78ea011ea2221f0af7ddae694e7b3ad4cf8e3471b11c9e9c6e39a5e26748"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/7696",
+      "title": "Vulkan validation errors on examples (Invalid explicit layout decorations on type for operand...)",
+      "created_at": "2025-05-16T21:30:54Z",
+      "updated_at": "2026-11-17T16:49:39Z",
+      "state": "open",
+      "stratum": "embedded_shader",
+      "grade": "positive_external",
+      "mechanism": "wgpu reports the validator rejecting a shader-local Function variable with explicit structure layout decorations.",
+      "decision": "Compare the emitted SPIR-V storage class and decorations with the independent Function block fixture. Check SPIR-V version and whether the Block decoration belongs only on the interface copy. A similarly numbered Private fixture is a negative distractor.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/SPIRV-Tools",
+          "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/LICENSE",
+          "path": "test/val/val_explicit_layout_test.cpp",
+          "lines": [
+            4011,
+            4036
+          ],
+          "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4011-L4036",
+          "note": "Current test uses embedded shader assembly and checks the exact VUID on a Function block.",
+          "source_sha256": "7a9b9d134b3666b9fe9e4376c70a6c3ee5fd018b829ee6b4df6f90fb5209b69c",
+          "license_sha256": "7d52847928f607914a1218a7afd40d8d0fe1570dcf094205c276c8aa52d5a816"
+        },
+        {
+          "repo": "KhronosGroup/SPIRV-Tools",
+          "revision": "19042c8921f35f7bec56b9e5c96c5f5691588ca8",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/19042c8921f35f7bec56b9e5c96c5f5691588ca8/LICENSE",
+          "path": "test/val/val_decoration_test.cpp",
+          "lines": [
+            10874,
+            10900
+          ],
+          "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/19042c8921f35f7bec56b9e5c96c5f5691588ca8/test/val/val_decoration_test.cpp#L10874-L10900",
+          "note": "The same independent validator fixture before it was moved.",
+          "source_sha256": "15a5b6e54727d4b90443300b0f765bd87dfff0bd38480b57fd7f3ddaa33687f2",
+          "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "body_sha256": "22d69208fbc6ab299733b7fc7ff133a9e2bd3b0bf7bb5a9f8730236249a71d6d"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9880",
+      "title": "Some CTS tests cause vulkan validation errors",
+      "created_at": "2026-07-15T19:12:06Z",
+      "updated_at": "2026-07-21T00:20:09Z",
+      "state": "open",
+      "stratum": "embedded_shader",
+      "grade": "positive_external",
+      "mechanism": "One still-open item of the wgpu CTS tracker concerns a textureNumLayers lowering that triggers the SPIR-V image size-with-LOD diagnostic.",
+      "decision": "Use the external validator fixture to test whether the emitted OpImageQuerySizeLod operand really has Sampled = 1. Review a no-LOD or separate path only after distinguishing image kind. The unrelated VUIDs in the same tracking issue do not qualify.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/SPIRV-Tools",
+          "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/LICENSE",
+          "path": "test/val/val_image_test.cpp",
+          "lines": [
+            4965,
+            5004
+          ],
+          "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_image_test.cpp#L4965-L5004",
+          "note": "The embedded shader gives a storage-image operand and expects the exact Vulkan diagnostic.",
+          "source_sha256": "efd47b14eb8954ae59ca0e468c06e503051f6e7a50e90d4af437085144d0097e",
+          "license_sha256": "7d52847928f607914a1218a7afd40d8d0fe1570dcf094205c276c8aa52d5a816"
+        }
+      ],
+      "body_sha256": "16d293cd2fa29eceabaddb22fcb9a56eb1ecb6307a09f129ab457b2dc9c5f49d"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9306",
+      "title": "Do we need a barrier prior to buffer mapping?",
+      "created_at": "2026-03-25T20:18:01Z",
+      "updated_at": "2026-11-23T14:17:03Z",
+      "state": "open",
+      "stratum": "cross_project",
+      "grade": "positive_external",
+      "mechanism": "wgpu wants an independent answer about additional synchronization before CPU reads a device-written mapped buffer.",
+      "decision": "For Vulkan, compare the external CTS readback operation, which explicitly adds a transfer-write to host-read barrier after the copy. Check ordering and host visibility separately and measure whether a separate submission is needed. D3D12 and Metal still need independent contracts.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/VK-GL-CTS",
+          "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+          "license": "Apache-2.0",
+          "license_path": "external/vulkancts/LICENSE",
+          "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE",
+          "path": "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.cpp",
+          "lines": [
+            748,
+            765
+          ],
+          "url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.cpp#L748-L765",
+          "note": "The Vulkan CTS GPU copy and host visibility control provide a concrete test pattern.",
+          "source_sha256": "884be74c9f7e0b33ea85e1886981c5642488c527283b6198f675d8a2ea7bd0b2",
+          "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "body_sha256": "e1cb319dcf69f41291260f7f7be79a8dd1272a977c7245301b605ec6d795bc28"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1749",
+      "title": "Apple M1 Max MoltenVK CPU performance is slow",
+      "created_at": "2022-10-23T15:43:03Z",
+      "updated_at": "2022-12-11T22:14:27Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "The MoltenVK issue compares vkQueueSubmit timing on unrelated platforms and reports no Vulkan validity diagnostic.",
+      "decision": "Repeat on an apples-to-apples workload or collect per-stage timing before suggesting a fix. Shared submission, driver or fence terms do not explain the timing contrast.",
+      "sources": [],
+      "body_sha256": "34c3215c37abbb0ec4942214ec44ca304d0de5c2f55fca1becee000c39ef3245"
+    }
+  ]
+}

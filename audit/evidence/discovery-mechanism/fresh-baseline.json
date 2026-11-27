@@ -1,0 +1,48 @@
+{
+  "index_files": 71,
+  "output": [
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1698",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/7696",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9880",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/command.cpp#L412",
+          "line": 412
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L45",
+          "line": 45
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6047",
+          "line": 6047
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9306",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1749",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": []
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1698",
+    "expected_sources": [
+      {
+        "source": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/subgroups/vktSubgroupsTestsUtils.cpp#L1788-L1792",
+        "in_snapshot": false
+      }
+    ]
+  },
+  {
+    "origin": "https://github.com/gfx-rs/wgpu/issues/7696",
+    "expected_sources": [
+      {
+        "source": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4011-L4036",
+        "in_snapshot": false
+      },
+      {
+        "source": "https://github.com/KhronosGroup/SPIRV-Tools/blob/19042c8921f35f7bec56b9e5c96c5f5691588ca8/test/val/val_decoration_test.cpp#L10874-L10900",
+        "in_snapshot": false
+      }
+    ]
+  },
+  {
+    "origin": "https://github.com/gfx-rs/wgpu/issues/9880",
+    "expected_sources": [
+      {
+        "source": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_image_test.cpp#L4965-L5004",
+        "in_snapshot": false
+      }
+    ]
+  },
+  {
+    "origin": "https://github.com/gfx-rs/wgpu/issues/9306",
+    "expected_sources": [
+      {
+        "source": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.cpp#L748-L765",
+        "in_snapshot": false
+      }
+    ]
+  }
+]

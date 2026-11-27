@@ -1,0 +1,749 @@
+{
+  "snapshot_sha256": "f50d78dc346242c82b1a460bd0e1ebe41eaff7b37107abd25a7a79d14df91271",
+  "files": [
+    {
+      "repo": "baldurk/renderdoc",
+      "path": "renderdoc/driver/d3d12/d3d12_command_list.h",
+      "revision": "762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d",
+      "sha256": "78fb5d8e6c8a4c0ad1b1aa38e7ddb30565e13e8c11784307386232250da1be06",
+      "license": "MIT",
+      "license_url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/LICENSE.md"
+    },
+    {
+      "repo": "baldurk/renderdoc",
+      "path": "renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp",
+      "revision": "762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d",
+      "sha256": "cafd1926a491256f4c5f3cae5e00293e9376d8b6186eb477c2597ac9c5bc770a",
+      "license": "MIT",
+      "license_url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/LICENSE.md"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/cache.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "850079a0381247bea0d6c302f2e9d1f4ab87ef45a52c86db338625f1d9c05d72",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/command.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "d8c5c2dbb805344788a2ee9d119392c582156c30c0d7d7bb22471c7fc74a078c",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/state.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "2c5c4ada9d8d1c6874d414d19b0a287f2d7db2a63b38573a6a72ea441df09677",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/pipelines.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "18b25c16c23d77eee3faecd020c159801c0646853c7203d790d5b09c7ebacc56",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/resources.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/descriptor_buffer.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "903f55f1213aec92bb01077e06328895bd7e8374dabb6247cc8153a947f824f4",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/image.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "2bf23e0148832483e6dc77dcbcfb641e985b5ff4b8e299e97fe33c3cb1e7a153",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "path": "llvm/docs/LangRef.rst",
+      "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+      "sha256": "d876a450dcc73c1cc75a778888ae470fba0f4f6884207cb1ca7ac0362fc3d760",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "license_url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/LICENSE.TXT"
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "path": "llvm/include/llvm/IR/Instructions.h",
+      "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+      "sha256": "cbb261bb0259c96a1ec9c31c06c3fab75ade201f04cc38b0553dd72f03340ac7",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "license_url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/LICENSE.TXT"
+    },
+    {
+      "repo": "microsoft/DirectX-Headers",
+      "path": "include/directx/d3dx12_check_feature_support.h",
+      "revision": "61c7718954ec73dbdd43c723240fe1a0452a3724",
+      "sha256": "82109e9666135f7eb275921d34e47662ddb9a4b6e5612df1a99ed4805a5f0b28",
+      "license": "MIT",
+      "license_url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/LICENSE"
+    },
+    {
+      "repo": "microsoft/DirectX-Headers",
+      "path": "include/directx/d3dx12_pipeline_state_stream.h",
+      "revision": "61c7718954ec73dbdd43c723240fe1a0452a3724",
+      "sha256": "aec0621cb9879a177858661529d364ebc3f378d8b2c00585da7ae35882dd09d3",
+      "license": "MIT",
+      "license_url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/LICENSE"
+    },
+    {
+      "repo": "wine-mirror/wine",
+      "path": "dlls/kernel32/tests/volume.c",
+      "revision": "db11d0fe6a169c457e23d007e20404643d067aa8",
+      "sha256": "41b6da9bbd9971471fa9aa2b5c00e3468017175c97473c23f6d2bf53b86a7167",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/COPYING.LIB"
+    },
+    {
+      "repo": "wine-mirror/wine",
+      "path": "dlls/kernelbase/file.c",
+      "revision": "db11d0fe6a169c457e23d007e20404643d067aa8",
+      "sha256": "2d5f74230a5153478fc68fefa626799db55bf452d6999235614729f8ef888504",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/COPYING.LIB"
+    },
+    {
+      "repo": "wine-mirror/wine",
+      "path": "dlls/kernelbase/volume.c",
+      "revision": "db11d0fe6a169c457e23d007e20404643d067aa8",
+      "sha256": "b6872435a89a09c0f0749443445cdd37959b77f1325a2b1b29399c1ea184dae6",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/wine-mirror/wine/blob/db11d0fe6a169c457e23d007e20404643d067aa8/COPYING.LIB"
+    },
+    {
+      "repo": "doitsujin/dxvk",
+      "path": "src/dxvk/dxvk_fence.cpp",
+      "revision": "1011dd97474a1c8c2608f3466429e4df45b36b7c",
+      "sha256": "2fe06323b376b078ebad6aec3687556e563bf5be3041c2e05998914ad7a78aad",
+      "license": "Zlib",
+      "license_url": "https://github.com/doitsujin/dxvk/blob/1011dd97474a1c8c2608f3466429e4df45b36b7c/LICENSE"
+    },
+    {
+      "repo": "doitsujin/dxvk",
+      "path": "src/dxvk/dxvk_memory.cpp",
+      "revision": "1011dd97474a1c8c2608f3466429e4df45b36b7c",
+      "sha256": "0b0094f01f02d33d12003fb82e2f11fd4132e00415a2c1865d4a3f1722ca58af",
+      "license": "Zlib",
+      "license_url": "https://github.com/doitsujin/dxvk/blob/1011dd97474a1c8c2608f3466429e4df45b36b7c/LICENSE"
+    },
+    {
+      "repo": "doitsujin/dxvk",
+      "path": "src/dxvk/dxvk_presenter.cpp",
+      "revision": "1011dd97474a1c8c2608f3466429e4df45b36b7c",
+      "sha256": "5669ddc4579d54e9752aa913754fba3bdb0e1c0b1951914db987537b6b24531d",
+      "license": "Zlib",
+      "license_url": "https://github.com/doitsujin/dxvk/blob/1011dd97474a1c8c2608f3466429e4df45b36b7c/LICENSE"
+    },
+    {
+      "repo": "doitsujin/dxvk",
+      "path": "src/dxvk/dxvk_shader.cpp",
+      "revision": "1011dd97474a1c8c2608f3466429e4df45b36b7c",
+      "sha256": "fd1b24e9ff0b8c73717e57c332983e28d4e3896c8c84987d421cbabed45857b4",
+      "license": "Zlib",
+      "license_url": "https://github.com/doitsujin/dxvk/blob/1011dd97474a1c8c2608f3466429e4df45b36b7c/LICENSE"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/descriptor_debug.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "11fe77c66e9891ed4cd0d6fc64452aeb9dded5efdcea53df6fb21cc97633fe62",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/heap.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "3181b1a827e78f4a7e42a8402ab70e82770d130dad7674f191c98f655ce7eca7",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/memory.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "12778ea91c2484e3edc48531bebaaab7d746d02104f2cd8e9be07a3dbf59ccac",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/queue_timeline.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "6bf732b832abf73df541ed9480c5904ebb0495ded253c823ea7a29ca4e6c09c8",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/renderdoc.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "f05231069aff513bd31d3f1bb5c330063ca2e548cc06a37117e36721baab7f47",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/resource.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "e96fd136c4a75b10f03c50128d6b03440f4b83429f86f4d8c1379392efbbaa33",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "libs/vkd3d/swapchain.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "c8346024d28af801997fd36df9cf16b82deb5fd3eb862edb3d37996a6ee70186",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "tests/d3d12_copy.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "ec3eebea565a999f04e2f702de790444779c8afac4246ececbc030c0347e9c0e",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "tests/d3d12_shaders.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "6fb0a07f67a0009d0b4b95f2d6e9c0dd17ffe54052675fefaf2a15c0a52e2753",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "path": "tests/d3d12_sync.c",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "sha256": "380e337ed414d1b8be13d76943ff5504e28a2acd30c7d7e1176eb85dcde7dc52",
+      "license": "LGPL-2.1-or-later",
+      "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING"
+    },
+    {
+      "repo": "KhronosGroup/SPIRV-Tools",
+      "path": "source/opt/convert_to_sampled_image_pass.cpp",
+      "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+      "sha256": "11d528e00d54722cd888ea15a105f4e8bc5acfc9572b119ca3e24414738633e5",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/SPIRV-Tools",
+      "path": "source/opt/copy_prop_arrays.cpp",
+      "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+      "sha256": "6814b250e35903ba6c0788e90d2fe1509dc1e76dbb5eb535969d69015bef4642",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/SPIRV-Tools",
+      "path": "source/opt/loop_descriptor.cpp",
+      "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+      "sha256": "7deeb2211d8ec20a5ba9cef75794ba91508c4e1896e9d74f12870988c1b4b099",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/SPIRV-Tools",
+      "path": "source/opt/upgrade_memory_model.cpp",
+      "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+      "sha256": "e108857cd20eaad8b293e66a5e2e3ea66a85bb7a8b69dc68c90e14f54a61b7dc",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsBasicTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "d39ec527d8f4da5e973de3dd1bbebf580e4d56f82a4ccd566f66b60882ee990b",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsBuiltinVarTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "6de0ee34a1d5d019bdbf4d703b227e1ff3d20059817a83d023ec5a747ecd4f3e",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsQuadTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "52faafe55c05f9786675b616a2cf61c6f1f098d02bd115f6cfe3411487e3be55",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsQuadTests.hpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "8d63df0c0e4753580f9583423f65817827d053b765e901df40ba688ee09e3a56",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "e145c2402e38ed0c313fd46073eaa324e08fd8b72bb94b6560dd997b5ecc018f",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsTests.hpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "b1740737b686122abceebddb21fe42c7d6fe5cd84c7efc6ff723645ab6726837",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsUniformDescriptorIndexingTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "002f90a20f382a0232bf5f1dbb9130dfc89fc9cdbb80896761066880c314a8e7",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsVoteTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "c529975bbdf81620926a8da334e10a30510c069fbf3f976767da40f031c1498f",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsVoteTests.hpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "cfb59db964c67929c6f3b3c3239faa8b141c46294f69453e49ffc78d0ef19364",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/synchronization/vktGlobalPriorityQueueTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "9aa1aec665b38591e6d9b982cdaf49e2c03bb888b91d6e0c0ba91293c50893b4",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationDefs.hpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "b5e2165436baadf30bf3e119184ec3dd91e523c66bccaa9c42c24978a4035ce3",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationImageLayoutTransitionTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "f76e48d91140985a0cf3861be02780602b2875d65e81e1323acd72f41c379dc2",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationResources.hpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "fd72c7febe35c3fa1d728ad08c49e0e3be65ee9b23e03e7bd950abf07d9f9477",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "path": "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "sha256": "433ae443a3c5312a778fd1478918d7007393b6bc13145e9842b7c4c8d78bde09",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/LICENSE"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/VK_KHR_surface/wsi.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/commonvalidity/invalidate_heap_common.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "0e1d8f9c3de950c55b3d47066ea783685d9b344cebe25b7657ce38ad18b51fb6",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/descriptors.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "887c624c45cb69e0f461b9d4a85fa1a8def7623141c989367e6c8ef7f9cbf269",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/descriptorsets.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "cb9ecd4df7d20256eb8ce0fc0d50d588978c662197dbd651abc2ef8c710bdf8e",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/devsandqueues.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "04a9b384dc060c03930613e45e81c0df80308e42c25f319324b0676920c814c2",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/fxvertex.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "b45cbbe170613a9b771cd60c996092e13477b70764e81e2c360593f60d97c23d",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/images.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "bd1930474b116ba85d760a7fd774dd5584248fc820c0c8f3aeff26ff170750a4",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/interfaces.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "46ccbfa5895fb97876edf4928fb4a6512d4aa1ebfc2a7eeb741b105309cfbe33",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/memory.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "2638908e6b312124e5f4aea26a2025308ce6128d4a92d2d9d17efc8521b192d4",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/renderpass.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "68415ea53e029a2dd98c861ac5d03b90db1153f6697bcb5a3086749e165d394a",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/shaders.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "2065977199d7197b829ec4f048f22f478bdeed10dcf8810ddba8cf9716a533c3",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/synchronization.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "e9240d98d42e82b855878e909eec6762a186092914e7b06cb638702f13f73328",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/textures.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "554b32d5a63b0b4c1bc34245147ef726da9a5413fa3fa2377c9ad15adbc7aa3b",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-Docs",
+      "path": "chapters/vertexpostproc.adoc",
+      "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+      "sha256": "4a5fd180d687f05361a2037179553c483b760459e32c49498e07870590090648",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/command.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "f4a95346c9e36f59d002657148cf54748af3f8aab094df6499559206439a90a7",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/descriptors.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "96414f46a3547cf6f5d72d401191ce6727ae6181bee303a2e7c991c408ce0b92",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/image_layout.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "4ea89de109d66948bfc1edf9d6bea320782bc72c46e05729d392fba53ba730bc",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/memory.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "79a14a7f764ef01659b8184a597da3cf7695bace24f43bed48b338d4fe3ccd27",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/pipeline.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "55945abe8693cbb512dcaf929dd18dffec3f61d12b2b9dac3f53316586fa9396",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/render_pass.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "45fbf7bf0b7ffa3ecaf6b65eab812ba43af8420db76973d96105048f4f3c4c64",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/subgroups.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "56f340cf3bc5d2a5019bf73ac48672e55f757c7a1d0fe016d7553f35c1fbf5e4",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/sync_val.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "7f90e45d7053e166a7c703ecd0a961720126541abd8ad077264bcd3ed90b2313",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/vertex_input.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "369a3041f8034c1ab0856f7140d22471a081fa51a5a2cc10a4fb0a2fec39fb27",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "KhronosGroup/Vulkan-ValidationLayers",
+      "path": "tests/unit/wsi.cpp",
+      "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+      "sha256": "0f9b21b8652a685e291b5a8997509bfcee81f2c29788be76559c25ca5bd499a2",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/LICENSE.txt"
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "path": "llvm/lib/Transforms/Scalar/ConstantHoisting.cpp",
+      "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+      "sha256": "f1b020838422e13856b7d5f933749ed44ee8f2a21e499fb5ad33c4223d313676",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "license_url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/LICENSE.TXT"
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "path": "llvm/lib/Transforms/Scalar/GVNHoist.cpp",
+      "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+      "sha256": "4252a6a01f08e15f660c17ab930b6fe47bde7e7939c8bbe93ecfad65d3f8a317",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "license_url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/LICENSE.TXT"
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "path": "llvm/lib/Transforms/Scalar/LICM.cpp",
+      "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+      "sha256": "5acdaca6bdece1a0580124ef0d6b715a41aaf671189af1f3f0c2f0b6d16d8e0f",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "license_url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/LICENSE.TXT"
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "path": "llvm/lib/Transforms/Scalar/MemCpyOptimizer.cpp",
+      "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+      "sha256": "f0005ab9aeeae058ad919b423778b94662ab8ae0b0da8097618450166871df80",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "license_url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/LICENSE.TXT"
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "path": "llvm/lib/Transforms/Scalar/TLSVariableHoist.cpp",
+      "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+      "sha256": "c18fc8e7e2289474f9e0c521522d90a7bb1e726180282edd2ecf78cd4fa9d94d",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "license_url": "https://github.com/llvm/llvm-project/blob/e19b7dc36bc047b9eb72078d034596be766da350/llvm/LICENSE.TXT"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "path": "tests/test_rdna2_exec_memory.py",
+      "revision": "a4453083ad6563ca50efcefead1eaa7a2aaaa12b",
+      "sha256": "fa3ac34223154280799944dc88a6677c58c6cb36ab9a3ae0a9c9d74b5cb98bb6",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/LooperSalty/AnyXboxX/blob/a4453083ad6563ca50efcefead1eaa7a2aaaa12b/LICENSE"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "path": "tests/test_readme_sync.py",
+      "revision": "a4453083ad6563ca50efcefead1eaa7a2aaaa12b",
+      "sha256": "76c40e4a2d9902f89f1ae573bafe20f18b9e1ccbada114ee4aff01c6f87bcd0d",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/LooperSalty/AnyXboxX/blob/a4453083ad6563ca50efcefead1eaa7a2aaaa12b/LICENSE"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "path": "tests/test_shader_cache.py",
+      "revision": "a4453083ad6563ca50efcefead1eaa7a2aaaa12b",
+      "sha256": "5bc3d156c5f4d6bece4b7812c706b4ced572df5478cc946ae0d7002914e933d8",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/LooperSalty/AnyXboxX/blob/a4453083ad6563ca50efcefead1eaa7a2aaaa12b/LICENSE"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "path": "tests/test_textures.py",
+      "revision": "a4453083ad6563ca50efcefead1eaa7a2aaaa12b",
+      "sha256": "d754e49f33c66c0600236833afc11117e712ea824f6519b70429359151058ba4",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/LooperSalty/AnyXboxX/blob/a4453083ad6563ca50efcefead1eaa7a2aaaa12b/LICENSE"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "path": "crates/victory-gpu/src/descriptor.rs",
+      "revision": "d96aa67da5d5de08ffb79ad05fcd6c911f8875fe",
+      "sha256": "1d29fbc3b6e8fc7b698039b0c6a3e1ef8ad67c06bb7a0e33adaf042f6b2fd7ec",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/TaynanGT/Vice-Tay/blob/d96aa67da5d5de08ffb79ad05fcd6c911f8875fe/LICENSE"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "path": "crates/victory-gpu/src/fence.rs",
+      "revision": "d96aa67da5d5de08ffb79ad05fcd6c911f8875fe",
+      "sha256": "cb38ead155645c783c05a03f8f3c0cd9f50cb34acd4ea91ea07027f10fcc95ce",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/TaynanGT/Vice-Tay/blob/d96aa67da5d5de08ffb79ad05fcd6c911f8875fe/LICENSE"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "path": "crates/victory-gpu/src/memory.rs",
+      "revision": "d96aa67da5d5de08ffb79ad05fcd6c911f8875fe",
+      "sha256": "046180f55abbf6f054acd3cc2768734ec9e7cfc0625d593d9e68f00429294e2b",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/TaynanGT/Vice-Tay/blob/d96aa67da5d5de08ffb79ad05fcd6c911f8875fe/LICENSE"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "path": "crates/victory-shader/src/emit/wave.rs",
+      "revision": "d96aa67da5d5de08ffb79ad05fcd6c911f8875fe",
+      "sha256": "136b7f054d0fb5c59f106d2534cf0d341827fd137b391afee2be6c1fde462e25",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/TaynanGT/Vice-Tay/blob/d96aa67da5d5de08ffb79ad05fcd6c911f8875fe/LICENSE"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "path": "runtime/test/fixtures/tiny_async.cpp",
+      "revision": "c0201a806b061120e6cdee9916395275a632367e",
+      "sha256": "a514cbf5ba51a873fc748e454c094e4cb19fcdc0c09e1e04828b44296d66dcfd",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/LICENSE"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "path": "runtime/test/image_memory_test.cpp",
+      "revision": "c0201a806b061120e6cdee9916395275a632367e",
+      "sha256": "b11f657aa6180ec0b9f27a3d117cdcf252594ad18c34a3f0b1bf822828c95e33",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/LICENSE"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "path": "runtime/test/vk_descriptor_bench.cpp",
+      "revision": "c0201a806b061120e6cdee9916395275a632367e",
+      "sha256": "90cabecc2eab92870d2b576b1cdfe9f28178a13cc131fc59f504370a1888179f",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/LICENSE"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "path": "runtime/test/xbox_present_test.cpp",
+      "revision": "c0201a806b061120e6cdee9916395275a632367e",
+      "sha256": "7e99ed60b8c8891f5620e542d18b7dd6ded2784616a3e11126cad05b2ce313c9",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/LICENSE"
+    },
+    {
+      "repo": "ubiquitarianism/leonida",
+      "path": "scripts/bench_wave64.py",
+      "revision": "c0201a806b061120e6cdee9916395275a632367e",
+      "sha256": "c6e66cc1514926b183d03621e566e2d728a0b09da9b8daa565a866f1f9fa47f0",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/ubiquitarianism/leonida/blob/c0201a806b061120e6cdee9916395275a632367e/LICENSE"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "path": "crates/xcl/src/gpu/dxil/lower_image.rs",
+      "revision": "06f90c1986f43698d0405eff3c2ab0af230e1ed9",
+      "sha256": "b97cf3a6905c7b94a0c7f9556d861376d489ee66fb30b409badaf611543edef8",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/LICENSE"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "path": "crates/xcl/src/gpu/dxil/shader.rs",
+      "revision": "06f90c1986f43698d0405eff3c2ab0af230e1ed9",
+      "sha256": "2fc8f6507f9804ca462e82d1e04919cc3fd2ba6f91c8da73253e69a49afd2ccc",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/LICENSE"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "path": "crates/xcl/src/gpu/dxil/validate.rs",
+      "revision": "06f90c1986f43698d0405eff3c2ab0af230e1ed9",
+      "sha256": "c5c606ff65c5f6847822d094423db8dd2574df058435012dd2106db319947d68",
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/LICENSE"
+    }
+  ]
+}
