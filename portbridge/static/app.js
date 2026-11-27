@@ -1621,9 +1621,7 @@ function labRequestEntry() {
   const actions = element('div', 'lab-agent-actions');
   const newRequest = githubLink(t('Request a test', 'Запросить тест'), labRequestURL());
   newRequest.classList.add('lab-primary');
-  const queue = new URL(`${portbridgeRepository}/issues`);
-  queue.searchParams.set('q', 'is:issue "Test request:" in:title');
-  actions.append(newRequest, githubLink(t('View test requests', 'Смотреть запросы'), queue.href));
+  actions.append(newRequest);
   section.append(element('h2', '', t('Find a tester', 'Найти тестировщика')),
     element('p', '', t('Share a reproducible check and the hardware it needs. Volunteers can reply in your request. A maintainer can review and send an invitation manually.',
       'Опишите проверку и нужное оборудование. Добровольцы могут ответить в запросе. Адресное приглашение проверяет и отправляет сопровождающий вручную.')),
@@ -1989,7 +1987,11 @@ function drawLab(data, params) {
   }
   equipment.addEventListener('change', updateFilters);
   showAll.addEventListener('change', updateFilters);
-  lab.append(bar, count, tasks, entrypoints);
+  const queue = new URL(`${portbridgeRepository}/issues`);
+  queue.searchParams.set('q', 'is:issue is:open in:title "Test request:"');
+  const openRequests = element('p');
+  openRequests.append(githubLink(t('Open volunteer requests on GitHub', 'Открытые запросы для добровольцев на GitHub'), queue.href));
+  lab.append(bar, openRequests, count, tasks, entrypoints);
   renderTasks();
   content.replaceChildren(lab);
 }
