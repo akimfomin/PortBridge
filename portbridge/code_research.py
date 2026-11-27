@@ -11,7 +11,7 @@ from time import sleep
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 
-from . import code_search, source_corpus
+from . import code_search, source_corpus, vulkan_rules
 from .matching import current_repository
 
 SCOPES = {
@@ -20,8 +20,13 @@ SCOPES = {
                             "external/vulkancts/modules/vulkan/subgroups"),
     "HansKristian-Work/vkd3d-proton": ("tests",),
     "xcl-dev/xcl": ("crates/xcl/src/gpu/dxil",),
+    "KhronosGroup/Vulkan-Docs": ("chapters", "appendices"),
 }
-MAX_FILES = 256
+DIRECTX_SPEC = {"repo": "microsoft/DirectX-Specs", "revision": "db16a3da3e1cd7575a4990053ded0622f8b48d97",
+                "license": "CC-BY-4.0", "license_path": "LICENSE", "scoped": True,
+                "directories": ["d3d"], "extensions": [".md"]}
+MAX_FILES = 600
+MAX_SOURCE_BYTES = 80 * 1024 * 1024
 SHORTLIST = 16
 APPLICATION_ID = 0x50424352
 SCHEMA = """
@@ -49,12 +54,27 @@ CREATE INDEX IF NOT EXISTS code_research_file_terms ON code_research_terms(repo,
 
 
 def scopes():
-    return [{**group, "directories": SCOPES[group["repo"]], "scoped": True}
-            for group in code_search._manifest() if group["repo"] in SCOPES]
+    groups = [{**group, "directories": SCOPES[group["repo"]], "scoped": True}
+              for group in code_search._manifest() if group["repo"] in SCOPES]
+    for group in groups:
+        if group["repo"] == "KhronosGroup/Vulkan-Docs":
+            group["exclude_prefixes"] = ("appendices/VK_",)
+    return [*groups, DIRECTX_SPEC]
+
+
+def eligible(group, path):
+    return (source_corpus.valid_file(group, path, extensions=group.get("extensions", source_corpus.EXTENSIONS))
+            and not path.startswith(group.get("exclude_prefixes", ())))
+
+
+def regular_source(group, path, mode):
+    return (eligible(group, path) and (mode == "100644"
+            or mode == "100755" and group["repo"] == vulkan_rules.REPO and path.endswith(".adoc")))
 
 
 def generation():
-    return sha256(json.dumps([code_search.CACHE_PREFIX, scopes()], sort_keys=True).encode()).hexdigest()
+    return sha256(json.dumps([code_search.CACHE_PREFIX, "vuid-includes-v3", scopes()],
+                             sort_keys=True).encode()).hexdigest()
 
 
 @contextmanager
@@ -75,6 +95,7 @@ def connect(path, *, write=False):
 
 def references(tree_fetch):
     result = []
+    total_bytes = 0
     for group in scopes():
         repo, revision = group["repo"], group["revision"]
         tree = tree_fetch(group)
@@ -85,19 +106,20 @@ def references(tree_fetch):
             if not isinstance(entry, dict):
                 continue
             path, blob = entry.get("path"), entry.get("sha")
-            if (entry.get("type") != "blob" or entry.get("mode") != "100644"
-                    or not source_corpus.valid_file(group, path) or path in seen or not isinstance(blob, str)
+            if (entry.get("type") != "blob" or not regular_source(group, path, entry.get("mode"))
+                    or path in seen or not isinstance(blob, str)
                     or not source_corpus.BLOB_SHA.fullmatch(blob)
                     or type(entry.get("size")) is not int or not 0 < entry["size"] <= source_corpus.MAX_FILE_BYTES):
                 continue
             seen.add(path)
+            total_bytes += entry["size"]
             result.append({"repo": repo, "revision": revision, "path": path, "blob": blob,
                            "license": group["license"],
                            "license_url": f"https://github.com/{repo}/blob/{revision}/{group['license_path']}"})
         if not seen:
             raise ValueError(f"No eligible files in research tree for {repo}")
-    if len(result) > MAX_FILES:
-        raise ValueError("Research source tree exceeds its file budget")
+    if len(result) > MAX_FILES or total_bytes > MAX_SOURCE_BYTES:
+        raise ValueError("Research source tree exceeds its source budget")
     return sorted(result, key=lambda row: (row["repo"], row["path"]))
 
 
@@ -121,7 +143,10 @@ def refresh(path, *, tree_fetch=source_corpus.fetch_tree, fetch=code_search._fet
                     raise
                 sleep(0.25)
                 body = fetch(ref)
-            return code_search.index_file(ref, body), None
+            row = code_search.index_file(ref, body)
+            if ref["repo"] == vulkan_rules.REPO and ref["path"].endswith(".adoc"):
+                row["_vulkan_rules"] = vulkan_rules.extract(body)
+            return row, None
         except (OSError, ValueError) as error:
             return ref, type(error).__name__
 
@@ -132,6 +157,7 @@ def refresh(path, *, tree_fetch=source_corpus.fetch_tree, fetch=code_search._fet
             else:
                 updated.append(row)
     if not errors:
+        vulkan_rules.resolve(updated)
         # Readers see one complete revision of the corpus. Keep a previously
         # usable index when a download or integrity check fails.
         with connect(path, write=True) as db:
@@ -142,38 +168,50 @@ def refresh(path, *, tree_fetch=source_corpus.fetch_tree, fetch=code_search._fet
                 db.execute("INSERT INTO code_research_files VALUES (?,?,?,?,?)",
                            (repo, path, row["revision"], row["blob"], json.dumps(row, separators=(",", ":"))))
                 db.executemany("INSERT INTO code_research_terms VALUES (?,?,?)",
-                               ((term, repo, path) for term in row["terms"]
-                                if not term.startswith(code_search.ANCHOR_PREFIXES)))
+                               ((term, repo, path) for term in row["terms"]))
             db.execute("INSERT OR REPLACE INTO code_research_generation VALUES (1,?)", (policy,))
     return {"indexed": len(updated) if not errors else 0, "expected": len(refs), "cached": 0, "errors": errors}
 
 
 def lookup(path, query, *, origin_url, limit=5):
-    exact, _ = code_search.query_terms(query)
-    exact = sorted(term for term in exact if not code_search.GENERIC_STATUS.match(term))
-    if len(exact) < 2 and not any(term.startswith(code_search.VUID_PREFIX) for term in exact):
+    exact, _, focus = code_search.query_signals(query)
+    focus = {term for term in focus if not code_search.GENERIC_STATUS.match(term)}
+    exact = {term for term in exact if not code_search.GENERIC_STATUS.match(term)}
+    anchors = {code_search.REFPAGE_PREFIX + term for term in focus
+               if code_search.WORD.fullmatch(term) and not term.startswith(code_search.VUID_PREFIX)}
+    rules = {code_search.rule_token(term) for term in exact if term.startswith(code_search.VUID_PREFIX)}
+    terms = sorted(exact | anchors | rules)
+    if not terms:
         return []
     owner = current_repository("/".join(urlsplit(origin_url).path.split("/")[1:3]))
-    marks = ",".join("?" for _ in exact)
+    marks = ",".join("?" for _ in terms)
     with connect(path) as db:
         db.execute("BEGIN")
         current = db.execute("SELECT policy FROM code_research_generation WHERE id=1").fetchone()
         if current != (generation(),):
-            return []
+            raise ValueError("Refresh the research database before searching this source policy")
         rows = db.execute(f"""
             WITH shortlist AS (
                 SELECT repo,path,COUNT(*) AS overlap,
-                       MAX(term GLOB 'pb_vuid_*') AS diagnostic
+                       MAX(CASE WHEN term GLOB 'pb_rule_*' THEN 2
+                                WHEN term GLOB 'pb_vuid_*' THEN 1 ELSE 0 END) AS diagnostic,
+                       MAX(term GLOB 'pb_ref_*') AS contract
                 FROM code_research_terms
                 WHERE term IN ({marks}) AND repo != ? COLLATE NOCASE
-                GROUP BY repo,path HAVING COUNT(*) >= 2 OR diagnostic
-                ORDER BY diagnostic DESC,overlap DESC,repo,path LIMIT ?
+                GROUP BY repo,path HAVING diagnostic OR contract
+                ORDER BY diagnostic DESC,contract DESC,overlap DESC,repo,path LIMIT ?
             )
             SELECT payload FROM shortlist JOIN code_research_files USING (repo,path)
-            ORDER BY diagnostic DESC,overlap DESC,repo,path
-        """, (*exact, owner, SHORTLIST)).fetchall()
+            ORDER BY diagnostic DESC,contract DESC,overlap DESC,repo,path
+        """, (*terms, owner, SHORTLIST)).fetchall()
     index = {"version": code_search.SCHEMA_VERSION, "files": [json.loads(row[0]) for row in rows]}
-    return code_search.lookup(index, query, origin_url=origin_url, limit=limit)
+    candidates = code_search.lookup(index, query, origin_url=origin_url, limit=10, strict_context=True)
+    title = query.split("\n", 1)[0]
+    runtime = code_search.RUNTIME_FAILURE_TITLE.search(title) or code_search.PERFORMANCE_TITLE.search(title)
+    accepted = {"normative_rule", "exact_diagnostic"}
+    if not runtime:
+        accepted.add("api_contract")
+    return [row for row in candidates if row["source_role"] in accepted][:limit]
 
 
 def main():

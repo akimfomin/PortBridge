@@ -61,7 +61,8 @@ class CodeResearchTests(unittest.TestCase):
         code_research.refresh(self.path, tree_fetch=self.tree, fetch=lambda _: self.content)
         origin = "https://github.com/receiver/backend/issues/1"
         with patch.object(code_research.code_search, "CACHE_PREFIX", "parser-changed:"):
-            self.assertFalse(code_research.lookup(self.path, self.diagnostic, origin_url=origin))
+            with self.assertRaisesRegex(ValueError, "Refresh"):
+                code_research.lookup(self.path, self.diagnostic, origin_url=origin)
             result = code_research.refresh(self.path, tree_fetch=self.tree, fetch=lambda _: b"corrupted")
             self.assertEqual(result["indexed"], 0)
             self.assertEqual(len(result["errors"]), 1)

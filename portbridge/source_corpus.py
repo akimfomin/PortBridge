@@ -32,11 +32,11 @@ def cache_key(group):
     return f"{CACHE}{group['repo']}@{group['revision']}:{suffix}"
 
 
-def valid_file(group, path):
+def valid_file(group, path, *, extensions=EXTENSIONS):
     return (isinstance(path, str) and SOURCE_PATH.fullmatch(path)
             and any(path.startswith(directory + "/") and not EXCLUDE.search(path[len(directory) + 1:])
                     for directory in group["directories"])
-            and PurePosixPath(path).suffix in EXTENSIONS)
+            and PurePosixPath(path).suffix in extensions)
 
 
 def _fetch_tree(repo, sha, *, recursive):

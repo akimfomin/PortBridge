@@ -164,6 +164,45 @@ class CodeDiscoveryTests(CatalogFixture):
                 {**index, "files": [code_search.index_file({**ref, "path": path}, body)]},
                 "vkCmdExecuteCommands", origin_url=self.url))
 
+    def test_exact_vulkan_rule_outranks_mentions_and_ignores_examples(self):
+        rule = "VUID-RuntimeSpirv-OpEntryPoint-07754"
+        repo = "KhronosGroup/Vulkan-Docs"
+        ref = {**self.ref, "repo": repo, "path": "appendices/spirvenv.adoc",
+               "license_url": self.ref["license_url"].replace("Example/Graphics", repo)}
+        document = ("----\n" + f"  * [[{rule}]]\n" + "----\n\n" +
+                    f"  * [[{rule}]]\n    Verify the interface component width.\n")
+        exact = code_search.index_file(ref, document.encode())
+        mention = code_search.index_file(self.ref, f'CheckRule(" {rule} ");'.encode())
+        index = {"version": code_search.SCHEMA_VERSION, "files": [mention, exact]}
+        hits = code_search.lookup(index, rule, origin_url=self.url)
+        self.assertEqual([(x["source_role"], x["line"]) for x in hits],
+                         [("normative_rule", 5), ("exact_diagnostic", 1)])
+        focused = code_search.index_file(self.ref, b"void vkCmdExecuteCommands();")
+        unrelated = f"vkCmdExecuteCommands command buffer usage\nReference for other platforms: {rule}"
+        hits = code_search.lookup({**index, "files": [exact, focused]}, unrelated, origin_url=self.url,
+                                  strict_context=True)
+        self.assertEqual([x["repo"] for x in hits], [self.ref["repo"]])
+        related = "VUID-vkCmdExecuteCommands-pCommandBuffers-00001"
+        focused = code_search.index_file(self.ref, f'CheckRule("{related}");'.encode())
+        hits = code_search.lookup({**index, "files": [exact, focused]},
+                                  f"vkCmdExecuteCommands command buffer usage\n{related} {rule}", origin_url=self.url,
+                                  strict_context=True)
+        self.assertEqual([x["repo"] for x in hits], [self.ref["repo"]])
+
+    def test_directx_capability_needs_a_focused_request_and_active_prose(self):
+        name = "UnrestrictedBufferTextureCopyPitchSupported"
+        repo = "microsoft/DirectX-Specs"
+        ref = {**self.ref, "repo": repo, "path": "d3d/conformance.md",
+               "license_url": self.ref["license_url"].replace("Example/Graphics", repo)}
+        statement = f"Support is reported via `{name}` in the capabilities structure."
+        document = (f"```markdown\n{statement}\n```\n\n"
+                    f"> {statement}\n    {statement}\n{statement}\n")
+        index = {"version": code_search.SCHEMA_VERSION,
+                 "files": [code_search.index_file(ref, document.encode())]}
+        hits = code_search.lookup(index, f"Check {name}", origin_url=self.url)
+        self.assertEqual([hit["line"] for hit in hits], [7])
+        self.assertFalse(code_search.lookup(index, f"Unrelated GPU hang\n{name}", origin_url=self.url))
+
     def test_scope_selects_only_regular_bounded_source_files(self):
         group = {"directories": ["gpu"], "limit": 2}
         entry = {"type": "blob", "mode": "100644", "size": 200, "sha": "a" * 40}
