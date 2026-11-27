@@ -140,6 +140,30 @@ class CodeDiscoveryTests(CatalogFixture):
         self.assertEqual(fallback[0]["repo"], "Elsewhere/Graphics")
         self.assertIn("diagnostic ID was not found", fallback[0]["next_step"])
 
+    def test_vulkan_refpage_marks_the_actual_definition_without_explaining_performance(self):
+        ref = {**self.ref, "path": "chapters/commands.adoc"}
+        source = (b"Previous work can call flink:vkCmdExecuteCommands.\n\n"
+                  b"[open,refpage='vkCmdExecuteCommands',desc='Run commands',type='protos']\n--\n"
+                  b"The command records execution in the primary command buffer.\n")
+        indexed = code_search.index_file(ref, source)
+        index = {"version": code_search.SCHEMA_VERSION, "files": [indexed]}
+        hits = code_search.lookup(index, "Is vkCmdExecuteCommands allowed here?", origin_url=self.url)
+        self.assertEqual([hit["line"] for hit in hits], [3])
+        self.assertFalse(code_search.lookup(index, "vkCmdExecuteCommands causes a latency regression",
+                                            origin_url=self.url))
+        self.assertFalse(code_search.lookup(index, "Fence returns early\nvkCmdExecuteCommands",
+                                            origin_url=self.url))
+        for path, body in (
+                ("guide.md", source),
+                (ref["path"], b"----\n" + source + b"----\n"),
+                (ref["path"], b"////\n" + source + b"////\n"),
+                (ref["path"], b"++++\n" + source + b"++++\n"),
+                (ref["path"], source.replace(b"'vkCmd", b'"vkCmd')),
+                (ref["path"], source.replace(b"']\n", b"'\n"))):
+            self.assertFalse(code_search.lookup(
+                {**index, "files": [code_search.index_file({**ref, "path": path}, body)]},
+                "vkCmdExecuteCommands", origin_url=self.url))
+
     def test_scope_selects_only_regular_bounded_source_files(self):
         group = {"directories": ["gpu"], "limit": 2}
         entry = {"type": "blob", "mode": "100644", "size": 200, "sha": "a" * 40}

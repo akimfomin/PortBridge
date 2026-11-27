@@ -143,7 +143,7 @@ def refresh(path, *, tree_fetch=source_corpus.fetch_tree, fetch=code_search._fet
                            (repo, path, row["revision"], row["blob"], json.dumps(row, separators=(",", ":"))))
                 db.executemany("INSERT INTO code_research_terms VALUES (?,?,?)",
                                ((term, repo, path) for term in row["terms"]
-                                if not term.startswith(code_search.ANCHOR_PREFIX)))
+                                if not term.startswith(code_search.ANCHOR_PREFIXES)))
             db.execute("INSERT OR REPLACE INTO code_research_generation VALUES (1,?)", (policy,))
     return {"indexed": len(updated) if not errors else 0, "expected": len(refs), "cached": 0, "errors": errors}
 

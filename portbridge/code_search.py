@@ -49,14 +49,18 @@ STOP = set("""the and for with return case this const void struct bool true fals
 PRIVATE_TEXT = re.compile(r"(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|[A-Za-z]:\\[^\s`]+|\\\\[^\s`]+|/(?:home|Users)/[^\s`]+)")
 API_NAME = re.compile(r"(?:D3D12_|DXGI_|VK_|VUID-|vk[A-Z]|ID3D12|GetDiskFreeSpace|GetVolumeInformation|GetFileInformation|SetFileInformation|Wave[A-Z]|EarlyCSE|SelectionDAG|[ds]s?_(?:read|write|add|cmp|load|store))")
 SENSITIVE = re.compile(r"(?i)(?:password|secret|credential|api_?key|private_?key|access_?token|ghp_|github_pat_|AKIA|[A-F0-9]{24,})")
-CACHE_PREFIX = "deep-code-v8:"
+CACHE_PREFIX = "deep-code-v11:"
 ANCHOR_PREFIX = "pb_decl_"
+REFPAGE_PREFIX = "pb_ref_"
+ANCHOR_PREFIXES = (ANCHOR_PREFIX, REFPAGE_PREFIX)
 PERFORMANCE_TITLE = re.compile(r"\b(?:latency|stutters?|performance|frametime|throughput|fps|slow(?:down|er)?|"
                                r"hangs?|freezes?|regression)\b", re.I)
 VUID_PREFIX = "pb_vuid_"
 GENERIC_STATUS = re.compile(r"(?:vk_error_|dxgi_error_|e_(?:fail|invalidarg|outofmemory)$)")
 VUID = re.compile(r"\bVUID-(?:[A-Za-z0-9_]{1,54}-){2,3}[0-9]{5}\b", re.I)
 DOC_DEFINITION = re.compile(r"^\s*[*+-]\s+(?:ename|flink|sname):([A-Za-z_][A-Za-z_0-9]+)\b")
+DOC_REFPAGE = re.compile(r"""^\[open,\s*refpage=(?P<quote>['"])(?P<name>[A-Za-z_][A-Za-z_0-9]+)(?P=quote)(?:,[^\]\r\n]*)?\]\s*$""")
+DOC_OPAQUE_BLOCK = re.compile(r"([-./+])\1{3,}")
 CODE_SIGNATURE = re.compile(
     r"^\s*(?!(?:return|if|else|while|for|case|match|throw|await|new)\b)"
     r"(?:[A-Za-z_][\w:<>&*]*\s+)+([A-Za-z_][A-Za-z_0-9]+)\s*\("
@@ -241,7 +245,15 @@ def index_file(reference, content):
                                        if match["comment"] else match[0], source)
         shader_names = {number: builtins for number, line in enumerate(active.splitlines(), start=1)
                         if (builtins := GLSL_BUILTIN.findall(URL.sub(" ", line)))}
-    for number, line in enumerate(source.splitlines(), start=1):
+    lines = source.splitlines()
+    asciidoc = reference["path"].endswith(".adoc")
+    opaque_fence = None
+    for number, line in enumerate(lines, start=1):
+        if asciidoc and DOC_OPAQUE_BLOCK.fullmatch(line.strip()):
+            if opaque_fence is None:
+                opaque_fence = line.strip()
+            elif opaque_fence == line.strip():
+                opaque_fence = None
         if SENSITIVE.search(line):
             continue
         line = PRIVATE_TEXT.sub(" ", line)
@@ -256,10 +268,13 @@ def index_file(reference, content):
         qualified.update(word.casefold() for word in words if SYMBOL.search(word) and len(word) >= 5)
         features = {value.casefold() for word in words for value in (word, *SPLIT.split(word))
                     if len(value) >= 3 and value.casefold() not in STOP}
-        if declaration := (DOC_DEFINITION if docs else CODE_SIGNATURE).match(literals_removed[:512]):
-            name = declaration[1]
+        declaration = (DOC_DEFINITION if docs else CODE_SIGNATURE).match(literals_removed[:512])
+        refpage = (DOC_REFPAGE.fullmatch(literals_removed) if asciidoc and opaque_fence is None
+                   and number < len(lines) and lines[number].strip() == "--" else None)
+        if declaration or refpage:
+            name = refpage["name"] if refpage else declaration[1]
             if name in words and len(name) <= 84:
-                marker = definition_token(name)
+                marker = REFPAGE_PREFIX + name.casefold() if refpage else definition_token(name)
                 features.add(marker)
                 qualified.add(marker)
         diagnostics = {diagnostic_token(vuid) for vuid in public_diagnostics(line) if len(vuid) <= 87}
@@ -271,7 +286,7 @@ def index_file(reference, content):
     # Favor technical names. Plain terms with a bounded number of occurrences
     # support co-occurrence when two implementations use different names.
     order = sorted(postings, key=lambda token: (not token.startswith(VUID_PREFIX),
-                                                not token.startswith(ANCHOR_PREFIX), token not in qualified,
+                                                not token.startswith(ANCHOR_PREFIXES), token not in qualified,
                                                 len(postings[token]), token))
     return {**reference, "sha256": sha256(content).hexdigest(),
             "terms": {token: postings[token] for token in order[:MAX_TERMS]}}
@@ -406,6 +421,7 @@ def lookup(index, query, *, origin_url="", limit=5):
     diagnostic_fallback = bool(diagnostics and not diagnostic_files)
     corroboration = {word for word in exact - diagnostics if not GENERIC_STATUS.match(word)}
     definitions = {definition_token(word) for word in corroboration}
+    definitions.update(REFPAGE_PREFIX + word for word in corroboration & focus)
     frequencies = Counter(token for row in files for token in (exact | words) & row["terms"].keys())
     results = []
     for row in files:
