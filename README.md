@@ -2,7 +2,7 @@
 
 **Find and reuse verified compatibility work across independent Xbox Series projects.**
 
-[See team progress](https://akimfomin.github.io/PortBridge/) · [Find a test for your PC](https://akimfomin.github.io/PortBridge/#/lab) · [Request a test](https://github.com/akimfomin/PortBridge/issues/new?template=test-request.yml) · [Start with an agent](docs/AGENT-PROMPT.md) · [Русский](README.ru.md)
+[See team progress](https://akimfomin.github.io/PortBridge/) · [Find a test for your PC](https://akimfomin.github.io/PortBridge/#/lab) · [Request a test](https://github.com/akimfomin/PortBridge/issues/new?template=test-request.yml) · [Start with an agent](docs/AGENT-PROMPT.md) · [Join the Test Lab](https://github.com/akimfomin/PortBridge/issues/112) · [Русский](README.ru.md)
 
 PortBridge connects public issues, pull requests, and test results across projects bringing Xbox Series software to PC. Look up an error or shader instruction, see what another team already tested, and share a reproducible result in the repository where it can help. Each team keeps its own tools, priorities, and review process.
 
