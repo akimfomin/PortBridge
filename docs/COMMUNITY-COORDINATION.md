@@ -1,5 +1,12 @@
 # Координация между командами
 
+## 27 ноября 2026 · Новые участники и независимые ответы
+
+- **Dathinel.** Получил команду своего существующего теста и сравнение с VIctory #1419. Аппаратный результат открыт. [VIctory-4GB](https://github.com/Dathinel/victory-4gb/issues/10#issuecomment-7207943312)
+- **KevinPratap.** Получил проверку смешанных фаз ApexVI и рецепт PortBridge для раздельных отрезков. Возврат агрегатов открыт. [PortWatch](https://github.com/4lwayz/portwatch-vi/issues/212#issuecomment-7207963789)
+- **Koaio.** Получил проверку параллельной очистки кэша и критерий теста с двумя процессами. Предыдущие результаты принадлежат ettehn и CryingLaughing. [XCL](https://github.com/xcl-dev/xcl/issues/2900#issuecomment-7207960004)
+- **Granite900** подтвердил, что включит проверку ресурса и предложенные контроли в прототип. **andrewDoing** подтвердил лишнее копирование в XCL, **ettehn** на своей RTX проверил вариант исправления. Оба проекта ещё рассматривают изменения. [VIctory](https://github.com/fxceless/victory-fork/issues/1423#issuecomment-7207955353) · [Трассировка XCL](https://github.com/xcl-dev/xcl/pull/2940#issuecomment-7207890471) · [Проверка на RTX](https://github.com/xcl-dev/xcl/pull/2940#issuecomment-7207891768)
+
 ## 27 ноября 2026 · Ревью XCL и продолжение работы с VIctory
 
 - **KOLESNiii** сослался на контроль PortBridge в черновике XCL #2940. PortBridge прогнал восемь изолированных тестов точной ревизии и передал проверку лишнего чтения и копирования при отключённом файловом кэше. Замечание опубликовано, принятие ещё открыто. [Черновик](https://github.com/xcl-dev/xcl/pull/2940) · [Ревью](https://github.com/xcl-dev/xcl/pull/2940#issuecomment-7207809226)

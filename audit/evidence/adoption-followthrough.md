@@ -252,3 +252,50 @@ print("PASS: stable sample, unused handle, recycled descriptor, distinct heap")
 ## Earlier outstanding adoption checks
 
 Three new addressed offers were posted to HabibUrRehmanBhattii, Solarthis and Epic-Y. A current upstream decision and a ready input are linked from each. Follow-up replies from a new participant or acceptance of the PortWatch/FrameLab integration have not yet been observed. The GitHub Action, MCP and bare tools still have separate evidence from their technical readiness. No external repository received an installation.
+
+## Новые участники и ответы 27 ноября
+
+### VIctory-4GB
+
+Проверяемый SHA форка `b72f3bd9476f745587a674ba5729516137eb1e89`, голова открытого VIctory #1419 `8d1162e31491ca8c462356e921b31f39ee99d58d`, база изменения `1f5d17a6b149f5ef95ba6d0be8826f4f9b62e363`. В Git-репозитории, содержащем все три ревизии:
+
+```text
+git merge-tree --write-tree --name-only --merge-base=1f5d17a6b149f5ef95ba6d0be8826f4f9b62e363 b72f3bd9476f745587a674ba5729516137eb1e89 8d1162e31491ca8c462356e921b31f39ee99d58d
+```
+
+Выход 1: конфликт содержимого `lower.rs`, конфликты изменения и удаления `paired.rs` и `wave64_after_loop.rs`. Для исходной проверки, где адрес кодирует `lane ^ 32`, модель RDNA 2 выбирает `(lane & 32) | (((lane ^ 32) + offset // 4) & 31)`. Модель старого пути выбирает `((lane ^ 32) + offset // 4) & 63`. При смещении 0 ошибочны все 64 значения старого пути, при 128 оба пути совпадают на всех 64 значениях. Форк уже содержит тест на смещения и частичную активность. Из точного дерева форка предложен один повтор на прежней RTX 3050. PortBridge проверил модель и исходники, физический тест остался открытым. [Функция и тест](https://github.com/Dathinel/victory-4gb/blob/b72f3bd9476f745587a674ba5729516137eb1e89/crates/victory-shader/src/emit/wave64_tests.rs#L91-L145) · [Предложение](https://github.com/Dathinel/victory-4gb/issues/10#issuecomment-7207943312)
+
+```text
+cargo test --locked -p victory-shader bpermute_reads_active_sources_within_each_half -- --nocapture
+```
+
+### ApexVI
+
+Сохраните [исходный `tools/frametime.py`](https://raw.githubusercontent.com/KevinPratap/ApexVI/9a17be6cd57514a616b9a95e5cb069f28749897f/tools/frametime.py) как `frametime.py` в текущей папке. SHA-256 исходного файла `a183bcbcb15fdebd832dbcc386f4e3ebaa316b3df422c2c6b1b7a0aec3dd21f3`. Пример запускается Python 3, нужны только локальные синтетические строки:
+
+```python
+from pathlib import Path
+from subprocess import check_output
+from tempfile import TemporaryDirectory
+import sys
+
+cold = "5 fps, 200 ms/frame (140 preparing: copies 2 ms; 12 on the GPU; 1 copying back), 3400 draws/frame\n" * 2
+warm = "20 fps, 50 ms/frame (30 preparing: copies 2 ms; 12 on the GPU; 1 copying back), 3400 draws/frame\n" * 2
+with TemporaryDirectory() as tmp:
+    for label, rows in [("cold", cold), ("warm", warm), ("mixed", cold + warm)]:
+        fixture = Path(tmp) / (label + ".txt")
+        fixture.write_text(rows, encoding="utf-8")
+        result = check_output([sys.executable, "-I", "frametime.py", str(fixture)], text=True)
+        print(label, result.strip())
+```
+
+Результаты `cold 2 samples: fps 5.00, ms 200, prep 140`, `warm 2 samples: fps 20.00, ms 50, prep 30`, `mixed 4 samples: fps 12.50, ms 125, prep 85`. Данные участника пока не пересчитывались. [Предложение](https://github.com/4lwayz/portwatch-vi/issues/212#issuecomment-7207963789) · [Готовый рецепт Lab](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7207139869)
+
+### XCL: очистка кэша
+
+На Windows во временном каталоге создан файл `.last-used`. После `os.utime` для времени на 15 суток раньше первый наблюдатель сохранил решение `age > 14 * 86400`. Второй шаг переписал время тем же `os.utime` на текущее. Повторное чтение давало `false`, прежний результат оставался `true`. Это фиксированный порядок двух чтений из реального файла. Ветку XCL и удаление здесь не запускали. Активность двух процессов и допустимое время хранения остаются отдельными вопросами. [Источник ветки](https://github.com/Koaio/xcl/blob/74698efa53b022a54230038757df67828aa102a9/crates/xcl/src/gpu/recomp/pso.rs#L499-L534) · [Сообщение в XCL](https://github.com/xcl-dev/xcl/issues/2900#issuecomment-7207960004)
+
+### Ответы по прежним проверкам
+
+- **VIctory #1423.** Granite900 описал, как будет хранить ключ из кучи, позиции и поколения для каждой отправки команд. Подтвердил добавление четырёх проверок в прототип. На момент сверки это решение автора в обсуждении. [Ответ](https://github.com/fxceless/victory-fork/issues/1423#issuecomment-7207955353)
+- **XCL #2940.** andrewDoing подтвердил замечание шестью прогонами с трассировкой и нашёл копирование 3 070 байт даже при отключённом дисковом кэше. ettehn на RTX 5070 Ti Laptop получил 12 PASS в черновике и с локальным изменением. В исходной версии тестовый blob 1 418 байт заменён на 1 402 байта за один вызов создания. Исполнение и трассировка принадлежат этим участникам. Замера пользовательской задержки и слияния правки ещё нет. [Трассировка](https://github.com/xcl-dev/xcl/pull/2940#issuecomment-7207890471) · [Аппаратный результат](https://github.com/xcl-dev/xcl/pull/2940#issuecomment-7207891768)
