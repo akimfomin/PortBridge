@@ -2,6 +2,14 @@
 
 Give your agent the GitHub link and the prompt below. Any session that can read public links can use this route without installing PortBridge, connecting MCP, or creating a GitHub token. Running a local test or making a change requires a session with a workspace and the tools for that check. [PortBridge on GitHub](https://github.com/akimfomin/PortBridge) · [Project instructions](../AGENTS.md)
 
+## A joint check from one public link
+
+1. Open the original issue or PR and state which decision needs evidence. [Request a test](https://github.com/akimfomin/PortBridge/issues/new?template=test-request.yml)
+2. Share the Test Lab request with another team or give its link to an agent. Keep the exact revision, hardware and expected result with the request.
+3. The volunteer posts the result or a skip. Link the original question, the PortBridge request or matching comment, and the credited result in the receiving team's discussion. Record a maintainer decision separately if one follows.
+
+[PortBridge's suggestion](https://github.com/Dathinel/victory-4gb/issues/10#issuecomment-7207943312) · [Dathinel's report in the receiving PR](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7208842607)
+
 ## Copy this prompt
 
 ```text

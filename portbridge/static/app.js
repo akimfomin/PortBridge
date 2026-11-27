@@ -1351,7 +1351,18 @@ function showActivity(data, quiet = false) {
   start.append(internalLink(t('Choose a test to run', 'Выбрать тест для своего стенда'), '#/lab', 'lab-primary'),
     internalLink(t('Browse reviewed cases', 'Посмотреть проверенные карточки'), '#/problems', 'retry'));
   if (snapshotSite?.browse_index) start.append(internalLink(t('Browse public GitHub sources', 'Открыть индекс GitHub'), '#/sources', 'retry'));
-  board.append(start, stats);
+  const collaboration = activityPanel(t('A test shared between teams', 'Как команды проверяют работу друг друга'));
+  collaboration.append(element('p', '', t(
+    'PortBridge linked a VIctory test to Dathinel’s setup. Dathinel ran six synthetic checks on an RTX 3050 Laptop and returned the results to the original PR.',
+    'PortBridge подобрал тест VIctory под стенд Dathinel. Он выполнил шесть синтетических проверок на RTX 3050 Laptop и вернул результаты в исходный PR.')));
+  const proof = element('div', 'activity-handoff-proof');
+  proof.append(githubLink(t('PortBridge’s suggestion', 'Что предложил PortBridge'),
+    'https://github.com/Dathinel/victory-4gb/issues/10#issuecomment-7207943312'),
+    githubLink(t('Dathinel’s report in VIctory', 'Отчёт Dathinel в VIctory'),
+      'https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7208842607'),
+    internalLink(t('Try the same workflow', 'Подключиться к совместной проверке'), t('./start.html', './start.ru.html')));
+  collaboration.append(proof);
+  board.append(start, collaboration, stats);
   const research = [...list(data.original_research), ...list(data.research)]
     .sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
   if (research.length) board.append(researchHighlights(research));
