@@ -1,5 +1,11 @@
 # PortBridge · Продолжение Growth & Adoption
 
+## Continued · сводка GPU-отчётов · 28 ноября 2026, МСК
+
+- На точной ревизии PR #2379 проверили уже принятый отчёт V100 от 31415-n. Текущий разбор пропускает все три прогона и тест `cs_imgstore_cube`, хотя проверка обязательных полей проходит. Замена двух заголовков в копии возвращает **193/256, 224/256 и 237/256**, по одному сбою в каждом. Раздельные проверки показали, что каждый заголовок восстанавливает свой раздел. [Измерения и воспроизведение](evidence/decision-followthrough/continued-v100-overview.json) · [Исходный отчёт](https://github.com/ProjectLeonida/mandy/blob/aa1d1013d363ba9ad4d514ba3eb174813dae5629/gpu-test-results/V100-SXM2.txt)
+- Передали результат в PR и предложили узкое исправление разбора либо отдельную правку двух заголовков. Решение сопровождающего и применение исправления пока не подтверждены. [Комментарий в Continued](https://github.com/ProjectLeonida/mandy/pull/2379#issuecomment-7229606837)
+- В VIctory закрыли объединённый PR #3327 после снятия устройства и чёрного экрана. Результат относится к объединённой сборке. Отдельный PR #2122 остаётся открытым. [Решение автора](https://github.com/Marvisak/VIctory/pull/3327#issuecomment-7203612512) · [VIctory #2122](https://github.com/Marvisak/VIctory/pull/2122)
+
 ## Проверка перед решением AnyXboxX · 28 ноября 2026, МСК
 
 - Собрали звуковой модуль с библиотеками Windows и штатной таблицей AnyXboxX. Найдены все пять звуковых функций, прошли **13 проверок**. Полная сборка и решение о переносе остаются открытыми. [Проверка и исходники](evidence/decision-followthrough/anyxboxx-dsp/native-bindings) · [AnyXboxX #534](https://github.com/LooperSalty/AnyXboxX/issues/534#issuecomment-7229136745)

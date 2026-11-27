@@ -1,0 +1,100 @@
+{
+  "parser": "https://github.com/ProjectLeonida/mandy/blob/346117c243ff42d9db567ad0875c46747d2f6f30/tools/gpu_results.py#L43",
+  "report": "https://github.com/ProjectLeonida/mandy/blob/aa1d1013d363ba9ad4d514ba3eb174813dae5629/gpu-test-results/V100-SXM2.txt",
+  "hardware_report_author": "31415-n",
+  "review": "https://github.com/ProjectLeonida/mandy/pull/2379#issuecomment-7229606837",
+  "decision": "awaiting_upstream_decision",
+  "measurement_type": "Parser test on a published hardware report with in-memory heading changes",
+  "run_fields": [
+    "passed",
+    "total",
+    "skipped",
+    "failed"
+  ],
+  "reproduction": {
+    "input": "Use the pinned public V100 report and pinned parser above.",
+    "changed_run_heading": {
+      "from": "run_gpu_tests.py, 256 fixtures; 265 shaders translated, 264 pass spirv-val in every run:",
+      "to": "run_gpu_tests.py:"
+    },
+    "changed_failed_heading": {
+      "from": "Failed in all three full runs, reproduced once with --filter cs_imgstore_cube:",
+      "to": "Failed:"
+    },
+    "check": "Parse the original, then replace either heading alone and both together in copies. Record parsed runs, fixture failures, notes and whether the fatal metadata check passes."
+  },
+  "results": {
+    "actual": {
+      "runs": [],
+      "failed": [],
+      "check_passes": true,
+      "notes": [
+        "no run_gpu_tests.py line with `N/M passed`"
+      ]
+    },
+    "only_run_heading": {
+      "runs": [
+        [
+          193,
+          256,
+          62,
+          1
+        ],
+        [
+          224,
+          256,
+          31,
+          1
+        ],
+        [
+          237,
+          256,
+          18,
+          1
+        ]
+      ],
+      "failed": [],
+      "check_passes": true,
+      "notes": [
+        "1 failed in a run, 0 fixture name(s) read from Failed"
+      ]
+    },
+    "only_failed_heading": {
+      "runs": [],
+      "failed": [
+        "cs_imgstore_cube"
+      ],
+      "check_passes": true,
+      "notes": [
+        "no run_gpu_tests.py line with `N/M passed`"
+      ]
+    },
+    "both": {
+      "runs": [
+        [
+          193,
+          256,
+          62,
+          1
+        ],
+        [
+          224,
+          256,
+          31,
+          1
+        ],
+        [
+          237,
+          256,
+          18,
+          1
+        ]
+      ],
+      "failed": [
+        "cs_imgstore_cube"
+      ],
+      "check_passes": true,
+      "notes": []
+    }
+  }
+}
