@@ -5,11 +5,14 @@ from pathlib import Path
 import time
 from unittest.mock import patch
 
+from portbridge.__main__ import DEFAULT_SEED
 from portbridge.action_summary import summary
+from portbridge.backup import backup_database, checkpoint_count
+from portbridge.catalog import Catalog
 from portbridge.discovery_scan import cached_index, scan
 from portbridge.discovery_search import SOURCE_FOUND, discover, historical_candidates
 from portbridge.github import Unavailable
-from portbridge.preflight import public_preflight
+from portbridge.preflight import preflight, public_preflight
 from test_portbridge import CatalogFixture
 
 PR = "https://github.com/xcl-dev/xcl/pull/2322"
@@ -80,6 +83,47 @@ class DiscoveryIncrementalTest(CatalogFixture):
         self.assertEqual(report["scan_status"], "stale")
         self.assertEqual(report["automatic_matches"][0]["source"], EXTERNAL)
         self.assertFalse(historical_candidates(report))
+
+    def test_scheduled_queue_survives_checkpoint_without_public_projection_limit(self):
+        observations = [self.observation(f"https://github.com/xcl-dev/xcl/pull/{number}")
+                        for number in range(3000, 3130)]
+        target = observations[0]["url"]
+        with patch("portbridge.discovery_scan.fetch", return_value=("available", [{"url": EXTERNAL}])) as fetch:
+            first = scan(self.catalog, observations, online=True, max_lookups=1, scheduled=True)
+            self.assertEqual(first["queue"], {"jobs": 130, "ready": 10, "pending": 10})
+            self.assertEqual(first["lookups"], 1)
+            backup = self.catalog.path.with_name("checkpoint-discovery.sqlite3")
+            backup_database(self.catalog.path, backup, public_checkpoint=True)
+            self.assertEqual(checkpoint_count(backup), 0)
+            restored = Catalog(backup, DEFAULT_SEED)
+            second = scan(restored, observations, online=True, max_lookups=1, scheduled=True)
+            self.assertEqual(second["queue"], {"jobs": 130, "ready": 0, "pending": 0})
+            self.assertEqual(second["lookups"], 0)
+            fetch.assert_called_once()
+        public = cached_index(restored)["automatic"]
+        self.assertEqual(len(public), 64)
+        self.assertNotIn(target.removeprefix("https://"), public)
+        self.assertEqual(preflight(restored, url=target)["discovery"]["scan_status"], "available")
+        with restored.connect() as db:
+            self.assertEqual(db.execute("SELECT count(*) FROM discovery_observation").fetchone()[0], 130)
+
+    def test_scheduled_queue_advances_past_backoff_and_enqueues_changed_revision(self):
+        other = self.observation(NEW.replace("2697", "2698"), title="vkQueueSubmit")
+        first, second = self.observation(), other
+        response = ("available", [])
+        with patch("portbridge.discovery_scan.fetch", side_effect=[
+                Unavailable("paused", reason="rate_limit"), response, response]) as fetch:
+            failure = scan(self.catalog, [first, second], online=True, max_lookups=1, scheduled=True)
+            self.assertEqual(failure["status"], "rate_limit")
+            self.assertEqual(failure["queue"], {"jobs": 2, "ready": 1, "pending": 2})
+            progress = scan(self.catalog, [first, second], online=True, max_lookups=1, scheduled=True)
+            self.assertEqual([origin["url"] for origin in progress["origins"]], [other["url"]])
+            self.assertEqual(progress["queue"], {"jobs": 2, "ready": 0, "pending": 1})
+            newer = {**other, "updated_at": "2026-11-27T00:00:00Z", "title": "vkQueueWaitIdle"}
+            refresh = scan(self.catalog, [newer], online=True, max_lookups=1, scheduled=True)
+            self.assertEqual(refresh["queue"], {"jobs": 1, "ready": 0, "pending": 0})
+            self.assertEqual(refresh["origins"][0]["query"], "vkqueuewaitidle")
+            self.assertEqual(fetch.call_count, 3)
 
     def test_public_snapshot_outage_uses_only_the_reviewed_bundle(self):
         with patch("portbridge.preflight.read_public_file", side_effect=OSError("offline")):

@@ -577,10 +577,9 @@ def main(argv=None):
         result = {"observations_saved": len(batch["items"]), "warnings": batch["warnings"],
                   "history": backfill_status(catalog.path, mode=args.command)}
         if args.command == "incremental" and args.discovery:
-            from .discovery_scan import MAX_ORIGINS, scan
+            from .discovery_scan import scan
 
-            # Include unsearched recent observations when a previous discovery batch hit its budget.
-            result["discovery"] = scan(catalog, catalog.observations(limit=MAX_ORIGINS), online=True)
+            result["discovery"] = scan(catalog, catalog.observations(limit=None), online=True, scheduled=True)
         print(json.dumps(result, indent=2, ensure_ascii=True))
         return 0
     if args.command == "sync":

@@ -908,6 +908,8 @@ const matchReasonText = {
   reference: ['В одном из источников есть прямая ссылка на другой проект.', 'One source links directly to the other project.'],
   shared_revision: ['Совпадает полный идентификатор коммита.', 'The full commit SHA matches.'],
   technical_signal: ['Совпадают технические идентификаторы.', 'Technical identifiers match.'],
+  shared_mechanism: ['Источники описывают сходную операцию и объект. Проверьте общий сценарий.',
+    'Both sources describe a similar operation on the same kind of object. Check whether a common test applies.'],
   instruction_variants: ['Совпадают семейства инструкций. Сверьте точные варианты и границы теста.',
     'Instruction families match. Check the exact variants and test scope.'],
   technical_terms: ['Совпадают редкие технические термины в описании или заголовке.', 'Distinctive technical terms match in the title or description.'],

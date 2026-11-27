@@ -13,15 +13,21 @@ from .catalog import Catalog, public_url
 from .community_sources import DATA, SCHEMA as PEOPLE_SCHEMA, actor, remember_discovery
 from .consoles import console_families
 from .discovery_search import SOURCE_FOUND, discover, discovery_index, key
+from . import discovery_queue
 from .discovery_terms import MAX_CUES, cues, stored_cue
 from .github import (API, INSTRUCTION_LIMIT, PR_URL, SIGNATURE_LIMIT, TECHNICAL_TERM, URL, Unavailable,
                      _Sync, _text, refresh_references)
 from .global_search import result_entry, RESULT_PATH
-from .matching import current_repository, source_revision
+from .matching import current_repository, source_revision, source_url_aliases
 
-MAX_ORIGINS = 64
+PUBLIC_ORIGINS = 64
+PRIORITY_PROJECTS = frozenset({
+    "xcl-dev/xcl", "fxceless/victory-fork", "ubiquitarianism/leonida", "loopersalty/anyxboxx",
+    "taynangt/vice-tay", "marvisak/victory", "kytyps5/kytyps5", "boykopovar/anyps5",
+})
 MAX_LOOKUPS = 5
 PAGE_SIZE = 5
+SCHEDULED_PAGE_SIZE = 15
 TTL = 24 * 3600
 FAILURE_TTL = 15 * 60
 BATCH_SECONDS = 14
@@ -87,7 +93,7 @@ def source_repo(url):
 
 def source_results(rows):
     seen = set()
-    for raw in rows[:PAGE_SIZE]:
+    for raw in rows[:SCHEDULED_PAGE_SIZE]:
         row = result_entry(raw)
         if not row or (repo := source_repo(row["url"])) not in EXTERNAL_NAMES:
             continue
@@ -102,21 +108,32 @@ def source_results(rows):
                "author": actor(raw.get("user"))}
 
 
-def cached_index(catalog):
+def cached_index(catalog, *, origin_urls=None):
     index = discovery_index()
     with catalog.connect() as db:
         if not db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='discovery_observation'").fetchone():
             return index
+        if origin_urls is None:
+            selection, parameters = "ORDER BY observation.seen DESC, observation.url LIMIT ?", (PUBLIC_ORIGINS,)
+        else:
+            urls = tuple(sorted({alias for url in origin_urls if public_url(url)
+                                 for alias in source_url_aliases(url)}))
+            if not urls:
+                return index
+            selection = (f"WHERE observation.url IN ({','.join('?' for _ in urls)})"
+                         " ORDER BY observation.seen DESC, observation.url")
+            parameters = urls
         rows = db.execute("""
             SELECT observation.url, observation.revision, observation.query,
                    query.retrieved, query.status, query.items, saved.title, saved.metadata, saved.updated_at
             FROM discovery_observation AS observation LEFT JOIN discovery_query AS query USING (query)
             LEFT JOIN observations AS saved ON lower(saved.url) = observation.url AND saved.kind IN ('pr', 'issue')
-            ORDER BY observation.seen DESC, observation.url LIMIT ?
-        """, (MAX_ORIGINS,)).fetchall()
+        """ + selection, parameters).fetchall()
     now = time.time()
     automatic = {}
     for url, revision, query, retrieved, state, items, title, metadata, updated in rows:
+        if key(url) in automatic:
+            continue
         term = query.split(":", 2)[-1]
         status, _, reason = (state or "no_subject").partition(":")
         if title is not None:
@@ -149,12 +166,12 @@ def acquire(db, lease):
     return True
 
 
-def fetch(client, term, *, family="xbox-series"):
+def fetch(client, term, *, family="xbox-series", page_size=PAGE_SIZE):
     targets = XBOX_PEERS if family=="ps5" else PS5_PEERS
     qualifier = " ".join(f"repo:{repo}" for repo in (*EXTERNAL,*targets))
     literal = f'"{term}"' if term not in {"dxgi budget", "adapter performance", "compute subobject"} else term
     query = f"{literal} is:public {qualifier}"
-    data, _ = client._request(f"{API}/search/issues?{urlencode({'q': query, 'per_page': PAGE_SIZE})}", "search", None)
+    data, _ = client._request(f"{API}/search/issues?{urlencode({'q': query, 'per_page': page_size})}", "search", None)
     if not isinstance(data, dict) or not isinstance(data.get("items"), list):
         raise Unavailable("Invalid Discovery search response", reason="invalid_payload")
     return ("partial" if data.get("incomplete_results") else "available"), list(source_results(data["items"]))
@@ -174,27 +191,39 @@ def lookup_plan(observations, known, *, requested_url=None):
     return plan
 
 
-def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, requested_url=None):
+def query_for(url, term, *, scheduled):
+    family = "ps5" if "ps5" in console_families(url) else "xbox-series"
+    version = f"{QUERY_VERSION}-bulk" if scheduled else QUERY_VERSION
+    return f"{version}:{family}:{term}"
+
+
+def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, requested_url=None, scheduled=False):
     if type(max_lookups) is not int or not 1 <= max_lookups <= MAX_LOOKUPS:
         raise ValueError(f"Use 1 to {MAX_LOOKUPS} Discovery lookups per batch")
     known = {row["repo"].lower() for row in catalog.projects()}
-    plan = lookup_plan(observations[:MAX_ORIGINS], known, requested_url=requested_url)
+    plan = lookup_plan(observations, known, requested_url=requested_url)
     report = {"status": "offline" if not online else "complete", "eligible": sum(bool(term) for _, term in plan.values()),
               "lookups": 0, "cache_hits": 0, "origins": []}
     if not online:
         return report
     with catalog.connect() as db:
         db.execute("PRAGMA busy_timeout=650")
-        db.executescript(SCHEMA + PEOPLE_SCHEMA)
+        db.executescript(SCHEMA + PEOPLE_SCHEMA + discovery_queue.SCHEMA)
         lease = uuid4().hex
         if not acquire(db, lease):
             return {**report, "status": "busy"}
         try:
             client = _Sync(db, False, anonymous=True, time_budget=BATCH_SECONDS)
             policy = json.loads((DATA / "people_policy.json").read_bytes())
-            for url, (revision, term) in plan.items():
-                family = "ps5" if "ps5" in console_families(url) else "xbox-series"
-                query = f"{QUERY_VERSION}:{family}:{term}"
+            jobs = {url: (revision, query_for(url, term, scheduled=scheduled), int(source_repo(url) in PRIORITY_PROJECTS))
+                    for url, (revision, term) in plan.items()}
+            if scheduled:
+                discovery_queue.schedule(db, jobs, time.time())
+                batch = discovery_queue.ready(db, time.time())
+            else:
+                batch = ((url, revision, query) for url, (revision, query, _) in jobs.items())
+            for url, revision, query in batch:
+                _, family, term = query.split(":", 2)
                 prior = db.execute("SELECT retrieved,retry_at,status,items FROM discovery_query WHERE query=?",
                                    (query,)).fetchone()
                 now = time.time()
@@ -211,7 +240,8 @@ def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, reques
                 else:
                     report["lookups"] += 1
                     try:
-                        status, items = fetch(client, term, family=family)
+                        status, items = fetch(client, term, family=family,
+                                              page_size=SCHEDULED_PAGE_SIZE if scheduled else PAGE_SIZE)
                     except Unavailable as error:
                         if not error.attempted:
                             report["lookups"] -= 1
@@ -237,12 +267,11 @@ def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, reques
                                           "reason": reason or None, "matches": [item["url"] for item in items]})
                 if report["status"] not in {"complete", "budget"}:
                     break
+            if scheduled:
+                report["queue"] = discovery_queue.counts(db, time.time())
         finally:
             with db:
                 db.execute("DELETE FROM discovery_lease WHERE id=1 AND lease=?", (lease,))
-                db.execute("DELETE FROM discovery_observation WHERE url NOT IN (SELECT url FROM discovery_observation "
-                           "ORDER BY seen DESC, url LIMIT ?)", (MAX_ORIGINS,))
-                db.execute("DELETE FROM discovery_query WHERE query NOT IN (SELECT query FROM discovery_observation)")
     return report
 
 
@@ -252,7 +281,7 @@ def link_result(catalog, observation):
     term = subject(observation)
     batch = scan(catalog, [observation], online=True, max_lookups=1, requested_url=url)
     origin = next(iter(batch["origins"]), None)
-    index = cached_index(catalog)
+    index = cached_index(catalog, origin_urls=[url])
     # Ignore a prior revision's automatic results if this attempt never ran.
     if not origin:
         index = {**index, "automatic": {}}
@@ -328,7 +357,7 @@ def main():
     catalog = Catalog(args.db, DEFAULT_SEED)
     try:
         report = (search_link(catalog, args.url) if args.url else
-                  scan(catalog, catalog.observations(limit=MAX_ORIGINS), online=args.online, max_lookups=args.limit))
+                  scan(catalog, catalog.observations(limit=None), online=args.online, max_lookups=args.limit, scheduled=True))
     except ValueError as error:
         parser.error(str(error))
     print(json.dumps(report, indent=2, ensure_ascii=True))

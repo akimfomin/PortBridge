@@ -97,7 +97,8 @@ def preflight(catalog, *, q="", url="", limit=5, expand_global=False):
     with catalog.read_view() as view:
         records = view.observations(limit=None)
         result = assess(view.problems(), view.projects(), records, view.health(), q=q, url=url, limit=limit)
-        attach_discovery(result, q, url, limit, cached_index(view), index_source="local_catalog")
+        index = cached_index(view, origin_urls=[url] if url else [])
+        attach_discovery(result, q, url, limit, index, index_source="local_catalog")
         if findings := filter_findings(reviewed_snapshot(view), url=url, query=q, limit=limit):
             result["radar_findings"] = findings
     return append_external_results(result, records, q=q, url=url) if expand_global else result

@@ -5,6 +5,8 @@ from math import log, sqrt
 import re
 from urllib.parse import urlsplit
 
+from .technical_mechanisms import DIAGNOSTIC, RULES, mechanisms
+
 
 WORDS = re.compile(r"[^\W_]+")
 ISA_OPCODE = re.compile(
@@ -129,6 +131,8 @@ class RelatedIndex:
         self.references = defaultdict(set)
         self.postings = defaultdict(set)
         self.symbols = defaultdict(set)
+        self.mechanisms = {}
+        self.mechanism_postings = defaultdict(set)
         self.instruction_families = {}
         self.family_postings = defaultdict(set)
         self.revisions = defaultdict(set)
@@ -139,6 +143,12 @@ class RelatedIndex:
             self.subjects[url] = self.titles[url] | terms(" ".join(technical.get("terms", [])))
             self.signals[url] = ({value.casefold() for value in technical.get("signals", [])}
                                  | {word for word in self.titles[url] if ISA_OPCODE.fullmatch(word)})
+            saved = technical.get("mechanisms")
+            names = ({name for name in saved if isinstance(name, str) and name in RULES}
+                     if isinstance(saved, list) else mechanisms(row["title"]))
+            self.mechanisms[url] = names
+            for name in names:
+                self.mechanism_postings[name].add(url)
             for word in self.subjects[url]:
                 self.postings[word].add(url)
             for signal in self.signals[url]:
@@ -168,13 +178,17 @@ class RelatedIndex:
         reference_urls = self.references.get(url, set()) if use_references else set()
         target_hits = Counter(other for term in self.subjects[url] & self.weight.keys()
                               for other in self.postings[term])
-        signal_urls = {other for signal in self.signals[url] if len(self.symbols[signal]) <= self.symbol_cap
-                       for other in self.symbols[signal]}
+        rare_signals = {signal for signal in self.signals[url]
+                        if len(self.symbols[signal]) <= self.symbol_cap and not DIAGNOSTIC.fullmatch(signal)}
+        signal_urls = {other for signal in rare_signals for other in self.symbols[signal]}
         families = {family for family in self.instruction_families[url]
                     if len(self.family_postings[family]) <= self.symbol_cap}
         family_urls = {other for family in families for other in self.family_postings[family]}
+        possible_mechanisms = {name for name in self.mechanisms[url]
+                               if len(self.mechanism_postings[name]) <= self.symbol_cap}
+        mechanism_urls = {other for name in possible_mechanisms for other in self.mechanism_postings[name]}
         shared_revision = self.revisions.get(source_revision(self.rows[url]), set())
-        for other in sorted(set(target_hits) | reference_urls | signal_urls | family_urls | shared_revision):
+        for other in sorted(set(target_hits) | reference_urls | signal_urls | family_urls | mechanism_urls | shared_revision):
             if self.rows[url]["project"] == self.rows[other]["project"]:
                 continue
             if other in shared_revision:
@@ -185,10 +199,13 @@ class RelatedIndex:
                 continue
             if self.kinds[url] != self.kinds[other]:
                 continue
+            shared_mechanisms = possible_mechanisms & self.mechanisms[other]
+            if shared_mechanisms and self.kinds[url] == "implementation":
+                yield other, 0.91 + 0.01 * min(len(shared_mechanisms), 3), "shared_mechanism", sorted(shared_mechanisms)[:6]
+                continue
             shared = self.subjects[url] & self.subjects[other] & self.weight.keys()
             specific = shared - GENERAL_SOURCE_TERMS
-            symbols = {signal for signal in self.signals[url] & self.signals[other]
-                       if len(self.symbols[signal]) <= self.symbol_cap}
+            symbols = rare_signals & self.signals[other]
             if symbols and (specific or any(ISA_OPCODE.fullmatch(symbol) for symbol in symbols)):
                 yield other, 0.78 + 0.04 * min(len(symbols), 3), "technical_signal", sorted(symbols)[:6]
                 continue
@@ -227,6 +244,7 @@ class RelatedIndex:
                     "reference": "В одном из источников есть прямая ссылка на другой проект.",
                     "shared_revision": "Совпадает полный идентификатор коммита.",
                     "technical_signal": "Совпадают технические идентификаторы.",
+                    "shared_mechanism": "Источники описывают сходную операцию и объект. Проверьте общий сценарий.",
                     "instruction_variants": "Совпадают семейства инструкций. Сверьте точные варианты и границы теста.",
                     "technical_terms": "Совпадают редкие технические термины в описании или заголовке.",
                 }[basis]

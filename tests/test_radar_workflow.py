@@ -74,6 +74,18 @@ class RadarWorkflowTest(CatalogFixture):
         self.assertFalse(radar["external_delivery"])
         self.assertEqual(refresh(self.catalog,now=NOW)["seen"],0)
 
+    def test_uncited_mechanism_is_visible_in_radar_without_automatic_task(self):
+        first = {**self.rows[0], "title": "Fix BVH node fetch for directory lookup",
+                 "metadata": {"head_sha": "c" * 40, "technical": {}}}
+        second = {**self.rows[1], "title": "Fix BVH node reads for second-half boundaries",
+                  "metadata": {"head_sha": "d" * 40, "technical": {}}}
+        self.catalog.record_sync({"items": [first, second]}, update_health=False)
+        refresh(self.catalog, now=NOW)
+        card = next(candidate for candidate in radar_view(self.catalog, NOW)["candidates"]
+                    if candidate["kind"] == "shared_mechanism")
+        self.assertEqual((card["confidence"], card["signals"]), ("research", ["bvh/node-fetch"]))
+        self.assertIsNone(card.get("task_id"))
+
     def test_claim_release_expiry_concurrency_and_stale_pins(self):
         self.act(self.reviewer,"queue",note="Visible source-backed check")
         def claim(actor,request):

@@ -8,7 +8,7 @@ import sqlite3
 PUBLIC_TABLES = {"projects", "problems", "withdrawn_problems", "observations", "source_changes", "sync_projects",
                  "history_sync", "source_context", "settings", "ecosystem_sources", "github_cache", "github_rate_limit",
                  "github_history", "github_history_anchor", "lab_report_checks", "core_events", "sqlite_sequence",
-                 "community_facts", "community_scopes", "discovery_observation", "discovery_query", "discovery_lease",
+                 "community_facts", "community_scopes", "discovery_observation", "discovery_query", "discovery_lease", "discovery_jobs",
                  "radar_seen", "radar_candidates", "radar_tasks", "radar_events", "radar_patch_cache"}
 # A scheduled public scan creates the Lab schema but never signs a participant in.
 EMPTY_PUBLIC_TABLES = {"radar_claims", "radar_reports", "radar_preferences"}

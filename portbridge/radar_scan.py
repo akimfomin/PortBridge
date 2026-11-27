@@ -11,7 +11,8 @@ from urllib.parse import urlsplit
 from .catalog import public_url, source_sync_failed
 from .consoles import console_families
 from .radar_patches import apply_cached, sample
-from .discovery_scan import cached_index, lookup_plan, scan as discovery_scan
+from .discovery_scan import TTL, cached_index, scan as discovery_scan
+from .discovery_queue import fresh_results
 from .discovery_search import discover
 from .identity import contributor_id, source_id, stable_id
 from .matching import GENERAL_SOURCE_TERMS, RelatedIndex, canonical_url, revision_checked_at, source_revision, subject_kind, terms
@@ -72,7 +73,7 @@ def candidate(origin, peer, kind, confidence, signals, reason):
     }
 
 
-def classify(left, right, basis, projects):
+def classify(left, right, basis, projects, *, match_signals=()):
     if left["project"] == right["project"] or (left["metadata"].get("draft") or right["metadata"].get("draft")):
         return None
     # Keep a still-open receiver first. With two open tasks, preserve the citing project.
@@ -102,6 +103,9 @@ def classify(left, right, basis, projects):
     common_commits = [url for url in (lref & rref) if "/commit/" in url]
     if common_commits and pins:
         return candidate(a, b, "common_source", "review", signal, "Both sources link an identical origin commit.")
+    if basis == "shared_mechanism" and not association:
+        return candidate(a, b, "shared_mechanism", "research", list(match_signals),
+                         "A technical object and operation overlap. Compare their architecture and negative controls.")
     if not association or any(kind not in ("implementation", "test") for kind in kinds):
         return candidate(a, b, "shared_signal", "research", signal,
                          "The mechanism or text overlaps. A common cause or transferable fix is unverified.") if signal else None
@@ -130,6 +134,8 @@ def historical(row, result, projects):
         high = bool(a["revision"]) and row["status"] == "open" and shared_scope
         yield {**candidate(a, b, "historical_solution", "high" if high else "review", lead["match"]["symbols"],
                            lead["similarity"]), "risk": lead["limits"], "next_step": lead["test"]}
+    if result["scan_status"] not in {"available", "partial"}:
+        return
     for lead in result["automatic_matches"][:2]:
         b = {"role": "historical", "url": lead["source"], "source_id": source_id(lead["source"]),
              "project": lead["project"], "status": lead["state"], "title": lead["title"], "revision": None,
@@ -225,27 +231,26 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
         project_map = {p["slug"]: p for p in view.projects()}
         observations = [row for row in view.observations(limit=None) if public_url(row["url"])]
     rows = {canonical_url(row["url"]): row for row in observations}
+    probes = discovery_scan(catalog, observations, online=True, scheduled=True) if online_discovery else None
     with catalog.connect() as db:
         db.executescript(SCHEMA)
         known = {row["url"]: row["fingerprint"] for row in db.execute("SELECT url,fingerprint FROM radar_seen")}
+        has_discovery = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='discovery_query'").fetchone()
+        external = {canonical_url(url): (revision, sha256(items.encode()).hexdigest())
+                    for url, revision, items in fresh_results(db, time.time() - TTL)} if has_discovery else {}
         cached = {row["revision"]: (row["digest"],row["checked"]) for row in db.execute("SELECT * FROM radar_patch_cache")}
     apply_cached(rows, cached)
-    upcoming = [(url, row, fingerprint(row)) for url, row in rows.items()
+    def input_fingerprint(url, row):
+        revision, digest = external.get(url, (None, ""))
+        matches_revision = revision == (source_revision(row) or row.get("updated_at"))
+        return fingerprint(row) + (digest if matches_revision else "")
+
+    upcoming = [(url, row, input_fingerprint(url, row)) for url, row in rows.items()
                 if row["kind"] in {"issue", "pr", "commit", "test"}
                 and now - HORIZON <= epoch(revision_checked_at(row)) <= now + 120]
     changed = nlargest(limit, (item for item in upcoming if known.get(item[0]) != item[2]
                               and (online_discovery or known.get(item[0]) != item[2] + ":offline")),
                        key=lambda item: (epoch(item[1].get("updated_at") or item[1].get("fetched_at")), item[0]))
-    pending = set()
-    probes = None
-    if online_discovery and changed:
-        events = [row for _, row, _ in changed]
-        eligible = lookup_plan(events, {project["repo"].lower() for project in project_map.values()})
-        probes = discovery_scan(catalog, [row for row in events if row["url"].lower() in eligible], online=True)
-        # An outage or exhausted lookup budget must leave unsearched events
-        # eligible for the next cycle, even when their source revision is unchanged.
-        completed = {origin["url"] for origin in probes["origins"] if origin["status"] in {"available", "partial"}}
-        pending = set(eligible) - completed
     patch_probes = sample(catalog, changed, rows, cached, now) if online_discovery and changed else 0
     patch_groups = defaultdict(list)
     if changed and cached:
@@ -253,18 +258,18 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
             if digest := patch_identity(row):
                 patch_groups[digest].append(key)
     index = RelatedIndex(observations) if any(row["kind"] != "test" for _, row, _ in changed) else None
-    discovery = cached_index(catalog) if changed else None
+    discovery = cached_index(catalog, origin_urls=[row["url"] for _, row, _ in changed]) if changed else None
     proposed = {}
     ranks = {"high": 0, "review": 1, "research": 2}
 
     def priority(card):
         return (ranks[card["confidence"]], card["kind"] not in {"same_patch", "same_revision"},
-                -len(card["signals"]), card["id"])
+                card["kind"] != "shared_mechanism", -len(card["signals"]), card["id"])
 
     for url, row, _ in changed:
         if index is not None and url in index.rows:
-            peers = (classify(row, index.rows[other], basis, project_map)
-                     for other, _, basis, _ in index.candidates(url))
+            peers = (classify(row, index.rows[other], basis, project_map, match_signals=signals)
+                     for other, _, basis, signals in index.candidates(url))
             ranked = [card for card in peers if card is not None]
             if digest := patch_identity(row):
                 for other in patch_groups[digest][:32]:
@@ -318,9 +323,10 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
                 refreshed += 1
         db.executemany("""INSERT INTO radar_seen VALUES(?,?,?) ON CONFLICT(url) DO UPDATE SET
                           fingerprint=excluded.fingerprint,checked=excluded.checked""",
-                       [(url, fingerprint(row) + ("" if online_discovery else ":offline"), now)
-                        for url, row, _ in changed if row["url"].lower() not in pending])
+                       [(url, input_version + ("" if online_discovery else ":offline"), now)
+                        for url, _, input_version in changed])
         db.execute("DELETE FROM radar_seen WHERE checked<?", (now - HORIZON * 2,))
     return {"seen": len(changed), "discovered_or_changed": count, "current_candidates": len(proposed),
-            "freshness_updates": refreshed, "discovery": probes, "discovery_deferred": len(pending),
+            "freshness_updates": refreshed, "discovery": probes,
+            "discovery_deferred": probes.get("queue", {}).get("pending", 0) if probes else 0,
             "patch_probes": patch_probes, "external_delivery": False}

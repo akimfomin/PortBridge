@@ -246,7 +246,8 @@ def main():
             from .discovery_scan import cached_index
             if not db.is_file():
                 raise ValueError("The local catalog is missing")
-            index = cached_index(ReadOnlyCatalog(db))
+            origin = args["url"]
+            index = cached_index(ReadOnlyCatalog(db), origin_urls=[origin] if query_key(origin) else [])
         result = discover(origin_url=args.pop("url"), index=index, **args)
     except ValueError as error:
         parser.error(str(error))
