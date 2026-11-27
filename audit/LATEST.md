@@ -1,5 +1,10 @@
 # PortBridge · Продолжение Growth & Adoption
 
+## Проверка перед решением AnyXboxX · 28 ноября 2026, МСК
+
+- Собрали звуковой модуль с библиотеками Windows и штатной таблицей AnyXboxX. Найдены все пять звуковых функций, прошли **13 проверок**. Полная сборка и решение о переносе остаются открытыми. [Проверка и исходники](evidence/decision-followthrough/anyxboxx-dsp/native-bindings) · [AnyXboxX #534](https://github.com/LooperSalty/AnyXboxX/issues/534#issuecomment-7229136745)
+- В Continued #1969 две необходимые проверки CI прошли, у VIctory #2122 обязательная проверка прошла. Оба PR совместимы с основной веткой и остаются открытыми. [Continued](https://github.com/ProjectLeonida/mandy/pull/1969) · [VIctory](https://github.com/Marvisak/VIctory/pull/2122)
+
 ## Доведение открытых взаимодействий · 28 ноября 2026, МСК
 
 - **AnyXboxX #534.** Запустили две точные версии аудиокода на Windows с синтетическими данными. При выключенном флаге сохранилось прежнее поведение. При включённом прошли 10 проверок, а намеренный отрицательный контроль на старой версии выявил тишину. Предложили разработчикам решить, принимать ли сначала перенос с флагом, выключенным по умолчанию. Полная сборка принимающего проекта и решение сопровождающих остаются открытыми. [Доказательства и воспроизведение](https://github.com/akimfomin/PortBridge/tree/4bee4dccb04995c86a5c9a31ab83967fabff8e9b/audit/evidence/decision-followthrough/anyxboxx-dsp) · [Вопрос о решении](https://github.com/LooperSalty/AnyXboxX/issues/534#issuecomment-7229136745)

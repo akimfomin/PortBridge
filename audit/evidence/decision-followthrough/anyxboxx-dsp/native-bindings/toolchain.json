@@ -1,0 +1,36 @@
+{
+  "rust": "1.100.1",
+  "target": "x86_64-pc-windows-gnu",
+  "binutils": "2.47.20260726",
+  "receiving_lock_sha256": "f61d5df290058900f4f93d5e641cf8e80dfe664958fb2a27b5950fca8a588a6a",
+  "msys2_packages": [
+    {
+      "url": "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-binutils-2.47-5-any.pkg.tar.zst",
+      "sha256": "a5e6de675bcd9d47bdb94f555ab6af9589a4c7dc813ab053c1c9c71f4aa03406"
+    },
+    {
+      "url": "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-gettext-runtime-1.0-1-any.pkg.tar.zst",
+      "sha256": "be68d7f260633284b910c588c6d82ee304a81c8817a686d2cd9df83f872c27af"
+    },
+    {
+      "url": "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-libiconv-1.19.1-1-any.pkg.tar.zst",
+      "sha256": "50e915aa36fdbe6c84acc8954e939275609ba051cdb4eeeff3884453c28efde0"
+    },
+    {
+      "url": "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-libwinpthread-14.0.0.r598.ge3d18511f-1-any.pkg.tar.zst",
+      "sha256": "942a62a3ecafbb4f5a80016685a0e3002a8de903012eed49c213e4f5b693668a"
+    },
+    {
+      "url": "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-zlib-1.4-2-any.pkg.tar.zst",
+      "sha256": "2a065fb3311d6c08bd2c7431a092b912ade08a83954474e06ea4eb0479d908cd"
+    },
+    {
+      "url": "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-zstd-1.5.7-2-any.pkg.tar.zst",
+      "sha256": "1add6705b344664f6aca108c85f79ab5bdd9e1162662bb06a4cf40a34f6e0907"
+    },
+    {
+      "url": "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-libgcc-16.2.0-7-any.pkg.tar.zst",
+      "sha256": "6d1311b397ba33be542fd46bae3de60338bfd967e95e221847f01269e98983b8"
+    }
+  ]
+}
