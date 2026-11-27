@@ -1,5 +1,11 @@
 # Координация между командами
 
+## 27 ноября 2026 · Самостоятельная заявка Vice-Tay и возврат результата VIctory
+
+- TaynanGT сам открыл #118, проверил команду на своём Windows 11 и подтвердил пользу разделения точного стенда и контрольных конфигураций. PortBridge нашёл одного точного адресата на LTSC и пять дополнительных конфигураций. Для другого теста Vice-Tay приглашён владелец RX 6700 XT с Windows 10. [Запрос](https://github.com/akimfomin/PortBridge/issues/118) · [Условия TaynanGT](https://github.com/akimfomin/PortBridge/issues/118#issuecomment-7209347599)
+- KyleS98 передал диагностированный результат с авторского стенда в #106. PortBridge обновил задачу, сохранил первичный вопрос, вклад Filip722, отдельную поправку к тесту KyleS98 и вход для независимого участника. [Отчёт](https://github.com/akimfomin/PortBridge/issues/106#issuecomment-7209276640) · [Актуальная инструкция](https://github.com/akimfomin/PortBridge/issues/106#issuecomment-7209347358)
+- [13 адресатов, два отклика сопровождающих и один опубликованный пример для медиа](../audit/evidence/adoption-followthrough.md#цикл-dathinel-и-самостоятельная-заявка-vice-tay).
+
 ## 27 ноября 2026 · Внешние проверки по конкретному оборудованию
 
 - Dathinel самостоятельно выполнил предложенную проверку на RTX 3050 Laptop и вернул результаты шести тестов в исходный PR VIctory. Перенос доказательства прошёл через автора отчёта. [Прогон](https://github.com/Dathinel/victory-4gb/issues/10#issuecomment-7208842295) · [Принимающий PR](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7208842607)
