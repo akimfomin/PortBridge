@@ -96,8 +96,12 @@ def index_entries(projects, observations):
     words = defaultdict(set)
     numbers = defaultdict(set)
     for url, record in records.items():
+        original = index.rows[url].get("metadata", {}).get("technical") or {}
+        technical = {**record["metadata"]["technical"], "code_symbols": original.get("code_symbols", []),
+                     "discovery_cues": original.get("discovery_cues", [])}
+        origin = {**record, "metadata": {**record["metadata"], "technical": technical}}
         matches = preflight_matches(index, stacks, url, limit=MATCH_LIMIT)
-        capsule = {"row": record, "matches": matches, "rare": sorted(index.titles[url] & index.weight.keys()),
+        capsule = {"row": origin, "matches": matches, "rare": sorted(index.titles[url] & index.weight.keys()),
                    "fallback": [observation_summary(records[other]) for other in source_fallback(index, url)]
                    if len(matches) < 2 else []}
         yield f"source:{url}", capsule

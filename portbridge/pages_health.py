@@ -187,7 +187,8 @@ def verify_linked_snapshots(site_sha256, request=public_snapshot):
     assets = site.get("snapshots", {})
     pointer = site.get("browse_index", {})
     generation = pointer.get("generation", "")
-    if (set(assets) != set(VERSIONED_SNAPSHOTS) or pointer.get("version") != 1
+    expected = set(VERSIONED_SNAPSHOTS)
+    if (set(assets) not in (expected, expected - {"source-code"}) or pointer.get("version") != 1
             or not isinstance(generation, str) or not re.fullmatch(r"[0-9a-f]{24}", generation)):
         return ("site manifest",)
 
@@ -203,7 +204,7 @@ def verify_linked_snapshots(site_sha256, request=public_snapshot):
             return name
 
     with ThreadPoolExecutor(max_workers=4) as executor:
-        failed = [name for name in executor.map(check, VERSIONED_SNAPSHOTS) if name]
+        failed = [name for name in executor.map(check, assets) if name]
     try:
         with request(f"browse-{generation}-index") as response:
             browse = json.loads(response.read(64 * 1024))

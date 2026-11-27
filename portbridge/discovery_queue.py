@@ -1,5 +1,7 @@
 """Persist bounded Discovery work across independent scheduler invocations."""
 
+from itertools import islice
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS discovery_jobs (
     url TEXT PRIMARY KEY,
@@ -17,6 +19,8 @@ LEFT JOIN discovery_observation AS result
 LEFT JOIN discovery_query AS cache ON cache.query=job.query
 """
 DUE = "(result.url IS NULL OR cache.retry_at IS NULL OR cache.retry_at<=?)"
+READY_SINCE = "CASE WHEN result.url IS NULL THEN job.queued ELSE coalesce(cache.retry_at, job.queued) END"
+FRESH_PRIORITY = 2
 LOCAL_BATCH = 120
 RESULT_TTL = 24 * 3600
 
@@ -39,16 +43,60 @@ def schedule(db, jobs, now):
         """, ((url, revision, query, now, priority) for url, (revision, query, priority) in jobs.items()))
 
 
-def ready(db, now):
-    # Oldest runnable work wins. Priority breaks ties within an intake cohort.
-    # An origin with unchanged terms can reuse a different origin's cached reply.
-    return db.execute("""
-        SELECT job.url,job.revision,job.query
-        """ + JOIN + " WHERE " + DUE + """
-        ORDER BY CASE WHEN result.url IS NULL THEN job.queued ELSE coalesce(cache.retry_at, job.queued) END,
-                 job.priority DESC, job.url
-        LIMIT ?
-    """, (now, LOCAL_BATCH)).fetchall()
+def ready(db, now, max_lookups):
+    """Reserve one remote topic for the oldest work and use spare slots for fresh work."""
+    rows = db.execute(f"""
+        SELECT job.url,job.revision,job.query,job.priority,{READY_SINCE} AS ready_since,
+               coalesce(cache.retry_at,0)>? AS cached
+        {JOIN} WHERE {DUE}
+        ORDER BY ready_since,job.priority DESC,job.url
+    """, (now, now)).fetchall()
+    oldest, fresh, cached = {}, {}, []
+    for row in rows:
+        query = row["query"]
+        if row["cached"]:
+            cached.append(row)
+            continue
+        oldest.setdefault(query, row)
+        if row["priority"] >= FRESH_PRIORITY:
+            if query not in fresh or row["priority"] > fresh[query]["priority"]:
+                fresh[query] = row
+    topics = dict(islice(oldest.items(), 1))
+    for row in sorted(fresh.values(), key=lambda row: (-row["priority"], row["ready_since"], row["url"])):
+        topics.setdefault(row["query"], row)
+    for query, row in oldest.items():
+        topics.setdefault(query, row)
+    anchors = list(islice(topics.values(), max_lookups))
+    chosen_queries = {row["query"] for row in anchors}
+    chosen_urls = {row["url"] for row in anchors}
+    cached = cached[:LOCAL_BATCH - len(anchors)]
+    remaining = LOCAL_BATCH - len(anchors) - len(cached)
+    shared = (row for row in rows if row["query"] in chosen_queries and row["url"] not in chosen_urls)
+    return [row[:3] for row in (*cached, *anchors, *islice(shared, remaining))]
+
+
+def metrics(db, now):
+    row = db.execute(f"""
+        WITH ready_jobs AS (
+            SELECT job.query,job.priority,{READY_SINCE} AS ready_since,
+                   coalesce(cache.retry_at,0)>? AS cached
+            {JOIN} WHERE {DUE}
+        )
+        SELECT count(*) AS ready_origins,
+               count(DISTINCT query) AS ready_topics,
+               count(DISTINCT CASE WHEN NOT cached THEN query END) AS remote_topics,
+               count(CASE WHEN cached THEN 1 END) AS cache_ready_origins,
+               count(CASE WHEN priority>=? THEN 1 END) AS fresh_leading_origins,
+               count(DISTINCT CASE WHEN priority>=? AND NOT cached THEN query END) AS fresh_leading_remote_topics,
+               min(ready_since) AS oldest,
+               min(CASE WHEN NOT cached THEN ready_since END) AS oldest_remote
+        FROM ready_jobs
+    """, (now, now, FRESH_PRIORITY, FRESH_PRIORITY)).fetchone()
+    result = dict(row)
+    for name in ("oldest", "oldest_remote"):
+        since = result.pop(name)
+        result[name + "_ready_seconds"] = max(0, int(now - since)) if since is not None else None
+    return result
 
 
 def fresh_results(db, now):

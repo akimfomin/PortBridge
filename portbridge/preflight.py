@@ -10,6 +10,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, build_opener
 
 from .catalog import PROBLEM_ID, ReadOnlyCatalog, public_url
+from . import code_search
 from .consoles import console_families
 from .discovery_scan import cached_index
 from .discovery_search import MAX_QUERY as MAX_DISCOVERY_QUERY, discover, empty_link_result, historical_candidates
@@ -35,10 +36,10 @@ GENERAL_CARD_TERMS = {"d3d12", "vulkan", "shader", "spirv", "wave32", "wave64", 
 def snapshot(resource, *, base_url=PUBLIC_BASE, site=None, revalidate=False):
     if base_url.rstrip("/") != PUBLIC_BASE.rstrip("/"):
         raise ValueError("Unrecognized PortBridge public catalog")
-    if resource not in {"activity", "ecosystem", "health", "lab", "problems", "projects", "observations", "site", "discovery", "radar", "people", "impact", "partner"}:
+    if resource not in {"activity", "ecosystem", "health", "lab", "problems", "projects", "observations", "site", "discovery", "radar", "people", "impact", "partner", "source-code"}:
         raise ValueError("Unknown PortBridge snapshot")
     limit = {"observations": OBSERVATIONS_SNAPSHOT_LIMIT, "site": MANIFEST_LIMIT,
-             "discovery": 512 * 1024}.get(resource, SNAPSHOT_LIMIT)
+             "discovery": 512 * 1024, "source-code": code_search.MAX_INDEX_BYTES}.get(resource, SNAPSHOT_LIMIT)
     if resource not in {"site", "observations"}:
         site = site if site is not None else snapshot("site", base_url=base_url)
         if not isinstance(site, dict) or not isinstance(site.get("snapshots", {}), dict):
@@ -92,13 +93,31 @@ def attach_discovery(result, q, url, limit, index=None, *, index_source=None):
     return result
 
 
+def attach_code(result, loader, *, limit):
+    query = result.pop("_code_query", "")
+    if not query:
+        if result.get("origin_url") and result.get("indexed") is False:
+            result["source_code"] = {"status": "origin_not_indexed", "matches": []}
+        return result
+    try:
+        index = loader()
+    except (OSError, ValueError, TypeError):
+        result["source_code"] = {"status": "unavailable", "matches": []}
+        return result
+    if isinstance(index, dict) and isinstance(index.get("files"), list):
+        result["source_code"] = code_search.report(index, query, origin_url=result.get("origin_url") or "", limit=limit)
+    return result
+
+
 def preflight(catalog, *, q="", url="", limit=5, expand_global=False):
     q, url = query_options(q, url, limit)
     with catalog.read_view() as view:
         records = view.observations(limit=None)
-        result = assess(view.problems(), view.projects(), records, view.health(), q=q, url=url, limit=limit)
+        result = assess(view.problems(), view.projects(), records, view.health(), q=q, url=url, limit=limit,
+                        with_code=True)
         index = cached_index(view, origin_urls=[url] if url else [])
         attach_discovery(result, q, url, limit, index, index_source="local_catalog")
+        attach_code(result, lambda: code_search.projection(view), limit=limit)
         if findings := filter_findings(reviewed_snapshot(view), url=url, query=q, limit=limit):
             result["radar_findings"] = findings
     return append_external_results(result, records, q=q, url=url) if expand_global else result
@@ -135,6 +154,10 @@ def public_preflight(*, q="", url="", limit=5, base_url=PUBLIC_BASE, expand_glob
                     findings = []
             else:
                 findings = []
+            def code_index():
+                return (snapshot("source-code", base_url=base_url, site=site, revalidate=retry)
+                        if site.get("snapshots", {}).get("source-code") else {"files": []})
+
             if site.get("snapshots", {}).get("discovery"):
                 try:
                     discovery = snapshot("discovery", base_url=base_url, site=site, revalidate=retry)
@@ -142,10 +165,12 @@ def public_preflight(*, q="", url="", limit=5, base_url=PUBLIC_BASE, expand_glob
                     discovery = {}
             if "search_index" not in site:
                 records = snapshot("observations", base_url=base_url)["observations"]
-                result = assess(problems["problems"], projects["projects"], records, health, q=q, url=url, limit=limit)
+                result = assess(problems["problems"], projects["projects"], records, health, q=q, url=url,
+                                limit=limit, with_code=True)
                 if findings:
                     result["radar_findings"] = findings
                 attach_discovery(result, q, url, limit, discovery)
+                attach_code(result, code_index, limit=limit)
                 return append_external_results(result, records, q=q, url=url) if expand_global else result
             index = site["search_index"]
             if not isinstance(index, dict) or type(index.get("version")) is not int or index["version"] != 1:
@@ -160,10 +185,12 @@ def public_preflight(*, q="", url="", limit=5, base_url=PUBLIC_BASE, expand_glob
                 if not retry:
                     continue
                 raise ValueError("PortBridge public search is updating. Try again shortly.")
-            result = assess_public_index(manifest, problems["problems"], projects["projects"], health, **options)
+            result = assess_public_index(manifest, problems["problems"], projects["projects"], health,
+                                         with_code=True, **options)
             if findings:
                 result["radar_findings"] = findings
-            return attach_discovery(result, q, url, limit, discovery)
+            attach_discovery(result, q, url, limit, discovery)
+            return attach_code(result, code_index, limit=limit)
         except HTTPError as error:
             # The site's old generation can disappear during a deployment.
             if retry or error.code not in {404, 503}:
@@ -171,7 +198,7 @@ def public_preflight(*, q="", url="", limit=5, base_url=PUBLIC_BASE, expand_glob
 
 
 def assess_public_index(manifest, cards, projects, health, *, q, url, limit, fetch=None, expand_global=False,
-                        budget=None):
+                        budget=None, with_code=False):
     path = urlsplit(url)
     anchor = canonical_url(url) if url and not COMMENT_FRAGMENT.fullmatch(path.fragment) else None
     number = q[1:] if re.fullmatch(r"#[1-9][0-9]*", q) else None
@@ -179,7 +206,7 @@ def assess_public_index(manifest, cards, projects, health, *, q, url, limit, fet
     try:
         records, index_context = reader.select(anchor=anchor, query=q, number=number,
                                                problem=bool(PROBLEM_ID.fullmatch(q.upper())))
-        result = assess(cards, projects, records, health, q=q, url=url, limit=limit, indexed=index_context)
+        result = assess(cards, projects, records, health, q=q, url=url, limit=limit, indexed=index_context, with_code=with_code)
     except (KeyError, TypeError, AttributeError) as error:
         raise ValueError("Invalid PortBridge public search entry") from error
     result["catalog_index"] = {"format": "partitioned-v1", "partial": reader.truncated,
@@ -286,7 +313,7 @@ def query_options(q, url, limit):
     return q, url
 
 
-def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=None):
+def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=None, with_code=False):
     q, url = query_options(q, url, limit)
 
     origin = canonical_url(url) if url else None
@@ -386,7 +413,15 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=N
         next_step = "The source is missing from this catalog. Check it on GitHub or refresh the configured catalog."
     else:
         next_step = "Provide an exact error, API function, or source link. Continue normal investigation if no prior work is indexed."
-    return {"query": q, "origin_url": f"{origin}#{origin_fragment}" if comment_source else origin,
+    code_query = ""
+    if with_code and not comment_source and not number_query and not problem_query:
+        origin_row = index.rows.get(indexed_origin)
+        if not origin_row or index.kinds[indexed_origin] == "implementation":
+            code_query = code_search.observation_query(origin_row) if origin_row else q
+            if q and origin_row and q.casefold() != origin_row["title"].casefold():
+                code_query += "\n" + q
+            code_query = code_query.strip()
+    return {"query": q, **({"_code_query": code_query} if with_code else {}), "origin_url": f"{origin}#{origin_fragment}" if comment_source else origin,
             "indexed": indexed_origin in index.rows if origin else None,
             "catalog_status": health.get("status"), "catalog_refreshed_at": health.get("refresh_at"),
             "catalog_last_success": health.get("last_success"), "catalog_freshness": health.get("freshness"),

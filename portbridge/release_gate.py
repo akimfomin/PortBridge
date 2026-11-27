@@ -50,6 +50,12 @@ def audit(path):
     manifest = read("site")
     site_digest = sha256((data / "site.json").read_bytes()).hexdigest()
     failed = list(verify_linked_snapshots(site_digest, request=lambda name: (data / (name + ".json")).open("rb")))
+    from .code_search import MAX_INDEX_BYTES, SCHEMA_VERSION
+    code_name = manifest["snapshots"].get("source-code")
+    if not code_name or not (data / code_name).is_file() or (data / code_name).stat().st_size > MAX_INDEX_BYTES:
+        failed.append("source-code snapshot")
+    elif read(code_name.removesuffix(".json")).get("version") != SCHEMA_VERSION:
+        failed.append(code_name)
     partner = read(manifest["snapshots"]["partner"].removesuffix(".json"))
     if partner != read("partner") or partner.get("schema_version") != SCHEMA:
         failed.append("partner contract")

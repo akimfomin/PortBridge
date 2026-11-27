@@ -160,6 +160,14 @@ def render_report(result, *, source_url=None, head=None, event_origin=False):
     research_lines = [f"- {link} · research source" for link in research_links if link]
     if research_lines:
         groups.extend(["### Discovery research sources", "", *research_lines, ""])
+    code = result.get("source_code") or {}
+    source_lines = []
+    for entry in code.get("matches", [])[:3]:
+        link = source_link(entry["path"], entry["url"])
+        if link:
+            source_lines.append(f"- {link} · line {entry['line']} · candidate, compare with the target")
+    if source_lines:
+        groups.extend(["### Candidate source-code lines", "", *source_lines, ""])
     if groups:
         lines.extend(groups)
     else:

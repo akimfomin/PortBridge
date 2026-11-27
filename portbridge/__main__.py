@@ -535,9 +535,14 @@ def main(argv=None):
         if args.discovery and not args.refresh:
             parser.error("--discovery requires --refresh")
         try:
+            if args.discovery:
+                from .code_search import refresh as refresh_code
+                code_status = refresh_code(catalog)
             result = (refresh(catalog, online_discovery=args.discovery, limit=args.limit) if args.refresh
                       else radar_view(catalog, int(time.time()), confidence=args.confidence, limit=args.limit,
                                      state=args.state, console=args.console, after=args.after))
+            if args.discovery:
+                result["source_code_index"] = code_status
         except ValueError as error:
             parser.error(str(error))
         print(json.dumps(result, indent=2, ensure_ascii=True))

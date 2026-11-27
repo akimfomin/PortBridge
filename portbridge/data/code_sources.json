@@ -1,0 +1,74 @@
+[
+  {
+    "repo": "wine-mirror/wine",
+    "revision": "db11d0fe6a169c457e23d007e20404643d067aa8",
+    "license": "LGPL-2.1-or-later",
+    "license_path": "COPYING.LIB",
+    "files": [
+      "dlls/kernelbase/volume.c",
+      "dlls/kernelbase/file.c",
+      "dlls/kernel32/tests/volume.c"
+    ]
+  },
+  {
+    "repo": "KhronosGroup/Vulkan-ValidationLayers",
+    "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+    "license": "Apache-2.0",
+    "license_path": "LICENSE.txt",
+    "files": [
+      "tests/unit/image.cpp",
+      "tests/unit/descriptor_buffer.cpp"
+    ]
+  },
+  {
+    "repo": "KhronosGroup/Vulkan-Docs",
+    "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+    "license": "CC-BY-4.0",
+    "license_path": "LICENSE.adoc",
+    "files": [
+      "chapters/resources.adoc",
+      "chapters/pipelines.adoc"
+    ]
+  },
+  {
+    "repo": "microsoft/DirectX-Headers",
+    "revision": "61c7718954ec73dbdd43c723240fe1a0452a3724",
+    "license": "MIT",
+    "license_path": "LICENSE",
+    "files": [
+      "include/directx/d3dx12_pipeline_state_stream.h",
+      "include/directx/d3dx12_check_feature_support.h"
+    ]
+  },
+  {
+    "repo": "HansKristian-Work/vkd3d-proton",
+    "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+    "license": "LGPL-2.1-or-later",
+    "license_path": "COPYING",
+    "files": [
+      "libs/vkd3d/cache.c",
+      "libs/vkd3d/state.c",
+      "libs/vkd3d/command.c"
+    ]
+  },
+  {
+    "repo": "llvm/llvm-project",
+    "revision": "e19b7dc36bc047b9eb72078d034596be766da350",
+    "license": "Apache-2.0 WITH LLVM-exception",
+    "license_path": "llvm/LICENSE.TXT",
+    "files": [
+      "llvm/docs/LangRef.rst",
+      "llvm/include/llvm/IR/Instructions.h"
+    ]
+  },
+  {
+    "repo": "baldurk/renderdoc",
+    "revision": "762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d",
+    "license": "MIT",
+    "license_path": "LICENSE.md",
+    "files": [
+      "renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp",
+      "renderdoc/driver/d3d12/d3d12_command_list.h"
+    ]
+  }
+]

@@ -16,15 +16,17 @@ from .discovery_search import SOURCE_FOUND, discover, discovery_index, key
 from . import discovery_queue
 from .discovery_terms import MAX_CUES, cues, stored_cue
 from .github import (API, INSTRUCTION_LIMIT, PR_URL, SIGNATURE_LIMIT, TECHNICAL_TERM, URL, Unavailable,
-                     _Sync, _text, refresh_references)
+                     _Sync, _text, _timestamp, refresh_references)
 from .global_search import result_entry, RESULT_PATH
-from .matching import current_repository, source_revision, source_url_aliases
+from .matching import current_repository, source_revision, source_url_aliases, subject_kind
 
 PUBLIC_ORIGINS = 64
 PRIORITY_PROJECTS = frozenset({
     "xcl-dev/xcl", "fxceless/victory-fork", "ubiquitarianism/leonida", "loopersalty/anyxboxx",
     "taynangt/vice-tay", "marvisak/victory", "kytyps5/kytyps5", "boykopovar/anyps5",
+    "edsuuu/vi-br-port", "belobug/victory-belobug-amd", "dathinel/victory-4gb", "r0y00/xbox2windows",
 })
+FRESH_WINDOW = 24 * 3600
 MAX_LOOKUPS = 5
 PAGE_SIZE = 5
 FETCH_SIZE = 15
@@ -207,10 +209,19 @@ def query_for(url, term):
     return f"{QUERY_VERSION}:{family}:{term}"
 
 
+def project_priority(url, updated_at, now):
+    if source_repo(url) not in PRIORITY_PROJECTS:
+        return 0
+    changed = _timestamp(updated_at)
+    return max(discovery_queue.FRESH_PRIORITY, changed) if now - FRESH_WINDOW <= changed <= now else 1
+
+
 def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, requested_url=None, scheduled=False):
     if type(max_lookups) is not int or not 1 <= max_lookups <= MAX_LOOKUPS:
         raise ValueError(f"Use 1 to {MAX_LOOKUPS} Discovery lookups per batch")
     known = {row["repo"].lower() for row in catalog.projects()}
+    if scheduled:
+        observations = list(observations)
     plan = lookup_plan(observations, known, requested_url=requested_url, scheduled=scheduled)
     report = {"status": "offline" if not online else "complete", "eligible": sum(bool(term) for _, term in plan.values()),
               "lookups": 0, "cache_hits": 0, "origins": []}
@@ -225,13 +236,16 @@ def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, reques
         try:
             client = _Sync(db, False, anonymous=True, time_budget=BATCH_SECONDS)
             policy = json.loads((DATA / "people_policy.json").read_bytes())
-            jobs = {url: (revision, query_for(url, term), int(source_repo(url) in PRIORITY_PROJECTS))
-                    for url, (revision, term) in plan.items()}
             if scheduled:
-                discovery_queue.schedule(db, jobs, time.time())
-                batch = discovery_queue.ready(db, time.time())
+                now = time.time()
+                updated = {row["url"].lower(): row.get("updated_at") for row in observations}
+                jobs = {url: (revision, query_for(url, term), project_priority(url, updated.get(url), now))
+                        for url, (revision, term) in plan.items()}
+                discovery_queue.schedule(db, jobs, now)
+                report["queue_metrics"] = {"before": discovery_queue.metrics(db, now)}
+                batch = discovery_queue.ready(db, now, max_lookups)
             else:
-                batch = ((url, revision, query) for url, (revision, query, _) in jobs.items())
+                batch = ((url, revision, query_for(url, term)) for url, (revision, term) in plan.items())
             for url, revision, query in batch:
                 _, family, term = query.split(":", 2)
                 prior = db.execute("SELECT retrieved,retry_at,status,items FROM discovery_query WHERE query=?",
@@ -277,7 +291,11 @@ def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, reques
                 if report["status"] not in {"complete", "budget"}:
                     break
             if scheduled:
-                report["queue"] = discovery_queue.counts(db, time.time())
+                now = time.time()
+                report["queue"] = discovery_queue.counts(db, now)
+                report["queue_metrics"]["after"] = discovery_queue.metrics(db, now)
+                if report["status"] == "complete" and report["queue"]["ready"]:
+                    report["status"] = "budget"
         finally:
             with db:
                 db.execute("DELETE FROM discovery_lease WHERE id=1 AND lease=?", (lease,))
@@ -319,9 +337,14 @@ def link_result(catalog, observation):
         explanation = "GitHub returned an incomplete search page. A missing match is inconclusive."
     else:
         explanation = f"The external search is {issue or status}. Any retained results need a freshness check."
+    from . import code_search
+    code = (code_search.report(code_search.projection(catalog), code_search.observation_query(observation), origin_url=url)
+            if subject_kind(observation.get("title", "")) == "implementation" else {"status": "not_technical", "matches": []})
+    if code["matches"]:
+        explanation += " Pinned code candidates require source review."
     return {"url": url, "revision": source_revision(observation), "subject": term, "status": status,
             "search_issue": issue, "lookups": batch["lookups"], "cache_hits": batch["cache_hits"],
-            "top5": list(found.values())[:PAGE_SIZE], "explanation": explanation}
+            "top5": list(found.values())[:PAGE_SIZE], "explanation": explanation, "source_code": code}
 
 
 def search_link(catalog, url):

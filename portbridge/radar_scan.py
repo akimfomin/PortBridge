@@ -9,6 +9,7 @@ import time
 from urllib.parse import urlsplit
 
 from .catalog import public_url, source_sync_failed
+from . import code_search
 from .consoles import console_families
 from .radar_patches import apply_cached, sample
 from .discovery_scan import TTL, cached_index, scan as discovery_scan
@@ -240,10 +241,15 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
                     for url, revision, items, retrieved in fresh_results(db, time.time() - TTL)} if has_discovery else {}
         cached = {row["revision"]: (row["digest"],row["checked"]) for row in db.execute("SELECT * FROM radar_patch_cache")}
     apply_cached(rows, cached)
+    codes = code_search.projection(catalog)
+    code_revisions = {(row["repo"], row["revision"], row["path"]) for row in codes["files"]}
+    code_digest = sha256(encode([[row[key] for key in ("repo", "revision", "path", "sha256", "license")]
+                                 for row in codes["files"]]).encode()).hexdigest() if code_revisions else ""
+
     def input_fingerprint(url, row):
         revision, digest = external.get(url, (None, ""))
         matches_revision = revision == (source_revision(row) or row.get("updated_at"))
-        return fingerprint(row) + (digest if matches_revision else "")
+        return fingerprint(row) + (digest if matches_revision else "") + code_digest
 
     upcoming = [(url, row, input_fingerprint(url, row)) for url, row in rows.items()
                 if row["kind"] in {"issue", "pr", "commit", "test"}
@@ -281,6 +287,16 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
             ranked = [card for card in ranked if card is not None]
         matches = discover(origin_url=row["url"], index=discovery)
         ranked.extend(historical(row, matches, project_map))
+        if codes["files"] and subject_kind(row["title"]) == "implementation":
+            origin = evidence_source(row, "target", project_map)
+            for lead in code_search.lookup(codes, code_search.observation_query(row), origin_url=row["url"], limit=1):
+                peer = {"role": "historical", "url": lead["url"], "source_id": source_id(lead["url"]),
+                        "project": lead["repo"], "status": "reference", "title": lead["path"],
+                        "revision": lead["revision"], "license": lead["license"], "consoles": [],
+                        "checked_at": None}
+                ranked.append({**candidate(origin, peer, "source_code", "research", lead["signals"],
+                                           "A pinned public file overlaps the technical query. Compare the cited lines."),
+                               "next_step": lead["next_step"]})
         distinct = {}
         for card in sorted(ranked, key=priority):
             distinct.setdefault(card["id"], card)
@@ -299,7 +315,9 @@ def refresh(catalog, *, online_discovery=False, limit=MAX_EVENTS, now=None):
             if saved["id"] in ids:
                 continue
             card = json.loads(saved["payload"])
-            invalid = False
+            invalid = card["kind"] == "source_code" and any(
+                (ref["project"], ref["revision"], urlsplit(ref["url"]).path.split("/", 5)[-1])
+                not in code_revisions for ref in card["sources"] if ref["role"] == "historical")
             for ref in card["sources"]:
                 if ref["role"] == "historical":
                     continue

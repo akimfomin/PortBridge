@@ -14,6 +14,7 @@ from .backup import backup_database
 from .catalog import REPO_NAME, ReadOnlyCatalog, timestamp
 from .coordination import knowledge_graph, recommendations
 from .discovery_scan import cached_index
+from .code_search import projection as code_projection
 from .ecosystem import build_ecosystem
 from .feed import build_feed
 from .identity import SCHEMA_VERSION
@@ -31,9 +32,9 @@ ASSETS = {"index.html": "index.html", "letter.html": "letter.html", "letter.ru.h
           "start.html": "start.html", "start.ru.html": "start.ru.html", "partner.html": "partner.html",
           "static/partner.js": "partner.js",
           "static/styles.css": "styles.css", "static/app.js": "app.js", "static/discovery.js": "discovery.js"}
-SNAPSHOTS = {"site", "projects", "ecosystem", "problems", "matches", "health", "observations", "coordination", "outreach", "activity", "lab", "discovery", "radar", "people", "people-directory", "impact", "partner",
+SNAPSHOTS = {"site", "projects", "ecosystem", "problems", "matches", "health", "observations", "coordination", "outreach", "activity", "lab", "discovery", "radar", "people", "people-directory", "impact", "partner", "source-code",
              "graph", "source-history", "recommendations"}
-VERSIONED_SNAPSHOTS = ("projects", "ecosystem", "problems", "health", "lab", "activity", "outreach", "coordination", "discovery", "radar", "people", "people-directory", "impact", "partner")
+VERSIONED_SNAPSHOTS = ("projects", "ecosystem", "problems", "health", "lab", "activity", "outreach", "coordination", "discovery", "radar", "people", "people-directory", "impact", "partner", "source-code")
 VERSIONED_SNAPSHOT = re.compile(rf"(?:{'|'.join(VERSIONED_SNAPSHOTS)})-([0-9a-f]{{24}})\.json")
 VERSIONED_ASSET = re.compile(r"(?:styles-([0-9a-f]{24})\.css|(?:app|discovery)-([0-9a-f]{24})\.js)")
 MATCH_PREVIEW_LIMIT = 200
@@ -162,6 +163,7 @@ def _export(catalog, directory, repository):
         "matches": {"matches": preview, "total": len(matches)},
         "health": catalog.health(generated_at=generated_at),
         "discovery": cached_index(catalog),
+        "source-code": code_projection(catalog),
         "lab": build_lab(catalog, now=epoch(generated_at)),
         "radar": radar_view(catalog, epoch(generated_at), include_catalog=True),
         "observations": {"observations": catalog.observations(limit=None)},
