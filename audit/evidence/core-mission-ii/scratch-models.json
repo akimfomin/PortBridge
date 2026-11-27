@@ -1,0 +1,79 @@
+{
+  "cases": 10000,
+  "seed": 2322,
+  "draft_smaller": 1653,
+  "equal": 7605,
+  "upstream_smaller": 742,
+  "median_draft_minus_upstream_words": 0.0,
+  "smallest_observed_examples": {
+    "draft_smaller": {
+      "intervals": [
+        [
+          6,
+          8,
+          1
+        ],
+        [
+          0,
+          17,
+          1
+        ],
+        [
+          8,
+          17,
+          1
+        ],
+        [
+          16,
+          18,
+          2
+        ],
+        [
+          0,
+          6,
+          1
+        ]
+      ],
+      "draft": 5,
+      "upstream": 6,
+      "lower": 5
+    },
+    "upstream_smaller": {
+      "intervals": [
+        [
+          14,
+          17,
+          2
+        ],
+        [
+          0,
+          9,
+          1
+        ],
+        [
+          7,
+          18,
+          1
+        ],
+        [
+          4,
+          16,
+          1
+        ],
+        [
+          14,
+          18,
+          1
+        ],
+        [
+          2,
+          12,
+          1
+        ]
+      ],
+      "draft": 7,
+      "upstream": 6,
+      "lower": 6
+    }
+  }
+}

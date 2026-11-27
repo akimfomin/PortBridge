@@ -1,0 +1,205 @@
+[
+  {
+    "origin": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+    "repo": "llvm/llvm-project",
+    "revision": "7ea8afa0a9ff7a59f79f0b4c70121d4cf4b0e4c9",
+    "path": "llvm/lib/Transforms/Scalar/LICM.cpp",
+    "license": "Apache-2.0 WITH LLVM-exception",
+    "license_path": "llvm/LICENSE.TXT",
+    "expected": [
+      1460,
+      1475
+    ],
+    "human_query": "LICM isSafeToSpeculativelyExecute isGuaranteedToExecute",
+    "content_sha256": "2c539d96fd8c623ab2984e05d9f6882f1068c179a9dbf2e2ca41836fc858640b",
+    "license_url": "https://github.com/llvm/llvm-project/blob/7ea8afa0a9ff7a59f79f0b4c70121d4cf4b0e4c9/llvm/LICENSE.TXT",
+    "released_query": {
+      "rank": null,
+      "line": null,
+      "anchor_in_expected_range": false,
+      "top5": []
+    },
+    "source_added": {
+      "rank": null,
+      "line": null,
+      "anchor_in_expected_range": false,
+      "top5": []
+    },
+    "manual_terms": {
+      "rank": 1,
+      "line": 1467,
+      "anchor_in_expected_range": true,
+      "top5": [
+        {
+          "url": "https://github.com/llvm/llvm-project/blob/7ea8afa0a9ff7a59f79f0b4c70121d4cf4b0e4c9/llvm/lib/Transforms/Scalar/LICM.cpp#L1467",
+          "signals": [
+            "execute",
+            "guaranteed",
+            "isguaranteedtoexecute",
+            "issafetospeculativelyexecute",
+            "safe",
+            "speculatively"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/xcl-dev/xcl/pull/3001",
+    "repo": "ubiquitarianism/leonida",
+    "revision": "95267b8c7bba786e356bef364dc25862a26ebab8",
+    "path": "scripts/check_precompile_verify.py",
+    "license": "GPL-3.0",
+    "license_path": "LICENSE",
+    "expected": [
+      114,
+      170
+    ],
+    "human_query": "cache hit verification journal driver require_hit",
+    "content_sha256": "7ee03184a42001f3141cf3ece0e6ce1d282cd685e9eb1820f2278a211e7ce565",
+    "license_url": "https://github.com/ubiquitarianism/leonida/blob/95267b8c7bba786e356bef364dc25862a26ebab8/LICENSE",
+    "released_query": {
+      "rank": null,
+      "line": null,
+      "anchor_in_expected_range": false,
+      "top5": [
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_pipeline_state_stream.h#L50",
+          "signals": [
+            "d12",
+            "d3d12_pipeline_state_flags",
+            "desc",
+            "state"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/cache.c#L1829",
+          "signals": [
+            "d3d12_compute_pipeline_state_desc",
+            "desc"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L2589",
+          "signals": [
+            "d3d12_pipeline_state_flags"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L34",
+          "signals": [
+            "d12",
+            "record",
+            "state"
+          ]
+        }
+      ]
+    },
+    "source_added": {
+      "rank": null,
+      "line": null,
+      "anchor_in_expected_range": false,
+      "top5": [
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_pipeline_state_stream.h#L50",
+          "signals": [
+            "d12",
+            "d3d12_pipeline_state_flags",
+            "desc",
+            "state"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/cache.c#L1829",
+          "signals": [
+            "d3d12_compute_pipeline_state_desc",
+            "desc"
+          ]
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L2589",
+          "signals": [
+            "d3d12_pipeline_state_flags"
+          ]
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L34",
+          "signals": [
+            "d12",
+            "record",
+            "state"
+          ]
+        }
+      ]
+    },
+    "manual_terms": {
+      "rank": 1,
+      "line": 68,
+      "anchor_in_expected_range": false,
+      "top5": [
+        {
+          "url": "https://github.com/ubiquitarianism/leonida/blob/95267b8c7bba786e356bef364dc25862a26ebab8/scripts/check_precompile_verify.py#L68",
+          "signals": [
+            "cache",
+            "hit",
+            "require",
+            "require_hit"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "origin": "https://github.com/ubiquitarianism/leonida/pull/2461",
+    "repo": "KhronosGroup/VK-GL-CTS",
+    "revision": "65fff6ac4d782ad42a490b007376e84159a113e3",
+    "path": "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp",
+    "license": "Apache-2.0",
+    "license_path": "LICENSE",
+    "expected": [
+      1665,
+      1706
+    ],
+    "human_query": "timeline semaphore wait before signal submit queue",
+    "content_sha256": "bda0e78e48efd4f71217029a53842c1dad90fb36569963aecebac5df943c9bc6",
+    "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/65fff6ac4d782ad42a490b007376e84159a113e3/LICENSE",
+    "released_query": {
+      "rank": null,
+      "line": null,
+      "anchor_in_expected_range": false,
+      "top5": []
+    },
+    "source_added": {
+      "rank": null,
+      "line": null,
+      "anchor_in_expected_range": false,
+      "top5": []
+    },
+    "manual_terms": {
+      "rank": 1,
+      "line": 104,
+      "anchor_in_expected_range": false,
+      "top5": [
+        {
+          "url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/65fff6ac4d782ad42a490b007376e84159a113e3/external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp#L104",
+          "signals": [
+            "queue",
+            "semaphore",
+            "signal",
+            "submit",
+            "timeline",
+            "wait"
+          ]
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L11807",
+          "signals": [
+            "semaphore",
+            "signal",
+            "wait"
+          ]
+        }
+      ]
+    }
+  }
+]

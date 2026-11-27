@@ -1,0 +1,29 @@
+{
+  "product_sha": "bcf645519a7cb1a302f5e426b883786bd7a24a05",
+  "pull_request": "https://github.com/akimfomin/PortBridge/pull/124",
+  "workflow": "https://github.com/akimfomin/PortBridge/actions/runs/45999480295",
+  "trigger": "push",
+  "tests": {
+    "pass": 309,
+    "fail": 0,
+    "skip": 0
+  },
+  "deploy": "success",
+  "verify_pages": "success",
+  "generated_at": "2026-11-27T12:37:57+00:00",
+  "problems": "https://akimfomin.github.io/PortBridge/data/problems-b72209b10ff9ba99d5b8185b.json",
+  "problem_id": "PB-0025",
+  "proof": "https://github.com/xcl-dev/xcl/pull/2322#issuecomment-7186987594",
+  "source_code": {
+    "indexed_this_run": 0,
+    "restored_from_previous_run": 16,
+    "expected": 16
+  },
+  "queue": {
+    "readiness_before": 3463,
+    "readiness_after": 3343,
+    "oldest_after_seconds": 28044,
+    "network_requests": 5,
+    "cache_hits": 115
+  }
+}
