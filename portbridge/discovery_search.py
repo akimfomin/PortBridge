@@ -10,7 +10,7 @@ from urllib.parse import urlsplit
 
 from .identity import stable_id
 from .consoles import console_families
-from .github import PR_URL
+from .github import WORK_URL
 from .matching import REPOSITORY_MOVES, current_repository
 
 DATA = Path(__file__).with_name("data") / "discovery.json"
@@ -123,8 +123,8 @@ def empty_link_result(requested_url, scan_status, reason):
         return scan_status, "No supported technical subject was found in the source metadata. No external search ran."
     if scan_status == "not_scanned":
         message = "There is no saved external search for this link."
-        if PR_URL.fullmatch("https://" + requested_url):
-            message += " To search this PR, run python -m portbridge.discovery_scan --online --url followed by its URL."
+        if WORK_URL.fullmatch("https://" + requested_url):
+            message += " To search this link, run python -m portbridge.discovery_scan --online --url followed by its URL."
         return scan_status, message
     if scan_status == "partial":
         return scan_status, "GitHub returned an incomplete search page. Other matching sources may exist."

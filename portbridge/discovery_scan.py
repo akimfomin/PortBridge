@@ -15,7 +15,7 @@ from .consoles import console_families
 from .discovery_search import SOURCE_FOUND, discover, discovery_index, key
 from . import discovery_queue
 from .discovery_terms import MAX_CUES, cues, stored_cue
-from .github import (API, INSTRUCTION_LIMIT, PR_URL, SIGNATURE_LIMIT, TECHNICAL_TERM, URL, Unavailable,
+from .github import (API, INSTRUCTION_LIMIT, SIGNATURE_LIMIT, TECHNICAL_TERM, URL, WORK_URL, Unavailable,
                      _Sync, _text, _timestamp, refresh_references)
 from .global_search import result_entry, RESULT_PATH
 from .matching import current_repository, source_revision, source_url_aliases, subject_kind
@@ -303,7 +303,7 @@ def scan(catalog, observations, *, online=False, max_lookups=MAX_LOOKUPS, reques
 
 
 def link_result(catalog, observation):
-    """Search one normalized observation; a user-selected PR may already be merged."""
+    """Search one normalized observation, including closed issues and merged PRs."""
     url = observation["url"]
     term = subject(observation)
     batch = scan(catalog, [observation], online=True, max_lookups=1, requested_url=url)
@@ -329,7 +329,7 @@ def link_result(catalog, observation):
     status = origin["status"] if origin else batch["status"]
     issue = origin.get("reason") if origin else status
     if status == "no_subject":
-        explanation = "No supported technical subject was found in the PR title or stored metadata. No external search ran."
+        explanation = "No supported technical subject was found in the title or stored metadata. No external search ran."
     elif status == "available":
         explanation = ("Open each source to compare the mechanism and revision." if found else
                        "The indexed corpus and first bounded GitHub page yielded no other source for this subject.")
@@ -348,17 +348,17 @@ def link_result(catalog, observation):
 
 
 def search_link(catalog, url):
-    """Resolve an explicitly supplied public PR; never expand catalog subscriptions."""
+    """Resolve one public issue or PR without expanding catalog subscriptions."""
     if isinstance(url, str):
         url = url.removesuffix("/")
-    if not isinstance(url, str) or len(url) > 500 or not PR_URL.fullmatch(url):
-        raise ValueError("Provide a public GitHub pull request URL")
-    owner, name, _, number = urlsplit(url).path.strip("/").split("/")
+    if not isinstance(url, str) or len(url) > 500 or not WORK_URL.fullmatch(url):
+        raise ValueError("Provide a public GitHub issue or pull request URL")
+    owner, name, collection, number = urlsplit(url).path.strip("/").split("/")
     repo = current_repository(f"{owner}/{name}")
     projects = catalog.projects()
     tracked = next((project for project in projects if project["repo"].casefold() == repo.casefold()), None)
     project = tracked or {"repo": repo, "slug": repo.casefold()}
-    source = f"https://github.com/{project['repo']}/pull/{number}"
+    source = f"https://github.com/{project['repo']}/{collection}/{number}"
     checked = refresh_references(projects if tracked else [*projects, project], catalog.path, [source], anonymous=True)
     if checked["references"] or not checked["items"]:
         failure = next(iter(checked["references"]), {})
@@ -367,7 +367,7 @@ def search_link(catalog, url):
         detail = (f" Retry after {retry}." if retry else "")
         return {"url": source, "revision": None, "subject": "", "status": reason, "retry_at": retry, "lookups": 0,
                 "cache_hits": 0, "top5": [], "explanation":
-                f"Public PR metadata could not be read ({reason}). No external search ran.{detail}"}
+                f"Public GitHub metadata could not be read ({reason}). No external search ran.{detail}"}
     if tracked:
         catalog.record_sync(checked, update_health=False)
     return link_result(catalog, checked["items"][0])
@@ -380,12 +380,12 @@ def main():
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
     parser.add_argument("--online", action="store_true", help="allow bounded anonymous GitHub reads")
     parser.add_argument("--limit", type=int, default=MAX_LOOKUPS)
-    parser.add_argument("--url", help="look up previous work for one public GitHub PR using --online")
+    parser.add_argument("--url", help="look up previous work for one public GitHub issue or PR using --online")
     args = parser.parse_args()
     if not 1 <= args.limit <= MAX_LOOKUPS:
         parser.error(f"--limit must be between 1 and {MAX_LOOKUPS}")
     if args.url and not args.online:
-        parser.error("--url needs --online to read the public PR")
+        parser.error("--url needs --online to read the public issue or PR")
     catalog = Catalog(args.db, DEFAULT_SEED)
     try:
         report = (search_link(catalog, args.url) if args.url else

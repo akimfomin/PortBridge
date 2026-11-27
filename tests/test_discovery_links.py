@@ -74,6 +74,23 @@ class DiscoveryLinkTests(CatalogFixture):
         self.assertFalse(lookup_plan([row], {self.project["repo"].lower()}))
         self.assertEqual(discover(origin_url=PR, index=cached_index(self.catalog))["subject"], result["subject"])
 
+    def test_explicit_issue_uses_the_issue_endpoint_and_same_lookup_budget(self):
+        url = PR.replace("/pull/", "/issues/")
+        issue = metadata("Host failed while calling vkQueueSubmit")
+        issue.pop("head")
+        with patch("portbridge.github._Sync._request", side_effect=[
+            (issue, {}),
+            ({"items": [{"html_url": EXTERNAL, "state": "open", "title": "Queue ordering"}]}, {}),
+        ]) as request:
+            first = search_link(self.catalog, url + "/")
+            repeat = search_link(self.catalog, url)
+        self.assertEqual([call.args[1] for call in request.call_args_list], ["core", "search"])
+        self.assertTrue(request.call_args_list[0].args[0].endswith("/issues/71"))
+        self.assertEqual((first["url"], first["subject"], first["revision"]), (url, "vkqueuesubmit", None))
+        self.assertEqual((first["lookups"], repeat["lookups"], repeat["cache_hits"]), (1, 0, 1))
+        self.assertEqual(first["top5"][0]["url"], EXTERNAL)
+        self.assertEqual(self.catalog.observations(kind="issue")[0]["url"], url)
+
     def test_revised_cueless_source_clears_saved_hits_even_before_a_new_search(self):
         with patch("portbridge.github._Sync._request", side_effect=[
             (metadata("vkQueueSubmit"), {}),

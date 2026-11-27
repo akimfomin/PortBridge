@@ -153,6 +153,14 @@
       "release": "PR #258 merge",
       "license": "GPL-3.0-or-later",
       "license_url": "https://github.com/TaynanGT/Vice-Tay/blob/927da4079031d74cc987de30a3c00af28a2bf631/LICENSE"
+    },
+    "victory-agility-969": {
+      "name": "VIctory Agility SDK device-factory PR",
+      "url": "https://github.com/Marvisak/VIctory",
+      "revision": "124356508350020912e09a43c12aef8c62505875",
+      "release": null,
+      "license": "GPL-3.0-or-later",
+      "license_url": "https://github.com/Marvisak/VIctory/blob/124356508350020912e09a43c12aef8c62505875/LICENSE"
     }
   },
   "facets": {
@@ -1031,6 +1039,40 @@
         "TaynanGT"
       ],
       "supplemental": true
+    },
+    {
+      "id": "victory-agility-root-signature-sm66",
+      "project": "victory-agility-969",
+      "kind": "test",
+      "title": "VIctory Agility SDK smoke test for D3D12 heap-indexed root signatures",
+      "title_ru": "Проверка Agility SDK для прямой индексации дескрипторов D3D12",
+      "source": "https://github.com/Marvisak/VIctory/blob/124356508350020912e09a43c12aef8c62505875/crates/victory-shader/src/emit/agility.rs#L422-L470",
+      "state": "reference",
+      "reviewed_on": "2026-11-28",
+      "topics": [],
+      "symbols": [
+        "D3D12GetInterface",
+        "ID3D12SDKConfiguration1",
+        "D3D12_ROOT_SIGNATURE_FLAG_CBV_SRV_UAV_HEAP_DIRECTLY_INDEXED",
+        "D3D12_ROOT_SIGNATURE_FLAG_SAMPLER_HEAP_DIRECTLY_INDEXED",
+        "VICTORY_D3D12_AGILITY",
+        "0xC01"
+      ],
+      "platforms": [
+        "Direct3D 12",
+        "Windows",
+        "Windows 10"
+      ],
+      "problem": "A Windows 10 root signature with direct heap indexing is refused before any draws reach the host.",
+      "similarity": "VIctory #3618 and AnyXboxX #559 report the same OS build and root signature flag refusal on different adapters. VIctory #969 tests that exact flag combination through the configured runtime.",
+      "differences": "VIctory #969 uses an Agility device factory. The app-local export route in VIctory #463 was validated separately. AnyXboxX has its own vendored runtime.",
+      "limits": "The test proves creation of an empty 0xC01 root signature. The current head is open. It leaves game startup, frame rendering, and Vega 8 compatibility unverified.",
+      "adaptation": "Compare the configured runtime with the system-runtime result before investigating later crashes. Use the Microsoft package matching the selected candidate.",
+      "test": "Set VICTORY_D3D12_AGILITY to the folder containing the official x64 D3D12Core.dll. Run cargo test -p victory-shader --release creates_device_and_serializes_heap_indexed_root_signature_when_configured. Without the variable the test returns early.",
+      "authors": [
+        "mgunes1311-lab"
+      ],
+      "supplemental": true
     }
   ],
   "cases": [
@@ -1210,6 +1252,28 @@
       "related": [],
       "verdict": "candidate",
       "conclusion": "Use the Vice-Tay DXIL test as a template for the structured-buffer follow-up. Applicability remains to be tested on VIctory."
+    },
+    {
+      "id": "victory-win10-heap-indexing",
+      "origin_url": "https://github.com/Marvisak/VIctory/issues/3618",
+      "title": "Diagnose rejected direct heap indexing on Windows 10",
+      "state": "open",
+      "query": "Agility SDK VICTORY_D3D12_AGILITY 0xC01 ID3D12SDKConfiguration1",
+      "primary": "victory-agility-root-signature-sm66",
+      "related": [],
+      "verdict": "candidate",
+      "conclusion": "Run the pinned test on the reported Vega 8. Track the root-signature refusal with the Agility work if it passes."
+    },
+    {
+      "id": "anyxboxx-win10-heap-indexing",
+      "origin_url": "https://github.com/LooperSalty/AnyXboxX/issues/559",
+      "title": "Diagnose rejected direct heap indexing on Windows 10",
+      "state": "closed",
+      "query": "Agility SDK VICTORY_D3D12_AGILITY 0xC01 ID3D12SDKConfiguration1",
+      "primary": "victory-agility-root-signature-sm66",
+      "related": [],
+      "verdict": "candidate",
+      "conclusion": "Use this as a historical comparison. The issue was closed with a diagnosis and the receiving branch still needs a check."
     }
   ]
 }
