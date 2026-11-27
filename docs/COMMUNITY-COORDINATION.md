@@ -1,5 +1,18 @@
 # Координация между командами
 
+## 27 ноября 2026 · Участие и внедрение
+
+В [журнале аудита](../audit/LATEST.md#23-новых-адресных-результата) 23 проверенных публикации для людей, которых не было среди предыдущих 27. Всего 50 разных адресатов. Один добровольный запрос для Intel Arc основан на публичном аппаратном отчёте из People. Публичная ссылка не доказывает факт прочтения.
+
+- halfwave50 самостоятельно перенёс свой Mac-отчёт из VIctory в Test Lab #99. После сверки PortBridge передал PortWatch исходный отчёт с авторством, отдельным 60-секундным окном и двумя разрешениями. [Подача](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206515563) · [Передача](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206556537)
+
+- leixner воспроизвёл сравнение двух разных внутренних разрешений и лимитов FPS, добавил контрпример в тесты и выпустил frametime-report v0.1.1. PortBridge перепроверил релиз на той же паре. [Отчёт PortWatch](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206219321) · [Повтор в Lab](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206434423)
+- UwUCammie принёс отдельные данные холодного старта в обсуждение PortWatch. Они связаны с опубликованной задачей и помечены как другое окно измерения. [Отчёт автора](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206398500)
+- vibryxcx независимо провёл парную проверку XCL #2916 на RX 6800 по запросу команды. PortBridge проверил, что совпадают исходные ревизии, и вернул результат в Lab с именем автора. [Исходный отчёт](https://github.com/xcl-dev/xcl/pull/2916#issuecomment-7206399186) · [Возврат результата](https://github.com/akimfomin/PortBridge/issues/101#issuecomment-7206434010)
+- FrameLab получил предложение одного пробного запуска без установки либо опциональной Action. PortWatch получил пример с одной ссылкой на отчёт и ленту. Решений об установке и подтверждений регулярного применения пока нет. [Сопровождающий FrameLab](https://github.com/5headsmartbtw/leonida-framelab/pull/36#issuecomment-7206299972) · [Предложение PortWatch](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206144658)
+
+halfwave50 затем вернулся в #99 и сам выполнил синтетический контроль при одинаковой частоте кадров. PortBridge повторил тест и подтвердил вывод по паре BM-v1. Это повторное участие в той же задаче. [Второй результат](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206709995) · [Проверка](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206800208)
+
 ## 27 ноября 2026 · Адресная кампания
 
 В [аудите](../audit/LATEST.md#фактические-доставки) сохранены 27 публичных сообщений и границы каждой проверки. Одно сообщение относится к одному адресату, даже если в нём проверены несколько PR. Ответ на старое приглашение отмечен отдельно. Число читателей неизвестно.

@@ -1,4 +1,85 @@
-# PortBridge · Адресная кампания 27 ноября 2026
+# PortBridge · Кампания участия и внедрения, 27 ноября 2026
+
+**Достигнут общий охват 50 уникальных адресатов.** Предыдущие 27 и ещё 23 отличаются по GitHub-логинам. Общая последовательность волн **10 / 15 / 25**. Все 23 новых публикации найдены в исходных обсуждениях при повторном чтении. Это фактически опубликованные предложения. Статистика прочтения недоступна. Отдельный комментарий в общей очереди и возвраты результатов в Lab не добавляли адресатов.
+
+## Что изменилось у участников
+
+| Событие | Подтверждение |
+| --- | --- |
+| Внешний автор принял проверку и выпустил исправление | **leixner** воспроизвёл наш контрпример, добавил его в тесты и выпустил frametime-report **v0.1.1**. Два 200-секундных отчёта с разными внутренним разрешением и ограничением FPS раньше считались сопоставимыми. На новой версии исходная пара отклонена. Одинаковые отчёты всё ещё сравниваются. [Ответ автора](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206219321) · [Релиз](https://github.com/leixner/frametime-report/releases/tag/v0.1.1) · [Наша повторная проверка](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206434423) |
+| Независимая полезная работа появилась у принимающей команды | **vibryxcx** проверил, что на RX 6800 настройка XCL #2916 сохраняет запуск фоновой очереди Windows. Два целевых теста прошли. На базе и кандидате — 1 324 и 1 309 кадров за 60 секунд. Участник откликнулся на вопрос в описании самого XCL. PortBridge сверил ревизии и перенёс итог с авторством в #101. [Исходный отчёт](https://github.com/xcl-dev/xcl/pull/2916#issuecomment-7206399186) · [Возврат в Lab](https://github.com/akimfomin/PortBridge/issues/101#issuecomment-7206434010) |
+| Участник вернулся с другой задачей | **UwUCammie**, ранее добавивший тест конкурентного кэша в AMD/Linux-форк, принёс отдельный вопрос о холодном старте в обсуждение PortWatch. Его отчёт за первые 300 секунд содержит 4 268 кадров, 14,23 FPS, P99 292 мс и самый длинный разрыв 11,18 с. PortBridge предложил отдельную строку с моментом запуска и состоянием кэшей. Это повторное техническое взаимодействие. Отдельного запуска PortBridge этим участником пока не подтверждено. [Первая работа](https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084) · [Новый вопрос](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206398500) · [Связь в Lab](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206434423) |
+| Путь для внешних команд | PortWatch предложен пилот одной ссылки на отчёт без влияния на рейтинг. FrameLab предложен пробный запуск CLI или существующей опциональной Action на одном PR. **Два предметных предложения, ноль подтверждённых новых установок.** Ранее документированное использование FrameLab и два отчёта BrokeAsh из прежней итерации учитываются отдельно. [PortWatch](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206144658) · [FrameLab](https://github.com/5headsmartbtw/leonida-framelab/pull/36#issuecomment-7206299972) |
+| Самостоятельное использование Test Lab | **halfwave50** перешёл из VIctory в #99 и сам подал существующий Mac-замер со всеми условиями. PortBridge проверил полный SHA и первичные счётчики и передал отчёт PortWatch. Участник затем вернулся в ту же карточку и самостоятельно выполнил отдельный синтетический контроль старой и новой версий. При одинаковом FPS новая версия корректно отвергла несопоставимые настройки, контроль с одинаковыми настройками прошёл. Это один внешний участник, две самостоятельные операции, одна карточка. [Повторное участие](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206709995) · [Подтверждение](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206800208) [Подача](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206515563) · [Сверка](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206550453) · [Передача в PortWatch](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206556537) |
+| Новые задачи и звёзды | Новых внешних запросов на проверку PR в #98 и новых пользовательских issues в этой части пока нет. Звёзды **2 → 2**. Публичный [пример и добровольное приглашение](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7206391931) размещены в GitHub Issues. Одна необязательная просьба о звезде оставлена под этим примером. |
+
+Цели трёх регулярно участвующих команд и десяти возвращающихся пользователей PortBridge остаются открытыми. Подтверждение отдельной полезной работы сохраняется с источником. Регулярность требует второй самостоятельной задачи или повторного использования инфраструктуры, которое можно проверить.
+
+## Задания, которые можно взять
+
+- [#99 · PortWatch и KLBF](https://github.com/akimfomin/PortBridge/issues/99). Два синтетических отчёта, проверка сопоставимости и пример настоящего BM-v1. Исходные форматы сохраняются. Холодный старт, прогретая сцена, порог задержек и условия рендера описываются отдельно.
+- [#100 · KytyPS5 на Intel Arc](https://github.com/akimfomin/PortBridge/issues/100). Два фильтра синтетических тестов на точном коммите. Один добровольный адресат найден через People по его публичному отчёту с Arc A770.
+- [#101 · XCL на AMD и Windows](https://github.com/akimfomin/PortBridge/issues/101). Независимый замер из PR уже возвращён с авторством. Остался отдельный вопрос точной проверки Wine на ветке с необходимыми предпосылками.
+- [#102 · AnyXboxX](https://github.com/akimfomin/PortBridge/issues/102). Первый PR против точного сочетания из трёх PR. Одно синтетическое сравнение на D3D12, результат можно отдать прямо автору стенда.
+- [#103 · DRED на AMD или Intel](https://github.com/akimfomin/PortBridge/issues/103). Два процесса, здоровое устройство, без принудительного сбоя. На RTX 4070 Ti SUPER обе функции дали 0x887a0022 при раннем включении и 0x887a0004 при позднем. Проверка той же пары на другом драйвере открыта. [Исходник и команда](evidence/growth-adoption.md#native-xcl-controls)
+
+Все пять опубликованных запросов прошли проверку действующим разборщиком формы. Точные рецепты и источники сохранены в обсуждениях. Метка автоматического приглашения не применялась. [Пример рецепта](https://github.com/akimfomin/PortBridge/issues/100#issuecomment-7206586780)
+
+## Экосистема и проверка продукта
+
+Сверены открытые обсуждения и исходники Vice-Tay, AnyXboxX, VIctory, двух веток VIctory-7900XTX, KLBF, XCL, Continued, Leonida Ultimate и FrameLab. На стороне PS5 просмотрены публичные PR [AnyPS5](https://github.com/boykopovar/AnyPS5/pulls), [KytyPS5](https://github.com/KytyPS5/KytyPS5/pulls), [KytyPS5 для Xbox](https://github.com/signingup/kytyps5) и соседний [shadPS4](https://github.com/shadps4-emu/shadPS4/issues/5767). Новые для этой кампании направления — [frametime-report](https://github.com/leixner/frametime-report), [macOS-форк halfwave50](https://github.com/halfwave50/VIctory-macOS-halfwave) и [6-ГБ форк washingtonrbo](https://github.com/washingtonrbo/ochin-nvidia). У TuxBox проверен текущий [вариант переноса 16-байтовых CBV](https://github.com/brcly/TuxBox/issues/251). По уже занятой проблеме [AnyPS5 #27130](https://github.com/boykopovar/AnyPS5/issues/27130) дополнительное обращение не отправлялось.
+
+Открыты живые страницы People, Impact и Test Lab. Сверены SHA-256 манифеста и Lab, а также все 14 связанных снимков. При первом чтении People содержит **1 985** публичных профилей. Это охват наблюдений, а не число согласившихся участников. Radar содержит 216 пар кандидатов и 3 выделенных результата. Для известной задачи округления AnyXboxX #133 поиск вернул 5 совпадений и 2 подготовленные карточки. Для KytyPS5 #2410 поиск честно сообщил отсутствие исходной записи в текущем индексе и сохранённого внешнего прогона. Пара для этого случая найдена вручную и проверена по исходникам. [People](https://akimfomin.github.io/PortBridge/#/people) · [Radar](https://akimfomin.github.io/PortBridge/data/radar.json) · [Требования и открытые ограничения](../docs/PORTBRIDGE-CHECKLIST.md)
+
+У публичной партнёрской ленты можно повторно прочитать одно поколение без новых событий. Проба фильтра PS5 вернула пустой набор, хотя страницы PS5 в каталоге доступны. Добавленные запросы видны в очереди GitHub. Обновление статической ленты и полнота независимых отчётов измеряются отдельно. Первый плановый прогон после начала недельного окна стартовал в 03:33 МСК и подтвердил публикацию в **03:42:42 МСК**. Проверена квитанция запуска 45917400112, попытка 1, SHA `2166a90e424aa8897d3dfcb02eb5bb994f069bd4`. Обе контрольные суммы совпали с фактически опубликованными `site.json` и `lab.json`. Это **1 подтверждённая автономная доставка**. [Квитанция](evidence/growth-pages-receipt.json) Выкладки после push и ручные действия в недельный счёт не входят. Сохраняется проверка 4 декабря. [Плановый прогон](https://github.com/akimfomin/PortBridge/actions/runs/45917400112) [Лента](https://akimfomin.github.io/PortBridge/data/partner.json) · [Очередь GitHub](https://github.com/akimfomin/PortBridge/issues?q=is%3Aopen+is%3Aissue+%22Test+request%3A%22+in%3Atitle) · [Плановые запуски](https://github.com/akimfomin/PortBridge/actions/workflows/pages.yml?query=branch%3Amain+event%3Aschedule)
+
+Агентский вход проверен через MCP без токена. Партнёрская выдача вернула опубликованную историю frametime-report и исходную атрибуцию. Запрос PS5 вернул пустой список без ошибки. [API и параметры](../API.en.md#partner-feed)
+
+## 23 новых адресных результата
+
+| Адресат | Публикация | Проверка или следующий шаг |
+| --- | --- | --- |
+| leixner | [portwatch-vi #233](https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206144658) | Репродукция сравнения при разных разрешении и лимите, пилот ленты #99. |
+| Nawid3333 | [KytyPS5 #2410](https://github.com/KytyPS5/KytyPS5/pull/2410#issuecomment-7206134353) | Слияние с точной базой и задача Intel Arc #100. |
+| Headache3318 | [klbf-lab #118](https://github.com/PastiiJay/klbf-lab/pull/118#issuecomment-7206242382) | На beta-2 переносится PE-часть. Третья правка шейдерных тестов требует ручной адаптации. |
+| KainanP | [AnyXboxX #441](https://github.com/LooperSalty/AnyXboxX/pull/441#issuecomment-7206222409) | Три конкретных PR сошлись в одно дерево. Отдельное задание на замер #102. |
+| EdenBendheim | [leonida #2193](https://github.com/ubiquitarianism/leonida/pull/2193#issuecomment-7206242446) | Пять тестов на Windows, включая UTF-8 имена файлов, прошли. |
+| HandshakeHackin | [klbf-lab #114](https://github.com/PastiiJay/klbf-lab/pull/114#issuecomment-7206242758) | Два проверенных BM-v1 контроля и условия показа у PortWatch. |
+| gustavsi | [xcl #2916](https://github.com/xcl-dev/xcl/pull/2916#issuecomment-7206328392) | Две нативные проверки условий heartbeat, карточка #101 для AMD. |
+| robot00f | [leonida #2414](https://github.com/ubiquitarianism/leonida/pull/2414#issuecomment-7206328423) | 51 семейство инструкций, две пары и синтетический PE успешно проверены на i5. |
+| spk-c | [victory-fork #1413](https://github.com/fxceless/victory-fork/pull/1413#issuecomment-7206299541) | Два точных дерева совместного слияния, предложена матрица четырёх режимов. |
+| 5headsmartbtw | [leonida-framelab #36](https://github.com/5headsmartbtw/leonida-framelab/pull/36#issuecomment-7206299972) | Два конфликтующих файла и проба существующей интеграции на одном PR. |
+| JJAutoCompare | [PortBridge #100](https://github.com/akimfomin/PortBridge/issues/100#issuecomment-7206298968) | Одно добровольное приглашение на Arc A770 по ранее опубликованной аппаратной работе. |
+| TaynanGT | [Vice-Tay #91](https://github.com/TaynanGT/Vice-Tay/pull/91#issuecomment-7206299280) | Слияние и тест повторного выделения по тому же адресу для переноса. |
+| KyleS98 | [victory-fork #1414](https://github.com/fxceless/victory-fork/pull/1414#issuecomment-7206317317) | Граничный контроль смены роли дескриптора на 240/241 кадре. |
+| Smoodie7 | [Vice-Tay #88](https://github.com/TaynanGT/Vice-Tay/issues/88#issuecomment-7206317848) | Синтетическое сравнение командных списков для его 16 ГБ RTX. |
+| halfwave50 | [victory-fork #1410](https://github.com/fxceless/victory-fork/issues/1410#issuecomment-7206318187) | Отдельные условия Mac и передача результата о режиме без выигрыша. |
+| Filip722 | [victory-fork #1411](https://github.com/fxceless/victory-fork/pull/1411#issuecomment-7206317614) | Совместимость с #1413 и ссылки на проверки Windows и Wine. |
+| joeypercia | [xcl #2920](https://github.com/xcl-dev/xcl/issues/2920#issuecomment-7206406424) | DRED до и после создания здорового устройства на RTX. Задача #103. |
+| Hailey-Ross | [Vice-Tay #76](https://github.com/TaynanGT/Vice-Tay/issues/76#issuecomment-7206385841) | Шесть чистых прогонов отличают сбой подготовки от артефакта воды VIctory. |
+| NickStallman | [TuxBox #251](https://github.com/brcly/TuxBox/issues/251#issuecomment-7206406775) | Граница окна для предлагаемого root SRV и безопасный контроль с запасом. |
+| WyrchikDev | [klbf-lab #117](https://github.com/PastiiJay/klbf-lab/issues/117#issuecomment-7206407023) | Публичная синтетика XCL для отдельной проверки памяти и старого значения GLC. |
+| Sinister-Siren | [shadPS4 #5767](https://github.com/shadps4-emu/shadPS4/issues/5767#issuecomment-7206407369) | Та же ошибка, но проверка размеров уже есть. Указаны поля для различения причин. |
+| Natakout | [xcl #2869](https://github.com/xcl-dev/xcl/issues/2869#issuecomment-7206407695) | Увязаны счётчики уникальных байтов и безопасное владение в AnyXboxX и XCL. |
+| washingtonrbo | [portwatch-vi #232](https://github.com/4lwayz/portwatch-vi/issues/232#issuecomment-7206407970) | Самостоятельный отчёт RTX 3050 6 ГБ с раздельными масштабами и сценами. |
+
+## Публикация и воспроизведение
+
+Данные Impact и вход в оба README вошли в main через [PR #104](https://github.com/akimfomin/PortBridge/pull/104), коммит [`2166a90e424aa8897d3dfcb02eb5bb994f069bd4`](https://github.com/akimfomin/PortBridge/commit/2166a90e424aa8897d3dfcb02eb5bb994f069bd4). Полный набор main дал **288 PASS, 0 FAIL, 0 SKIP**. Экспорт и release gate прошли. В локальном снимке три новых истории имеют исходные ссылки и авторство. Счётчик подтверждённого повторного использования вырос с 1 до 3, счётчик документированных интеграций составил 1. [Облачная проверка точной ветки](https://github.com/akimfomin/PortBridge/actions/runs/45916951688) · [Выкладка main](https://github.com/akimfomin/PortBridge/actions/runs/45917262083)
+
+Live-снимок 03:36:57 МСК показал 29 249 наблюдений, три новых истории и сохранённый счётчик интеграций. При открытии Impact в браузере переход к leixner вёл на пустую страницу People. В [#105](https://github.com/akimfomin/PortBridge/pull/105) добавлены точный публичный коммит автора и самостоятельная подача Mac-замера. Итоговый main — [`b98a4185f57fcc37416cfa81e1ba22602257f767`](https://github.com/akimfomin/PortBridge/commit/b98a4185f57fcc37416cfa81e1ba22602257f767). В экспортированном снимке профиль `github-user:49769147` соответствует ссылке Impact и видна карточка Mac. Четыре целевых теста People прошли. [Последняя выкладка](https://github.com/akimfomin/PortBridge/actions/runs/45918469648) GitHub Pages подтвердил финальную выкладку. На живом снимке **03:47:40 МСК** видны Mac-история, профиль leixner и его подтверждённое авторство. В браузере переход Impact → People открывает одну правильную карточку. Снимок содержит 2 209 профилей, три подтверждения повторного применения результатов и одну документированную внешнюю интеграцию. [Impact](https://akimfomin.github.io/PortBridge/#/impact) · [Профиль](https://akimfomin.github.io/PortBridge/#/people?profile=github-user%3A49769147)
+
+В аудиторской ветке повторный полный прогон дал **291 PASS, 0 FAIL, 0 SKIP**. Первый прогон прервался на одном локальном HTTP-тесте Windows с `WinError 10053`. Все пять тестов группы и следующий полный набор прошли без изменений настроек или кода.
+
+```sh
+python -B -m unittest discover -s tests -v
+python -B -m portbridge --db .portbridge/growth-validation/catalog.sqlite3 export --out .portbridge/growth-validation/dist --repository akimfomin/PortBridge
+python -B -m portbridge.release_gate .portbridge/growth-validation/dist
+```
+
+[Измерения, исходники и команды](evidence/growth-adoption.md) · [Журнал взаимодействий](../docs/COMMUNITY-COORDINATION.md) · [Вход для PR и добровольцев](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7206391931)
+
+## Предыдущая часть кампании · первые 27 результатов
 
 Срез ответов и публикаций — 02:49 МСК. В GitHub проверены все **27** сообщений с инженерным результатом для **27** разных получателей. Волны — **10, 15 и 2**. Для 22 это первое найденное опубликованное предложение PortBridge, для 5 — продолжение прежнего контакта. Разбор отчёта BrokeAsh по прежнему запросу и публикации для сообществ учтены отдельно.
 
