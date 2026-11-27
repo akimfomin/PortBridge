@@ -9,8 +9,8 @@ from urllib.request import Request, build_opener
 
 MAX_TREE_BYTES = 4_000_000
 MAX_FILE_BYTES = 1_150_000
-MAX_SELECTED = 12
-CACHE = "code-tree-selection-v2:"
+MAX_SELECTED = 16
+CACHE = "code-tree-selection-v4:"
 BLOB_SHA = re.compile(r"[0-9a-f]{40}")
 SOURCE_PATH = re.compile(r"(?:[A-Za-z0-9_-][A-Za-z0-9_+.-]*/)*[A-Za-z0-9_-][A-Za-z0-9_+.-]*")
 EXTENSIONS = {".c", ".cpp", ".h", ".hpp", ".rs", ".py", ".adoc", ".rst"}
@@ -19,6 +19,8 @@ FAMILIES = tuple(re.compile(pattern) for pattern in (
     r"shader|pipeline|wave", r"memory|resource|heap", r"descriptor|binding",
     r"render|image|texture|vertex", r"command|queue|copy",
     r"validat|regression|replay", r"hoist|licm|optimizer|optimize",
+    r"renderpass|render_pass", r"interface|layout", r"subgroup|builtin", r"^resources?$",
+    r"vertex", r"builtin", r"timeline",
 ))
 EXCLUDE = re.compile(r"(?:^|[/_.-])(?:generated|headers|external|third.party|vendor|secret|keys?|auth|drm)(?:$|[/_.-])", re.I)
 

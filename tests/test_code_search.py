@@ -192,3 +192,26 @@ class CodeDiscoveryTests(CatalogFixture):
             self.assertEqual(errors, [{"scope": group["repo"], "reason": "ValueError"}])
             code_search._discover_scopes(self.catalog, fetch)
         self.assertEqual(fetch.call_count, 2)
+
+    def test_embedded_shader_keeps_standard_subgroup_names_only(self):
+        literal = (b'// gl_SubgroupID gl_SubgroupInvocationID\n'
+                   b'/* example shader "gl_SubgroupID gl_SubgroupInvocationID" */\n'
+                   b'std::string shader = "gl_SubgroupID gl_SubgroupInvocationID OtherLiteralContent";')
+        row = code_search.index_file(self.ref, literal)
+        self.assertNotIn("otherliteralcontent", row["terms"])
+        symbols = code_search.public_symbols(
+            "The pair gl_SubgroupID gl_SubgroupInvocationID. https://example.test/gl_SubgroupSize"
+        )
+        self.assertEqual(symbols, ["gl_SubgroupID", "gl_SubgroupInvocationID"])
+        index = {"version": code_search.SCHEMA_VERSION, "files": [row]}
+        self.assertEqual(code_search.lookup(index, " ".join(symbols), origin_url=self.url)[0]["line"], 3)
+
+    def test_diagnostic_keeps_a_corroborated_shader_fixture(self):
+        diagnostic = "VUID-vkCmdDraw-None-00001"
+        values = "gl_SubgroupID gl_SubgroupInvocationID"
+        documentation = code_search.index_file({**self.ref, "path": "docs/shaders.adoc"},
+                                               f"* {diagnostic}\n".encode())
+        fixture = code_search.index_file(self.ref, f'const char *shader = "{values}";'.encode())
+        index = {"version": code_search.SCHEMA_VERSION, "files": [fixture, documentation]}
+        results = code_search.lookup(index, f"Check subgroup output\n{diagnostic} {values}", origin_url=self.url)
+        self.assertEqual([row["path"] for row in results], ["docs/shaders.adoc", self.ref["path"]])

@@ -16,7 +16,7 @@ from .matching import STOP_WORDS, current_repository
 
 MANIFEST = Path(__file__).with_name("data") / "code_sources.json"
 SCHEMA_VERSION = 2
-MAX_FILES = 72
+MAX_FILES = 96
 MAX_BYTES = 1_200_000
 MAX_INDEX_BYTES = 4_000_000
 MAX_TERMS = 2800
@@ -24,7 +24,16 @@ POSITIONS = 16
 WORD = re.compile(r"\b[A-Za-z_][A-Za-z_0-9]{2,95}\b", re.ASCII)
 SYMBOL = re.compile(r"(?:[a-z][A-Z]|[A-Za-z]_+[A-Za-z0-9])")
 SPLIT = re.compile(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|_+")
+# GLSL fixtures can be assembled from C or C++ string literals.
+GLSL_BUILTIN = re.compile(
+    r"\bgl_(?:NumSubgroups|Subgroup(?:Size|ID|InvocationID|EqMask|GeMask|GtMask|LeMask|LtMask)"
+    r"|GlobalInvocationID|LocalInvocation(?:ID|Index)|NumWorkGroups|WorkGroupSize)\b"
+)
 QUOTED = re.compile(r"""(?:"[^"\r\n]*"|'[^'\r\n]*')""")
+C_SOURCE_SEGMENTS = re.compile(
+    r'''"(?:\\.|[^"\\\r\n])*"|'(?:\\.|[^'\\\r\n])*'|(?P<comment>//[^\r\n]*|/\*.*?(?:\*/|\Z))''',
+    re.S,
+)
 URL = re.compile(r"https?://[^\s<>()]+")
 REPO = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+")
 PIN = re.compile(r"[0-9a-f]{40}")
@@ -40,7 +49,7 @@ STOP = set("""the and for with return case this const void struct bool true fals
 PRIVATE_TEXT = re.compile(r"(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|[A-Za-z]:\\[^\s`]+|\\\\[^\s`]+|/(?:home|Users)/[^\s`]+)")
 API_NAME = re.compile(r"(?:D3D12_|DXGI_|VK_|VUID-|vk[A-Z]|ID3D12|GetDiskFreeSpace|GetVolumeInformation|GetFileInformation|SetFileInformation|Wave[A-Z]|EarlyCSE|SelectionDAG|[ds]s?_(?:read|write|add|cmp|load|store))")
 SENSITIVE = re.compile(r"(?i)(?:password|secret|credential|api_?key|private_?key|access_?token|ghp_|github_pat_|AKIA|[A-F0-9]{24,})")
-CACHE_PREFIX = "deep-code-v5:"
+CACHE_PREFIX = "deep-code-v8:"
 ANCHOR_PREFIX = "pb_decl_"
 PERFORMANCE_TITLE = re.compile(r"\b(?:latency|stutters?|performance|frametime|throughput|fps|slow(?:down|er)?|"
                                r"hangs?|freezes?|regression)\b", re.I)
@@ -167,7 +176,8 @@ def identifiers(text, *, public_only=False):
     text = PRIVATE_TEXT.sub(" ", URL.sub(" ", text))
     return list(dict.fromkeys(word for word in _tokens(text)
                               if len(word) >= 5 and SYMBOL.search(word)
-                              and (not public_only or API_NAME.match(word) or STORED_SYMBOL.fullmatch(word))))[:24]
+                              and (not public_only or API_NAME.match(word) or STORED_SYMBOL.fullmatch(word)
+                                   or GLSL_BUILTIN.fullmatch(word))))[:24]
 
 
 def public_symbols(text):
@@ -223,7 +233,15 @@ def index_file(reference, content):
     postings = defaultdict(list)
     qualified = set()
     docs = reference["path"].endswith((".adoc", ".rst", ".md", ".texi"))
-    for number, line in enumerate(content.decode("utf-8").splitlines(), start=1):
+    source = content.decode("utf-8")
+    shader_names = {}
+    c_source = reference["path"].endswith((".c", ".cpp", ".h", ".hpp"))
+    if c_source and GLSL_BUILTIN.search(source):
+        active = C_SOURCE_SEGMENTS.sub(lambda match: re.sub(r"[^\r\n]", " ", match[0])
+                                       if match["comment"] else match[0], source)
+        shader_names = {number: builtins for number, line in enumerate(active.splitlines(), start=1)
+                        if (builtins := GLSL_BUILTIN.findall(URL.sub(" ", line)))}
+    for number, line in enumerate(source.splitlines(), start=1):
         if SENSITIVE.search(line):
             continue
         line = PRIVATE_TEXT.sub(" ", line)
@@ -232,6 +250,9 @@ def index_file(reference, content):
         else:
             literals_removed = line
         words = _tokens(URL.sub(" ", literals_removed))
+        if c_source:
+            words = [word for word in words if not GLSL_BUILTIN.fullmatch(word)]
+            words.extend(shader_names.get(number, ()))
         qualified.update(word.casefold() for word in words if SYMBOL.search(word) and len(word) >= 5)
         features = {value.casefold() for word in words for value in (word, *SPLIT.split(word))
                     if len(value) >= 3 and value.casefold() not in STOP}
@@ -279,11 +300,16 @@ def projection(catalog):
     files.sort(key=lambda row: ("blob" in row, row["repo"].casefold(), row["path"]))
     result = {"version": SCHEMA_VERSION, "diagnostics": True, "expected_files": len(expected), "files": files}
     if len(snapshot_bytes(result)) > MAX_INDEX_BYTES:
-        # Each reference keeps a bounded share. The postings are ordered with
-        # diagnostic IDs first, then definitions, then other symbols.
-        budget = (MAX_INDEX_BYTES - 4096) // len(files)
-        for row in files:
-            trim_postings(row, budget)
+        # Small references keep all their postings. Their unused share goes
+        # to larger references, with diagnostics and definitions retained first.
+        sizes = sorted((len(snapshot_bytes(row)), index) for index, row in enumerate(files))
+        remaining = MAX_INDEX_BYTES - 4096
+        for offset, (size, index) in enumerate(sizes):
+            share = remaining // (len(sizes) - offset)
+            if size > share:
+                trim_postings(files[index], share)
+                size = len(snapshot_bytes(files[index]))
+            remaining -= size
         if len(snapshot_bytes(result)) > MAX_INDEX_BYTES:
             raise ValueError("Public code index exceeds the client size limit")
     return result
@@ -372,10 +398,12 @@ def lookup(index, query, *, origin_url="", limit=5):
     files = [row for row in files if current_repository(row["repo"]).casefold() != owner]
     diagnostics = {word for word in exact if word.startswith(VUID_PREFIX)}
     diagnostic_files = [row for row in files if diagnostics & row["terms"].keys()]
-    if diagnostic_files:
-        files = diagnostic_files
-    diagnostic_fallback = bool(diagnostics and not diagnostic_files)
     performance = PERFORMANCE_TITLE.search(query.split("\n", 1)[0])
+    builtins = set() if performance else {name.casefold() for name in GLSL_BUILTIN.findall(query[:2000])}
+    if diagnostic_files:
+        files = [row for row in files if diagnostics & row["terms"].keys()
+                 or len(builtins & row["terms"].keys()) >= 2]
+    diagnostic_fallback = bool(diagnostics and not diagnostic_files)
     corroboration = {word for word in exact - diagnostics if not GENERIC_STATUS.match(word)}
     definitions = {definition_token(word) for word in corroboration}
     frequencies = Counter(token for row in files for token in (exact | words) & row["terms"].keys())
@@ -398,7 +426,7 @@ def lookup(index, query, *, origin_url="", limit=5):
         ranked = []
         for line in sorted(hit_lines):
             diagnostic = len(hit_lines[line] & diagnostics)
-            if diagnostic_files and not diagnostic:
+            if diagnostic_files and not diagnostic and len(hit_lines[line] & builtins) < 2:
                 continue
             nearby = set().union(*(hit_lines.get(n, ()) for n in range(max(1, line - 12), line + 13)))
             nearby.difference_update(definitions)
@@ -420,17 +448,18 @@ def lookup(index, query, *, origin_url="", limit=5):
                            -line, sorted(nearby)))
         if not ranked:
             continue
-        _, score, _, _, _, anchored, evidence = max(ranked)
+        diagnostic, score, _, _, _, anchored, evidence = max(ranked)
         project, path, revision = row["repo"], row["path"], row["revision"]
-        results.append({"url": f"https://github.com/{project}/blob/{revision}/{path}#L{-anchored}",
+        results.append((bool(diagnostic), {"url": f"https://github.com/{project}/blob/{revision}/{path}#L{-anchored}",
                         "path": path, "repo": project, "revision": revision, "line": -anchored,
                         "license": row["license"], "license_url": row["license_url"], "score": score,
                         "signals": [token[len(VUID_PREFIX):].replace("_", "-")
                                     if token.startswith(VUID_PREFIX) else token for token in evidence[:10]], "evidence_status": "source_found",
                         "next_step": ("The diagnostic ID was not found. Check the rule separately before using this API lead."
                                       if diagnostic_fallback else
-                                      "Compare the cited lines and one opposite control in the target before adapting.")})
-    return sorted(results, key=lambda row: (-row["score"], row["url"]))[: max(1, min(limit, 10))]
+                                      "Compare the cited lines and one opposite control in the target before adapting.")}))
+    ranked_results = sorted(results, key=lambda item: (not item[0], -item[1]["score"], item[1]["url"]))
+    return [row for _, row in ranked_results[:max(1, min(limit, 10))]]
 
 
 def report(index, query, *, origin_url="", limit=5):

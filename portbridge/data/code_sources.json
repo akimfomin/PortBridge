@@ -36,7 +36,7 @@
     "directories": [
       "chapters"
     ],
-    "limit": 8
+    "limit": 14
   },
   {
     "repo": "microsoft/DirectX-Headers",
@@ -62,7 +62,7 @@
       "libs/vkd3d",
       "tests"
     ],
-    "limit": 4
+    "limit": 10
   },
   {
     "repo": "llvm/llvm-project",
@@ -166,9 +166,10 @@
     "license_path": "external/vulkancts/LICENSE",
     "files": [],
     "directories": [
-      "external/vulkancts/modules/vulkan/synchronization"
+      "external/vulkancts/modules/vulkan/synchronization",
+      "external/vulkancts/modules/vulkan/subgroups"
     ],
-    "limit": 4,
+    "limit": 14,
     "scoped": true
   }
 ]
