@@ -36,6 +36,18 @@
     "evidence": "https://github.com/Marvisak/VIctory/pull/1088#issuecomment-7137333841"
   },
   {
+    "project": "vice-tay", "area": "graphics", "kind": "tested",
+    "scope": "Проверки границ дескрипторов на RX 6750 XT, 423 успешных теста на исходной версии исправления.",
+    "translations": {"en": {"scope": "Descriptor-bound checks on RX 6750 XT, 423 tests passed on the original fix revision."}},
+    "evidence": "https://github.com/TaynanGT/Vice-Tay/pull/121#issuecomment-7208747837"
+  },
+  {
+    "project": "vi-br-port", "area": "graphics", "kind": "source",
+    "scope": "Адаптация исправления привязки ресурсов с проверкой синтетического рендера.",
+    "translations": {"en": {"scope": "Adapted resource binding change with a synthetic rendering check."}},
+    "evidence": "https://github.com/edsuuu/VI-BR-PORT/commit/5c17c8c83b782a9c5f1bfa12fb1d2fa438c23e5b"
+  },
+  {
     "project": "leonida-ce", "area": "hardware", "kind": "reported",
     "scope": "Матрица синтетических Wave64 проверок на AMD и NVIDIA с отдельными результатами для аппаратного и эмулированного режимов.",
     "translations": {"en": {"scope": "Reported AMD and NVIDIA synthetic Wave64 matrix with hardware and emulated results."}},

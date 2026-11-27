@@ -46,6 +46,24 @@
       "translations": {"en": {"stack": "VIctory fork, Rust and Windows D3D12"}}
     },
     {
+      "slug": "vice-tay",
+      "name": "Vice-Tay",
+      "repo": "TaynanGT/Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay",
+      "stack": "Форк VIctory, Rust и Windows D3D12",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "VIctory fork, Rust and Windows D3D12"}}
+    },
+    {
+      "slug": "vi-br-port",
+      "name": "VI-BR-PORT",
+      "repo": "edsuuu/VI-BR-PORT",
+      "url": "https://github.com/edsuuu/VI-BR-PORT",
+      "stack": "Форк VIctory, Rust и Windows D3D12",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "VIctory fork, Rust and Windows D3D12"}}
+    },
+    {
       "slug": "leonida-ce",
       "name": "Leonida CE",
       "repo": "IAmNotSiob/leonida-ce",
