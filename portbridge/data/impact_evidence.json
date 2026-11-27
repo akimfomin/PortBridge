@@ -2,6 +2,21 @@
   "version": 1,
   "people": [
     {
+      "subject": "https://github.com/leixner/frametime-report",
+      "source": "https://github.com/leixner/frametime-report/commit/1e68449753af153e1650d3211bde534bc63e73c5",
+      "actor": {
+        "login": "leixner",
+        "user_id": 49769147
+      },
+      "at": "2026-11-27T00:08:16Z",
+      "role": "developer",
+      "basis": "Confirmed and released the frametime-report comparability regression",
+      "specialties": [
+        "testing"
+      ],
+      "checked_at": "2026-11-27T00:38:00Z"
+    },
+    {
       "subject": "https://github.com/akimfomin/PortBridge",
       "source": "https://github.com/akimfomin/PortBridge",
       "actor": {
@@ -1214,6 +1229,58 @@
     }
   ],
   "stories": [
+    {
+      "id": "impact:mac-report-test-lab",
+      "title": "A VIctory Mac contributor submitted a benchmark row through Test Lab",
+      "title_ru": "Разработчик VIctory для Mac самостоятельно подал замер в Test Lab",
+      "state": "reviewed",
+      "type": "hardware_review",
+      "at": "2026-11-27T00:30:18Z",
+      "consoles": [
+        "xbox-series"
+      ],
+      "specialty": "testing",
+      "summary": "halfwave50 brought an existing Apple Silicon benchmark into Test Lab. PortBridge checked the exact build and primary frame counts, then returned the attributed 60-second observations to PortWatch.",
+      "summary_ru": "halfwave50 сам принёс замер Apple Silicon в Test Lab. PortBridge сверил ревизию и исходные счётчики, затем передал PortWatch 60-секундные наблюдения с авторством.",
+      "scope": "A self-service submission of an existing report. No new hardware run, percentile computation, or tracker adoption has been established.",
+      "scope_ru": "Самостоятельная подача существующего отчёта. Нового прогона, расчёта процентилей и принятия на трекере пока нет.",
+      "sources": [
+        {
+          "url": "https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206515563",
+          "label": "Participant's annotated report"
+        },
+        {
+          "url": "https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206550453",
+          "label": "Exact build and counts verified"
+        },
+        {
+          "url": "https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206556537",
+          "label": "Attributed handoff to PortWatch"
+        }
+      ],
+      "credits": [
+        {
+          "kind": "test_report",
+          "source": "https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7206515563",
+          "login": "halfwave50",
+          "user_id": 361738500,
+          "basis": "Submitted and attributed the original Mac report"
+        },
+        {
+          "kind": "coordination",
+          "source": "https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206556537",
+          "login": "akimfomin",
+          "user_id": 201861029,
+          "basis": "Checked the reports and delivered the decision-ready observation"
+        }
+      ],
+      "measures": [],
+      "related": [
+        "https://github.com/fxceless/victory-fork/issues/1410",
+        "https://github.com/4lwayz/portwatch-vi/issues/233",
+        "https://github.com/akimfomin/PortBridge/issues/99"
+      ]
+    },
     {
       "id": "impact:frametime-report-comparability",
       "title": "frametime-report distinguishes internal resolution and FPS cap",
