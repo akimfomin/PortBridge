@@ -78,6 +78,25 @@ class CodeDiscoveryTests(CatalogFixture):
         self.assertIn("creategraphicspipelinestate", result["source_code"]["matches"][0]["signals"])
         self.assertIn("updatetilemappings", result["source_code"]["matches"][0]["signals"])
 
+    def test_body_mechanism_reaches_public_preflight_and_anchors_behavior(self):
+        source = (b"void hostSignal(Device device, int timelineValue);\n"
+                  b"hostSignal(vk, device, semaphore, timelineValue);\n"
+                  b"VK_CHECK(vk.deviceWaitIdle(device));\n")
+        code_search.refresh(self.catalog, fetch=lambda _: source)
+        title = "Defer writeback"
+        technical = _technical({"title": title, "body": "Hold a queue with an unsignaled timeline semaphore."},
+                               [], {})
+        self.assertEqual(technical["mechanisms"], ["queue/timeline-retirement"])
+        row = self.observation("anyxboxx", "pr", "9991", title, self.url,
+                               {"head_sha": "b" * 40, "technical": technical})
+        self.catalog.record_sync({"items": [row]}, update_health=False)
+        exported = export(self.catalog, self.workspace / "site")
+        with patch("portbridge.preflight.read_public_file",
+                   side_effect=lambda name, *_args, **_kwargs: json.loads((exported / name).read_bytes())):
+            result = public_preflight(url=self.url)
+        self.assertEqual(result["source_code"]["matches"][0]["line"], 2)
+        self.assertFalse(code_search.mechanisms("Use a timeline semaphore for command execution."))
+
     def test_radar_revisits_unchanged_origin_after_source_index_arrives(self):
         when = datetime.now(timezone.utc)
         row = self.observation("anyxboxx", "pr", "9991", "Fix GetDiskFreeSpaceA", self.url, {"head_sha": "b" * 40})

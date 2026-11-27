@@ -70,5 +70,32 @@
       "renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp",
       "renderdoc/driver/d3d12/d3d12_command_list.h"
     ]
+  },
+  {
+    "repo": "llvm/llvm-project",
+    "revision": "7ea8afa0a9ff7a59f79f0b4c70121d4cf4b0e4c9",
+    "license": "Apache-2.0 WITH LLVM-exception",
+    "license_path": "llvm/LICENSE.TXT",
+    "files": [
+      "llvm/lib/Transforms/Scalar/LICM.cpp"
+    ]
+  },
+  {
+    "repo": "ubiquitarianism/leonida",
+    "revision": "95267b8c7bba786e356bef364dc25862a26ebab8",
+    "license": "GPL-3.0",
+    "license_path": "LICENSE",
+    "files": [
+      "scripts/check_precompile_verify.py"
+    ]
+  },
+  {
+    "repo": "KhronosGroup/VK-GL-CTS",
+    "revision": "65fff6ac4d782ad42a490b007376e84159a113e3",
+    "license": "Apache-2.0",
+    "license_path": "LICENSE",
+    "files": [
+      "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp"
+    ]
   }
 ]

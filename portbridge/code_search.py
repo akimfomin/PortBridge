@@ -12,9 +12,10 @@ from urllib.request import Request, build_opener
 
 from .discovery_terms import STORED_SYMBOL
 from .matching import STOP_WORDS
+from .technical_mechanisms import mechanisms
 
 MANIFEST = Path(__file__).with_name("data") / "code_sources.json"
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 MAX_FILES = 32
 MAX_BYTES = 1_200_000
 MAX_INDEX_BYTES = 4_000_000
@@ -40,6 +41,24 @@ PRIVATE_TEXT = re.compile(r"(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|[A-Za-z]:\\[^\s`]+
 API_NAME = re.compile(r"(?:D3D12_|DXGI_|VK_|VUID-|vk[A-Z]|ID3D12|GetDiskFreeSpace|GetVolumeInformation|GetFileInformation|SetFileInformation|Wave[A-Z]|EarlyCSE|SelectionDAG|[ds]s?_(?:read|write|add|cmp|load|store))")
 SENSITIVE = re.compile(r"(?i)(?:password|secret|credential|api_?key|private_?key|access_?token|ghp_|github_pat_|AKIA|[A-F0-9]{24,})")
 CACHE_PREFIX = f"deep-code-v{SCHEMA_VERSION}:"
+
+
+# Code landmarks for the same mechanisms retained from public PR descriptions.
+# These are candidate anchors. A name cannot establish behavioral equivalence.
+ANCHORS = {
+    "compiler/licm-safety": re.compile(r"\bisSafeToSpeculativelyExecute\s*\("),
+    "pipeline-cache/runtime-hit": re.compile(
+        r"\b(?:application[ -]cache hit|VK_PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT\w*)\b", re.I
+    ),
+}
+TIMELINE_RELEASE = re.compile(r"^\s*hostSignal\s*\([^;]{0,512}?timeline[^;]{0,512}\);", re.I)
+TIMELINE_WAIT = re.compile(r"\bdeviceWaitIdle\s*\(")
+TIMELINE_MECHANISM = "queue/timeline-retirement"
+CODE_MECHANISMS = frozenset(ANCHORS) | {TIMELINE_MECHANISM}
+
+
+def mechanism_token(name):
+    return "pb_code_" + name.replace("/", "_").replace("-", "_")
 
 
 def _path(value):
@@ -96,6 +115,7 @@ def query_terms(text):
              if len(part) >= 3 and part.casefold() not in STOP}
     technical = {word.casefold() for word in identifiers(text)}
     technical.update(word for word in exact if "_" in word or STORED_SYMBOL.fullmatch(word))
+    technical.update(mechanism_token(name) for name in mechanisms(text) if name in CODE_MECHANISMS)
     if not technical and len(exact) == 1 and len(text.strip()) >= 4:
         technical = exact
     return technical, (exact | words) - technical
@@ -105,7 +125,8 @@ def observation_query(row):
     technical = row.get("metadata", {}).get("technical") or {}
     return row.get("title", "") + "\n" + " ".join([
         *technical.get("code_symbols", ()), *technical.get("discovery_cues", ()),
-        *technical.get("signals", ()), *technical.get("terms", ())])
+        *technical.get("signals", ()), *technical.get("terms", ()),
+        *(mechanism_token(name) for name in technical.get("mechanisms", ()) if name in CODE_MECHANISMS)])
 
 
 def _fetch(reference):
@@ -123,7 +144,8 @@ def index_file(reference, content):
     # Retain neither source lines nor the original text or strings in implementation files.
     postings = defaultdict(list)
     qualified = set()
-    for number, line in enumerate(content.decode("utf-8").splitlines(), start=1):
+    lines = content.decode("utf-8").splitlines()
+    for number, line in enumerate(lines, start=1):
         if SENSITIVE.search(line):
             continue
         line = PRIVATE_TEXT.sub(" ", line)
@@ -135,6 +157,11 @@ def index_file(reference, content):
         qualified.update(word.casefold() for word in words if SYMBOL.search(word) and len(word) >= 5)
         features = {value.casefold() for word in words for value in (word, *SPLIT.split(word))
                     if len(value) >= 3 and value.casefold() not in STOP}
+        tags = {mechanism_token(name) for name, anchor in ANCHORS.items() if anchor.search(line)}
+        if number < len(lines) and TIMELINE_RELEASE.search(line) and TIMELINE_WAIT.search(lines[number]):
+            tags.add(mechanism_token(TIMELINE_MECHANISM))
+        features.update(tags)
+        qualified.update(tags)
         for feature in features:
             if len(postings[feature]) < POSITIONS:
                 postings[feature].append(number)
@@ -209,7 +236,8 @@ def _sensible(row):
 def lookup(index, query, *, origin_url="", limit=5):
     exact, words = query_terms(query)
     focus, _ = query_terms(query.split("\n", 1)[0])
-    files = index.get("files", []) if index.get("version") == SCHEMA_VERSION else []
+    mechanism_terms = exact & {mechanism_token(name) for name in CODE_MECHANISMS}
+    files = index.get("files", []) if index.get("version") in (2, SCHEMA_VERSION) else []
     files = [row for row in files[:MAX_FILES] if _sensible(row)]
     if not exact and len(words) < 3:
         return []
@@ -237,13 +265,13 @@ def lookup(index, query, *, origin_url="", limit=5):
             nearby = set().union(*(hit_lines.get(n, ()) for n in range(max(1, line - 12), line + 13)))
             if not nearby & strong and len(nearby) < 3:
                 continue
-            score = sum((20 if token in focus else 7 if token in strong else 1)
+            score = sum((40 if token in mechanism_terms else 20 if token in focus else 7 if token in strong else 1)
                         + 1 / frequencies[token] for token in nearby)
-            ranked.append((round(score, 4), len(hit_lines[line] & focus), len(hit_lines[line] & strong),
-                           -line, sorted(nearby)))
+            ranked.append((round(score, 4), len(hit_lines[line] & mechanism_terms),
+                           len(hit_lines[line] & focus), len(hit_lines[line] & strong), -line, sorted(nearby)))
         if not ranked:
             continue
-        score, _, _, anchored, evidence = max(ranked)
+        score, _, _, _, anchored, evidence = max(ranked)
         project, path, revision = row["repo"], row["path"], row["revision"]
         results.append({"url": f"https://github.com/{project}/blob/{revision}/{path}#L{-anchored}",
                         "path": path, "repo": project, "revision": revision, "line": -anchored,

@@ -98,7 +98,8 @@ def index_entries(projects, observations):
     for url, record in records.items():
         original = index.rows[url].get("metadata", {}).get("technical") or {}
         technical = {**record["metadata"]["technical"], "code_symbols": original.get("code_symbols", []),
-                     "discovery_cues": original.get("discovery_cues", [])}
+                     "discovery_cues": original.get("discovery_cues", []),
+                     "mechanisms": original.get("mechanisms", [])}
         origin = {**record, "metadata": {**record["metadata"], "technical": technical}}
         matches = preflight_matches(index, stacks, url, limit=MATCH_LIMIT)
         capsule = {"row": origin, "matches": matches, "rare": sorted(index.titles[url] & index.weight.keys()),

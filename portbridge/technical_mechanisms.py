@@ -5,13 +5,21 @@ import re
 
 # Each rule pairs an object with a distinct operation or boundary. Error strings
 # and broad topics such as "device loss" do not describe a mechanism.
-PIPELINE_CACHE = r"(?:\bpipeline cache\b|\bPSO cache\b|\bpipeline librar(?:y|ies)\b|\b(?:cache|driver(?:'s)?) (?:pipeline )?blob\b|\bpipeline_cache(?:\.d|\.bin)\b)"
+PIPELINE_CACHE = r"(?:\bpipeline cache\b|\bPSO cache\b|\bpipeline librar(?:y|ies)\b|\b(?:cache|driver(?:'s)?) (?:pipeline )?blob\b|\bpipeline_cache(?:\.d|\.bin)\b|\b(?:offline cache|pipeline journal|driver[_ ]cache)(?=\b|_))"
 COMMAND_LIST = r"(?:\bcommand[ -]lists?\b|\bID3D12(?:Graphics)?CommandList\w*\b)"
 MEMORY_COPY = r"(?:\b(?:cop(?:y|ies|ied|ying)|shadow)\w*\b.{0,65}\b(?:pages?|blocks?|views?|mappings?)\b|\b(?:pages?|blocks?|views?|mappings?)\b.{0,65}\b(?:cop(?:y|ies|ied|ying)|shadow)\w*\b)"
 BVH = r"(?:\bBVH\b|\bbox(?:16|32)\b|\bimage_bvh(?:64)?_intersect_ray\b)"
 RULES = {
+    "compiler/licm-safety": (
+        r"\b(?:LICM|loop invariant code motion|invariant hoist\w*)\b",
+        r"\b(?:speculat\w+|non[ -]trapping|guaranteed|dominat\w+)\b",
+    ),
+    "queue/timeline-retirement": (
+        r"\btimeline semaphore\b",
+        r"\b(?:unsignaled|unsignalled|retire\w*|wait[ -]before[ -]signal|completion ticket)\b",
+    ),
     "pipeline-cache/device-identity": (PIPELINE_CACHE, r"\b(?:cache UUID|device identity|driver version|vendor ID|device ID|pipelineCacheUUID)\b"),
-    "pipeline-cache/runtime-hit": (PIPELINE_CACHE, r"\b(?:cache hits?|hits? (?:that|the) cache|require[ -]hit|creation feedback|PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT)\b"),
+    "pipeline-cache/runtime-hit": (PIPELINE_CACHE, r"\b(?:cache hits?|hits? (?:that|the) cache|fresh runtime process hits|require[ _-]hit|creation feedback|PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT)\b"),
     "pipeline-cache/compile-fallback": (PIPELINE_CACHE, r"\b(?:stale blobs?|(?:refus\w+|reject\w+|invalid|incompatible) (?:the |a )?(?:blobs?|cache)|(?:compil\w+|creat\w+) (?:it )?(?:again|without (?:the |a )?blob))\b"),
     "command-list/final-release": (COMMAND_LIST, r"\b(?:final release|reference count|AddRef|destructor|destroy\w+ (?:the |a )?wrapper)\b"),
     "command-list/pointer-reuse": (COMMAND_LIST, r"\b(?:address[ -]reuse|pointer[ -]reuse|reuse\w* (?:the |a )?(?:native |real )?(?:address|pointer))\b"),
