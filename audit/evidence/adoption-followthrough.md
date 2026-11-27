@@ -155,6 +155,31 @@ cargo test --locked --release -p victory-shader --features host --lib paired_fp3
 
 VIctory macOS #478 действительно в `main` как `0c0d5ca7f990fa4dee5c088933f2d184fb2229aa`; кандидатом был `273475d713abca9083c78dc5b0e3d47f5bf44c2e`. На Windows и RTX 4070 Ti SUPER 617.14 проверка возможностей D3D12 вернула, в порядке RTV, typed view, typed store, кортежи `86: 1/0/0`, `115: 0/0/0`, `28: 1/1/1`. Сборка и исходник для самостоятельного запуска доступны в публичной карточке. Самостоятельной проверки этими командами на D3DMetal пока нет. [Проба и исходник](https://github.com/akimfomin/PortBridge/issues/110#issuecomment-7207400958) · [Предложение трекеру](https://github.com/4lwayz/portwatch-vi/issues/231#issuecomment-7207455097)
 
+## XCL #2939 · нативная проверка на второй карте
+
+[Ettehn подтвердил](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207601447) добавление контроля PortBridge в локальный набор XCL: 4 passed, 0 failed, 0 skipped на RTX 5070 Ti Laptop (621.24). Его тест подменял результат создания и использовал настоящий исходный объект. Такие проверки подтверждают логику счётчиков XCL.
+
+PortBridge запустил самостоятельный пример на физической NVIDIA RTX 4070 Ti SUPER, драйвер 617.14, Windows 11 28000.3501, LLVM-MinGW и DXC 1.9.2609.5. Шейдер создан специально для теста, подпись ресурсов пуста. Кэш-пакет получен на той же карте через `GetCachedBlob`, а в одном из входов к нему дописаны 16 нулевых байт. Пример сравнивает количество вызовов для двух стратегий из обсуждения. [Контракт D3D12](https://learn.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_cached_pipeline_state) · [CreateComputePipelineState](https://learn.microsoft.com/en-us/windows/win32/api/d3d12/nf-d3d12-id3d12device-createcomputepipelinestate)
+
+Из корня репозитория в Windows, с DXC и Windows SDK-совместимым Clang:
+
+```powershell
+dxc -T cs_6_0 -E main -Fo pso.dxil audit/fixtures/d3d12-cache-probe.hlsl
+clang++ -std=c++17 -O2 -static audit/fixtures/d3d12-cache-probe.cpp -o pso.exe -ld3d12 -ldxgi
+.\pso.exe pso.dxil
+```
+
+| Вход на RTX 4070 Ti SUPER | Передано → возвращено, байт | Создания при проверке длины → при сохранении результата |
+| --- | ---: | ---: |
+| Исходный пакет | 1 422 → 1 422 | 1 → 1 |
+| Пакет с 16 нулевыми байтами после конца | 1 438 → 1 422 | 2 → 1 |
+
+Оба первых вызова возвращали `S_OK` во всех четырёх свежих процессах. В первом запуске данные одинаковой длины различались в обеих стратегиях. В трёх повторениях первые данные совпали при варианте `size`, а при варианте `keep` различались. Это наблюдение относится к конкретной последовательности вызовов и драйверу. Равенство содержимого не доказывает попадание в кэш. Стратегия в образце повторяет только развилку после создания. Замеров задержки, запуска игры или производительности приложения не было. Цифры размера относятся к непрозрачному объекту кэша.
+
+### Первый шаг поиска регрессии VIctory
+
+`git rev-list --bisect-vars --ancestry-path 52ac4ec0f8a03f103c146e60228e53612759d435..d154dcb15b1d659eea99ad9fbbcd09eddee23957` выдал `c005a245f073e2897bbb709cdc73fe53eb7d5f9b`, `bisect_good=7`, `bisect_bad=7`, `bisect_all=16`. Проверена достижимость родителя. Это точка первого добровольного запуска, результат которой выбирает половину диапазона. [Вывод передан автору](https://github.com/fxceless/victory-fork/issues/1420#issuecomment-7207661854)
+
 ## Earlier outstanding adoption checks
 
 Three new addressed offers were posted to HabibUrRehmanBhattii, Solarthis and Epic-Y. A current upstream decision and a ready input are linked from each. Follow-up replies from a new participant or acceptance of the PortWatch/FrameLab integration have not yet been observed. The GitHub Action, MCP and bare tools still have separate evidence from their technical readiness. No external repository received an installation.

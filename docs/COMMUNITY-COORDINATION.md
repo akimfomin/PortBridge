@@ -1,5 +1,11 @@
 # Координация между командами
 
+## 27 ноября 2026 · XCL, VIctory и AnyXboxX
+
+- **ettehn** включил предложенный PortBridge случай равного размера разных данных в локальный тест XCL. На RTX 5070 Ti Laptop прошли 4 проверки. PortBridge независимо воспроизвёл нативное различие на RTX 4070 Ti SUPER и сохранил команды и исходники. [Результат ettehn](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207601447) · [Наше воспроизведение](../audit/evidence/adoption-followthrough.md#xcl-2939-нативная-проверка-на-второй-карте)
+- **B0rm0t0s** и **Ym1r1710** привели сходные сбои VIctory. Автору исходной заявки оставлен первый точный коммит для проверки по его предложению разделить историю. [VIctory #1420](https://github.com/fxceless/victory-fork/issues/1420#issuecomment-7207661854)
+- **Hailey-Ross** в AnyXboxX получил один чёткий контроль размера интерфейса. Он опирается на принятую настройку разрешения AnyXboxX и исследование слоёв VIctory. [AnyXboxX #479](https://github.com/LooperSalty/AnyXboxX/issues/479#issuecomment-7207672836)
+
 ## 27 ноября 2026 · Ведущие команды и NVIDIA
 
 - **ByFxbian и fxceless.** PortBridge ответил на отказ двух программ воды на RTX 4070. Проверка документации AMD отделила FP16/FP64 округление от двух дополнительных битов, важных для обработки NaN. ByFxbian включил замечание в PR, разделил диагностические сообщения и проверил на RTX 3070. На RTX 4070 Ti SUPER PortBridge независимо прогнал четыре теста новой ревизии и вернул результат в PR. Визуальная проверка открыта. [Первое сообщение](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7207409583) · [Ответ ByFxbian](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7207518729) · [Независимый прогон](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7207563987)
