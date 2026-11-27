@@ -184,6 +184,71 @@ clang++ -std=c++17 -O2 -static audit/fixtures/d3d12-cache-probe.cpp -o pso.exe -
 
 `git rev-list --bisect-vars --ancestry-path 52ac4ec0f8a03f103c146e60228e53612759d435..d154dcb15b1d659eea99ad9fbbcd09eddee23957` выдал `c005a245f073e2897bbb709cdc73fe53eb7d5f9b`, `bisect_good=7`, `bisect_bad=7`, `bisect_all=16`. Проверена достижимость родителя. Это точка первого добровольного запуска, результат которой выбирает половину диапазона. [Вывод передан автору](https://github.com/fxceless/victory-fork/issues/1420#issuecomment-7207661854)
 
+## Новые проверки для ведущих команд
+
+### Стратегия записи кэша в XCL #2940
+
+Источник `ee919a6407afdaefeb295fa0bc3feb0d1868581c`. Для воспроизведения сохраните из [`shaders.rs` исходной ревизии](https://github.com/KOLESNiii/xcl/blob/ee919a6407afdaefeb295fa0bc3feb0d1868581c/crates/xcl/src/shaders.rs#L1668-L1814) код от `enum BlobBuild<P, E>` до комментария перед `used_compute`. Это включает саму функцию и неизменённые восемь тестов автора. Добавьте следующий тест:
+
+```rust
+#[test]
+fn observes_get_blob_on_uncached_creation() {
+    let calls = std::cell::Cell::new(0);
+    let built = build_with_blob(None, false, |_| Ok::<_, ()>(42u32), |_| {
+        calls.set(calls.get() + 1);
+        Some(vec![1u8; 32])
+    });
+    assert!(matches!(built, BlobBuild::Made { pso: 42, .. }));
+    assert_eq!(calls.get(), 1);
+}
+```
+
+Запуск `rustc --test --edition 2024 --crate-name xcl_blob_checks xcl_blob_checks.rs`, затем `xcl_blob_checks --test-threads=1`. На Windows использован Rust 1.100.0 gnullvm и LLVM-MinGW. Итог 9 passed, 0 failed, 0 ignored. GPU не использовался.
+
+При `XCL_PSO_DISK_CACHE=0` [путь отсутствует](https://github.com/KOLESNiii/xcl/blob/ee919a6407afdaefeb295fa0bc3feb0d1868581c/crates/xcl/src/hle/d3d12x/real.rs#L4530-L4541). В черновике [замыкание всё равно экспортирует и копирует байты](https://github.com/KOLESNiii/xcl/blob/ee919a6407afdaefeb295fa0bc3feb0d1868581c/crates/xcl/src/shaders.rs#L1613-L1634). В [старом пути без файла](https://github.com/xcl-dev/xcl/blob/8b957bec6f82495aec940944c6bf47faa02db590/crates/xcl/src/shaders.rs#L1570-L1580) обе операции пропускались. В случае прогретого кэша старый путь считывал длину без Rust-копии; черновик создаёт Vec ещё до сравнения размера. Рекомендация оставить корректность одного создания, пропускать экспорт без пути и отдельно оценить копирование при прогретом кэше. Сборка всего XCL и аппаратный прогон этого head не выполнялись. [Переданное ревью](https://github.com/xcl-dev/xcl/pull/2940#issuecomment-7207809226)
+
+### Проверка обратной связи для текстур
+
+Проверка [VIctory `4c604661`](https://github.com/fxceless/victory-fork/blob/4c60466140f4bccd2252427b6f2cfbc658c16906/crates/victory-gpu/src/descriptor/host.rs#L2403-L2418) показывает, что отложенная публикация уже сверяет индекс и поколение записи. Аналогичный контроль нужен при чтении отметок кадром позже. Пример моделирует известную при записи команд привязку. При неизвестной привязке результаты следует учитывать как диагностические и исключать из решений об освобождении памяти.
+
+Сохраните следующий пример в файл `feedback.py` и запустите `python -I feedback.py`:
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Descriptor:
+    view: int
+    generation: int
+
+def receive(slots_at_recording, slots_at_readback, sampled_slots):
+    return {
+        slots_at_recording[slot]
+        for slot in sampled_slots
+        if slots_at_recording[slot] == slots_at_readback.get(slot)
+    }
+
+slot = ("shader-visible-heap-a", 240)
+never_sampled = ("shader-visible-heap-a", 241)
+old_view = Descriptor(301, 7)
+new_view = Descriptor(302, 8)
+untouched = Descriptor(303, 4)
+recorded = {slot: old_view, never_sampled: untouched}
+created_handles = {slot, never_sampled}
+samples = {slot}
+
+assert receive(recorded, recorded, samples) == {old_view}
+assert {recorded[s] for s in created_handles} - receive(recorded, recorded, samples) == {untouched}
+live = {slot: new_view, never_sampled: untouched}
+assert {live[s] for s in samples} == {new_view}
+assert receive(recorded, live, samples) == set()
+other_heap = ("shader-visible-heap-b", 240)
+assert receive(recorded, {other_heap: old_view}, samples) == set()
+print("PASS: stable sample, unused handle, recycled descriptor, distinct heap")
+```
+
+Результат `PASS: stable sample, unused handle, recycled descriptor, distinct heap`. Это проверка правила сопоставления, без оценки стоимости и пригодности реального прототипа. [Переданная проверка](https://github.com/fxceless/victory-fork/issues/1423#issuecomment-7207798274)
+
 ## Earlier outstanding adoption checks
 
 Three new addressed offers were posted to HabibUrRehmanBhattii, Solarthis and Epic-Y. A current upstream decision and a ready input are linked from each. Follow-up replies from a new participant or acceptance of the PortWatch/FrameLab integration have not yet been observed. The GitHub Action, MCP and bare tools still have separate evidence from their technical readiness. No external repository received an installation.
