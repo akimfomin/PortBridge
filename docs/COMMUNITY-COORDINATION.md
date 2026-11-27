@@ -1,5 +1,13 @@
 # Координация между командами
 
+## 27 ноября 2026 · Ведущие команды и NVIDIA
+
+- **ByFxbian и fxceless.** PortBridge ответил на независимый отказ двух программ воды на RTX 4070. Проверка документации AMD отделила FP16/FP64 округление от двух дополнительных битов, важных для обработки NaN. Приёмка и визуальная проверка открыты. [VIctory #1419](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7207409583)
+- **mauroalvare.** Вернули проверку слияния и адресную регрессию AnyXboxX #476. Автор опубликовал отдельный аппаратный контроль до и после на RTX 5070 Ti. Его измерения не приписываются PortBridge. [Наша проверка](https://github.com/LooperSalty/AnyXboxX/pull/476#issuecomment-7207477061) · [Исходный замер](https://github.com/LooperSalty/AnyXboxX/pull/476#issuecomment-7207479425)
+- **KOLESNiii и ettehn.** XCL получил метод сравнения от Continued и отдельный сценарий одинаковой длины разных файлов кэша. Физический результат в XCL принадлежит ettehn. [XCL #2939](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207445228)
+- **31415-n и kevincommits.** В Continued опубликована сверка сборок Volta и Turing. Доступна одна точная проверка на Volta с ссылками на оба независимых результата. [Continued #1492](https://github.com/ubiquitarianism/leonida/issues/1492#issuecomment-7207434291) · [Lab #111](https://github.com/akimfomin/PortBridge/issues/111#issuecomment-7207400733)
+- **halfwave50, shortside, lvdkp и pragyaangaur.** Данные о Mac и принятый порт связаны с первоисточниками, отдельный контроль сделан на физической RTX. Сопровождающий принял работу halfwave50 и сообщил о дополнительных переносах. Участникам оставлен добровольный тест. lvdkp взял паузу, отдельных повторных приглашений нет. PortWatch получил готовую ссылку для Mac-раздела. [VIctory macOS](https://github.com/pragyaangaur/VIctory-macOS/issues/455#issuecomment-7207449982) · [Ответ сопровождающего](https://github.com/pragyaangaur/VIctory-macOS/issues/455#issuecomment-7207453979) · [PortWatch](https://github.com/4lwayz/portwatch-vi/issues/231#issuecomment-7207455097)
+
 ## 27 ноября 2026 · Связали проверки AnyXboxX, Vice-Tay и PortWatch
 
 - **nidscode и KainanP.** На открытый запрос AnyXboxX #466 подготовлен самостоятельный Test Lab #109. PortBridge проверил слияние на точной принимающей версии. Автору замера Vice-Tay с 16 ГБ предложен один добровольный синтетический тест. Результат проверки слияния и ссылку на задачу получил PR AnyXboxX. Отклики на момент сверки отсутствуют. [Vice-Tay](https://github.com/TaynanGT/Vice-Tay/issues/97#issuecomment-7207146355) · [AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/466#issuecomment-7207175840) · [Lab](https://github.com/akimfomin/PortBridge/issues/109#issuecomment-7207139616)

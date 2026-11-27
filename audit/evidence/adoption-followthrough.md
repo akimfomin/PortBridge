@@ -76,6 +76,61 @@ python -B -m portbridge.merge_check https://github.com/LooperSalty/AnyXboxX/pull
 
 Дополнительная проверка после ответа UwUCammie. В команду `summarize` на синтетическом примере добавлены `--set capture.phase=cold_boot --set capture.launchToFirstAcceptedPresentMs=750`. Команда завершилась успешно, но оба поля отсутствуют в `capture` результата. В 750 мс нет измерения реального запуска. Для изменения формата предлагается проверять одинаковую фазу при разных метках, явно разные фазы и пару с отсутствующей фазой. [Проверка версии и условия](https://github.com/akimfomin/PortBridge/issues/99#issuecomment-7207220632)
 
+## Ведущие команды и проверки NVIDIA
+
+### AnyXboxX #476
+
+```sh
+python -B -m portbridge.merge_check https://github.com/LooperSalty/AnyXboxX/pull/476 b62053fe70078deac140ec43039d7ce0af3c6b17
+```
+
+Результат `clean merge`, head `f482803499f4f10f356922686643cf2f042e6fec`, merge base `4340aac1a494b9649c00e0e1ad2c6fbe6ea00e80`. Три изменённых файла, включая [тесты](https://github.com/LooperSalty/AnyXboxX/blob/f482803499f4f10f356922686643cf2f042e6fec/third_party/victory/crates/victory-shader/src/emit/intersect_tests.rs). Проверка адресной арифметики ниже использует только CPU и не запускает компилятор шейдеров. Сохраните как `check_bvh_address.py` и запустите `python -I check_bvh_address.py`.
+
+```python
+import random
+
+u32 = (1 << 32) - 1
+u64 = (1 << 64) - 1
+
+def oracle(w0, w1, pointer, pointer_high):
+    base = (w0 | ((w1 & 0xff) << 32)) << 8
+    full_pointer = pointer | ((pointer_high or 0) << 32)
+    return (base + ((full_pointer >> 3) << 6)) & u64
+
+def halves(w0, w1, pointer, pointer_high):
+    lo_base = (w0 << 8) & u32
+    hi_base = ((w1 & 0xff) << 8) | (w0 >> 24)
+    lo_off = ((pointer & ~7) << 3) & u32
+    hi_off = (((pointer_high or 0) << 3) | (pointer >> 29)) & u32
+    lo = (lo_base + lo_off) & u32
+    hi = (hi_base + hi_off + int(lo < lo_base)) & u32
+    return (hi << 32) | lo
+
+cases = [(0x00ffffff, 0, 0x25, None), (0x00ffffff, 0, 0x25, 1)]
+assert [halves(*v) for v in cases] == [0x100000000, 0x900000000]
+rng = random.Random(476)
+for i in range(100_000):
+    words = [rng.getrandbits(32) for _ in range(4)]
+    if i & 1:
+        words[-1] = None
+    assert halves(*words) == oracle(*words)
+print("2 targeted vectors, 100000 deterministic random vectors: PASS")
+```
+
+[Переданные результаты](https://github.com/LooperSalty/AnyXboxX/pull/476#issuecomment-7207477061). [Замеры mauroalvare](https://github.com/LooperSalty/AnyXboxX/pull/476#issuecomment-7207479425) подтверждают свои тесты на RTX и небольшой проигрыш 0,005 мс для удачно расположенных четырёх дочерних узлов. Эти GPU-замеры принадлежат автору и не являются измерением игрового кадра.
+
+### VIctory #1419 и XCL
+
+В [AMD RDNA2 ISA, таблица 4](https://docs.amd.com/api/khub/documents/Et~wpu9g~Ffl7d9q0QZ~Og/content#page=24) режимы FP32 занимают биты 0–1 и 4–5, а режимы обработки NaN учитывают биты 8–9. Проверено на коротких контрольных масках, что запись длиной два бита с позиции 2 не пересекается с `0x333`, запись с позиции 1 или 3 пересекается, отдельно пересекаются запись в бит 8 и запись в бит 9. Это различает границы записи, а не доказывает семантику незнакомого участка программы. [VIctory #1419](https://github.com/fxceless/victory-fork/pull/1419#issuecomment-7207409583)
+
+XCL #2931. Автор [свёл независимые замеры](https://github.com/xcl-dev/xcl/pull/2931#issuecomment-7207276633): создаваемые рабочие потоки сократились примерно с 640 до 4, процесс использовал примерно на 10 МиБ меньше пиковой выделенной памяти, холодное время остаётся примерно тем же. В #2939 ettehn проверил другой механизм и дал физический результат в одном синтетическом случае. [Первичный результат](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207407756) · [Дополнительная проверка PortBridge](https://github.com/xcl-dev/xcl/issues/2939#issuecomment-7207445228)
+
+### Continued и Mac
+
+У контрольных версий Continued `b4b7756e8c64e7ae8b310288d543db0e428c0796` и `d1dff7949be62b6609c3c2ca937df7f50fbf1305` совпадает Git blob шейдера `9763e233f63689b87d664c15a37dbe72c99913e4`. Различаются Git blobs оболочки проверки и C++ исполняемого теста. Принимающий прогон должен указать чистый build, точный драйвер и строку с гранью 4. [Рецепт и доказательства](https://github.com/akimfomin/PortBridge/issues/111#issuecomment-7207400733)
+
+VIctory macOS #478 действительно в `main` как `0c0d5ca7f990fa4dee5c088933f2d184fb2229aa`; кандидатом был `273475d713abca9083c78dc5b0e3d47f5bf44c2e`. На Windows и RTX 4070 Ti SUPER 617.14 проверка возможностей D3D12 вернула, в порядке RTV, typed view, typed store, кортежи `86: 1/0/0`, `115: 0/0/0`, `28: 1/1/1`. Сборка и исходник для самостоятельного запуска доступны в публичной карточке. Самостоятельной проверки этими командами на D3DMetal пока нет. [Проба и исходник](https://github.com/akimfomin/PortBridge/issues/110#issuecomment-7207400958) · [Предложение трекеру](https://github.com/4lwayz/portwatch-vi/issues/231#issuecomment-7207455097)
+
 ## Earlier outstanding adoption checks
 
 Three new addressed offers were posted to HabibUrRehmanBhattii, Solarthis and Epic-Y. A current upstream decision and a ready input are linked from each. Follow-up replies from a new participant or acceptance of the PortWatch/FrameLab integration have not yet been observed. The GitHub Action, MCP and bare tools still have separate evidence from their technical readiness. No external repository received an installation.
