@@ -1,5 +1,12 @@
 # Координация между командами
 
+## 27 ноября 2026 · VIctory и AnyXboxX
+
+- **spk-c** получил проверенную инструкцию и локальный скрипт сравнения работы с текстурами для своей ветки. Пока есть синтетическая проверка скрипта. [VIctory #1418](https://github.com/fxceless/victory-fork/issues/1418#issuecomment-7208127401)
+- **KainanP** получил воспроизведение расхождения между логическим объёмом очищенных окон и объёмом выделенных копий. Уточнена задача для добровольца на 16 ГБ. [AnyXboxX #466](https://github.com/LooperSalty/AnyXboxX/pull/466#issuecomment-7208112675) · [Lab #109](https://github.com/akimfomin/PortBridge/issues/109#issuecomment-7207139616)
+- **LooperSalty** получил проверку двух входов диагностики и способ изолировать источник проблемы с управлением. [AnyXboxX #478](https://github.com/LooperSalty/AnyXboxX/issues/478#issuecomment-7208153664)
+- **ettehn** попросил указать его соавторство за воспроизведение и проверку Windows. Решение принимает автор PR. [XCL #2940](https://github.com/xcl-dev/xcl/pull/2940#issuecomment-7208037087)
+
 ## 27 ноября 2026 · Новые участники и независимые ответы
 
 - **Dathinel.** Получил команду своего существующего теста и сравнение с VIctory #1419. Аппаратный результат открыт. [VIctory-4GB](https://github.com/Dathinel/victory-4gb/issues/10#issuecomment-7207943312)
