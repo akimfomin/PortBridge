@@ -1215,6 +1215,169 @@
   ],
   "stories": [
     {
+      "id": "impact:frametime-report-comparability",
+      "title": "frametime-report distinguishes internal resolution and FPS cap",
+      "title_ru": "frametime-report учитывает внутреннее разрешение и лимит FPS",
+      "state": "accepted",
+      "type": "evidence_reuse",
+      "at": "2026-11-27T00:09:26Z",
+      "consoles": [
+        "xbox-series"
+      ],
+      "specialty": "testing",
+      "summary": "PortBridge supplied two synthetic 200-second reports with different internal resolutions and FPS caps. leixner reproduced the result, added a regression and released a stricter comparison in v0.1.1.",
+      "summary_ru": "PortBridge передал два синтетических 200-секундных отчёта с разными внутренними разрешениями и лимитами FPS. leixner воспроизвёл результат, добавил тест и выпустил исправление в v0.1.1.",
+      "scope": "The stricter CLI comparison was rerun on both original reports and an identical-report control. PortWatch has not confirmed using the proposed display integration.",
+      "scope_ru": "Проверены исходная пара и контроль с одинаковыми отчётами. Решение об интеграции в PortWatch ещё не подтверждено.",
+      "sources": [
+        {
+          "url": "https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206144658",
+          "label": "Original synthetic pair"
+        },
+        {
+          "url": "https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206219321",
+          "label": "Author confirms the regression and release"
+        },
+        {
+          "url": "https://github.com/leixner/frametime-report/commit/1e68449753af153e1650d3211bde534bc63e73c5",
+          "label": "Upstream implementation"
+        }
+      ],
+      "credits": [
+        {
+          "kind": "coordination",
+          "source": "https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206144658",
+          "login": "akimfomin",
+          "user_id": 201861029,
+          "basis": "Supplied two controlled aggregate reports"
+        },
+        {
+          "kind": "fix",
+          "source": "https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206219321",
+          "login": "leixner",
+          "user_id": 49769147,
+          "basis": "Reproduced, implemented and released the correction"
+        }
+      ],
+      "measures": [
+        [
+          "evidence_reuse",
+          "https://github.com/4lwayz/portwatch-vi/issues/233#issuecomment-7206219321"
+        ]
+      ],
+      "related": [
+        "https://github.com/4lwayz/portwatch-vi/issues/233",
+        "https://github.com/akimfomin/PortBridge/issues/99"
+      ]
+    },
+    {
+      "id": "impact:victory-signature-interleaving",
+      "title": "An AMD/Linux VIctory fork reused a command-signature concurrency test",
+      "title_ru": "Форк VIctory для AMD/Linux добавил тест одновременного создания сигнатур",
+      "state": "reviewed",
+      "type": "evidence_reuse",
+      "at": "2026-11-26T23:37:45Z",
+      "consoles": [
+        "xbox-series"
+      ],
+      "specialty": "testing",
+      "summary": "A deterministic ordering exposed when a failed creator could overlook a signature published by another thread. UwUCammie implemented the same ordering in an attributed AMD/Linux backport of n-romanovich's work and ran it under Wine 11.22.",
+      "summary_ru": "Точный порядок двух потоков показал, как неудачное создание могло пропустить опубликованный объект. UwUCammie добавил этот случай в перенос работы n-romanovich и проверил под Wine 11.22.",
+      "scope": "Verified in the receiving PR. Default-branch acceptance and game performance remain unconfirmed.",
+      "scope_ru": "Проверка подтверждена в принимающем PR. Слияние и влияние на игру открыты.",
+      "sources": [
+        {
+          "url": "https://github.com/fxceless/victory-fork/pull/1393#issuecomment-7205145118",
+          "label": "Original case and comparison"
+        },
+        {
+          "url": "https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084",
+          "label": "Receiving author confirms test reuse"
+        },
+        {
+          "url": "https://github.com/jtrudeau1530/VIctory-7900XTX/commit/4455a70d6065b2dacdd8aafdb05121360fcd2756",
+          "label": "Receiving regression commit"
+        }
+      ],
+      "credits": [
+        {
+          "kind": "coordination",
+          "source": "https://github.com/fxceless/victory-fork/pull/1393#issuecomment-7205145118",
+          "login": "akimfomin",
+          "user_id": 201861029,
+          "basis": "Provided the deterministic check"
+        },
+        {
+          "kind": "independent_test",
+          "source": "https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084",
+          "login": "UwUCammie",
+          "user_id": 97979492,
+          "basis": "Implemented the test in the backport and ran it under Wine"
+        }
+      ],
+      "measures": [
+        [
+          "evidence_reuse",
+          "https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27#issuecomment-7205708084"
+        ]
+      ],
+      "related": [
+        "https://github.com/fxceless/victory-fork/pull/1393",
+        "https://github.com/jtrudeau1530/VIctory-7900XTX/pull/27"
+      ]
+    },
+    {
+      "id": "impact:klbf-bm-v1-same-host",
+      "title": "BrokeAsh returned same-host BM-v1 controls through Test Lab",
+      "title_ru": "BrokeAsh передал в Test Lab два контроля BM-v1 на одном ПК",
+      "state": "reviewed",
+      "type": "hardware_review",
+      "at": "2026-11-26T23:22:36Z",
+      "consoles": [
+        "xbox-series"
+      ],
+      "specialty": "testing",
+      "summary": "BrokeAsh ran KLBF on the same RX 9070 XT and Ryzen 5 9600X as the fork result. Warming the cache changed KLBF from 8.84 to 9.03 FPS and its longest frame from 1,829 to 906 ms. PortBridge checked both content serials and recorded the comparison.",
+      "summary_ru": "BrokeAsh проверил KLBF на тех же RX 9070 XT и Ryzen 5 9600X. Прогрев изменил средний FPS с 8,84 до 9,03 и самый длинный кадр с 1 829 до 906 мс. PortBridge сверил контрольные номера обоих отчётов.",
+      "scope": "Two independent reports for one Test Lab request. Differences in skipped rendering and in-run pipeline compilation leave cause attribution open.",
+      "scope_ru": "Два самостоятельных замера по одной заявке. Разное число пропусков и компиляций во время прогона ограничивает вывод о причине разницы.",
+      "sources": [
+        {
+          "url": "https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205367219",
+          "label": "BrokeAsh's cold control"
+        },
+        {
+          "url": "https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205488418",
+          "label": "BrokeAsh's warm control"
+        },
+        {
+          "url": "https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205850459",
+          "label": "Test Lab verification"
+        }
+      ],
+      "credits": [
+        {
+          "kind": "independent_test",
+          "source": "https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205488418",
+          "login": "BrokeAsh",
+          "user_id": 158607416,
+          "basis": "Ran and published both matched-host controls"
+        },
+        {
+          "kind": "review",
+          "source": "https://github.com/akimfomin/PortBridge/issues/95#issuecomment-7205850459",
+          "login": "akimfomin",
+          "user_id": 201861029,
+          "basis": "Verified the native reports and documented comparison limits"
+        }
+      ],
+      "measures": [],
+      "related": [
+        "https://github.com/akimfomin/PortBridge/issues/95",
+        "https://github.com/PastiiJay/klbf-lab/issues/87"
+      ]
+    },
+    {
       "id": "impact:continued-m53-cache-control",
       "title": "Continued checked whether its pipeline stage produces a usable driver cache entry",
       "title_ru": "Continued проверил попадание в кэш драйвера после этапа предкомпиляции",

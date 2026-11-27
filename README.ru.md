@@ -10,6 +10,8 @@
 
 ## Проверить один pull request
 
+[Передайте ссылку на публичный PR и целевой коммит](https://github.com/akimfomin/PortBridge/issues/98). Эту же ссылку можно дать своему агенту, чтобы запустить проверку самостоятельно. Добровольцы могут [взять одну готовую задачу](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7206391931) и оставить краткий результат.
+
 Сопровождающий может включить [проверку GitHub](docs/GITHUB-ACTION.md). Результат появится прямо в PR с источниками или причиной пустой выдачи. В пилоте M5–M6 можно предложить один конкретный технический вопрос. [Подключение агента](docs/MCP.md) · [Партнёрская лента](API.md) · [Проверенные результаты и ограничения](https://github.com/akimfomin/PortBridge/blob/audit/review/audit/LATEST.md)
 
 В пилоте Continued проверила, что новый процесс действительно использует записанный кэш. Два участника получили положительный результат на GTX 1050 Ti и RTX 5070 с помощью диагностики самой команды. [Предложение PortBridge](https://github.com/ubiquitarianism/leonida/pull/2392#issuecomment-7202363138) · [Проверка пустого и заполненного журналов](https://github.com/ubiquitarianism/leonida/pull/2392#pullrequestreview-6080300502)
