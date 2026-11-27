@@ -1,0 +1,54 @@
+{
+  "site_sha256": "63a4f8080729e318859a64f703b4bc8009314e02458a2bffdbbd105566b2ecc0",
+  "generated_at": "2026-11-27T17:40:03+00:00",
+  "health_status": "partial",
+  "observations": 35620,
+  "source_last_success": "2026-11-27T17:37:18+00:00",
+  "published_sections_verified": [
+    "activity",
+    "coordination",
+    "discovery",
+    "ecosystem",
+    "health",
+    "impact",
+    "lab",
+    "outreach",
+    "partner",
+    "people",
+    "people-directory",
+    "problems",
+    "projects",
+    "radar",
+    "source-code"
+  ],
+  "browse_totals": {
+    "matches": 114250,
+    "sources": 35620
+  },
+  "partner_counts": {
+    "task": 6,
+    "result": 19
+  },
+  "tasks_in_first_poll": 6,
+  "changed_on_second_poll": 0,
+  "mcp_partner_first_page_items": 1,
+  "reference_pr": "https://github.com/xcl-dev/xcl/pull/2322",
+  "origin_in_source_index": true,
+  "discovery_matches": 2,
+  "mcp_and_api_sources": [
+    "https://github.com/llvm/llvm-project/blob/87f0227cb60147a26a1eeb4fb06e3b505e9c7261/llvm/lib/CodeGen/StackColoring.cpp#L8",
+    "https://gitlab.freedesktop.org/mesa/mesa/-/blob/5c142e46f3f6e752ed745fd48912ebb8fad67145/src/amd/compiler/aco_spill.cpp#L1406"
+  ],
+  "continued_pilot": {
+    "task": "https://github.com/ubiquitarianism/leonida/pull/2392",
+    "state": "reviewed",
+    "offer": "https://github.com/ubiquitarianism/leonida/pull/2392#issuecomment-7202363138",
+    "team_reports": {
+      "qhukz13": "https://github.com/ubiquitarianism/leonida/pull/2392#issuecomment-7202911853",
+      "lixonik": "https://github.com/ubiquitarianism/leonida/pull/2392#pullrequestreview-6080300502"
+    }
+  },
+  "main": "917976823ef03334bffa9e2903684dbc5fd7436e",
+  "run_url": "https://github.com/akimfomin/PortBridge/actions/runs/46042940074",
+  "trigger": "push"
+}
