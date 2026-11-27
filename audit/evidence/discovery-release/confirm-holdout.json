@@ -1,0 +1,125 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T17:57:02.466153+00:00",
+  "method": "Second independent verification set frozen without inspecting a ranker output. Open public GitHub issues disjoint from prior tracked audits and the first Mission 4 holdout. A valid positive links the exact remaining rule at the pinned reference, including approved line range. Superseded diagnostics and already-covered checklist entries do not qualify. The two scoped negative controls expose multiple API terms but no normative solution or cause in the cited fixtures. Exact diagnostic localization is not a cross-project transfer.",
+  "cases": [
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9370",
+      "title": "Validation errors when overdrawing a lot.",
+      "created_at": "2026-04-04T16:50:11Z",
+      "updated_at": "2026-04-13T16:42:30Z",
+      "state": "open",
+      "stratum": "diagnostic",
+      "grade": "positive_external",
+      "mechanism": "The issue update says the remaining validation failure is attempting to reset a command pool while its buffers are pending.",
+      "decision": "Verify completion for buffers from the pool before reuse. The acquisition semaphore report is already fixed and not part of this test.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/cmdbuffers.adoc",
+          "lines": [
+            605,
+            607
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/cmdbuffers.adoc#L605-L607",
+          "note": "Exact Vulkan diagnostic location.",
+          "source_sha256": "3f611d77a36adbdde72009c9a9b96ccf0f7dfb669086258916ed24fefdda4fa7",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "4acdd012d6142767c72db18db8125bc0b096fa4321cfa534af2bf3646b398f7b"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/11447",
+      "title": "Missing misc WSI checks",
+      "created_at": "2026-01-09T17:48:26Z",
+      "updated_at": "2026-09-22T19:28:17Z",
+      "state": "open",
+      "stratum": "diagnostic",
+      "grade": "positive_external",
+      "mechanism": "The VVL checklist asks about coverage for unresolved WSI checks. Swapchain destruction is already marked covered.",
+      "decision": "Inspect the unresolved counter condition and matching display-mode or stereo-type restrictions to decide where validation can be added.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            6478,
+            6480
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6478-L6480",
+          "note": "Exact Vulkan diagnostic location.",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            7439,
+            7442
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L7439-L7442",
+          "note": "Exact Vulkan diagnostic location.",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            7445,
+            7448
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L7445-L7448",
+          "note": "Exact Vulkan diagnostic location.",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "a52a1b333bbcbae3eadc5996d1b4ab6f3b202ec554a3a3e1856f23cadce66e10"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/5756",
+      "title": "Debug Performance Regressions on 0.20 Vulkan due to SyncVal",
+      "created_at": "2024-05-30T07:20:37Z",
+      "updated_at": "2025-12-02T20:02:51Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "The debug performance regression concerns validation instrumentation and an API timing measurement with asynchronous readback.",
+      "decision": "A submission or mapping API definition cannot establish the reason for time spent under SyncVal. Compare timing with that validation mode enabled and disabled at the same revision.",
+      "sources": [],
+      "body_sha256": "76948ba2fa456408df9330a92727df178f36a6f05e3d98aeb80f21f033c0cb8c"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2766",
+      "title": "All MTLCommandBuffers fail with kIOGPUCommandBufferCallbackErrorOutOfMemory for 32-bit Vulkan game under Wine on Apple M5 / macOS 26.4",
+      "created_at": "2026-07-06T11:41:07Z",
+      "updated_at": "2026-07-07T14:40:10Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "A Wine environment fails at Metal command-buffer execution while a native control succeeds and many unrelated Vulkan API operations appear in the captured command stream.",
+      "decision": "Retain the paired environment controls. The status and ubiquitous command names do not identify which component causes the failure, and they do not establish an applicable Vulkan fix.",
+      "sources": [],
+      "body_sha256": "d2979c985dd2b3b9a2d183ea287314b2b67b83ba309a863648253ab7fab25f05"
+    }
+  ]
+}

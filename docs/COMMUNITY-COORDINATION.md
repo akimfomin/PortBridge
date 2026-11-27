@@ -1,5 +1,9 @@
 # Координация между командами
 
+## Независимая проверка Xbox2Windows на Intel · 27 ноября 2026
+
+jstrdev прислал результат по запросу PortBridge #121 с Arc B580, Windows Debug и драйвером 32.0.101.9175. На ревизии `246857e4593880fbc19ab18eb1d4a56ba8370ad6` прошли native_cvt_pk_u8_controls и native_cvt_pk_u8_hardware. Обе выборки совпали по всем 2 064 словам. Участник отдельно проверил устройство по умолчанию, поскольку этот тест не использует общий фильтр адаптера. PortBridge передал результат и обнаруженное ограничение в Xbox2Windows #3052, сохранив авторство. Применение замечания принимающей командой пока открыто. [Тест](https://github.com/akimfomin/PortBridge/issues/121#issuecomment-7224783967) · [Передача](https://github.com/R0Y00/Xbox2Windows/issues/3052#issuecomment-7224882175)
+
 ## 27 ноября 2026 · Core Mission II
 
 - 5headsmartbtw сам подал задачу FrameLab. PortBridge сверил две ревизии, девять конфликтов и отличия установленных компонентов. Отправлен разбор пакета с последовательностью проверок. [Заявка](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7212427397) · [Ответ](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7218025721)

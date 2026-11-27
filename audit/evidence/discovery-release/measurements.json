@@ -1,0 +1,40 @@
+{
+  "candidate": "9c7cb306675167f791549899436e2d133bd69f9b",
+  "main": "88d02b3a39757ffefb3b9eebe6847085643f30b6",
+  "previous_main": "917976823ef03334bffa9e2903684dbc5fd7436e",
+  "preview": {
+    "run": 46045849378,
+    "artifact": 15223335164,
+    "source_code_sha256": "18a3b3b45c9cb4f5da74a5b2cfa8a58ee37ded734033cb4e0f975b734ad60cc9",
+    "cloud_equal_to_local": true,
+    "files": 71,
+    "projects": 14,
+    "bytes": 3259588
+  },
+  "local": {
+    "tests": 316,
+    "failed": 0,
+    "skipped": 0,
+    "test_seconds": 53.854,
+    "production_size_export": {
+      "observations": 33345,
+      "seconds": 71.95,
+      "gate": "pass"
+    },
+    "scope_build_seconds": 13.483,
+    "warm_seconds": 0.487,
+    "refresh_tree_reads_warm": 0
+  },
+  "schedule": [
+    {
+      "run": 45917400112,
+      "receipt": 15162839029,
+      "delivered_at": "2026-11-27T00:42:43Z"
+    },
+    {
+      "run": 45970589550,
+      "receipt": 15185851570,
+      "delivered_at": "2026-11-27T09:11:00Z"
+    }
+  ]
+}

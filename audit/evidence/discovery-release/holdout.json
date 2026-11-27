@@ -1,0 +1,317 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T17:50:51.883442+00:00",
+  "method": "Retrospective selection of open upstream GitHub issues not present in tracked earlier audits. Four diagnostics, three technical references from other projects or standards, four scoped controls. No product output was inspected. A hit requires a top-five matching pinned revision, license, path and line range which supports the written decision. Exact diagnostic references test localization, including author-supplied diagnostics. Cross-project references support decisions or tests, not proof of a fix or transfer. Negative controls only establish whether a generic link would overstate the observed cause. Score relevant line evidence separately from generic candidates and high-confidence recommendations.",
+  "cases": [
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/8491",
+      "title": "Multi-planar textures with multiple mip levels should probably be disallowed",
+      "created_at": "2025-11-06T21:12:30Z",
+      "updated_at": "2026-10-20T22:01:04Z",
+      "state": "open",
+      "stratum": "diagnostic",
+      "grade": "positive_external",
+      "mechanism": "The reporter points to the Vulkan YCbCr multi-planar mip-level restriction.",
+      "decision": "Reject or limit multiple mips for applicable Vulkan formats. Other backends need their own contract.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "path": "chapters/resources.adoc",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "lines": [
+            2525,
+            2528
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L2525-L2528",
+          "source_sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa",
+          "note": "The exact VUID governs formats requiring YCbCr conversion."
+        }
+      ],
+      "body_sha256": "8814cf15faba551c15e9016ce8b358ca1853b159721398a1b3c6a58c54fd19c6"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/12039",
+      "title": "Validation for dynamic rendering attachment layout possibly doesn't respect input attachment indices for local reads",
+      "created_at": "2026-04-04T05:21:11Z",
+      "updated_at": "2026-10-18T15:43:48Z",
+      "state": "open",
+      "stratum": "diagnostic",
+      "grade": "positive_external",
+      "mechanism": "The reported local-read attachment case depends on whether that view is actually accessed.",
+      "decision": "Check the configured unused attachment mapping and which views are accessed before changing validation.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "path": "chapters/renderpass.adoc",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "lines": [
+            96,
+            100
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96-L100",
+          "source_sha256": "68415ea53e029a2dd98c861ac5d03b90db1153f6697bcb5a3086749e165d394a",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa",
+          "note": "The color attachment layout rule applies when the image view is accessed."
+        }
+      ],
+      "body_sha256": "8806254e216ee3c5d978b0883e0e368da73327fb3c038f227ff1458de0baf577"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/12859",
+      "title": "Layers incorrectly assume a dynamic state has been invalidated",
+      "created_at": "2026-08-12T10:02:10Z",
+      "updated_at": "2026-10-05T08:24:01Z",
+      "state": "open",
+      "stratum": "diagnostic",
+      "grade": "positive_external",
+      "mechanism": "A diagnostic about a dynamic scissor count follows a bind of a rasterizer-discard pipeline.",
+      "decision": "Inspect whether the intermediate bind provided static state or omitted the viewport state. Verify the dynamic-state lifetime rule before changing invalidation.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "path": "chapters/commonvalidity/draw_common.adoc",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "lines": [
+            407,
+            421
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/commonvalidity/draw_common.adoc#L407-L421",
+          "source_sha256": "89d629eaa31adc2e2cbdcc65477e790b00499c0274e39d6445405d0ed54743ae",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa",
+          "note": "This source template instantiates the draw VUID. It points to the dynamic-state lifetime rule."
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "path": "chapters/pipelines.adoc",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "lines": [
+            10069,
+            10097
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L10069-L10097",
+          "source_sha256": "18b25c16c23d77eee3faecd020c159801c0646853c7203d790d5b09c7ebacc56",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa",
+          "note": "The lifetime rule discusses invalidation on binding static state."
+        }
+      ],
+      "body_sha256": "4dfd7280f24989c1424ce3fa12ee542e1145d67f7af686e03b21d39b31382cc2"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2859",
+      "title": "Destroying a resource after a timeline semaphore wait trips Metal validation (unretained MTLCommandBuffer)",
+      "created_at": "2026-10-05T01:49:02Z",
+      "updated_at": "2026-10-05T01:49:02Z",
+      "state": "open",
+      "stratum": "diagnostic",
+      "grade": "positive_external",
+      "mechanism": "The issue distinguishes Vulkan submission completion from backend object retention.",
+      "decision": "Check that all submitted buffer references are complete at the destruction point. The VUID does not establish Metal-side object lifetime.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "path": "chapters/resources.adoc",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "lines": [
+            1136,
+            1139
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L1136-L1139",
+          "source_sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa",
+          "note": "The rule concerns submitted commands referring to the buffer."
+        }
+      ],
+      "body_sha256": "f10ced451988348a37b31403cec1a6c5ddf3937b85a06e84532cb52b9764d487"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/11112",
+      "title": "Vulkan: don't create a descriptor pool for bind group layouts with no descriptors",
+      "created_at": "2026-11-24T22:50:50Z",
+      "updated_at": "2026-11-24T22:50:50Z",
+      "state": "open",
+      "stratum": "prior_work",
+      "grade": "positive_external",
+      "mechanism": "The report proposes allocating empty-layout descriptor pools lazily while preserving valid nonempty pool storage.",
+      "decision": "Use the VKD3D sampler allocator as an independent first-allocation control. It illustrates lazy creation and a nonzero sampler count. The layout keys and pool capacity policy differ.",
+      "sources": [
+        {
+          "repo": "HansKristian-Work/vkd3d-proton",
+          "path": "libs/vkd3d/resource.c",
+          "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+          "license": "LGPL-2.1-or-later",
+          "license_path": "COPYING",
+          "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING",
+          "lines": [
+            1854,
+            1870
+          ],
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L1854-L1870",
+          "source_sha256": "e96fd136c4a75b10f03c50128d6b03440f4b83429f86f4d8c1379392efbbaa33",
+          "license_sha256": "f51ad4bf5a3bd2b5f383fe28150b23d01e6f5d7b620b194150e7c6a620c43c1f",
+          "note": "One sampler size entry reaches vkCreateDescriptorPool."
+        },
+        {
+          "repo": "HansKristian-Work/vkd3d-proton",
+          "path": "libs/vkd3d/resource.c",
+          "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+          "license": "LGPL-2.1-or-later",
+          "license_path": "COPYING",
+          "license_url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/COPYING",
+          "lines": [
+            1894,
+            1928
+          ],
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/resource.c#L1894-L1928",
+          "source_sha256": "e96fd136c4a75b10f03c50128d6b03440f4b83429f86f4d8c1379392efbbaa33",
+          "license_sha256": "f51ad4bf5a3bd2b5f383fe28150b23d01e6f5d7b620b194150e7c6a620c43c1f",
+          "note": "The allocation path creates a pool after no existing pool yields a set."
+        }
+      ],
+      "body_sha256": "324c1ad52c21d4e5bde174c066e400d6caf27d3464cca8a417658eb8576f098f"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/10083",
+      "title": "Uniform/Immediates f16 matrix alignment test fails on dx12 and vulkan",
+      "created_at": "2026-08-15T10:21:46Z",
+      "updated_at": "2026-08-15T10:45:43Z",
+      "state": "open",
+      "stratum": "prior_work",
+      "grade": "positive_external",
+      "mechanism": "The Vulkan diagnostic in a cross-backend f16 matrix test reports misaligned Uniform block layout.",
+      "decision": "Compare the generated member offsets and matrix strides against the actual Vulkan feature settings. Leave the DX12 side to its own layout verification.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "path": "chapters/interfaces.adoc",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "lines": [
+            1950,
+            1960
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L1950-L1960",
+          "source_sha256": "46ccbfa5895fb97876edf4928fb4a6512d4aa1ebfc2a7eeb741b105309cfbe33",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa",
+          "note": "Uniform plus Block requires extended alignment when the feature is missing."
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "path": "chapters/interfaces.adoc",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "lines": [
+            1970,
+            1982
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L1970-L1982",
+          "source_sha256": "46ccbfa5895fb97876edf4928fb4a6512d4aa1ebfc2a7eeb741b105309cfbe33",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa",
+          "note": "The strides and member offset are multiples of the appropriate alignment."
+        }
+      ],
+      "body_sha256": "e735d660e3435f6e86ae4f75edcdba213ec5741742710cc2aa43933b9400c435"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1553",
+      "title": "gl_SubgroupInvocationID ranges from 0 to 31 for gl_SubgroupSize 64.",
+      "created_at": "2022-04-01T00:16:23Z",
+      "updated_at": "2026-06-21T13:11:45Z",
+      "state": "open",
+      "stratum": "prior_work",
+      "grade": "positive_external",
+      "mechanism": "The reporter observes repeated invocation IDs with a larger declared subgroup size.",
+      "decision": "Use the independent CTS shader to capture subgroup ID and subgroup count alongside size and invocation ID. Decide whether the repeated numbers belong to distinct subgroups before concluding the frontend lowered a built-in incorrectly.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/VK-GL-CTS",
+          "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsBuiltinVarTests.cpp",
+          "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/LICENSE",
+          "lines": [
+            992,
+            1008
+          ],
+          "url": "https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/subgroups/vktSubgroupsBuiltinVarTests.cpp#L992-L1008",
+          "source_sha256": "6de0ee34a1d5d019bdbf4d703b227e1ff3d20059817a83d023ec5a747ecd4f3e",
+          "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "note": "The four-value compute result enables subgroup-aware interpretation."
+        }
+      ],
+      "body_sha256": "de832daaa7aaba3d2e08561a0f077658bc9bc2de5689c9f6797ad66064991521"
+    },
+    {
+      "origin": "https://github.com/doitsujin/dxvk/issues/6068",
+      "title": "Stutters when pausing the game - GTA IV",
+      "created_at": "2026-11-25T03:37:02Z",
+      "updated_at": "2026-11-26T17:31:49Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "Pause and fade stutter has no identified Vulkan validity rule in the public issue.",
+      "decision": "A timing regression needs a fixed route with the reported version and mod separated. A generally relevant presentation or compilation source does not explain the pause-only symptom.",
+      "sources": [],
+      "body_sha256": "2e93cfc8d54abc9c89e864784c66a5c17935503028af46c189c6f31e6eecb39f"
+    },
+    {
+      "origin": "https://github.com/doitsujin/dxvk/issues/6060",
+      "title": "\"Failed to create Vulkan buffer view: VK_ERROR_OUT_OF_DEVICE_MEMORY\" crash in The Division 2 (GTX 1060 6GB, NVIDIA 580), DX12 mode works",
+      "created_at": "2026-11-21T16:58:50Z",
+      "updated_at": "2026-11-25T20:51:09Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "Small buffer-view creation on a specific driver reports an allocation error.",
+      "decision": "Measure the exact driver and workload before assigning cause. A generic allocation or view documentation link cannot determine the reported failure mechanism.",
+      "sources": [],
+      "body_sha256": "e8c92d4aa823524b3be43d56b2011e2748370d12908b94793c1649bfaff97c69"
+    },
+    {
+      "origin": "https://github.com/doitsujin/dxvk/issues/5842",
+      "title": "Hard hang during shader compilation burst under load (D3D9), AMD RDNA2/Windows — reproducible across DXVK 2.7.1 / 3.0 / 3.0.2",
+      "created_at": "2026-08-14T10:38:58Z",
+      "updated_at": "2026-08-24T06:53:17Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "The public issue reports a D3D9 translation hard hang across several driver and release combinations.",
+      "decision": "The compilation correlation does not identify a particular synchronization or shader-compiler defect. This control is scoped to whether the indexed source can explain the reported hang.",
+      "sources": [],
+      "body_sha256": "21dcde7c9e60ff407877609cbb8f1fae48d8be55d4fd5348ffc9334f664634a0"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/581",
+      "title": "Frame rate performance is clamped by 30 / second on macOS (macBook Pro / i7)",
+      "created_at": "2019-04-26T17:04:48Z",
+      "updated_at": "2020-04-27T14:59:43Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "An older macOS project reports a 30 FPS ceiling after trying multiple presentation and synchronization modes.",
+      "decision": "A general Vulkan mode or wait rule cannot diagnose the timing ceiling. Capture refresh rate and per-frame pacing first.",
+      "sources": [],
+      "body_sha256": "6f1c4221a8d3ffdd593c9da60990c18cfbb08cd897226c26df78fd9d263df79d"
+    }
+  ]
+}

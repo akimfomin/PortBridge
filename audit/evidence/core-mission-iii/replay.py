@@ -14,14 +14,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("product", type=Path)
     parser.add_argument("database", type=Path)
-    parser.add_argument("suite", choices=("mixed", "diagnostic"))
+    parser.add_argument("suite", help="mixed, diagnostic, or an explicit frozen holdout JSON path")
     args = parser.parse_args()
     sys.path.insert(0, str(args.product.resolve()))
     from portbridge.catalog import ReadOnlyCatalog
     from portbridge.code_search import lookup, observation_query, projection
     from portbridge.github import NoRedirect, _technical
 
-    path = Path(__file__).with_name(args.suite + "-holdout.json")
+    path = (Path(__file__).with_name(args.suite + "-holdout.json")
+            if args.suite in {"mixed", "diagnostic"} else Path(args.suite))
     cases = json.loads(path.read_bytes())["cases"]
     index = projection(ReadOnlyCatalog(args.database))
     headers = {"Accept": "application/vnd.github+json", "User-Agent": "PortBridge-frozen-holdout"}
