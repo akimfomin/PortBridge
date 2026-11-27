@@ -1,0 +1,247 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "method": "Independent retrospective holdout fixed without inspecting the candidate implementation or either ranker's output. Six positives score exact repository, revision, path and line span in the first five hits. Three scoped negatives require manual review of claims. This rendering and compatibility sample does not estimate ecosystem-wide accuracy, recall, adoption or latency. The pinned evidence can postdate historical origins.",
+  "cases": [
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/3629",
+      "title": "Can't create cube app with VK_IMAGE_VIEW_TYPE_CUBE ",
+      "created_at": "2021-12-30T02:06:33Z",
+      "updated_at": "2022-03-16T22:03:54Z",
+      "grade": "positive_external",
+      "mechanism": "A cube view requests six array layers on a one-layer image.",
+      "decision": "Check the exact array-layer bound for the view.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/resources.adoc",
+          "lines": [
+            6209,
+            6218
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6209-L6218",
+          "note": "The VUID bounds the sum of base layer and layer count.",
+          "availability": "pinned_initial",
+          "source_sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa"
+        }
+      ],
+      "body_sha256": "1531c2ea6fc5cc70269fb4fe0c83e16131ec62897db17f9e5f5e498cc4171229"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/5379",
+      "title": "Vulkan Validation errors when creating sRGB view of storage texture",
+      "created_at": "2024-03-11T19:23:17Z",
+      "updated_at": "2025-03-13T14:05:01Z",
+      "grade": "positive_external",
+      "mechanism": "Storage usage requires storage-image support from the image view's selected format.",
+      "decision": "Compare the view's advertised format features and inherited storage usage.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/resources.adoc",
+          "lines": [
+            6086,
+            6089
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6086-L6089",
+          "note": "Exact storage-image requirement.",
+          "availability": "pinned_initial",
+          "source_sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-ValidationLayers",
+          "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE.txt",
+          "path": "tests/unit/image.cpp",
+          "lines": [
+            1101,
+            1134
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L1101-L1134",
+          "note": "Fixture maps storage usage and format requirement to the exact VUID.",
+          "availability": "pinned_initial",
+          "source_sha256": "2bf23e0148832483e6dc77dcbcfb641e985b5ff4b8e299e97fe33c3cb1e7a153"
+        }
+      ],
+      "body_sha256": "f648505061de4cc9ad4b23c3dfb92d567daec18a20b8b9ddb0fd8d36ed94f8b2"
+    },
+    {
+      "origin": "https://github.com/KytyPS5/KytyPS5/issues/1436",
+      "title": "[EMULATOR: ERROR VULKAN - BUG APP",
+      "created_at": "2026-10-12T02:14:04Z",
+      "updated_at": "2026-11-15T22:07:57Z",
+      "grade": "positive_external",
+      "mechanism": "The semaphore passed to vkAcquireNextImageKHR cannot have pending signal or wait operations.",
+      "decision": "Focus on the first VUID. The report's second image-view problem has another cause.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            6893,
+            6898
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6893-L6898",
+          "note": "Exact acquisition-semaphore pending-operation VUID.",
+          "availability": "additional_same_repo",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272"
+        }
+      ],
+      "body_sha256": "137b327e7c120f482565dcd7ad0ddffbb897a252112162e21db9ca1720b53168"
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/2918",
+      "title": "vkd3d-proton.cache always reports \"driver version mismatch\" with NVIDIA 595 drivers, preventing cache accumulation",
+      "created_at": "2026-04-06T08:59:58Z",
+      "updated_at": "2026-09-26T05:48:40Z",
+      "grade": "positive_external",
+      "mechanism": "Cache data loaded across runs can depend on the device and implementation identity.",
+      "decision": "Inspect cache compatibility fields. The spec does not establish which vkd3d check caused rejection.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/pipelines.adoc",
+          "lines": [
+            8433,
+            8441
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L8433-L8441",
+          "note": "Persistent reuse and driver/implementation dependence.",
+          "availability": "pinned_initial",
+          "source_sha256": "18b25c16c23d77eee3faecd020c159801c0646853c7203d790d5b09c7ebacc56"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/pipelines.adoc",
+          "lines": [
+            8486,
+            8498
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L8486-L8498",
+          "note": "Header vendor, device, and cache UUID fields.",
+          "availability": "pinned_initial",
+          "source_sha256": "18b25c16c23d77eee3faecd020c159801c0646853c7203d790d5b09c7ebacc56"
+        }
+      ],
+      "body_sha256": "aa8685c0b533388d9822db3aec9a8fe683d2daaef5ed458c60748eb95258d72f"
+    },
+    {
+      "origin": "https://github.com/NVIDIA-RTX/Streamline/issues/112",
+      "title": "Streamline DLSS-G (Vulkan) — pacer reuses its present-semaphore -> VUID-vkQueueSubmit-pSignalSemaphores-00067",
+      "created_at": "2026-06-25T13:18:45Z",
+      "updated_at": "2026-11-01T00:21:16Z",
+      "grade": "positive_external",
+      "mechanism": "Re-signaling a present wait semaphore before its prior present consumes it triggers the reported validation condition.",
+      "decision": "Compare the synthetic Khronos test, with no Streamline or game assets. It cannot establish application object ownership.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-ValidationLayers",
+          "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE.txt",
+          "path": "tests/unit/wsi.cpp",
+          "lines": [
+            4828,
+            4853
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L4828-L4853",
+          "note": "Correctly models present followed by re-signal before reacquisition and asserts the VUID.",
+          "availability": "additional_same_repo",
+          "source_sha256": "0f9b21b8652a685e291b5a8997509bfcee81f2c29788be76559c25ca5bd499a2"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-ValidationLayers",
+          "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE.txt",
+          "path": "tests/unit/wsi.cpp",
+          "lines": [
+            4858,
+            4883
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L4858-L4883",
+          "note": "Separate maintenance1 variant covers the same VUID after queue wait.",
+          "availability": "additional_same_repo",
+          "source_sha256": "0f9b21b8652a685e291b5a8997509bfcee81f2c29788be76559c25ca5bd499a2"
+        }
+      ],
+      "body_sha256": "9ae6900add8b262f3d0a1a724b0ea148a52709093f1e2a26cb0e4678cad2f2cd"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-Tutorial/issues/290",
+      "title": "32_ecosystem_utilities fires a validation error, followed by a driver crash",
+      "created_at": "2026-01-22T12:44:22Z",
+      "updated_at": "2026-03-01T17:47:22Z",
+      "grade": "positive_external",
+      "mechanism": "Timeline-semaphore signal counts must match in VkTimelineSemaphoreSubmitInfo and VkSubmitInfo.",
+      "decision": "Confirm the mismatched count separately from the downstream driver crash.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-ValidationLayers",
+          "revision": "011ffa0d23534e8fd6a7972093edb96e9bc0f304",
+          "license": "Apache-2.0",
+          "license_path": "LICENSE.txt",
+          "path": "tests/unit/sync_object.cpp",
+          "lines": [
+            2975,
+            2994
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/sync_object.cpp#L2975-L2994",
+          "note": "Pinned synthetic count mismatch yields the exact VUID.",
+          "availability": "additional_same_repo",
+          "source_sha256": "98eba1232866e83c8299b3b46b9ada8821a7d19f87a5f489b0bbc51154d05f21"
+        }
+      ],
+      "body_sha256": "fa91b1f0288b987b13451f06022e4ff71f65ca3e28e3de260ef0eb91ded717eb"
+    },
+    {
+      "origin": "https://github.com/NVIDIA-RTX/NRI/issues/130",
+      "title": "D3D12 Resource Initialization Error Due to D3D12_HEAP_FLAG_CREATE_NOT_ZEROED",
+      "created_at": "2025-04-14T15:26:11Z",
+      "updated_at": "2025-05-19T06:43:48Z",
+      "grade": "scoped_negative",
+      "mechanism": "Same not-zeroed D3D12 heap flag on incompatible resource types.",
+      "decision": "A buffer-only test does not corroborate mandatory initialization of render-target or depth/stencil textures.",
+      "sources": [],
+      "known_misleading_example": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_resource.c#L5433-L5465",
+      "body_sha256": "2f9b4fe95d216ef633511db53a4e526d21cf6ca6f7b7e67c95cd4d4042fc4590"
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/2793",
+      "title": "NVIDIA: DX12 games eventually freeze/crash unless VKD3D shader cache is disabled (VKD3D_SHADER_CACHE_PATH=0)",
+      "created_at": "2026-01-12T17:31:49Z",
+      "updated_at": "2026-10-08T20:05:22Z",
+      "grade": "scoped_negative",
+      "mechanism": "Turning off the internal shader cache changes symptoms of an NVIDIA crash with no pinned error signature.",
+      "decision": "Generic cache code cannot establish the reported crash cause. An exact configuration workaround would remain a workaround.",
+      "sources": [],
+      "body_sha256": "3b2eeb4c9f04109239df259b36137435541f42450b6c4d07ac129db7b805623d"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-Docs/issues/2843",
+      "title": "VK_EXT_metal_objects VUs don't account for binding memory",
+      "created_at": "2026-10-26T21:25:42Z",
+      "updated_at": "2026-11-04T14:44:15Z",
+      "grade": "scoped_negative",
+      "mechanism": "Reported VUIDs conflict with the older VK_EXT_metal_objects memory-binding model.",
+      "decision": "Generic image rules do not settle the old extension exception. Upstream directs users to a successor.",
+      "sources": [],
+      "body_sha256": "8231dcff949ce7b701fcf4b9fa686dd4c9f9edccf6b96aa92276d16866700288"
+    }
+  ]
+}

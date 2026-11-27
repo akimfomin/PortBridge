@@ -1,0 +1,70 @@
+{
+  "candidate": "5a7cb0877c00aeeecdd3d3737087fba000b8dd75",
+  "baseline": "bcf645519a7cb1a302f5e426b883786bd7a24a05",
+  "corpus": {
+    "before": 16,
+    "after": 40,
+    "repositories": 8,
+    "initial_tree_requests": 4,
+    "repeat": {
+      "indexed": 0,
+      "cached": 40,
+      "reused_blobs": 0,
+      "expected": 40,
+      "tree_reads": 0,
+      "errors": [],
+      "wall_seconds": 0.3947112
+    }
+  },
+  "local": {
+    "tests_passed": 313,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "duration_seconds": 53.144,
+    "publication_gate": "pass",
+    "chrome_local_and_static": "pass",
+    "node_syntax": "pass"
+  },
+  "github": {
+    "run_url": "https://github.com/akimfomin/PortBridge/actions/runs/46041836616",
+    "job_url": "https://github.com/akimfomin/PortBridge/actions/runs/46041836616/job/140651224178",
+    "trigger": "workflow_dispatch",
+    "test": "pass",
+    "export": "pass",
+    "publication_gate": "pass",
+    "source_refresh": "skipped",
+    "production_deploy": "skipped"
+  },
+  "schedule": {
+    "period_start": "2026-11-26T21:07:00Z",
+    "reported_scheduled_receipts": 2,
+    "consecutive_gap_hours": 8.47,
+    "week_complete": false,
+    "run_urls": [
+      "https://github.com/akimfomin/PortBridge/actions/runs/45917400112",
+      "https://github.com/akimfomin/PortBridge/actions/runs/45970589550"
+    ]
+  },
+  "scoring": {
+    "old_development_regression": [
+      0,
+      2,
+      3
+    ],
+    "mixed_development": [
+      0,
+      2,
+      6
+    ],
+    "independent_diagnostic": [
+      0,
+      4,
+      5
+    ],
+    "diagnostic_controls_with_unsupported_candidates": [
+      2,
+      2
+    ],
+    "proven_new_transfers": 0
+  }
+}

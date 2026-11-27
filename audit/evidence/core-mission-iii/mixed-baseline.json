@@ -1,0 +1,199 @@
+{
+  "index_files": 16,
+  "output": [
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/3629",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4191",
+          "line": 4191
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L15842",
+          "line": 15842
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L1134",
+          "line": 1134
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/cache.c#L1016",
+          "line": 1016
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L3588",
+          "line": 3588
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/5379",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L1232",
+          "line": 1232
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptor_buffer.cpp#L435",
+          "line": 435
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L1801",
+          "line": 1801
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L5502",
+          "line": 5502
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L15842",
+          "line": 15842
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KytyPS5/KytyPS5/issues/1436",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L214",
+          "line": 214
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L1294",
+          "line": 1294
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L11262",
+          "line": 11262
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptor_buffer.cpp#L128",
+          "line": 128
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L2781",
+          "line": 2781
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/2918",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L513",
+          "line": 513
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/NVIDIA-RTX/Streamline/issues/112",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L11814",
+          "line": 11814
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L26369",
+          "line": 26369
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L111",
+          "line": 111
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L6757",
+          "line": 6757
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptor_buffer.cpp#L466",
+          "line": 466
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-Tutorial/issues/290",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L11788",
+          "line": 11788
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L26304",
+          "line": 26304
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L128",
+          "line": 128
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L101",
+          "line": 101
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/NVIDIA-RTX/NRI/issues/130",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L382",
+          "line": 382
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L3493",
+          "line": 3493
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L13655",
+          "line": 13655
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L42",
+          "line": 42
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L44",
+          "line": 44
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/2793",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-Docs/issues/2843",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L1010",
+          "line": 1010
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptor_buffer.cpp#L447",
+          "line": 447
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/cache.c#L1772",
+          "line": 1772
+        }
+      ]
+    }
+  ]
+}

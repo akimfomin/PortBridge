@@ -1,0 +1,163 @@
+{
+  "index_files": 40,
+  "output": [
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/3629",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6012",
+          "line": 6012
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/5379",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 2,
+        "line": 6086,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6086"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L1250",
+          "line": 1250
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6086",
+          "line": 6086
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KytyPS5/KytyPS5/issues/1436",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L317",
+          "line": 317
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/swapchain.c#L2817",
+          "line": 2817
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L500",
+          "line": 500
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/synchronization.adoc#L2005",
+          "line": 2005
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/shaders.adoc#L658",
+          "line": 658
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/2918",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L652",
+          "line": 652
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/NVIDIA-RTX/Streamline/issues/112",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 1,
+        "line": 4851,
+        "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L4851"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L4851",
+          "line": 4851
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/sync_object.cpp#L3798",
+          "line": 3798
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-Tutorial/issues/290",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/synchronization.adoc#L3702",
+          "line": 3702
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/sync_object.cpp#L2847",
+          "line": 2847
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/swapchain.c#L242",
+          "line": 242
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L3103",
+          "line": 3103
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/command.cpp#L39",
+          "line": 39
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/NVIDIA-RTX/NRI/issues/130",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_sync.c#L28",
+          "line": 28
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_shaders.c#L28",
+          "line": 28
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/heap.c#L349",
+          "line": 349
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L382",
+          "line": 382
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/swapchain.c#L591",
+          "line": 591
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/2793",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-Docs/issues/2843",
+      "grade": "scoped_negative",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/memory.cpp#L1219",
+          "line": 1219
+        }
+      ]
+    }
+  ]
+}

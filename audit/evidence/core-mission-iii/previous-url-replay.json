@@ -1,0 +1,305 @@
+{
+  "origins": 15,
+  "unsupported": [],
+  "seconds": 0.756,
+  "cases": [
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "head_sha": "d944f53edc0a559d9235b8911667f339bba249b6",
+      "indexed": true,
+      "body_sha256": "8cf17e85621e31e27c026c45e01d4c2a12dd010858ee63ff8ed8b59d4cb21c03",
+      "top5": [
+        "https://github.com/xcl-dev/xcl/pull/1658",
+        "https://github.com/Batushn/KestrelX/issues/1",
+        "https://github.com/Belobug/VIctory-Belobug-AMD/pull/221",
+        "https://github.com/Marvisak/VIctory/issues/1870",
+        "https://github.com/Marvisak/VIctory/pull/632"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L3220"
+        },
+        {
+          "url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/crates/xcl/src/gpu/dxil/shader.rs#L33"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/descriptors.adoc#L161"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/shaders.adoc#L2001"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/491",
+      "head_sha": "c769cb53ee40a2d21f018292f7af9083cfa65ef2",
+      "indexed": true,
+      "body_sha256": "2e8eef7a2a5494d5e62d4c83ab9ae92bcce0a830f88a7e0257dc8435c6bc8828",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L514"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/command.c#L17695"
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L2643"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_sync.c#L94"
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L42"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+      "head_sha": "173bde063c28c9b23c7e5cf308b319d2e46eaccc",
+      "indexed": true,
+      "body_sha256": "71b6ebb8568a1832a2783947fb73c8e8a35e401b59fa0710ecf9b12a27f30833",
+      "top5": [
+        "https://github.com/edsuuu/VI-BR-PORT/pull/4",
+        "https://github.com/PastiiJay/klbf-lab/pull/41",
+        "https://github.com/fxceless/victory-fork/pull/1126",
+        "https://github.com/vitutu1/victory-perf/pull/17"
+      ],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/243",
+      "head_sha": "cad05b61924ec9b769f58cda6b791c01dfde15f4",
+      "indexed": true,
+      "body_sha256": "b6b71411652a276a5e3c0b94c8695ff1be6457079d9040f40a603676793be68a",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list_wrap.cpp#L448"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1443",
+      "head_sha": "7a61bf0e6313fe40aead25c40f0cef335a1c6866",
+      "indexed": true,
+      "body_sha256": "15c5b96b39486602e784df01594097473d6f5220b90a8dfc6302ed010e823115",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L421"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_sync.c#L1817"
+        },
+        {
+          "url": "https://github.com/baldurk/renderdoc/blob/762d40b9bb535f62f8b6bbcb728ca0078ce0ca2d/renderdoc/driver/d3d12/d3d12_command_list.h#L428"
+        },
+        {
+          "url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/crates/xcl/src/gpu/dxil/shader.rs#L297"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1465",
+      "head_sha": "3276d58be5b41dd4af968147e7ad0129a2e9267a",
+      "indexed": true,
+      "body_sha256": "a41aae15135e8299f6b9f6d0bf9f5fe326fc5222d9f4da6dfafa402d53aa469e",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2988",
+      "head_sha": "6f5e03cf268b24e716b3f3438ae0bf435b7deb4b",
+      "indexed": true,
+      "body_sha256": "e6972d69fb961ec0a17ed8bf21c0472dc4f264e41b62a70a27dce4b45f175bc0",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3001",
+      "head_sha": "894ae3beebaa32baac2f381fd077ce6897b30bc1",
+      "indexed": true,
+      "body_sha256": "66f4e5645bb5599a055003aff516000f9b163711d930e3619886206bd8b0def0",
+      "top5": [],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_pipeline_state_stream.h#L50"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/cache.c#L1829"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L2589"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_shaders.c#L14610"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_sync.c#L86"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2439",
+      "head_sha": "53d138d2d177f6492527e2a34b20be4ee86a2b1b",
+      "indexed": true,
+      "body_sha256": "4a1189231598c41133be7a280ca053e4f2330e7b8ea552e765da75634b325800",
+      "top5": [
+        "https://github.com/JMAN730/project-flamingo/issues/274",
+        "https://github.com/JMAN730/project-flamingo/issues/281",
+        "https://github.com/JMAN730/project-flamingo/pull/2",
+        "https://github.com/LooperSalty/AnyXboxX/pull/275",
+        "https://github.com/Marvisak/VIctory/issues/823"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L176"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptors.cpp#L4449"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/shader_mesh.cpp#L273"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/memory.adoc#L434"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/state.c#L3581"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/ubiquitarianism/leonida/pull/2461",
+      "head_sha": "78158bab98b6d9f22b58e2fd12401b4a0a1a4c53",
+      "indexed": true,
+      "body_sha256": "187148c1c05ddb1c052c600b37d06c8a6ad003a6b4affa7faf24ae0adf8e32ae",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2583",
+      "head_sha": "e031e582820ba026137e88b80ea6b7dd9b8e5558",
+      "indexed": true,
+      "body_sha256": "a50fc715721bdddf885bcf4fac5711ae359f124d6db6520d2f920a6ed295158a",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27752",
+      "head_sha": "2918a41fd3a2c4f057f528408bd82605a74db54d",
+      "indexed": true,
+      "body_sha256": "239db7e540beda1ff3793e4919e65dfdf737c11cc46582288281fac390d29ea1",
+      "top5": [],
+      "source_code_status": "no_match",
+      "code_top5": [],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27799",
+      "head_sha": "bbc7b24a1984e6632b5f4444e79e21af500279aa",
+      "indexed": true,
+      "body_sha256": "7bf4898afb363cbd5760b4fd46c779dc740a3aee9ce3f1513093d59c471acf1a",
+      "top5": [],
+      "source_code_status": null,
+      "code_top5": [],
+      "snapshot_reads": 9,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3025",
+      "head_sha": "837728ddfa9f612ca4c73817055b5ba72fdbd318",
+      "indexed": true,
+      "body_sha256": "b3bd463c8f9e3ddb39a8c01c6242c4d2b4c1ca6e438f9bdb1650d5efb361f4c7",
+      "top5": [
+        "https://github.com/Marvisak/VIctory/issues/2867",
+        "https://github.com/Marvisak/VIctory/pull/1385",
+        "https://github.com/Marvisak/VIctory/pull/1597",
+        "https://github.com/xcl-dev/xcl/issues/159",
+        "https://github.com/JMAN730/project-flamingo/issues/176"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/crates/xcl/src/gpu/dxil/shader.rs#L295"
+        },
+        {
+          "url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/crates/xcl/src/gpu/dxil/lower_image.rs#L14"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_shaders.c#L3475"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_sync.c#L1831"
+        },
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L52"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    },
+    {
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3051",
+      "head_sha": "44f24d710fec93c2b02672767b010b3d443e69f3",
+      "indexed": true,
+      "body_sha256": "d21c3a6107a0a3d449dc52d937af5adfd49eef8b2ff29e790366c9644814024d",
+      "top5": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/119",
+        "https://github.com/Marvisak/VIctory/pull/1381",
+        "https://github.com/Marvisak/VIctory/pull/148",
+        "https://github.com/boykopovar/AnyPS5/pull/528",
+        "https://github.com/fxceless/victory-fork/pull/636"
+      ],
+      "source_code_status": "found",
+      "code_top5": [
+        {
+          "url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/crates/xcl/src/gpu/dxil/shader.rs#L104"
+        },
+        {
+          "url": "https://github.com/xcl-dev/xcl/blob/06f90c1986f43698d0405eff3c2ab0af230e1ed9/crates/xcl/src/gpu/dxil/lower_image.rs#L1991"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/tests/d3d12_shaders.c#L242"
+        }
+      ],
+      "snapshot_reads": 10,
+      "external_search_requests": 0
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "index_files": 40,
+  "output": [
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9855",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 1,
+        "line": 6902,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6902"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6902",
+          "line": 6902
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9882",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 1,
+        "line": 6894,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6894"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6894",
+          "line": 6894
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L1674",
+          "line": 1674
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/8670",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 2,
+        "line": 6364,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6364"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L4415",
+          "line": 4415
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6364",
+          "line": 6364
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7899",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 1,
+        "line": 2886,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L2886"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L2886",
+          "line": 2886
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2877",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/descriptors.cpp#L3544",
+          "line": 3544
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9559",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/sync_val_wsi.cpp#L49",
+          "line": 49
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/swapchain.c#L245",
+          "line": 245
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/synchronization.adoc#L1991",
+          "line": 1991
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L4199",
+          "line": 4199
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L315",
+          "line": 315
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/doitsujin/dxvk/issues/5895",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L318",
+          "line": 318
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/synchronization.adoc#L8358",
+          "line": 8358
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/devsandqueues.adoc#L4200",
+          "line": 4200
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/blob/71cae091b06571e51446cf2a937f0b04c237c04d/libs/vkd3d/swapchain.c#L1161",
+          "line": 1161
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/wsi.cpp#L3472",
+          "line": 3472
+        }
+      ]
+    }
+  ]
+}

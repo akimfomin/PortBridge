@@ -1,0 +1,217 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T17:17:02.969376+00:00",
+  "method": "Retrospective, mechanism-stratified holdout authored without looking at either ranker's output. Public cases cover synchronization, resources, pipelines and vertex input, with two same-domain timing controls where a normative rule does not diagnose the issue. Earlier evaluation origins were excluded. A hit requires an exact frozen file, revision, license and location within the first five matches on the same index. Adjacent fence and semaphore clauses are distinct decoys. Any negative-case result requires manual review. Some original authors state the answer or include a spec URL, so this evaluates diagnostic lookup and localization, without measuring novel transfer, ecosystem-wide quality, historical latency or adoption.",
+  "cases": [
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9855",
+      "title": "Vulkan validation errors in wgpu 0.30.0: VUID-vkAcquireNextImageKHR-fence-10066",
+      "created_at": "2026-07-11T17:10:46Z",
+      "updated_at": "2026-08-22T02:57:40Z",
+      "grade": "positive_external",
+      "mechanism": "The acquire fence is still associated with an unfinished queue command.",
+      "decision": "Trace completion of the fence's previous queue command before reuse.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            6902,
+            6905
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6902-L6905",
+          "note": "The clause requires completion before fence reuse.",
+          "diagnostic": "VUID-vkAcquireNextImageKHR-fence-10066",
+          "availability": "general_public_path",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272"
+        }
+      ],
+      "body_sha256": "2df42f0ca52eac9a0e784e6a5ff2578238553a7a7189f8365d7607a33e508be2"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9882",
+      "title": "`wgpu_hal::Vulkan::swapchain::native::SwapchainAcquireSemaphore::acquire` is never awaited if no commands are submitted that use its texture",
+      "created_at": "2026-07-16T04:28:34Z",
+      "updated_at": "2026-07-17T00:51:16Z",
+      "grade": "positive_external",
+      "mechanism": "Dropping an acquired texture without submitting work leaves an acquire semaphore signaled.",
+      "decision": "Ensure every successful acquire has a consuming wait before reusing its binary semaphore.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/VK_KHR_surface/wsi.adoc",
+          "lines": [
+            6894,
+            6895
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L6894-L6895",
+          "note": "The clause requires an unsignaled acquire semaphore.",
+          "diagnostic": "VUID-vkAcquireNextImageKHR-semaphore-01286",
+          "availability": "general_public_path",
+          "source_sha256": "b58fd27eb95dfac258dce0e5a01c6a229b2355e47cb324124247dfe15a657272"
+        }
+      ],
+      "body_sha256": "48958b12095e6b33eb547912cb83d7375994b0895089abbc848c57733c54078d"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/8670",
+      "title": "Texture format misreporting tracking issue",
+      "created_at": "2025-12-05T20:23:37Z",
+      "updated_at": "2026-03-30T22:17:21Z",
+      "grade": "positive_external",
+      "mechanism": "The capability report permits an R64_UINT image usage the device rejects; the separate NV12 report combines plane aspects.",
+      "decision": "Query the exact R64_UINT image-format tuple before exposing usage, or create separate views for each NV12 plane.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/resources.adoc",
+          "lines": [
+            2154,
+            2159
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L2154-L2159",
+          "note": "Check that the image creation limits are defined for the selected tuple.",
+          "diagnostic": "VUID-VkImageCreateInfo-imageCreateMaxMipLevels-02251",
+          "availability": "general_public_path",
+          "source_sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/resources.adoc",
+          "lines": [
+            6364,
+            6366
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6364-L6366",
+          "note": "Use at most one multi-planar aspect bit for the independent NV12 report.",
+          "diagnostic": "VUID-VkImageViewCreateInfo-subresourceRange-07818",
+          "availability": "general_public_path",
+          "source_sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa"
+        }
+      ],
+      "body_sha256": "f1f9e33e8a715cc7fcc58d69e0adf6d12e286dfc8d5a1082cb15b2349f6390e5"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7899",
+      "title": "Spurious validation error messages about missing multisample state",
+      "created_at": "2024-04-24T08:54:11Z",
+      "updated_at": "2024-04-29T02:34:02Z",
+      "grade": "positive_external",
+      "mechanism": "A pipeline reported as missing multisample state supplies it while rasterization state is dynamic.",
+      "decision": "Inspect pMultisampleState and fragment-output requirements separately from the nullable pRasterizationState.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/pipelines.adoc",
+          "lines": [
+            2886,
+            2898
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L2886-L2898",
+          "note": "Fragment-output requirements concern pMultisampleState and dynamic-state exceptions.",
+          "diagnostic": "VUID-VkGraphicsPipelineCreateInfo-pMultisampleState-09026",
+          "availability": "general_public_path",
+          "source_sha256": "18b25c16c23d77eee3faecd020c159801c0646853c7203d790d5b09c7ebacc56"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/pipelines.adoc",
+          "lines": [
+            4643,
+            4653
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/pipelines.adoc#L4643-L4653",
+          "note": "The render-pass-dependent requirement concerns pMultisampleState.",
+          "diagnostic": "VUID-VkGraphicsPipelineCreateInfo-renderpass-06631",
+          "availability": "general_public_path",
+          "source_sha256": "18b25c16c23d77eee3faecd020c159801c0646853c7203d790d5b09c7ebacc56"
+        }
+      ],
+      "body_sha256": "f3da5f4d5a398ec1b954b2ba379aa55528c0881a5f2c39d49302e14b6c114234"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2877",
+      "title": "MoltenVK segfaults in `vkCmdBindVertexBuffers`/`vkCmdBindVertexBuffers2` when a buffer is `VK_NULL_HANDLE`",
+      "created_at": "2026-10-14T19:11:24Z",
+      "updated_at": "2026-10-15T06:29:13Z",
+      "grade": "positive_external",
+      "mechanism": "The application binds a null vertex buffer when nullDescriptor is disabled.",
+      "decision": "Gate binding on nullDescriptor or use a legal fallback buffer. Graceful failure would be a robustness improvement.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/fxvertex.adoc",
+          "lines": [
+            962,
+            964
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/fxvertex.adoc#L962-L964",
+          "note": "The rule disallows null pBuffers entries when nullDescriptor is disabled.",
+          "diagnostic": "VUID-vkCmdBindVertexBuffers-pBuffers-04001",
+          "availability": "general_public_path",
+          "source_sha256": "b45cbbe170613a9b771cd60c996092e13477b70764e81e2c360593f60d97c23d"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "path": "chapters/fxvertex.adoc",
+          "lines": [
+            883,
+            885
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/fxvertex.adoc#L883-L885",
+          "note": "The same feature condition applies to the second binding entry point.",
+          "diagnostic": "VUID-vkCmdBindVertexBuffers2-pBuffers-04111",
+          "availability": "general_public_path",
+          "source_sha256": "b45cbbe170613a9b771cd60c996092e13477b70764e81e2c360593f60d97c23d"
+        }
+      ],
+      "body_sha256": "f13bd2eca48ab25435256f614a01d482fe88a3bcb57e1be4a1becfaf706d3c42"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9559",
+      "title": "wgpu-hal v26.0.6 PR #8420 fence wait blows up acquire latency on AMD + Immediate present (bisect + reproducer)",
+      "created_at": "2026-05-17T13:34:03Z",
+      "updated_at": "2026-11-06T15:54:50Z",
+      "grade": "negative_scoped",
+      "mechanism": "A bisected acquire-fence wait increases latency under Immediate present on AMD.",
+      "decision": "Start with the same-repository bisect and controlled timing. A generic normative fence rule does not explain the regression.",
+      "sources": [],
+      "body_sha256": "bf5cd25115d09fc20e4616ba432cde375e722fc61afcfefbc22794bc45ba78a1"
+    },
+    {
+      "origin": "https://github.com/doitsujin/dxvk/issues/5895",
+      "title": "[AMD Vulkan driver] vkQueuePresentKHR blocks ~100ms per call → D3D9 via DXVK locked at 10 FPS (RX 9070 XT, 2.0.395)",
+      "created_at": "2026-09-11T06:52:59Z",
+      "updated_at": "2026-09-11T12:53:01Z",
+      "grade": "negative_scoped",
+      "mechanism": "Driver-side present/acquire calls stall on an AMD D3D9 translation workload without a concrete validity violation.",
+      "decision": "Start from the driver environment and timing reproducer. A generic WSI rule has no observed validity violation to explain.",
+      "sources": [],
+      "body_sha256": "cb6dbd6fe622e9afb7da6db0a3d85a9c47c7a7a8c531f368f3d9f39036bc25d4"
+    }
+  ]
+}
