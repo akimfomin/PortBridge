@@ -1,0 +1,85 @@
+{
+  "index_files": 93,
+  "output": [
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16780",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/microsoft/DirectX-Headers/blob/61c7718954ec73dbdd43c723240fe1a0452a3724/include/directx/d3dx12_check_feature_support.h#L188",
+          "line": 188
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16380",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16392",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image_layout.cpp#L573",
+          "line": 573
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/11371",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/10484",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/11750",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 1,
+        "line": 774,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L774"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L774",
+          "line": 774
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/5374",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3494",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/descriptorsets.adoc#L1758",
+          "line": 1758
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/descriptors.adoc#L604",
+          "line": 604
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/VK_KHR_surface/wsi.adoc#L3513",
+          "line": 3513
+        }
+      ]
+    }
+  ]
+}

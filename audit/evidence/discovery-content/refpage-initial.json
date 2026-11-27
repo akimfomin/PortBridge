@@ -1,0 +1,58 @@
+{
+  "index_files": 93,
+  "output": [
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/13491",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 1,
+        "line": 96,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96",
+          "line": 96
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2922",
+      "grade": "positive_external",
+      "hit": {
+        "rank": 1,
+        "line": 4942,
+        "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942"
+      },
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942",
+          "line": 4942
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16823",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": []
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/10125",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/shaders.adoc#L1496",
+          "line": 1496
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3444",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": []
+    }
+  ]
+}

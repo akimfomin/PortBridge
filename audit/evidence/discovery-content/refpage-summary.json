@@ -1,0 +1,79 @@
+{
+  "refpage-candidate": {
+    "before": {
+      "hits": 2,
+      "positive": 3,
+      "negative_links": 0
+    },
+    "after": {
+      "hits": 2,
+      "positive": 3,
+      "negative_links": 0
+    }
+  },
+  "refpage-exploratory": {
+    "before": {
+      "hits": 0,
+      "positive": 6,
+      "negative_links": 3
+    },
+    "after": {
+      "hits": 1,
+      "positive": 6,
+      "negative_links": 3
+    }
+  },
+  "previous": {
+    "before": {
+      "hits": 4,
+      "positive": 7,
+      "negative_links": 1
+    },
+    "after": {
+      "hits": 4,
+      "positive": 7,
+      "negative_links": 1
+    }
+  },
+  "mixed": {
+    "before": {
+      "hits": 2,
+      "positive": 6,
+      "negative_links": 6
+    },
+    "after": {
+      "hits": 2,
+      "positive": 6,
+      "negative_links": 6
+    }
+  },
+  "vulkan": {
+    "before": {
+      "hits": 5,
+      "positive": 5,
+      "negative_links": 1
+    },
+    "after": {
+      "hits": 5,
+      "positive": 5,
+      "negative_links": 1
+    }
+  },
+  "confirmed": {
+    "before": {
+      "hits": 1,
+      "positive": 2,
+      "negative_links": 5
+    },
+    "after": {
+      "hits": 1,
+      "positive": 2,
+      "negative_links": 5
+    }
+  },
+  "export": {
+    "files": 93,
+    "bytes": 3995979,
+    "sha256": "13993eb187b1da9ffb31bff3ffee17e73585797f8c3b7148e64952604d3d0ae3"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T18:55:17.935813+00:00",
+  "method": "Blind narrow Vulkan normative source localization check. Three distinct open positive work items updated during October–November 2026, plus two time/stability/operation-reporting controls. Exact pinned source span and full body hash required. An unrelated printed VUID in an issue does not establish a match for the problem under investigation. No ranking or proposed code inspected.",
+  "cases": [
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/13491",
+      "title": "Image layout issue not caught by the layers",
+      "created_at": "2026-10-16T09:44:36Z",
+      "updated_at": "2026-10-20T13:13:24Z",
+      "state": "open",
+      "stratum": "normative_api",
+      "grade": "positive_external",
+      "mechanism": "Secondary dynamic rendering must use the real accessed color image layout. The affected validator misses one command-buffer topology.",
+      "decision": "Check attachment layout agreement at access time across each command buffer configuration. The rule is independent of whether the validator currently reports the error.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/renderpass.adoc",
+          "lines": [
+            96,
+            100
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L96-L100",
+          "note": "Specific validity rule for accessed color attachment views.",
+          "source_sha256": "68415ea53e029a2dd98c861ac5d03b90db1153f6697bcb5a3086749e165d394a",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "5c3346d4e0694e3e8fd4184031148fa6ed850372045f8c49163566addb51ace2"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/2922",
+      "title": "`MVKImage` lacks `destroy()`/`detachMemory()`, pinning `MTLTexture` and `MTLHeap` until all `VkImageView`s are destroyed",
+      "created_at": "2026-11-25T21:36:18Z",
+      "updated_at": "2026-11-25T21:36:18Z",
+      "state": "open",
+      "stratum": "normative_api",
+      "grade": "positive_external",
+      "mechanism": "MoltenVK retains the backing Metal resources while a previously created image view still holds a wrapper reference.",
+      "decision": "Compare destruction after completion of submitted direct or image-view references. Separate idle wrapper lifetime from the rule about pending access, then examine Metal residency cleanup independently.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/resources.adoc",
+          "lines": [
+            4942,
+            4945
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L4942-L4945",
+          "note": "Exact Vulkan criterion for outstanding work on the image and its views.",
+          "source_sha256": "68b21bd098b312be1fb70e1a349ec3a9d8a3e6c8f81725c94bf01dd1baf67dfa",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "ab8f90fbcd8a0528e37e6e467fd5f7215d64ed7c46b2f790ab951ddb642ae864"
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16823",
+      "title": "GPU Vulkan: framebuffer cache key ignores resolve_layer and resolve_mip_level",
+      "created_at": "2026-11-24T21:01:28Z",
+      "updated_at": "2026-11-25T02:31:05Z",
+      "state": "open",
+      "stratum": "normative_api",
+      "grade": "positive_external",
+      "mechanism": "The framebuffer cache uses a different view selection from framebuffer creation for layer or mip resolves.",
+      "decision": "For an ordinary framebuffer, include the actual resolve VkImageView in framebuffer cache identity. The specification establishes that each created attachment view is used for that render pass, independently of how a backend stores cache keys.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/renderpass.adoc",
+          "lines": [
+            5675,
+            5685
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L5675-L5685",
+          "note": "Exact framebuffer creation clause for concrete image-view attachment identities.",
+          "source_sha256": "68415ea53e029a2dd98c861ac5d03b90db1153f6697bcb5a3086749e165d394a",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "4a4f132eceb72bc2e8e6d735ba1ceafe2082628081d4f6ea026a4ab417a5bdf4"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/10125",
+      "title": "get_current_texture report Validation instead of Timeout if unrelated validation errors are present",
+      "created_at": "2026-08-20T23:28:28Z",
+      "updated_at": "2026-08-28T21:49:22Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "The issue reports surface acquisition timeout being converted to a generic validation outcome when unrelated shader validation logs exist.",
+      "decision": "Check the acquisition return path and how errors are associated with the operation on each backend. Locating the shader VUID printed in the logs may be technically correct for an unrelated shader, but does not explain the acquisition error classification.",
+      "sources": [],
+      "body_sha256": "0d7aea909593d2433e85fd3d6ee3def0799459ec51c0729b275368059ff921ea"
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3444",
+      "title": "Crimson Desert (3321460) 2.04 DLC: GPU hang (Xid 109 CTX SWITCH TIMEOUT) ~20 s after diving underwater, RTX 5070 Ti",
+      "created_at": "2026-11-03T04:25:25Z",
+      "updated_at": "2026-11-15T15:26:26Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "A game/application hang is followed by driver context timeout and device-loss messages; the issue has no isolated normative API violation.",
+      "decision": "Identify the hanging workload and bisect with fixed driver and runtime controls. Broad Vulkan return status or rendering API documentation cannot identify what caused the stall.",
+      "sources": [],
+      "body_sha256": "f04f7db7e8726608117eceb9d09f8f16bd7eafd9e0211c730bf237f660e668a7"
+    }
+  ]
+}

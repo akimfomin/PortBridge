@@ -1,0 +1,73 @@
+{
+  "cold": {
+    "indexed": 249,
+    "expected": 249,
+    "cached": 0,
+    "errors": [],
+    "seconds": 32.462
+  },
+  "warm": {
+    "indexed": 0,
+    "expected": 249,
+    "cached": 249,
+    "errors": [],
+    "seconds": 0.001
+  },
+  "bytes": 26365952,
+  "source_manifest_sha256": "d3f443c34de4e5a6c5c93c9ab6e73aa742da07097fa9ee56c750e55a981f2b97",
+  "approved_scopes": [
+    {
+      "repo": "HansKristian-Work/vkd3d-proton",
+      "revision": "71cae091b06571e51446cf2a937f0b04c237c04d",
+      "license": "LGPL-2.1-or-later",
+      "license_path": "COPYING",
+      "files": [
+        "libs/vkd3d/cache.c",
+        "libs/vkd3d/state.c",
+        "libs/vkd3d/command.c"
+      ],
+      "directories": [
+        "tests"
+      ],
+      "limit": 10,
+      "scoped": true
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "revision": "06f90c1986f43698d0405eff3c2ab0af230e1ed9",
+      "license": "GPL-3.0-or-later",
+      "license_path": "LICENSE",
+      "files": [],
+      "directories": [
+        "crates/xcl/src/gpu/dxil"
+      ],
+      "limit": 4,
+      "scoped": true
+    },
+    {
+      "repo": "KhronosGroup/SPIRV-Tools",
+      "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+      "license": "Apache-2.0",
+      "license_path": "LICENSE",
+      "files": [],
+      "directories": [
+        "test/val"
+      ],
+      "limit": 4,
+      "scoped": true
+    },
+    {
+      "repo": "KhronosGroup/VK-GL-CTS",
+      "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+      "license": "Apache-2.0",
+      "license_path": "external/vulkancts/LICENSE",
+      "files": [],
+      "directories": [
+        "external/vulkancts/modules/vulkan/synchronization",
+        "external/vulkancts/modules/vulkan/subgroups"
+      ],
+      "limit": 14,
+      "scoped": true
+    }
+  ]
+}

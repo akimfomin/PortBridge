@@ -1,0 +1,261 @@
+{
+  "schema": "portbridge-code-retrieval-holdout-v1",
+  "frozen_at": "2026-11-27T18:44:18.606323+00:00",
+  "method": "Retrospective public issue sample frozen without viewing implementation or ranking. Six exact, useful primary-source checks and two scoped negatives. Open issues checked by API and disjoint from earlier tracked audits and the two preceding independent batches. Two cases require non-Vulkan D3D12 contracts. A hit requires a pinned source and the specified useful line range. Related documentation without the written decision does not qualify. External standards or code may inform independent validation; this suite does not establish prior actual reuse, bug confirmation or performance causation. For gpu-allocator 0.28.0, raw tag bytes matched Git blob hashes returned from the exact commit by the GitHub contents API.",
+  "cases": [
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16780",
+      "title": "GPU (D3D12): Incorrect 3D texture data uploads with UnrestrictedBufferTextureCopyPitchSupported",
+      "created_at": "2026-11-20T17:39:43Z",
+      "updated_at": "2026-11-23T14:00:39Z",
+      "state": "open",
+      "stratum": "non_vulkan_contract",
+      "grade": "positive_external",
+      "mechanism": "The SDL D3D12 unrestricted-copy feature path corrupts later slices of a 3D upload.",
+      "decision": "Check texel-unit alignment, footprint offset, row/slice stride, and per-slice readback before restoring the legacy blanket alignment. The D3D12 conformance contract covers 3D slices.",
+      "sources": [
+        {
+          "repo": "microsoft/DirectX-Specs",
+          "revision": "db16a3da3e1cd7575a4990053ded0622f8b48d97",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/microsoft/DirectX-Specs/blob/db16a3da3e1cd7575a4990053ded0622f8b48d97/LICENSE",
+          "path": "d3d/VulkanOn12.md",
+          "lines": [
+            224,
+            232
+          ],
+          "url": "https://github.com/microsoft/DirectX-Specs/blob/db16a3da3e1cd7575a4990053ded0622f8b48d97/d3d/VulkanOn12.md#L224-L232",
+          "note": "D3D12 capability and whole-texel alignment rule.",
+          "source_sha256": "e0774af6d33a487541c806967c6b832e87c85cbfdda68ce7370c4a595f556f7f",
+          "license_sha256": "d6239afa918961b465b07bf7411cbe34ff6685854f58553db7966f4881a0211f"
+        },
+        {
+          "repo": "microsoft/DirectX-Specs",
+          "revision": "db16a3da3e1cd7575a4990053ded0622f8b48d97",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/microsoft/DirectX-Specs/blob/db16a3da3e1cd7575a4990053ded0622f8b48d97/LICENSE",
+          "path": "d3d/VulkanOn12.md",
+          "lines": [
+            234,
+            244
+          ],
+          "url": "https://github.com/microsoft/DirectX-Specs/blob/db16a3da3e1cd7575a4990053ded0622f8b48d97/d3d/VulkanOn12.md#L234-L244",
+          "note": "Independent specified conformance control for exact 3D slice data.",
+          "source_sha256": "e0774af6d33a487541c806967c6b832e87c85cbfdda68ce7370c4a595f556f7f",
+          "license_sha256": "d6239afa918961b465b07bf7411cbe34ff6685854f58553db7966f4881a0211f"
+        }
+      ],
+      "body_sha256": "e94ec77b36d9880cb52a63b49cd845e60422bc438f8a6a6fd7df4c2cfe3121fe"
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16380",
+      "title": "SDL_gpu: primitiveRestart in vulkan backend",
+      "created_at": "2026-09-24T16:08:04Z",
+      "updated_at": "2026-11-20T16:08:13Z",
+      "state": "open",
+      "stratum": "vulkan_contract",
+      "grade": "positive_external",
+      "mechanism": "SDL currently disables primitive restart in its Vulkan input assembly. The request asks for an API to control it.",
+      "decision": "Check indexed draw mode, restart marker for the index width and the additional features needed for list topologies. Do not toggle restart unconditionally.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/drawing.adoc",
+          "lines": [
+            49,
+            78
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/drawing.adoc#L49-L78",
+          "note": "Index-width-dependent restart markers and list topology feature gates.",
+          "source_sha256": "3a0241fe2234fbf24f4222be06699f2a5e8397191c724e1e2093ca6ddf7c43bc",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/drawing.adoc",
+          "lines": [
+            92,
+            112
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/drawing.adoc#L92-L112",
+          "note": "Exact restrictions for list and patch-list topology.",
+          "source_sha256": "3a0241fe2234fbf24f4222be06699f2a5e8397191c724e1e2093ca6ddf7c43bc",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "1e668203d05ebe8ad29a9b4fcf6ec28478647086fe8bc15ff55befad503bb019"
+    },
+    {
+      "origin": "https://github.com/libsdl-org/SDL/issues/16392",
+      "title": "D3D12 / Vulkan: Binding multiple slices of a 3D texture causes validation errors",
+      "created_at": "2026-09-27T12:53:35Z",
+      "updated_at": "2026-11-18T02:04:54Z",
+      "state": "open",
+      "stratum": "non_vulkan_contract",
+      "grade": "positive_external",
+      "mechanism": "Two render targets select distinct depth slices of one 3D mip. The D3D12 barrier state applies to the same subresource.",
+      "decision": "Deduplicate D3D12 barriers by resource and actual subresource index, not by depth slice. A useful control uses two distinct slices of one mip and two genuinely different mips.",
+      "sources": [
+        {
+          "repo": "MicrosoftDocs/win32",
+          "revision": "bc82a65f74ef2c4f2f44a3d7db5f7cfebfdc3583",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE",
+          "license_url": "https://github.com/MicrosoftDocs/win32/blob/bc82a65f74ef2c4f2f44a3d7db5f7cfebfdc3583/LICENSE",
+          "path": "desktop-src/direct3d12/d3d12calcsubresource.md",
+          "lines": [
+            90,
+            98
+          ],
+          "url": "https://github.com/MicrosoftDocs/win32/blob/bc82a65f74ef2c4f2f44a3d7db5f7cfebfdc3583/desktop-src/direct3d12/d3d12calcsubresource.md#L90-L98",
+          "note": "D3D12 uses one subresource index for all slices of a volume mip.",
+          "source_sha256": "33ba8d6897a8d37290450fa3581f4bfdf26fd7287196cf32efcc61bb5930bddc",
+          "license_sha256": "7183ef9749eb9b75e710a81a4c812a9405cc184f087500581a973e5929ac3f5e"
+        }
+      ],
+      "body_sha256": "aa28dad8ab0472a58097734384384553072ebc6c5e6c97077b5798f0b1705d30"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/11371",
+      "title": "Not validating type mismatch between user interface variables.",
+      "created_at": "2026-01-05T19:22:30Z",
+      "updated_at": "2026-01-27T00:13:51Z",
+      "state": "open",
+      "stratum": "vulkan_contract",
+      "grade": "positive_external",
+      "mechanism": "The reporter asks whether a vertex output array matches a fragment input vector with the same components.",
+      "decision": "For the ordinary vertex-to-fragment path, test type-declaration equivalence, handling stage-specific exceptions separately. Equal component counts alone do not establish a type match.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/interfaces.adoc",
+          "lines": [
+            135,
+            158
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L135-L158",
+          "note": "The explicit type matching rule and its exceptions; an incidental VUID about component counts does not answer the issue.",
+          "source_sha256": "46ccbfa5895fb97876edf4928fb4a6512d4aa1ebfc2a7eeb741b105309cfbe33",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "c203c9c6fa393ff5e145780e227cf7acc4dd3f51fc1caef3db1549a10bc93a1a"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/10484",
+      "title": "Vulkan: MAP_WRITE staging buffers allocated in ReBAR VRAM since gpu-allocator switch",
+      "created_at": "2026-09-28T08:04:03Z",
+      "updated_at": "2026-10-07T22:45:00Z",
+      "state": "open",
+      "stratum": "cross_project_implementation",
+      "grade": "positive_external",
+      "mechanism": "The Vulkan wgpu allocator switch changed MAP_WRITE memory placement on ReBAR hardware.",
+      "decision": "The exact gpu-allocator 0.28 preference prioritizes host-visible, coherent and device-local memory together. Compare it with the fallback without the local bit for a one-copy upload staging control. The code verifies policy, not the measured performance impact.",
+      "sources": [
+        {
+          "repo": "Traverse-Research/gpu-allocator",
+          "revision": "c1d4a8dc44f703a581a8d58d5a7b9593e80dd6d7",
+          "license": "MIT OR Apache-2.0",
+          "license_path": "LICENSE-APACHE",
+          "license_url": "https://github.com/Traverse-Research/gpu-allocator/blob/c1d4a8dc44f703a581a8d58d5a7b9593e80dd6d7/LICENSE-APACHE",
+          "path": "src/vulkan/mod.rs",
+          "lines": [
+            803,
+            829
+          ],
+          "url": "https://github.com/Traverse-Research/gpu-allocator/blob/c1d4a8dc44f703a581a8d58d5a7b9593e80dd6d7/src/vulkan/mod.rs#L803-L829",
+          "note": "Independently maintained allocator implementation with preference and fallback bits.",
+          "source_sha256": "f354d1379ef33fe97d889940deb06cffa3977e65cb286661cee4d186dd4bd54d",
+          "license_sha256": "0178e21322b0e88aa3aeb3146f6a9611bc1f8df6d98bdfb34be28b9dd56a8107"
+        }
+      ],
+      "body_sha256": "63086e3b97b28565c72022d0ecd385278e70d5aee500010f673f6e48ec70d301"
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/11750",
+      "title": "Missing validation if renderpass output is used as input attachment but not mapped with `vkCmdSetRenderingInputAttachmentIndices`",
+      "created_at": "2026-02-25T15:48:38Z",
+      "updated_at": "2026-03-04T17:23:47Z",
+      "state": "open",
+      "stratum": "vulkan_contract",
+      "grade": "positive_external",
+      "mechanism": "A shader explicitly decorates a depth input attachment index, but the command buffer leaves the default mapping while depth writes are enabled.",
+      "decision": "Check the default depth/stencil mapping and whether the shader lookup is classified as an attachment read. For overlapping write plus non-attachment access, compare the explicit feedback-loop requirement. This helps identify the missing validation condition without relying on the linked private discussion.",
+      "sources": [
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/interfaces.adoc",
+          "lines": [
+            774,
+            802
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/interfaces.adoc#L774-L802",
+          "note": "Defines the command and default depth/stencil mapping before it is called.",
+          "source_sha256": "46ccbfa5895fb97876edf4928fb4a6512d4aa1ebfc2a7eeb741b105309cfbe33",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        },
+        {
+          "repo": "KhronosGroup/Vulkan-Docs",
+          "revision": "81b1d516cbf42f04a3c7f781977c499945b5e5dc",
+          "license": "CC-BY-4.0",
+          "license_path": "LICENSE.adoc",
+          "license_url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/LICENSE.adoc",
+          "path": "chapters/renderpass.adoc",
+          "lines": [
+            8482,
+            8502
+          ],
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/renderpass.adoc#L8482-L8502",
+          "note": "Ordinary overlapping write plus non-attachment use is invalid unless feedback-loop conditions apply.",
+          "source_sha256": "68415ea53e029a2dd98c861ac5d03b90db1153f6697bcb5a3086749e165d394a",
+          "license_sha256": "39743375d31b5c3cafaeb6691d40a32971ea1d674c9d93be90756b3594b7f6fa"
+        }
+      ],
+      "body_sha256": "e3141c9814cc993f34a21210b88751cf18946699b7c5d3b876baafddc274f41a"
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/5374",
+      "title": "Window resizing lags with white rectangles on Windows",
+      "created_at": "2024-03-10T15:26:32Z",
+      "updated_at": "2025-09-08T05:04:01Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "The report shows Windows resizing artifacts on Vulkan and D3D12 but does not identify a specific swapchain rule violation.",
+      "decision": "Use a platform and backend control first. General presentation or render-pass source lines cannot determine the mechanism of the white rectangles.",
+      "sources": [],
+      "body_sha256": "83952b94c19d040a3934e5c52cec2d6391d5353105a1596b1b481ba15df4022d"
+    },
+    {
+      "origin": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3494",
+      "title": "Trollheim Gnomes (UE 5.7.4, AppID 4584570): character sprite visible only from certain angles on NVIDIA Pascal (GTX 1080)",
+      "created_at": "2026-11-14T12:50:17Z",
+      "updated_at": "2026-11-14T12:50:17Z",
+      "state": "open",
+      "stratum": "negative",
+      "grade": "negative_scoped",
+      "mechanism": "The report shows camera-dependent sprite flicker on one DX12 compatibility stack without a useful narrowed shader or API diagnostic.",
+      "decision": "Separate shader and rasterizer behavior with a minimal capture and platform control. A related feature flag or generic shader-cache warning does not establish applicable prior work.",
+      "sources": [],
+      "body_sha256": "96da939cfe7a681a56fede23717568395940b9e94b4b16d695150b361cae5b4b"
+    }
+  ]
+}

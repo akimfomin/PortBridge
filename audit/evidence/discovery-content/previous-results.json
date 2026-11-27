@@ -1,0 +1,164 @@
+{
+  "index_files": 93,
+  "output": [
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1698",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/subgroups.cpp#L290",
+          "line": 290
+        }
+      ],
+      "research": {
+        "hit": null,
+        "candidates": []
+      },
+      "duration_ms": {
+        "baseline": 0.64,
+        "research": 1.34
+      },
+      "coverage": [
+        {
+          "repo": "KhronosGroup/VK-GL-CTS",
+          "path": "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsTestsUtils.cpp",
+          "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+          "baseline": false,
+          "research": true
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/7696",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [],
+      "research": {
+        "hit": {
+          "rank": 1,
+          "line": 4033,
+          "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4033"
+        },
+        "candidates": [
+          {
+            "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_explicit_layout_test.cpp#L4033",
+            "line": 4033
+          }
+        ]
+      },
+      "duration_ms": {
+        "baseline": 1.34,
+        "research": 1.64
+      },
+      "coverage": [
+        {
+          "repo": "KhronosGroup/SPIRV-Tools",
+          "path": "test/val/val_explicit_layout_test.cpp",
+          "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+          "baseline": false,
+          "research": true
+        },
+        {
+          "repo": "KhronosGroup/SPIRV-Tools",
+          "path": "test/val/val_decoration_test.cpp",
+          "revision": "19042c8921f35f7bec56b9e5c96c5f5691588ca8",
+          "baseline": false,
+          "research": false
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9880",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/command.cpp#L412",
+          "line": 412
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L45",
+          "line": 45
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/vertexpostproc.adoc#L1991",
+          "line": 1991
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L6047",
+          "line": 6047
+        }
+      ],
+      "research": {
+        "hit": {
+          "rank": 2,
+          "line": 4998,
+          "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_image_test.cpp#L4998"
+        },
+        "candidates": [
+          {
+            "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_builtins_test.cpp#L1517",
+            "line": 1517
+          },
+          {
+            "url": "https://github.com/KhronosGroup/SPIRV-Tools/blob/b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c/test/val/val_image_test.cpp#L4998",
+            "line": 4998
+          }
+        ]
+      },
+      "duration_ms": {
+        "baseline": 0.99,
+        "research": 7.55
+      },
+      "coverage": [
+        {
+          "repo": "KhronosGroup/SPIRV-Tools",
+          "path": "test/val/val_image_test.cpp",
+          "revision": "b1d2dc272aee6e6c9454d202fe88cbcbbeaab72c",
+          "baseline": false,
+          "research": true
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/gfx-rs/wgpu/issues/9306",
+      "grade": "positive_external",
+      "hit": null,
+      "candidates": [],
+      "research": {
+        "hit": null,
+        "candidates": []
+      },
+      "duration_ms": {
+        "baseline": 3.25,
+        "research": 0.07
+      },
+      "coverage": [
+        {
+          "repo": "KhronosGroup/VK-GL-CTS",
+          "path": "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.cpp",
+          "revision": "05ca62dcffe1353d8e058a6a9d759e3fa1007449",
+          "baseline": false,
+          "research": true
+        }
+      ]
+    },
+    {
+      "origin": "https://github.com/KhronosGroup/MoltenVK/issues/1749",
+      "grade": "negative_scoped",
+      "hit": null,
+      "candidates": [],
+      "research": {
+        "hit": null,
+        "candidates": []
+      },
+      "duration_ms": {
+        "baseline": 8.18,
+        "research": 9.84
+      },
+      "coverage": []
+    }
+  ],
+  "holdout_sha256": "55ce3ca7335b0cb324f533a528f9083a1d86f10674d3bf85e35c7520273fd996"
+}

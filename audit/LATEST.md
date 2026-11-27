@@ -1,5 +1,11 @@
 # PortBridge · Продолжение Growth & Adoption
 
+## Discovery · отбор по содержимому · 27 ноября 2026, МСК
+
+- Отдельный индекс из 249 файлов нашёл два точных теста SPIRV-Tools из четырёх прежних задач. На новой независимой выборке — 0/6. Четырём задачам не хватило нужного файла, две пропущены при имеющемся файле. [Отчёт, выдача и воспроизведение](evidence/discovery-content/assessment.md)
+- Исправлен разбор нормативных объявлений Vulkan. Известная пропущенная задача теперь ведёт к нужному правилу. На следующей слепой выборке осталось 2/3, шум на двух отрицательных задачах не вырос. Прошли 321 тест и экспорт 93 файлов. В рабочую версию сайта изменения не выкладывались. [Черновик PR #128](https://github.com/akimfomin/PortBridge/pull/128) · [Точный кандидат](https://github.com/akimfomin/PortBridge/commit/0ca21bb60d20c35fcfe3344348b8c2ee1cb449b0)
+- Обновили карточку Vice-Tay → XCL по слиянию #283 и парному замеру его автора. Проверка применимости в XCL остаётся открытой. [Карточка #126](https://github.com/akimfomin/PortBridge/issues/126)
+
 ## Discovery · проверка охвата · 27 ноября 2026, МСК
 
 - В черновике индекс вырос с 71 до 93 файлов. Поиск нашёл точный тест Vulkan CTS для MoltenVK. На прежних межпроектных примерах результат вырос с 0/3 до 1/3, на отдельной проверке правил Vulkan — с 4/5 до 5/5. [Черновик PR #128](https://github.com/akimfomin/PortBridge/pull/128) · [Точный тест CTS](https://github.com/KhronosGroup/VK-GL-CTS/blob/05ca62dcffe1353d8e058a6a9d759e3fa1007449/external/vulkancts/modules/vulkan/subgroups/vktSubgroupsBuiltinVarTests.cpp#L1006)
