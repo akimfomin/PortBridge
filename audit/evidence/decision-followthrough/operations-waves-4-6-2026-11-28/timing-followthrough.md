@@ -1,0 +1,7 @@
+# VIctory timing integration follow-through
+
+The Git sweep found that VIctory #3313 and #3622 change the same submission accounting in `crates/victory-gpu/src/host.rs`. PortBridge returned separate controls for a missing observation and an untimed tail. [#3313 delivery](https://github.com/Marvisak/VIctory/pull/3313#issuecomment-7232062508) · [#3622 delivery](https://github.com/Marvisak/VIctory/pull/3622#issuecomment-7232062629).
+
+andrewpozdnakov7-jpg resolved the conflict in [`75f42f9fe3bd38b790610681037a3516721f54ff`](https://github.com/andrewpozdnakov7-jpg/VIctory/commit/75f42f9fe3bd38b790610681037a3516721f54ff) and [reported four deterministic CPU cases](https://github.com/Marvisak/VIctory/pull/3622#issuecomment-7232147172). With simulated query data, the previous fixture's second sample included the unmeasured tail and read 980 ms. The integration read 15 ms for that sample and kept the first at 10 ms. A list with missing command readback kept its wall time of 20 ms, with an empty command map and no summed command duration. The result measures semantics, not frame-time improvements.
+
+The timing integration is an independent contributor result. It provides a second externally validated item from the three waves. Only Vice-Tay #392 has an explicit acceptance and implementation of the PortBridge-requested test so far. Maintainer adoption of the timing integration was not shown by this result. [Return to #3313](https://github.com/Marvisak/VIctory/pull/3313#issuecomment-7232152800).
