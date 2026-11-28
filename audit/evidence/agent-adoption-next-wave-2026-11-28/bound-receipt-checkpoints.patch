@@ -1,0 +1,45 @@
+--- a/crates/xcl/src/shaders/warm_blobs.rs
++++ b/crates/xcl/src/shaders/warm_blobs.rs
+@@ -16,6 +16,8 @@
+     [digest(&path.file_name()), layout, digest(&blob)]
+ }
+ 
++const CHECKPOINT_KEYS: usize = 64;
++
+ pub(super) struct Verified {
+     path: PathBuf,
+     keys: Mutex<Entries>,
+@@ -25,6 +27,7 @@
+ struct Entries {
+     known: HashSet<[u64; 3]>,
+     unsaved: usize,
++    since_attempt: usize,
+ }
+ 
+ fn read_keys(path: &Path) -> Option<HashSet<[u64; 3]>> {
+@@ -62,6 +65,7 @@
+             }
+             if let Some(keys) = read_keys(&legacy_path(dir, native, "")) { entries.known.extend(keys); }
+             entries.unsaved = entries.known.len();
++            entries.since_attempt = entries.unsaved.min(CHECKPOINT_KEYS);
+         }
+         Self { path, keys: Mutex::new(entries) }
+     }
+@@ -74,7 +78,8 @@
+         let mut entries = self.keys.lock().unwrap();
+         if entries.known.insert(stamp) {
+             entries.unsaved += 1;
+-            if entries.unsaved >= 64 { self.flush(&mut entries); }
++            entries.since_attempt += 1;
++            if entries.since_attempt >= CHECKPOINT_KEYS { self.flush(&mut entries); }
+         }
+     }
+ 
+@@ -84,6 +89,7 @@
+     }
+ 
+     fn flush(&self, entries: &mut Entries) {
++        entries.since_attempt = 0;
+         if let Err(e) = self.merge_and_save(entries) {
+             crate::xlog_warn!("Shader preparation: could not save verified compute blob list: {e}");
+         }
