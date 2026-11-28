@@ -10,6 +10,29 @@ from test_portbridge import CatalogFixture
 
 
 class PublicSearchIndexTests(CatalogFixture):
+    def test_exact_revision_beats_text_and_recovers_a_legacy_commit_url(self):
+        sha = "1" * 40
+        source, decoy, _ = self.sample()
+        source["metadata"]["head_sha"] = sha
+        decoy["title"] += " " + sha
+        old_commit = self.observation("xcl", "commit", sha, "Old recorded revision",
+                                      f"https://github.com/xcl-dev/xcl/commit/{sha}")
+        unpinned = self.observation("xcl", "commit", "decoy", "Unrelated path",
+                                    f"https://github.com/xcl-dev/xcl/tree/{sha}")
+        rows = [source, decoy, old_commit, unpinned]
+        self.catalog.record_sync({"items": rows})
+        self.assertEqual({row["url"] for row in self.catalog.observations(q=sha)},
+                         {source["url"], old_commit["url"]})
+        projects, cards, files = self.snapshots(rows)
+        manifest = json.loads(files[MANIFEST])
+        fetch = lambda path, *_: json.loads(files[path])
+        report = assess_public_index(manifest, cards, projects, {}, q=sha, url="", limit=5, fetch=fetch)
+        self.assertEqual({row["url"] for row in report["observations"]}, {source["url"], old_commit["url"]})
+        self.assertTrue(all(row["revision"] == sha for row in report["observations"]))
+        absent = assess_public_index(manifest, cards, projects, {}, q="a" * 40, url="", limit=5, fetch=fetch)
+        self.assertEqual(absent["observations"], [])
+        self.assertIn("exact revision is absent", absent["next_step"])
+
     def snapshots(self, observations):
         projects, cards = self.catalog.projects(), self.catalog.problems()
         return projects, cards, build_search_files(projects, observations)

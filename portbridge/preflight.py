@@ -16,8 +16,8 @@ from .discovery_scan import cached_index
 from .discovery_search import MAX_QUERY as MAX_DISCOVERY_QUERY, discover, empty_link_result, historical_candidates
 from .github import NoRedirect
 from .global_search import append_external_results
-from .matching import (GENERAL_SOURCE_TERMS, RelatedIndex, canonical_url, current_repository, observation_summary,
-                       preflight_matches, rank_query, terms)
+from .matching import (FULL_REVISION, GENERAL_SOURCE_TERMS, RelatedIndex, canonical_url, current_repository,
+                       observation_summary, preflight_matches, rank_query, source_revision, terms)
 from .preflight_index import MANIFEST, MANIFEST_LIMIT, QUERY_READS, QueryBudget, SearchReader, source_number
 from .source_health import health_freshness
 from .radar_store import filter_findings, reviewed_snapshot
@@ -330,6 +330,7 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=N
                            if current_repository(project["repo"]).casefold() == repo_path), None)
     problem_query = q.upper() if PROBLEM_ID.fullmatch(q.upper()) else None
     number_query = q[1:] if re.fullmatch(r"#[1-9][0-9]*", q) else None
+    revision_query = q.casefold() if FULL_REVISION.fullmatch(q) else None
     query = terms(q)
     index = RelatedIndex(records)
     card_query = query - GENERAL_CARD_TERMS if origin else query
@@ -344,6 +345,10 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=N
         direct = origin and any(urlsplit(ref["url"]).fragment == origin_fragment and canonical_url(ref["url"]) == origin
                                 for solution in card["solutions"] for ref in solution["source_refs"])
         exact_number = number_query and any(source_number(ref["url"]) == number_query for ref in refs)
+        exact_revision = revision_query and any(
+            str(ref.get("revision", "")).casefold() == revision_query or
+            urlsplit(ref["url"]).path.rstrip("/").casefold().endswith("/commit/" + revision_query)
+            for ref in refs)
         title = " ".join([card["title"], english_text(card, "title") or ""])
         details = [card["summary"], english_text(card, "summary") or "", *card.get("tags", []),
                    *(item["title"] for item in refs), *(english_text(item, "title") or "" for item in refs)]
@@ -361,8 +366,10 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=N
             score, basis = 4, "problem_id" if not origin else "text"
         elif exact_number:
             score, basis = 4, "source_number"
+        elif exact_revision:
+            score, basis = 4, "source_revision"
         else:
-            score = 0 if problem_query or number_query else rank_query(card_query, title, details)
+            score = 0 if problem_query or number_query or revision_query else rank_query(card_query, title, details)
             basis = "text"
         if score:
             ranked.append((score, card["id"], card, basis))
@@ -382,12 +389,14 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=N
 
     relevant = []
     origin_anchors = (terms(q) | index.titles.get(indexed_origin, set())) - GENERAL_SOURCE_TERMS
-    if fallback is None and (number_query or (query and not problem_query and not matches)):
+    if fallback is None and (number_query or revision_query or (query and not problem_query and not matches)):
         for key, row in index.rows.items():
             if key in {origin, checked_source} or (origin_project and row["project"] == origin_project):
                 continue
             if number_query:
                 score = int(source_number(key) == number_query)
+            elif revision_query:
+                score = int(source_revision(row) == revision_query)
             elif indexed_origin in index.kinds and index.kinds[indexed_origin] != index.kinds[key]:
                 continue
             else:
@@ -413,10 +422,12 @@ def assess(cards, projects, records, health, *, q="", url="", limit=5, indexed=N
         next_step = "Open the linked comment or provide a short description to search for related work."
     elif origin and origin not in index.rows:
         next_step = "The source is missing from this catalog. Check it on GitHub or refresh the configured catalog."
+    elif revision_query:
+        next_step = "This exact revision is absent from the catalog snapshot."
     else:
         next_step = "Provide an exact error, API function, or source link. Continue normal investigation if no prior work is indexed."
     code_query = ""
-    if with_code and not comment_source and not number_query and not problem_query:
+    if with_code and not comment_source and not number_query and not problem_query and not revision_query:
         origin_row = index.rows.get(indexed_origin)
         if not origin_row or index.kinds[indexed_origin] == "implementation":
             code_query = code_search.observation_query(origin_row) if origin_row else q

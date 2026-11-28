@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 from . import PROJECT_LINK
 from . import core_events
 from .identity import contributor_id, evidence_fields, observation_provenance, relation_fields, repository_id
-from .matching import RelatedIndex, canonical_url, repository_identity, source_revision, source_url_aliases
+from .matching import FULL_REVISION, RelatedIndex, canonical_url, repository_identity, source_revision, source_url_aliases
 from .source_health import freshest, health_freshness
 
 
@@ -464,6 +464,8 @@ class Catalog:
         return {**dict(row), "metadata": json.loads(row["metadata"])} if row else None
 
     def observations(self, *, q="", kind="", project="", limit=100):
+        revision = q.strip().casefold()
+        exact_revision = FULL_REVISION.fullmatch(revision)
         clauses, arguments = [], []
         for column, value in (("kind", kind), ("project", project)):
             if value:
@@ -475,7 +477,7 @@ class Catalog:
             for row in db.execute("SELECT * FROM observations" + where + " ORDER BY updated_at DESC", arguments):
                 item = dict(row)
                 item["metadata"] = json.loads(item["metadata"])
-                if contains(item, q):
+                if (source_revision(item) == revision if exact_revision else contains(item, q)):
                     item["provenance"] = observation_provenance(item)
                     item["contributor_id"] = contributor_id(item["metadata"].get("author"),
                                                             item["metadata"].get("github_user_id"))
