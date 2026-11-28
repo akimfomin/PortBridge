@@ -1,0 +1,335 @@
+{
+  "initial_shared_database": [
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3079",
+      "revision": "f64494d167f527a48a008fe3fbd7287b497398b0",
+      "subject": "executeindirect",
+      "status": "busy",
+      "search_issue": "busy",
+      "lookups": 0,
+      "cache_hits": 0,
+      "top5": [],
+      "explanation": "The external search is busy. Any retained results need a freshness check.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+      "revision": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+      "subject": "",
+      "status": "busy",
+      "search_issue": "busy",
+      "lookups": 0,
+      "cache_hits": 0,
+      "top5": [],
+      "explanation": "The external search is busy. Any retained results need a freshness check.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/pull/3630",
+      "revision": "7dfc01a60a93ee7a084f027d261a70f9ddb38e1d",
+      "subject": "v_movrels_b32",
+      "status": "busy",
+      "search_issue": "busy",
+      "lookups": 0,
+      "cache_hits": 0,
+      "top5": [],
+      "explanation": "The external search is busy. Any retained results need a freshness check.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2591",
+      "revision": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+      "subject": "vuid-vkimagecreateinfo-miplevels-00958",
+      "status": "available",
+      "search_issue": null,
+      "lookups": 1,
+      "cache_hits": 0,
+      "top5": [
+        {
+          "url": "https://github.com/RPCS3/rpcs3/issues/15985",
+          "title": "gl: Low resolution scale crash due to too many mipmaps on a small texture",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/shadps4-emu/shadPS4/pull/5453",
+          "title": "texture_cache: clamp mip levels to the full mip chain",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/MoltenVK/issues/2083",
+          "title": "crash in MVKQueue::submit",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/gfx-rs/wgpu/issues/894",
+          "title": "create_texture with too many mip levels triggers validation error",
+          "route": "github",
+          "evidence_status": "source_found"
+        }
+      ],
+      "explanation": "Open each source to compare the mechanism and revision.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    }
+  ],
+  "before_serial": [
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3079",
+      "revision": "f64494d167f527a48a008fe3fbd7287b497398b0",
+      "subject": "executeindirect",
+      "status": "available",
+      "search_issue": null,
+      "lookups": 1,
+      "cache_hits": 0,
+      "top5": [
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/issues/3421",
+          "title": "CONTROL Resonant: mesh-shader ExecuteIndirect needs EXT_dgc, RADV (PS5 port) reports maxIndirectCommandsTokenCount=0",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/pull/2315",
+          "title": "Add debug ring support to ExecuteIndirect.",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/issues/1486",
+          "title": "Memory layout compatibility with DirectX 12 for indirect arguments",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/HansKristian-Work/vkd3d-proton/issues/2521",
+          "title": "[NVIDIA 1080Ti / 575.64] The Last of Us Part 2 freezes 10 seconds into game.",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/Vulkan-Docs/issues/2153",
+          "title": "Work Graphs",
+          "route": "github",
+          "evidence_status": "source_found"
+        }
+      ],
+      "explanation": "Open each source to compare the mechanism and revision.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+      "revision": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+      "subject": "",
+      "status": "no_subject",
+      "search_issue": null,
+      "lookups": 0,
+      "cache_hits": 0,
+      "top5": [],
+      "explanation": "No supported technical subject was found in the title or stored metadata. No external search ran.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/pull/3630",
+      "revision": "7dfc01a60a93ee7a084f027d261a70f9ddb38e1d",
+      "subject": "v_movrels_b32",
+      "status": "available",
+      "search_issue": null,
+      "lookups": 1,
+      "cache_hits": 0,
+      "top5": [
+        {
+          "url": "https://github.com/KytyPS5/KytyPS5/pull/1197",
+          "title": "shader: fold equality compares against impossible values",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/KytyPS5/KytyPS5/pull/2462",
+          "title": "shader: select V_MOVRELS sources with a multiplexer on M0 (ASTRO BOT)",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/boykopovar/AnyPS5/pull/22607",
+          "title": "docs(debt): measure DPP lane selection of the relative moves on gfx1036",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/shadps4-emu/shadPS4/issues/496",
+          "title": "[Aggregate issue] Missing opcodes",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/boykopovar/AnyPS5/pull/4120",
+          "title": "fix(shader): keep direct VGPR accesses in SSA when the window has only relative reads",
+          "route": "github",
+          "evidence_status": "source_found"
+        }
+      ],
+      "explanation": "Open each source to compare the mechanism and revision.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2591",
+      "revision": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+      "subject": "vuid-vkimagecreateinfo-miplevels-00958",
+      "status": "available",
+      "search_issue": null,
+      "lookups": 0,
+      "cache_hits": 1,
+      "top5": [
+        {
+          "url": "https://github.com/RPCS3/rpcs3/issues/15985",
+          "title": "gl: Low resolution scale crash due to too many mipmaps on a small texture",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/shadps4-emu/shadPS4/pull/5453",
+          "title": "texture_cache: clamp mip levels to the full mip chain",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/MoltenVK/issues/2083",
+          "title": "crash in MVKQueue::submit",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/gfx-rs/wgpu/issues/894",
+          "title": "create_texture with too many mip levels triggers validation error",
+          "route": "github",
+          "evidence_status": "source_found"
+        }
+      ],
+      "explanation": "Open each source to compare the mechanism and revision.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    }
+  ],
+  "after": {
+    "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+    "revision": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+    "subject": "gpu timing",
+    "status": "available",
+    "search_issue": null,
+    "lookups": 1,
+    "cache_hits": 0,
+    "top5": [
+      {
+        "url": "https://github.com/boykopovar/AnyPS5/pull/26613",
+        "title": "feat(agc): time GPU command classes in one present of N (APS5_PROFILE_GPU_EVERY)",
+        "route": "github",
+        "evidence_status": "source_found"
+      },
+      {
+        "url": "https://github.com/boykopovar/AnyPS5/pull/24219",
+        "title": "fix(tools): reject incomplete GPU timing in A/B comparisons",
+        "route": "github",
+        "evidence_status": "source_found"
+      },
+      {
+        "url": "https://github.com/boykopovar/AnyPS5/pull/17768",
+        "title": "fix(tools): reject incomplete A/B GPU timing reports",
+        "route": "github",
+        "evidence_status": "source_found"
+      },
+      {
+        "url": "https://github.com/boykopovar/AnyPS5/pull/25421",
+        "title": "fix(agc): reuse the GPU timing query pools instead of destroying one per batch",
+        "route": "github",
+        "evidence_status": "source_found"
+      },
+      {
+        "url": "https://github.com/boykopovar/AnyPS5/pull/22461",
+        "title": "fix(libc): copy the UTF codecvt and multibyte conversion ranges safely",
+        "route": "github",
+        "evidence_status": "source_found"
+      }
+    ],
+    "explanation": "Open each source to compare the mechanism and revision.",
+    "source_code": {
+      "status": "not_indexed",
+      "indexed_files": 0,
+      "expected_files": 16,
+      "matches": [],
+      "scope": "pinned_public_files",
+      "confidence": "candidate"
+    },
+    "lookup_parent": "f9da51bbef688d4b71beea8c6d8b77f6a3705a84",
+    "published_main": "e2847c438af3377ab04fd20ee3ed4250b1a537c1"
+  },
+  "title_only_comparison": {
+    "titles": 53,
+    "changed": {
+      "https://github.com/LooperSalty/AnyXboxX/pull/568": [
+        "",
+        "gpu timing"
+      ],
+      "https://github.com/Marvisak/VIctory/pull/3623": [
+        "",
+        "gpu timing"
+      ]
+    }
+  }
+}

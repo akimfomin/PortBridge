@@ -1,0 +1,100 @@
+{
+  "handoffs": [
+    {
+      "to": "KainanP",
+      "repository": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/568#issuecomment-7230854923"
+    },
+    {
+      "to": "Vladimir-Human",
+      "repository": "fxceless/victory-fork",
+      "url": "https://github.com/fxceless/victory-fork/pull/1280#issuecomment-7230855411"
+    },
+    {
+      "to": "gmankab",
+      "repository": "KytyPS5/KytyPS5",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2591#issuecomment-7230855760"
+    },
+    {
+      "to": "SmartIngenieriayDesarrollo",
+      "repository": "TaynanGT/Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/389#issuecomment-7230907471"
+    },
+    {
+      "to": "KainanP",
+      "repository": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/571#issuecomment-7230907652"
+    },
+    {
+      "to": "RodrigoTorreao",
+      "repository": "xcl-dev/xcl",
+      "url": "https://github.com/xcl-dev/xcl/pull/3079#issuecomment-7230924161"
+    },
+    {
+      "to": "Tyrannys",
+      "repository": "ProjectLeonida/mandy",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2517#issuecomment-7230937914"
+    },
+    {
+      "to": "Moon0755",
+      "repository": "Marvisak/VIctory",
+      "url": "https://github.com/Marvisak/VIctory/pull/3609#issuecomment-7230938186"
+    },
+    {
+      "to": "chitters2004",
+      "repository": "boykopovar/AnyPS5",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27979#issuecomment-7230938535"
+    },
+    {
+      "to": "andrewpozdnakov7-jpg",
+      "repository": "Marvisak/VIctory",
+      "url": "https://github.com/Marvisak/VIctory/pull/3630#issuecomment-7230938853"
+    },
+    {
+      "to": "LooperSalty",
+      "repository": "LooperSalty/AnyXboxX",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/519#issuecomment-7231006372"
+    },
+    {
+      "to": "marquezinii",
+      "repository": "fxceless/victory-fork",
+      "url": "https://github.com/fxceless/victory-fork/pull/92#issuecomment-7231058971"
+    },
+    {
+      "to": "hamdanpor-ctrl",
+      "repository": "TaynanGT/Vice-Tay",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/382#issuecomment-7231073087"
+    }
+  ],
+  "volunteer_invitations": [
+    {
+      "number": 136,
+      "author": "ZrDaniel07",
+      "id": 7230998488
+    },
+    {
+      "number": 134,
+      "author": "Cai-piroska",
+      "id": 7230998945
+    },
+    {
+      "number": 135,
+      "author": "Doorriiaann",
+      "id": 7230998696
+    },
+    {
+      "number": 133,
+      "author": "KDenKC",
+      "id": 7231000862
+    }
+  ],
+  "distinct_developers": 12,
+  "repository_count": 8,
+  "decisions": [
+    "https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230999315",
+    "https://github.com/ProjectLeonida/mandy/pull/2517#issuecomment-7231040752"
+  ],
+  "public_entry": "https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7231109215",
+  "merged_main": "e2847c438af3377ab04fd20ee3ed4250b1a537c1",
+  "push_run": "https://github.com/akimfomin/PortBridge/actions/runs/46088844439"
+}

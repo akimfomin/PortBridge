@@ -1,6 +1,12 @@
 Warning: truncated output (original token count: 45452)
 Total output lines: 529
 
+## Результат серии · 28 ноября 2026, МСК
+
+- **AnyXboxX и Continued применили предложения PortBridge.** В AnyXboxX #550 KainanP свёл две ветки правила к одному порогу и привязал тест к нему. На RTX 4060 Laptop его повторный тест показал снижение пика с **6 220 до 5 708 МБ**. PortBridge проверил, что новая ревизия совмещается с `main`, и обновил запрос на физический замер 12 ГБ. В Continued #2517 Tyrannys подтвердил мягкий лимит и добавил предложенный регрессионный случай. Оба PR оставались открыты при проверке. [Решение AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230999315) · [Решение Continued](https://github.com/ProjectLeonida/mandy/pull/2517#issuecomment-7231040752) · [Тест 12 ГБ](https://github.com/akimfomin/PortBridge/issues/132)
+- **Поиск PortBridge применён к актуальной задаче.** AnyXboxX #568 раньше возвращал `no_subject`. После восстановления признака `GPU_TIMING` один запрос нашёл принятое решение AnyPS5 #24219. Предложили AnyXboxX проверить, что неполный замер отклоняется. Локально прошли **322 теста**, экспорт и проверка публикации. [Изменение в main](https://github.com/akimfomin/PortBridge/pull/137) · [Откуда взят контроль](https://github.com/boykopovar/AnyPS5/pull/24219) · [Передача](https://github.com/LooperSalty/AnyXboxX/pull/519#issuecomment-7231006372) · [Облачный прогон](https://github.com/akimfomin/PortBridge/actions/runs/46088844439)
+- **Передача и открытые результаты.** 13 технических передач 12 авторам в 8 репозиториях. Четыре новых добровольца приглашены в отдельные Lab-задачи. Ответы и прогоны по этим приглашениям ещё открыты. Две команды получили предложение использовать форму по ссылке и SHA для своего агента. Принятых интеграций в этой волне пока нет. [Все доставки, приглашения и решения](evidence/decision-followthrough/parallel-ops-2026-11-28/followthrough.md) · [Вход для нового PR](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7231109215)
+
 ## Совместимость веток и межкомандные тесты · 28 ноября 2026, МСК
 
 - Проверено **53 открытых PR в восьми проектах** против их принимающих веток. Результат: 48 чистых совмещений и 5 конфликтов. Из **38 отдельных пар PR** 30 прошли Git-проверку и 8 конфликтуют. Сохранены точные ревизии и конфликтующие файлы. [Проверки, 20 сравнений и следующие действия](evidence/decision-followthrough/parallel-ops-2026-11-28/README.md)

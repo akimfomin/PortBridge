@@ -1,6 +1,12 @@
 Warning: truncated output (original token count: 65772)
 Total output lines: 599
 
+## Решения и независимые проверки · 28 ноября 2026
+
+- KainanP принял обе поправки PortBridge, затем повторил тест на RTX 4060 Laptop. PortBridge проверил новый SHA против main и перевёл Lab #132 на этот SHA без повторного приглашения. [Решение автора](https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230999315) · [Обновлённая задача](https://github.com/akimfomin/PortBridge/issues/132)
+- Tyrannys добавил согласованный сценарий мягкого лимита в Continued #2517. PortBridge проверил новый тест в опубликованном diff и совмещение с main. [Ответ автора](https://github.com/ProjectLeonida/mandy/pull/2517#issuecomment-7231040752)
+- 13 технических передач и четыре новых персональных приглашения. Слияния принимающих PR, аппаратные результаты по новым запросам и принятие предложений по подключению остаются открыты. [Доставленные материалы](../audit/evidence/decision-followthrough/parallel-ops-2026-11-28/followthrough.md)
+
 ## Параллельная проверка веток · 28 ноября 2026
 
 - Переданы проверенные конфликты, альтернативные проверки и точные ревизии. [AnyXboxX #568](https://github.com/LooperSalty/AnyXboxX/pull/568#issuecomment-7230854923) · [victory-fork #1280](https://github.com/fxceless/victory-fork/pull/1280#issuecomment-7230855411) · [KytyPS5 #2591](https://github.com/KytyPS5/KytyPS5/pull/2591#issuecomment-7230855760) · [Vice-Tay #389](https://github.com/TaynanGT/Vice-Tay/pull/389#issuecomment-7230907471) · [AnyXboxX #571](https://github.com/LooperSalty/AnyXboxX/pull/571#issuecomment-7230907652)
