@@ -119,6 +119,8 @@
       }
     }
   ],
+  "strict_hardware_fixture_tree": "74a66f97afcff228896e18a8d1511edeb71d484f",
+  "strict_hardware_fixture_sha256": "76d345451d5bc86d7c206c28915dfed1d3a08215d1a9d857b9f02359d839d9bf",
   "compiled": false,
   "physical_gpu": false
 }
