@@ -56,6 +56,33 @@
       "translations": {"en": {"stack": "VIctory fork, Rust and Windows D3D12"}}
     },
     {
+      "slug": "copperframe",
+      "name": "Copperframe",
+      "repo": "XaviFortes/VIctory-RDNA",
+      "url": "https://github.com/XaviFortes/VIctory-RDNA",
+      "stack": "Форк VIctory-7900XTX, Rust и Windows D3D12, оптимизации для AMD RDNA",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "VIctory-7900XTX fork, Rust and Windows D3D12, AMD RDNA tuning"}}
+    },
+    {
+      "slug": "victory-nvidia",
+      "name": "VIctory-NVIDIA",
+      "repo": "trustno1-coder/VIctory-NVIDIA",
+      "url": "https://github.com/trustno1-coder/VIctory-NVIDIA",
+      "stack": "Форк VIctory, Rust и Windows D3D12, оптимизации для NVIDIA RTX",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "VIctory fork, Rust and Windows D3D12, NVIDIA RTX tuning"}}
+    },
+    {
+      "slug": "victory-altracing",
+      "name": "victory-altracing",
+      "repo": "whoalin1/victory-altracing",
+      "url": "https://github.com/whoalin1/victory-altracing",
+      "stack": "Форк VIctory-NVIDIA, Rust и Windows D3D12, трассировка лучей и время кадра",
+      "license": "GPL-3.0",
+      "translations": {"en": {"stack": "VIctory-NVIDIA fork, Rust and Windows D3D12, ray tracing and frame pacing"}}
+    },
+    {
       "slug": "vi-br-port",
       "name": "VI-BR-PORT",
       "repo": "edsuuu/VI-BR-PORT",
