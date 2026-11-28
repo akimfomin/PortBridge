@@ -22,6 +22,7 @@ from test_portbridge import CatalogFixture
 
 
 PR = "https://github.com/xcl-dev/xcl/pull/99999"
+PR_FORM = "https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml"
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -145,7 +146,10 @@ class DiscoveryPresentationTest(CatalogFixture):
                     "--no-first-run", f"--user-data-dir={self.workspace / 'browser'}", "--virtual-time-budget=3000",
                     "--dump-dom", route,
                 ], capture_output=True, timeout=25, check=True)
-                self.assertIn("Для этого PR пока нет сохранённого внешнего поиска.", rendered.stdout.decode("utf-8"))
+                page = rendered.stdout.decode("utf-8")
+                self.assertIn("Для этого PR пока нет сохранённого внешнего поиска.", page)
+                self.assertIn(f'href="{PR_FORM}"', page)
+                self.assertIn("Запросить проверку PR", page)
             finally:
                 server.shutdown()
                 thread.join()
@@ -177,6 +181,7 @@ class DiscoveryPresentationTest(CatalogFixture):
                         ], capture_output=True, timeout=25, check=True).stdout.decode("utf-8")
                         self.assertIn("Candidate source-code lines", page)
                         self.assertIn(f"https://github.com/{repo}/blob/{revision}/{source_path}#L1", page)
+                        self.assertIn(f'href="{PR_FORM}"', page)
                     finally:
                         server.shutdown()
                         thread.join()

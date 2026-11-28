@@ -408,14 +408,20 @@ function drawProblems(problems, view, discovery, findings) {
   if (!problems.length && !discovery.matches.length && !list(discovery.code).length && !findings.length) {
     stateScreen(t('No issues found', 'Проблемы не найдены'),
       discovery.emptyMessage || t('Try another search or reset the filters.', 'Измените поисковый запрос или сбросьте фильтры.'));
-    return;
+  } else {
+    const wrapper = element('div', 'cards');
+    problems.forEach((problem) => wrapper.append(problemCard(problem, view)));
+    content.replaceChildren();
+    if (problems.length) content.append(wrapper);
+    drawDiscovery(discovery);
+    drawReviewedRadar(findings);
   }
-  const wrapper = element('div', 'cards');
-  problems.forEach((problem) => wrapper.append(problemCard(problem, view)));
-  content.replaceChildren();
-  if (problems.length) content.append(wrapper);
-  drawDiscovery(discovery);
-  drawReviewedRadar(findings);
+  if (discovery.pr) {
+    const request = element('p', 'activity-note');
+    request.append(githubLink(t('Ask for a PR check', 'Запросить проверку PR'),
+      'https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml'));
+    content.append(request);
+  }
 }
 
 function emptyDiscoveryMessage(status, reason) {
@@ -457,7 +463,7 @@ async function discoveryResults(query, signal) {
   const matches = [...list(result.matches), ...list(result.automatic_matches)];
   const pr = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/pull\/[1-9]\d*\/?$/i.test(query.trim());
   const code = list(result.code_candidates);
-  return {matches, code, emptyMessage: pr && !matches.length && !code.length ? emptyDiscoveryMessage(result.scan_status, result.scan_reason) : ''};
+  return {matches, code, pr, emptyMessage: pr && !matches.length && !code.length ? emptyDiscoveryMessage(result.scan_status, result.scan_reason) : ''};
 }
 
 async function reviewedRadarResults(query, signal) {
