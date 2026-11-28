@@ -1,0 +1,154 @@
+{
+  "baseline": {
+    "https://github.com/loopersalty/anyxboxx/pull/574": [],
+    "https://github.com/shadps4-emu/shadps4/pull/5434": [],
+    "https://github.com/pastiijay/klbf-lab/pull/59": [
+      [
+        "https://github.com/taynangt/vice-tay/pull/279",
+        0.3662146356755566,
+        "technical_terms",
+        [
+          "copy",
+          "cpu",
+          "opt"
+        ]
+      ]
+    ],
+    "https://github.com/taynangt/vice-tay/pull/392": []
+  },
+  "candidate": {
+    "https://github.com/loopersalty/anyxboxx/pull/574": [
+      [
+        "https://github.com/pastiijay/klbf-lab/pull/59",
+        0.96,
+        "shared_mechanism",
+        [
+          "gpu-readback/cpu-observation"
+        ]
+      ],
+      [
+        "https://github.com/shadps4-emu/shadps4/pull/5434",
+        0.96,
+        "shared_mechanism",
+        [
+          "gpu-readback/cpu-observation"
+        ]
+      ]
+    ],
+    "https://github.com/shadps4-emu/shadps4/pull/5434": [
+      [
+        "https://github.com/loopersalty/anyxboxx/pull/574",
+        0.96,
+        "shared_mechanism",
+        [
+          "gpu-readback/cpu-observation"
+        ]
+      ],
+      [
+        "https://github.com/pastiijay/klbf-lab/pull/59",
+        0.96,
+        "shared_mechanism",
+        [
+          "gpu-readback/cpu-observation"
+        ]
+      ]
+    ],
+    "https://github.com/pastiijay/klbf-lab/pull/59": [
+      [
+        "https://github.com/loopersalty/anyxboxx/pull/574",
+        0.96,
+        "shared_mechanism",
+        [
+          "gpu-readback/cpu-observation"
+        ]
+      ],
+      [
+        "https://github.com/shadps4-emu/shadps4/pull/5434",
+        0.96,
+        "shared_mechanism",
+        [
+          "gpu-readback/cpu-observation"
+        ]
+      ],
+      [
+        "https://github.com/taynangt/vice-tay/pull/279",
+        0.3662146356755566,
+        "technical_terms",
+        [
+          "copy",
+          "cpu",
+          "opt"
+        ]
+      ]
+    ],
+    "https://github.com/taynangt/vice-tay/pull/392": []
+  },
+  "previous_live": {
+    "publication": {
+      "generated_at": "2026-11-28T04:26:16+03:00",
+      "age_seconds": 1495,
+      "age_state": "fresh"
+    },
+    "matches": [
+      "https://github.com/Belobug/VIctory-Belobug-AMD/pull/112",
+      "shared_mechanism",
+      "https://github.com/Belobug/VIctory-Belobug-AMD/pull/503",
+      "shared_mechanism",
+      "https://github.com/JMAN730/project-flamingo/issues/136",
+      "shared_mechanism",
+      "https://github.com/JMAN730/project-flamingo/issues/149",
+      "shared_mechanism",
+      "https://github.com/JMAN730/project-flamingo/issues/186",
+      "shared_mechanism"
+    ]
+  },
+  "published": [
+    {
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "ad596c6945726e7ae5d0c0d457be9e5a93770978",
+      "html_url": "https://github.com/akimfomin/PortBridge/actions/runs/46095732942"
+    },
+    {
+      "indexed": true,
+      "publication": {
+        "generated_at": "2026-11-28T05:06:04+03:00",
+        "age_seconds": 174,
+        "age_state": "fresh"
+      },
+      "matches": [
+        {
+          "url": "https://github.com/PastiiJay/klbf-lab/pull/59",
+          "score": 0.96,
+          "basis": "shared_mechanism",
+          "reason": "Источники описывают сходную операцию и объект. Проверьте общий сценарий. gpu-readback/cpu-observation. Проверьте различия между архитектурами."
+        },
+        {
+          "url": "https://github.com/Belobug/VIctory-Belobug-AMD/pull/112",
+          "score": 0.92,
+          "basis": "shared_mechanism",
+          "reason": "Источники описывают сходную операцию и объект. Проверьте общий сценарий. memory-copy/write-tracking. Проверьте различия между архитектурами."
+        },
+        {
+          "url": "https://github.com/Belobug/VIctory-Belobug-AMD/pull/503",
+          "score": 0.92,
+          "basis": "shared_mechanism",
+          "reason": "Источники описывают сходную операцию и объект. Проверьте общий сценарий. memory-copy/write-tracking. Проверьте различия между архитектурами."
+        },
+        {
+          "url": "https://github.com/JMAN730/project-flamingo/issues/136",
+          "score": 0.92,
+          "basis": "shared_mechanism",
+          "reason": "Источники описывают сходную операцию и объект. Проверьте общий сценарий. memory-copy/write-tracking. Проверьте различия между архитектурами."
+        },
+        {
+          "url": "https://github.com/JMAN730/project-flamingo/issues/149",
+          "score": 0.92,
+          "basis": "shared_mechanism",
+          "reason": "Источники описывают сходную операцию и объект. Проверьте общий сценарий. memory-copy/write-tracking. Проверьте различия между архитектурами."
+        }
+      ]
+    }
+  ]
+}

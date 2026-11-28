@@ -1,0 +1,869 @@
+[
+  {
+    "target": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 574,
+      "sha": "3fa09cd0e3ddb145b20abbe6adbef14bce803dbf",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/574",
+      "title": "perf: lazy GPU readback on guarded title pages (VICTORY_LAZY_BACK, off)"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 59,
+      "sha": "7311cab076733171ad0b48402cde71c9448246ae",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/59",
+      "title": "gpu/shadow: opt-in VEH lazy GPU-to-CPU copy-back (4/4 of #51)"
+    },
+    "check": "On untouched intervals, report zero host-transfer bytes. Reading one 64 KiB page must transfer only the needed data and preserve sibling pages; test mapped and private memory separately."
+  },
+  {
+    "target": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 574,
+      "sha": "3fa09cd0e3ddb145b20abbe6adbef14bce803dbf",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/574",
+      "title": "perf: lazy GPU readback on guarded title pages (VICTORY_LAZY_BACK, off)"
+    },
+    "source": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5434,
+      "sha": "b3cdcdee3814681b80c925fb565ae33505a2d042",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5434",
+      "title": "video_core: download GPU-written images when the CPU reads them"
+    },
+    "check": "Use an aliased color target whose newest GPU value is sampled by CPU. An untouched color target is an independent control. A Vulkan image transfer is not the D3D12 page path."
+  },
+  {
+    "target": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 392,
+      "sha": "3ffa31f5d3ee7b6f9d76530d111cc3590be5886d",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/392",
+      "title": "Shadow: queue card copies as they change instead of scanning all at each submission"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 57,
+      "sha": "73998126340586acdc89b81cf76b926c90c8c56d",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/57",
+      "title": "gpu/shadow: O(dirty) CopiedPages bitmask, lock-free mirrors & AVX2 merge/diff (2/4 of #51)"
+    },
+    "check": "Compare event queues and page bitmaps with many clean objects and repeated dirty writes to one object. Count visits and canonical dirty results before elapsed time."
+  },
+  {
+    "target": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 392,
+      "sha": "3ffa31f5d3ee7b6f9d76530d111cc3590be5886d",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/392",
+      "title": "Shadow: queue card copies as they change instead of scanning all at each submission"
+    },
+    "source": {
+      "r": "XaviFortes/VIctory-RDNA",
+      "n": 4,
+      "sha": "3a592a8ed607055d9328c263b80c27d33506a324",
+      "url": "https://github.com/XaviFortes/VIctory-RDNA/pull/4",
+      "title": "host: keep refreshes in front across title writes that miss them (VICTORY_KEEP_AHEAD, off by default)"
+    },
+    "check": "The object-level dirty queue and byte-level validity mask solve different filtering stages. Use two copies on one page and one dirty write that reaches only the first."
+  },
+  {
+    "target": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 379,
+      "sha": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/379",
+      "title": "Refresh texture views after writes through a mapped alias"
+    },
+    "source": {
+      "r": "fxceless/victory-fork",
+      "n": 1496,
+      "sha": "ee732dc02b23effce4b59df721c2f55adba14e0c",
+      "url": "https://github.com/fxceless/victory-fork/pull/1496",
+      "title": "GPU: backport placed-page write-watch stamps from Vice-Tay"
+    },
+    "check": "Test writes through distinct aliases, then remap one view. Preserve an unrelated mip and verify newest generation visible to both alias paths."
+  },
+  {
+    "target": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 379,
+      "sha": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/379",
+      "title": "Refresh texture views after writes through a mapped alias"
+    },
+    "source": {
+      "r": "boykopovar/AnyPS5",
+      "n": 26819,
+      "sha": "5b5c7676c98571a9d29888130ba839d6e1819169",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/26819",
+      "title": "fix(agc): correct write-watch lifetime and stencil invalidation"
+    },
+    "check": "Under an aliasing write, verify stale image contents and independently maintained stencil state. The color alias and stencil range need differently scoped updates."
+  },
+  {
+    "target": {
+      "r": "fxceless/victory-fork",
+      "n": 1333,
+      "sha": "88efd7ea876f5d5771d95ff3b5f22c076f19ea2a",
+      "url": "https://github.com/fxceless/victory-fork/pull/1333",
+      "title": "GPU: keep the remap history for every view heap, coalesced and bounded (port of Kamiloj9/victory-dlss 2023d5c8b)"
+    },
+    "source": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 379,
+      "sha": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/379",
+      "title": "Refresh texture views after writes through a mapped alias"
+    },
+    "check": "Bound remap history to the affected heap and reject an old generation after remap. A second view heap with the same logical address is the negative control."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 2578,
+      "sha": "e60f0835e8c9037513e9c9b553be8e84c2635296",
+      "url": "https://github.com/xcl-dev/xcl/pull/2578",
+      "title": "D3D12.X: clear LAST_CONTENT on placed texture unmap and remap (#2460)"
+    },
+    "source": {
+      "r": "fxceless/victory-fork",
+      "n": 1333,
+      "sha": "88efd7ea876f5d5771d95ff3b5f22c076f19ea2a",
+      "url": "https://github.com/fxceless/victory-fork/pull/1333",
+      "title": "GPU: keep the remap history for every view heap, coalesced and bounded (port of Kamiloj9/victory-dlss 2023d5c8b)"
+    },
+    "check": "Check placed view remap after the old object lands. Old last-content identity and bounded history should not survive a remap to unrelated backing."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 2470,
+      "sha": "d5f6daf79b1780f64d8683337bbd1e9303880b37",
+      "url": "https://github.com/xcl-dev/xcl/pull/2470",
+      "title": "D3D12.X: retry uploads after lazy mip mapping failures"
+    },
+    "source": {
+      "r": "boykopovar/AnyPS5",
+      "n": 27451,
+      "sha": "f0182fa9f516f6a44eb96e0fe62e0bb8970f94b8",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27451",
+      "title": "fix(agc): read a sparse buffer piece the guest decommitted as zeros"
+    },
+    "check": "Differentiate nonresident, reserved and successfully mapped backings. Retry once mapping succeeds. Decommitted pages must not be mistaken for a pending texture upload."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 2987,
+      "sha": "f8e75bca1ea903b1cf0e9d4f9387b73f359e5051",
+      "url": "https://github.com/xcl-dev/xcl/pull/2987",
+      "title": "D3D12.X: sparse tiles outside the GPU heaps can live in system memory"
+    },
+    "source": {
+      "r": "boykopovar/AnyPS5",
+      "n": 27991,
+      "sha": "7042da5d054c33622b5f9704acc964960d2305bc",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27991",
+      "title": "perf(agc): reuse read-only sparse buffer address uploads"
+    },
+    "check": "Compare device-local sparse and nonlocal read-only host backing, then modify the source and require only the stale version to be refreshed."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 3039,
+      "sha": "7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "url": "https://github.com/xcl-dev/xcl/pull/3039",
+      "title": "D3D12.X: XCL_TEXTURE_SYSMEM puts streamed texture levels in system memory"
+    },
+    "source": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 550,
+      "sha": "b45603a0106c87fcbaaac893076d664144f30c44",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/550",
+      "title": "perf: the texture pool keeps only the empty blocks that fit under the 85 % line (8 GB: -512 MB at the peak, no 640 MB churn)"
+    },
+    "check": "Split texture bytes still in use from driver-allocated empty reserve before comparing 8 GB results. Keep the mip range and pooling threshold constant across arms."
+  },
+  {
+    "target": {
+      "r": "boykopovar/AnyPS5",
+      "n": 27991,
+      "sha": "7042da5d054c33622b5f9704acc964960d2305bc",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27991",
+      "title": "perf(agc): reuse read-only sparse buffer address uploads"
+    },
+    "source": {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1270,
+      "sha": "4301dad64106828ea388b75a2cc33c6b79da2420",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/1270",
+      "title": "graphics: back the BDA page table with sparse memory"
+    },
+    "check": "Measure page-table bytes and repeatedly uploaded address payload independently. Remap sparse backing and ensure cache identity follows the new mapping."
+  },
+  {
+    "target": {
+      "r": "ProjectLeonida/mandy",
+      "n": 2547,
+      "sha": "1f73cfa98240219bc7b6daf3267beae52a31407d",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2547",
+      "title": "mem-probe: say how full the shared texture blocks are (RT-MEMPROBE-TEXTURE-BLOCKS)"
+    },
+    "source": {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1394,
+      "sha": "9b8fd691204853e7567352ddf8aa82932c50d83d",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/1394",
+      "title": "graphics: give images dedicated allocations where the driver allows many"
+    },
+    "check": "Port the allocator diagnostic criterion: live bytes, block bytes, and largest free span during mixed-size churn. It separates texture growth from stranded reserve."
+  },
+  {
+    "target": {
+      "r": "ProjectLeonida/mandy",
+      "n": 2547,
+      "sha": "1f73cfa98240219bc7b6daf3267beae52a31407d",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2547",
+      "title": "mem-probe: say how full the shared texture blocks are (RT-MEMPROBE-TEXTURE-BLOCKS)"
+    },
+    "source": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 550,
+      "sha": "b45603a0106c87fcbaaac893076d664144f30c44",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/550",
+      "title": "perf: the texture pool keeps only the empty blocks that fit under the 85 % line (8 GB: -512 MB at the peak, no 640 MB churn)"
+    },
+    "check": "Track released empty blocks separately from live data at the 85% admission line. A lower allocated peak alone cannot identify whether texture contents changed."
+  },
+  {
+    "target": {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1395,
+      "sha": "cd09ff80ceef784e3ca4053561c6ab2dc3c305e5",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/1395",
+      "title": "graphics: keep texture GC thresholds within the current memory budget"
+    },
+    "source": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 550,
+      "sha": "b45603a0106c87fcbaaac893076d664144f30c44",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/550",
+      "title": "perf: the texture pool keeps only the empty blocks that fit under the 85 % line (8 GB: -512 MB at the peak, no 640 MB churn)"
+    },
+    "check": "Use equal VRAM pressure with two driver budget values. Active textures must stay warm below the chosen threshold; compare release of empty blocks separately."
+  },
+  {
+    "target": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 309,
+      "sha": "c6466267ec3c31f9237a7a95be672b5015870dd7",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/309",
+      "title": "Account for requested bytes in speculative staging admission"
+    },
+    "source": {
+      "r": "xcl-dev/xcl",
+      "n": 3037,
+      "sha": "58ff61c296bda172c636a007ff102324c5c5d6f3",
+      "url": "https://github.com/xcl-dev/xcl/pull/3037",
+      "title": "D3D12.X: gate texture uploads on OOM back-off and commit headroom (XCL_UPLOAD_BACKOFF=1)"
+    },
+    "check": "Separate speculative upload commitment, already requested bytes and useful headroom. Reject only the newly proposed speculative work when the budget becomes insufficient."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3642,
+      "sha": "1e7176ae20748131b4c0f89c1fe82ef3821351f6",
+      "url": "https://github.com/Marvisak/VIctory/pull/3642",
+      "title": "GPU: keep the CPU-write-only tables in video memory (VICTORY_GPU_UPLOAD)"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 58,
+      "sha": "d29505a1d5a3eef400b75cc081d88b51bf6a5688",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/58",
+      "title": "gpu/shadow: opt-in ReBAR GPU_UPLOAD heap with VRAM guard & WC streaming (3/4 of #51)"
+    },
+    "check": "Check ReBAR-capable local heap behavior and an unsupported adapter separately. Acceptance requires identical GPU-observed table bytes, even if CPU write cost differs."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3642,
+      "sha": "1e7176ae20748131b4c0f89c1fe82ef3821351f6",
+      "url": "https://github.com/Marvisak/VIctory/pull/3642",
+      "title": "GPU: keep the CPU-write-only tables in video memory (VICTORY_GPU_UPLOAD)"
+    },
+    "source": {
+      "r": "HansKristian-Work/vkd3d-proton",
+      "n": 3533,
+      "sha": "8bdd434b7de0fd40c51027663bbe33f36c290bd3",
+      "url": "https://github.com/HansKristian-Work/vkd3d-proton/pull/3533",
+      "title": "Fix buffer usage flags based on heap type"
+    },
+    "check": "The runtime must choose resource usage appropriate to heap type. Test host-visible GPU-upload buffer versus ordinary upload and skip unsupported paths explicitly."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3644,
+      "sha": "9c81f8cc8aaeed3f452eb29a951dce235fe5e033",
+      "url": "https://github.com/Marvisak/VIctory/pull/3644",
+      "title": "GPU: share the lists' indirect budgets and pool their arguments"
+    },
+    "source": {
+      "r": "ProjectLeonida/mandy",
+      "n": 2537,
+      "sha": "6ff203098302e11208b637ea15a84ccea15e78ef",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2537",
+      "title": "D3D12: cover indirect budget resets and rejected batches in both modes"
+    },
+    "check": "Test normal indirect budget reuse and a rejected indirect batch. Reset must restore the full per-list budget without leaking accounting into a different list."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3644,
+      "sha": "9c81f8cc8aaeed3f452eb29a951dce235fe5e033",
+      "url": "https://github.com/Marvisak/VIctory/pull/3644",
+      "title": "GPU: share the lists' indirect budgets and pool their arguments"
+    },
+    "source": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 480,
+      "sha": "02936d50c93e3e872457305aed1f89643e92b556",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/480",
+      "title": "perf(victory-gpu): preserve indirect clamp batch across non-storing compute dispatches"
+    },
+    "check": "Interleave an indirect clamp batch with non-storing compute and then reset after retirement. Compare argument contents and capacity before and after batching."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3643,
+      "sha": "63f337ca8e1e432ab0fbc8ef94618ae89d9612f4",
+      "url": "https://github.com/Marvisak/VIctory/pull/3643",
+      "title": "GPU: share one state-prelude allocator across host lists"
+    },
+    "source": {
+      "r": "xcl-dev/xcl",
+      "n": 2543,
+      "sha": "12141ccbfa162b7e169d913a20c1b7e3fd1bf1dd",
+      "url": "https://github.com/xcl-dev/xcl/pull/2543",
+      "title": "D3D12.X: clear dispatch_chain shared scratch on list lifecycle transitions"
+    },
+    "check": "Shared scratch/prelude objects need both reset and destruction controls. Confirm another list still holds valid state across reset of the first list."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3641,
+      "sha": "31374faf1a710512dd06e3f4275916ab756f570b",
+      "url": "https://github.com/Marvisak/VIctory/pull/3641",
+      "title": "GPU: close a host list before resetting its allocator"
+    },
+    "source": {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3196,
+      "sha": "9a41fd99788ad778cc62797c756bf60308168687",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196",
+      "title": "startup: reset the window presenter's allocator only after its fence is reached"
+    },
+    "check": "Close-and-reset sequencing and GPU completion are independent constraints. Test closed/not-completed and complete/still-recording in addition to the good path."
+  },
+  {
+    "target": {
+      "r": "ProjectLeonida/mandy",
+      "n": 2541,
+      "sha": "25d460ccb7a895351591a31ba2c6b87f656da245",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2541",
+      "title": "d3d12: LEONIDA_RELEASE_WORKER=1 releases a queue's held work on its own worker, not on the signalling thread (RT-RELEASER-HELD-REPLAY)"
+    },
+    "source": {
+      "r": "xcl-dev/xcl",
+      "n": 2965,
+      "sha": "be0c274d642839e451d535a1d481f271bfdd5f38",
+      "url": "https://github.com/xcl-dev/xcl/pull/2965",
+      "title": "D3D12.X: correlate submissions with GPU completion"
+    },
+    "check": "Fence logging orders submitted/completed work separately from callback delivery. Confirm held resource lifetime through worker shutdown and a completed signal."
+  },
+  {
+    "target": {
+      "r": "boykopovar/AnyPS5",
+      "n": 17943,
+      "sha": "4a817932705b2a3ad4580e06b971423d401d1fd2",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/17943",
+      "title": "perf(agc): record Vulkan draw commands on an encoder thread"
+    },
+    "source": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 266,
+      "sha": "49de7774d9a4f603f9a7981bf7f789da520a1431",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/266",
+      "title": "victory-gpu: opt-in multi-queue async compute and copy timeline engine"
+    },
+    "check": "Move encoding and queue scheduling to different scopes. Verify command order around a dependency and measure only preparation CPU time before making a GPU claim."
+  },
+  {
+    "target": {
+      "r": "boykopovar/AnyPS5",
+      "n": 22546,
+      "sha": "ee15f3ca0b96a511428bf954f7a09d3763474892",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/22546",
+      "title": "perf(agc): pipeline dispatches whenever draws commit on the committer"
+    },
+    "source": {
+      "r": "ProjectLeonida/mandy",
+      "n": 2484,
+      "sha": "020d1dd95ba3d949c78d4bf9ab71afc9b029aecd",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2484",
+      "title": "d3d12_xs: a gate held for a later write opens on the GPU, behind the writer (RT-XS-LATE-RELAY)"
+    },
+    "check": "A draw-commit gate must open behind an actual writer. A synthetic writer then dependent indirect consumer can catch early submission even when recording already succeeded."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 3066,
+      "sha": "d8a1f5f1fc30b8640afb76266d24d4a7b79896c5",
+      "url": "https://github.com/xcl-dev/xcl/pull/3066",
+      "title": "D3D12.X: build masked pipelines for partial DispatchX groups on workers"
+    },
+    "source": {
+      "r": "boykopovar/AnyPS5",
+      "n": 26196,
+      "sha": "8f9a9cae20d7c67537df81e64ba09e9ce214f9b9",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/26196",
+      "title": "fix(agc): skip the first-visit library prebuild for a pipeline the async build defers"
+    },
+    "check": "Warm/no-cache control should prove the caller does not build the deferred variant itself. Preserve capability gate and distinguish graphics prebuild from partial compute groups."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 3066,
+      "sha": "d8a1f5f1fc30b8640afb76266d24d4a7b79896c5",
+      "url": "https://github.com/xcl-dev/xcl/pull/3066",
+      "title": "D3D12.X: build masked pipelines for partial DispatchX groups on workers"
+    },
+    "source": {
+      "r": "fxceless/victory-fork",
+      "n": 1450,
+      "sha": "17a6f01d7be53a3696614654a2fd970a37879b25",
+      "url": "https://github.com/fxceless/victory-fork/pull/1450",
+      "title": "GPU: cap the time a frame waits for compute pipelines made at their dispatch (#1420)"
+    },
+    "check": "If worker wait is bounded, separately assert what happens to the next dispatch when the variant finally arrives. Keep partial-group masks and work ordering in the test."
+  },
+  {
+    "target": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 575,
+      "sha": "c1ba64581b14885c4c565ec239bed149dd7677a9",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/575",
+      "title": "fix: translate shaders then warm only used pipelines on the Vice-Tay base"
+    },
+    "source": {
+      "r": "fxceless/victory-fork",
+      "n": 1226,
+      "sha": "b55f71372f2ee632392eafd3068c1fd8cdb03149",
+      "url": "https://github.com/fxceless/victory-fork/pull/1226",
+      "title": "translate --cache [--pipelines]: pipeline pre-build ported from upstream (first run loads instead of making)"
+    },
+    "check": "Warm up active pipelines only and write a repeatable key manifest. An input with one translated but unused entry distinguishes prebuilding everything from warming only the used keys."
+  },
+  {
+    "target": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 434,
+      "sha": "543cbc00ac5a7f82c7e6f4dd274be10cf65bfad8",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/434",
+      "title": "perf(launcher): restrict warm-state fingerprint to shader-cache variables"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 56,
+      "sha": "a7ed24211f2015c00bd537bbc5d21c580add5ab5",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/56",
+      "title": "gpu/pipeline: adapter-keyed PSO cache filenames and atomic rename (1/4 of #51)"
+    },
+    "check": "Runtime-only user settings must not invalidate a shader cache, while adapter identity or compiler change must. Test both with identical inputs."
+  },
+  {
+    "target": {
+      "r": "fxceless/victory-fork",
+      "n": 1442,
+      "sha": "c13e2a390930cacfa68fb27a3341445b18c71c2e",
+      "url": "https://github.com/fxceless/victory-fork/pull/1442",
+      "title": "GPU: keep unrelated pipeline library loads from blocking each other"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 56,
+      "sha": "a7ed24211f2015c00bd537bbc5d21c580add5ab5",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/56",
+      "title": "gpu/pipeline: adapter-keyed PSO cache filenames and atomic rename (1/4 of #51)"
+    },
+    "check": "Compare two unrelated cache keys populated concurrently, with a same-key writer as a serialization control. Keep adapter-key generation and atomic publication explicit."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 2103,
+      "sha": "7743842ada44feff940b4785bf94e70b87b7d39c",
+      "url": "https://github.com/xcl-dev/xcl/pull/2103",
+      "title": "Direct DXIL: defer cold console_geometry during cached_only PSO probes"
+    },
+    "source": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 575,
+      "sha": "c1ba64581b14885c4c565ec239bed149dd7677a9",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/575",
+      "title": "fix: translate shaders then warm only used pipelines on the Vice-Tay base"
+    },
+    "check": "A cache-only probe should skip eager build of absent geometry. Re-run with the key already present and assert hit before broad cold startup timing."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 2755,
+      "sha": "4bb6b30fc5b19e5dbcec8818134af47e39a68a31",
+      "url": "https://github.com/xcl-dev/xcl/pull/2755",
+      "title": "D3D12.X: preserve used-pipeline key on RT-gated compute stand-ins"
+    },
+    "source": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 575,
+      "sha": "c1ba64581b14885c4c565ec239bed149dd7677a9",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/575",
+      "title": "fix: translate shaders then warm only used pipelines on the Vice-Tay base"
+    },
+    "check": "Supply a gated compute variant and a normal one. The warm manifest must retain the correct identity for whichever variant was actually observed."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3313,
+      "sha": "7592bb4f908d0cfc201b287d058daee4ba09098b",
+      "url": "https://github.com/Marvisak/VIctory/pull/3313",
+      "title": "GPU: count single-list submissions in the GPU timing summary"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 14,
+      "sha": "d18474523030d0bda09080b48dd52c3a197bead4",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/14",
+      "title": "Skip missing DXGI present counts in frame generation timing"
+    },
+    "check": "Validate single-list accounting separately from frame-count collection. Simulate a missing measurement and preserve the known baseline so the next delta stays meaningful."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3622,
+      "sha": "f6989c64e2a1962babb12fff855950622b3a1c47",
+      "url": "https://github.com/Marvisak/VIctory/pull/3622",
+      "title": "GPU timing: stop the last sample at the untimed tail"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 14,
+      "sha": "d18474523030d0bda09080b48dd52c3a197bead4",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/14",
+      "title": "Skip missing DXGI present counts in frame generation timing"
+    },
+    "check": "Use native counters from two valid intervals with an untimed tail. The tail is omitted without reporting zero or elongating the previous sample."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3639,
+      "sha": "e0b5e8f7fbbea890f9a41ec95242305444e6c6e1",
+      "url": "https://github.com/Marvisak/VIctory/pull/3639",
+      "title": "GPU capture: decode signed R8 and R16 targets"
+    },
+    "source": {
+      "r": "boykopovar/AnyPS5",
+      "n": 27829,
+      "sha": "b984d28314be17d09ab7906b921b049af5b67d9e",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27829",
+      "title": "fix(agc): render alternate 1_5_5_5 targets during Windows loading"
+    },
+    "check": "Check binary decode of a known signed target before applying output color transforms. Use a positive, negative and boundary texel plus a separate 1555 format case."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 2516,
+      "sha": "c9f7f75ac70fd774c78426e95cd399b743e8590e",
+      "url": "https://github.com/Marvisak/VIctory/pull/2516",
+      "title": "GPU capture: decode XR-biased RGB before image scaling"
+    },
+    "source": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 370,
+      "sha": "260891ba64d55445e007f21002235884d42e4bc7",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/370",
+      "title": "Read colour textures in the requested format and reuse tile offsets"
+    },
+    "check": "Use a midpoint encoded pixel and an explicit linear reference. XR-bias removal and an sRGB transfer curve are separate stages applied before image scaling."
+  },
+  {
+    "target": {
+      "r": "ProjectLeonida/mandy",
+      "n": 2480,
+      "sha": "86b890ca172941547db57a3a7193e48d17ef088a",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2480",
+      "title": "RT-STATE-AUDIT-FORMATS: honor D3D12_DSV_FLAG_READ_ONLY_DEPTH and READ_ONLY_STENCIL"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 27,
+      "sha": "06f4fccace3f6f6a87490afde34105b8b6a39603",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/27",
+      "title": "Fix bounds-only depth testing on D3D12 WARP"
+    },
+    "check": "Read-only DSV must preserve depth and permit a bounds test. Test the identical draw with a depth-writing control and a depth view with no stencil."
+  },
+  {
+    "target": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5601,
+      "sha": "1e6b241129b247fbbc6979d787dcc71c62429f4f",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5601",
+      "title": "texture_cache: Refresh the guest stencil plane of depth images"
+    },
+    "source": {
+      "r": "ProjectLeonida/mandy",
+      "n": 2480,
+      "sha": "86b890ca172941547db57a3a7193e48d17ef088a",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2480",
+      "title": "RT-STATE-AUDIT-FORMATS: honor D3D12_DSV_FLAG_READ_ONLY_DEPTH and READ_ONLY_STENCIL"
+    },
+    "check": "Check stencil read-only and depth read-only separately. A stencil-only write must not masquerade as changed depth data."
+  },
+  {
+    "target": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5762,
+      "sha": "73be5dd4e5fbb562e70783a88c3821264aa703b8",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5762",
+      "title": "texture_cache: Give a cropped texture the image the GPU wrote last"
+    },
+    "source": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 379,
+      "sha": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/379",
+      "title": "Refresh texture views after writes through a mapped alias"
+    },
+    "check": "Test that a cropped view inherits only the latest overlapping GPU-written target. A neighboring unmodified view on the same allocation should preserve its own bytes."
+  },
+  {
+    "target": {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3244,
+      "sha": "9863d46902dbe627c14a05f787ba89165067e253",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3244",
+      "title": "shader: accept GLC and DLC cache flags on direct read-only image ops"
+    },
+    "source": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5739,
+      "sha": "98505c3694c23ed595aee58016d3974844a414d3",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5739",
+      "title": "shader_recompiler: Keep image address operands alive with a no-op"
+    },
+    "check": "Keep image operand flags separate from operand liveness. Compare identical fetch coordinates with a tested cache hint, and a second address operand kept alive across legalization."
+  },
+  {
+    "target": {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3247,
+      "sha": "573c3b7c672c82799cba1a492efbc1f3a65eac6c",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3247",
+      "title": "compute: lower s_andn2_wrexec_b64 for wave64 direct compute"
+    },
+    "source": {
+      "r": "KytyPS5/KytyPS5",
+      "n": 458,
+      "sha": "df7c3ac625d2cedbd88cfc1ebc812be2e4bf9119",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/458",
+      "title": "shader: support the remaining wave32 SAVEEXEC variants"
+    },
+    "check": "Use a wave with a live high half and a disabled low half. Validate saved EXEC and restore behavior, then test the wave32 path separately."
+  },
+  {
+    "target": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 435,
+      "sha": "d53b8fa689e15fc5673aff5afeb2c0fe55eee528",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/435",
+      "title": "fix(victory-shader): enforce inactive-lane EXEC rules for DPP16 and DPP8"
+    },
+    "source": {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3236,
+      "sha": "2cd00891174b5195a9b4e8644e60c41764ba8a8f",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3236",
+      "title": "compute: lower DPP8 sources in the direct compute path"
+    },
+    "check": "Sparse EXEC plus asymmetric source lanes distinguishes fetch-inactive flags from zero. Keep wave32 and split wave64 checks separate."
+  },
+  {
+    "target": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 289,
+      "sha": "4ec4b55f15351dc87e8dbc1aa4c56f54f39f6751",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/289",
+      "title": "shader: exact static Wave32 LDS alias, lane-private, and commutative-atomic analysis"
+    },
+    "source": {
+      "r": "PastiiJay/klbf-lab",
+      "n": 50,
+      "sha": "a6883bfaaa282b48e1b88c51fd019d8f470c433f",
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/50",
+      "title": "shader: static Wave32 LDS hazard analysis for branched/disjoint compute (vitutu1#12 handover)"
+    },
+    "check": "Compare proven lane-private LDS with a cross-half read and a divergent barrier. Require fallback for the two unsupported conditions before comparing shader time."
+  },
+  {
+    "target": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5310,
+      "sha": "5cf71c8b86d6d729c77481819af6e7bac815248d",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5310",
+      "title": "shader_recompiler: Add barrier for buffer dependencies inside a wave"
+    },
+    "source": {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 289,
+      "sha": "4ec4b55f15351dc87e8dbc1aa4c56f54f39f6751",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/289",
+      "title": "shader: exact static Wave32 LDS alias, lane-private, and commutative-atomic analysis"
+    },
+    "check": "A barrier in a valid shared-memory kernel is observable even when there is no same-lane value dependency. Check a reader lane different from the writer lane."
+  },
+  {
+    "target": {
+      "r": "xcl-dev/xcl",
+      "n": 2964,
+      "sha": "86a90eebad296798fb46d8d610203f89eadaee7f",
+      "url": "https://github.com/xcl-dev/xcl/pull/2964",
+      "title": "Shaders: fail closed on wave64 rendezvous timeout"
+    },
+    "source": {
+      "r": "fxceless/victory-fork",
+      "n": 854,
+      "sha": "7c9a2f988dc4ceb8e071ddc5792019b02ba4827e",
+      "url": "https://github.com/fxceless/victory-fork/pull/854",
+      "title": "Shaders: what the paired form still lacks on 32-lane hosts (the structure builder's programs, DispatchX counts per lane, on by default), mesh programs over 32 KiB linked with their pixel program, and smaller fixes"
+    },
+    "check": "Verify that a missing second half of a paired wave refuses the path rather than returning invented data. A supported two-half input is the positive control."
+  },
+  {
+    "target": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5753,
+      "sha": "4815716d334024e72a1c43cece677fb7f3022d0f",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5753",
+      "title": "shader_recompiler: Split buffer loads whose V# comes from a phi"
+    },
+    "source": {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3063,
+      "sha": "64513f26a85867bc74969777eae3e27f9c4ef48a",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3063",
+      "title": "native: read GPU-selected heap slots raw and typed in one program"
+    },
+    "check": "Use a branch whose selected buffer changes its representation. Verify value and dimensions on both branches, without claiming that HLSL and SPIR-V select lowering are identical."
+  },
+  {
+    "target": {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3135,
+      "sha": "fbb9aef797c0ef186e1122f164eda512c3b0ca01",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3135",
+      "title": "shader: lower v_floor_f16, v_ceil_f16, v_trunc_f16 and v_rndne_f16 in the direct compute path"
+    },
+    "source": {
+      "r": "Marvisak/VIctory",
+      "n": 3620,
+      "sha": "0fcf49d37e5f5556996c82772eccf3e8aaee9d93",
+      "url": "https://github.com/Marvisak/VIctory/pull/3620",
+      "title": "Shaders: emit fewer instructions for FP16 denormal rounding"
+    },
+    "check": "Pin negative zero, subnormals, infinities and NaNs around binary16 rounding. Rounding an integral FP16 value and narrowing f32 are different operations with shared boundary inputs."
+  },
+  {
+    "target": {
+      "r": "boykopovar/AnyPS5",
+      "n": 27887,
+      "sha": "9ece009800bac311e6b6bccdfb7b9d8014df3109",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27887",
+      "title": "fix(shader): emulate image atomics on 8- and 16-bit integer texels"
+    },
+    "source": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5768,
+      "sha": "6204747a11cdb65064bc173c118ec0bafd65dda1",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5768",
+      "title": "shader_recompiler: Do 32_32 image atomics on an R64ui view"
+    },
+    "check": "Exercise narrow atomic data in the selected channel while preserving neighbor bits. Native R64ui use is a separate width and capability control."
+  },
+  {
+    "target": {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5713,
+      "sha": "1fbc0a6abb760a1e94110a207bee64b769d46201",
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5713",
+      "title": "shader_recompiler: DS_ORDERED_COUNT"
+    },
+    "source": {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1199,
+      "sha": "050386010c5e72572b01c83af346e7ba06309bbe",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/1199",
+      "title": "shader: serve DS_ORDERED_COUNT waves in dispatch order"
+    },
+    "check": "Check DS_ORDERED_COUNT in two waves with one partially participating wave; validate returned counts and ordering with a buffer-only fixture."
+  },
+  {
+    "target": {
+      "r": "Marvisak/VIctory",
+      "n": 3637,
+      "sha": "8d45f077a20616923f5142836be52c8e0247b3bb",
+      "url": "https://github.com/Marvisak/VIctory/pull/3637",
+      "title": "Shaders: lower scalar bit-field extracts through Ibfe and Ubfe"
+    },
+    "source": {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3225,
+      "sha": "4f75193e1fa747d3c7c4f30c8f905cc41a58b80e",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3225",
+      "title": "shader: lower pixel image descriptor size fields read as numbers"
+    },
+    "check": "Use an independent bitfield extractor for the exact width and signed/unsigned corner. Access through descriptor fields should have a distinct shift/mask control."
+  },
+  {
+    "target": {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1197,
+      "sha": "083a22278b341c5e8931ef26e6c9316da412c195",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/1197",
+      "title": "shader: fold equality compares against impossible values"
+    },
+    "source": {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 571,
+      "sha": "446fb7a691a2ded94f23abf549dfc8bf1f5b3e20",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/571",
+      "title": "perf: M0-indexed register reads as a select tree on M0's bits (up to 7.6x on a 4060 Laptop)"
+    },
+    "check": "The constrained range can prune impossible choices, while the balanced tree reduces dependency depth. Compare aligned and unconstrained indices on both sides of the last register. The CPU tree matched flat lookup in 12 scenario groups."
+  }
+]

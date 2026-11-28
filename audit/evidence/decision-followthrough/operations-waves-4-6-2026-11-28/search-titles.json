@@ -1,0 +1,947 @@
+[
+  [
+    "xcl-dev/xcl",
+    3066,
+    "D3D12.X: build masked pipelines for partial DispatchX groups on workers"
+  ],
+  [
+    "xcl-dev/xcl",
+    2960,
+    "D3D12.X: read wait cells without faulting"
+  ],
+  [
+    "xcl-dev/xcl",
+    2961,
+    "D3D12.X: own sparse planning observations"
+  ],
+  [
+    "xcl-dev/xcl",
+    2962,
+    "D3D12.X: keep unlocked sparse planning inert"
+  ],
+  [
+    "xcl-dev/xcl",
+    2965,
+    "D3D12.X: correlate submissions with GPU completion"
+  ],
+  [
+    "xcl-dev/xcl",
+    2755,
+    "D3D12.X: preserve used-pipeline key on RT-gated compute stand-ins"
+  ],
+  [
+    "xcl-dev/xcl",
+    3061,
+    "D3D12.X: coherent UMA windows in a driver heap on NVIDIA (port of #2844 to amd-dev)"
+  ],
+  [
+    "xcl-dev/xcl",
+    2550,
+    "D3D12.X: a skipped ExecuteIndirect inside an occlusion query leaves it visible"
+  ],
+  [
+    "xcl-dev/xcl",
+    2543,
+    "D3D12.X: clear dispatch_chain shared scratch on list lifecycle transitions"
+  ],
+  [
+    "xcl-dev/xcl",
+    3039,
+    "D3D12.X: XCL_TEXTURE_SYSMEM puts streamed texture levels in system memory"
+  ],
+  [
+    "xcl-dev/xcl",
+    2987,
+    "D3D12.X: sparse tiles outside the GPU heaps can live in system memory"
+  ],
+  [
+    "xcl-dev/xcl",
+    2578,
+    "D3D12.X: clear LAST_CONTENT on placed texture unmap and remap (#2460)"
+  ],
+  [
+    "xcl-dev/xcl",
+    2470,
+    "D3D12.X: retry uploads after lazy mip mapping failures"
+  ],
+  [
+    "xcl-dev/xcl",
+    2424,
+    "D3D12.X: keep inline split pipeline pieces on the foreground path"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3251,
+    "compute: accept GLC, DLC and SLC on raw buffer loads and stores in direct compute"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    2344,
+    "startup: close the rendered session from the output window"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    2245,
+    "startup: stop probing unmapped guest memory from the texture and no-op paths"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    2470,
+    "startup: dispatch translated compute programs with raw table buffers"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3063,
+    "native: read GPU-selected heap slots raw and typed in one program"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3221,
+    "native: bind a single directly indexed heap flag as a descriptor table"
+  ],
+  [
+    "Marvisak/VIctory",
+    3644,
+    "GPU: share the lists' indirect budgets and pool their arguments"
+  ],
+  [
+    "Marvisak/VIctory",
+    3643,
+    "GPU: share one state-prelude allocator across host lists"
+  ],
+  [
+    "Marvisak/VIctory",
+    3642,
+    "GPU: keep the CPU-write-only tables in video memory (VICTORY_GPU_UPLOAD)"
+  ],
+  [
+    "Marvisak/VIctory",
+    3641,
+    "GPU: close a host list before resetting its allocator"
+  ],
+  [
+    "Marvisak/VIctory",
+    3638,
+    "GPU diagnostics: VICTORY_PROBE, live pipeline coverage and on-demand target snapshot (off by default)"
+  ],
+  [
+    "Marvisak/VIctory",
+    2827,
+    "Capture: save packed R10G10B10A2 presentation frames"
+  ],
+  [
+    "Marvisak/VIctory",
+    3639,
+    "GPU capture: decode signed R8 and R16 targets"
+  ],
+  [
+    "Marvisak/VIctory",
+    2516,
+    "GPU capture: decode XR-biased RGB before image scaling"
+  ],
+  [
+    "Marvisak/VIctory",
+    3628,
+    "Windows 10: load the Agility SDK runtime from a D3D12 folder beside v…"
+  ],
+  [
+    "Marvisak/VIctory",
+    3274,
+    "GPU: a texture read knows its memory has no writer without the texture map's lock"
+  ],
+  [
+    "Marvisak/VIctory",
+    3604,
+    "GPU: reuse scratch for marked-page write-back"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    392,
+    "Shadow: queue card copies as they change instead of scanning all at each submission"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    379,
+    "Refresh texture views after writes through a mapped alias"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    375,
+    "Launcher: renderer ports 6 and 7 on NVIDIA with ten or more cores"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    120,
+    "Integrate the pending renderer and compatibility fixes"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    118,
+    "Keep GPU removal diagnostics when validating texture readbacks"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    260,
+    "feat(gpu): opt-in D3D12 sparse VA page table for loose windows"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    275,
+    "Port GPU amplification-stage indirect mesh launch (VICTORY_MESH_LAUNCH)"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    276,
+    "hle: event-driven 8 kHz raw mouse ring, cursor capture, KBM+pad XUID binding, and trigger/DualSense haptics"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    279,
+    "Add opt-in GPU-direct zero-CPU-copy 3-way sync engine (VICTORY_GPU_SYNC=1)"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    266,
+    "victory-gpu: opt-in multi-queue async compute and copy timeline engine"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    309,
+    "Account for requested bytes in speculative staging admission"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    312,
+    "VICTORY_WIDE_THREADS and VICTORY_CAPTURE_EVERY"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2548,
+    "vulkan: the predicate reducer and the present composer pick memory through memory_type_order (RT-PREDICATE-COMPOSE-MEMORY-TYPES)"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2547,
+    "mem-probe: say how full the shared texture blocks are (RT-MEMPROBE-TEXTURE-BLOCKS)"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2541,
+    "d3d12: LEONIDA_RELEASE_WORKER=1 releases a queue's held work on its own worker, not on the signalling thread (RT-RELEASER-HELD-REPLAY)"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2488,
+    "xmem: fill the 120-byte buffer of XMemGetWorkingSetStatistics kind 0x2000000a (RT-XMEM-WORKINGSET-KIND-0A)"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2522,
+    "d3d12, process: null barrier arrays, CopyTiles in a bundle, calibration wait, entry thread argument, getmainargs expand (RT-COM-NULL-BARRIERS-ENTRY)"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2538,
+    "D3D12: anchor the placed-view regression to its backing buffer"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2537,
+    "D3D12: cover indirect budget resets and rejected batches in both modes"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2536,
+    "CI: validate D3D12 replay documentation against Rust clap options"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2535,
+    "acphal: power-of-two alignment in ApuIsVirtualAddressValid; ApuAlloc(flags=2) gets the lazy default heap (RT-ACPHAL-ALIGNMENT-AND-LAZY-HEAP)"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2405,
+    "d3d12: check sparse buffer memory_types before sharing the tile arena"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    574,
+    "perf: lazy GPU readback on guarded title pages (VICTORY_LAZY_BACK, off)"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    550,
+    "perf: the texture pool keeps only the empty blocks that fit under the 85 % line (8 GB: -512 MB at the peak, no 640 MB churn)"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    458,
+    "fix(victory-gpu): bind zero fallback for missing root CBVs/SRVs and drop draws missing stride tables"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    554,
+    "perf(victory-gpu): index Step::GpuWrite per list so declared_writes skips non-write steps"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    347,
+    "victory-gpu: size-tiered card-buffer headroom and fence-safe LRU demotion"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    480,
+    "perf(victory-gpu): preserve indirect clamp batch across non-storing compute dispatches"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    472,
+    "fix(victory-gpu): align RT pass gating, avoid builder_runs stall in ambient, and add synthetic occluder test"
+  ],
+  [
+    "fxceless/victory-fork",
+    1496,
+    "GPU: backport placed-page write-watch stamps from Vice-Tay"
+  ],
+  [
+    "fxceless/victory-fork",
+    1333,
+    "GPU: keep the remap history for every view heap, coalesced and bounded (port of Kamiloj9/victory-dlss 2023d5c8b)"
+  ],
+  [
+    "fxceless/victory-fork",
+    1433,
+    "Rect tests: skip validation on a validator older than DXC 1.8 (#1337)"
+  ],
+  [
+    "fxceless/victory-fork",
+    1460,
+    "HLE/xmem: a page-mapping copy that cannot be served leaves the buffer it showed"
+  ],
+  [
+    "fxceless/victory-fork",
+    1486,
+    "GPU: initialize the Series S compositor on Proton"
+  ],
+  [
+    "fxceless/victory-fork",
+    1192,
+    "GPU/draw: reduce CPU work when preparing descriptor tables"
+  ],
+  [
+    "fxceless/victory-fork",
+    1450,
+    "GPU: cap the time a frame waits for compute pipelines made at their dispatch (#1420)"
+  ],
+  [
+    "fxceless/victory-fork",
+    1481,
+    "gpu: VICTORY_LINE_WAITS, what the submitting thread waits on and who ends it (diagnostics, off by default)"
+  ],
+  [
+    "fxceless/victory-fork",
+    1442,
+    "GPU: keep unrelated pipeline library loads from blocking each other"
+  ],
+  [
+    "fxceless/victory-fork",
+    1458,
+    "victory-gpu: add diagnostics counters per branch of refresh_timed"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    2141,
+    "common: finish file reads that hit GPU-protected guest pages (ASTRO BOT)"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    2595,
+    "ngs2: route custom module outputs to separate buffers (Rise of the Ronin)"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1395,
+    "graphics: keep texture GC thresholds within the current memory budget"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1307,
+    "memory: write-protect tracked guest pages with userfaultfd"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1405,
+    "CP: close a command buffer whose last dword cannot be a packet"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1289,
+    "renderer: reuse texture lookups for unchanged descriptors"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1270,
+    "graphics: back the BDA page table with sparse memory"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1294,
+    "gpu: scan only summarized words of the BDA fault buffer"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    17943,
+    "perf(agc): record Vulkan draw commands on an encoder thread"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    26819,
+    "fix(agc): correct write-watch lifetime and stencil invalidation"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    27991,
+    "perf(agc): reuse read-only sparse buffer address uploads"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    26462,
+    "fix(libSceAudioIn): give a capture open that does not return a silent port"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    27829,
+    "fix(agc): render alternate 1_5_5_5 targets during Windows loading"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    26196,
+    "fix(agc): skip the first-visit library prebuild for a pipeline the async build defers"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    16018,
+    "feat(libSceNpCppWebApi): allocate String, Vector and IntrusivePtr objects from the LibContext"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    22546,
+    "perf(agc): pipeline dispatches whenever draws commit on the committer"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    27451,
+    "fix(agc): read a sparse buffer piece the guest decommitted as zeros"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    16,
+    "perf(gpu): shard HostHeap::mirror across 256 descriptor stripes"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    59,
+    "gpu/shadow: opt-in VEH lazy GPU-to-CPU copy-back (4/4 of #51)"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    51,
+    "gpu: opt-in lazy GPU write-back (VEH), O(dirty) CopiedPages, AVX2 shadow & AdapterKey PSO (vitutu1#20 handover)"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    113,
+    "Allow opting out of half buffer views"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    72,
+    "Test descriptor invalidation against the rules available on win10-test"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    22,
+    "Use the discrete GPU on laptops instead of the integrated one"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    28,
+    "Textures: hash big texture memory on several threads (same hash, up to 6x faster)"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    44,
+    "perf(rt,gpu): speed up BVH traversal, add ListSync/quarantine, and fix multi-heap directory ordering"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    58,
+    "gpu/shadow: opt-in ReBAR GPU_UPLOAD heap with VRAM guard & WC streaming (3/4 of #51)"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    60,
+    "Make the write-watch test tolerate earlier journal entries"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5772,
+    "kernel: Relocate user thread stacks away from game memory on Windows"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5779,
+    "video_core: Drop page watchers when memory is mapped"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5770,
+    "renderer_vulkan: Add a size limit for read-only unbounded buffers"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5190,
+    "video_core / renderer_vulkan: PM4 packet improvements and draw predication"
+  ],
+  [
+    "xcl-dev/xcl",
+    2398,
+    "DXIL: saturate 16-bit integer valu16 ops when CLAMP=1"
+  ],
+  [
+    "xcl-dev/xcl",
+    2964,
+    "Shaders: fail closed on wave64 rendezvous timeout"
+  ],
+  [
+    "xcl-dev/xcl",
+    1082,
+    "Shaders: console containers are walked without decoding instructions"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3250,
+    "shader: lower v_madmk_f32 and v_madak_f32 in direct Compute and Pixel DXIL"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3241,
+    "shader: merge current main into the native shader module stack"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3239,
+    "shader: lower v_dot2_f32_f16 in direct Compute and Pixel DXIL"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3247,
+    "compute: lower s_andn2_wrexec_b64 for wave64 direct compute"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    1918,
+    "shader: lower compute v_ldexp_f32"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3232,
+    "Carry formatted buffer loads through byte-address windows to main"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3100,
+    "shader: lower pixel structured-to-raw buffer loads"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3119,
+    "tooling: extend the patch manifest loader (nesting refusal, shader kind, load_data)"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3123,
+    "shader: lower v_ldexp_f16 in the direct compute path"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3135,
+    "shader: lower v_floor_f16, v_ceil_f16, v_trunc_f16 and v_rndne_f16 in the direct compute path"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3136,
+    "shader: harden compile_lds_request CLI, path guards, and replay checks with offline unit suite"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3137,
+    "compile_dxil: invalidate a published manifest when sidecar content changes with an older timestamp"
+  ],
+  [
+    "Marvisak/VIctory",
+    3640,
+    "Shaders: lower SAD differences through UMax and UMin"
+  ],
+  [
+    "Marvisak/VIctory",
+    2500,
+    "CLI: report completed shader translation jobs"
+  ],
+  [
+    "Marvisak/VIctory",
+    3637,
+    "Shaders: lower scalar bit-field extracts through Ibfe and Ubfe"
+  ],
+  [
+    "Marvisak/VIctory",
+    3600,
+    "Shaders: lower dynamic v_perm_b32 sign fills once per instruction"
+  ],
+  [
+    "Marvisak/VIctory",
+    2079,
+    "Shaders: a relative move's program is built at its full range only if no bound is proven"
+  ],
+  [
+    "Marvisak/VIctory",
+    3221,
+    "fix(shader): preserve signed zero when f32 div:2 underflows"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    289,
+    "shader: exact static Wave32 LDS alias, lane-private, and commutative-atomic analysis"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    281,
+    "shader: add opt-in whole-function DXIL exec-mask, known-bits, and bitfield dataflow pass"
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    305,
+    "Shaders: stop ray traversal sooner (512) in programs with the node test"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2543,
+    "d3d12: with no shader library, the descriptor table is tagged, the tr…"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2480,
+    "RT-STATE-AUDIT-FORMATS: honor D3D12_DSV_FLAG_READ_ONLY_DEPTH and READ_ONLY_STENCIL"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2540,
+    "D3D12 shader: reach mixed typed table reads in the D16 round-trip test"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2438,
+    "rdna2spirv: check high 32 bits for buffer offset fit to avoid NVVM crash (SHADER-NVVM-MUBUF-OFFSET-FIT)"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    535,
+    "fix(victory-shader): support dynamic BVH descriptor word1, partial dmask, and clamp >=1 TiB directory addresses"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    456,
+    "fix(victory-shader): port #448 and #435 onto the Vice-Tay base"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    350,
+    "perf(victory-gpu): reclaim idle host System RAM via MEM_DECOMMIT and cold pool/DXIL trimming"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    435,
+    "fix(victory-shader): enforce inactive-lane EXEC rules for DPP16 and DPP8"
+  ],
+  [
+    "fxceless/victory-fork",
+    1006,
+    "Shaders: the code table starts after the instructions (fixes RTX 5090 Xid 13; port of Marvisak/VIctory#2143)"
+  ],
+  [
+    "fxceless/victory-fork",
+    854,
+    "Shaders: what the paired form still lacks on 32-lane hosts (the structure builder's programs, DispatchX counts per lane, on by default), mesh programs over 32 KiB linked with their pixel program, and smaller fixes"
+  ],
+  [
+    "fxceless/victory-fork",
+    1482,
+    "gpu: VICTORY_SAMPLE_LINE, a stack sampler for the submit thread and named thread groups (off by default)"
+  ],
+  [
+    "fxceless/victory-fork",
+    1216,
+    "GPU/Shaders: a slot picked by index is read as a constant buffer only if it holds one"
+  ],
+  [
+    "fxceless/victory-fork",
+    1476,
+    "GPU: what shaders touch on the card's side in one switch, sizes by the card's budget (VICTORY_CARD_SIDE=1, off by default)"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    2590,
+    "shader: link GPU-selected calls through function tables"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    2358,
+    "shader: read BDA pages past the page table as missing"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1444,
+    "shader: bound post-tested loop image tables by their start value (Guardians of the Galaxy, #1004)"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1295,
+    "shader: forward EXEC-guarded selects into guarded ALU operands"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    1197,
+    "shader: fold equality compares against impossible values"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    22439,
+    "feat(agc): draw PS4 ES-GS-VS geometry shaders through a Vulkan geometry stage"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    27887,
+    "fix(shader): emulate image atomics on 8- and 16-bit integer texels"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    41,
+    "perf(shader): add DXIL pure LICM, canonical ptr-path LDS forwarding, and barrier dedup"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    75,
+    "Test texture dimensions through both supported shader paths on win10-test"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    27,
+    "Fix bounds-only depth testing on D3D12 WARP"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    37,
+    "Repair indirect, overlap and depth-bounds GPU tests on win10-test"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5773,
+    "shader_recompiler: Read s_buffer_load through DMA when its V# can't be fetched"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5713,
+    "shader_recompiler: DS_ORDERED_COUNT"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5768,
+    "shader_recompiler: Do 32_32 image atomics on an R64ui view"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5753,
+    "shader_recompiler: Split buffer loads whose V# comes from a phi"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5310,
+    "shader_recompiler: Add barrier for buffer dependencies inside a wave"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5738,
+    "shader_recompiler: Support off-chip and DYNAMIC_HS tessellation"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5739,
+    "shader_recompiler: Keep image address operands alive with a no-op"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5218,
+    "shader_recompiler: Skip images and samplers behind untaken branches"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5549,
+    "shader_recompiler: Support thread ID buffer addressing in all stages"
+  ],
+  [
+    "xcl-dev/xcl",
+    2103,
+    "Direct DXIL: defer cold console_geometry during cached_only PSO probes"
+  ],
+  [
+    "R0Y00/Xbox2Windows",
+    3244,
+    "shader: accept GLC and DLC cache flags on direct read-only image ops"
+  ],
+  [
+    "Marvisak/VIctory",
+    3313,
+    "GPU: count single-list submissions in the GPU timing summary"
+  ],
+  [
+    "Marvisak/VIctory",
+    3622,
+    "GPU timing: stop the last sample at the untimed tail"
+  ],
+  [
+    "ProjectLeonida/mandy",
+    2525,
+    "library_loader: no \".dll\" for an empty name; FreeLibrary drops the cached name (RT-LOADER-EMPTY-NAME-STALE-CACHE)"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    573,
+    "fix: isolate the CLI pipeline warm-up from the Windows console"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    575,
+    "fix: translate shaders then warm only used pipelines on the Vice-Tay base"
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    434,
+    "perf(launcher): restrict warm-state fingerprint to shader-cache variables"
+  ],
+  [
+    "fxceless/victory-fork",
+    1226,
+    "translate --cache [--pipelines]: pipeline pre-build ported from upstream (first run loads instead of making)"
+  ],
+  [
+    "KytyPS5/KytyPS5",
+    937,
+    "Wolverine: renderer threading, caches, AMPR/AJM and shader recompiler fixes"
+  ],
+  [
+    "boykopovar/AnyPS5",
+    27986,
+    "feat(libSceNKWebKit): implement AXObjectCache toggles and WKAccessibilityEnhancedAccessibilityEnabled"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    14,
+    "Skip missing DXGI present counts in frame generation timing"
+  ],
+  [
+    "PastiiJay/klbf-lab",
+    56,
+    "gpu/pipeline: adapter-keyed PSO cache filenames and atomic rename (1/4 of #51)"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5745,
+    "video_core: Unmap texture cache images on the GPU thread"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5762,
+    "texture_cache: Give a cropped texture the image the GPU wrote last"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5601,
+    "texture_cache: Refresh the guest stencil plane of depth images"
+  ],
+  [
+    "doitsujin/dxvk",
+    5929,
+    "Nuke descriptor buffer path"
+  ],
+  [
+    "doitsujin/dxvk",
+    5828,
+    "[d3d11] Implement NVAPI multiview rendering"
+  ],
+  [
+    "HansKristian-Work/vkd3d-proton",
+    3534,
+    "vkd3d: Release frame latency waitable on occluded Present (alt-tabbing out and in of a game halves the FPS)"
+  ],
+  [
+    "HansKristian-Work/vkd3d-proton",
+    3533,
+    "Fix buffer usage flags based on heap type"
+  ],
+  [
+    "HansKristian-Work/vkd3d-proton",
+    3379,
+    "xess xmx: Enable the Vulkan extensions and features XeSS requires"
+  ],
+  [
+    "microsoft/DirectXShaderCompiler",
+    8426,
+    "Disable 16bit Store with RWByteAddressBuffer for SPIRV"
+  ],
+  [
+    "microsoft/DirectXShaderCompiler",
+    8719,
+    "[SPIR-V] Follow-up to #8616: exclude entry functions from function-target decoration"
+  ],
+  [
+    "microsoft/DirectXShaderCompiler",
+    8057,
+    "[SPIR-V] Fix Mesh Shader debug info source locations"
+  ],
+  [
+    "KhronosGroup/Vulkan-ValidationLayers",
+    13708,
+    "gpuav: Fix descriptor states buffers allocations"
+  ],
+  [
+    "KhronosGroup/Vulkan-ValidationLayers",
+    13780,
+    "sync-gpuav: Validate argument buffer reads for indirect count draws"
+  ],
+  [
+    "KhronosGroup/Vulkan-ValidationLayers",
+    13756,
+    "gpuav: Add ShaderAbort support"
+  ],
+  [
+    "RPCS3/rpcs3",
+    20042,
+    "cellSaveData: Filter files not present on PARAM.SFO"
+  ],
+  [
+    "RPCS3/rpcs3",
+    19785,
+    "[NOT TO BE MERGED] rsx: Fix main memory tiling (tile bank, shader read detile, float readback)"
+  ],
+  [
+    "RPCS3/rpcs3",
+    19969,
+    "hle: Check allocation failures in TLS and cellSail, gate cellRecStart/Stop on pending callback"
+  ],
+  [
+    "shadps4-emu/shadPS4",
+    5434,
+    "video_core: download GPU-written images when the CPU reads them"
+  ]
+]

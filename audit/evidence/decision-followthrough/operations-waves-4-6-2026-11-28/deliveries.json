@@ -1,0 +1,411 @@
+{
+  "contacts": [
+    {
+      "r": "ProjectLeonida/mandy",
+      "n": 2541,
+      "id": 7232057491,
+      "who": "tiguan26",
+      "link": "https://github.com/ProjectLeonida/mandy/pull/2541#issuecomment-7232057491",
+      "prior_contact": false
+    },
+    {
+      "r": "Marvisak/VIctory",
+      "n": 3644,
+      "id": 7232057225,
+      "who": "Luislariosss",
+      "link": "https://github.com/Marvisak/VIctory/pull/3644#issuecomment-7232057225",
+      "prior_contact": false
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5762,
+      "id": 7232063181,
+      "who": "nikmparis217-ux",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5762#issuecomment-7232063181",
+      "prior_contact": false
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 3066,
+      "id": 7232062187,
+      "who": "KDenKC",
+      "link": "https://github.com/xcl-dev/xcl/pull/3066#issuecomment-7232062187",
+      "prior_contact": true
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 2578,
+      "id": 7232056517,
+      "who": "AngeloMaiale",
+      "link": "https://github.com/xcl-dev/xcl/pull/2578#issuecomment-7232056517",
+      "prior_contact": false
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 2470,
+      "id": 7232056565,
+      "who": "razormontana",
+      "link": "https://github.com/xcl-dev/xcl/pull/2470#issuecomment-7232056565",
+      "prior_contact": false
+    },
+    {
+      "r": "ProjectLeonida/mandy",
+      "n": 2547,
+      "id": 7232057097,
+      "who": "Tyrannys",
+      "link": "https://github.com/ProjectLeonida/mandy/pull/2547#issuecomment-7232057097",
+      "prior_contact": true
+    },
+    {
+      "r": "boykopovar/AnyPS5",
+      "n": 27991,
+      "id": 7232057075,
+      "who": "kteal",
+      "link": "https://github.com/boykopovar/AnyPS5/pull/27991#issuecomment-7232057075",
+      "prior_contact": false
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 2987,
+      "id": 7232056646,
+      "who": "treybertram06",
+      "link": "https://github.com/xcl-dev/xcl/pull/2987#issuecomment-7232056646",
+      "prior_contact": false
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 2755,
+      "id": 7232062366,
+      "who": "Saksukella",
+      "link": "https://github.com/xcl-dev/xcl/pull/2755#issuecomment-7232062366",
+      "prior_contact": false
+    },
+    {
+      "r": "Marvisak/VIctory",
+      "n": 3622,
+      "id": 7232062629,
+      "who": "andrewpozdnakov7-jpg",
+      "link": "https://github.com/Marvisak/VIctory/pull/3622#issuecomment-7232062629",
+      "prior_contact": true
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 2964,
+      "id": 7232068055,
+      "who": "bmjask",
+      "link": "https://github.com/xcl-dev/xcl/pull/2964#issuecomment-7232068055",
+      "prior_contact": false
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 2103,
+      "id": 7232067766,
+      "who": "Decodere",
+      "link": "https://github.com/xcl-dev/xcl/pull/2103#issuecomment-7232067766",
+      "prior_contact": false
+    },
+    {
+      "r": "Marvisak/VIctory",
+      "n": 3313,
+      "id": 7232062508,
+      "who": "neonbyte1",
+      "link": "https://github.com/Marvisak/VIctory/pull/3313#issuecomment-7232062508",
+      "prior_contact": true
+    },
+    {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 309,
+      "id": 7232018176,
+      "who": "CandyyPL",
+      "link": "https://github.com/TaynanGT/Vice-Tay/pull/309#issuecomment-7232018176",
+      "prior_contact": false
+    },
+    {
+      "r": "ProjectLeonida/mandy",
+      "n": 2480,
+      "id": 7232062835,
+      "who": "lixonik",
+      "link": "https://github.com/ProjectLeonida/mandy/pull/2480#issuecomment-7232062835",
+      "prior_contact": true
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5601,
+      "id": 7232063037,
+      "who": "BeneausVillach",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5601#issuecomment-7232063037",
+      "prior_contact": false
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5310,
+      "id": 7232067864,
+      "who": "junminlee2004",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5310#issuecomment-7232067864",
+      "prior_contact": false
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3135,
+      "id": 7232022743,
+      "who": "R0D4X",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/3135#issuecomment-7232022743",
+      "prior_contact": false
+    },
+    {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 392,
+      "id": 7232017730,
+      "who": "urielbeaupre",
+      "link": "https://github.com/TaynanGT/Vice-Tay/pull/392#issuecomment-7232017730",
+      "prior_contact": false
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3244,
+      "id": 7232022486,
+      "who": "legacy-code-archaeologist",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/3244#issuecomment-7232022486",
+      "prior_contact": false
+    },
+    {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 574,
+      "id": 7232017968,
+      "who": "LooperSalty",
+      "link": "https://github.com/LooperSalty/AnyXboxX/pull/574#issuecomment-7232017968",
+      "prior_contact": true
+    },
+    {
+      "r": "boykopovar/AnyPS5",
+      "n": 27887,
+      "id": 7232068138,
+      "who": "superSniper4576154",
+      "link": "https://github.com/boykopovar/AnyPS5/pull/27887#issuecomment-7232068138",
+      "prior_contact": false
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1192,
+      "id": 7232099258,
+      "who": "nicolasveilleux",
+      "link": "https://github.com/fxceless/victory-fork/pull/1192#issuecomment-7232099258",
+      "prior_contact": false
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5713,
+      "id": 7232068256,
+      "who": "baggins183",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5713#issuecomment-7232068256",
+      "prior_contact": false
+    },
+    {
+      "r": "KytyPS5/KytyPS5",
+      "n": 2590,
+      "id": 7232100018,
+      "who": "lordra9-svg",
+      "link": "https://github.com/KytyPS5/KytyPS5/pull/2590#issuecomment-7232100018",
+      "prior_contact": false
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1442,
+      "id": 7232019736,
+      "who": "Filip722",
+      "link": "https://github.com/fxceless/victory-fork/pull/1442#issuecomment-7232019736",
+      "prior_contact": true
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3232,
+      "id": 7232100258,
+      "who": "RonLogic",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/3232#issuecomment-7232100258",
+      "prior_contact": true
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5773,
+      "id": 7232112304,
+      "who": "ffgamer404-glitch",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5773#issuecomment-7232112304",
+      "prior_contact": false
+    },
+    {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 312,
+      "id": 7232100511,
+      "who": "wondasahnet",
+      "link": "https://github.com/TaynanGT/Vice-Tay/pull/312#issuecomment-7232100511",
+      "prior_contact": false
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1481,
+      "id": 7232099550,
+      "who": "Ym1r1710",
+      "link": "https://github.com/fxceless/victory-fork/pull/1481#issuecomment-7232099550",
+      "prior_contact": true
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 1918,
+      "id": 7232099773,
+      "who": "henriazz10",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/1918#issuecomment-7232099773",
+      "prior_contact": false
+    },
+    {
+      "r": "PastiiJay/klbf-lab",
+      "n": 23,
+      "id": 7232112710,
+      "who": "spy0eye-beep",
+      "link": "https://github.com/PastiiJay/klbf-lab/pull/23#issuecomment-7232112710",
+      "prior_contact": false
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1433,
+      "id": 7232101016,
+      "who": "Danty-Cod",
+      "link": "https://github.com/fxceless/victory-fork/pull/1433#issuecomment-7232101016",
+      "prior_contact": false
+    },
+    {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1289,
+      "id": 7232100742,
+      "who": "NeySlim",
+      "link": "https://github.com/KytyPS5/KytyPS5/pull/1289#issuecomment-7232100742",
+      "prior_contact": false
+    },
+    {
+      "r": "boykopovar/AnyPS5",
+      "n": 22439,
+      "id": 7232112469,
+      "who": "B-Howell",
+      "link": "https://github.com/boykopovar/AnyPS5/pull/22439#issuecomment-7232112469",
+      "prior_contact": false
+    },
+    {
+      "r": "PastiiJay/klbf-lab",
+      "n": 14,
+      "id": 7232113002,
+      "who": "HandshakeHackin",
+      "link": "https://github.com/PastiiJay/klbf-lab/pull/14#issuecomment-7232113002",
+      "prior_contact": true
+    },
+    {
+      "r": "xcl-dev/xcl",
+      "n": 1082,
+      "id": 7232112888,
+      "who": "TG0000",
+      "link": "https://github.com/xcl-dev/xcl/pull/1082#issuecomment-7232112888",
+      "prior_contact": false
+    },
+    {
+      "r": "boykopovar/AnyPS5",
+      "n": 26196,
+      "id": 7232112844,
+      "who": "oneandonlydean",
+      "link": "https://github.com/boykopovar/AnyPS5/pull/26196#issuecomment-7232112844",
+      "prior_contact": false
+    },
+    {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1197,
+      "who": "akar995",
+      "id": 7232133756,
+      "link": "https://github.com/KytyPS5/KytyPS5/pull/1197#issuecomment-7232133756",
+      "prior_contact": false
+    }
+  ],
+  "tester_invitations": [
+    {
+      "who": "qhukz13",
+      "issue": 152,
+      "prior_public_test": "https://github.com/ProjectLeonida/mandy/pull/2438#issuecomment-7228376431",
+      "link": "https://github.com/akimfomin/PortBridge/issues/152#issuecomment-7232036488"
+    },
+    {
+      "who": "SlopTart",
+      "issue": 150,
+      "prior_public_test": "https://github.com/xcl-dev/xcl/pull/2398#issuecomment-7172124796",
+      "link": "https://github.com/akimfomin/PortBridge/issues/150#issuecomment-7232036689"
+    },
+    {
+      "who": "ecox982745",
+      "issue": 149,
+      "prior_public_test": "https://github.com/ProjectLeonida/mandy/pull/2405#issuecomment-7204997731",
+      "link": "https://github.com/akimfomin/PortBridge/issues/149#issuecomment-7232036766"
+    },
+    {
+      "who": "klosixgaming-arch",
+      "issue": 151,
+      "prior_public_test": "https://github.com/boykopovar/AnyPS5/pull/17943#issuecomment-6928000868",
+      "link": "https://github.com/akimfomin/PortBridge/issues/151#issuecomment-7232036884"
+    },
+    {
+      "who": "mercuryVM",
+      "issue": 149,
+      "prior_public_test": "https://github.com/Marvisak/VIctory/pull/1437#pullrequestreview-6048628026",
+      "link": "https://github.com/akimfomin/PortBridge/issues/149#issuecomment-7232037017"
+    },
+    {
+      "who": "gustavowalkersgroup",
+      "issue": 146,
+      "prior_public_test": "https://github.com/fxceless/victory-fork/pull/854#issuecomment-7190321776",
+      "link": "https://github.com/akimfomin/PortBridge/issues/146#issuecomment-7232037091"
+    },
+    {
+      "who": "SzczepanGrela",
+      "issue": 151,
+      "prior_public_test": "https://github.com/xcl-dev/xcl/pull/2987#issuecomment-7213164584",
+      "link": "https://github.com/akimfomin/PortBridge/issues/151#issuecomment-7232037254"
+    },
+    {
+      "who": "djrolfes",
+      "issue": 147,
+      "prior_public_test": "https://github.com/ProjectLeonida/mandy/pull/2480#issuecomment-7224195640",
+      "link": "https://github.com/akimfomin/PortBridge/issues/147#issuecomment-7232037329"
+    },
+    {
+      "who": "borosf",
+      "issue": 146,
+      "prior_public_test": "https://github.com/Marvisak/VIctory/pull/3313#issuecomment-7201152090",
+      "link": "https://github.com/akimfomin/PortBridge/issues/146#issuecomment-7232037462"
+    },
+    {
+      "who": "alpz1000",
+      "issue": 148,
+      "prior_public_test": "https://github.com/fxceless/victory-fork/pull/1192#issuecomment-7183225532",
+      "link": "https://github.com/akimfomin/PortBridge/issues/148#issuecomment-7232037534"
+    },
+    {
+      "who": "thepatrickworld",
+      "issue": 146,
+      "prior_public_test": "https://github.com/R0Y00/Xbox2Windows/pull/1918#issuecomment-7185213584",
+      "link": "https://github.com/akimfomin/PortBridge/issues/146#issuecomment-7232037843"
+    },
+    {
+      "who": "Proudnoob4",
+      "issue": 148,
+      "prior_public_test": "https://github.com/PastiiJay/klbf-lab/pull/41#issuecomment-7185190923",
+      "link": "https://github.com/akimfomin/PortBridge/issues/148#issuecomment-7232038044"
+    }
+  ],
+  "candidate_testers_count": 23,
+  "external_agent_adoptions": 0,
+  "verified_outcome": "https://github.com/TaynanGT/Vice-Tay/pull/392#issuecomment-7232139054",
+  "other_verified_evidence": {
+    "vice": "https://github.com/TaynanGT/Vice-Tay/pull/392#issuecomment-7232139054",
+    "vice_recheck": "https://github.com/TaynanGT/Vice-Tay/pull/392#issuecomment-7232162172",
+    "vice_commit": "https://github.com/TaynanGT/Vice-Tay/commit/b45345c1ed7011b1b8441511a7228ee44989d49d",
+    "continued": "https://github.com/ProjectLeonida/mandy/pull/2517#issuecomment-7231757105",
+    "continued_review": "https://github.com/ProjectLeonida/mandy/pull/2541#issuecomment-7232076673",
+    "xbox_existing": "https://github.com/R0Y00/Xbox2Windows/pull/3244#issuecomment-7232113418",
+    "klbf": "https://github.com/PastiiJay/klbf-lab/pull/14#issuecomment-7232113002",
+    "initial_schedule": "https://github.com/akimfomin/PortBridge/actions/runs/46095541312"
+  }
+}

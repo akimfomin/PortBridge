@@ -1,0 +1,28 @@
+test_no_dirty_event_is_lost (__main__.DirtyQueueControls.test_no_dirty_event_is_lost) ... ok
+test_wrong_order_can_lose_a_later_event (__main__.DirtyQueueControls.test_wrong_order_can_lose_a_later_event) ... ok
+test_missing_as_zero_counterexample (__main__.PresentCountControls.test_missing_as_zero_counterexample) ... ok
+test_missing_is_neither_zero_nor_wrap (__main__.PresentCountControls.test_missing_is_neither_zero_nor_wrap) ... ok
+test_observations_match_eager_reference (__main__.ReadbackControls.test_observations_match_eager_reference) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+
+test_constrained_and_open_select_tree (__main__.IndexedRead.test_constrained_and_open_select_tree) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK
+
+rustc 1.100.1 (20ddd0171 2026-11-25)
+
+running 1 test
+test present_rates_span_failed_queries_and_preserve_a_real_counter_wrap ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+94629A8A8870CE27456D0C174014A64C01DAE6995A1710A496330D5E40E14A27
+
+PortBridge: 326 tests passed; static export and publication gate passed.
