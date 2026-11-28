@@ -42,6 +42,42 @@
     "evidence": "https://github.com/TaynanGT/Vice-Tay/pull/121#issuecomment-7208747837"
   },
   {
+    "project": "copperframe",
+    "area": "performance",
+    "kind": "reported",
+    "scope": "Автор отдельно разобрал падение FPS по ходу длинного прогона при нулевой очереди компиляции.",
+    "translations": {
+      "en": {
+        "scope": "The author examined a long-run FPS decline with no pipelines pending."
+      }
+    },
+    "evidence": "https://github.com/XaviFortes/VIctory-RDNA/blob/4e3a4d2a2c8b47c1c7355d7847def528a506af28/README.md#L151"
+  },
+  {
+    "project": "victory-nvidia",
+    "area": "performance",
+    "kind": "source",
+    "scope": "Воспроизведение порядка статических сэмплеров при старте для кэша D3D12.",
+    "translations": {
+      "en": {
+        "scope": "Startup replay of static sampler order for the D3D12 pipeline cache."
+      }
+    },
+    "evidence": "https://github.com/trustno1-coder/VIctory-NVIDIA/blob/63b902fe1720a5188ee79d94a88c8de0470f6349/crates/victory-gpu/src/pipeline/samplers.rs#L85-L104"
+  },
+  {
+    "project": "victory-altracing",
+    "area": "ray-tracing",
+    "kind": "reported",
+    "scope": "Автор сравнил нативный режим и DLSS Performance с трассировкой лучей на RTX 4070 SUPER без генерации кадров.",
+    "translations": {
+      "en": {
+        "scope": "Reported native and DLSS Performance comparisons with ray tracing on an RTX 4070 SUPER, both without frame generation."
+      }
+    },
+    "evidence": "https://github.com/whoalin1/victory-altracing/blob/95e1ca80b56865b3bf2654f27c7550b05a8d54a9/README.md#L21-L31"
+  },
+  {
     "project": "vi-br-port", "area": "graphics", "kind": "source",
     "scope": "Адаптация исправления привязки ресурсов с проверкой синтетического рендера.",
     "translations": {"en": {"scope": "Adapted resource binding change with a synthetic rendering check."}},

@@ -207,7 +207,8 @@ class CatalogTest(CatalogFixture):
                                     "klbf-lab", "klbf-lab-beta", "xbvk", "victory-perf", "vx-layer", "xtp", "scarlight",
                                     "metalvi", "ztrx", "victory-amd", "project-flamingo", "vitoriabr", "anybox",
                                     "neonbridge", "mangrove", "r4y", "xseries-wine", "scarlettport",
-                                    "victory-belobug-amd", "xbox-hle-lab", "anyps5", "kytyps5", "vice-tay", "vi-br-port"})
+                                    "victory-belobug-amd", "xbox-hle-lab", "anyps5", "kytyps5", "vice-tay", "vi-br-port",
+                                    "copperframe", "victory-nvidia", "victory-altracing"})
         cards = self.catalog.problems()
         ids = [card["id"] for card in cards]
         self.assertGreaterEqual(len(ids), 3)
