@@ -1,6 +1,13 @@
 Warning: truncated output (original token count: 45452)
 Total output lines: 529
 
+## Продолжение технической волны · 28 ноября 2026, МСК
+
+- За две серии проверено **77 разных PR и 71 пара изменений**. В новой серии 28 пар совместились по Git, пять конфликтуют. Нашли **25 применимых направлений проверки** по первоисточникам. Восемь новых CPU-проверок прошли, включая 25 000 входов для граничных условий DispatchMesh. [Точные ревизии, исходники, журналы](evidence/decision-followthrough/parallel-ops-wave-two-2026-11-28/README.md)
+- Доставили технические результаты **23 разным разработчикам** без учёта отозванного предложения. **10 тестировщиков** получили личные приглашения. **11 команд** получили предложение воспользоваться PortBridge со своим агентом. [Перечень доставок и приглашений](evidence/decision-followthrough/parallel-ops-wave-two-2026-11-28/README.md#delivered-messages-and-invitations)
+- По четырём задачам есть внешние подтверждения: решение AnyXboxX, регрессия Continued и два теста VIctory на программном WARP. По пятой выполнили запрос автора victory-fork: проверили точные исходники лаунчера и лимитов памяти, вернули результат в PR. [Прогоны VIctory](https://github.com/Marvisak/VIctory/pull/3609#issuecomment-7231002918) · [Второй прогон VIctory](https://github.com/Marvisak/VIctory/pull/3630#issuecomment-7231030168) · [Независимая проверка victory-fork](https://github.com/fxceless/victory-fork/pull/1500#issuecomment-7231272315)
+- Поиск PortBridge связал Vice-Tay с KLBF. Git подтвердил, что общего предка у проверенных веток нет. Передали KLBF тест для переноса. Два сообщения Xbox2Windows исправлены после сверки более свежих ответов и ревизий. [Передача KLBF](https://github.com/PastiiJay/klbf-lab/pull/16#issuecomment-7231418221) · [Исправление Xbox2Windows](https://github.com/R0Y00/Xbox2Windows/pull/3228#issuecomment-7231272519)
+
 ## Результат серии · 28 ноября 2026, МСК
 
 - **AnyXboxX и Continued применили предложения PortBridge.** В AnyXboxX #550 KainanP свёл две ветки правила к одному порогу и привязал тест к нему. На RTX 4060 Laptop его повторный тест показал снижение пика с **6 220 до 5 708 МБ**. PortBridge проверил, что новая ревизия совмещается с `main`, и обновил запрос на физический замер 12 ГБ. В Continued #2517 Tyrannys подтвердил мягкий лимит и добавил предложенный регрессионный случай. Оба PR оставались открыты при проверке. [Решение AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230999315) · [Решение Continued](https://github.com/ProjectLeonida/mandy/pull/2517#issuecomment-7231040752) · [Тест 12 ГБ](https://github.com/akimfomin/PortBridge/issues/132)

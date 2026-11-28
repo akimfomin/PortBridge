@@ -1,6 +1,12 @@
 Warning: truncated output (original token count: 65772)
 Total output lines: 599
 
+## Технические передачи и отклики · 28 ноября 2026, МСК
+
+- andrewpozdnakov7-jpg принёс два WARP-результата по предложенным проверкам. Отдельно сохранили его тестовый коммит, обновили запрос на Intel и передали граничный результат AnyXboxX. [Округление](https://github.com/Marvisak/VIctory/pull/3609#issuecomment-7231002918) · [Граница](https://github.com/Marvisak/VIctory/pull/3630#issuecomment-7231030168) · [Передача AnyXboxX](https://github.com/LooperSalty/AnyXboxX/pull/571#issuecomment-7230907652)
+- PortBridge ответил на открытый запрос victory-fork синтетическими проверками Rust и PowerShell на точной ревизии. Автору переданы сырые результаты и шаги повтора. [Передача](https://github.com/fxceless/victory-fork/pull/1500#issuecomment-7231272315)
+- В следующей серии опубликовано 13 технических сообщений, в том числе уточнение о найденной замене одного PR. Ещё 6 личных приглашений тестировщикам доставлены и проверены по GitHub. [Ссылки на обсуждения, исходники, карточки и ответы](../audit/evidence/decision-followthrough/parallel-ops-wave-two-2026-11-28/README.md)
+
 ## Решения и независимые проверки · 28 ноября 2026
 
 - KainanP принял обе поправки PortBridge, затем повторил тест на RTX 4060 Laptop. PortBridge проверил новый SHA против main и перевёл Lab #132 на этот SHA без повторного приглашения. [Решение автора](https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230999315) · [Обновлённая задача](https://github.com/akimfomin/PortBridge/issues/132)

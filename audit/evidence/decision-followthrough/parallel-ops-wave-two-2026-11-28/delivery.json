@@ -1,0 +1,202 @@
+{
+  "added": [
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "pr": 390,
+      "author": "PetrSeifert",
+      "id": 7231272072,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/390#issuecomment-7231272072",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "R0Y00/Xbox2Windows",
+      "pr": 3139,
+      "author": "lambirou",
+      "id": 7231272986,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3139#issuecomment-7231272986",
+      "outcome": "independent rebase already published, checked fresh head"
+    },
+    {
+      "repo": "R0Y00/Xbox2Windows",
+      "pr": 3228,
+      "author": "RonLogic",
+      "id": 7231272519,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3228#issuecomment-7231272519",
+      "outcome": "superseded by upstream before outreach"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "pr": 541,
+      "author": "mauroalvare",
+      "id": 7231273291,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/541#issuecomment-7231273291",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "KytyPS5/KytyPS5",
+      "pr": 2278,
+      "author": "Nawid3333",
+      "id": 7231272716,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2278#issuecomment-7231272716",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "fxceless/victory-fork",
+      "pr": 1500,
+      "author": "cebondlovu",
+      "id": 7231272315,
+      "url": "https://github.com/fxceless/victory-fork/pull/1500#issuecomment-7231272315",
+      "outcome": "executed requested source checks and returned results"
+    },
+    {
+      "repo": "ProjectLeonida/mandy",
+      "pr": 2437,
+      "author": "MoonEyes",
+      "id": 7231300536,
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2437#issuecomment-7231300536",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "boykopovar/AnyPS5",
+      "pr": 27984,
+      "author": "17bryen",
+      "id": 7231300755,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27984#issuecomment-7231300755",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "boykopovar/AnyPS5",
+      "pr": 23955,
+      "author": "JJenkx",
+      "id": 7231301059,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/23955#issuecomment-7231301059",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "Marvisak/VIctory",
+      "pr": 3069,
+      "author": "moe-miau",
+      "id": 7231301348,
+      "url": "https://github.com/Marvisak/VIctory/pull/3069#issuecomment-7231301348",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "pr": 3056,
+      "author": "Kalmarv",
+      "id": 7231301610,
+      "url": "https://github.com/xcl-dev/xcl/pull/3056#issuecomment-7231301610",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "edsuuu/VI-BR-PORT",
+      "pr": 8,
+      "author": "edsuuu",
+      "id": 7231301917,
+      "url": "https://github.com/edsuuu/VI-BR-PORT/pull/8#issuecomment-7231301917",
+      "outcome": "delivered; decision open"
+    },
+    {
+      "repo": "PastiiJay/klbf-lab",
+      "pr": 16,
+      "author": "Vladimir-Human",
+      "id": 7231418221,
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/16#issuecomment-7231418221",
+      "outcome": "delivered; decision open"
+    }
+  ],
+  "invite": [
+    {
+      "to": "Decodere",
+      "issue": 138,
+      "pr": 3608,
+      "repo": "Marvisak/VIctory",
+      "head": "d06df15fe1c618a775490070ec24bf791941e60a",
+      "source": "https://github.com/xcl-dev/xcl/pull/2975#issuecomment-7213602404",
+      "url": "https://github.com/akimfomin/PortBridge/issues/138#issuecomment-7231281221"
+    },
+    {
+      "to": "mrfelek",
+      "issue": 140,
+      "pr": 27984,
+      "repo": "boykopovar/AnyPS5",
+      "head": "c1321287c7889ad5f637aa59e34d97da689eef94",
+      "source": "https://github.com/KytyPS5/KytyPS5/pull/2357#issuecomment-7168576107",
+      "url": "https://github.com/akimfomin/PortBridge/issues/140#issuecomment-7231280761"
+    },
+    {
+      "to": "Helldiverr",
+      "issue": 143,
+      "pr": 27972,
+      "repo": "boykopovar/AnyPS5",
+      "head": "42cbebae4798f8191275bd92ee1f905ae0b541ea",
+      "source": "https://github.com/boykopovar/AnyPS5/pull/26047#issuecomment-7096148157",
+      "url": "https://github.com/akimfomin/PortBridge/issues/143#issuecomment-7231281718"
+    },
+    {
+      "to": "neonbyte1",
+      "issue": 142,
+      "pr": 3246,
+      "repo": "Marvisak/VIctory",
+      "head": "c2e4507ce40ccdf1056ccf9c40e39f27bb8721ef",
+      "source": "https://github.com/Marvisak/VIctory/pull/3246#issuecomment-7212139954",
+      "url": "https://github.com/akimfomin/PortBridge/issues/142#issuecomment-7231281901"
+    },
+    {
+      "to": "adriaespii",
+      "issue": 141,
+      "pr": 1500,
+      "repo": "fxceless/victory-fork",
+      "head": "4351fb43edd626bd8fd450853a17f02ca0c1b6f7",
+      "source": "https://github.com/fxceless/victory-fork/pull/92#issuecomment-7145027732",
+      "url": "https://github.com/akimfomin/PortBridge/issues/141#issuecomment-7231281479"
+    },
+    {
+      "to": "upipibi",
+      "issue": 139,
+      "pr": 23955,
+      "repo": "boykopovar/AnyPS5",
+      "head": "8e0df64d5d5b8c65a3076bb640c71fa2a192e472",
+      "source": "https://github.com/boykopovar/AnyPS5/pull/26047#issuecomment-7132028246",
+      "url": "https://github.com/akimfomin/PortBridge/issues/139#issuecomment-7231281020"
+    }
+  ],
+  "oldInviteNumbers": [
+    133,
+    134,
+    135,
+    136
+  ],
+  "offer_repositories": [
+    "KytyPS5/KytyPS5",
+    "LooperSalty/AnyXboxX",
+    "Marvisak/VIctory",
+    "PastiiJay/klbf-lab",
+    "ProjectLeonida/mandy",
+    "R0Y00/Xbox2Windows",
+    "TaynanGT/Vice-Tay",
+    "boykopovar/AnyPS5",
+    "edsuuu/VI-BR-PORT",
+    "fxceless/victory-fork",
+    "xcl-dev/xcl"
+  ],
+  "unique_developers": 24,
+  "unique_developers_excluding_superseded": 23,
+  "technical_outcomes": {
+    "any": "https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230999315",
+    "mandy": "https://github.com/ProjectLeonida/mandy/pull/2517#issuecomment-7231040752",
+    "exp": "https://github.com/Marvisak/VIctory/pull/3609#issuecomment-7231002918",
+    "bound": "https://github.com/Marvisak/VIctory/pull/3630#issuecomment-7231030168",
+    "fork": "https://github.com/fxceless/victory-fork/pull/1500#issuecomment-7231272315"
+  },
+  "metrics": {
+    "uniquePR": 77,
+    "uniquePairs": 71,
+    "first": 53,
+    "now": 38,
+    "oldClean": 30,
+    "oldConflict": 8,
+    "newClean": 28,
+    "newConflict": 5
+  }
+}
