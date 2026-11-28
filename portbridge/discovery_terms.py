@@ -20,7 +20,8 @@ DISCOVERY_SYMBOL = re.compile(
 )
 MECHANISMS = re.compile(
     r"\b(?:subgroup[-_ ]size|shared exponent|memory budget|device loss|typed buffer|"
-    r"raw buffer view|pipeline state|frame pacing|texture upload|texture uploads|robust buffer access)\b", re.I
+    r"raw buffer view|pipeline state|frame pacing|texture upload|texture uploads|robust buffer access)\b|"
+    r"(?<![a-z0-9])gpu[-_ ]timing\b", re.I
 )
 # Only normalized values from the typed metadata field use case-insensitive matching.
 # Raw prose must keep its original casing (e.g. a Vulkan vkFoo call).
