@@ -23,7 +23,13 @@ Public GitHub revisions sampled on 28 November 2026. PortBridge product baseline
 
 ## Test Lab result intake
 
-[PortBridge #163](https://github.com/akimfomin/PortBridge/issues/163) is open for physical NVIDIA. The original same-list fixture returns success early when no host GPU or depth-plane twin is selected. The reproducer also emits a test-only guard that rejects both early returns and identifies the selected adapter by the live DXGI device. This produces a separate strict tree in the receipt. The hardware result stays unverified until a volunteer submits both test outcomes. The request to post in VIctory-NVIDIA #1018 was denied by the GitHub integration.
+[PortBridge #163](https://github.com/akimfomin/PortBridge/issues/163) is open for physical NVIDIA. The fork owner received [one optional invitation](https://github.com/akimfomin/PortBridge/issues/163#issuecomment-7238826359) in the PortBridge issue. The original same-list fixture returns success early when no host GPU or depth-plane twin is selected. The reproducer also emits a test-only guard that rejects both early returns and identifies the selected adapter by the live DXGI device. This produces a separate strict tree in the receipt. The hardware result stays unverified until a volunteer submits both test outcomes. The request to post in VIctory-NVIDIA #1018 was denied by the GitHub integration.
+
+## Search replay on the same public work
+
+[Actual results](discovery-live-replay.json) list four hand-selected source relationships, the input URLs, terms and external lookup counts. The clean-database online URL path found none, with two zero-lookup no-subject responses. The live preflight path found the Copperframe to Vice-Tay pair at rank 1 (technical terms, suggested, score 0.77). The same author opened both proposals before this check. This is a small operational replay, with three failures on the published path and no independent new discovery claim.
+
+The new [published catalog](https://akimfomin.github.io/PortBridge/data/projects.json) and [capability API](https://akimfomin.github.io/PortBridge/data/ecosystem.json) contain all three additions. GitHub Pages deployment and its follow-up smoke check succeeded. The live health receipt exposes 41,690 observations and eight unavailable sources. [GitHub delivery](https://github.com/akimfomin/PortBridge/actions/runs/46141025231) · [Live health](https://akimfomin.github.io/PortBridge/data/health.json).
 
 ## Follow-through
 
@@ -47,3 +53,10 @@ python verify_sampler_gate.py
 
 The upstream projects retain authorship of all source changes and existing regressions. The Vice-Tay delta is an adaptation on its GPL source. Primary GitHub links and testable controls identify what PortBridge compared or produced.
 
+
+For the URL client replay, use one fresh temporary database per row and the exact `pr` in the receipt. The preflight command reads the published catalog by default.
+
+```text
+python -m portbridge.discovery_scan --db <fresh-db> --online --url <pr>
+python -m portbridge.preflight --url <pr> --limit 5
+```

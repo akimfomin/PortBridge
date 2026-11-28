@@ -1,0 +1,85 @@
+[
+  {
+    "case": "static sampler reuse",
+    "pr": "https://github.com/LooperSalty/AnyXboxX/pull/577",
+    "revision": "daaffd4fc095d4122680d98dacaf91f28ed5d833",
+    "expected_for_manual_replay": "https://github.com/TaynanGT/Vice-Tay/pull/395",
+    "fresh_url_discovery": {
+      "subject": "id3d12pipelinelibrary1",
+      "status": "available",
+      "external_lookups": 1,
+      "indexed_source_files": 0,
+      "top5": [],
+      "expected_seen": false
+    },
+    "published_preflight": {
+      "expected_seen_anywhere": false
+    }
+  },
+  {
+    "case": "same-list depth",
+    "pr": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1018",
+    "revision": "c100068f09fd19e0be3f0d7452e2bec208d04444",
+    "expected_for_manual_replay": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1017",
+    "fresh_url_discovery": {
+      "subject": "command list",
+      "status": "available",
+      "external_lookups": 1,
+      "indexed_source_files": 0,
+      "top5": [
+        "https://github.com/HansKristian-Work/vkd3d-proton/pull/3399",
+        "https://github.com/HansKristian-Work/vkd3d-proton/issues/3525",
+        "https://github.com/HansKristian-Work/vkd3d-proton/issues/3355",
+        "https://github.com/llvm/llvm-project/pull/239954",
+        "https://github.com/HansKristian-Work/vkd3d-proton/issues/3508"
+      ],
+      "expected_seen": false
+    },
+    "published_preflight": {
+      "expected_seen_anywhere": false
+    }
+  },
+  {
+    "case": "dirty refresh",
+    "pr": "https://github.com/XaviFortes/VIctory-RDNA/pull/4",
+    "revision": "3a592a8ed607055d9328c263b80c27d33506a324",
+    "expected_for_manual_replay": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+    "fresh_url_discovery": {
+      "subject": "",
+      "status": "no_subject",
+      "external_lookups": 0,
+      "indexed_source_files": 0,
+      "top5": [],
+      "expected_seen": false
+    },
+    "published_preflight": {
+      "expected_seen_anywhere": true,
+      "first_candidate": {
+        "rank": 1,
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+        "revision": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+        "basis": "technical_terms",
+        "score": 0.77,
+        "status": "suggested",
+        "publication": "2026-11-28T11:46:35+00:00"
+      }
+    }
+  },
+  {
+    "case": "fractional fallback",
+    "pr": "https://github.com/PastiiJay/klbf-lab/pull/88",
+    "revision": "3206d075baea85534b2dcc1f73487389d7ae0b35",
+    "expected_for_manual_replay": "https://github.com/ProjectLeonida/mandy/pull/1437",
+    "fresh_url_discovery": {
+      "subject": "",
+      "status": "no_subject",
+      "external_lookups": 0,
+      "indexed_source_files": 0,
+      "top5": [],
+      "expected_seen": false
+    },
+    "published_preflight": {
+      "expected_seen_anywhere": false
+    }
+  }
+]
