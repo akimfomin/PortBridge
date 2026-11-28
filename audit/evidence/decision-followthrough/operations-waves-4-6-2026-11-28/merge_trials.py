@@ -86,4 +86,3 @@ Path(os.environ["PB_OPS_REPORT_FILE"]).write_text(json.dumps(out,indent=2)+"\n",
 for r in out:
     from collections import Counter
     print(r["repo"],bool(r.get("error")),dict(Counter(x["status"] for x in r["singles"])),dict(Counter(x["status"] for x in r["pairs"])))
-
