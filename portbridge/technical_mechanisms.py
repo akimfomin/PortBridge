@@ -7,12 +7,20 @@ import re
 # and broad topics such as "device loss" do not describe a mechanism.
 PIPELINE_CACHE = r"(?:\bpipeline cache\b|\bPSO cache\b|\bpipeline librar(?:y|ies)\b|\b(?:cache|driver(?:'s)?) (?:pipeline )?blob\b|\bpipeline_cache(?:\.d|\.bin)\b)"
 COMMAND_LIST = r"(?:\bcommand[ -]lists?\b|\bID3D12(?:Graphics)?CommandList\w*\b)"
+COMMAND_ALLOCATOR = (r"\b(?:ID3D12CommandAllocator|command(?:[ -]list)?[ -]allocators?|"
+                     r"(?:presenter(?:['’]s)?|sparse) (?:command )?allocators?|sparse (?:command )?lists?|"
+                     r"relay command lists?|allocators? and (?:command )?lists?)\b")
+ALLOCATOR_REUSE = r"\b(?:reset|recycl|reus)\w*\b"
+GPU_PROGRESS = (r"\b(?:fences?|still in flight|still execut\w+|completed submissions?|"
+                r"completed (?:relay )?command lists?)\b")
 MEMORY_COPY = r"(?:\b(?:cop(?:y|ies|ied|ying)|shadow)\w*\b.{0,65}\b(?:pages?|blocks?|views?|mappings?)\b|\b(?:pages?|blocks?|views?|mappings?)\b.{0,65}\b(?:cop(?:y|ies|ied|ying)|shadow)\w*\b)"
 BVH = r"(?:\bBVH\b|\bbox(?:16|32)\b|\bimage_bvh(?:64)?_intersect_ray\b)"
 RULES = {
     "pipeline-cache/device-identity": (PIPELINE_CACHE, r"\b(?:cache UUID|device identity|driver version|vendor ID|device ID|pipelineCacheUUID)\b"),
     "pipeline-cache/runtime-hit": (PIPELINE_CACHE, r"\b(?:cache hits?|hits? (?:that|the) cache|require[ -]hit|creation feedback|PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT)\b"),
     "pipeline-cache/compile-fallback": (PIPELINE_CACHE, r"\b(?:stale blobs?|(?:refus\w+|reject\w+|invalid|incompatible) (?:the |a )?(?:blobs?|cache)|(?:compil\w+|creat\w+) (?:it )?(?:again|without (?:the |a )?blob))\b"),
+    "command-allocator/fence-gated-reuse": (COMMAND_ALLOCATOR,
+        rf"(?:{ALLOCATOR_REUSE}.{{0,105}}{GPU_PROGRESS}|{GPU_PROGRESS}.{{0,105}}{ALLOCATOR_REUSE})"),
     "command-list/final-release": (COMMAND_LIST, r"\b(?:final release|reference count|AddRef|destructor|destroy\w+ (?:the |a )?wrapper)\b"),
     "command-list/pointer-reuse": (COMMAND_LIST, r"\b(?:address[ -]reuse|pointer[ -]reuse|reuse\w* (?:the |a )?(?:native |real )?(?:address|pointer))\b"),
     "command-list/retirement": (COMMAND_LIST, r"\b(?:recycl\w+|retire\w+|allocator reuse)\b"),
