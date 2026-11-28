@@ -1,0 +1,35 @@
+--- a/tests/native_f16_alu_check.py
++++ b/tests/native_f16_alu_check.py
+@@ -29,6 +29,7 @@
+ from native_scalar_lds_check import scalar, sop1, vmove
+ 
+ GROUPS = 2
++EXP2_INPUTS = (0x11c4, 0x11c5, 0x11c6, 0xa86d, 0x36b6, 0xb8a5)
+ WORDS = 2064
+ SENTINEL = 0x69696969  # native_store_replay fills untouched words with 0x69
+ BASE = 8
+@@ -239,6 +240,8 @@
+         items.extend(Case(op, a, 0, kind) for kind in ('vop1', 'vop3') for a in UNARY_INPUTS)
+         items.append(Case(op, 0xc000, 0, 'vop3', abs_mask=1))
+         items.append(Case(op, 0x4000, 0, 'vop3', neg=1))
++    items.extend(Case('exp', value, 0, kind)
++                 for kind in ('vop1', 'vop3') for value in EXP2_INPUTS)
+     assert len(items) < STRIDE
+     return items
+ 
+@@ -711,6 +714,15 @@
+             results = {slot: (value, ops[n] if ops else None) for offsets in group_offsets(len(reference))
+                        for n, (slot, value) in enumerate(zip(offsets, reference))}
+             actual = struct.unpack('<2064I', dest.read_bytes())
++            if name == 'alu':
++                for group, offsets in enumerate(group_offsets(len(reference))):
++                    for index, (case, slot) in enumerate(zip(items, offsets)):
++                        if case.op == 'exp' and case.a in EXP2_INPUTS:
++                            got = actual[slot]
++                            expected = reference[index]
++                            print(f'exp2 group={group} form={case.kind} input=0x{case.a:04x} '
++                                  f'actual=0x{got:08x} expected=0x{expected:08x} '
++                                  f'exact={got == expected}')
+             bad = []
+             for index, got in enumerate(actual):
+                 model, op = results.get(index, (SENTINEL, None))
