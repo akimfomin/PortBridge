@@ -1,0 +1,13 @@
+test_cached_pool_frees_driver_bytes_before_other_eviction (__main__.NewControls.test_cached_pool_frees_driver_bytes_before_other_eviction) ... ok
+test_dropped_indirect_never_spends_a_live_slot (__main__.NewControls.test_dropped_indirect_never_spends_a_live_slot) ... ok
+test_exact_boundary_precedes_record_cap (__main__.NewControls.test_exact_boundary_precedes_record_cap) ... ok
+test_fp16_clamp_position (__main__.NewControls.test_fp16_clamp_position) ... ok
+test_label_observation_rejects_any_missing_condition (__main__.NewControls.test_label_observation_rejects_any_missing_condition) ... ok
+test_partial_label_page_needs_two_sources (__main__.NewControls.test_partial_label_page_needs_two_sources) ... ok
+test_successful_stale_probe_and_failed_candidate_are_different (__main__.NewControls.test_successful_stale_probe_and_failed_candidate_are_different) ... ok
+test_xcl_integer_group_guard_against_wide_oracle (__main__.NewControls.test_xcl_integer_group_guard_against_wide_oracle) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.048s
+
+OK

@@ -1,0 +1,861 @@
+[
+  {
+    "repo": "TaynanGT/Vice-Tay",
+    "singles": [
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "f9342353545933d723ad2fc9d28d22cb658c0552",
+        "pr": 390,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+        "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+        "status": "clean",
+        "tree": "bca285f0b16c84fc80fdd89f622b3ee006ebc34e",
+        "pr": 357,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "8d5316c9b516f9fa34524a33cf7a2499d16524fd",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "7058d22fdc4f7cc52fbf54db73e8d6e427f10009",
+        "pr": 381,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "836872fcddd1532e97f1a61677027dc6edd03567",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "57bf7b52c185bd99c781c0bb53247cf0e06ab991",
+        "pr": 383,
+        "branch": "main",
+        "test_paths": []
+      }
+    ],
+    "pairs": [
+      {
+        "target": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+        "head": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+        "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+        "status": "clean",
+        "tree": "a48bf6a759c942f70c7d309ba2d52c437959fd8d",
+        "first": 390,
+        "second": 357
+      },
+      {
+        "target": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+        "head": "8d5316c9b516f9fa34524a33cf7a2499d16524fd",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "29adfcf173cf837187bd2e7b5f9619cba6f3e229",
+        "first": 390,
+        "second": 381
+      },
+      {
+        "target": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+        "head": "836872fcddd1532e97f1a61677027dc6edd03567",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "ff6cab61730b48ee50fd0a09abde033b3072c18a",
+        "first": 390,
+        "second": 383
+      },
+      {
+        "target": "8d5316c9b516f9fa34524a33cf7a2499d16524fd",
+        "head": "836872fcddd1532e97f1a61677027dc6edd03567",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "cb498d418eeeb30688cd5cfa56e0af5fe1558205",
+        "first": 381,
+        "second": 383
+      },
+      {
+        "target": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+        "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "0f6386537bde27b7f7f86fc23d4ee341e77a60cb",
+        "first": 390,
+        "second": 388
+      }
+    ],
+    "targets": {
+      "main": "fe7c6e52198f2070805ffafc4e55a7163291bad0"
+    }
+  },
+  {
+    "repo": "LooperSalty/AnyXboxX",
+    "singles": [
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "91d327400466912976e75a2687ea2f72e54e1597",
+        "merge_base": "3e3dd53e269f69f90ca77563fc23216d05ea913e",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/apps/victory/src/warm.rs",
+          "third_party/victory/crates/victory-gpu/src/pipeline/known.rs"
+        ],
+        "pr": 541,
+        "branch": "main",
+        "test_paths": [
+          "third_party/victory/apps/victory/src/warm/bad_journal_tests.rs"
+        ]
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "abbd7081e2cf82ea4bf9aacc53ec69cf145ebc74",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "e31ad962f6bc6b46dd0dfc251a91f2b31002e435",
+        "pr": 517,
+        "branch": "main",
+        "test_paths": [
+          "third_party/victory/crates/victory-gpu/src/descriptor/rounds/tests.rs"
+        ]
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "6708faf2076fd28872c8f9a240edb7d86f690f83",
+        "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/crates/victory-gpu/src/resource.rs",
+          "third_party/victory/crates/victory-gpu/src/texture.rs"
+        ],
+        "pr": 555,
+        "branch": "main",
+        "test_paths": [
+          "third_party/victory/crates/victory-gpu/src/descriptor/mip_clamp_tests.rs",
+          "third_party/victory/crates/victory-gpu/src/texture_mip_clamp_tests.rs"
+        ]
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "28814de19064a8ab9bb6b068acc057225907006e",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "0f53c9e276926d4bc0512677c75d5f9cdd5debe9",
+        "pr": 528,
+        "branch": "main",
+        "test_paths": []
+      }
+    ],
+    "pairs": [
+      {
+        "target": "91d327400466912976e75a2687ea2f72e54e1597",
+        "head": "abbd7081e2cf82ea4bf9aacc53ec69cf145ebc74",
+        "merge_base": "3e3dd53e269f69f90ca77563fc23216d05ea913e",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/apps/victory/src/warm.rs",
+          "third_party/victory/crates/victory-gpu/src/pipeline/known.rs"
+        ],
+        "first": 541,
+        "second": 517
+      },
+      {
+        "target": "91d327400466912976e75a2687ea2f72e54e1597",
+        "head": "6708faf2076fd28872c8f9a240edb7d86f690f83",
+        "merge_base": "3e3dd53e269f69f90ca77563fc23216d05ea913e",
+        "status": "clean",
+        "tree": "c22b626061bf55a3f56c2f3de3e861eeb472e375",
+        "first": 541,
+        "second": 555
+      },
+      {
+        "target": "28814de19064a8ab9bb6b068acc057225907006e",
+        "head": "abbd7081e2cf82ea4bf9aacc53ec69cf145ebc74",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "5b293811957d5da33317edcf658f0b4d91da5ff9",
+        "first": 528,
+        "second": 517
+      },
+      {
+        "target": "28814de19064a8ab9bb6b068acc057225907006e",
+        "head": "6708faf2076fd28872c8f9a240edb7d86f690f83",
+        "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/crates/victory-gpu/src/resource.rs",
+          "third_party/victory/crates/victory-gpu/src/texture.rs"
+        ],
+        "first": 528,
+        "second": 555
+      }
+    ],
+    "targets": {
+      "main": "132da61504cc2c2d086796c468a8ace1759aba22"
+    }
+  },
+  {
+    "repo": "ProjectLeonida/mandy",
+    "singles": [
+      {
+        "target": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32",
+        "head": "4d3badfa4e8cf7d299015595109e150ed3351fa1",
+        "merge_base": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32",
+        "status": "clean",
+        "tree": "096679bd88593f4003f902855ddea0a55d11f0b4",
+        "pr": 2523,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/replay_dropped_indirect_clamp_test.cpp"
+        ]
+      },
+      {
+        "target": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32",
+        "head": "f06577169c4052e6363256896a9b46eb98ffa10f",
+        "merge_base": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32",
+        "status": "clean",
+        "tree": "033f00c31d91fda547e8cf004a449018a77ccab0",
+        "pr": 2527,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/address_guard_buffer_test.cpp"
+        ]
+      },
+      {
+        "target": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32",
+        "head": "36635599f8a8e64652492cc8ebca6e188d6e28d7",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "9b7129c7085e2ef558e6f7c6c2077f14277a76bc",
+        "pr": 2437,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/graphics_identity_test.cpp"
+        ]
+      },
+      {
+        "target": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32",
+        "head": "c6f39028a6b293edb2c413b8229b6480fd0c5204",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "2327a4436c35b77b3413f827b879bb4567d7e483",
+        "pr": 2513,
+        "branch": "main",
+        "test_paths": [
+          "tests/test_make_game_translator_flags.py"
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "target": "4d3badfa4e8cf7d299015595109e150ed3351fa1",
+        "head": "f06577169c4052e6363256896a9b46eb98ffa10f",
+        "merge_base": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32",
+        "status": "clean",
+        "tree": "133f34c8faec13827fc9e1aa38f8dfd1f5f28884",
+        "first": 2523,
+        "second": 2527
+      },
+      {
+        "target": "36635599f8a8e64652492cc8ebca6e188d6e28d7",
+        "head": "f06577169c4052e6363256896a9b46eb98ffa10f",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "a4b81aa7ab6e2a08208b870cf6b9753d1b0e54d6",
+        "first": 2437,
+        "second": 2527
+      },
+      {
+        "target": "36635599f8a8e64652492cc8ebca6e188d6e28d7",
+        "head": "c6f39028a6b293edb2c413b8229b6480fd0c5204",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "33c74cd1b852993e9a286cfd2bf618f57c71f953",
+        "first": 2437,
+        "second": 2513
+      },
+      {
+        "target": "c6f39028a6b293edb2c413b8229b6480fd0c5204",
+        "head": "4d3badfa4e8cf7d299015595109e150ed3351fa1",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "9121bd216ed73ec9522591e62d56be5f3b504215",
+        "first": 2513,
+        "second": 2523
+      }
+    ],
+    "targets": {
+      "main": "431ceba4f4a55c69c26fcf0e36fd83e86e1b9a32"
+    }
+  },
+  {
+    "repo": "Marvisak/VIctory",
+    "singles": [
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "d06df15fe1c618a775490070ec24bf791941e60a",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "ed432c15ceb4599a52ff508a0558724db9e34153",
+        "pr": 3608,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-shader/src/emit/semantics_tests.rs"
+        ]
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "c59ae3993acdfce685354f1b788e8e2daa314f07",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "7c94c4decff4a59c9f424d0e38d5d4566877dde6",
+        "pr": 3627,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "c2e4507ce40ccdf1056ccf9c40e39f27bb8721ef",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "6414fa9dff5e2138802481d7640ac05bdb123289",
+        "pr": 3246,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "a18f50bc1dfaf78a50a3ee3e90ff4dbeefbf293c",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "8208c11ef4ae3fdcd8695100f08e53e7914674c1",
+        "pr": 3069,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "4982f53b4821b459efb89605b9526900b0ec380a",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "62a261f4d44eef2a232b6978c18f79c4f3df3c4f",
+        "pr": 3633,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "1960fa53e7759e8cfae8e254b66826af668e7d38",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "f1f20c78d17faa7bb8addf7cd3fdcc0ab0e63f4b",
+        "pr": 3586,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-gpu/src/pipeline/placed_uav_tests.rs"
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "target": "d06df15fe1c618a775490070ec24bf791941e60a",
+        "head": "c59ae3993acdfce685354f1b788e8e2daa314f07",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "3bed5ff3070dfa8e359b2ed0567d8faf51b88c0e",
+        "first": 3608,
+        "second": 3627
+      },
+      {
+        "target": "c2e4507ce40ccdf1056ccf9c40e39f27bb8721ef",
+        "head": "a18f50bc1dfaf78a50a3ee3e90ff4dbeefbf293c",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "2f379ab7b466cf425c913a525610c70cbab453bc",
+        "first": 3246,
+        "second": 3069
+      },
+      {
+        "target": "4982f53b4821b459efb89605b9526900b0ec380a",
+        "head": "1960fa53e7759e8cfae8e254b66826af668e7d38",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "a5154eb1be352439e9f3fc8ad4c9ce5c55f0864a",
+        "first": 3633,
+        "second": 3586
+      },
+      {
+        "target": "4982f53b4821b459efb89605b9526900b0ec380a",
+        "head": "c59ae3993acdfce685354f1b788e8e2daa314f07",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "229f4d186a0b855ae55fa94aad443969f8c0dd4c",
+        "first": 3633,
+        "second": 3627
+      },
+      {
+        "target": "a18f50bc1dfaf78a50a3ee3e90ff4dbeefbf293c",
+        "head": "c59ae3993acdfce685354f1b788e8e2daa314f07",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "3a73cdf7cc5186da65b255a9c741cbb19196f363",
+        "first": 3069,
+        "second": 3627
+      }
+    ],
+    "targets": {
+      "main": "63bcca43c6a00a758510398fa43096ce7e4f7df0"
+    }
+  },
+  {
+    "repo": "xcl-dev/xcl",
+    "singles": [
+      {
+        "target": "2c717a043c8488938179fca81da4bb9e7913a358",
+        "head": "698acd707b6b65f594961676af9ee8e713c700c6",
+        "merge_base": "8b957bec6f82495aec940944c6bf47faa02db590",
+        "status": "clean",
+        "tree": "bf905db92afc9cdfe45ca91ca0db0c0229ea499a",
+        "pr": 3035,
+        "branch": "main",
+        "test_paths": [
+          "tests/testtitle/src/gpu.rs"
+        ]
+      },
+      {
+        "target": "2c717a043c8488938179fca81da4bb9e7913a358",
+        "head": "e26155031dabcc8755830cd1d642b435e4d985f0",
+        "merge_base": "8b957bec6f82495aec940944c6bf47faa02db590",
+        "status": "conflict",
+        "paths": [
+          "crates/xcl/src/shaders.rs"
+        ],
+        "pr": 2940,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "ba9d1f9473ebeb73fd5216c13a367d968f0a1c07",
+        "head": "b3d63124c02176b12d87a40366e2d6c883d9ebdc",
+        "merge_base": "bf42a6ee003cca247c436b8e7e730cba27e934b8",
+        "status": "clean",
+        "tree": "6cfca2c9f7b72fa132a46df46959801c17f0d326",
+        "pr": 3005,
+        "branch": "nvidia-dev",
+        "test_paths": []
+      },
+      {
+        "target": "ba9d1f9473ebeb73fd5216c13a367d968f0a1c07",
+        "head": "9cb19274369e86c1dffa01e2f75f5a4a8a9d2ee6",
+        "merge_base": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "status": "conflict",
+        "paths": [
+          "crates/xcl/src/hle/d3d12x/bind.rs"
+        ],
+        "pr": 3056,
+        "branch": "nvidia-dev",
+        "test_paths": []
+      },
+      {
+        "target": "ba9d1f9473ebeb73fd5216c13a367d968f0a1c07",
+        "head": "2608ea2367ead8d4aa43c9523ba7bad9b17e890d",
+        "merge_base": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "status": "clean",
+        "tree": "907b25bc0eb738b8d87bacbf580337488c2c3574",
+        "pr": 2956,
+        "branch": "nvidia-dev",
+        "test_paths": []
+      }
+    ],
+    "pairs": [
+      {
+        "target": "698acd707b6b65f594961676af9ee8e713c700c6",
+        "head": "e26155031dabcc8755830cd1d642b435e4d985f0",
+        "merge_base": "8b957bec6f82495aec940944c6bf47faa02db590",
+        "status": "clean",
+        "tree": "5adad18d597cc5d404fb5922f925181cca0cc46c",
+        "first": 3035,
+        "second": 2940
+      },
+      {
+        "target": "b3d63124c02176b12d87a40366e2d6c883d9ebdc",
+        "head": "9cb19274369e86c1dffa01e2f75f5a4a8a9d2ee6",
+        "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+        "status": "clean",
+        "tree": "ef850dc7a063929bb94dd5c65a9d753eb4930e84",
+        "first": 3005,
+        "second": 3056
+      },
+      {
+        "target": "b3d63124c02176b12d87a40366e2d6c883d9ebdc",
+        "head": "2608ea2367ead8d4aa43c9523ba7bad9b17e890d",
+        "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+        "status": "clean",
+        "tree": "6bfd367b52ea179c09cbe17256de8e528fc17728",
+        "first": 3005,
+        "second": 2956
+      },
+      {
+        "target": "9cb19274369e86c1dffa01e2f75f5a4a8a9d2ee6",
+        "head": "2608ea2367ead8d4aa43c9523ba7bad9b17e890d",
+        "merge_base": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "status": "clean",
+        "tree": "5ad0c2cd0ab167bf71697eb1880d332d77e2cf48",
+        "first": 3056,
+        "second": 2956
+      }
+    ],
+    "targets": {
+      "main": "2c717a043c8488938179fca81da4bb9e7913a358",
+      "nvidia-dev": "ba9d1f9473ebeb73fd5216c13a367d968f0a1c07"
+    }
+  },
+  {
+    "repo": "R0Y00/Xbox2Windows",
+    "singles": [
+      {
+        "target": "97cde4d53d13bdc4b77250f6e1a1718b12924870",
+        "head": "4df092945bb231c9bced95c00c8d60b376cd9f1c",
+        "merge_base": "b80513fd18a63319b238261c755aaf46c0d5e79a",
+        "status": "conflict",
+        "paths": [
+          "src/startup_stubs/d3d12_draw.inl"
+        ],
+        "pr": 3139,
+        "branch": "codex/native-graphics-integration",
+        "test_paths": [
+          "tests/startup_native_graphics_draw_check.py"
+        ]
+      },
+      {
+        "target": "247530b0e04224661e4c935a453ee3a96089d938",
+        "head": "97cde4d53d13bdc4b77250f6e1a1718b12924870",
+        "merge_base": "247530b0e04224661e4c935a453ee3a96089d938",
+        "status": "clean",
+        "tree": "11e0f07619fe4aa543e4d6ddc7d46846edc17060",
+        "pr": 3094,
+        "branch": "codex/native-shader-modules",
+        "test_paths": [
+          "tests/native_graphics_interface_library_check.py",
+          "tests/native_indexed_pixel_texture_check.py",
+          "tests/native_rtv_variant_check.py",
+          "tests/native_startup_request_cache_check.py",
+          "tests/startup_address_srv.cpp",
+          "tests/startup_compute_dispatch_native_check.py"
+        ]
+      },
+      {
+        "target": "86beae952d54ad045ad1d47b60c63b022b01bc15",
+        "head": "7de0ee42b266d47b17c372b5b33da411fc0860ac",
+        "merge_base": "7fcde81f74c6d8219ac22dc4aa2010af3ff4e4d7",
+        "status": "conflict",
+        "paths": [
+          "tests/startup_compute_dispatch_native_check.py"
+        ],
+        "pr": 3228,
+        "branch": "main",
+        "test_paths": [
+          "tests/startup_compute_dispatch_native_check.py"
+        ]
+      },
+      {
+        "target": "86beae952d54ad045ad1d47b60c63b022b01bc15",
+        "head": "797954e1ea26cfa8f05c7949a6adceb6182aa86b",
+        "merge_base": "ad306425aa0a1a08abf0a29a1a74b6f0776c17d2",
+        "status": "clean",
+        "tree": "00e9a322adeb6db1301e5592edd0da6ef950f06a",
+        "pr": 3229,
+        "branch": "main",
+        "test_paths": [
+          "tests/cmake/startup_compute_dispatch_output.cmake",
+          "tests/startup_compute_dispatch_check.py",
+          "tests/startup_compute_dispatch_output_check.py",
+          "tests/startup_stream_consumer.cpp"
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "target": "4df092945bb231c9bced95c00c8d60b376cd9f1c",
+        "head": "97cde4d53d13bdc4b77250f6e1a1718b12924870",
+        "merge_base": "b80513fd18a63319b238261c755aaf46c0d5e79a",
+        "status": "conflict",
+        "paths": [
+          "src/startup_stubs/d3d12_draw.inl"
+        ],
+        "first": 3139,
+        "second": 3094
+      },
+      {
+        "target": "7de0ee42b266d47b17c372b5b33da411fc0860ac",
+        "head": "797954e1ea26cfa8f05c7949a6adceb6182aa86b",
+        "merge_base": "ad306425aa0a1a08abf0a29a1a74b6f0776c17d2",
+        "status": "clean",
+        "tree": "31bb2334d80964748fda1ab04346ae65f094bf01",
+        "first": 3228,
+        "second": 3229
+      },
+      {
+        "target": "797954e1ea26cfa8f05c7949a6adceb6182aa86b",
+        "head": "97cde4d53d13bdc4b77250f6e1a1718b12924870",
+        "merge_base": "ad306425aa0a1a08abf0a29a1a74b6f0776c17d2",
+        "status": "conflict",
+        "paths": [
+          "src/startup_stubs/d3d12_compute_dispatch.inl"
+        ],
+        "first": 3229,
+        "second": 3094
+      }
+    ],
+    "targets": {
+      "codex/native-graphics-integration": "97cde4d53d13bdc4b77250f6e1a1718b12924870",
+      "codex/native-shader-modules": "247530b0e04224661e4c935a453ee3a96089d938",
+      "main": "86beae952d54ad045ad1d47b60c63b022b01bc15"
+    }
+  },
+  {
+    "repo": "boykopovar/AnyPS5",
+    "singles": [
+      {
+        "target": "4814cae855171e336c7e415e56afbc673656f687",
+        "head": "c1321287c7889ad5f637aa59e34d97da689eef94",
+        "merge_base": "1b095e740e4ab2178740a97fce934a7cda12ceba",
+        "status": "clean",
+        "tree": "40afcd252ce7d68f1fe525690444288b4737560b",
+        "pr": 27984,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/Recorder.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/cmake/agc_driver_capture_known_label_tests.cmake",
+          "core/libs/prx/libSceAgcDriver/tests/execution/CaptureKnownLabel.cpp"
+        ]
+      },
+      {
+        "target": "4814cae855171e336c7e415e56afbc673656f687",
+        "head": "42cbebae4798f8191275bd92ee1f905ae0b541ea",
+        "merge_base": "1b095e740e4ab2178740a97fce934a7cda12ceba",
+        "status": "clean",
+        "tree": "46ddec46cdde08d69ef26cc1fdf845f31cecaf96",
+        "pr": 27972,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/execution/Fp16OverflowOmod.cpp",
+          "docs/dev/debt/changes/test-fp16-overflow-omod-gfx1151.md"
+        ]
+      },
+      {
+        "target": "4814cae855171e336c7e415e56afbc673656f687",
+        "head": "8e0df64d5d5b8c65a3076bb640c71fa2a192e472",
+        "merge_base": "23786c4e4f7715f07407938ef3611b7f9c1e2de3",
+        "status": "clean",
+        "tree": "3b19b1054908130e0b1899bc03e59205efd16026",
+        "pr": 23955,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/BufferPool.cpp"
+        ]
+      },
+      {
+        "target": "4814cae855171e336c7e415e56afbc673656f687",
+        "head": "ab2742cac58552db32188432f34ce89d00cab96f",
+        "merge_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "status": "clean",
+        "tree": "afbb6cda350d8c1f1c096ea7afeda7478680b195",
+        "pr": 26047,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/execution/FractDirectedRounding.cpp"
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "target": "c1321287c7889ad5f637aa59e34d97da689eef94",
+        "head": "42cbebae4798f8191275bd92ee1f905ae0b541ea",
+        "merge_base": "1b095e740e4ab2178740a97fce934a7cda12ceba",
+        "status": "clean",
+        "tree": "2c50eb57d0ee29908d55d4423afd4e15180c7285",
+        "first": 27984,
+        "second": 27972
+      },
+      {
+        "target": "c1321287c7889ad5f637aa59e34d97da689eef94",
+        "head": "8e0df64d5d5b8c65a3076bb640c71fa2a192e472",
+        "merge_base": "23786c4e4f7715f07407938ef3611b7f9c1e2de3",
+        "status": "clean",
+        "tree": "0e423a1d4e92869185e83a11e8363709cdbee516",
+        "first": 27984,
+        "second": 23955
+      },
+      {
+        "target": "42cbebae4798f8191275bd92ee1f905ae0b541ea",
+        "head": "ab2742cac58552db32188432f34ce89d00cab96f",
+        "merge_base": "1b095e740e4ab2178740a97fce934a7cda12ceba",
+        "status": "clean",
+        "tree": "bb47671d9d5db22504553b2383d7c0290d9d8f9a",
+        "first": 27972,
+        "second": 26047
+      }
+    ],
+    "targets": {
+      "main": "4814cae855171e336c7e415e56afbc673656f687"
+    }
+  },
+  {
+    "repo": "KytyPS5/KytyPS5",
+    "singles": [
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "09fcbe2b2692417f3dc4fd799338542f54425070",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "2a29938f8d7807560b351ece50eda9218faa4f91",
+        "pr": 2278,
+        "branch": "main",
+        "test_paths": [
+          "tests/ResourceTrackingTests.cpp",
+          "tests/ShaderRecompilerComputeTests.cpp",
+          "tests/shaderCfgTests.cpp"
+        ]
+      },
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "81d29d43cb151883949d5f0cfd3c1d1a3bf80e13",
+        "merge_base": "83df9c252ce13173b176e926abe2ab39e83295be",
+        "status": "clean",
+        "tree": "4a475345544627897c49dbbacd0b88f7e7baa3fd",
+        "pr": 2172,
+        "branch": "main",
+        "test_paths": [
+          "tests/ShaderRecompilerComputeTests.cpp"
+        ]
+      },
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "d1f980006cc1d92201b6d05d4c4b873310e9d553",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "2eb0671f875d5293b9097c3d927fae2f3b2d0e09",
+        "pr": 2357,
+        "branch": "main",
+        "test_paths": [
+          "tests/shaderCfgTests.cpp"
+        ]
+      },
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "e77d078ef15e6da3629ed34a0931047f9f9c1072",
+        "pr": 2591,
+        "branch": "main",
+        "test_paths": [
+          "tests/ShaderRecompilerComputeTests.cpp"
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "target": "09fcbe2b2692417f3dc4fd799338542f54425070",
+        "head": "81d29d43cb151883949d5f0cfd3c1d1a3bf80e13",
+        "merge_base": "83df9c252ce13173b176e926abe2ab39e83295be",
+        "status": "clean",
+        "tree": "f9adea50d69bad9e5f274cc1e7acaa9fe8dc1dfd",
+        "first": 2278,
+        "second": 2172
+      },
+      {
+        "target": "09fcbe2b2692417f3dc4fd799338542f54425070",
+        "head": "d1f980006cc1d92201b6d05d4c4b873310e9d553",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "c6c393c7b2882b719faa9bb275657cce58a9280b",
+        "first": 2278,
+        "second": 2357
+      },
+      {
+        "target": "09fcbe2b2692417f3dc4fd799338542f54425070",
+        "head": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "29cd4b6b00b5befe2153721ccd6c4bbc5cc61259",
+        "first": 2278,
+        "second": 2591
+      }
+    ],
+    "targets": {
+      "main": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e"
+    }
+  },
+  {
+    "repo": "fxceless/victory-fork",
+    "singles": [
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "4351fb43edd626bd8fd450853a17f02ca0c1b6f7",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "2ee3329ae07f5e522af207b76e29d1b311406c3d",
+        "pr": 1500,
+        "branch": "main",
+        "test_paths": [
+          "TESTING_REQUEST.md",
+          "tests/launcher-probe.ps1",
+          "tests/low-memory-launcher.ps1",
+          "tests/performance-tools.ps1"
+        ]
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "f219179417ecf0d4d9c8585bcccefe91a19d3856",
+        "merge_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "status": "clean",
+        "tree": "4edd3f3b52728aa2f3630544a9a3b400f0961e98",
+        "pr": 885,
+        "branch": "main",
+        "test_paths": []
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "b344f5b74c974b602914c8b0a498b000158897ea",
+        "merge_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "status": "clean",
+        "tree": "7714baaf804470f64662895825567124b02f93cf",
+        "pr": 1489,
+        "branch": "main",
+        "test_paths": []
+      }
+    ],
+    "pairs": [
+      {
+        "target": "4351fb43edd626bd8fd450853a17f02ca0c1b6f7",
+        "head": "f219179417ecf0d4d9c8585bcccefe91a19d3856",
+        "merge_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "status": "clean",
+        "tree": "555e2dbb327b821ae808cf8984f9b6a8ff428dd4",
+        "first": 1500,
+        "second": 885
+      },
+      {
+        "target": "4351fb43edd626bd8fd450853a17f02ca0c1b6f7",
+        "head": "b344f5b74c974b602914c8b0a498b000158897ea",
+        "merge_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "status": "conflict",
+        "paths": [
+          "crates/victory-gpu/src/lib.rs"
+        ],
+        "first": 1500,
+        "second": 1489
+      }
+    ],
+    "targets": {
+      "main": "2eade68cade9b2f8cd2511cc97328e83f58508c3"
+    }
+  }
+]
