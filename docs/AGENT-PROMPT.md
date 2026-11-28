@@ -2,6 +2,10 @@
 
 Give your agent the GitHub link and the prompt below. Any session that can read public links can use this route without installing PortBridge, connecting MCP, or creating a GitHub token. Running a local test or making a change requires a session with a workspace and the tools for that check. [PortBridge on GitHub](https://github.com/akimfomin/PortBridge) · [Project instructions](../AGENTS.md)
 
+## Ask about one public pull request
+
+Use the [PR request form](https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml) to share the public PR and the decision you need to make. Include a full target commit if you are checking a transfer. You can follow the evidence and any receiving decision in your issue.
+
 ## A joint check from one public link
 
 1. Open the original issue or PR and state which decision needs evidence. [Request a test](https://github.com/akimfomin/PortBridge/issues/new?template=test-request.yml)

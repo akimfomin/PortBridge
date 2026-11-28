@@ -28,6 +28,9 @@ REPORT_POLICIES = {
     FRAMELAB_TASK: ("vulkan", ("same-binary", "same-timeline", "cross-binary", "cross-timeline")),
     "xcl-2126-scratch-coverage": ("d3d12-wave32", ("skip-middle-piece", "overlapping-edges")),
     "portbridge-subgroup-wave64": ("vulkan-wave64", ("cross-half", "partial-workgroup")),
+    "xbox2windows-3220-exp2-rounding": (
+        "d3d12-wave32", ("native-adapter", "input-11c5", "input-a86d", "input-36b6", "input-b8a5"),
+    ),
 }
 REPORT_HEADER = "portbridge test report v1"
 FIELD_LINE = re.compile(r"(task|revisions|equipment|hardware|pci|os|driver|toolchain|subgroup-width|opt-in):\s*(.+)", re.I)

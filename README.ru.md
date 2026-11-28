@@ -10,7 +10,7 @@
 
 ## Проверить один pull request
 
-[Передайте ссылку на публичный PR и целевой коммит](https://github.com/akimfomin/PortBridge/issues/98). Эту же ссылку можно дать своему агенту, чтобы запустить проверку самостоятельно. Добровольцы могут [взять одну готовую задачу](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7206391931) и оставить краткий результат.
+[Откройте запрос по одному публичному PR](https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml) или дайте ссылку на PR своему агенту для поиска прежних решений. Если проверяете перенос, укажите точный целевой коммит. Добровольцы могут [взять проверку в Lab](https://akimfomin.github.io/PortBridge/?lang=ru#/lab) и оставить краткий результат.
 
 Сопровождающий может включить [проверку GitHub](docs/GITHUB-ACTION.md). Результат появится прямо в PR с источниками или причиной пустой выдачи. В пилоте M5–M6 можно предложить один конкретный технический вопрос. [Подключение агента](docs/MCP.md) · [Партнёрская лента](API.md) · [Проверенные результаты и ограничения](https://github.com/akimfomin/PortBridge/blob/audit/review/audit/LATEST.md)
 
