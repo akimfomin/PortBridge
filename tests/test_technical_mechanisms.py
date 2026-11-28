@@ -59,6 +59,21 @@ class TechnicalMechanismTests(unittest.TestCase):
         self.assertEqual(mechanisms("Reset command allocators. An unrelated queue has a fence."),
                          set())
 
+    def test_on_demand_readback_outweighs_generic_page_copy_terms(self):
+        origin = observation("one", 574, "Lazy GPU readback on guarded title pages",
+                             "Guard aliased pages instead of copying them each submission.")
+        source = observation("two", 5434, "Download GPU-written images when the CPU reads them", old=True)
+        peer = observation("three", 59, "Opt-in VEH lazy GPU-to-CPU copy-back")
+        decoy = observation("four", 1, "Guard aliased CPU copy pages instead of copying them each submission")
+        matches = RelatedIndex([origin, source, peer, decoy]).matches({}, origin=canonical_url(origin["url"]))
+        self.assertEqual({row["right"]["url"] for row in matches[:2]}, {source["url"], peer["url"]})
+        self.assertTrue(all(row["state"] == "suggested" for row in matches))
+        self.assertNotIn("gpu-readback/cpu-observation", matches[-1]["reason"])
+
+    def test_batched_readback_without_a_consumer_is_not_on_demand(self):
+        self.assertNotIn("gpu-readback/cpu-observation",
+                         mechanisms("Batch GPU readbacks when the frame ends. The CPU later reads logs."))
+
     def test_distinguishes_shared_errors_from_a_specific_match_without_a_citation(self):
         signal = ("vk_error_device_lost",)
         origin = observation("target", 1, "Guard aliased pages instead of copying them each submission", signals=signal)

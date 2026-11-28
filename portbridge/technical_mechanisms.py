@@ -14,6 +14,12 @@ ALLOCATOR_REUSE = r"\b(?:reset|recycl|reus)\w*\b"
 GPU_PROGRESS = (r"\b(?:fences?|still in flight|still execut\w+|completed submissions?|"
                 r"completed (?:relay )?command lists?)\b")
 MEMORY_COPY = r"(?:\b(?:cop(?:y|ies|ied|ying)|shadow)\w*\b.{0,65}\b(?:pages?|blocks?|views?|mappings?)\b|\b(?:pages?|blocks?|views?|mappings?)\b.{0,65}\b(?:cop(?:y|ies|ied|ying)|shadow)\w*\b)"
+GPU_READBACK = (r"\b(?:GPU[ -](?:to[ -]CPU[ -])?(?:readbacks?|copy[ -]back)|"
+                r"(?:download|read[ -]back) GPU[ -](?:written|modified) (?:images?|textures?|buffers?)|"
+                r"copy[ -]back (?:from|what) (?:the )?(?:GPU|card))\b")
+CPU_OBSERVATION = (r"\b(?:lazy|demand[ -]driven|on[ -]demand|guarded (?:title )?pages?|"
+                   r"(?:first )?(?:guest )?CPU (?:reads?|access(?:es)?|touch(?:es)?)|"
+                   r"when (?:the )?(?:guest )?CPU (?:touches|reads|accesses))\b")
 BVH = r"(?:\bBVH\b|\bbox(?:16|32)\b|\bimage_bvh(?:64)?_intersect_ray\b)"
 RULES = {
     "pipeline-cache/device-identity": (PIPELINE_CACHE, r"\b(?:cache UUID|device identity|driver version|vendor ID|device ID|pipelineCacheUUID)\b"),
@@ -27,12 +33,16 @@ RULES = {
     "memory-copy/write-tracking": (MEMORY_COPY, r"\b(?:guard\w*|write[ -]watch\w*|write faults?|dirty[ -]page\w*)\b"),
     "memory-copy/mapping-change": (MEMORY_COPY, r"\b(?:remap\w*|unmap\w*|alias(?:ed|es|ing)?|mapping change\w*)\b"),
     "memory-copy/selective-refresh": (MEMORY_COPY, r"\b(?:re[ -]copy\w*|instead of copying|cop\w+ (?:them |it )?again|skip\w* (?:the |a )?cop\w+|changed[ -]pages?)\b"),
+    "gpu-readback/cpu-observation": (GPU_READBACK, CPU_OBSERVATION),
     "bvh/page-boundary": (BVH, r"\b(?:cross[ -]page|page boundar\w+|across arena\w*|partially[ -]unmapped)\b"),
     "bvh/lane-participation": (BVH, r"\b(?:partial (?:groups?|participation|waves?)|masked[ -]out lanes|inactive lanes|memory guard)\b"),
     "bvh/node-fetch": (BVH, r"\b(?:node.{0,12}(?:loads?|fetches?|reads?)|second[ -]half|(?:two|2)[ -]child|directory lookup)\b"),
 }
 SCOPE_PATTERNS = [(name, re.compile(scope, re.I), re.compile(action, re.I))
                   for name, (scope, action) in RULES.items()]
+# A specific consumer for a transfer carries more evidence than several
+# overlapping tags about page copies, protection and address mappings.
+SPECIFIC_MECHANISMS = {"gpu-readback/cpu-observation"}
 CLAUSE = re.compile(r"[\r\n]+|(?<=[.!?])\s+")
 DIAGNOSTIC = re.compile(r"(?:0x[0-9a-f]+|vuid-.*|.*_(?:error|message_id)_.*)", re.I)
 MAX_WINDOW = 160
