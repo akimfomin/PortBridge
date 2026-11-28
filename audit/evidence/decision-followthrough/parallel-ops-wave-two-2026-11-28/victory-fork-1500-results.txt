@@ -1,0 +1,16 @@
+7.6.9
+PASS: 4 upscaler modes, overrides, actual console/settings forwarding, success/failure environment restoration, missing runner rejection.
+PASS: normal warm-up reaches the synthetic run; warm-up exit 29 blocks it; parent location and settings survive both.
+
+rustc 1.100.1 (20ddd0171 2026-11-25)
+
+running 6 tests
+test budget::tests::explicit_limit_never_bypasses_live_vram_or_reservations ... ok
+test budget::tests::idle_pool_does_not_keep_four_gib_on_an_eight_gib_gpu ... ok
+test budget::tests::previous_large_host_prefetch_rules_are_preserved ... ok
+test budget::tests::small_profile_starts_before_memory_pressure ... ok
+test crossing_the_spare_threshold_reduces_the_cap ... ok
+test small_profile_has_an_inclusive_boundary ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
