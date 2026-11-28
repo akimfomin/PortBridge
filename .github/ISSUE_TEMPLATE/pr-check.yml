@@ -1,0 +1,32 @@
+name: Ask for prior work on a public pull request
+description: Bring one decision and a public PR so contributors can look for a relevant fix or test.
+title: 'PR check: '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask about one decision. A contributor can return source links, a compatibility check, or a test. Responses are voluntary.
+
+        If you prefer to start yourself, paste your PR into the [PortBridge catalog](https://akimfomin.github.io/PortBridge/#/problems). Keep private logs, credentials, and game data out of your request.
+  - type: input
+    id: pull-request
+    attributes:
+      label: Public pull request
+      description: Link the GitHub pull request you want to check.
+      placeholder: https://github.com/owner/repository/pull/123
+    validations:
+      required: true
+  - type: input
+    id: receiving-revision
+    attributes:
+      label: Receiving commit
+      description: If checking a transfer or merge, include the full public commit URL you want to target.
+      placeholder: https://github.com/owner/repository/commit/0123456789012345678901234567890123456789
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decision you need to make
+      description: Name the choice, symptom, or missing evidence. Mention the exact test or settings when you have them.
+      placeholder: Is this test enough to rule out the same regression on RDNA2?
+    validations:
+      required: true

@@ -10,7 +10,7 @@ from portbridge.community import filter_impact, people
 from portbridge.exchange import Conflict, Exchange, PermissionDenied
 from portbridge.export import export
 from portbridge.github import Unavailable
-from portbridge.lab import build_lab
+from portbridge.lab import TASKS, build_lab
 from portbridge.lab_workflow import apply, dashboard
 from portbridge.mcp import PortBridgeMCP
 from portbridge.preflight import preflight
@@ -75,7 +75,8 @@ class RadarWorkflowTest(CatalogFixture):
                         note="Independent review fixture",checked_artifact=True,**kwargs)
 
     def test_existing_lab_and_real_output_paths_preserved(self):
-        self.assertEqual(len(build_lab(self.catalog)["tasks"]),17)
+        self.assertEqual({card["id"] for card in build_lab(self.catalog)["tasks"]},
+                         {card["id"] for card in TASKS} | {self.task})
         task = build_lab(self.catalog,task=self.task,kind="source-only",os="Windows")["tasks"][0]
         self.assertEqual(task["workflow_state"],"draft")
         self.assertTrue(task["prompt"] and task["criteria"]["skip"])

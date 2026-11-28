@@ -8,7 +8,7 @@ PortBridge connects public issues, pull requests, and test results across projec
 
 ## Try PortBridge on one pull request
 
-[Share a public PR URL and receiving commit](https://github.com/akimfomin/PortBridge/issues/98), or give the same link to your agent to run the check yourself. Volunteers can [take one current Test Lab task](https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7206391931) and reply with an aggregate result.
+[Open a request for one public PR](https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml), or give your agent the PR link to search yourself. Include the full target commit if you are checking a transfer. Volunteers can [take one current Test Lab task](https://akimfomin.github.io/PortBridge/#/lab) and reply with an aggregate result.
 
 A repository maintainer can enable the [read-only GitHub check](docs/GITHUB-ACTION.md) to see earlier work or the reason for an empty result directly in a PR. The M5–M6 pilot welcomes one concrete technical decision at a time. [Agent setup](docs/MCP.md) · [Partner feed](API.en.md) · [Measured outcomes and open limits](https://github.com/akimfomin/PortBridge/blob/audit/review/audit/LATEST.md)
 
