@@ -1,5 +1,10 @@
 # Координация между командами
 
+## Координация Vice-Tay и проверка AnyXboxX · 28 ноября 2026
+
+- TaynanGT подтвердил собственный способ координации в #273. PortBridge предложил прогон списка свободных задач с возвратом результата в исходный PR. В отдельном #388 передан тест взаимодействия с #379. Решение команды по сотрудничеству пока открыто. [Правила обсуждения](https://github.com/TaynanGT/Vice-Tay/issues/273#issuecomment-7219416199) · [Предложение](https://github.com/TaynanGT/Vice-Tay/issues/273#issuecomment-7230521445) · [Совместный контроль](https://github.com/TaynanGT/Vice-Tay/pull/388#issuecomment-7230619436)
+- KainanP подтвердил применение правила PortBridge и добавил регрессию на вершине #550. Следующая передача затронула конфликт с актуальной веткой. Для добровольной проверки на 12 ГБ приглашён Anon64, ранее опубликовавший сопоставимые данные XCL. Нового результата пока нет. [Изменение автора](https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230084159) · [Передача](https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230573166) · [Приглашение](https://github.com/akimfomin/PortBridge/issues/132#issuecomment-7230663294)
+
 ## Continued · дополнительный контроль для #2405 · 28 ноября 2026
 
 - ecox982745 проверил совместимый второй буфер, которому ранняя ветка аренда/выделение отказывала. PortBridge добавил к этому отдельный контроль для несовместимых типов и предложил проверять сохранение первого отображения. Авторство начальной проверки сохранено. Решение сопровождающего и результат Arc A770 ещё открыты. [Исходная проверка](https://github.com/ProjectLeonida/mandy/pull/2405#issuecomment-7204997731) · [Контроль PortBridge](https://github.com/ProjectLeonida/mandy/pull/2405#issuecomment-7229987775) · [Test Lab](https://github.com/akimfomin/PortBridge/issues/117)

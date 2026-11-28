@@ -1,0 +1,1620 @@
+{
+  "as_of_local_date": "2026-11-28",
+  "portbridge_revision": "f9da51bbef688d4b71beea8c6d8b77f6a3705a84",
+  "method": "Public PR refs and receiving SHAs, existing portbridge.merge_check.compare in isolated bare repositories. Pair comparisons use the two raw heads, including stacked dependencies. All merge-tree results require build and behavior validation before merge.",
+  "summary": {
+    "single_clean": 16,
+    "single_conflict": 4,
+    "pair_clean": 12,
+    "pair_conflict": 8,
+    "ci_success": 9,
+    "ci_failure": 3,
+    "ci_review_required": 8
+  },
+  "pull_requests": [
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+      "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/host.rs"
+      ],
+      "changed_tests": [],
+      "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/388/commits/0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "target_branch": "main",
+      "author": "SmartIngenieriayDesarrollo",
+      "subject": "Refresh keeps unrelated copies",
+      "next_check": "Run the two `a_title_write_*` regressions. With #379 also applied, repeat with two mapped addresses and a write that straddles a mapped range. Check bytes and notices independently.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/357",
+      "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/descriptor.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/host/heap_pace.rs",
+        "docs/this-fork.md"
+      ],
+      "changed_tests": [],
+      "head": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/357/commits/6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "target_branch": "main",
+      "author": "cafeoh",
+      "subject": "Stretched-triangle pacing",
+      "next_check": "Repeat an interleaved same-scene comparison with heap pacing off/on. Record visible spikes and rendered frame times on Series S and Series X separately.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/263",
+      "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/copystat.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/lib.rs",
+        "crates/victory-gpu/src/list.rs",
+        "crates/victory-gpu/src/pipeline.rs",
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/pipeline/known.rs",
+        "crates/victory-gpu/src/pipeline/make.rs",
+        "crates/victory-gpu/src/pool.rs",
+        "crates/victory-gpu/src/ram_trim.rs",
+        "crates/victory-gpu/src/shadow.rs",
+        "crates/victory-gpu/src/texture.rs",
+        "crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_tests": [],
+      "head": "4f5de4ecdd613867bb8af4b548957174139b321f",
+      "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/263/commits/4f5de4ecdd613867bb8af4b548957174139b321f",
+      "target_branch": "main",
+      "author": "Vladimir-Human",
+      "subject": "Unused RAM reclamation",
+      "next_check": "Run `stress_decommit_recommit_reuse_no_corruption_and_os_commit_drops` after resolving the target tree. Check contents after reuse and private commit separately.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/379",
+      "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/descriptor/host.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/inplace.rs",
+        "crates/victory-gpu/src/lib.rs",
+        "crates/victory-gpu/src/watch.rs",
+        "crates/victory-hle/src/modules/xmem.rs"
+      ],
+      "changed_tests": [],
+      "head": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/379/commits/ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "target_branch": "main",
+      "author": "TaynanGT",
+      "subject": "Alias texture refresh",
+      "next_check": "Run the pinned two-view Windows regression. Check both texture heaps and the unrelated page, with completed writes and with a notice drain during a copy.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/550",
+      "target": "4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "status": "conflict",
+      "conflicts": [
+        "third_party/victory/crates/victory-gpu/src/pool.rs"
+      ],
+      "changed_files": [
+        "third_party/victory/crates/victory-gpu/src/pool.rs"
+      ],
+      "changed_tests": [],
+      "head": "4d8fb188ecda39f23f765702750b8a0020206e9d",
+      "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+      "file_evidence": [
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/pool.rs"
+      ],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/550/commits/4d8fb188ecda39f23f765702750b8a0020206e9d",
+      "target_branch": "main",
+      "author": "KainanP",
+      "subject": "VRAM pool budget",
+      "next_check": "Run both busy-pool controls. After rebase use the effective configured pool line for the 12 GB test and preserve the 81%-fill observation at the old head.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "tests",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+      "target": "4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "status": "conflict",
+      "conflicts": [
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/docs/README-fxceless.md"
+      ],
+      "changed_files": [
+        "docs/fr/lancer-gta6.md",
+        "docs/running-gta6.md",
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/docs/README-fxceless.md"
+      ],
+      "changed_tests": [],
+      "head": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+      "merge_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+      "file_evidence": [
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/host.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/docs/README-fxceless.md"
+      ],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/568/commits/2e1939d5d020f7df83a522994744caa2d049fc2d",
+      "target_branch": "main",
+      "author": "KainanP",
+      "subject": "Command timing without full DRED",
+      "next_check": "After resolving host.rs, run `timing_notes_commands_without_full_device_removed_data`. Compare timing off, light DRED with timing, and full DRED marker ordering.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "tests",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/555",
+      "target": "4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "status": "conflict",
+      "conflicts": [
+        "third_party/victory/crates/victory-gpu/src/resource.rs",
+        "third_party/victory/crates/victory-gpu/src/texture.rs"
+      ],
+      "changed_files": [
+        "third_party/victory/crates/victory-gpu/src/descriptor.rs",
+        "third_party/victory/crates/victory-gpu/src/descriptor/host.rs",
+        "third_party/victory/crates/victory-gpu/src/descriptor/mip_clamp_tests.rs",
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/crates/victory-gpu/src/lib.rs",
+        "third_party/victory/crates/victory-gpu/src/list.rs",
+        "third_party/victory/crates/victory-gpu/src/resource.rs",
+        "third_party/victory/crates/victory-gpu/src/texture.rs",
+        "third_party/victory/crates/victory-gpu/src/texture_mip_clamp.rs",
+        "third_party/victory/crates/victory-gpu/src/texture_mip_clamp_tests.rs"
+      ],
+      "changed_tests": [
+        "third_party/victory/crates/victory-gpu/src/descriptor/mip_clamp_tests.rs",
+        "third_party/victory/crates/victory-gpu/src/texture_mip_clamp_tests.rs"
+      ],
+      "head": "6708faf2076fd28872c8f9a240edb7d86f690f83",
+      "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+      "file_evidence": [
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/resource.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/texture.rs"
+      ],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/555/commits/6708faf2076fd28872c8f9a240edb7d86f690f83",
+      "target_branch": "main",
+      "author": "Vladimir-Human",
+      "subject": "Default-off mip policy",
+      "next_check": "After rebase, compare unset versus main staging-cache reuse and copied mip contents. With the switch on, separately check explicit readback after a base mip change.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "tests",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/350",
+      "target": "4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "status": "conflict",
+      "conflicts": [
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/crates/victory-gpu/src/pipeline.rs",
+        "third_party/victory/crates/victory-gpu/src/pipeline/host.rs",
+        "third_party/victory/crates/victory-gpu/src/pool.rs",
+        "third_party/victory/crates/victory-gpu/src/shadow.rs",
+        "third_party/victory/crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_files": [
+        "third_party/victory/crates/victory-gpu/src/copystat.rs",
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/crates/victory-gpu/src/lib.rs",
+        "third_party/victory/crates/victory-gpu/src/list.rs",
+        "third_party/victory/crates/victory-gpu/src/pipeline.rs",
+        "third_party/victory/crates/victory-gpu/src/pipeline/host.rs",
+        "third_party/victory/crates/victory-gpu/src/pipeline/known.rs",
+        "third_party/victory/crates/victory-gpu/src/pipeline/list_bench.rs",
+        "third_party/victory/crates/victory-gpu/src/pipeline/make.rs",
+        "third_party/victory/crates/victory-gpu/src/pool.rs",
+        "third_party/victory/crates/victory-gpu/src/ram_trim.rs",
+        "third_party/victory/crates/victory-gpu/src/shadow.rs",
+        "third_party/victory/crates/victory-gpu/src/texture.rs",
+        "third_party/victory/crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_tests": [],
+      "head": "4142924be4a11181d8342f0180516da0b023e1cd",
+      "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+      "file_evidence": [
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/host.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/pipeline.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/pipeline/host.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/pool.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/shadow.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/4079f2b50b073935a8c64bf575b15f87ec91989b/third_party/victory/crates/victory-gpu/src/watch.rs"
+      ],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/4079f2b50b073935a8c64bf575b15f87ec91989b",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/350/commits/4142924be4a11181d8342f0180516da0b023e1cd",
+      "target_branch": "main",
+      "author": "Vladimir-Human",
+      "subject": "Host RAM trim",
+      "next_check": "After resolving the six target files, run the re-commit/reuse and staged-copy tests on the same tree. Verify the default mode before drawing performance conclusions.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "tests",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2405",
+      "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "runtime/shims/d3d12_vulkan_device.cpp"
+      ],
+      "changed_tests": [],
+      "head": "f0b86e19380c8af09569161e1a0bc0243125a738",
+      "merge_base": "a73a57e1339be072baf5522351c8ec7f1482b56b",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/ProjectLeonida/mandy/commit/d44285197237cfe331684aa150fb9dec4b1d08b5",
+      "head_url": "https://github.com/ProjectLeonida/mandy/pull/2405/commits/f0b86e19380c8af09569161e1a0bc0243125a738",
+      "target_branch": "main",
+      "author": "pepefroge",
+      "subject": "Sparse Vulkan buffer allocation",
+      "next_check": "Check Vulkan replay tile count on Arc A770. Keep native D3D12 separate. In the mixed-mask CPU fixture, reject B while A still reads back.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "action_required"
+        },
+        {
+          "name": "Runtime",
+          "status": "completed",
+          "conclusion": "action_required"
+        },
+        {
+          "name": "No Game Data",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2379",
+      "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "gpu-test-results/README.md",
+        "tests/test_gpu_results.py",
+        "tools/gpu_results.py"
+      ],
+      "changed_tests": [
+        "tests/test_gpu_results.py"
+      ],
+      "head": "346117c243ff42d9db567ad0875c46747d2f6f30",
+      "merge_base": "56bdd7e889f6e05ca498eb79e35fa22578fe4696",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/ProjectLeonida/mandy/commit/d44285197237cfe331684aa150fb9dec4b1d08b5",
+      "head_url": "https://github.com/ProjectLeonida/mandy/pull/2379/commits/346117c243ff42d9db567ad0875c46747d2f6f30",
+      "target_branch": "main",
+      "author": "syfyra",
+      "subject": "Legacy GPU result rendering",
+      "next_check": "Run `tests/test_gpu_results.py` and compare the accepted V100 record. Require all three runs and the named failure in the overview.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "action_required"
+        },
+        {
+          "name": "No Game Data",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/ProjectLeonida/mandy/pull/1437",
+      "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "scripts/run_semantic_tests.py",
+        "tests/test_run_semantic_tests.py"
+      ],
+      "changed_tests": [
+        "scripts/run_semantic_tests.py",
+        "tests/test_run_semantic_tests.py"
+      ],
+      "head": "53bc0e3a88bbfc336c8270ae03ad8f3e0fc851b3",
+      "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/ProjectLeonida/mandy/commit/d44285197237cfe331684aa150fb9dec4b1d08b5",
+      "head_url": "https://github.com/ProjectLeonida/mandy/pull/1437/commits/53bc0e3a88bbfc336c8270ae03ad8f3e0fc851b3",
+      "target_branch": "main",
+      "author": "titoreinaldo",
+      "subject": "Semantic-runner completion",
+      "next_check": "Run `tests/test_run_semantic_tests.py`. Missing or untrustworthy output must fail, while a real success and an explicit permitted skip retain their semantics.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "No Game Data",
+          "status": "completed",
+          "conclusion": "action_required"
+        },
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "action_required"
+        },
+        {
+          "name": "Runtime",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/pull/3628",
+      "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "README.md",
+        "apps/victory/Cargo.toml",
+        "apps/victory/build.rs",
+        "apps/victory/src/main.rs",
+        "apps/victory/src/sdkpath.rs"
+      ],
+      "changed_tests": [],
+      "head": "0ff8eceaf44989fdec06ea0136197afe94d6e4a0",
+      "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/3628/commits/0ff8eceaf44989fdec06ea0136197afe94d6e4a0",
+      "target_branch": "main",
+      "author": "grosso1337",
+      "subject": "Windows 10 Agility runtime",
+      "next_check": "On the opt-in build, test no SDK folder with a CPU-only command and a GPU command. With official Agility plus compatible WARP, expect a cold generated pipeline and a repeat cache hit.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/pull/3623",
+      "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/host.rs"
+      ],
+      "changed_tests": [],
+      "head": "8f5927edcbc97261c3bb491da687bd4efc299857",
+      "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/3623/commits/8f5927edcbc97261c3bb491da687bd4efc299857",
+      "target_branch": "main",
+      "author": "andrewpozdnakov7-jpg",
+      "subject": "Diagnostic timestamp reuse",
+      "next_check": "Repeat the author’s synthetic slow-list fixture with stable versus delayed timestamp reporting. Preserve the per-command output and avoid a duplicate timestamp readback.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/pull/3274",
+      "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/resource.rs"
+      ],
+      "changed_tests": [],
+      "head": "6964f11508928a985a5bcb4553f62e3c11b99703",
+      "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/3274/commits/6964f11508928a985a5bcb4553f62e3c11b99703",
+      "target_branch": "main",
+      "author": "KainanP",
+      "subject": "Writer-free texture read",
+      "next_check": "Use `a_texture_read_with_no_writer_does_not_wait_for_the_texture_map`. Pair it with the late writer at the same memory address to catch false negative caching.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/pull/2633",
+      "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "README.md",
+        "apps/victory/src/main.rs",
+        "apps/victory/src/translate.rs",
+        "crates/victory-gpu/src/draw.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/shader_cache.rs",
+        "crates/victory-shader/src/emit/bvh_tests.rs",
+        "crates/victory-shader/src/emit/crosslane_tests.rs",
+        "crates/victory-shader/src/emit/halves_random_tests.rs",
+        "crates/victory-shader/src/emit/halves_tests.rs",
+        "crates/victory-shader/src/emit/host.rs",
+        "crates/victory-shader/src/emit/lower.rs",
+        "crates/victory-shader/src/emit/lower/confine.rs",
+        "crates/victory-shader/src/emit/lower/halves.rs",
+        "crates/victory-shader/src/emit/lower/tests.rs",
+        "crates/victory-shader/src/emit/lower/wide.rs",
+        "crates/victory-shader/src/emit/memory_tests.rs",
+        "crates/victory-shader/src/emit/mod.rs",
+        "crates/victory-shader/src/emit/semantics_tests.rs",
+        "crates/victory-shader/src/emit/shader.rs",
+        "crates/victory-shader/src/emit/stride_tests.rs",
+        "crates/victory-shader/src/emit/synthetic_tests.rs",
+        "crates/victory-shader/src/emit/valu_tests.rs",
+        "crates/victory-shader/src/emit/waterfall_tests.rs",
+        "docs/architecture.md"
+      ],
+      "changed_tests": [
+        "crates/victory-shader/src/emit/bvh_tests.rs",
+        "crates/victory-shader/src/emit/crosslane_tests.rs",
+        "crates/victory-shader/src/emit/halves_random_tests.rs",
+        "crates/victory-shader/src/emit/halves_tests.rs",
+        "crates/victory-shader/src/emit/lower/tests.rs",
+        "crates/victory-shader/src/emit/memory_tests.rs",
+        "crates/victory-shader/src/emit/semantics_tests.rs",
+        "crates/victory-shader/src/emit/stride_tests.rs"
+      ],
+      "head": "1b1ef2161a2f1cbcb46d7f72a7b24baf1303d419",
+      "merge_base": "842b0cb76f8f5fa9289bd779783c51ec24d75302",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/2633/commits/1b1ef2161a2f1cbcb46d7f72a7b24baf1303d419",
+      "target_branch": "main",
+      "author": "chippy01",
+      "subject": "Wave64 on a Wave32 host",
+      "next_check": "Run `emit::halves_random_tests` and the focused late cross-half read control on a physical Wave32 device. Track cases that are refused separately.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3036",
+      "target": "d1be8103644791b7a65f068954324e93d4b1b565",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/xcl/src/hle/d3d12x/bind.rs",
+        "crates/xcl/src/hle/d3d12x/list_x.rs"
+      ],
+      "changed_tests": [],
+      "head": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+      "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/d1be8103644791b7a65f068954324e93d4b1b565",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/3036/commits/6f3ad70ccc22acb777205cdea1d512bf24421299",
+      "target_branch": "nvidia-dev",
+      "author": "Kalmarv",
+      "subject": "Deferred graphics state",
+      "next_check": "On nvidia-dev, compare immediate versus deferred stencil, topology and scissors with one generated pipeline pair. Verify final pixels, the cache and queue order.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "failure"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2898",
+      "target": "d1be8103644791b7a65f068954324e93d4b1b565",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/xcl/src/hle/d3d12x/sparse.rs"
+      ],
+      "changed_tests": [],
+      "head": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "merge_base": "af2cecc40886a8682ecf3267f5328c6dc4b66ad7",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/d1be8103644791b7a65f068954324e93d4b1b565",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/2898/commits/8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "target_branch": "nvidia-dev",
+      "author": "itsSio",
+      "subject": "Sparse heap packing",
+      "next_check": "Run `reuse_tile_packs_fuller_heaps_so_nearly_empty_pools_retire`. Check the cooling boundary and a fully empty heap. Keep the system-memory pool separate if combined with #3039.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "failure"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3039",
+      "target": "d1be8103644791b7a65f068954324e93d4b1b565",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/xcl/src/hle/d3d12x/sparse.rs",
+        "crates/xcl/src/hle/d3d12x/vram.rs",
+        "crates/xcl/src/hle/kernelx.rs"
+      ],
+      "changed_tests": [],
+      "head": "7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "merge_base": "d1be8103644791b7a65f068954324e93d4b1b565",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/d1be8103644791b7a65f068954324e93d4b1b565",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/3039/commits/7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "target_branch": "nvidia-dev",
+      "author": "treybertram06",
+      "subject": "Streamed texture pages in system memory",
+      "next_check": "Run `a_system_memory_page_is_told_apart_and_cools_in_its_own_pool`. Combine with a same-index local heap control and an L0-backed shader read in a separate run.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "failure"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1286",
+      "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/copystat.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/lib.rs",
+        "crates/victory-gpu/src/list.rs",
+        "crates/victory-gpu/src/pipeline.rs",
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/pipeline/known.rs",
+        "crates/victory-gpu/src/pipeline/make.rs",
+        "crates/victory-gpu/src/pool.rs",
+        "crates/victory-gpu/src/ram_trim.rs",
+        "crates/victory-gpu/src/shadow.rs",
+        "crates/victory-gpu/src/texture.rs",
+        "crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_tests": [],
+      "head": "3f3ec37d16bc2f22f4249b435d70e142caf349a0",
+      "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/fxceless/victory-fork/commit/2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "head_url": "https://github.com/fxceless/victory-fork/pull/1286/commits/3f3ec37d16bc2f22f4249b435d70e142caf349a0",
+      "target_branch": "main",
+      "author": "Vladimir-Human",
+      "subject": "Reclaim idle host memory in victory-fork",
+      "next_check": "Run `ram_trim` and the GPU copy reuse control on the exact branch. Track private commit and byte equality separately, and isolate the switch if comparing frame times.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    },
+    {
+      "url": "https://github.com/fxceless/victory-fork/pull/1126",
+      "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-shader/src/emit/bitcode/opt.rs",
+        "crates/victory-shader/src/emit/mod.rs"
+      ],
+      "changed_tests": [],
+      "head": "335c089b244627842693e91ed4f9a6a59b33d1f9",
+      "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/fxceless/victory-fork/commit/2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "head_url": "https://github.com/fxceless/victory-fork/pull/1126/commits/335c089b244627842693e91ed4f9a6a59b33d1f9",
+      "target_branch": "main",
+      "author": "Vladimir-Human",
+      "subject": "DXIL optimization parity",
+      "next_check": "Run `dxil_opt_hw_gpu_bit_exact_parity_and_validation` with a real adapter and the same DXIL baseline. If combined with #1140, compare all four flag combinations.",
+      "next_check_executed_by_portbridge": false,
+      "ci_on_pr_head": [
+        {
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "action_required"
+        }
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "left": 388,
+      "right": 379,
+      "expected": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "target": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/host.rs"
+      ],
+      "changed_tests": [],
+      "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/388/commits/0334d598083f7e8b1015c316f2b60485acbee4f4"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "left": 388,
+      "right": 357,
+      "expected": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "target": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        ".gitignore",
+        "Cargo.lock",
+        "README.md",
+        "apps/victory/Cargo.toml",
+        "apps/victory/src/main.rs",
+        "apps/victory/src/replay.rs",
+        "apps/victory/src/run.rs",
+        "apps/victory/src/shader/scan.rs",
+        "apps/victory/src/translate.rs",
+        "apps/victory/src/translate/stamp.rs",
+        "apps/victory/src/warm.rs",
+        "crates/victory-formats/src/bcpack.rs",
+        "crates/victory-gpu/src/descriptor/host.rs",
+        "crates/victory-gpu/src/draw.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/lib.rs",
+        "crates/victory-gpu/src/pipeline.rs",
+        "crates/victory-gpu/src/pipeline/make.rs",
+        "crates/victory-gpu/src/shader_cache.rs",
+        "crates/victory-gpu/src/texture.rs",
+        "crates/victory-hle/src/modules/d3d12x.rs",
+        "crates/victory-hle/src/modules/dstorage.rs",
+        "crates/victory-hle/src/modules/fidelityfx.rs",
+        "crates/victory-hle/src/modules/xstore.rs",
+        "crates/victory-loader/src/crash.rs"
+      ],
+      "changed_tests": [],
+      "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/388/commits/0334d598083f7e8b1015c316f2b60485acbee4f4"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "left": 388,
+      "right": 263,
+      "expected": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "target": "4f5de4ecdd613867bb8af4b548957174139b321f",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/host.rs"
+      ],
+      "changed_tests": [],
+      "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/4f5de4ecdd613867bb8af4b548957174139b321f",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/388/commits/0334d598083f7e8b1015c316f2b60485acbee4f4"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "left": 357,
+      "right": 263,
+      "expected": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "target": "4f5de4ecdd613867bb8af4b548957174139b321f",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/357",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/descriptor.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/host/heap_pace.rs",
+        "docs/this-fork.md"
+      ],
+      "changed_tests": [],
+      "head": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/4f5de4ecdd613867bb8af4b548957174139b321f",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/357/commits/6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "left": 357,
+      "right": 379,
+      "expected": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "target": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/357",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/descriptor.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/host/heap_pace.rs",
+        "docs/this-fork.md"
+      ],
+      "changed_tests": [],
+      "head": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+      "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/357/commits/6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee"
+    },
+    {
+      "repo": "TaynanGT/Vice-Tay",
+      "left": 263,
+      "right": 379,
+      "expected": "4f5de4ecdd613867bb8af4b548957174139b321f",
+      "target": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/263",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/copystat.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/lib.rs",
+        "crates/victory-gpu/src/list.rs",
+        "crates/victory-gpu/src/pipeline.rs",
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/pipeline/known.rs",
+        "crates/victory-gpu/src/pipeline/make.rs",
+        "crates/victory-gpu/src/pool.rs",
+        "crates/victory-gpu/src/ram_trim.rs",
+        "crates/victory-gpu/src/shadow.rs",
+        "crates/victory-gpu/src/texture.rs",
+        "crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_tests": [],
+      "head": "4f5de4ecdd613867bb8af4b548957174139b321f",
+      "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/TaynanGT/Vice-Tay/commit/ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+      "head_url": "https://github.com/TaynanGT/Vice-Tay/pull/263/commits/4f5de4ecdd613867bb8af4b548957174139b321f"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "left": 550,
+      "right": 350,
+      "expected": "4d8fb188ecda39f23f765702750b8a0020206e9d",
+      "target": "4142924be4a11181d8342f0180516da0b023e1cd",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/550",
+      "status": "conflict",
+      "conflicts": [
+        "third_party/victory/crates/victory-gpu/src/pool.rs"
+      ],
+      "changed_files": [
+        "third_party/victory/crates/victory-gpu/src/pool.rs"
+      ],
+      "changed_tests": [],
+      "head": "4d8fb188ecda39f23f765702750b8a0020206e9d",
+      "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+      "file_evidence": [
+        "https://github.com/LooperSalty/AnyXboxX/blob/4142924be4a11181d8342f0180516da0b023e1cd/third_party/victory/crates/victory-gpu/src/pool.rs"
+      ],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/4142924be4a11181d8342f0180516da0b023e1cd",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/550/commits/4d8fb188ecda39f23f765702750b8a0020206e9d"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "left": 555,
+      "right": 354,
+      "expected": "6708faf2076fd28872c8f9a240edb7d86f690f83",
+      "target": "b106642e4a54a8178cd44646ffcfe4c9e3b97e62",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/555",
+      "status": "conflict",
+      "conflicts": [
+        "third_party/victory/crates/victory-gpu/src/descriptor/host.rs",
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/crates/victory-gpu/src/resource.rs",
+        "third_party/victory/crates/victory-gpu/src/texture.rs"
+      ],
+      "changed_files": [
+        "third_party/victory/crates/victory-gpu/src/descriptor.rs",
+        "third_party/victory/crates/victory-gpu/src/descriptor/host.rs",
+        "third_party/victory/crates/victory-gpu/src/descriptor/mip_clamp_tests.rs",
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/crates/victory-gpu/src/lib.rs",
+        "third_party/victory/crates/victory-gpu/src/list.rs",
+        "third_party/victory/crates/victory-gpu/src/resource.rs",
+        "third_party/victory/crates/victory-gpu/src/texture.rs",
+        "third_party/victory/crates/victory-gpu/src/texture_mip_clamp.rs",
+        "third_party/victory/crates/victory-gpu/src/texture_mip_clamp_tests.rs"
+      ],
+      "changed_tests": [
+        "third_party/victory/crates/victory-gpu/src/descriptor/mip_clamp_tests.rs",
+        "third_party/victory/crates/victory-gpu/src/texture_mip_clamp_tests.rs"
+      ],
+      "head": "6708faf2076fd28872c8f9a240edb7d86f690f83",
+      "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+      "file_evidence": [
+        "https://github.com/LooperSalty/AnyXboxX/blob/b106642e4a54a8178cd44646ffcfe4c9e3b97e62/third_party/victory/crates/victory-gpu/src/descriptor/host.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/b106642e4a54a8178cd44646ffcfe4c9e3b97e62/third_party/victory/crates/victory-gpu/src/host.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/b106642e4a54a8178cd44646ffcfe4c9e3b97e62/third_party/victory/crates/victory-gpu/src/resource.rs",
+        "https://github.com/LooperSalty/AnyXboxX/blob/b106642e4a54a8178cd44646ffcfe4c9e3b97e62/third_party/victory/crates/victory-gpu/src/texture.rs"
+      ],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/b106642e4a54a8178cd44646ffcfe4c9e3b97e62",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/555/commits/6708faf2076fd28872c8f9a240edb7d86f690f83"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "left": 568,
+      "right": 570,
+      "expected": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+      "target": "6245785d1e807d051b69bbb16fc57a1a80e2a802",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+      "status": "conflict",
+      "conflicts": [
+        "docs/fr/lancer-gta6.md",
+        "docs/running-gta6.md",
+        "third_party/victory/docs/README-fxceless.md"
+      ],
+      "changed_files": [
+        "docs/fr/lancer-gta6.md",
+        "docs/running-gta6.md",
+        "third_party/victory/crates/victory-gpu/src/host.rs",
+        "third_party/victory/docs/README-fxceless.md"
+      ],
+      "changed_tests": [],
+      "head": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+      "merge_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+      "file_evidence": [
+        "https://github.com/LooperSalty/AnyXboxX/blob/6245785d1e807d051b69bbb16fc57a1a80e2a802/docs/fr/lancer-gta6.md",
+        "https://github.com/LooperSalty/AnyXboxX/blob/6245785d1e807d051b69bbb16fc57a1a80e2a802/docs/running-gta6.md",
+        "https://github.com/LooperSalty/AnyXboxX/blob/6245785d1e807d051b69bbb16fc57a1a80e2a802/third_party/victory/docs/README-fxceless.md"
+      ],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/6245785d1e807d051b69bbb16fc57a1a80e2a802",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/568/commits/2e1939d5d020f7df83a522994744caa2d049fc2d"
+    },
+    {
+      "repo": "LooperSalty/AnyXboxX",
+      "left": 550,
+      "right": 555,
+      "expected": "4d8fb188ecda39f23f765702750b8a0020206e9d",
+      "target": "6708faf2076fd28872c8f9a240edb7d86f690f83",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/550",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "third_party/victory/crates/victory-gpu/src/pool.rs"
+      ],
+      "changed_tests": [],
+      "head": "4d8fb188ecda39f23f765702750b8a0020206e9d",
+      "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/LooperSalty/AnyXboxX/commit/6708faf2076fd28872c8f9a240edb7d86f690f83",
+      "head_url": "https://github.com/LooperSalty/AnyXboxX/pull/550/commits/4d8fb188ecda39f23f765702750b8a0020206e9d"
+    },
+    {
+      "repo": "Marvisak/VIctory",
+      "left": 3615,
+      "right": 3585,
+      "expected": "5b8f14e7b88a468c8a4a84e74e43d612f2a59b7b",
+      "target": "af08b8b11f28adeb1e355620cfa7ea20751e8491",
+      "url": "https://github.com/Marvisak/VIctory/pull/3615",
+      "status": "conflict",
+      "conflicts": [
+        "crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_files": [
+        "crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_tests": [],
+      "head": "5b8f14e7b88a468c8a4a84e74e43d612f2a59b7b",
+      "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "file_evidence": [
+        "https://github.com/Marvisak/VIctory/blob/af08b8b11f28adeb1e355620cfa7ea20751e8491/crates/victory-gpu/src/watch.rs"
+      ],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/af08b8b11f28adeb1e355620cfa7ea20751e8491",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/3615/commits/5b8f14e7b88a468c8a4a84e74e43d612f2a59b7b"
+    },
+    {
+      "repo": "Marvisak/VIctory",
+      "left": 3623,
+      "right": 3627,
+      "expected": "8f5927edcbc97261c3bb491da687bd4efc299857",
+      "target": "c59ae3993acdfce685354f1b788e8e2daa314f07",
+      "url": "https://github.com/Marvisak/VIctory/pull/3623",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/host.rs"
+      ],
+      "changed_tests": [],
+      "head": "8f5927edcbc97261c3bb491da687bd4efc299857",
+      "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/c59ae3993acdfce685354f1b788e8e2daa314f07",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/3623/commits/8f5927edcbc97261c3bb491da687bd4efc299857"
+    },
+    {
+      "repo": "Marvisak/VIctory",
+      "left": 3274,
+      "right": 3289,
+      "expected": "6964f11508928a985a5bcb4553f62e3c11b99703",
+      "target": "6d3e9539f2765ed187f62f1db4cc29357a2a506c",
+      "url": "https://github.com/Marvisak/VIctory/pull/3274",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-gpu/src/resource.rs"
+      ],
+      "changed_tests": [],
+      "head": "6964f11508928a985a5bcb4553f62e3c11b99703",
+      "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/6d3e9539f2765ed187f62f1db4cc29357a2a506c",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/3274/commits/6964f11508928a985a5bcb4553f62e3c11b99703"
+    },
+    {
+      "repo": "Marvisak/VIctory",
+      "left": 2633,
+      "right": 2711,
+      "expected": "1b1ef2161a2f1cbcb46d7f72a7b24baf1303d419",
+      "target": "f896d26e8919581a740f46478dc14fe18a646e84",
+      "url": "https://github.com/Marvisak/VIctory/pull/2633",
+      "status": "conflict",
+      "conflicts": [
+        "apps/victory/src/translate.rs",
+        "crates/victory-gpu/src/draw.rs",
+        "crates/victory-gpu/src/shader_cache.rs",
+        "crates/victory-shader/src/emit/crosslane_tests.rs",
+        "crates/victory-shader/src/emit/lower.rs",
+        "crates/victory-shader/src/emit/memory_tests.rs",
+        "crates/victory-shader/src/emit/mod.rs",
+        "crates/victory-shader/src/emit/synthetic_tests.rs"
+      ],
+      "changed_files": [
+        "README.md",
+        "apps/victory/src/main.rs",
+        "apps/victory/src/translate.rs",
+        "crates/victory-gpu/src/draw.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/list.rs",
+        "crates/victory-gpu/src/pipeline.rs",
+        "crates/victory-gpu/src/pipeline/depth_bounds_test.rs",
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/resource.rs",
+        "crates/victory-gpu/src/shader_cache.rs",
+        "crates/victory-shader/src/emit/bvh_tests.rs",
+        "crates/victory-shader/src/emit/crosslane_tests.rs",
+        "crates/victory-shader/src/emit/halves_random_tests.rs",
+        "crates/victory-shader/src/emit/halves_tests.rs",
+        "crates/victory-shader/src/emit/host.rs",
+        "crates/victory-shader/src/emit/lower.rs",
+        "crates/victory-shader/src/emit/lower/confine.rs",
+        "crates/victory-shader/src/emit/lower/halves.rs",
+        "crates/victory-shader/src/emit/lower/tests.rs",
+        "crates/victory-shader/src/emit/lower/wide.rs",
+        "crates/victory-shader/src/emit/memory_tests.rs",
+        "crates/victory-shader/src/emit/mod.rs",
+        "crates/victory-shader/src/emit/semantics_tests.rs",
+        "crates/victory-shader/src/emit/shader.rs"
+      ],
+      "changed_tests": [
+        "crates/victory-gpu/src/pipeline/depth_bounds_test.rs",
+        "crates/victory-shader/src/emit/bvh_tests.rs",
+        "crates/victory-shader/src/emit/crosslane_tests.rs",
+        "crates/victory-shader/src/emit/halves_random_tests.rs",
+        "crates/victory-shader/src/emit/halves_tests.rs",
+        "crates/victory-shader/src/emit/lower/tests.rs",
+        "crates/victory-shader/src/emit/memory_tests.rs",
+        "crates/victory-shader/src/emit/semantics_tests.rs"
+      ],
+      "head": "1b1ef2161a2f1cbcb46d7f72a7b24baf1303d419",
+      "merge_base": "f3578e386ea0f06153445af10a698df029620aad",
+      "file_evidence": [
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/apps/victory/src/translate.rs",
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/crates/victory-gpu/src/draw.rs",
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/crates/victory-gpu/src/shader_cache.rs",
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/crates/victory-shader/src/emit/crosslane_tests.rs",
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/crates/victory-shader/src/emit/lower.rs",
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/crates/victory-shader/src/emit/memory_tests.rs",
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/crates/victory-shader/src/emit/mod.rs",
+        "https://github.com/Marvisak/VIctory/blob/f896d26e8919581a740f46478dc14fe18a646e84/crates/victory-shader/src/emit/synthetic_tests.rs"
+      ],
+      "receiving_commit_url": "https://github.com/Marvisak/VIctory/commit/f896d26e8919581a740f46478dc14fe18a646e84",
+      "head_url": "https://github.com/Marvisak/VIctory/pull/2633/commits/1b1ef2161a2f1cbcb46d7f72a7b24baf1303d419"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "left": 3036,
+      "right": 2898,
+      "expected": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+      "target": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "url": "https://github.com/xcl-dev/xcl/pull/3036",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "README.md",
+        "crates/xcl/src/config.rs",
+        "crates/xcl/src/eh.rs",
+        "crates/xcl/src/gpu/bvh.rs",
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/kernel.rs",
+        "crates/xcl/src/gpu/dxil/lanes.rs",
+        "crates/xcl/src/gpu/dxil/lower.rs",
+        "crates/xcl/src/gpu/dxil/lower_image.rs",
+        "crates/xcl/src/gpu/dxil/lower_mem.rs",
+        "crates/xcl/src/gpu/recomp/emit.rs",
+        "crates/xcl/src/gpu/recomp/lower.rs",
+        "crates/xcl/src/gpu/recomp/lower_dxil.rs",
+        "crates/xcl/src/gpu/recomp/mod.rs",
+        "crates/xcl/src/gpu/recomp/pso.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/src/gpu/uma.rs",
+        "crates/xcl/src/hle/d3d12x/bind.rs",
+        "crates/xcl/src/hle/d3d12x/bvh_want.rs",
+        "crates/xcl/src/hle/d3d12x/capture.rs",
+        "crates/xcl/src/hle/d3d12x/console_heap.rs",
+        "crates/xcl/src/hle/d3d12x/console_list.rs",
+        "crates/xcl/src/hle/d3d12x/device_x.rs",
+        "crates/xcl/src/hle/d3d12x/gpu_profile.rs",
+        "crates/xcl/src/hle/d3d12x/gpu_times.rs"
+      ],
+      "changed_tests": [
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs"
+      ],
+      "head": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+      "merge_base": "af2cecc40886a8682ecf3267f5328c6dc4b66ad7",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/3036/commits/6f3ad70ccc22acb777205cdea1d512bf24421299"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "left": 3036,
+      "right": 3039,
+      "expected": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+      "target": "7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "url": "https://github.com/xcl-dev/xcl/pull/3036",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/xcl/src/hle/d3d12x/bind.rs",
+        "crates/xcl/src/hle/d3d12x/list_x.rs"
+      ],
+      "changed_tests": [],
+      "head": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+      "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/3036/commits/6f3ad70ccc22acb777205cdea1d512bf24421299"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "left": 2898,
+      "right": 3039,
+      "expected": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "target": "7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "url": "https://github.com/xcl-dev/xcl/pull/2898",
+      "status": "conflict",
+      "conflicts": [
+        "crates/xcl/src/hle/d3d12x/sparse.rs"
+      ],
+      "changed_files": [
+        "crates/xcl/src/hle/d3d12x/sparse.rs"
+      ],
+      "changed_tests": [],
+      "head": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "merge_base": "af2cecc40886a8682ecf3267f5328c6dc4b66ad7",
+      "file_evidence": [
+        "https://github.com/xcl-dev/xcl/blob/7cce7d3d4625ac8f90f146f1f89f25a613e32e76/crates/xcl/src/hle/d3d12x/sparse.rs"
+      ],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/2898/commits/8cf249e55603a3e6dc4c34aa9e1b4fec5077d997"
+    },
+    {
+      "repo": "xcl-dev/xcl",
+      "left": 2898,
+      "right": 2759,
+      "expected": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "target": "e54040363979e2c629e45e323bd0f84b692770e4",
+      "url": "https://github.com/xcl-dev/xcl/pull/2898",
+      "status": "conflict",
+      "conflicts": [
+        "crates/xcl/src/hle/d3d12x/vram.rs"
+      ],
+      "changed_files": [
+        "Cargo.lock",
+        "README.md",
+        "crates/xcl/Cargo.toml",
+        "crates/xcl/src/eh.rs",
+        "crates/xcl/src/gpu/dxil/cfg.rs",
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/coverage.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/kernel.rs",
+        "crates/xcl/src/gpu/dxil/lanes.rs",
+        "crates/xcl/src/gpu/dxil/lower.rs",
+        "crates/xcl/src/gpu/dxil/lower_mem.rs",
+        "crates/xcl/src/gpu/dxil/lower_window.rs",
+        "crates/xcl/src/gpu/dxil/module/split.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/dxc.rs",
+        "crates/xcl/src/gpu/recomp/emit.rs",
+        "crates/xcl/src/gpu/recomp/lower.rs",
+        "crates/xcl/src/gpu/recomp/lower_dxil.rs",
+        "crates/xcl/src/gpu/recomp/mod.rs",
+        "crates/xcl/src/gpu/recomp/pso.rs",
+        "crates/xcl/src/gpu/recomp/runner.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/src/gpu/shader.rs",
+        "crates/xcl/src/gpu/texture.rs"
+      ],
+      "changed_tests": [
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/tests/e2e.rs",
+        "crates/xcl/tests/gpu_two_pass_cache_e2e.rs",
+        "crates/xcl/tests/gpu_view_lists.rs",
+        "crates/xcl/tests/gpu_view_windows.rs"
+      ],
+      "head": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "merge_base": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7",
+      "file_evidence": [
+        "https://github.com/xcl-dev/xcl/blob/e54040363979e2c629e45e323bd0f84b692770e4/crates/xcl/src/hle/d3d12x/vram.rs"
+      ],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/e54040363979e2c629e45e323bd0f84b692770e4",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/2898/commits/8cf249e55603a3e6dc4c34aa9e1b4fec5077d997"
+    },
+    {
+      "repo": "fxceless/victory-fork",
+      "left": 1286,
+      "right": 1280,
+      "expected": "3f3ec37d16bc2f22f4249b435d70e142caf349a0",
+      "target": "97d270bfc31619fca9b02f3b13f2fea2c8f9526f",
+      "url": "https://github.com/fxceless/victory-fork/pull/1286",
+      "status": "conflict",
+      "conflicts": [
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/shadow.rs"
+      ],
+      "changed_files": [
+        "crates/victory-gpu/src/copystat.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/lib.rs",
+        "crates/victory-gpu/src/list.rs",
+        "crates/victory-gpu/src/pipeline.rs",
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/pipeline/known.rs",
+        "crates/victory-gpu/src/pipeline/make.rs",
+        "crates/victory-gpu/src/pool.rs",
+        "crates/victory-gpu/src/ram_trim.rs",
+        "crates/victory-gpu/src/shadow.rs",
+        "crates/victory-gpu/src/texture.rs",
+        "crates/victory-gpu/src/watch.rs"
+      ],
+      "changed_tests": [],
+      "head": "3f3ec37d16bc2f22f4249b435d70e142caf349a0",
+      "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "file_evidence": [
+        "https://github.com/fxceless/victory-fork/blob/97d270bfc31619fca9b02f3b13f2fea2c8f9526f/crates/victory-gpu/src/host.rs",
+        "https://github.com/fxceless/victory-fork/blob/97d270bfc31619fca9b02f3b13f2fea2c8f9526f/crates/victory-gpu/src/shadow.rs"
+      ],
+      "receiving_commit_url": "https://github.com/fxceless/victory-fork/commit/97d270bfc31619fca9b02f3b13f2fea2c8f9526f",
+      "head_url": "https://github.com/fxceless/victory-fork/pull/1286/commits/3f3ec37d16bc2f22f4249b435d70e142caf349a0"
+    },
+    {
+      "repo": "fxceless/victory-fork",
+      "left": 1126,
+      "right": 1140,
+      "expected": "335c089b244627842693e91ed4f9a6a59b33d1f9",
+      "target": "f2d68c9ddb2bbea7533033f92e806d719b64efc8",
+      "url": "https://github.com/fxceless/victory-fork/pull/1126",
+      "status": "clean merge",
+      "conflicts": [],
+      "changed_files": [
+        "crates/victory-shader/src/emit/bitcode/opt.rs",
+        "crates/victory-shader/src/emit/mod.rs"
+      ],
+      "changed_tests": [],
+      "head": "335c089b244627842693e91ed4f9a6a59b33d1f9",
+      "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+      "file_evidence": [],
+      "receiving_commit_url": "https://github.com/fxceless/victory-fork/commit/f2d68c9ddb2bbea7533033f92e806d719b64efc8",
+      "head_url": "https://github.com/fxceless/victory-fork/pull/1126/commits/335c089b244627842693e91ed4f9a6a59b33d1f9"
+    }
+  ],
+  "optional_xcl_main_portability_probe": [
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3036",
+      "target": "2c717a043c8488938179fca81da4bb9e7913a358",
+      "status": "conflict",
+      "conflicts": [
+        "README.md",
+        "crates/xcl/src/hle/d3d12x/mod.rs",
+        "crates/xcl/src/hle/d3d12x/present/preparation.rs",
+        "crates/xcl/src/hle/d3d12x/real.rs",
+        "crates/xcl/src/hle/d3d12x/title_textures.rs",
+        "crates/xcl/src/shaders.rs",
+        "crates/xcl/tests/gpu_two_pass_cache_e2e.rs"
+      ],
+      "changed_files": [
+        "Cargo.lock",
+        "README.md",
+        "crates/xcl/Cargo.toml",
+        "crates/xcl/src/config.rs",
+        "crates/xcl/src/eh.rs",
+        "crates/xcl/src/gpu/bvh.rs",
+        "crates/xcl/src/gpu/dxil/cfg.rs",
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/coverage.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/kernel.rs",
+        "crates/xcl/src/gpu/dxil/lanes.rs",
+        "crates/xcl/src/gpu/dxil/lower.rs",
+        "crates/xcl/src/gpu/dxil/lower_image.rs",
+        "crates/xcl/src/gpu/dxil/lower_mem.rs",
+        "crates/xcl/src/gpu/dxil/lower_window.rs",
+        "crates/xcl/src/gpu/dxil/module/split.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/dxc.rs",
+        "crates/xcl/src/gpu/recomp/emit.rs",
+        "crates/xcl/src/gpu/recomp/lower.rs",
+        "crates/xcl/src/gpu/recomp/lower_dxil.rs",
+        "crates/xcl/src/gpu/recomp/mod.rs",
+        "crates/xcl/src/gpu/recomp/pso.rs",
+        "crates/xcl/src/gpu/recomp/runner.rs"
+      ],
+      "changed_tests": [
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/tests/e2e.rs",
+        "crates/xcl/tests/gpu_two_pass_cache_e2e.rs",
+        "crates/xcl/tests/gpu_view_lists.rs",
+        "crates/xcl/tests/gpu_view_windows.rs"
+      ],
+      "head": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+      "merge_base": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7",
+      "file_evidence": [
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/README.md",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/mod.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/present/preparation.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/real.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/title_textures.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/shaders.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/tests/gpu_two_pass_cache_e2e.rs"
+      ],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/2c717a043c8488938179fca81da4bb9e7913a358",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/3036/commits/6f3ad70ccc22acb777205cdea1d512bf24421299"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/2898",
+      "target": "2c717a043c8488938179fca81da4bb9e7913a358",
+      "status": "conflict",
+      "conflicts": [
+        "README.md",
+        "crates/xcl/src/hle/d3d12x/mod.rs",
+        "crates/xcl/src/hle/d3d12x/present/preparation.rs",
+        "crates/xcl/src/hle/d3d12x/real.rs",
+        "crates/xcl/src/hle/d3d12x/title_textures.rs",
+        "crates/xcl/src/shaders.rs",
+        "crates/xcl/tests/gpu_two_pass_cache_e2e.rs"
+      ],
+      "changed_files": [
+        "Cargo.lock",
+        "README.md",
+        "crates/xcl/Cargo.toml",
+        "crates/xcl/src/eh.rs",
+        "crates/xcl/src/gpu/dxil/cfg.rs",
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/coverage.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/kernel.rs",
+        "crates/xcl/src/gpu/dxil/lanes.rs",
+        "crates/xcl/src/gpu/dxil/lower.rs",
+        "crates/xcl/src/gpu/dxil/lower_mem.rs",
+        "crates/xcl/src/gpu/dxil/lower_window.rs",
+        "crates/xcl/src/gpu/dxil/module/split.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/dxc.rs",
+        "crates/xcl/src/gpu/recomp/emit.rs",
+        "crates/xcl/src/gpu/recomp/lower.rs",
+        "crates/xcl/src/gpu/recomp/lower_dxil.rs",
+        "crates/xcl/src/gpu/recomp/mod.rs",
+        "crates/xcl/src/gpu/recomp/pso.rs",
+        "crates/xcl/src/gpu/recomp/runner.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/src/gpu/shader.rs",
+        "crates/xcl/src/gpu/texture.rs"
+      ],
+      "changed_tests": [
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/tests/e2e.rs",
+        "crates/xcl/tests/gpu_two_pass_cache_e2e.rs",
+        "crates/xcl/tests/gpu_view_lists.rs",
+        "crates/xcl/tests/gpu_view_windows.rs"
+      ],
+      "head": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+      "merge_base": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7",
+      "file_evidence": [
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/README.md",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/mod.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/present/preparation.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/real.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/title_textures.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/shaders.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/tests/gpu_two_pass_cache_e2e.rs"
+      ],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/2c717a043c8488938179fca81da4bb9e7913a358",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/2898/commits/8cf249e55603a3e6dc4c34aa9e1b4fec5077d997"
+    },
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3039",
+      "target": "2c717a043c8488938179fca81da4bb9e7913a358",
+      "status": "conflict",
+      "conflicts": [
+        "README.md",
+        "crates/xcl/src/hle/d3d12x/mod.rs",
+        "crates/xcl/src/hle/d3d12x/present/preparation.rs",
+        "crates/xcl/src/hle/d3d12x/real.rs",
+        "crates/xcl/src/hle/d3d12x/title_textures.rs",
+        "crates/xcl/src/shaders.rs",
+        "crates/xcl/tests/gpu_two_pass_cache_e2e.rs"
+      ],
+      "changed_files": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "Cargo.lock",
+        "Cargo.toml",
+        "LICENSE",
+        "README.md",
+        "SECURITY.md",
+        "THIRD_PARTY.md",
+        "crates/xcl/Cargo.toml",
+        "crates/xcl/src/config.rs",
+        "crates/xcl/src/eh.rs",
+        "crates/xcl/src/gpu/bvh.rs",
+        "crates/xcl/src/gpu/dxil/cfg.rs",
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/coverage.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/kernel.rs",
+        "crates/xcl/src/gpu/dxil/lanes.rs",
+        "crates/xcl/src/gpu/dxil/lower.rs",
+        "crates/xcl/src/gpu/dxil/lower_image.rs",
+        "crates/xcl/src/gpu/dxil/lower_mem.rs",
+        "crates/xcl/src/gpu/dxil/lower_window.rs",
+        "crates/xcl/src/gpu/dxil/module/split.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/dxc.rs"
+      ],
+      "changed_tests": [
+        "crates/xcl/src/gpu/dxil/core_tests.rs",
+        "crates/xcl/src/gpu/dxil/geometry_tests.rs",
+        "crates/xcl/src/gpu/dxil/robustness_tests.rs",
+        "crates/xcl/src/gpu/recomp/tests.rs",
+        "crates/xcl/tests/e2e.rs",
+        "crates/xcl/tests/gpu_two_pass_cache_e2e.rs",
+        "crates/xcl/tests/gpu_view_lists.rs",
+        "crates/xcl/tests/gpu_view_windows.rs"
+      ],
+      "head": "7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+      "merge_base": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7",
+      "file_evidence": [
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/README.md",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/mod.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/present/preparation.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/real.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/hle/d3d12x/title_textures.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/src/shaders.rs",
+        "https://github.com/xcl-dev/xcl/blob/2c717a043c8488938179fca81da4bb9e7913a358/crates/xcl/tests/gpu_two_pass_cache_e2e.rs"
+      ],
+      "receiving_commit_url": "https://github.com/xcl-dev/xcl/commit/2c717a043c8488938179fca81da4bb9e7913a358",
+      "head_url": "https://github.com/xcl-dev/xcl/pull/3039/commits/7cce7d3d4625ac8f90f146f1f89f25a613e32e76"
+    }
+  ],
+  "xcl_pair_resolution": {
+    "head": "8cf249e55603a3e6dc4c34aa9e1b4fec5077d997",
+    "target": "7cce7d3d4625ac8f90f146f1f89f25a613e32e76",
+    "conflict_file": "crates/xcl/src/hle/d3d12x/sparse.rs",
+    "conflict_tree": "c3921a16eef870ec5d74924d6c8c69e044820260",
+    "resolved_tree": "b013d81d4c84739ca93827ad99ce6b8d99da0d7c",
+    "resolution": "keep separate SysPools and FreePools declaration blocks",
+    "git_diff_check": "pass",
+    "compile": "not_run",
+    "diff_stat": "crates/xcl/src/hle/d3d12x/sparse.rs | 219 +++++++++++++++++++++++++++++++-----\n 1 file changed, 190 insertions(+), 29 deletions(-)",
+    "acceptance": "Separate video-memory and system-memory free/cooling paths and handle tagged indices before local heap lookups.",
+    "upstream_proposal_author": "throny"
+  },
+  "coordination": {
+    "vice_local_rule": "https://github.com/TaynanGT/Vice-Tay/issues/273#issuecomment-7219416199",
+    "vice_offer": "https://github.com/TaynanGT/Vice-Tay/issues/273#issuecomment-7230521445",
+    "vice_pair": "https://github.com/TaynanGT/Vice-Tay/pull/388#issuecomment-7230619436",
+    "anyxboxx_author_adoption": "https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230084159",
+    "anyxboxx_revision": "https://github.com/LooperSalty/AnyXboxX/commit/4d8fb188ecda39f23f765702750b8a0020206e9d",
+    "anyxboxx_followthrough": "https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230573166",
+    "test_lab": "https://github.com/akimfomin/PortBridge/issues/132",
+    "lab_invitation": "https://github.com/akimfomin/PortBridge/issues/132#issuecomment-7230663294",
+    "xcl_independent_decision": "https://github.com/xcl-dev/xcl/pull/3039#issuecomment-7230644016",
+    "victory_independent_coordination": "https://github.com/Marvisak/VIctory/issues/1633",
+    "continued_independent_coordination": "https://github.com/ProjectLeonida/mandy/issues/1608",
+    "xcl_independent_coordination": "https://github.com/xcl-dev/xcl/issues/1607"
+  },
+  "vice_preflight_demo": [
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/issues/270",
+      "catalog": "partial",
+      "matches": [],
+      "observations": [],
+      "research": [],
+      "radar": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/208",
+      "catalog": "partial",
+      "matches": [
+        [
+          "technical_terms",
+          "https://github.com/Geckomacabre/vx-layer/commit/0513d7b5b1ab09327ea5bf66bd0458a263371915"
+        ],
+        [
+          "technical_terms",
+          "https://github.com/fxceless/victory-fork/commit/8a32d0ba17ae5feb457018b9c39d303e3a5a4aeb"
+        ],
+        [
+          "technical_terms",
+          "https://github.com/ProjectLeonida/mandy/commit/1411b6ca38685d8f350131e762f5a9f2c6f49ac4"
+        ]
+      ],
+      "observations": [],
+      "research": [],
+      "radar": 0
+    },
+    {
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/158",
+      "catalog": "partial",
+      "matches": [],
+      "observations": [
+        "https://github.com/DesignWithTommy/i95/commit/1dc4fcd7b6677e945eb12e837d006298fccb92f1",
+        "https://github.com/DesignWithTommy/i95/commit/245887db7be0c69327d044d7816f4bf7c99f30bf",
+        "https://github.com/DesignWithTommy/i95/commit/6d49be2d2a361668f59374b966e98bfdf5b22d48",
+        "https://github.com/DesignWithTommy/i95/commit/a92cee95ac939ea4f0cdb44252086a564e19d9bb",
+        "https://github.com/DesignWithTommy/i95/commit/be0b59802be21e0693e849c9cf4276c8fa8779a7"
+      ],
+      "research": [],
+      "radar": 0
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/issues/1633",
+      "catalog": "partial",
+      "matches": [
+        [
+          "reference",
+          "https://github.com/JMAN730/project-flamingo/issues/495"
+        ],
+        [
+          "shared_mechanism",
+          "https://github.com/TaynanGT/Vice-Tay/pull/166"
+        ],
+        [
+          "shared_mechanism",
+          "https://github.com/fxceless/victory-fork/pull/1424"
+        ],
+        [
+          "shared_mechanism",
+          "https://github.com/pragyaangaur/VIctory-macOS/issues/554"
+        ],
+        [
+          "shared_mechanism",
+          "https://github.com/ubiquitarianism/leonida/pull/1867"
+        ]
+      ],
+      "observations": [],
+      "research": [],
+      "radar": 0
+    }
+  ],
+  "handoff_status": "Four public PortBridge comments, including a targeted volunteer invitation. One Lab request. AnyXboxX author confirmed code adoption in the PR, which remains open. Vice-Tay pilot awaiting a decision. No new physical results or merges into external repositories verified from this wave."
+}
