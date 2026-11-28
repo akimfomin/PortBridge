@@ -40,6 +40,27 @@ class DiscoveryLinkTests(CatalogFixture):
                ["irrelevant"] * 48 + ["vkqueuesubmit"]}}}
         self.assertEqual(subject(old), "vkqueuesubmit")
 
+    def test_gpu_timing_subject_uses_one_lookup_from_a_plain_url(self):
+        for entry in (
+            metadata("", title="GPU_TIMING names commands under light DRED"),
+            metadata("Enable VICTORY_GPU_TIMING for the test."),
+            metadata("Compare GPU timing between runs."),
+        ):
+            with self.subTest(entry=entry):
+                row = _item(entry, "pr", self.project, {})
+                self.assertEqual(subject(row), "gpu timing")
+        self.assertEqual(subject(_item(metadata("Compare timings"), "pr", self.project, {})), "")
+        data = metadata("", title="GPU_TIMING names commands under light DRED")
+        with patch("portbridge.github._Sync._request", side_effect=[
+            (data, {}),
+            ({"items": [{"html_url": EXTERNAL, "state": "closed", "title": "GPU timing"}]}, {}),
+        ]) as request:
+            report = search_link(self.catalog, PR)
+        self.assertEqual([call.args[1] for call in request.call_args_list], ["core", "search"])
+        self.assertIn('"gpu timing"', parse_qs(urlsplit(request.call_args.args[0]).query)["q"][0])
+        self.assertEqual((report["subject"], report["lookups"]), ("gpu timing", 1))
+        self.assertEqual(report["top5"][0]["url"], EXTERNAL)
+
     def test_extraction_is_bounded_and_does_not_retain_prose_or_url_symbols(self):
         body = "https://example.org/vkSecretCall no raw-private-prose D3D12_TILE_RANGE_FLAG_NULL via UpdateTileMappings"
         sig = _technical(metadata(body), [], {})
