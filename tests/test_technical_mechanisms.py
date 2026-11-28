@@ -41,6 +41,24 @@ class TechnicalMechanismTests(unittest.TestCase):
         self.assertIn((canonical_url(source["url"]), 0.92, "shared_mechanism", ["pipeline-cache/device-identity"]), hits)
         self.assertNotIn(canonical_url(decoy["url"]), [url for url, _, basis, _ in hits if basis == "shared_mechanism"])
 
+    def test_allocator_fence_mechanism_is_visible_even_with_older_saved_tags(self):
+        origin = observation("xbox2windows", 3196, "Reset the window presenter's allocator only after its fence is reached")
+        source = observation("xcl", 3062, "A sparse list still in flight after its bounded wait is held, not reset")
+        source["metadata"]["technical"]["mechanisms"] = []
+        origin["metadata"]["technical"]["mechanisms"] = []
+        other_wait = observation("other", 1, "Skip a stale readback when its fence did not complete")
+        generic_allocator = observation("generic", 2, "Reset a CPU heap allocator when the fence observer changes")
+        index = RelatedIndex([origin, source, other_wait, generic_allocator])
+        found = {url: (basis, reasons) for url, _, basis, reasons in index.candidates(canonical_url(origin["url"]))}
+        self.assertEqual(found[canonical_url(source["url"])],
+                         ("shared_mechanism", ["command-allocator/fence-gated-reuse"]))
+        self.assertNotIn("command-allocator/fence-gated-reuse", index.mechanisms[canonical_url(other_wait["url"])])
+        self.assertNotIn("command-allocator/fence-gated-reuse", index.mechanisms[canonical_url(generic_allocator["url"])])
+
+    def test_allocator_reset_and_completion_have_to_be_in_one_clause(self):
+        self.assertEqual(mechanisms("Reset command allocators. An unrelated queue has a fence."),
+                         set())
+
     def test_distinguishes_shared_errors_from_a_specific_match_without_a_citation(self):
         signal = ("vk_error_device_lost",)
         origin = observation("target", 1, "Guard aliased pages instead of copying them each submission", signals=signal)

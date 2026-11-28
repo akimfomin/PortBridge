@@ -145,8 +145,9 @@ class RelatedIndex:
             self.signals[url] = ({value.casefold() for value in technical.get("signals", [])}
                                  | {word for word in self.titles[url] if ISA_OPCODE.fullmatch(word)})
             saved = technical.get("mechanisms")
-            names = ({name for name in saved if isinstance(name, str) and name in RULES}
-                     if isinstance(saved, list) else mechanisms(row["title"]))
+            names = mechanisms(row["title"])
+            if isinstance(saved, list):
+                names.update(name for name in saved if isinstance(name, str) and name in RULES)
             self.mechanisms[url] = names
             for name in names:
                 self.mechanism_postings[name].add(url)
