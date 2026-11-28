@@ -686,7 +686,7 @@ TASKS = (
         "revisions": [revision("Xbox2Windows FP16 baseline", "Исходная версия FP16 Xbox2Windows",
                                "R0Y00/Xbox2Windows", "eceb81af87456a1e887738c78c1ceee05c8d02f5")],
         "requirements": ["Physical D3D12 GPU with Wave32", "Windows and the public synthetic test"],
-        "why": "The raw results on another adapter can inform the choice of FP16 rounding tolerance.",
+        "why": "The maintainer requested a bounded exp correction. A second adapter can show which inputs the baseline misses.",
         "evidence": "The author measured one midpoint case on RTX 5080. Three more inputs lack hardware results.",
         "steps": ["Read #155 and check out the pinned baseline.",
                   "Run the public v_exp_f16 check for the four inputs on a physical GPU.",
@@ -696,7 +696,7 @@ TASKS = (
         "translations": {"ru": {
             "title": "Измерить округление FP16 на второй видеокарте D3D12",
             "requirements": ["Физическая видеокарта D3D12 с Wave32", "Windows и открытый синтетический тест"],
-            "why": "Проверка другой видеокарты поможет выбрать допустимую погрешность округления FP16.",
+            "why": "Сопровождающий запросил исправление с доказанной точностью. Вторая видеокарта покажет, на каких входах расходится исходная версия.",
             "evidence": "Автор проверил один пограничный случай на RTX 5080. Ещё три требуют аппаратной проверки.",
             "steps": ["Прочтите #155 и откройте закреплённую версию.",
                       "Запустите открытый тест v_exp_f16 для четырёх входов на физической видеокарте.",
