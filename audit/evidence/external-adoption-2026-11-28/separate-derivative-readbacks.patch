@@ -1,0 +1,32 @@
+--- a/tests/native_compute_implicit_lod_check.py
++++ b/tests/native_compute_implicit_lod_check.py
+@@ -224,17 +224,26 @@
+         wave = render(renderer, adapter, '--shader-wave32')
+         assert wave.returncode == 0, wave.stdout + wave.stderr
+         reference = work / 'expected.bin'
++        failed_arms = []
+         for group, wave32 in CASES:
+             write_reference(reference, group)
+-            for shader in compile_pair(cli, sdk, work, group, wave32):
+-                check_readback(renderer, adapter, shader, reference)
+-            print(f'{group} wave{32 if wave32 else 64}: implicit and explicit LOD matched guest readback')
++            shaders = compile_pair(cli, sdk, work, group, wave32)
++            for mode, shader in zip(('implicit', 'explicit'), shaders, strict=True):
++                case = f'{group} wave{32 if wave32 else 64} {mode}'
++                try:
++                    check_readback(renderer, adapter, shader, reference)
++                except AssertionError as error:
++                    print(f'{case}: FAIL {error}', file=sys.stderr)
++                    failed_arms.append(case)
++                else:
++                    print(f'{case}: PASS')
+         for name, binary, expected, payload, flags in operation_cases():
+             shader, run = compile_program(cli, sdk, work, name, binary)
+             assert run.returncode == 0 and shader.is_file(), (name, run.stdout, run.stderr)
+             write_case(reference, expected, payload, flags)
+             check_readback(renderer, adapter, shader, reference)
+             print(f'{name}: exact readback')
++        assert not failed_arms, failed_arms
+ 
+ 
+ if __name__ == '__main__':
