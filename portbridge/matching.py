@@ -5,7 +5,7 @@ from math import log, sqrt
 import re
 from urllib.parse import urlsplit
 
-from .technical_mechanisms import DIAGNOSTIC, RULES, mechanisms
+from .technical_mechanisms import DIAGNOSTIC, RULES, SPECIFIC_MECHANISMS, mechanisms
 
 
 WORDS = re.compile(r"[^\W_]+")
@@ -203,7 +203,9 @@ class RelatedIndex:
                 continue
             shared_mechanisms = possible_mechanisms & self.mechanisms[other]
             if shared_mechanisms and self.kinds[url] == "implementation":
-                yield other, 0.91 + 0.01 * min(len(shared_mechanisms), 3), "shared_mechanism", sorted(shared_mechanisms)[:6]
+                score = (0.96 if shared_mechanisms & SPECIFIC_MECHANISMS
+                         else 0.91 + 0.01 * min(len(shared_mechanisms), 3))
+                yield other, score, "shared_mechanism", sorted(shared_mechanisms)[:6]
                 continue
             shared = self.subjects[url] & self.subjects[other] & self.weight.keys()
             specific = shared - GENERAL_SOURCE_TERMS
