@@ -1,13 +1,26 @@
 from io import BytesIO
+from json import JSONDecodeError
 import unittest
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 from portbridge.github import _technical
-from portbridge.preflight import assess, preflight, public_preflight, snapshot
+from portbridge.preflight import assess, attach_code, preflight, public_preflight, snapshot
 from test_portbridge import CatalogFixture
 
 
 class PublicSnapshotTest(unittest.TestCase):
+    def test_malformed_initial_manifest_falls_back_with_unavailable_status(self):
+        source = "https://github.com/example/port/pull/42"
+        with patch("portbridge.preflight.read_public_file", side_effect=JSONDecodeError("bad JSON", "", 0)):
+            report = public_preflight(url=source)
+        self.assertEqual(report["catalog_status"], "unavailable")
+        self.assertEqual(report["discovery"]["index_source"], "bundled_fallback")
+
+    def test_unreadable_code_index_is_distinguished_from_no_matching_code(self):
+        report = attach_code({"_code_query": "ID3D12CommandAllocator"}, lambda: {"files": {}}, limit=5)
+        self.assertEqual(report, {"source_code": {"status": "unavailable", "matches": []}})
+
     def test_observations_have_a_larger_but_bounded_download(self):
         at_limit = b'{"observations":[]}'.ljust(32)
         with patch("portbridge.preflight.SNAPSHOT_LIMIT", 16), \
@@ -218,6 +231,24 @@ class PreflightTest(CatalogFixture):
         snapshots = report["problems"][0]["solutions"][0]["evidence"]
         self.assertEqual(snapshots[0]["outcome"], "failed")
         self.assertEqual(snapshots[0]["kind"], "automated_test")
+
+    def test_legacy_observations_revalidate_after_a_generation_change(self):
+        frozen = {"projects": {"projects": self.catalog.projects()}, "problems": {"problems": self.catalog.problems()},
+                  "observations": {"observations": []}, "health": self.catalog.health(), "site": {}}
+        checks = []
+
+        def read(resource, **options):
+            if resource == "observations":
+                checks.append(options["revalidate"])
+                if not options["revalidate"]:
+                    raise HTTPError("https://akimfomin.github.io/PortBridge/data/observations.json",
+                                    503, "Temporarily unavailable", None, None)
+            return frozen[resource]
+
+        with patch("portbridge.preflight.snapshot", side_effect=read), \
+                patch("portbridge.preflight.read_public_file", return_value=frozen["site"]):
+            self.assertTrue(public_preflight(q="#20")["problems"])
+        self.assertEqual(checks, [False, True])
 
     def test_we_do_not_fetch_a_supplied_url(self):
         with self.assertRaisesRegex(ValueError, "public GitHub"):

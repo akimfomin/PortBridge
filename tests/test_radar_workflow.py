@@ -15,7 +15,7 @@ from portbridge.lab_workflow import apply, dashboard
 from portbridge.mcp import PortBridgeMCP
 from portbridge.preflight import preflight
 from portbridge.radar_scan import classify, refresh
-from portbridge.radar_store import radar_view, recent, timestamp
+from portbridge.radar_store import filter_findings, radar_view, recent, timestamp
 from test_portbridge import CatalogFixture
 
 LEFT = "https://github.com/LooperSalty/AnyXboxX/pull/9991"
@@ -24,6 +24,19 @@ NOW = int(datetime.now(timezone.utc).timestamp())
 
 
 class RadarWorkflowTest(CatalogFixture):
+    def test_public_finding_comment_lookup_uses_exact_receipt(self):
+        legacy = "https://github.com/ivall/xcl/pull/1144"
+        current = "https://github.com/xcl-dev/xcl/pull/1144"
+        rows = [
+            {"origin": legacy, "peer": LEFT, "source_url": current + "#issuecomment-1"},
+            {"origin": legacy, "peer": LEFT, "source_url": legacy + "#issuecomment-2",
+             "review_url": current + "#issuecomment-4"},
+        ]
+        self.assertEqual(filter_findings(rows, url=current), rows)
+        self.assertEqual(filter_findings(rows, url=current + "#issuecomment-2"), rows[1:])
+        self.assertEqual(filter_findings(rows, url=current + "#issuecomment-4"), rows[1:])
+        self.assertEqual(filter_findings(rows, url=current + "#issuecomment-9"), [])
+
     def setUp(self):
         super().setUp()
         self.exchange = Exchange(self.workspace / "authorization.sqlite3")

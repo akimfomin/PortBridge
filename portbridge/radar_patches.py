@@ -6,7 +6,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, build_opener
 
 from .github import NoRedirect, REPO
-from .matching import canonical_url, source_revision
+from .matching import canonical_url, current_repository, source_revision
 from .patch_identity import MAX_PATCH, patch_bytes
 
 PROBES = 4
@@ -46,7 +46,7 @@ def sample(catalog, changed, rows, cached, now):
         rev = source_revision(row)
         slug = "/".join(urlsplit(row["url"]).path.split("/")[1:3])
         if rev and REPO.fullmatch(slug) and (rev not in cached or not cached[rev][0] and cached[rev][1] + RETRY <= now):
-            probes.setdefault(rev, slug)
+            probes.setdefault(rev, current_repository(slug))
         if len(probes) >= PROBES:
             break
     for rev, slug in probes.items():
