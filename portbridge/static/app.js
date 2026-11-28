@@ -807,7 +807,8 @@ function browseKeys(params, kind) {
   const query = searchable((params.get('q') || '').trim().slice(0, 200));
   const url = githubURL(query);
   const keys = [];
-  if (/^[1-9][0-9]*$/.test(query)) keys.push('number:' + query);
+  if (kind === 'sources' && /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(query)) keys.push('revision:' + query);
+  else if (/^[1-9][0-9]*$/.test(query)) keys.push('number:' + query);
   else if (url) {
     const parsed = new URL(url);
     keys.push('url:' + parsed.origin + parsed.pathname.replace(/\/+$/, ''));

@@ -46,6 +46,17 @@ def page(directory, index, kind, number):
 
 
 class PublicBrowseTest(CatalogFixture):
+    def test_source_posting_requires_exact_revision_identity(self):
+        sha = "f" * 40
+        genuine = self.observation("xcl", "pr", 7, "Pinned revision", "https://github.com/xcl-dev/xcl/pull/7",
+                                   {"head_sha": sha.upper()})
+        decoy = self.observation("xcl", "pr", 8, "Mentions " + sha, "https://github.com/xcl-dev/xcl/pull/8")
+        self.catalog.record_sync({"items": [genuine, decoy]})
+        directory = export(self.catalog, self.workspace / "revision-site")
+        index = manifest(directory)
+        hit, = posting(directory, index, "sources", "revision:" + sha)
+        self.assertEqual(page(directory, index, "sources", hit // PAGE_SIZE)[hit % PAGE_SIZE]["url"], genuine["url"])
+
     def test_all_pairs_and_public_observations_remain_reachable_after_updates(self):
         rows = []
         for number in range(8000, 8220):

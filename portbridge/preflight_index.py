@@ -8,7 +8,7 @@ import re
 from time import monotonic
 from urllib.parse import urlsplit
 
-from .matching import (GENERAL_SOURCE_TERMS, ISA_OPCODE, RelatedIndex, observation_summary,
+from .matching import (FULL_REVISION, GENERAL_SOURCE_TERMS, ISA_OPCODE, RelatedIndex, observation_summary,
                        preflight_matches, rank_query, source_revision, terms)
 
 
@@ -95,6 +95,7 @@ def index_entries(projects, observations):
     encoded = {key: (record, len(encode(record))) for key, record in records.items()}
     words = defaultdict(set)
     numbers = defaultdict(set)
+    revisions = defaultdict(set)
     for url, record in records.items():
         original = index.rows[url].get("metadata", {}).get("technical") or {}
         technical = {**record["metadata"]["technical"], "code_symbols": original.get("code_symbols", []),
@@ -108,6 +109,8 @@ def index_entries(projects, observations):
         yield f"source:{url}", capsule
         if number := source_number(url):
             numbers[number].add(url)
+        if revision := record["metadata"].get("sha"):
+            revisions[revision].add(url)
         for word in index.subjects[url] | index.signals[url]:
             words[word].add(url)
     for word, keys in words.items():
@@ -115,6 +118,8 @@ def index_entries(projects, observations):
         yield f"word:{word}", choose_postings(ordered, encoded, rare=word in index.weight)
     for number, keys in numbers.items():
         yield f"number:{number}", choose_postings(sorted(keys), encoded)
+    for revision, keys in revisions.items():
+        yield f"revision:{revision}", choose_postings(sorted(keys), encoded)
 
 
 def pack(prefix, items, files):
@@ -219,7 +224,9 @@ class SearchReader:
             rows[anchor] = capsule["row"]
             matches = capsule["matches"]
             rare = set(capsule["rare"])
-        if number:
+        if FULL_REVISION.fullmatch(query):
+            keys = [f"revision:{query.casefold()}"]
+        elif number:
             keys = [f"number:{number}"]
         elif not query and capsule is not None:
             fallback = capsule["fallback"]

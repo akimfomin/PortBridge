@@ -9,6 +9,7 @@ from .technical_mechanisms import DIAGNOSTIC, RULES, SPECIFIC_MECHANISMS, mechan
 
 
 WORDS = re.compile(r"[^\W_]+")
+FULL_REVISION = re.compile(r"[0-9a-f]{40}|[0-9a-f]{64}", re.I)
 ISA_OPCODE = re.compile(
     r"\b(?:ds_(?:nop|append|consume|[a-z][a-z0-9]*(?:_[a-z0-9]+){1,6})|"
     r"image_(?:sample|gather4|load|store|atomic)(?:_[a-z0-9]+){1,6}|"
@@ -117,7 +118,11 @@ def subject_kind(title):
 def source_revision(row):
     metadata = row["metadata"]
     value = metadata.get("sha") or metadata.get("head_sha")
-    return value.lower() if isinstance(value, str) and re.fullmatch(r"[0-9a-fA-F]{40,64}", value) else None
+    if not value and row.get("kind") == "commit":
+        parent, _, commit = urlsplit(row.get("url", "")).path.rstrip("/").rpartition("/")
+        if parent.endswith("/commit"):
+            value = commit
+    return value.lower() if isinstance(value, str) and FULL_REVISION.fullmatch(value) else None
 
 
 def revision_checked_at(row):

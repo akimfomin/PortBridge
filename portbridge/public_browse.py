@@ -4,7 +4,7 @@ from collections import defaultdict
 from hashlib import sha256
 import re
 
-from .matching import source_url_aliases
+from .matching import source_revision, source_url_aliases
 from .preflight_index import SHARD_LIMIT, digest, encode, pack, source_number
 
 
@@ -37,6 +37,7 @@ def source_keys(row):
     return (
         word_keys(row["title"], *technical.get("terms", ()), *technical.get("signals", ()))
         | url_keys(row["url"])
+        | ({f"revision:{revision}"} if (revision := source_revision(row)) else set())
         | {f'{field}:{row[field].lower()}' for field in ("project", "status", "kind")}
     )
 

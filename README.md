@@ -20,6 +20,8 @@ In the Continued pilot, two contributors used the team’s own diagnostics to ch
 
 Search for earlier implementations from other projects using an error, GPU instruction, API symbol or a known issue or PR link. Results include the source revision, compatibility limits, license and a proposed check. [Try it locally](docs/QUICKSTART.md#try-discovery-locally)
 
+Paste a full commit SHA into GitHub Sources or pass it to `python -m portbridge.preflight --q <SHA>` to find recorded revisions. A revision missing from the snapshot may still exist on GitHub.
+
 ## People and Impact
 
 The public projections link technical work to its sources and distinguish contributions, independent tests and receiving decisions. [M4 evidence](docs/PORTBRIDGE-M4.md) · [Engineering record](docs/FINAL-AUDIT.md)
