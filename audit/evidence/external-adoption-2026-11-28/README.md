@@ -38,3 +38,18 @@ Run `python verify_framelab_queue_receipt.py --self-test`. It accepted the inten
   "observed_readbacks": ["<first observed frame SHA-256>", "<second observed frame SHA-256>"]
 }
 ```
+
+## Delivery and adoption receipts
+
+- The [own Lab request #159](https://github.com/akimfomin/PortBridge/issues/159) records the independent AMD result and links the exact failing main revision. PortBridge returned the split-readback diagnostic to [Xbox2Windows #3255](https://github.com/R0Y00/Xbox2Windows/pull/3255#issuecomment-7233284599). The maintainer had already used the waiting AMD replay to route a meaningful next check. The independent report is credited to lambirou. No physical result for the split test has been received.
+- The independent table check was [sent to Xbox2Windows #3220](https://github.com/R0Y00/Xbox2Windows/pull/3220#issuecomment-7233385268). The existing [Lab #155](https://github.com/akimfomin/PortBridge/issues/155) now gives the exact current head and test for a second adapter. No early NVIDIA author report is counted as a second independent submission.
+- The [FrameLab #54 delivery](https://github.com/5headsmartbtw/leonida-framelab/issues/54#issuecomment-7233384999) provides the CPU-checked receipt verifier and offers one consent-based RTX 3060 replay after their probe is posted. The proposal has no confirmed response or physical run.
+- The public [invitation #112](https://github.com/akimfomin/PortBridge/issues/112) now links the live AMD case and the existing [PR request form](https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml). The two routes tested this wave are a prepared check in a maintainer's active discussion and a live result inside the public volunteer invitation. No bulk notifications were sent.
+
+This wave verified one newly linked independent hardware report, in one external team. There were three published technical handoffs across Xbox2Windows and FrameLab, no newly confirmed independent issue-form submissions, and no newly verified external team installations or repeat use. The Xbox2Windows maintainer's concrete follow-up is separate from installation and autonomous use metrics.
+
+## LAB-09 acceptance blocker
+
+The live returned handoff covers source attribution and delivery. The review workflow still rejects a closed or merged receiving PR even with its original exact head. A local SQLite control exercised `current_receiver` with the same public-style PR permalink and full SHA. Open succeeded. Both `merged` and `closed` produced `The receiving revision changed or the task closed`. The call guard currently covers post-test delivery and decision receipt actions for source-reviewed work. Historical outcome recording needs to retain exact reviewed pins through a later close. No production write or external report was simulated. [Guard and workflow](https://github.com/akimfomin/PortBridge/blob/4b3378af870d8b3fac78bb50ffd019c886a056ba/portbridge/lab_workflow.py#L156-L168) · [Requirement](https://github.com/akimfomin/PortBridge/blob/4b3378af870d8b3fac78bb50ffd019c886a056ba/docs/PORTBRIDGE-CHECKLIST.md)
+
+No requirements were promoted on the basis of invitations or this partial handoff. The current count remains 83 of 122 verified.
