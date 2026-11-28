@@ -1,0 +1,227 @@
+{
+  "base": "e2847c438af3377ab04fd20ee3ed4250b1a537c1",
+  "resultsha": "6d1ed27a1dc083536c1404609deb83f241cb5b65",
+  "before": {
+    "title_only": {
+      "tags": {
+        "https://github.com/R0Y00/Xbox2Windows/pull/3196": [],
+        "https://github.com/xcl-dev/xcl/pull/3062": [],
+        "https://github.com/TaynanGT/Vice-Tay/pull/144": [],
+        "https://github.com/LooperSalty/AnyXboxX/pull/494": [],
+        "https://github.com/xcl-dev/xcl/pull/3063": [],
+        "https://github.com/fxceless/victory-fork/pull/1234": [],
+        "https://github.com/Marvisak/VIctory/pull/3611": []
+      },
+      "candidates": []
+    },
+    "with_body": {
+      "tags": {
+        "https://github.com/R0Y00/Xbox2Windows/pull/3196": [],
+        "https://github.com/xcl-dev/xcl/pull/3062": [],
+        "https://github.com/TaynanGT/Vice-Tay/pull/144": [
+          "command-list/retirement"
+        ],
+        "https://github.com/LooperSalty/AnyXboxX/pull/494": [],
+        "https://github.com/xcl-dev/xcl/pull/3063": [],
+        "https://github.com/fxceless/victory-fork/pull/1234": [],
+        "https://github.com/Marvisak/VIctory/pull/3611": []
+      },
+      "candidates": []
+    }
+  },
+  "after": {
+    "title_only": {
+      "tags": {
+        "https://github.com/R0Y00/Xbox2Windows/pull/3196": [
+          "command-allocator/fence-gated-reuse"
+        ],
+        "https://github.com/xcl-dev/xcl/pull/3062": [
+          "command-allocator/fence-gated-reuse"
+        ],
+        "https://github.com/TaynanGT/Vice-Tay/pull/144": [
+          "command-allocator/fence-gated-reuse",
+          "command-list/retirement"
+        ],
+        "https://github.com/LooperSalty/AnyXboxX/pull/494": [],
+        "https://github.com/xcl-dev/xcl/pull/3063": [],
+        "https://github.com/fxceless/victory-fork/pull/1234": [],
+        "https://github.com/Marvisak/VIctory/pull/3611": []
+      },
+      "candidates": [
+        [
+          "https://github.com/ivall/xcl/pull/3062",
+          "shared_mechanism",
+          [
+            "command-allocator/fence-gated-reuse"
+          ]
+        ],
+        [
+          "https://github.com/taynangt/vice-tay/pull/144",
+          "shared_mechanism",
+          [
+            "command-allocator/fence-gated-reuse"
+          ]
+        ]
+      ]
+    },
+    "with_body": {
+      "tags": {
+        "https://github.com/R0Y00/Xbox2Windows/pull/3196": [
+          "command-allocator/fence-gated-reuse"
+        ],
+        "https://github.com/xcl-dev/xcl/pull/3062": [
+          "command-allocator/fence-gated-reuse"
+        ],
+        "https://github.com/TaynanGT/Vice-Tay/pull/144": [
+          "command-allocator/fence-gated-reuse",
+          "command-list/retirement"
+        ],
+        "https://github.com/LooperSalty/AnyXboxX/pull/494": [],
+        "https://github.com/xcl-dev/xcl/pull/3063": [],
+        "https://github.com/fxceless/victory-fork/pull/1234": [],
+        "https://github.com/Marvisak/VIctory/pull/3611": []
+      },
+      "candidates": [
+        [
+          "https://github.com/ivall/xcl/pull/3062",
+          "shared_mechanism",
+          [
+            "command-allocator/fence-gated-reuse"
+          ]
+        ],
+        [
+          "https://github.com/taynangt/vice-tay/pull/144",
+          "shared_mechanism",
+          [
+            "command-allocator/fence-gated-reuse"
+          ]
+        ]
+      ]
+    }
+  },
+  "live": {
+    "indexed": true,
+    "publication": {
+      "generated_at": "2026-11-28T04:26:16+03:00",
+      "age_seconds": 369,
+      "age_state": "fresh"
+    },
+    "matches": [
+      {
+        "left": {
+          "project": "xbox2windows",
+          "title": "startup: reset the window presenter's allocator only after its fence is reached",
+          "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196"
+        },
+        "right": {
+          "project": "vice-tay",
+          "title": "Test early recycling of completed relay command lists",
+          "url": "https://github.com/TaynanGT/Vice-Tay/pull/144",
+          "status": "open",
+          "revision": null,
+          "observed_at": "2026-11-28T00:59:18+03:00"
+        },
+        "score": 0.92,
+        "reason": "Источники описывают сходную операцию и объект. Проверьте общий сценарий. command-allocator/fence-gated-reuse. Проверьте различия между архитектурами.",
+        "basis": "shared_mechanism",
+        "state": "suggested",
+        "problem_id": null,
+        "different_stacks": true,
+        "relationship": "candidate",
+        "applicability": "test_reference_across_stacks"
+      },
+      {
+        "left": {
+          "project": "xbox2windows",
+          "title": "startup: reset the window presenter's allocator only after its fence is reached",
+          "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196"
+        },
+        "right": {
+          "project": "xcl",
+          "title": "D3D12.X: a sparse list still in flight after its bounded wait is held, not reset",
+          "url": "https://github.com/xcl-dev/xcl/pull/3062",
+          "status": "open",
+          "revision": null,
+          "observed_at": "2026-11-28T04:25:12+03:00"
+        },
+        "score": 0.92,
+        "reason": "Источники описывают сходную операцию и объект. Проверьте общий сценарий. command-allocator/fence-gated-reuse. Проверьте различия между архитектурами.",
+        "basis": "shared_mechanism",
+        "state": "suggested",
+        "problem_id": null,
+        "different_stacks": true,
+        "relationship": "candidate",
+        "applicability": "test_reference_across_stacks"
+      },
+      {
+        "left": {
+          "project": "xbox2windows",
+          "title": "startup: reset the window presenter's allocator only after its fence is reached",
+          "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196"
+        },
+        "right": {
+          "project": "victory-belobug-amd",
+          "title": "Linux gameplay AV at +0x4e9b578: null command-allocator pointer before Reset",
+          "url": "https://github.com/Belobug/VIctory-Belobug-AMD/issues/583",
+          "status": "open",
+          "revision": null,
+          "observed_at": "2026-11-27T15:37:18+03:00"
+        },
+        "score": 0.82,
+        "reason": "Совпадают технические идентификаторы. id3d12commandallocator. Проверьте различия между архитектурами.",
+        "basis": "technical_signal",
+        "state": "suggested",
+        "problem_id": null,
+        "different_stacks": true,
+        "relationship": "candidate",
+        "applicability": "test_reference_across_stacks"
+      },
+      {
+        "left": {
+          "project": "xbox2windows",
+          "title": "startup: reset the window presenter's allocator only after its fence is reached",
+          "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196"
+        },
+        "right": {
+          "project": "victory-belobug-amd",
+          "title": "gpu: lazily attach host lists on reset and trim idle list/send pools under memory pressure",
+          "url": "https://github.com/Belobug/VIctory-Belobug-AMD/pull/319",
+          "status": "closed",
+          "revision": null,
+          "observed_at": "2026-11-27T01:38:53+03:00"
+        },
+        "score": 0.82,
+        "reason": "Совпадают технические идентификаторы. id3d12commandallocator. Проверьте различия между архитектурами.",
+        "basis": "technical_signal",
+        "state": "suggested",
+        "problem_id": null,
+        "different_stacks": true,
+        "relationship": "candidate",
+        "applicability": "test_reference_across_stacks"
+      },
+      {
+        "left": {
+          "project": "xbox2windows",
+          "title": "startup: reset the window presenter's allocator only after its fence is reached",
+          "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196"
+        },
+        "right": {
+          "project": "victory",
+          "title": "GPU: avoid clobbering HostList prelude allocator when a list executes twice in one submission",
+          "url": "https://github.com/Marvisak/VIctory/pull/1414",
+          "status": "open",
+          "revision": null,
+          "observed_at": "2026-11-26T04:02:47+03:00"
+        },
+        "score": 0.82,
+        "reason": "Совпадают технические идентификаторы. id3d12commandallocator. Проверьте различия между архитектурами.",
+        "basis": "technical_signal",
+        "state": "suggested",
+        "problem_id": null,
+        "different_stacks": true,
+        "relationship": "candidate",
+        "applicability": "test_reference_across_stacks"
+      }
+    ]
+  }
+}

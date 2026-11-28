@@ -1,0 +1,291 @@
+{
+  "contacts": [
+    {
+      "r": "xcl-dev/xcl",
+      "n": 1967,
+      "who": "n-romanovich",
+      "link": "https://github.com/xcl-dev/xcl/pull/1967#issuecomment-7231727207",
+      "previous_contact": false
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3014,
+      "who": "stan495",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/3014#issuecomment-7231713831",
+      "previous_contact": false
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3196,
+      "who": "tedin7",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/3196#issuecomment-7231621993",
+      "previous_contact": false
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3220,
+      "who": "Leyukaka",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/3220#issuecomment-7231640944",
+      "previous_contact": false
+    },
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3225,
+      "who": "SimSalabimse",
+      "link": "https://github.com/R0Y00/Xbox2Windows/pull/3225#issuecomment-7231752656",
+      "previous_contact": false
+    },
+    {
+      "r": "Marvisak/VIctory",
+      "n": 3611,
+      "who": "Ingenioeren",
+      "link": "https://github.com/Marvisak/VIctory/pull/3611#issuecomment-7231654449",
+      "previous_contact": false
+    },
+    {
+      "r": "Marvisak/VIctory",
+      "n": 3613,
+      "who": "kilolimaVI",
+      "link": "https://github.com/Marvisak/VIctory/pull/3613#issuecomment-7231727367",
+      "previous_contact": false
+    },
+    {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 376,
+      "who": "agriby-chaniago",
+      "link": "https://github.com/TaynanGT/Vice-Tay/pull/376#issuecomment-7231640405",
+      "previous_contact": false
+    },
+    {
+      "r": "TaynanGT/Vice-Tay",
+      "n": 282,
+      "who": "Vladimir-Human",
+      "link": "https://github.com/TaynanGT/Vice-Tay/pull/282#issuecomment-7231712725",
+      "previous_contact": true
+    },
+    {
+      "r": "ProjectLeonida/mandy",
+      "n": 2508,
+      "who": "lixonik",
+      "link": "https://github.com/ProjectLeonida/mandy/pull/2508#issuecomment-7231654057",
+      "previous_contact": false
+    },
+    {
+      "r": "ProjectLeonida/mandy",
+      "n": 1437,
+      "who": "titoreinaldo",
+      "link": "https://github.com/ProjectLeonida/mandy/pull/1437#issuecomment-7231653720",
+      "previous_contact": false
+    },
+    {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 556,
+      "who": "Lewandox",
+      "link": "https://github.com/LooperSalty/AnyXboxX/pull/556#issuecomment-7231622222",
+      "previous_contact": true
+    },
+    {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 520,
+      "who": "LooperSalty",
+      "link": "https://github.com/LooperSalty/AnyXboxX/pull/520#issuecomment-7231712424",
+      "previous_contact": true
+    },
+    {
+      "r": "LooperSalty/AnyXboxX",
+      "n": 489,
+      "who": "mauroalvare",
+      "link": "https://github.com/LooperSalty/AnyXboxX/pull/489#issuecomment-7231714147",
+      "previous_contact": true
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1503,
+      "who": "Swagi-REDACTED",
+      "link": "https://github.com/fxceless/victory-fork/pull/1503#issuecomment-7231622488",
+      "previous_contact": false
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1234,
+      "who": "milesah3ad",
+      "link": "https://github.com/fxceless/victory-fork/pull/1234#issuecomment-7231712940",
+      "previous_contact": false
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1152,
+      "who": "BradRoland",
+      "link": "https://github.com/fxceless/victory-fork/pull/1152#issuecomment-7231713528",
+      "previous_contact": false
+    },
+    {
+      "r": "fxceless/victory-fork",
+      "n": 1472,
+      "who": "CwWwWwW",
+      "link": "https://github.com/fxceless/victory-fork/pull/1472#issuecomment-7231640707",
+      "previous_contact": false
+    },
+    {
+      "r": "KytyPS5/KytyPS5",
+      "n": 2410,
+      "who": "Nawid3333",
+      "link": "https://github.com/KytyPS5/KytyPS5/pull/2410#issuecomment-7231752390",
+      "previous_contact": true
+    },
+    {
+      "r": "KytyPS5/KytyPS5",
+      "n": 2567,
+      "who": "Nawid3333",
+      "link": "https://github.com/KytyPS5/KytyPS5/pull/2567#issuecomment-7231713208",
+      "previous_contact": true
+    },
+    {
+      "r": "KytyPS5/KytyPS5",
+      "n": 1394,
+      "who": "msfvn",
+      "link": "https://github.com/KytyPS5/KytyPS5/pull/1394#issuecomment-7231641286",
+      "previous_contact": false
+    },
+    {
+      "r": "boykopovar/AnyPS5",
+      "n": 27965,
+      "who": "Jirka135",
+      "link": "https://github.com/boykopovar/AnyPS5/pull/27965#issuecomment-7231653892",
+      "previous_contact": false
+    },
+    {
+      "r": "PastiiJay/klbf-lab",
+      "n": 88,
+      "who": "HandshakeHackin",
+      "link": "https://github.com/PastiiJay/klbf-lab/pull/88#issuecomment-7231653891",
+      "previous_contact": false
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5708,
+      "who": "NevesHenry",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5708#issuecomment-7231654330",
+      "previous_contact": false
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5665,
+      "who": "jaime7981",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5665#issuecomment-7231727255",
+      "previous_contact": false
+    },
+    {
+      "r": "shadps4-emu/shadPS4",
+      "n": 5726,
+      "who": "Gih-pt",
+      "link": "https://github.com/shadps4-emu/shadPS4/pull/5726#issuecomment-7231727628",
+      "previous_contact": false
+    },
+    {
+      "r": "XaviFortes/VIctory-RDNA",
+      "n": 4,
+      "who": "SmartIngenieriayDesarrollo",
+      "link": "https://github.com/XaviFortes/VIctory-RDNA/pull/4#issuecomment-7231768185",
+      "previous_contact": true
+    }
+  ],
+  "invites": [
+    {
+      "who": "roansystemlabs",
+      "source": "https://github.com/R0Y00/Xbox2Windows/pull/3231#issuecomment-7230866699",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/146",
+      "link": "https://github.com/akimfomin/PortBridge/issues/146#issuecomment-7231691818",
+      "error": null
+    },
+    {
+      "who": "LocranKing",
+      "source": "https://github.com/xcl-dev/xcl/pull/2975#issuecomment-7218134348",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/146",
+      "link": "https://github.com/akimfomin/PortBridge/issues/146#issuecomment-7231692020",
+      "error": null
+    },
+    {
+      "who": "ArturoWolff",
+      "source": "https://github.com/fxceless/victory-fork/pull/885#issuecomment-7228457033",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/151",
+      "link": "https://github.com/akimfomin/PortBridge/issues/151#issuecomment-7231691620",
+      "error": null
+    },
+    {
+      "who": "Garu667",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/144#issuecomment-7210928846",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/149",
+      "link": "https://github.com/akimfomin/PortBridge/issues/149#issuecomment-7231691419",
+      "error": null
+    },
+    {
+      "who": "zedekvdb",
+      "source": "https://github.com/boykopovar/AnyPS5/pull/26047#issuecomment-7122598164",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/152",
+      "link": "https://github.com/akimfomin/PortBridge/issues/152#issuecomment-7231692557",
+      "error": null
+    },
+    {
+      "who": "BitWuehler",
+      "source": "https://github.com/fxceless/victory-fork/pull/92#issuecomment-7146502029",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/150",
+      "link": "https://github.com/akimfomin/PortBridge/issues/150#issuecomment-7231692768",
+      "error": null
+    },
+    {
+      "who": "ColorMeBoom",
+      "source": "https://github.com/Marvisak/VIctory/pull/3608#issuecomment-7230428415",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/145",
+      "link": "https://github.com/akimfomin/PortBridge/issues/145#issuecomment-7231691994",
+      "error": null
+    },
+    {
+      "who": "slauko",
+      "source": "https://github.com/fxceless/victory-fork/pull/1234#issuecomment-7185530215",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/147",
+      "link": "https://github.com/akimfomin/PortBridge/issues/147#issuecomment-7231692374",
+      "error": null
+    },
+    {
+      "who": "OctoAlgo",
+      "source": "https://github.com/fxceless/victory-fork/pull/885#issuecomment-7225669347",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/148",
+      "link": "https://github.com/akimfomin/PortBridge/issues/148#issuecomment-7231692177",
+      "error": null
+    },
+    {
+      "who": "SkillIssueXO",
+      "source": "https://github.com/fxceless/victory-fork/pull/1152#issuecomment-7175998092",
+      "issue": "https://github.com/akimfomin/PortBridge/issues/148",
+      "link": "https://github.com/akimfomin/PortBridge/issues/148#issuecomment-7231692371",
+      "error": null
+    }
+  ],
+  "replies": [
+    {
+      "r": "R0Y00/Xbox2Windows",
+      "n": 3220,
+      "user": "Leyukaka",
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3220#issuecomment-7231716533",
+      "excerpt": "Rebased on `main` `8007a539` (head `8027ad6e`). The only conflict was next to #3236: DPP8 stays refused on binary16, and DPP16 stays refused on these VOP1 forms. The same 41-test selection plus the new DPP8 tests passes (49/49, RTX 5080, Release).\r\n\r\n@akimfomin, I checked that midpoint lane with a one-off readback through this branch's direct path on the RTX 5080 (Release):\r\n\r\n| input | result | c",
+      "lab": false
+    },
+    {
+      "r": "Marvisak/VIctory",
+      "n": 3611,
+      "user": "ColorMeBoom",
+      "url": "https://github.com/Marvisak/VIctory/pull/3611#issuecomment-7231702822",
+      "excerpt": "@akimfomin The PR's test already covers that negative case. In `old_state_reset_does_not_free_a_replacement_heaps_dynamic_slots`, the old State holds heap A's range `(first, 1)`. After A is destroyed and B takes the same address, B allocates the same `(first, 1)` into a new State, then every other slot is filled. The stale `old.reset` must then leave B's allocator full (`dynamic(1) == None`). Only",
+      "lab": false
+    }
+  ],
+  "returned": {
+    "primary": "https://github.com/R0Y00/Xbox2Windows/pull/3220#issuecomment-7231716533",
+    "donor": "https://github.com/Marvisak/VIctory/pull/3609#issuecomment-7231793286",
+    "back": "https://github.com/R0Y00/Xbox2Windows/pull/3220#issuecomment-7231787941",
+    "guide": "https://github.com/akimfomin/PortBridge/issues/98#issuecomment-7231788193"
+  },
+  "existing_control": "https://github.com/Marvisak/VIctory/pull/3611#issuecomment-7231702822",
+  "adoption_verified": 0
+}

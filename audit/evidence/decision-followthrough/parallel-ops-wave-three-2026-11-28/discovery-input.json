@@ -1,0 +1,44 @@
+[
+  [
+    "R0Y00/Xbox2Windows",
+    3196,
+    "startup: reset the window presenter's allocator only after its fence is reached",
+    "The window presenter resets its command allocator only after the submitted fence is reached. The timeout emits a warning."
+  ],
+  [
+    "xcl-dev/xcl",
+    3062,
+    "D3D12.X: a sparse list still in flight after its bounded wait is held, not reset",
+    "A sparse command list still in flight is held with its allocator rather than reset after the wait expires."
+  ],
+  [
+    "TaynanGT/Vice-Tay",
+    144,
+    "Test early recycling of completed relay command lists",
+    "The relay recycles command lists and allocators after completion. Referenced objects have a separate retirement queue."
+  ],
+  [
+    "LooperSalty/AnyXboxX",
+    494,
+    "perf(victory-gpu): reclaim idle host list allocators, thin backing lists, and spike indirect buffers",
+    "Reclaim idle backing storage under memory pressure. Preserve live lists and track indirect buffer retention."
+  ],
+  [
+    "xcl-dev/xcl",
+    3063,
+    "D3D12.X: a sparse readback its wait gave up on is not copied into title memory",
+    "Do not copy a stale readback when the fence wait expires."
+  ],
+  [
+    "fxceless/victory-fork",
+    1234,
+    "GPU: a pipeline is waited for in one frame only (#1181)",
+    "Waiting for a pipeline worker more than once per frame multiplies the time spent waiting for one pipeline."
+  ],
+  [
+    "Marvisak/VIctory",
+    3611,
+    "GPU: dynamic descriptor slots go back only to the heap that took them",
+    "An old dynamic descriptor range goes only to its original heap, even after another heap is allocated."
+  ]
+]

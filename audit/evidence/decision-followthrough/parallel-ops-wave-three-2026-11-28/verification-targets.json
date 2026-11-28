@@ -1,0 +1,529 @@
+[
+  {
+    "receiver": {
+      "repo": "R0Y00/Xbox2Windows",
+      "number": 3196,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196",
+      "sha": "9a41fd99788ad778cc62797c756bf60308168687",
+      "title": "startup: reset the window presenter's allocator only after its fence is reached"
+    },
+    "source": {
+      "repo": "xcl-dev/xcl",
+      "number": 3062,
+      "url": "https://github.com/xcl-dev/xcl/pull/3062",
+      "sha": "e9e84e87e1da60ae3d69f6652741f536e48b4ef5",
+      "title": "D3D12.X: a sparse list still in flight after its bounded wait is held, not reset"
+    },
+    "check": "A stalled queue leaves an allocator in flight. Preserve the old pair until the last submitted fence, even when the diagnostic timeout elapsed. Presenter waits; sparse path can substitute."
+  },
+  {
+    "receiver": {
+      "repo": "TaynanGT/Vice-Tay",
+      "number": 144,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/144",
+      "sha": "f40e6d826d8d293a1450bf940766bd6182ce3c9e",
+      "title": "Test early recycling of completed relay command lists"
+    },
+    "source": {
+      "repo": "R0Y00/Xbox2Windows",
+      "number": 3196,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3196",
+      "sha": "9a41fd99788ad778cc62797c756bf60308168687",
+      "title": "startup: reset the window presenter's allocator only after its fence is reached"
+    },
+    "check": "Test early recycle on a completed flight and hold referenced resources on an artificially delayed next flight. A neutral 3080 result is distinct from the unresolved RX 6700 XT reset."
+  },
+  {
+    "receiver": {
+      "repo": "Marvisak/VIctory",
+      "number": 3611,
+      "url": "https://github.com/Marvisak/VIctory/pull/3611",
+      "sha": "26b63a03eacf1e4921daeb071a8e5f7119fb6cd1",
+      "title": "GPU: dynamic descriptor slots go back only to the heap that took them"
+    },
+    "source": {
+      "repo": "xcl-dev/xcl",
+      "number": 1899,
+      "url": "https://github.com/xcl-dev/xcl/pull/1899",
+      "sha": "11fea400cd87edf8f562e359e1451d221f08183c",
+      "title": "D3D12.X: forget released command queues from vram::Pages::waited"
+    },
+    "check": "Put a stale return from heap A ahead of a valid return from B at the same offset. B free-list accounting should change only on the latter; D3D12 queue address reuse supplies the analogous ownership case."
+  },
+  {
+    "receiver": {
+      "repo": "fxceless/victory-fork",
+      "number": 1503,
+      "url": "https://github.com/fxceless/victory-fork/pull/1503",
+      "sha": "0d7a2bafe1e8a9f54a52ecd6379fcc05a4a720b4",
+      "title": "GPU: defer host replacements for private translator lists"
+    },
+    "source": {
+      "repo": "xcl-dev/xcl",
+      "number": 2333,
+      "url": "https://github.com/xcl-dev/xcl/pull/2333",
+      "sha": "a7b93a853ec56621bdef65a695cd858094878bfe",
+      "title": "D3D12.X: keep caller allocator for untracked lists and retain whole PSOs in dispatch_chain"
+    },
+    "check": "Test a private translator list and a caller-owned list separately when the host replacement is requested. A defer decision belongs only to the list the translator owns."
+  },
+  {
+    "receiver": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 494,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/494",
+      "sha": "e1b2d978543eed569300ddcdcf009a46ad99830c",
+      "title": "perf(victory-gpu): reclaim idle host list allocators, thin backing lists, and spike indirect buffers"
+    },
+    "source": {
+      "repo": "xcl-dev/xcl",
+      "number": 2538,
+      "url": "https://github.com/xcl-dev/xcl/pull/2538",
+      "sha": "2fc8268271f4d025d408527a9b9cfd62730fab1c",
+      "title": "D3D12.X: fail closed on heap retirement fences and sweep idle arenas without PAGES"
+    },
+    "check": "Separate pending, completed-but-live, and idle allocation slots under pressure. Reclaim the last class. Delayed completion and failed wait must never make the first class eligible."
+  },
+  {
+    "receiver": {
+      "repo": "boykopovar/AnyPS5",
+      "number": 27857,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27857",
+      "sha": "48a4db53ce442e085f26ee567467023cba7d9a7e",
+      "title": "fix(agc): evict storage images past the entry limit only once idle"
+    },
+    "source": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 354,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/354",
+      "sha": "b106642e4a54a8178cd44646ffcfe4c9e3b97e62",
+      "title": "perf(victory-gpu): fence-safe LRU texture eviction and kept-view yielding"
+    },
+    "check": "Bind more than the logical entry cap in one synthetic draw sequence. Compare released versus in-flight images and confirm an actively owned view survives ordinary LRU trimming. Distinct Vulkan and D3D12 lifetime plumbing."
+  },
+  {
+    "receiver": {
+      "repo": "KytyPS5/KytyPS5",
+      "number": 1394,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/1394",
+      "sha": "9b8fd691204853e7567352ddf8aa82932c50d83d",
+      "title": "graphics: give images dedicated allocations where the driver allows many"
+    },
+    "source": {
+      "repo": "boykopovar/AnyPS5",
+      "number": 23955,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/23955",
+      "sha": "8e0df64d5d5b8c65a3076bb640c71fa2a192e472",
+      "title": "fix(agc): release retained image memory before evicting caches or placing allocations in host memory"
+    },
+    "check": "After mixed-size image churn, record allocator block bytes and live bytes separately. A fixed-size churn arm checks the cost of giving up shared reuse."
+  },
+  {
+    "receiver": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 556,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/556",
+      "sha": "512099cd752c7c07a19b60667a460af602b547e8",
+      "title": "fix(shader-cache): handle concurrent Windows os.replace PermissionError in ShaderCache.put"
+    },
+    "source": {
+      "repo": "R0Y00/Xbox2Windows",
+      "number": 3138,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3138",
+      "sha": "e31ffc6d637c4335455693d6bb90459cb3e7e9d4",
+      "title": "shader: invalidate watch manifests when sidecar content changes with an older mtime"
+    },
+    "check": "Test divergent concurrent producers against permanent lock, new independent reader, and no stale staged data. The watcher likewise needs content identity rather than metadata alone. The two publication formats remain distinct."
+  },
+  {
+    "receiver": {
+      "repo": "Marvisak/VIctory",
+      "number": 3636,
+      "url": "https://github.com/Marvisak/VIctory/pull/3636",
+      "sha": "7319f78e4fe82bae920de3e8f2f02562d1852c14",
+      "title": "CLI: report pipeline-check worker setup failures"
+    },
+    "source": {
+      "repo": "ProjectLeonida/mandy",
+      "number": 1437,
+      "url": "https://github.com/ProjectLeonida/mandy/pull/1437",
+      "sha": "53bc0e3a88bbfc336c8270ae03ad8f3e0fc851b3",
+      "title": "Fail semantic runs that exit without a trustworthy result (SEMANTIC-RUNNER-COMPLETION)"
+    },
+    "check": "One worker fails initialization, another succeeds. Require a nonzero result and report which worker did work. A clean exit without completed results is a separate case."
+  },
+  {
+    "receiver": {
+      "repo": "PastiiJay/klbf-lab",
+      "number": 88,
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/88",
+      "sha": "3206d075baea85534b2dcc1f73487389d7ae0b35",
+      "title": "Keep fractional seconds when cutting BM-v1 fallback logs"
+    },
+    "source": {
+      "repo": "ProjectLeonida/mandy",
+      "number": 1437,
+      "url": "https://github.com/ProjectLeonida/mandy/pull/1437",
+      "sha": "53bc0e3a88bbfc336c8270ae03ad8f3e0fc851b3",
+      "title": "Fail semantic runs that exit without a trustworthy result (SEMANTIC-RUNNER-COMPLETION)"
+    },
+    "check": "Require an imported short/partial CPU-produced report to retain its uncertified flag even with success exit. Existing fallback window checks use fractional times at 299.2 s and 300 s."
+  },
+  {
+    "receiver": {
+      "repo": "TaynanGT/Vice-Tay",
+      "number": 376,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/376",
+      "sha": "8291c7857439970b427a17b142a2a85aee451486",
+      "title": "Report submission timing breakdowns in frame measurements"
+    },
+    "source": {
+      "repo": "boykopovar/AnyPS5",
+      "number": 24219,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/24219",
+      "sha": "917297eeb7422b1d55fb1482b04ca75e18c840b5",
+      "title": "fix(tools): reject incomplete GPU timing in A/B comparisons"
+    },
+    "check": "Feed otherwise identical synthetic capture sets with one missing batch completion/timing row on one side. Record per-arm coverage or refuse comparison."
+  },
+  {
+    "receiver": {
+      "repo": "PastiiJay/klbf-lab",
+      "number": 126,
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/126",
+      "sha": "0b5ec61ddb0db6662c46da653e7e56d3bd3387f6",
+      "title": "Exclude the opening fade only after a lit frame is observed"
+    },
+    "source": {
+      "repo": "boykopovar/AnyPS5",
+      "number": 24219,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/24219",
+      "sha": "917297eeb7422b1d55fb1482b04ca75e18c840b5",
+      "title": "fix(tools): reject incomplete GPU timing in A/B comparisons"
+    },
+    "check": "All samples missing a probe cannot be reported as observed lit. Keep measured black frames, missing probe counts and excluded ineligible samples separately."
+  },
+  {
+    "receiver": {
+      "repo": "PastiiJay/klbf-lab",
+      "number": 125,
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/125",
+      "sha": "c616d292f1bf7788f8ea8bcff7988ec6a19b6b8f",
+      "title": "Represent unmeasured beta-amd benchmark settings as null in JSON"
+    },
+    "source": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 519,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/519",
+      "sha": "bdfc8ce053d9b5e2c6524ca5bfedfc68dc64c076",
+      "title": "feat: frame-time stability report and slow-frame book (VICTORY_FRAME_TIMES, VICTORY_FRAME_BOOK, VICTORY_THIN_TIMES; off)"
+    },
+    "check": "Import optional counters without substituting zero for an unmeasured value. A complete sample with measured zero is the distinct control."
+  },
+  {
+    "receiver": {
+      "repo": "PastiiJay/klbf-lab",
+      "number": 42,
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/42",
+      "sha": "276d0b3a402a1ae4378b2cc920712d3aac2101af",
+      "title": "perf(formats): add AVX2/SSE2 256B micro-tile texture detiler and DetilePool"
+    },
+    "source": {
+      "repo": "fxceless/victory-fork",
+      "number": 92,
+      "url": "https://github.com/fxceless/victory-fork/pull/92",
+      "sha": "f31ad9480618ea49b72c7ab55c0331627ab7ae39",
+      "title": "Textures: detile big subresources in bands on several threads"
+    },
+    "check": "Compare one worker versus many with partial aligned bands at a small cut boundary and jagged padded stride. Verify output bytes and untouched padding before comparing throughput."
+  },
+  {
+    "receiver": {
+      "repo": "Marvisak/VIctory",
+      "number": 3487,
+      "url": "https://github.com/Marvisak/VIctory/pull/3487",
+      "sha": "612207a8ef3a2a0345c83bf6a97c9af5c74a4b25",
+      "title": "GPU: batch submission heap/memory steps and fast-scan bindless and page-table bitmaps"
+    },
+    "source": {
+      "repo": "PastiiJay/klbf-lab",
+      "number": 43,
+      "url": "https://github.com/PastiiJay/klbf-lab/pull/43",
+      "sha": "100c4581f875cc9dcf765e7b4612d54d1cf74ec4",
+      "title": "perf(gpu): batch scattered indirect clamps and coalesce ready queue parts"
+    },
+    "check": "Force one ready and one blocked queue fragment. Batching must preserve ready work without emitting the blocked fragment or crossing the barrier."
+  },
+  {
+    "receiver": {
+      "repo": "xcl-dev/xcl",
+      "number": 3040,
+      "url": "https://github.com/xcl-dev/xcl/pull/3040",
+      "sha": "962cdca84c402e0254cc1c6909bb82393164cd21",
+      "title": "Recompiler: add exact wave-local eligibility analysis for wave64 compute"
+    },
+    "source": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 489,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "sha": "1a7dd21cef9d1d19a1180690937513b93efb8375",
+      "title": "fix(victory-shader): prove lane-private LDS stacks for wave64-to-wave32 lowering"
+    },
+    "check": "Run lane-private LDS access and an explicit cross-half read on the same workgroup width. Analyze/cache independent identities and fall back for the shared case."
+  },
+  {
+    "receiver": {
+      "repo": "xcl-dev/xcl",
+      "number": 3042,
+      "url": "https://github.com/xcl-dev/xcl/pull/3042",
+      "sha": "becdecfe8895548fc6329e572b44cba010757acc",
+      "title": "Recompiler: add opt-in XCL_WAVE_LOCAL=1 compute lowering"
+    },
+    "source": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 489,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/489",
+      "sha": "1a7dd21cef9d1d19a1180690937513b93efb8375",
+      "title": "fix(victory-shader): prove lane-private LDS stacks for wave64-to-wave32 lowering"
+    },
+    "check": "Cold and warm cache on identical inputs before/after enabling experimental lowering. Eligibility failure must leave the established fallback path available."
+  },
+  {
+    "receiver": {
+      "repo": "KytyPS5/KytyPS5",
+      "number": 2567,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2567",
+      "sha": "7e340f39b5401bfc999e1c2f912909dec8c3551e",
+      "title": "renderer: run compute groups over the host's invocation limit with 32-lane subgroups"
+    },
+    "source": {
+      "repo": "ProjectLeonida/mandy",
+      "number": 2506,
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2506",
+      "sha": "29361079f69b9e38449dcc1e8896f5f172e5627a",
+      "title": "rdna2spirv: --mesh-serial-waves under --mesh-compute too (SHADER-W64-MESH-SERIAL-COMPUTE)"
+    },
+    "check": "Test an oversized wave64 group on a wave32 backend, with a barrier and then distinct values in both halves. Maintain a supported-size control and count missing subgroup capability as skip."
+  },
+  {
+    "receiver": {
+      "repo": "shadps4-emu/shadPS4",
+      "number": 5708,
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5708",
+      "sha": "6ec32c89505e76ae694a8ae5e905cc96fabf967b",
+      "title": "shader_recompiler: keep scalar ALU out of EXEC divergence scopes"
+    },
+    "source": {
+      "repo": "R0Y00/Xbox2Windows",
+      "number": 3193,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3193",
+      "sha": "c8bf4dcd3006cdd7108fdcbf6b57a0c4962162ec",
+      "title": "compute: lower s_or_saveexec_b32 in the direct wave32 path"
+    },
+    "check": "Make an ordinary scalar update with EXEC zero, restore EXEC, and read the value later. Vector writes must still obey their masks; preserve cases that read EXEC or VCC."
+  },
+  {
+    "receiver": {
+      "repo": "R0Y00/Xbox2Windows",
+      "number": 3220,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3220",
+      "sha": "ece04c8b43f211f3cd81be4ba0701cdb742b59d7",
+      "title": "compute: lower binary16 VOP1 rcp, sqrt, exp, rsq and log"
+    },
+    "source": {
+      "repo": "Marvisak/VIctory",
+      "number": 3609,
+      "url": "https://github.com/Marvisak/VIctory/pull/3609",
+      "sha": "d54570166a81247966e596487b050b93bc548415",
+      "title": "Shaders: round v_exp_f16 once at its double-rounding midpoint"
+    },
+    "check": "Run the proven v_exp_f16 midpoint vector (0x11c5) on the receiving native frontend and report result bits. Keep WARP and physical adapters separate."
+  },
+  {
+    "receiver": {
+      "repo": "boykopovar/AnyPS5",
+      "number": 27965,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27965",
+      "sha": "810a4158020b39a1ba3255ecfe233c3268ddad6f",
+      "title": "test(shader): pin v_pk_min/max_f16 in non-RNE f16 round modes as measured on gfx1151"
+    },
+    "source": {
+      "repo": "R0Y00/Xbox2Windows",
+      "number": 3125,
+      "url": "https://github.com/R0Y00/Xbox2Windows/pull/3125",
+      "sha": "eeaa3d78051f0a63e88fbcc7517ecdbec06a8711",
+      "title": "shader: lower v_min_f16 and v_max_f16 in the direct compute path"
+    },
+    "check": "Compare signed zero in both orders, then in a selected packed half. Scalar donor's upper-half preservation is a separate expected value, not packed semantics."
+  },
+  {
+    "receiver": {
+      "repo": "xcl-dev/xcl",
+      "number": 2534,
+      "url": "https://github.com/xcl-dev/xcl/pull/2534",
+      "sha": "b3fced11b79fe70204212a03ec78e60dca110eb9",
+      "title": "DXIL: fix negative preserved denormal qNaN in rm_sqrt and route rm_mad via by_mode"
+    },
+    "source": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 566,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/566",
+      "sha": "9acac901053093014cbae7a508d51fe9b311cb39",
+      "title": "fix: round v_sqrt_f16 exactly when the f32 sqrt misses by an ulp"
+    },
+    "check": "Use an ULP-near-half boundary and negative denormal controls. Compare exception class separately. Donor binary16 and receiver directed f32 paths require their own expectations."
+  },
+  {
+    "receiver": {
+      "repo": "TaynanGT/Vice-Tay",
+      "number": 320,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/320",
+      "sha": "9611538733d5c9a7b0d65f190e05e76e8cb78179",
+      "title": "Preserve half data in typed descriptor tables"
+    },
+    "source": {
+      "repo": "Marvisak/VIctory",
+      "number": 3620,
+      "url": "https://github.com/Marvisak/VIctory/pull/3620",
+      "sha": "0fcf49d37e5f5556996c82772eccf3e8aaee9d93",
+      "title": "Shaders: emit fewer instructions for FP16 denormal rounding"
+    },
+    "check": "Round-trip raw binary16 subnormals and special bits through the typed descriptor. Numeric conversion is a separate control; its nearest-even expectations must not leak into raw views."
+  },
+  {
+    "receiver": {
+      "repo": "ProjectLeonida/mandy",
+      "number": 2508,
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2508",
+      "sha": "ef5620bf609b2149475089c122afda3b85e0bf69",
+      "title": "present_compose: fix premultiplied sRGB and additive alpha plane 1 decoding"
+    },
+    "source": {
+      "repo": "TaynanGT/Vice-Tay",
+      "number": 370,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/370",
+      "sha": "260891ba64d55445e007f21002235884d42e4bc7",
+      "title": "Read colour textures in the requested format and reuse tile offsets"
+    },
+    "check": "Use the mid-gray sRGB full-alpha value as a transfer-only control, then run the same equivalent color at half alpha and a linear-format input."
+  },
+  {
+    "receiver": {
+      "repo": "fxceless/victory-fork",
+      "number": 1152,
+      "url": "https://github.com/fxceless/victory-fork/pull/1152",
+      "sha": "43cadb44c607391a7e2085fedba8d6f861f8f96e",
+      "title": "Preserve untouched mips and slices during water texture readback"
+    },
+    "source": {
+      "repo": "KytyPS5/KytyPS5",
+      "number": 2410,
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2410",
+      "sha": "c65b1abe825cc4ef2eebd3e8e082f72885f2e3fe",
+      "title": "graphics: compare image subresources by containment (Uncharted: Legacy of Thieves Collection)"
+    },
+    "check": "Use a synthetic array with a single bound mip/slice range. A sibling slice's known byte must survive and an equal-address disjoint view must stay distinct."
+  },
+  {
+    "receiver": {
+      "repo": "fxceless/victory-fork",
+      "number": 1472,
+      "url": "https://github.com/fxceless/victory-fork/pull/1472",
+      "sha": "2fe517238d8056fba3081aeeb4890e7854641e9a",
+      "title": "Formats: a depth pitch that overlaps its depth slices is refused"
+    },
+    "source": {
+      "repo": "shadps4-emu/shadPS4",
+      "number": 5453,
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5453",
+      "sha": "22aa55d6cdcbee1a9b61d7744822ec95273b12a8",
+      "title": "texture_cache: clamp mip levels to the full mip chain"
+    },
+    "check": "Exercise two image validation boundaries independently: depth pitch one byte short versus exact, and requested mip chain one level above maximum versus equal."
+  },
+  {
+    "receiver": {
+      "repo": "Marvisak/VIctory",
+      "number": 3529,
+      "url": "https://github.com/Marvisak/VIctory/pull/3529",
+      "sha": "14dd3b8fd2ea19733b232177dc1904258a7f6875",
+      "title": "GPU: a buffer view left null for lack of a host copy is made again after each submission"
+    },
+    "source": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 458,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/458",
+      "sha": "eb95bc39f5e2f3615c40669fb5ff327b00a5d824",
+      "title": "fix(victory-gpu): bind zero fallback for missing root CBVs/SRVs and drop draws missing stride tables"
+    },
+    "check": "After a missing backing buffer produces the safe temporary binding, expose the real backing on the next submission and confirm it replaces the fallback without rewriting the title descriptor."
+  },
+  {
+    "receiver": {
+      "repo": "ProjectLeonida/mandy",
+      "number": 2504,
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2504",
+      "sha": "52074f847e5addee4378209b43aea1c12c349f97",
+      "title": "labels: GPU timestamps wait for their query, others record none, store unlocked (RT-GPU-LABEL-COMPLETIONS)"
+    },
+    "source": {
+      "repo": "boykopovar/AnyPS5",
+      "number": 27984,
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27984",
+      "sha": "c1321287c7889ad5f637aa59e34d97da689eef94",
+      "title": "perf(agc): read a capture's own queued labels from their known values instead of waiting for the GPU"
+    },
+    "check": "Split a query-derived timestamp from a queue-local value known on CPU. Query path waits for its own producer, known value path must not insert a device-wide wait."
+  },
+  {
+    "receiver": {
+      "repo": "fxceless/victory-fork",
+      "number": 1234,
+      "url": "https://github.com/fxceless/victory-fork/pull/1234",
+      "sha": "7195775ba6f09a797b7523c749c7d8b558255a7f",
+      "title": "GPU: a pipeline is waited for in one frame only (#1181)"
+    },
+    "source": {
+      "repo": "LooperSalty/AnyXboxX",
+      "number": 515,
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/515",
+      "sha": "8b23530ba140048c153823883c5ad5ceae469e74",
+      "title": "perf(victory-gpu): avoid pipeline worker thundering herd and skip unawaited DONE notify"
+    },
+    "check": "Distinguish repeated waiting for a pending worker from an absent waiter. Include a late joining worker and an eventual completion to guard against suppression of a real notification."
+  },
+  {
+    "receiver": {
+      "repo": "xcl-dev/xcl",
+      "number": 3037,
+      "url": "https://github.com/xcl-dev/xcl/pull/3037",
+      "sha": "58ff61c296bda172c636a007ff102324c5c5d6f3",
+      "title": "D3D12.X: gate texture uploads on OOM back-off and commit headroom (XCL_UPLOAD_BACKOFF=1)"
+    },
+    "source": {
+      "repo": "TaynanGT/Vice-Tay",
+      "number": 282,
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/282",
+      "sha": "4687df5eb867da6ef7d9337763a4021358133d9e",
+      "title": "perf(gpu): add opt-in tiered WDDM residency orchestrator (VICTORY_WDDM_RESIDENCY=1)"
+    },
+    "check": "Separate local-memory residency budget from host commit headroom. Test above-threshold used memory with host headroom still high, and below-threshold used memory with low commit headroom. The source PR already credits Vice-Tay, so this is retrospective."
+  },
+  {
+    "receiver": {
+      "repo": "shadps4-emu/shadPS4",
+      "number": 5726,
+      "url": "https://github.com/shadps4-emu/shadPS4/pull/5726",
+      "sha": "40925c02b9238908ba54debcb7de15563713958d",
+      "title": "video_core: Skip redundant pipeline binds"
+    },
+    "source": {
+      "repo": "fxceless/victory-fork",
+      "number": 1234,
+      "url": "https://github.com/fxceless/victory-fork/pull/1234",
+      "sha": "7195775ba6f09a797b7523c749c7d8b558255a7f",
+      "title": "GPU: a pipeline is waited for in one frame only (#1181)"
+    },
+    "check": "Rebind the same graphics pipeline on one command buffer, then on a new command buffer and on compute. Same-identity bind suppression and once-per-frame wait have different identities/scopes."
+  }
+]
