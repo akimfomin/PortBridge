@@ -2,6 +2,7 @@
 
 const apiRoot = '/api/v1';
 const exportedSite = Boolean(document.querySelector('meta[name="portbridge-mode"][content="snapshot"]'));
+const publicPullRequest = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/pull\/[1-9]\d*\/?$/i;
 const byId = (id) => document.getElementById(id);
 const content = byId('content');
 const heading = byId('page-title');
@@ -461,7 +462,7 @@ async function discoveryResults(query, signal) {
     result = {scan_status: 'unavailable', scan_reason: 'snapshot_unavailable'};
   }
   const matches = [...list(result.matches), ...list(result.automatic_matches)];
-  const pr = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/pull\/[1-9]\d*\/?$/i.test(query.trim());
+  const pr = publicPullRequest.test(query.trim());
   const code = list(result.code_candidates);
   return {matches, code, pr, emptyMessage: pr && !matches.length && !code.length ? emptyDiscoveryMessage(result.scan_status, result.scan_reason) : ''};
 }
@@ -2529,7 +2530,9 @@ function filterHash(current) {
   const suffix = params.size ? `?${params}` : '';
   const homeQuery = (params.get('q') || '').trim();
   if (current.view === 'activity' && /^PB-[0-9]{4,}$/i.test(homeQuery)) return urlFor(homeQuery.toUpperCase());
-  const view = current.view === 'activity' ? (snapshotSite?.browse_index ? 'sources' : 'problems') : current.view;
+  const view = current.view === 'activity'
+    ? (snapshotSite?.browse_index && !publicPullRequest.test(homeQuery) ? 'sources' : 'problems')
+    : current.view;
   return `#/${view}${suffix}`;
 }
 
