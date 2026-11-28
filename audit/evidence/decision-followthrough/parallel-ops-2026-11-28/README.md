@@ -1,0 +1,66 @@
+# Parallel compatibility operations · 28 November 2026
+
+## Collection and Git checks
+
+Selected recently updated open PRs for synthetic graphics/runtime behavior, test tooling, or transfer compatibility. Reviewed 53 tasks across eight projects. The first batch selected technical scope before measuring merge results. PR heads were checked against the explicit GitHub pull refs. Receiving commits were resolved from each PR's named public base branch, including XCL `nvidia-dev` and `amd-dev`. The refs are rechecked after fetch. No third-party code is built or run by the merge script.
+
+- **53 PR-to-branch tests** · 48 clean, 5 conflicts.
+- **38 PR-to-PR tests** · 30 clean, 8 conflicts. These are separate from 53 PR-to-branch tests. A clean tree only establishes textual compatibility for the pair at those exact heads.
+- [Exact refs, common ancestors, result trees, conflicting paths and changed tests](git-results.json).
+- [Public PortBridge lookup](preflight-results.json) used published data through the usual URL entry point. In 53 lookups there were no trusted first checks. All 53 lacked a saved external Discovery scan. The published source search returned no match for 36, the origin was absent for 16, and one had code/spec references. Ordinary similarity matching surfaced Xbox2Windows #2332 for XCL #3079. Reading the primary source established practical relevance.
+- Four distinct on-demand external scans returned three `busy` results without a lookup and one result with a single lookup. This is not a new relevance benchmark. Existing plans were compared manually where the service did not supply usable evidence.
+
+## Reviewed technical links
+
+Candidate means the source supports a next test or decision. Historical links establish provenance and avoid duplicate work. These are **20 reviewed comparisons**, with **13 current test/review leads**, **4 recorded precursors or transfers**, and **3 excluded as a direct match**. No branch was merged in any of the receiving repositories during this wave.
+
+| Receiving task and reference | Decision or bounded test | Status |
+| --- | --- | --- |
+| [XCL #3079](https://github.com/xcl-dev/xcl/pull/3079) and [Xbox2Windows #2332](https://github.com/R0Y00/Xbox2Windows/pull/2332) | Reuse the separate writer-wait and consumer-retirement controls. The donor proved 8/8 pixels with the wait and 4/8 without, plus a late unmap control on WARP. XCL uses a different allocator. | Current · automatically surfaced, source checked |
+| [XCL #3079](https://github.com/xcl-dev/xcl/pull/3079) and [VIctory #898](https://github.com/Marvisak/VIctory/issues/898) | Both mention indirect dispatch. The VIctory report's corrupt argument and null-descriptor observations do not establish the same staged-ring cause. | Exclude as direct match |
+| [XCL #3036](https://github.com/xcl-dev/xcl/pull/3036) and [AnyPS5 #27979](https://github.com/boykopovar/AnyPS5/pull/27979) | Transfer the shape of the interleaved identical-state draw control. XCL preserves logical order; AnyPS5 invalidates Vulkan primary state after a secondary. No API-level code transfer. | Current · test shape |
+| [XCL #2975](https://github.com/xcl-dev/xcl/pull/2975) and [Continued #2392](https://github.com/ProjectLeonida/mandy/pull/2392) | Empty shader entries should keep the cache key in process one. Verify a real hit in process two versus the empty-journal control. | Current · test shape |
+| [Continued #2511](https://github.com/ProjectLeonida/mandy/pull/2511) and [victory-fork #885](https://github.com/fxceless/victory-fork/pull/885) | Compare stale writer accepted by driver versus a rejected library and new empty creation. These are distinct outcomes with complementary two-process evidence. | Current · interpret test outcome |
+| [victory-fork #885](https://github.com/fxceless/victory-fork/pull/885) and [VIctory #347](https://github.com/Marvisak/VIctory/pull/347) | The existing fork patch already credits the zero-size null-pointer change. Proton has its own result. | Historical · documented port |
+| [victory-fork #1496](https://github.com/fxceless/victory-fork/pull/1496) and [Vice-Tay #342](https://github.com/TaynanGT/Vice-Tay/pull/342) | Existing port of placed-page write-watch; preserve the opposite control of a later four-byte CPU write. | Historical · tested WARP port |
+| [victory-fork #1495](https://github.com/fxceless/victory-fork/pull/1495) and [Vice-Tay source](https://github.com/TaynanGT/Vice-Tay/commit/00eaf47c77431830c0342bb87f88de8bf2e4fb06) | Existing port of widened scalar-code table includes Wave32/Wave64 control. | Historical · tested source port |
+| [Vice-Tay #389](https://github.com/TaynanGT/Vice-Tay/pull/389) and [VIctory-RDNA](https://github.com/XaviFortes/VIctory-RDNA/commit/b2917b48e) | Existing proposal credits RDNA's direct-buffer idea. Keep mode 1 windows separate from mode 2 buffers. Review view eligibility, source contract, and the 4 GiB boundary before copying any implementation. | Historical · cited direction |
+| [AnyXboxX #568](https://github.com/LooperSalty/AnyXboxX/pull/568) and [VIctory #3623](https://github.com/Marvisak/VIctory/pull/3623) | Adapt the two delay controls for honest timestamps; enable named notes under light DRED independently of slow-frame reporting. | Current · source and negative control |
+| [VIctory #3630](https://github.com/Marvisak/VIctory/pull/3630) and [AnyXboxX #571](https://github.com/LooperSalty/AnyXboxX/pull/571) | Similar independent bit-test tree. Compare in-range M0 across sizes with nonpower-of-two counts. Check each target's out-of-range contract separately. | Current · avoid duplicate port |
+| [AnyXboxX #571](https://github.com/LooperSalty/AnyXboxX/pull/571) and [VIctory #2079](https://github.com/Marvisak/VIctory/pull/2079) | One change lowers the selected interval; the other avoids an unnecessary full-range build. Count both compiler phases and include a case where no range is proven. | Current · compatible ideas, no merge claim |
+| [VIctory #3609](https://github.com/Marvisak/VIctory/pull/3609) and [AnyXboxX #566](https://github.com/LooperSalty/AnyXboxX/pull/566) | Port the injected-ULP method, not the sqrt arithmetic. Correct rounding for one binary16 exp2 midpoint does not prove protection against ordinary host error. | Current · independent CPU result |
+| [KytyPS5 #2591](https://github.com/KytyPS5/KytyPS5/pull/2591) and [Vulkan ValidationLayers](https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L2361) | Use the API mip-count test as a negative control, independently from image-byte equivalence in the aliasing fix. | Current · automatically surfaced, spec/test |
+| [KytyPS5 #2591](https://github.com/KytyPS5/KytyPS5/pull/2591) and [shadPS4 #5453](https://github.com/shadps4-emu/shadPS4/pull/5453) | The Discovery candidate clamps to the chain. Here guest backing has extra usable compressed blocks; clamping alone cannot prove those writes survive. | Exclude as drop-in · Discovery lead |
+| [Continued #2405](https://github.com/ProjectLeonida/mandy/pull/2405) and [Vice-Tay #260](https://github.com/TaynanGT/Vice-Tay/pull/260) | D3D12 aliases the same physical tiles. Vulkan still needs an accepted memory type for each buffer. Use the compatible case as a contrast only. | Exclude as direct backend fix |
+| [Continued #2517](https://github.com/ProjectLeonida/mandy/pull/2517) and [Vice-Tay #388](https://github.com/TaynanGT/Vice-Tay/pull/388) | Transfer half-open overlap, exact touch, and bridge cases. One unions writes; the other invalidates intersections. Keep these rules distinct. | Current · test shape |
+| [victory-fork #1280](https://github.com/fxceless/victory-fork/pull/1280) and [AnyXboxX #550](https://github.com/LooperSalty/AnyXboxX/pull/550#issuecomment-7230084159) | Test pressure while trim cannot inspect its pool. Retain live buffers separately from allocator-limit updates, with pre- and post-fence observations. | Current · complementary pressure test |
+| [Continued #2501](https://github.com/ProjectLeonida/mandy/pull/2501) and [victory-fork #1140](https://github.com/fxceless/victory-fork/pull/1140) | Add an active lane whose mask is later read as scalar data after a loop merge. Native lane-local optimization still needs separate collective cases. | Current · test shape, separate analyzers |
+| [AnyPS5 #27979](https://github.com/boykopovar/AnyPS5/pull/27979) and [XCL #2902](https://github.com/xcl-dev/xcl/pull/2902) | The common property is submission order and state retention under recorded work split. Use distinguishable state values before and after the split, not borrowed backend code. | Current · test shape |
+
+## Fifteen runnable CPU checks and receiving tests
+
+Run `python decision-checks.py` (Python 3.11+) and `rustc --edition=2021 ring-wrap.rs` followed by the resulting executable. The [CPU output](cpu-results.txt) is from this iteration. The math and ordering checks are independent models. The separate Rust fixture uses real atomic operations. No game, driver, or upstream branch is executed in these commands.
+
+| Receiving task | Reproducible next check |
+| --- | --- |
+| XCL #3079 · wrap | Run the included Rust fixture. Far from the wrap, get offsets 0 and 256. With two simultaneous wrappers at 4 MiB, get 0 and 0. |
+| XCL #3079 · queue lifetime | Use two-slot synthetic capacity and generated argument tuples. Keep queue A in flight while queue B reserves another slice. Compare fixed and baseline via the two outcomes in PortBridge Lab #133. |
+| XCL #3079 · same-list order | Supply a non-window argument and a window-native control. Record the first with staged copy, keeping prelude consumption after that copy. Verify distinct generated tuples on both paths. |
+| XCL #2975 · cache | Find the empty DS/HS/GS fixture at head. Run a fresh process with the populated and an empty journal separately; compare actual hits and selected shader hashes. |
+| AnyXboxX #568 · timing | Apply the two controlled delay legs from VIctory #3623 after resolving host.rs. Verify readable command names both times and a slow-list warning only for the wait leg. |
+| AnyXboxX #571 and VIctory #3630 · bit tree | Enumerate counts 7, 8, 9, 128 and 129. Compare the first and last valid indexes and the first excluded index using the receiving shader's documented out-of-range contract. |
+| AnyXboxX #566 · sqrt | Run the existing injected-ULP GPU fixture with both directions. The separate CPU model observed mismatches 0/0/15 before correction for −1/0/+1 and 0/0/0 after correction. |
+| VIctory #3609 · exp2 | Add `0x8dc6` and `0x36b6` to the exact midpoint test as diagnostic cases. Retain `0x11c5` and the existing controls. CPU reference results are in the test log. |
+| KytyPS5 #2591 · BC/raw guard | Run the 64×64 BC / 16×16 raw fixture before and after. Change the raw byte interval for a negative control. Add the chosen descriptor PR's past-MAX_MIP fixture as a separate check. |
+| AnyPS5 #27979 and #25279 · ordering | In a generated workload, record inline draw, pooled depth draw, one-shot compute, then the original inline draw. Delay the compilation to the configured limit. Verify rebind and at most one executed compute, and cover retain failure separately. |
+| victory-fork #1280 and #1500 · pressure | Hold the GPU fence of one shadow allocation and trigger pressure; verify it is not returned while in flight and becomes eligible only after completion. Compare eligible and ineligible allocations. |
+| Continued #2517 · byte bound | Use a cap of 64, 63 already covered, then add a disjoint 4-byte interval. Current logic admits the crossing to 67 before refusing the next addition. Decide explicitly whether the cap is soft or strict. Also bridge ranges without a dropped prefix. |
+| Continued #2511 · cache compatibility | Use identical payload and different producer build IDs, then identical build ID with a changed Vulkan device config. Separate retained seed, true driver hit, and cache rejection across two processes. |
+| Vice-Tay #389 · boundary | Within one synthetic mapping, test one range ending at 4 GiB, one straddling it, and an addition overflow. Repeat with mode 0, 1, and 2. Keep ordinary title buffers separate from aperture windows. |
+| Vice-Tay #382 and #379 · mapping lifetime | In a synthetic remap case, free a shown address then reallocate it as privately watched. Check view flags and copy eligibility. Compare with one alias written through a still-live mapping. |
+
+## Commands and scope
+
+PortBridge application SHA `f9da51bbef688d4b71beea8c6d8b77f6a3705a84`. On a clean checkout, individual live comparisons use `python -m portbridge.merge_check <PR_URL> <RECEIVING_SHA>`. To replay a pair with both pinned commits fetched into an isolated bare repository, use `git merge-tree --write-tree --name-only --no-messages <FIRST_HEAD> <SECOND_HEAD>`. Compare fetched refs to the recorded SHAs first. The original batch script uses local ref checks and explicit public HTTPS, and does not run any PR code. [Batch runner](merge-batch.py).
+
+Do not reuse a measurement after a head moves without recording the new revision. Consult the receiving team's existing claims mechanism before claiming work. Personal contacts, workstation paths, credentials, and unpublished data are absent. GPU work is still open.

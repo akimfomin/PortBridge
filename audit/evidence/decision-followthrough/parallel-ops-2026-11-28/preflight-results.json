@@ -1,0 +1,726 @@
+{
+  "preflight": [
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/389",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/290",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/357",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/263",
+      "external_status": "available",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/Marvisak/VIctory/pull/2972",
+        "https://github.com/xcl-dev/xcl/issues/2639",
+        "https://github.com/Marvisak/VIctory/pull/3230",
+        "https://github.com/Marvisak/VIctory/pull/3442"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/254",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/382",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+      "external_status": "available",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/edsuuu/VI-BR-PORT/pull/4",
+        "https://github.com/PastiiJay/klbf-lab/pull/41",
+        "https://github.com/fxceless/victory-fork/pull/1126",
+        "https://github.com/vitutu1/victory-perf/pull/17"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/521",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/528",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/526",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/511",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/571",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/570",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/566",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2518",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2511",
+      "external_status": "available",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/7jycwjmbfn-eng/scenegate-vi/commit/b0b2c0749d0fa1f3d1551082f68cfe7186c21cb8",
+        "https://github.com/Belobug/VIctory-Belobug-AMD/pull/471"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2517",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2501",
+      "external_status": "available",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/R0Y00/Xbox2Windows/pull/1156",
+        "https://github.com/R0Y00/Xbox2Windows/pull/234",
+        "https://github.com/R0Y00/Xbox2Windows/pull/2515",
+        "https://github.com/R0Y00/Xbox2Windows/pull/257",
+        "https://github.com/R0Y00/Xbox2Windows/pull/2577"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2516",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2513",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/ProjectLeonida/mandy/pull/2515",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/Marvisak/VIctory/pull/3630",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/Marvisak/VIctory/pull/3608",
+      "external_status": "available",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/Batushn/KestrelX/issues/26",
+        "https://github.com/Batushn/KestrelX/pull/39",
+        "https://github.com/Belobug/VIctory-Belobug-AMD/issues/82",
+        "https://github.com/JMAN730/project-flamingo/issues/190",
+        "https://github.com/JMAN730/project-flamingo/issues/205"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/Marvisak/VIctory/pull/3612",
+      "external_status": "available",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/R0Y00/Xbox2Windows/pull/1745",
+        "https://github.com/R0Y00/Xbox2Windows/pull/2814",
+        "https://github.com/boykopovar/AnyPS5/pull/27915",
+        "https://github.com/fxceless/victory-fork/pull/319",
+        "https://github.com/ubiquitarianism/leonida/pull/1231"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/Marvisak/VIctory/pull/3609",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/LooperSalty/AnyXboxX/issues/482",
+        "https://github.com/LooperSalty/AnyXboxX/pull/310",
+        "https://github.com/LooperSalty/AnyXboxX/pull/503",
+        "https://github.com/R0Y00/Xbox2Windows/issues/3219",
+        "https://github.com/R0Y00/Xbox2Windows/issues/839"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/Marvisak/VIctory/pull/3623",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/Marvisak/VIctory/pull/3246",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/Marvisak/VIctory/pull/3586",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/xcl-dev/xcl/pull/2793",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/xcl-dev/xcl/pull/2902",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/xcl-dev/xcl/pull/2975",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/JMAN730/project-flamingo/issues/236"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/xcl-dev/xcl/pull/3008",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/Marvisak/VIctory/pull/3365",
+        "https://github.com/LooperSalty/AnyXboxX/issues/482",
+        "https://github.com/LooperSalty/AnyXboxX/pull/501",
+        "https://github.com/R0Y00/Xbox2Windows/issues/2945",
+        "https://github.com/R0Y00/Xbox2Windows/issues/2963"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/xcl-dev/xcl/pull/3079",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/JMAN730/project-flamingo/issues/342",
+        "https://github.com/Marvisak/VIctory/issues/898",
+        "https://github.com/R0Y00/Xbox2Windows/issues/1759",
+        "https://github.com/R0Y00/Xbox2Windows/pull/2332",
+        "https://github.com/ubiquitarianism/leonida/pull/1232"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/xcl-dev/xcl/pull/3036",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/92",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/PastiiJay/klbf-lab/pull/28"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/1140",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/TaynanGT/Vice-Tay/pull/289",
+        "https://github.com/edsuuu/VI-BR-PORT/pull/5"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/1500",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/1280",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/347",
+        "https://github.com/LooperSalty/AnyXboxX/pull/354"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/1286",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/350"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/1126",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/PastiiJay/klbf-lab/pull/41",
+        "https://github.com/TaynanGT/Vice-Tay/pull/193",
+        "https://github.com/edsuuu/VI-BR-PORT/pull/4",
+        "https://github.com/vitutu1/victory-perf/pull/17"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/885",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/Marvisak/VIctory/pull/347"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/fxceless/victory-fork/pull/1489",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2172",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/LeonidaReforge/Leonida/issues/9",
+        "https://github.com/LooperSalty/AnyXboxX/pull/126",
+        "https://github.com/LooperSalty/AnyXboxX/pull/152",
+        "https://github.com/LooperSalty/AnyXboxX/pull/343",
+        "https://github.com/Marvisak/VIctory/issues/2087"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2278",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2591",
+      "external_status": "query_needed",
+      "source_urls": [
+        "https://github.com/KhronosGroup/Vulkan-Docs/blob/81b1d516cbf42f04a3c7f781977c499945b5e5dc/chapters/resources.adoc#L2287",
+        "https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/011ffa0d23534e8fd6a7972093edb96e9bc0f304/tests/unit/image.cpp#L2361"
+      ],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "found",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2357",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/26100",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/Marvisak/VIctory/pull/1554",
+        "https://github.com/Marvisak/VIctory/pull/284",
+        "https://github.com/Marvisak/VIctory/pull/3212",
+        "https://github.com/MiamiGame/XTP/pull/71",
+        "https://github.com/R0Y00/Xbox2Windows/issues/1728"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/26101",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [
+        "https://github.com/LooperSalty/AnyXboxX/pull/146",
+        "https://github.com/Marvisak/VIctory/pull/200",
+        "https://github.com/ubiquitarianism/leonida/pull/1366",
+        "https://github.com/ubiquitarianism/leonida/pull/1933",
+        "https://github.com/xcl-dev/xcl/pull/823"
+      ],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/26047",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27979",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "origin_not_indexed",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/25279",
+      "external_status": "unavailable",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    },
+    {
+      "catalog_status": "partial",
+      "url": "https://github.com/boykopovar/AnyPS5/pull/27966",
+      "external_status": "query_needed",
+      "source_urls": [],
+      "candidate_urls": [],
+      "discovery_status": "not_scanned",
+      "source_status": "no_match",
+      "first_check": false
+    }
+  ],
+  "online": [
+    {
+      "url": "https://github.com/xcl-dev/xcl/pull/3079",
+      "revision": "f64494d167f527a48a008fe3fbd7287b497398b0",
+      "subject": "executeindirect",
+      "status": "busy",
+      "search_issue": "busy",
+      "lookups": 0,
+      "cache_hits": 0,
+      "top5": [],
+      "explanation": "The external search is busy. Any retained results need a freshness check.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+      "revision": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+      "subject": "",
+      "status": "busy",
+      "search_issue": "busy",
+      "lookups": 0,
+      "cache_hits": 0,
+      "top5": [],
+      "explanation": "The external search is busy. Any retained results need a freshness check.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/Marvisak/VIctory/pull/3630",
+      "revision": "7dfc01a60a93ee7a084f027d261a70f9ddb38e1d",
+      "subject": "v_movrels_b32",
+      "status": "busy",
+      "search_issue": "busy",
+      "lookups": 0,
+      "cache_hits": 0,
+      "top5": [],
+      "explanation": "The external search is busy. Any retained results need a freshness check.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    },
+    {
+      "url": "https://github.com/KytyPS5/KytyPS5/pull/2591",
+      "revision": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+      "subject": "vuid-vkimagecreateinfo-miplevels-00958",
+      "status": "available",
+      "search_issue": null,
+      "lookups": 1,
+      "cache_hits": 0,
+      "top5": [
+        {
+          "url": "https://github.com/RPCS3/rpcs3/issues/15985",
+          "title": "gl: Low resolution scale crash due to too many mipmaps on a small texture",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/shadps4-emu/shadPS4/pull/5453",
+          "title": "texture_cache: clamp mip levels to the full mip chain",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/KhronosGroup/MoltenVK/issues/2083",
+          "title": "crash in MVKQueue::submit",
+          "route": "github",
+          "evidence_status": "source_found"
+        },
+        {
+          "url": "https://github.com/gfx-rs/wgpu/issues/894",
+          "title": "create_texture with too many mip levels triggers validation error",
+          "route": "github",
+          "evidence_status": "source_found"
+        }
+      ],
+      "explanation": "Open each source to compare the mechanism and revision.",
+      "source_code": {
+        "status": "not_indexed",
+        "indexed_files": 0,
+        "expected_files": 16,
+        "matches": [],
+        "scope": "pinned_public_files",
+        "confidence": "candidate"
+      }
+    }
+  ]
+}

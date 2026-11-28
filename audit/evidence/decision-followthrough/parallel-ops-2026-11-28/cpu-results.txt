@@ -1,0 +1,25 @@
+test_exp_is_not_a_global_tolerance_proof (__main__.DecisionChecks.test_exp_is_not_a_global_tolerance_proof) ... ok
+test_exp_midpoint (__main__.DecisionChecks.test_exp_midpoint) ... ok
+test_ring_cross_queue_requires_completion_before_reuse (__main__.DecisionChecks.test_ring_cross_queue_requires_completion_before_reuse) ... ok
+test_ring_far_from_wrap (__main__.DecisionChecks.test_ring_far_from_wrap) ... ok
+test_ring_one_worker_wraps (__main__.DecisionChecks.test_ring_one_worker_wraps) ... ok
+test_ring_two_workers_at_wrap (__main__.DecisionChecks.test_ring_two_workers_at_wrap) ... ok
+test_select_tree_exact_boundary (__main__.DecisionChecks.test_select_tree_exact_boundary) ... ok
+test_select_tree_in_range (__main__.DecisionChecks.test_select_tree_in_range) ... ok
+test_select_tree_uint32_outside_dense_range (__main__.DecisionChecks.test_select_tree_uint32_outside_dense_range) ... ok
+test_sparse_ranges_bridge_and_keep_prefix (__main__.DecisionChecks.test_sparse_ranges_bridge_and_keep_prefix) ... ok
+test_sparse_ranges_respect_byte_bound_without_wrapping (__main__.DecisionChecks.test_sparse_ranges_respect_byte_bound_without_wrapping) ... ok
+test_sqrt_1_ulp_high (__main__.DecisionChecks.test_sqrt_1_ulp_high) ... ok
+test_sqrt_1_ulp_low (__main__.DecisionChecks.test_sqrt_1_ulp_low) ... ok
+test_sqrt_nearest_f32 (__main__.DecisionChecks.test_sqrt_nearest_f32) ... ok
+test_timing_separates_collection_cost_from_gpu_wait (__main__.DecisionChecks.test_timing_separates_collection_cost_from_gpu_wait) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.443s
+
+OK
+sqrt: uncorrected, corrected per binary32 perturbation: {-1: [0, 0], 0: [0, 0], 1: [15, 0]}
+exp unique nearest-f32 input, perturbed examples (input, got, expected): ([4549], {-1: [('0x36b6', '0x3d59', '0x3d5a'), ('0x9bf2', '0x3bfa', '0x3bfb'), ('0xa86d', '0x3bcf', '0x3bd0'), ('0xb8a5', '0x3959', '0x395a')], 1: [('0x8dc6', '0x3c00', '0x3bff'), ('0x9f98', '0x3bf6', '0x3bf5'), ('0xaf57', '0x3b64', '0x3b63'), ('0xce40', '0x0001', '0x0000')]})
+
+rustc 1.100.1 (20ddd0171 2026-11-25)
+away from wrap: [0, 256]; one wrapper: [0, 4194048]; two wrappers: [0, 0]

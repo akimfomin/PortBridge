@@ -1,0 +1,1393 @@
+[
+  {
+    "repo": "TaynanGT/Vice-Tay",
+    "singles": [
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "d7e5183b6b619d1976ef1b0dce798c7fd042fa82",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "f814c6a219cc0918d23c355d5740ef62e03dced2",
+        "pr": 389,
+        "branch": "main",
+        "test_paths": [],
+        "title": "Place view memory above 4 GiB through renderer port 1 (VICTORY_PORT_HIGH, RDNA's PORT_BUFFERS idea)",
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/389",
+        "author": "SmartIngenieriayDesarrollo",
+        "source_base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "updated_at": "2026-11-27T23:31:01Z",
+        "draft": false
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "315c946d8d1b7c2b2fcc32b0a0d75444e41bcc4f",
+        "merge_base": "9d302e677ffa7fed8f00f7a1324ae7e6cab9acca",
+        "status": "clean",
+        "tree": "1cdc488caa35d61dbb68520746ec492d13a001ab",
+        "pr": 290,
+        "branch": "main",
+        "test_paths": [],
+        "title": "perf(rt): prioritize VRAM for BVH arenas and use GPU-ordered single-buffer PC-RAM spill",
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/290",
+        "author": "Vladimir-Human",
+        "source_base": "f1819a77ce86bdfa1a758d9ec1a710b5fd5860cd",
+        "updated_at": "2026-11-27T23:24:33Z",
+        "draft": false
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+        "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+        "status": "clean",
+        "tree": "bca285f0b16c84fc80fdd89f622b3ee006ebc34e",
+        "pr": 357,
+        "branch": "main",
+        "test_paths": [],
+        "title": "GPU: heap pacing against stretched-triangle spikes (#90), opt-in for now",
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/357",
+        "author": "cafeoh",
+        "source_base": "bc78af6f0551ddf388ed9e2b3bc835152567661f",
+        "updated_at": "2026-11-27T22:42:00Z",
+        "draft": false
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "4f5de4ecdd613867bb8af4b548957174139b321f",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "954f424f8812751d848932251502415f2157774e",
+        "pr": 263,
+        "branch": "main",
+        "test_paths": [],
+        "title": "gpu: reclaim dead shadow pages, idle staging blocks, and post-PSO DXIL commit",
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/263",
+        "author": "Vladimir-Human",
+        "source_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "updated_at": "2026-11-27T22:22:27Z",
+        "draft": false
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "971deec05027bf51d13729866e4e8f28ffb77855",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "c7b3a56667a34c3cc11653a3619f2a52e80e69d3",
+        "pr": 254,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-shader/src/emit/intersect_tests.rs"
+        ],
+        "title": "perf(rt): add opt-in VICTORY_BVH_NO_HIT and dead-RT compute pass skipping",
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/254",
+        "author": "Vladimir-Human",
+        "source_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "updated_at": "2026-11-27T22:19:05Z",
+        "draft": false
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "ea557975ff2e8bef5cd206e452de0420c1cfd650",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "69f2f66debf0a6d509aa3c8049666a2113142e78",
+        "pr": 382,
+        "branch": "main",
+        "test_paths": [],
+        "title": "Forget the views a test unmaps in drop_views",
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/382",
+        "author": "hamdanpor-ctrl",
+        "source_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "updated_at": "2026-11-27T21:58:32Z",
+        "draft": false
+      },
+      {
+        "target": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+        "head": "1a34e9ca637a4e46aeace956d0ab7d7e9d257302",
+        "merge_base": "9d302e677ffa7fed8f00f7a1324ae7e6cab9acca",
+        "status": "clean",
+        "tree": "88201d49ccd19fe9bc4636d421b72ec1aaad1411",
+        "pr": 193,
+        "branch": "main",
+        "test_paths": [],
+        "title": "perf(shader): add DXIL folds, pure LICM, local/LDS forwarding, and barrier dedup",
+        "url": "https://github.com/TaynanGT/Vice-Tay/pull/193",
+        "author": "Vladimir-Human",
+        "source_base": "e0cdb0910ac96e3e30ea826992718c8bc7d82687",
+        "updated_at": "2026-11-27T21:23:43Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "4f5de4ecdd613867bb8af4b548957174139b321f",
+        "head": "315c946d8d1b7c2b2fcc32b0a0d75444e41bcc4f",
+        "merge_base": "9d302e677ffa7fed8f00f7a1324ae7e6cab9acca",
+        "status": "clean",
+        "tree": "8339f6fe586f67c7726a28d2364ce45499469e79",
+        "first": 263,
+        "second": 290
+      },
+      {
+        "target": "315c946d8d1b7c2b2fcc32b0a0d75444e41bcc4f",
+        "head": "971deec05027bf51d13729866e4e8f28ffb77855",
+        "merge_base": "9d302e677ffa7fed8f00f7a1324ae7e6cab9acca",
+        "status": "clean",
+        "tree": "6ae232b442e99b27d5b6e3c315548b41483a2c6b",
+        "first": 290,
+        "second": 254
+      },
+      {
+        "target": "6d20a254f9a6a25ecc3f826ef8242eb7aa1952ee",
+        "head": "315c946d8d1b7c2b2fcc32b0a0d75444e41bcc4f",
+        "merge_base": "1d8308579faef9fa81c9754528925f96535b9712",
+        "status": "clean",
+        "tree": "4599c42054ea0a098489fc6b4f2adb98ce021efc",
+        "first": 357,
+        "second": 290
+      },
+      {
+        "target": "4f5de4ecdd613867bb8af4b548957174139b321f",
+        "head": "d7e5183b6b619d1976ef1b0dce798c7fd042fa82",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "aba6ae171bb7f2f5f83a52cd889645137ac28819",
+        "first": 263,
+        "second": 389
+      },
+      {
+        "target": "ea557975ff2e8bef5cd206e452de0420c1cfd650",
+        "head": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "ceae24fbb16edfb1bcbd89c14f51515d3ca13579",
+        "first": 382,
+        "second": 379
+      },
+      {
+        "target": "d7e5183b6b619d1976ef1b0dce798c7fd042fa82",
+        "head": "ecc003e18bc17f4635bc0ca1ad53dfe7fe03f520",
+        "merge_base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+        "status": "clean",
+        "tree": "af6cf0248cc0bfb3b1faf801f774ff05ed52f0f1",
+        "first": 389,
+        "second": 379
+      }
+    ],
+    "targets": {
+      "main": "fe7c6e52198f2070805ffafc4e55a7163291bad0"
+    }
+  },
+  {
+    "repo": "LooperSalty/AnyXboxX",
+    "singles": [
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "ebb6f09858f3bc96a1e7bc72e5030b71d0e500d4",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "99e22b56c29a400079a8d984b464bd34e1444c87",
+        "pr": 521,
+        "branch": "main",
+        "test_paths": [
+          "third_party/victory/crates/victory-gpu/src/descriptor/host/copied_tests.rs"
+        ],
+        "title": "perf: prepare copied indexed textures earlier (VICTORY_COPIED_AT_ONCE, VICTORY_TABLED_ORPHANS; off)",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/521",
+        "author": "LooperSalty",
+        "source_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "updated_at": "2026-11-28T00:11:14Z",
+        "draft": false
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "28814de19064a8ab9bb6b068acc057225907006e",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "0f53c9e276926d4bc0512677c75d5f9cdd5debe9",
+        "pr": 528,
+        "branch": "main",
+        "test_paths": [],
+        "title": "perf: reuse descriptor references, wait for slots without the submission lock (VICTORY_SLOT_WAIT, off)",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/528",
+        "author": "LooperSalty",
+        "source_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "updated_at": "2026-11-28T00:09:08Z",
+        "draft": false
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "47f2505aa23a2aaf8e47ac325d36e7238112b728",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "4a3d9efe8ca2dd13f407e008d265cadbb0ddcbaa",
+        "pr": 526,
+        "branch": "main",
+        "test_paths": [],
+        "title": "fix: clamp dynamic raw buffer views to the host buffer (VICTORY_RAW_VIEW_CLAMP, on)",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/526",
+        "author": "LooperSalty",
+        "source_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "updated_at": "2026-11-28T00:08:03Z",
+        "draft": false
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "33d3018ea4450201a05173873e2dc1da811b2636",
+        "merge_base": "4079f2b50b073935a8c64bf575b15f87ec91989b",
+        "status": "clean",
+        "tree": "8ad20b923dc66ad4da9afaed407c2e80d976d5cb",
+        "pr": 511,
+        "branch": "main",
+        "test_paths": [],
+        "title": "perf: share large pre-write refresh spans across wide workers (VICTORY_PAR_REFRESH, off)",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/511",
+        "author": "LooperSalty",
+        "source_base": "4079f2b50b073935a8c64bf575b15f87ec91989b",
+        "updated_at": "2026-11-28T00:02:38Z",
+        "draft": false
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "c129c8b7175f1cb9fe6a83bea9e11fdaa65f907e",
+        "merge_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/crates/victory-shader/src/emit/bitcode.rs",
+          "third_party/victory/crates/victory-shader/src/emit/mod.rs"
+        ],
+        "pr": 571,
+        "branch": "main",
+        "test_paths": [
+          "third_party/victory/crates/victory-shader/src/emit/movrel_tests.rs",
+          "third_party/victory/crates/victory-shader/src/emit/wave64_tests.rs"
+        ],
+        "title": "perf: M0-indexed register reads as a select tree on M0's bits (up to 7.6x on a 4060 Laptop)",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/571",
+        "author": "KainanP",
+        "source_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "updated_at": "2026-11-28T00:02:32Z",
+        "draft": false
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "6245785d1e807d051b69bbb16fc57a1a80e2a802",
+        "merge_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/crates/victory-shader/src/emit/bitcode.rs",
+          "third_party/victory/crates/victory-shader/src/emit/mod.rs"
+        ],
+        "pr": 570,
+        "branch": "main",
+        "test_paths": [
+          "third_party/victory/crates/victory-shader/src/emit/wave64_tests.rs"
+        ],
+        "title": "feat: shader census counts the translation's own costs per shader hash",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/570",
+        "author": "KainanP",
+        "source_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+        "updated_at": "2026-11-27T23:46:10Z",
+        "draft": false
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+        "merge_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/crates/victory-gpu/src/host.rs",
+          "third_party/victory/docs/README-fxceless.md"
+        ],
+        "pr": 568,
+        "branch": "main",
+        "test_paths": [],
+        "title": "fix: GPU_TIMING names and times commands under light or no DRED",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/568",
+        "author": "KainanP",
+        "source_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+        "updated_at": "2026-11-27T23:43:09Z",
+        "draft": false
+      },
+      {
+        "target": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "head": "9acac901053093014cbae7a508d51fe9b311cb39",
+        "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+        "status": "clean",
+        "tree": "a4612855f01894d4d8ad37d4c9e04b8628f72083",
+        "pr": 566,
+        "branch": "main",
+        "test_paths": [
+          "tests/test_rdna2_f16_transcendentals.py"
+        ],
+        "title": "fix: round v_sqrt_f16 exactly when the f32 sqrt misses by an ulp",
+        "url": "https://github.com/LooperSalty/AnyXboxX/pull/566",
+        "author": "Cai-piroska",
+        "source_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+        "updated_at": "2026-11-27T23:17:18Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "ebb6f09858f3bc96a1e7bc72e5030b71d0e500d4",
+        "head": "28814de19064a8ab9bb6b068acc057225907006e",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "0e59192c9a7ad9cbee0246649fb2c3bf92696558",
+        "first": 521,
+        "second": 528
+      },
+      {
+        "target": "28814de19064a8ab9bb6b068acc057225907006e",
+        "head": "47f2505aa23a2aaf8e47ac325d36e7238112b728",
+        "merge_base": "132da61504cc2c2d086796c468a8ace1759aba22",
+        "status": "clean",
+        "tree": "d0e4b83cac3d663575dcb75fc6325260982a13b9",
+        "first": 528,
+        "second": 526
+      },
+      {
+        "target": "33d3018ea4450201a05173873e2dc1da811b2636",
+        "head": "ebb6f09858f3bc96a1e7bc72e5030b71d0e500d4",
+        "merge_base": "4079f2b50b073935a8c64bf575b15f87ec91989b",
+        "status": "conflict",
+        "paths": [
+          "THIRD_PARTY.md"
+        ],
+        "first": 511,
+        "second": 521
+      },
+      {
+        "target": "6245785d1e807d051b69bbb16fc57a1a80e2a802",
+        "head": "c129c8b7175f1cb9fe6a83bea9e11fdaa65f907e",
+        "merge_base": "6245785d1e807d051b69bbb16fc57a1a80e2a802",
+        "status": "clean",
+        "tree": "c0eaa9d18acac49d917dd98f6cd11fb19e20a397",
+        "first": 570,
+        "second": 571
+      },
+      {
+        "target": "2e1939d5d020f7df83a522994744caa2d049fc2d",
+        "head": "bdfc8ce053d9b5e2c6524ca5bfedfc68dc64c076",
+        "merge_base": "4bfb5bd85fc091a41412684f45ef4c3e2b275c88",
+        "status": "conflict",
+        "paths": [
+          "third_party/victory/crates/victory-gpu/src/host.rs",
+          "third_party/victory/docs/README-fxceless.md"
+        ],
+        "first": 568,
+        "second": 519
+      },
+      {
+        "target": "9acac901053093014cbae7a508d51fe9b311cb39",
+        "head": "c129c8b7175f1cb9fe6a83bea9e11fdaa65f907e",
+        "merge_base": "bebcfb104aebbcb081a2b2f2233d5c3c009a4250",
+        "status": "clean",
+        "tree": "6079857c6b779bdf47d9c4102f310b555b4130c9",
+        "first": 566,
+        "second": 571
+      }
+    ],
+    "targets": {
+      "main": "132da61504cc2c2d086796c468a8ace1759aba22"
+    }
+  },
+  {
+    "repo": "ProjectLeonida/mandy",
+    "singles": [
+      {
+        "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "head": "f2b6d4a1dafcabd261af217a06b4040383184f5e",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "6c524fdd31ef534f099cab631f321f1ad7277ebf",
+        "pr": 2518,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/title_buffer_windows_reuse_test.cpp"
+        ],
+        "title": "d3d12: title windows reuse earlier blocks; destroyed blocks' reader slots are reused (RT-TITLE-BUFFER-WINDOWS-REUSE)",
+        "url": "https://github.com/ProjectLeonida/mandy/pull/2518",
+        "author": "Tyrannys",
+        "source_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "updated_at": "2026-11-28T00:12:04Z",
+        "draft": false
+      },
+      {
+        "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "head": "4a497c8f1bebda53091413442a76d31ff3411c97",
+        "merge_base": "34e33d3ddc4dd95ad14a074db886df3d25588201",
+        "status": "clean",
+        "tree": "cf895d514ddae8a41185429705204c301662a82b",
+        "pr": 2511,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/check_precompile_skip_list.cmake",
+          "runtime/test/pipeline_cache_journal_test.cpp",
+          "runtime/test/vulkan_device_config_test.cpp"
+        ],
+        "title": "d3d12: stamp compute journal files with the writing build and device-create config; precompile re-checks other writers' files (RT-PIPELINE-JOURNAL-BUILD-ID)",
+        "url": "https://github.com/ProjectLeonida/mandy/pull/2511",
+        "author": "Tyrannys",
+        "source_base": "34e33d3ddc4dd95ad14a074db886df3d25588201",
+        "updated_at": "2026-11-28T00:11:41Z",
+        "draft": false
+      },
+      {
+        "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "head": "b3db0f3659d2deb51b086fc93e767182b2ac0dad",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "1ee0c90eff71a1ae6f8739696f0c73a15f9fe7a9",
+        "pr": 2517,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/title_write_ranges_test.cpp"
+        ],
+        "title": "d3d12: title write-back ranges merge into disjoint ranges, none dropped (RT-TITLE-WRITE-NOTE-MERGE)",
+        "url": "https://github.com/ProjectLeonida/mandy/pull/2517",
+        "author": "Tyrannys",
+        "source_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "updated_at": "2026-11-28T00:10:07Z",
+        "draft": false
+      },
+      {
+        "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "head": "660f609d95f821b6698984f305bca0fe38b57653",
+        "merge_base": "39f52f39c435e04273bc822f258f2c4bb1b7fec0",
+        "status": "clean",
+        "tree": "91154a55e32bb028a170ece8a031cb2bbf69ccde",
+        "pr": 2501,
+        "branch": "main",
+        "test_paths": [
+          "tests/semantic/test_ballot_bit_loop.py",
+          "tests/test_lane_masks.py"
+        ],
+        "title": "Translator: gather a lane mask's bits where a merge takes it as data (SHADER-WAVE-LOOP-EXEC-VOTE)",
+        "url": "https://github.com/ProjectLeonida/mandy/pull/2501",
+        "author": "Tyrannys",
+        "source_base": "39f52f39c435e04273bc822f258f2c4bb1b7fec0",
+        "updated_at": "2026-11-28T00:09:59Z",
+        "draft": false
+      },
+      {
+        "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "head": "c05dc2ff523524183cb78df75055ddee7e4c186a",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "19020e0ca8d86d10b2e66a230ff76fff76b26873",
+        "pr": 2516,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/xs_proxy_mock_test.cpp"
+        ],
+        "title": "Size read-only console textures in the title's swizzle mode (RT-XS-CONSOLE-PLACEMENT-TITLE-LAYOUT)",
+        "url": "https://github.com/ProjectLeonida/mandy/pull/2516",
+        "author": "Tyrannys",
+        "source_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "updated_at": "2026-11-28T00:09:41Z",
+        "draft": false
+      },
+      {
+        "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "head": "c6f39028a6b293edb2c413b8229b6480fd0c5204",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "37faa4df01df4878ec69482991dbe62683b3e693",
+        "pr": 2513,
+        "branch": "main",
+        "test_paths": [
+          "tests/test_make_game_translator_flags.py"
+        ],
+        "title": "make_game: --mesh-serial-waves forwards the translator's switch (BUILD-MAKEGAME-MESH-SERIAL-WAVES)",
+        "url": "https://github.com/ProjectLeonida/mandy/pull/2513",
+        "author": "quartz-heron-58",
+        "source_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "updated_at": "2026-11-28T00:03:04Z",
+        "draft": false
+      },
+      {
+        "target": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "head": "6e5e82e4003ae9971afc36fa79d051d23d3255cd",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "bb9aa13f2718c110085e41ce1707c27b87a648be",
+        "pr": 2515,
+        "branch": "main",
+        "test_paths": [
+          "runtime/test/d3d12_existing_heap_test.cpp"
+        ],
+        "title": "test: use an invalid handle in the existing-heap check (TEST-D3D12-EXISTING-HEAP-INVALID-HANDLE)",
+        "url": "https://github.com/ProjectLeonida/mandy/pull/2515",
+        "author": "TheGeogeo",
+        "source_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "updated_at": "2026-11-27T23:59:17Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "f2b6d4a1dafcabd261af217a06b4040383184f5e",
+        "head": "b3db0f3659d2deb51b086fc93e767182b2ac0dad",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "8040dcd20dceafa9864da00e2f6e0df34d0c8f34",
+        "first": 2518,
+        "second": 2517
+      },
+      {
+        "target": "f2b6d4a1dafcabd261af217a06b4040383184f5e",
+        "head": "c05dc2ff523524183cb78df75055ddee7e4c186a",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "d1c44942ea4d97437cb0083cb94a9e794ef6d1a7",
+        "first": 2518,
+        "second": 2516
+      },
+      {
+        "target": "4a497c8f1bebda53091413442a76d31ff3411c97",
+        "head": "b3db0f3659d2deb51b086fc93e767182b2ac0dad",
+        "merge_base": "34e33d3ddc4dd95ad14a074db886df3d25588201",
+        "status": "clean",
+        "tree": "e6f9f91fb119f40d1142f3eccd6ad389432c402d",
+        "first": 2511,
+        "second": 2517
+      },
+      {
+        "target": "660f609d95f821b6698984f305bca0fe38b57653",
+        "head": "c6f39028a6b293edb2c413b8229b6480fd0c5204",
+        "merge_base": "39f52f39c435e04273bc822f258f2c4bb1b7fec0",
+        "status": "clean",
+        "tree": "e159a47e8262d5fc0ce6feda713ec08a52b364e9",
+        "first": 2501,
+        "second": 2513
+      },
+      {
+        "target": "c05dc2ff523524183cb78df75055ddee7e4c186a",
+        "head": "b3db0f3659d2deb51b086fc93e767182b2ac0dad",
+        "merge_base": "d44285197237cfe331684aa150fb9dec4b1d08b5",
+        "status": "clean",
+        "tree": "a59e5bb66d5a4b18992a0f9c20b3808789c9d124",
+        "first": 2516,
+        "second": 2517
+      }
+    ],
+    "targets": {
+      "main": "d44285197237cfe331684aa150fb9dec4b1d08b5"
+    }
+  },
+  {
+    "repo": "Marvisak/VIctory",
+    "singles": [
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "7dfc01a60a93ee7a084f027d261a70f9ddb38e1d",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "531666542faa43d21dc8dde29c68df3d897674aa",
+        "pr": 3630,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-shader/src/emit/valu_tests.rs"
+        ],
+        "title": "Shaders: shorten long relative VGPR source selections",
+        "url": "https://github.com/Marvisak/VIctory/pull/3630",
+        "author": "andrewpozdnakov7-jpg",
+        "source_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "updated_at": "2026-11-27T23:58:17Z",
+        "draft": false
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "d06df15fe1c618a775490070ec24bf791941e60a",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "ed432c15ceb4599a52ff508a0558724db9e34153",
+        "pr": 3608,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-shader/src/emit/semantics_tests.rs"
+        ],
+        "title": "Shaders: lower v_med3_f32 through ordered integer keys",
+        "url": "https://github.com/Marvisak/VIctory/pull/3608",
+        "author": "Ingenioeren",
+        "source_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "updated_at": "2026-11-27T23:48:53Z",
+        "draft": false
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "aa6305357c3b90c6d64309c6c94bab3895df0547",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "1a4c6826038f8b7412d09e15c814cf03d9bf1db2",
+        "pr": 3612,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-shader/src/emit/valu_tests.rs"
+        ],
+        "title": "Shaders: invalid f32 sqrt, rsq and log inputs return negative quiet NaN",
+        "url": "https://github.com/Marvisak/VIctory/pull/3612",
+        "author": "Moon0755",
+        "source_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "updated_at": "2026-11-27T23:48:52Z",
+        "draft": false
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "d54570166a81247966e596487b050b93bc548415",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "7d151cd8c51dc94f271cb4ac3c2ad2d1f8e015f8",
+        "pr": 3609,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-shader/src/emit/valu_tests.rs"
+        ],
+        "title": "Shaders: round v_exp_f16 once at its double-rounding midpoint",
+        "url": "https://github.com/Marvisak/VIctory/pull/3609",
+        "author": "Moon0755",
+        "source_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "updated_at": "2026-11-27T23:48:51Z",
+        "draft": false
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "8f5927edcbc97261c3bb491da687bd4efc299857",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "ff63aadcb5e7dd14cf6e2a5eba2008b7034943af",
+        "pr": 3623,
+        "branch": "main",
+        "test_paths": [],
+        "title": "GPU timing: reuse the timestamp readback for slow-list reports",
+        "url": "https://github.com/Marvisak/VIctory/pull/3623",
+        "author": "andrewpozdnakov7-jpg",
+        "source_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "updated_at": "2026-11-27T23:42:10Z",
+        "draft": false
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "c2e4507ce40ccdf1056ccf9c40e39f27bb8721ef",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "6414fa9dff5e2138802481d7640ac05bdb123289",
+        "pr": 3246,
+        "branch": "main",
+        "test_paths": [],
+        "title": "GPU: a marked page's copy-back reads the title's page into one buffer per thread",
+        "url": "https://github.com/Marvisak/VIctory/pull/3246",
+        "author": "lhnizdo",
+        "source_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "updated_at": "2026-11-27T23:33:41Z",
+        "draft": false
+      },
+      {
+        "target": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "head": "1960fa53e7759e8cfae8e254b66826af668e7d38",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "f1f20c78d17faa7bb8addf7cd3fdcc0ab0e63f4b",
+        "pr": 3586,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-gpu/src/pipeline/placed_uav_tests.rs"
+        ],
+        "title": "GPU: deserialize console pipeline states",
+        "url": "https://github.com/Marvisak/VIctory/pull/3586",
+        "author": "kotekompotek",
+        "source_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "updated_at": "2026-11-27T23:33:28Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "7dfc01a60a93ee7a084f027d261a70f9ddb38e1d",
+        "head": "d06df15fe1c618a775490070ec24bf791941e60a",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "d4fb03f6222e67ac76e28ad5d0d087e8d3e73559",
+        "first": 3630,
+        "second": 3608
+      },
+      {
+        "target": "7dfc01a60a93ee7a084f027d261a70f9ddb38e1d",
+        "head": "aa6305357c3b90c6d64309c6c94bab3895df0547",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "194045edcad40411584d53e4375460fdd20799d9",
+        "first": 3630,
+        "second": 3612
+      },
+      {
+        "target": "d06df15fe1c618a775490070ec24bf791941e60a",
+        "head": "d54570166a81247966e596487b050b93bc548415",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "0428d03d9985075be7fe31b95c0ffa8b2683c374",
+        "first": 3608,
+        "second": 3609
+      },
+      {
+        "target": "8f5927edcbc97261c3bb491da687bd4efc299857",
+        "head": "c2e4507ce40ccdf1056ccf9c40e39f27bb8721ef",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "79fb85b40f276942df20fe40b44f22abd0c1895b",
+        "first": 3623,
+        "second": 3246
+      },
+      {
+        "target": "1960fa53e7759e8cfae8e254b66826af668e7d38",
+        "head": "8f5927edcbc97261c3bb491da687bd4efc299857",
+        "merge_base": "63bcca43c6a00a758510398fa43096ce7e4f7df0",
+        "status": "clean",
+        "tree": "5669212673c994d1b00b37cc69491c031a96a238",
+        "first": 3586,
+        "second": 3623
+      }
+    ],
+    "targets": {
+      "main": "63bcca43c6a00a758510398fa43096ce7e4f7df0"
+    }
+  },
+  {
+    "repo": "xcl-dev/xcl",
+    "singles": [
+      {
+        "target": "2c717a043c8488938179fca81da4bb9e7913a358",
+        "head": "1f106b3f93ffeb19b7fa999fe695f9abb1f18f88",
+        "merge_base": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7",
+        "status": "conflict",
+        "paths": [
+          "crates/xcl/src/shaders.rs"
+        ],
+        "pr": 2793,
+        "branch": "main",
+        "test_paths": [
+          "crates/xcl/src/gpu/dxil/compact_tests.rs",
+          "crates/xcl/src/gpu/recomp/tests.rs"
+        ],
+        "title": "Recompiler: each loop region of a program gets its own iteration budget",
+        "url": "https://github.com/xcl-dev/xcl/pull/2793",
+        "author": "jessenic",
+        "source_base": "b49be1836844fe0b0cdb3211dce3cb7fb4e21ac7",
+        "updated_at": "2026-11-28T00:14:17Z",
+        "draft": false
+      },
+      {
+        "target": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "head": "96dfa767b927190f0d57eba22f9dba56c995deaf",
+        "merge_base": "eae015021c639866ab061cdff2e9daf8ba9daac5",
+        "status": "clean",
+        "tree": "f715793325766eee8dfa54ee3fef52e3dc5d2612",
+        "pr": 2902,
+        "branch": "nvidia-dev",
+        "test_paths": [
+          "crates/xcl/src/gpu/recomp/tests.rs"
+        ],
+        "title": "D3D12.X: slice direct mesh draws within the record cap",
+        "url": "https://github.com/xcl-dev/xcl/pull/2902",
+        "author": "coolpersonnn",
+        "source_base": "eff3bcabf1b6f99223796ece166948003a53e0bc",
+        "updated_at": "2026-11-28T00:11:31Z",
+        "draft": false
+      },
+      {
+        "target": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "head": "4e52050cea54dec0493482f429f246c1ea1e9362",
+        "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+        "status": "clean",
+        "tree": "9b159252626d9ae85be1e1911776f9495d628768",
+        "pr": 2975,
+        "branch": "nvidia-dev",
+        "test_paths": [],
+        "title": "D3D12.X: empty shader slots keep a two-pass mesh pipeline's cache key",
+        "url": "https://github.com/xcl-dev/xcl/pull/2975",
+        "author": "treybertram06",
+        "source_base": "e0821b121ad2d66aad205b73fe78aad4248a8a8e",
+        "updated_at": "2026-11-28T00:06:25Z",
+        "draft": false
+      },
+      {
+        "target": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "head": "24fdb7b9297e47af1433a7c1069436becfe7a724",
+        "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+        "status": "clean",
+        "tree": "168a7d7fa8a1eaf47682733b59bd27f986bee260",
+        "pr": 3008,
+        "branch": "nvidia-dev",
+        "test_paths": [],
+        "title": "D3D12.X: XCL_SMALL_TEXTURES=1 puts small sampled textures on 4 KiB placements",
+        "url": "https://github.com/xcl-dev/xcl/pull/3008",
+        "author": "Kalmarv",
+        "source_base": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "updated_at": "2026-11-28T00:06:21Z",
+        "draft": false
+      },
+      {
+        "target": "7c795f5eefa0661eaf3f9f696d0cba3a75ce9628",
+        "head": "f64494d167f527a48a008fe3fbd7287b497398b0",
+        "merge_base": "7c795f5eefa0661eaf3f9f696d0cba3a75ce9628",
+        "status": "clean",
+        "tree": "0859cfab9c3f0accae81ec7e2f923c53263e9d4b",
+        "pr": 3079,
+        "branch": "amd-dev",
+        "test_paths": [],
+        "title": "D3D12.X: copy out-of-window two-pass indirect arguments into the window",
+        "url": "https://github.com/xcl-dev/xcl/pull/3079",
+        "author": "RodrigoTorreao",
+        "source_base": "7c795f5eefa0661eaf3f9f696d0cba3a75ce9628",
+        "updated_at": "2026-11-28T00:06:19Z",
+        "draft": false
+      },
+      {
+        "target": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "head": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+        "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+        "status": "clean",
+        "tree": "810b5c6cc7d133c4acd52a60af90e7abbe05b237",
+        "pr": 3036,
+        "branch": "nvidia-dev",
+        "test_paths": [],
+        "title": "D3D12.X: stencil, topology and scissor sets go into deferred two-pass runs",
+        "url": "https://github.com/xcl-dev/xcl/pull/3036",
+        "author": "Kalmarv",
+        "source_base": "d1be8103644791b7a65f068954324e93d4b1b565",
+        "updated_at": "2026-11-28T00:06:18Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+        "head": "96dfa767b927190f0d57eba22f9dba56c995deaf",
+        "merge_base": "eae015021c639866ab061cdff2e9daf8ba9daac5",
+        "status": "clean",
+        "tree": "557c19ab64a9f24d64e4cb97308aa296497eb50d",
+        "first": 3036,
+        "second": 2902
+      },
+      {
+        "target": "6f3ad70ccc22acb777205cdea1d512bf24421299",
+        "head": "4e52050cea54dec0493482f429f246c1ea1e9362",
+        "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+        "status": "clean",
+        "tree": "16b657502e6b37d3f3f356c42d62c6e2dbcdeb9f",
+        "first": 3036,
+        "second": 2975
+      },
+      {
+        "target": "24fdb7b9297e47af1433a7c1069436becfe7a724",
+        "head": "f8e75bca1ea903b1cf0e9d4f9387b73f359e5051",
+        "merge_base": "a5e2d851a503fc0e04609f773ea53f2d2c4e3269",
+        "status": "clean",
+        "tree": "6e2064fc7dfa388631bb68b2d484a23a667769b2",
+        "first": 3008,
+        "second": 2987
+      },
+      {
+        "target": "4e52050cea54dec0493482f429f246c1ea1e9362",
+        "head": "96dfa767b927190f0d57eba22f9dba56c995deaf",
+        "merge_base": "eae015021c639866ab061cdff2e9daf8ba9daac5",
+        "status": "clean",
+        "tree": "9ea25283d97e3264cf9c13b38c3be5c0a8087ed0",
+        "first": 2975,
+        "second": 2902
+      }
+    ],
+    "targets": {
+      "amd-dev": "7c795f5eefa0661eaf3f9f696d0cba3a75ce9628",
+      "main": "2c717a043c8488938179fca81da4bb9e7913a358",
+      "nvidia-dev": "d1be8103644791b7a65f068954324e93d4b1b565"
+    }
+  },
+  {
+    "repo": "fxceless/victory-fork",
+    "singles": [
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "f31ad9480618ea49b72c7ab55c0331627ab7ae39",
+        "merge_base": "4e17478b9c27bb530643e5b0e16a767cf4419e08",
+        "status": "conflict",
+        "paths": [
+          "crates/victory-formats/src/texture.rs",
+          "crates/victory-gpu/src/texture.rs"
+        ],
+        "pr": 92,
+        "branch": "main",
+        "test_paths": [],
+        "title": "Textures: detile big subresources in bands on several threads",
+        "url": "https://github.com/fxceless/victory-fork/pull/92",
+        "author": "marquezinii",
+        "source_base": "4e17478b9c27bb530643e5b0e16a767cf4419e08",
+        "updated_at": "2026-11-27T23:48:25Z",
+        "draft": false
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "f2d68c9ddb2bbea7533033f92e806d719b64efc8",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "7d1ced2321c5a6fd2b2326c1c72b78fac3462973",
+        "pr": 1140,
+        "branch": "main",
+        "test_paths": [
+          "crates/victory-shader/src/emit/wave64_tests.rs"
+        ],
+        "title": "shader: static Wave32 LDS alias & lane-private analysis for native Wave32 compute",
+        "url": "https://github.com/fxceless/victory-fork/pull/1140",
+        "author": "Vladimir-Human",
+        "source_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "updated_at": "2026-11-27T22:10:52Z",
+        "draft": false
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "4351fb43edd626bd8fd450853a17f02ca0c1b6f7",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "2ee3329ae07f5e522af207b76e29d1b311406c3d",
+        "pr": 1500,
+        "branch": "main",
+        "test_paths": [
+          "TESTING_REQUEST.md",
+          "tests/launcher-probe.ps1",
+          "tests/low-memory-launcher.ps1",
+          "tests/performance-tools.ps1"
+        ],
+        "title": "Add memory-pressure safeguards, timing safety and frame-time testing",
+        "url": "https://github.com/fxceless/victory-fork/pull/1500",
+        "author": "cebondlovu",
+        "source_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "updated_at": "2026-11-27T22:07:27Z",
+        "draft": true
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "97d270bfc31619fca9b02f3b13f2fea2c8f9526f",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "fada0008fd3c681e83056874235b3a80067665d3",
+        "pr": 1280,
+        "branch": "main",
+        "test_paths": [],
+        "title": "victory-gpu: size-tiered card-buffer headroom and fence-safe LRU demotion (#1163)",
+        "url": "https://github.com/fxceless/victory-fork/pull/1280",
+        "author": "Vladimir-Human",
+        "source_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "updated_at": "2026-11-27T21:51:46Z",
+        "draft": false
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "3f3ec37d16bc2f22f4249b435d70e142caf349a0",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "79337324c80a9e1594509daadb89106a94e866d4",
+        "pr": 1286,
+        "branch": "main",
+        "test_paths": [],
+        "title": "perf(victory-gpu): reduce host System RAM footprint via VM decommit and cold pool/DXIL trimming",
+        "url": "https://github.com/fxceless/victory-fork/pull/1286",
+        "author": "Vladimir-Human",
+        "source_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "updated_at": "2026-11-27T21:43:07Z",
+        "draft": false
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "335c089b244627842693e91ed4f9a6a59b33d1f9",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "5571b44d7dc85abd42c0e195ca94030e5bc1f314",
+        "pr": 1126,
+        "branch": "main",
+        "test_paths": [],
+        "title": "perf(shader): add DXIL pure LICM, canonical ptr-path LDS forwarding, and barrier dedup",
+        "url": "https://github.com/fxceless/victory-fork/pull/1126",
+        "author": "Vladimir-Human",
+        "source_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "updated_at": "2026-11-27T21:35:59Z",
+        "draft": false
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "f219179417ecf0d4d9c8585bcccefe91a19d3856",
+        "merge_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "status": "clean",
+        "tree": "4edd3f3b52728aa2f3630544a9a3b400f0961e98",
+        "pr": 885,
+        "branch": "main",
+        "test_paths": [],
+        "title": "GPU: pass null for empty D3D12 pipeline libraries on Proton",
+        "url": "https://github.com/fxceless/victory-fork/pull/885",
+        "author": "Filip722",
+        "source_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "updated_at": "2026-11-27T21:27:12Z",
+        "draft": false
+      },
+      {
+        "target": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "head": "b344f5b74c974b602914c8b0a498b000158897ea",
+        "merge_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "status": "clean",
+        "tree": "7714baaf804470f64662895825567124b02f93cf",
+        "pr": 1489,
+        "branch": "main",
+        "test_paths": [],
+        "title": "GPU: restore indirect and card-copy shaders under Proton",
+        "url": "https://github.com/fxceless/victory-fork/pull/1489",
+        "author": "Filip722",
+        "source_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "updated_at": "2026-11-27T21:17:19Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "97d270bfc31619fca9b02f3b13f2fea2c8f9526f",
+        "head": "3f3ec37d16bc2f22f4249b435d70e142caf349a0",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "conflict",
+        "paths": [
+          "crates/victory-gpu/src/host.rs",
+          "crates/victory-gpu/src/shadow.rs"
+        ],
+        "first": 1280,
+        "second": 1286
+      },
+      {
+        "target": "97d270bfc31619fca9b02f3b13f2fea2c8f9526f",
+        "head": "4351fb43edd626bd8fd450853a17f02ca0c1b6f7",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "034c338570d6edc4a23b4f888d0292df97ff4a6b",
+        "first": 1280,
+        "second": 1500
+      },
+      {
+        "target": "3f3ec37d16bc2f22f4249b435d70e142caf349a0",
+        "head": "4351fb43edd626bd8fd450853a17f02ca0c1b6f7",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "conflict",
+        "paths": [
+          "crates/victory-gpu/src/shadow.rs"
+        ],
+        "first": 1286,
+        "second": 1500
+      },
+      {
+        "target": "335c089b244627842693e91ed4f9a6a59b33d1f9",
+        "head": "f2d68c9ddb2bbea7533033f92e806d719b64efc8",
+        "merge_base": "2eade68cade9b2f8cd2511cc97328e83f58508c3",
+        "status": "clean",
+        "tree": "191f78237c53f05072cae53d8ef2a7559ae6ebc4",
+        "first": 1126,
+        "second": 1140
+      },
+      {
+        "target": "f219179417ecf0d4d9c8585bcccefe91a19d3856",
+        "head": "b344f5b74c974b602914c8b0a498b000158897ea",
+        "merge_base": "3e573d2556adc5a5b22ccd2d6d92231a72ee55bb",
+        "status": "clean",
+        "tree": "3770e9d4d74e97f4b02abc79121af0e94e2c9ef2",
+        "first": 885,
+        "second": 1489
+      }
+    ],
+    "targets": {
+      "main": "2eade68cade9b2f8cd2511cc97328e83f58508c3"
+    }
+  },
+  {
+    "repo": "KytyPS5/KytyPS5",
+    "singles": [
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "81d29d43cb151883949d5f0cfd3c1d1a3bf80e13",
+        "merge_base": "83df9c252ce13173b176e926abe2ab39e83295be",
+        "status": "clean",
+        "tree": "4a475345544627897c49dbbacd0b88f7e7baa3fd",
+        "pr": 2172,
+        "branch": "main",
+        "test_paths": [
+          "tests/ShaderRecompilerComputeTests.cpp"
+        ],
+        "title": "graphics: keep views past MAX_MIP in the declared chain when its layout holds them (ASTRO BOT)",
+        "url": "https://github.com/KytyPS5/KytyPS5/pull/2172",
+        "author": "Nawid3333",
+        "source_base": "832d6dac19567518e0f60047d01d27cd068adf76",
+        "updated_at": "2026-11-27T19:25:52Z",
+        "draft": false
+      },
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "09fcbe2b2692417f3dc4fd799338542f54425070",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "2a29938f8d7807560b351ece50eda9218faa4f91",
+        "pr": 2278,
+        "branch": "main",
+        "test_paths": [
+          "tests/ResourceTrackingTests.cpp",
+          "tests/ShaderRecompilerComputeTests.cpp",
+          "tests/shaderCfgTests.cpp"
+        ],
+        "title": "shader: bound waterfall image keys by their clamp on the selected lanes",
+        "url": "https://github.com/KytyPS5/KytyPS5/pull/2278",
+        "author": "Nawid3333",
+        "source_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "updated_at": "2026-11-27T16:27:10Z",
+        "draft": false
+      },
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "e77d078ef15e6da3629ed34a0931047f9f9c1072",
+        "pr": 2591,
+        "branch": "main",
+        "test_paths": [
+          "tests/ShaderRecompilerComputeTests.cpp"
+        ],
+        "title": "graphics: reuse compressed images for overlong raw mip views",
+        "url": "https://github.com/KytyPS5/KytyPS5/pull/2591",
+        "author": "gmankab",
+        "source_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "updated_at": "2026-11-27T14:59:31Z",
+        "draft": false
+      },
+      {
+        "target": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "head": "d1f980006cc1d92201b6d05d4c4b873310e9d553",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "2eb0671f875d5293b9097c3d927fae2f3b2d0e09",
+        "pr": 2357,
+        "branch": "main",
+        "test_paths": [
+          "tests/shaderCfgTests.cpp"
+        ],
+        "title": "graphics: fall back to the stored chain for mip views past MAX_MIP",
+        "url": "https://github.com/KytyPS5/KytyPS5/pull/2357",
+        "author": "wuboo",
+        "source_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "updated_at": "2026-11-27T10:19:42Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "81d29d43cb151883949d5f0cfd3c1d1a3bf80e13",
+        "head": "d1f980006cc1d92201b6d05d4c4b873310e9d553",
+        "merge_base": "83df9c252ce13173b176e926abe2ab39e83295be",
+        "status": "conflict",
+        "paths": [
+          "src/graphics/host_gpu/renderer/pipeline/descriptors.cpp"
+        ],
+        "first": 2172,
+        "second": 2357
+      },
+      {
+        "target": "81d29d43cb151883949d5f0cfd3c1d1a3bf80e13",
+        "head": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+        "merge_base": "83df9c252ce13173b176e926abe2ab39e83295be",
+        "status": "clean",
+        "tree": "723adccbd223efd0cdff2f7dacaaf02faff566c7",
+        "first": 2172,
+        "second": 2591
+      },
+      {
+        "target": "d1f980006cc1d92201b6d05d4c4b873310e9d553",
+        "head": "74d2fc98caf61be3708b6d860a524b86bb34c41e",
+        "merge_base": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e",
+        "status": "clean",
+        "tree": "8305f4f2a13db2eb43713f1821b360e85c6ee28d",
+        "first": 2357,
+        "second": 2591
+      }
+    ],
+    "targets": {
+      "main": "61db2f8874d4a94fd2908a87cefa973ddc48ef6e"
+    }
+  },
+  {
+    "repo": "boykopovar/AnyPS5",
+    "singles": [
+      {
+        "target": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "head": "a00c6029c6648136af721703098e358e69525945",
+        "merge_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "status": "clean",
+        "tree": "d87476273a4f359e44193f8833beb872b9d11da8",
+        "pr": 26100,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/ShaderModeRegisters.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/cmake/agc_driver_f32_directed_rounding_tests.cmake",
+          "core/libs/prx/libSceAgcDriver/tests/execution/F32DenormalFlush.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/execution/F32DirectedRounding.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/execution/LegacyDirectedRounding.cpp",
+          "core/libs/tests/VectorConstantFactorTininess.cpp"
+        ],
+        "title": "fix(shader): round v_mad_legacy_f32 and v_mac_legacy_f32 in the directed FLOAT_MODE rounding modes",
+        "url": "https://github.com/boykopovar/AnyPS5/pull/26100",
+        "author": "DannyOppenheimer",
+        "source_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "updated_at": "2026-11-28T00:14:28Z",
+        "draft": false
+      },
+      {
+        "target": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "head": "a4cbdb998fa08040a2c7676fa84bb5c184fbfed0",
+        "merge_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "status": "clean",
+        "tree": "0b2229ed719cd5fb69da24fd63e772f59c142aa6",
+        "pr": 26101,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/ShaderModeRegisters.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/execution/DivFmasF64DirectedRounding.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/execution/F64AddMulDirectedRounding.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/execution/F64FmaDirectedRounding.cpp"
+        ],
+        "title": "fix(shader): round v_div_fmas_f64 in the directed FLOAT_MODE rounding modes",
+        "url": "https://github.com/boykopovar/AnyPS5/pull/26101",
+        "author": "DannyOppenheimer",
+        "source_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "updated_at": "2026-11-28T00:14:40Z",
+        "draft": false
+      },
+      {
+        "target": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "head": "ab2742cac58552db32188432f34ce89d00cab96f",
+        "merge_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "status": "clean",
+        "tree": "cba2fa8aeaa707173c71f61b844995de88209f3b",
+        "pr": 26047,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/execution/FractDirectedRounding.cpp"
+        ],
+        "title": "fix(shader): round v_fract_f32, v_fract_f16 and v_fract_f64 in directed FLOAT_MODE rounding modes",
+        "url": "https://github.com/boykopovar/AnyPS5/pull/26047",
+        "author": "DannyOppenheimer",
+        "source_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "updated_at": "2026-11-28T00:14:23Z",
+        "draft": false
+      },
+      {
+        "target": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "head": "c22ff588ce9be63992322135ef02c6583029e1df",
+        "merge_base": "7e3053f5223f64307e3a6d6c6580f53b0579461a",
+        "status": "clean",
+        "tree": "e3b73db78fc9600e6adb888e6a3ee6d9d56cb882",
+        "pr": 27979,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/CommandStateLog.hpp",
+          "core/libs/prx/libSceAgcDriver/tests/Recorder.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/RecordingPoolAllocation.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/cmake/agc_driver_depth_plane_sampling_tests.cmake",
+          "core/libs/prx/libSceAgcDriver/tests/cmake/agc_driver_pixel_lds_limit_tests.cmake",
+          "core/libs/prx/libSceAgcDriver/tests/cmake/agc_driver_stencil_replay_tests.cmake"
+        ],
+        "title": "fix(agc): make pooled depth-only recording safe to execute, retain and fail",
+        "url": "https://github.com/boykopovar/AnyPS5/pull/27979",
+        "author": "chitters2004",
+        "source_base": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "updated_at": "2026-11-28T00:14:48Z",
+        "draft": false
+      },
+      {
+        "target": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "head": "8eb74c2335767efa875a3b88a312d885d5d45f97",
+        "merge_base": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "status": "clean",
+        "tree": "c3178cb018fd3dbe1f3f54fe537854c2597650a4",
+        "pr": 25279,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/execution/ComputePrebuildShare.cpp"
+        ],
+        "title": "fix(agc): wait for a compute dispatch instead of dropping it",
+        "url": "https://github.com/boykopovar/AnyPS5/pull/25279",
+        "author": "relativespace2K",
+        "source_base": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "updated_at": "2026-11-28T00:13:02Z",
+        "draft": false
+      },
+      {
+        "target": "750a5234ed1fd5f2eb2cca65ca004476c188a571",
+        "head": "e2e97886eee135e83ea9a55e8cdb769768eba6ff",
+        "merge_base": "073e0313f365dafa955454b428541b9280b60fcc",
+        "status": "clean",
+        "tree": "4ce1ad08547060a1d11e857ca5bd728eb4abeb80",
+        "pr": 27966,
+        "branch": "main",
+        "test_paths": [
+          "core/libs/prx/libSceAgcDriver/tests/Graphics.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/execution/PackedUnorm4444ColorTarget.cpp",
+          "core/libs/prx/libSceAgcDriver/tests/execution/PackedUnorm4444PartialWrite.cpp"
+        ],
+        "title": "fix(agc): support 4_4_4_4 component orders during PPSA38500 loading",
+        "url": "https://github.com/boykopovar/AnyPS5/pull/27966",
+        "author": "lgqdaxia",
+        "source_base": "073e0313f365dafa955454b428541b9280b60fcc",
+        "updated_at": "2026-11-28T00:13:25Z",
+        "draft": false
+      }
+    ],
+    "pairs": [
+      {
+        "target": "a00c6029c6648136af721703098e358e69525945",
+        "head": "a4cbdb998fa08040a2c7676fa84bb5c184fbfed0",
+        "merge_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "status": "conflict",
+        "paths": [
+          "core/libs/prx/libSceAgcDriver/tests/ShaderModeRegisters.cpp"
+        ],
+        "first": 26100,
+        "second": 26101
+      },
+      {
+        "target": "a00c6029c6648136af721703098e358e69525945",
+        "head": "ab2742cac58552db32188432f34ce89d00cab96f",
+        "merge_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "status": "conflict",
+        "paths": [
+          "core/shader/recompiler/Translation/src/RoundingMode.cpp"
+        ],
+        "first": 26100,
+        "second": 26047
+      },
+      {
+        "target": "a4cbdb998fa08040a2c7676fa84bb5c184fbfed0",
+        "head": "ab2742cac58552db32188432f34ce89d00cab96f",
+        "merge_base": "a2d8d409dba36d4cc0d531d49b828f808bc93a16",
+        "status": "conflict",
+        "paths": [
+          "core/shader/recompiler/Translation/src/RoundingMode.cpp"
+        ],
+        "first": 26101,
+        "second": 26047
+      },
+      {
+        "target": "c22ff588ce9be63992322135ef02c6583029e1df",
+        "head": "8eb74c2335767efa875a3b88a312d885d5d45f97",
+        "merge_base": "7e3053f5223f64307e3a6d6c6580f53b0579461a",
+        "status": "clean",
+        "tree": "859c474e22415c7e21b57b0eb6843b2ac88933b6",
+        "first": 27979,
+        "second": 25279
+      }
+    ],
+    "targets": {
+      "main": "750a5234ed1fd5f2eb2cca65ca004476c188a571"
+    }
+  }
+]
