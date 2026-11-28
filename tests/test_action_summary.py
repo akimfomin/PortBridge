@@ -93,6 +93,31 @@ class ActionSummaryTests(TestCase):
         self.assertIn("No related work was found", markdown)
         self.assertNotIn("Investigate the result", markdown)
 
+    def test_reviewed_handoff_result_remains_visible_without_search_hits(self):
+        revision = "9" * 40
+        proof = "https://github.com/example/port/pull/42#issuecomment-123"
+        response = {"problems": [], "matches": [], "radar_findings": [{
+            "status": "reviewed", "contested": True, "title": "Wait check",
+            "source_url": proof, "revisions": [revision], "outcome": "FAIL",
+            "observed": "Ordering mismatch on a physical adapter", "limitations": "Only tested on Windows",
+        }]}
+        markdown = action_summary.render_report(response)
+        self.assertIn("Reviewed test results", markdown)
+        self.assertIn(proof, markdown)
+        self.assertIn(f"`{revision}`", markdown)
+        self.assertIn("contested · FAIL", markdown)
+        self.assertIn("Only tested on Windows", markdown)
+        self.assertNotIn("No related work", markdown)
+
+    def test_shard_limit_and_observed_candidate_revision_are_shown(self):
+        revision = "8" * 40
+        response = {"problems": [], "catalog_index": {"partial": True}, "matches": [{
+            "right": {"title": "Candidate", "url": self.source, "revision": revision}
+        }]}
+        rendered = action_summary.render_report(response)
+        self.assertIn("snapshot page limit", rendered)
+        self.assertIn(f"observed revision `{revision}`", rendered)
+
     def test_unavailable_catalog_is_advisory(self):
         with mock.patch.object(action_summary, "public_preflight", side_effect=URLError("private error")):
             self.assertEqual(action_summary.main(self.env), 0)

@@ -104,8 +104,10 @@ def attach_code(result, loader, *, limit):
     except (OSError, ValueError, TypeError):
         result["source_code"] = {"status": "unavailable", "matches": []}
         return result
-    if isinstance(index, dict) and isinstance(index.get("files"), list):
-        result["source_code"] = code_search.report(index, query, origin_url=result.get("origin_url") or "", limit=limit)
+    if not isinstance(index, dict) or not isinstance(index.get("files"), list):
+        result["source_code"] = {"status": "unavailable", "matches": []}
+        return result
+    result["source_code"] = code_search.report(index, query, origin_url=result.get("origin_url") or "", limit=limit)
     return result
 
 
@@ -127,7 +129,7 @@ def public_preflight(*, q="", url="", limit=5, base_url=PUBLIC_BASE, expand_glob
     q, url = query_options(q, url, limit)
     try:
         site = snapshot("site", base_url=base_url)
-    except OSError:
+    except (OSError, json.JSONDecodeError):
         result = {"query": q, "origin_url": url, "catalog_status": "unavailable",
                   "problems": [], "matches": [], "observations": [], "first_check": None,
                   "next_step": "Public catalog unavailable. Discovery uses the bundled reviewed sources."}
@@ -164,7 +166,7 @@ def public_preflight(*, q="", url="", limit=5, base_url=PUBLIC_BASE, expand_glob
                 except (OSError, ValueError):
                     discovery = {}
             if "search_index" not in site:
-                records = snapshot("observations", base_url=base_url)["observations"]
+                records = snapshot("observations", base_url=base_url, site=site, revalidate=retry)["observations"]
                 result = assess(problems["problems"], projects["projects"], records, health, q=q, url=url,
                                 limit=limit, with_code=True)
                 if findings:

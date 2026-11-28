@@ -1,10 +1,12 @@
 """Focused checks for sources, revisions, and coverage in the research queue."""
 
 from datetime import datetime, timedelta, timezone
+from unittest.mock import patch
 
 from portbridge.activity import build_activity
 from portbridge.lab import build_lab
 from portbridge.radar import build_radar
+from portbridge.radar_patches import sample
 
 from test_portbridge import CatalogFixture
 
@@ -14,6 +16,21 @@ FRESH = (NOW - timedelta(minutes=5)).isoformat()
 
 
 class RadarTest(CatalogFixture):
+    def test_patch_probe_uses_current_repo_for_stored_legacy_source(self):
+        from portbridge.matching import canonical_url
+        from portbridge.radar_store import SCHEMA
+
+        with self.catalog.connect() as db:
+            db.executescript(SCHEMA)
+        old = "https://github.com/ivall/xcl/pull/1144"
+        origin = self.row("victory", 100, reference=old, revision="a" * 40)
+        peer = {**self.row("xcl", 1144, revision="b" * 40), "url": old}
+        rows = {canonical_url(row["url"]): row for row in (origin, peer)}
+        with patch("portbridge.radar_patches.digest_commit", return_value="c" * 40) as digest, \
+                patch("portbridge.radar_patches.shutil.which", return_value="git"):
+            self.assertEqual(sample(self.catalog, [("first", origin, None)], rows, {}, 1), 2)
+        digest.assert_any_call("xcl-dev/xcl", "b" * 40, "git")
+
     def row(self, project, number, *, signal=None, reference=None, revision=None,
             status="open", fetched_at=FRESH):
         repo = next(item["repo"] for item in self.catalog.projects() if item["slug"] == project)

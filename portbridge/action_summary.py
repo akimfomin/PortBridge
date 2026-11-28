@@ -18,6 +18,7 @@ from .preflight import PUBLIC_BASE, english_text, public_preflight
 
 EVENT_LIMIT = 4 * 1024 * 1024
 ESCAPE_MARKDOWN = str.maketrans({char: f"&#{ord(char)};" for char in string.punctuation})
+FULL_REVISION = re.compile(r"[a-fA-F0-9]{40,64}")
 HEADER = "## PortBridge prior-work summary\n\n"
 UNAVAILABLE = "The public catalog is unavailable. Continue the usual review.\n"
 
@@ -83,8 +84,26 @@ def source_group(heading, items, confidence=None):
     for item in items[:5]:
         link = source_link(item["title"], item["url"])
         if link:
-            rows.append(f"- {link}" + (f" · {confidence}" if confidence else ""))
+            revision = item.get("revision") or ""
+            pin = f" · observed revision `{revision}`" if isinstance(revision, str) and FULL_REVISION.fullmatch(revision) else ""
+            rows.append(f"- {link}" + pin + (f" · {confidence}" if confidence else ""))
     return [f"### {heading}", "", *rows, ""] if rows else []
+
+
+def reviewed_group(findings):
+    rows = []
+    for entry in findings[:5]:
+        link = source_link(entry["title"], entry["source_url"])
+        if not link:
+            continue
+        status = "contested" if entry.get("contested") else entry["status"]
+        details = [label(status), label(entry["outcome"]), label(entry["observed"])]
+        details.extend(f"`{revision}`" for revision in entry.get("revisions", [])[:3]
+                       if isinstance(revision, str) and FULL_REVISION.fullmatch(revision))
+        if entry.get("limitations"):
+            details.append(label(entry["limitations"]))
+        rows.append(f"- {link} · " + " · ".join(details))
+    return ["### Reviewed test results", "", *rows, ""] if rows else []
 
 
 def render_report(result, *, source_url=None, head=None, event_origin=False):
@@ -97,6 +116,8 @@ def render_report(result, *, source_url=None, head=None, event_origin=False):
             lines.extend([f"{scope}: `{head}`. Catalog evidence may predate this head.", ""])
     if result.get("catalog_status") in {"partial", "stale", "error", "seed-only"}:
         lines.extend(["The public snapshot may be incomplete.", ""])
+    if (result.get("catalog_index") or {}).get("partial"):
+        lines.extend(["This search reached its snapshot page limit. More results may exist.", ""])
     if (result.get("catalog_freshness") or {}).get("age_state") == "stale":
         lines.extend(["Latest successful GitHub data is at least two hours old.", ""])
     for heading, stamp in (("GitHub last success", result.get("catalog_last_success")),
@@ -135,6 +156,7 @@ def render_report(result, *, source_url=None, head=None, event_origin=False):
         section = candidates if card.get("match_level") == "candidate" else cards
         section.append(f"{row} · {suffix}" if suffix else row)
     groups = ["### Reviewed catalog", "", *cards, ""] if cards else []
+    groups.extend(reviewed_group(result.get("radar_findings", [])))
     if candidates:
         groups.extend(["### Possible catalog matches", "", *candidates, ""])
     groups.extend(source_group("Suggested cross-project leads", [

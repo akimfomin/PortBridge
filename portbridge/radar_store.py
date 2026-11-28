@@ -225,6 +225,11 @@ def filter_findings(rows, *, url="", query="", limit=5):
     from .matching import canonical_url
 
     normalized = canonical_url(url) if url else None
+    fragment = url.partition("#")[2]
+    if normalized and fragment:
+        return [item for item in rows if any(
+            source.partition("#")[2] == fragment and canonical_url(source) == normalized
+            for source in (item.get("source_url", ""), item.get("review_url", "")))][:limit]
     q = query.strip().casefold()
     return [item for item in rows if ((normalized and normalized in (item["origin"], item["peer"]))
              or (not normalized and q and q in item["title"].casefold()))][:limit]
