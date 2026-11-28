@@ -1,0 +1,124 @@
+{
+  "receiver": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+  "upstream_base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+  "pull_heads": {
+    "1017": "52a4c6f6f43b2d831084b072924c9da01ac896fe",
+    "1018": "c100068f09fd19e0be3f0d7452e2bec208d04444",
+    "1015": "7a6729d9847562ca7b5f0d906aa5dc8a34b59f48"
+  },
+  "patch_sha256": {
+    "1017": "137c094a27002a8a6d05d5b229c8be2d55f8a375e5b50aeb6212c7af2a02bff6",
+    "1018": "d37ccd77b70b96a9e3467ba0b1021500ceeb8d0fb33b641011c050f30d39fe25",
+    "1015": "8837f2db7019bede5fe5a2667851dc8d41b1f4ddb13c2c60307f4b7829e36ec6"
+  },
+  "combined_trees": [
+    {
+      "order": [
+        1017,
+        1018
+      ],
+      "tree": "aaae8218d01976d61f2c10580e47bbe674d01ab6",
+      "fixtures": {
+        "replay": {
+          "path": "crates/victory-gpu/src/replay/play/pixel.rs",
+          "test_functions": [
+            "depth_probe_reads_the_copied_plane_layout"
+          ]
+        },
+        "publication": {
+          "path": "crates/victory-gpu/src/resource.rs",
+          "test_functions": [
+            "a_depth_planes_twin_is_drawn_into_the_plane"
+          ]
+        },
+        "cache": {
+          "path": "crates/victory-gpu/src/pipeline/library.rs",
+          "test_functions": []
+        }
+      }
+    },
+    {
+      "order": [
+        1018,
+        1017
+      ],
+      "tree": "aaae8218d01976d61f2c10580e47bbe674d01ab6",
+      "fixtures": {
+        "replay": {
+          "path": "crates/victory-gpu/src/replay/play/pixel.rs",
+          "test_functions": [
+            "depth_probe_reads_the_copied_plane_layout"
+          ]
+        },
+        "publication": {
+          "path": "crates/victory-gpu/src/resource.rs",
+          "test_functions": [
+            "a_depth_planes_twin_is_drawn_into_the_plane"
+          ]
+        },
+        "cache": {
+          "path": "crates/victory-gpu/src/pipeline/library.rs",
+          "test_functions": []
+        }
+      }
+    },
+    {
+      "order": [
+        1017,
+        1018,
+        1015
+      ],
+      "tree": "de207b4982a0edd42d61512b225b1a5b678fa8bc",
+      "fixtures": {
+        "replay": {
+          "path": "crates/victory-gpu/src/replay/play/pixel.rs",
+          "test_functions": [
+            "depth_probe_reads_the_copied_plane_layout"
+          ]
+        },
+        "publication": {
+          "path": "crates/victory-gpu/src/resource.rs",
+          "test_functions": [
+            "a_depth_planes_twin_is_drawn_into_the_plane"
+          ]
+        },
+        "cache": {
+          "path": "crates/victory-gpu/src/pipeline/library.rs",
+          "test_functions": [
+            "adapter_dir"
+          ]
+        }
+      }
+    },
+    {
+      "order": [
+        1015,
+        1018,
+        1017
+      ],
+      "tree": "de207b4982a0edd42d61512b225b1a5b678fa8bc",
+      "fixtures": {
+        "replay": {
+          "path": "crates/victory-gpu/src/replay/play/pixel.rs",
+          "test_functions": [
+            "depth_probe_reads_the_copied_plane_layout"
+          ]
+        },
+        "publication": {
+          "path": "crates/victory-gpu/src/resource.rs",
+          "test_functions": [
+            "a_depth_planes_twin_is_drawn_into_the_plane"
+          ]
+        },
+        "cache": {
+          "path": "crates/victory-gpu/src/pipeline/library.rs",
+          "test_functions": [
+            "adapter_dir"
+          ]
+        }
+      }
+    }
+  ],
+  "compiled": false,
+  "physical_gpu": false
+}

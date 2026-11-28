@@ -1,0 +1,45 @@
+{
+  "source_checks": {
+    "any-gate": {
+      "source": "https://github.com/LooperSalty/AnyXboxX/blob/daaffd4fc095d4122680d98dacaf91f28ed5d833/third_party/victory/crates/victory-gpu/src/pipeline/host.rs#L598",
+      "file_sha256": "978472833658c23109e13c4c564b5f0a2e6eb77429a5d3e910b542060737fc5f"
+    },
+    "any-replay": {
+      "source": "https://github.com/LooperSalty/AnyXboxX/blob/daaffd4fc095d4122680d98dacaf91f28ed5d833/third_party/victory/crates/victory-gpu/src/pipeline/host.rs#L590",
+      "file_sha256": "978472833658c23109e13c4c564b5f0a2e6eb77429a5d3e910b542060737fc5f"
+    },
+    "any-nvidia-override": {
+      "source": "https://github.com/LooperSalty/AnyXboxX/blob/daaffd4fc095d4122680d98dacaf91f28ed5d833/third_party/victory/crates/victory-gpu/src/pipeline/library.rs#L639",
+      "file_sha256": "da73ec19e5083e8bb9d2652c8eafc67e02ff9b3e36b9f6cdfbe63d714e99cbcb"
+    },
+    "any-conditional-cache-name": {
+      "source": "https://github.com/LooperSalty/AnyXboxX/blob/daaffd4fc095d4122680d98dacaf91f28ed5d833/third_party/victory/crates/victory-gpu/src/pipeline/host.rs#L617",
+      "file_sha256": "978472833658c23109e13c4c564b5f0a2e6eb77429a5d3e910b542060737fc5f"
+    },
+    "vice-gate": {
+      "source": "https://github.com/TaynanGT/Vice-Tay/blob/ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842/crates/victory-gpu/src/pipeline/host.rs#L603",
+      "file_sha256": "4b665b7075dfb88523293cc5134cdaee7284e79a39bccb74cb294f0b340b7e61"
+    },
+    "vice-snapshot": {
+      "source": "https://github.com/TaynanGT/Vice-Tay/blob/ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842/crates/victory-gpu/src/pipeline/samplers.rs#L70",
+      "file_sha256": "fe164e947300bbde59570661eb684ddcb8fb292624d1ad4078060396e7c27acb"
+    },
+    "vice-root-failure": {
+      "source": "https://github.com/TaynanGT/Vice-Tay/blob/ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842/crates/victory-gpu/src/pipeline/samplers.rs#L180",
+      "file_sha256": "fe164e947300bbde59570661eb684ddcb8fb292624d1ad4078060396e7c27acb"
+    },
+    "vice-published-keys": {
+      "source": "https://github.com/TaynanGT/Vice-Tay/blob/ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842/crates/victory-gpu/src/pipeline/samplers.rs#L195",
+      "file_sha256": "fe164e947300bbde59570661eb684ddcb8fb292624d1ad4078060396e7c27acb"
+    }
+  },
+  "expected_policy_vectors": {
+    "empty root": true,
+    "flag off, listed sampler": false,
+    "first launch": false,
+    "new sampler after replay": false,
+    "next launch after rediscovery": true,
+    "replayed but one root was refused": false,
+    "point/clamp is a different key": false
+  }
+}

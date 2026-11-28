@@ -1,0 +1,52 @@
+--- a/crates/victory-gpu/src/pipeline/samplers.rs
++++ b/crates/victory-gpu/src/pipeline/samplers.rs
+@@ -65,10 +65,12 @@
+     if !on() {
+         return;
+     }
+-    let made = sync(device, &[]);
+-    let primed = SEEN.read().unwrap_or_else(|e| e.into_inner()).clone().unwrap_or_default();
+-    let _ = PRIMED.set(primed);
+-    tracing::info!(samplers = made, "static samplers made in the order of the cache's list (VICTORY_SAMPLER_ORDER)");
++    let (made, complete) = sync(device, &[]);
++    if complete {
++        let primed = SEEN.read().unwrap_or_else(|e| e.into_inner()).clone().unwrap_or_default();
++        let _ = PRIMED.set(primed);
++    }
++    tracing::info!(samplers = made, complete, "static sampler replay (VICTORY_SAMPLER_ORDER)");
+ }
+ 
+ /// Whether all of `samplers` hold the places the list gives them in this
+@@ -150,16 +152,16 @@
+ }
+ 
+ /// Makes what the list holds and this process has not made yet, in the
+-/// list's order, then `mine` where new (added to the list). How many this
+-/// process has made in all.
+-fn sync(device: &ID3D12Device, mine: &[Words]) -> usize {
++/// list's order, then `mine` where new (added to the list). Returns how many
++/// keys the process has seen and whether the list was read and fully replayed.
++fn sync(device: &ID3D12Device, mine: &[Words]) -> (usize, bool) {
+     let mut made = MADE.lock().unwrap_or_else(|e| e.into_inner());
+     let made = made.get_or_insert_with(|| Made { known: HashSet::new(), kept: Vec::new() });
+     let mut file = open_alone();
+     let mut listed = String::new();
+-    if let Some(file) = &mut file {
+-        let _ = file.read_to_string(&mut listed);
+-    }
++    let read_list = file
++        .as_mut()
++        .is_some_and(|file| file.read_to_string(&mut listed).is_ok());
+     let mut new = Vec::new();
+     for w in listed.lines().filter_map(parse) {
+         if made.known.insert(w) {
+@@ -193,7 +195,8 @@
+     drop(file);
+     let mut seen = SEEN.write().unwrap_or_else(|e| e.into_inner());
+     seen.get_or_insert_default().extend(new);
+-    made.known.len()
++    let complete = read_list && made.known.len() == made.kept.len();
++    (made.known.len(), complete)
+ }
+ 
+ /// A root signature with the one static sampler `w`.

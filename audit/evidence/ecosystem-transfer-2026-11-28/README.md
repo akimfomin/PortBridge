@@ -1,0 +1,45 @@
+# PortBridge ecosystem transfer wave
+
+Public GitHub revisions sampled on 28 November 2026. PortBridge product baseline `4b3378af870d8b3fac78bb50ffd019c886a056ba`.
+
+## What was checked
+
+- [Fresh sample](fresh-sample.json) contains 150 PR metadata records across 13 repositories, drawn from 365 pull records returned by GitHub for 14 repositories, including a fork with no PRs. Prior identical heads from the previous published three-wave PR list were excluded from the fresh sample. This is platform triage. The changed files of the narrower Git sample were inspected separately.
+- [98 PRs against their current base](same-repository-results.json): 87 clean and 11 conflicting. Of [72 pair trials](same-repository-results.json), 50 built a changed tree, 20 conflicted and two added no changes. [49 cross-repository trials](cross-repository-results.json): 16 source patches applied directly, 24 three-way trials conflicted, five vendored-source contexts differed, one exact patch was already present, and three were skipped after revision drift. Thus 118 completed pair/transfer trials, plus 98 current-base trials. No trial executed fetched code.
+- Direct source trials used only `crates/` and `scripts/` and the existing vendored prefix for AnyXboxX. A clean application is permission to build and investigate. The evidence makes no claim about compile, performance, graphics equivalence or a compatible release.
+
+## Ready checks and transfer decisions
+
+| Case | Finding | Next evidence |
+| --- | --- | --- |
+| AnyXboxX #577 and Vice-Tay #395 | Both replay static-sampler order. The AnyXboxX NVIDIA path still omits the library name if only the new feature is enabled. Vice-Tay admits a named pipeline when all samplers were primed. | Check cold learning, fresh-process hit, one new sampler, and a replay refusal with the override unset. [AnyXboxX delivery](https://github.com/LooperSalty/AnyXboxX/pull/577#issuecomment-7238679662) · [source comparison and seven CPU policy vectors](sampler-source-receipt.json). |
+| Vice-Tay #395 | A sampler whose root creation returns an error still enters the primed-key set. A refused earlier key may change the numbering of later keys. | [GPL patch for the pinned Vice-Tay head](vice-sampler-fail-closed.patch) enters the existing fallback when opening/reading the list or recreating any listed root fails. It applies and reverses at the exact head; the crate and the driver path still need verification. Existing driver-override behavior is outside the change. [Receiving thread](https://github.com/TaynanGT/Vice-Tay/pull/395#issuecomment-7238679395). |
+| victory-altracing + VIctory-NVIDIA #1017 and #1018 | The depth probe needs the copied plane's actual footprint, while same-list lighting needs a freshly written depth plane. Both fixes together produce the same tree in both orders on the fork's main. | Run `depth_probe_reads_the_copied_plane_layout` and `a_depth_planes_twin_is_drawn_into_the_plane` separately on the aggregate. The former needs `diagnostics`. [Original probe](https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1017) · [Original writer fix](https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1018) · [pinned stack](altracing-stack-receipt.json). |
+| victory-altracing + VIctory-NVIDIA #1015 | Adapter separation in the pipeline library also stacks with both depth fixes in either tested order. It addresses separate adapter paths, alongside the fork's existing cold-sampler limitation. | Compare generated adapter-specific library directories first; retain same-list depth outputs. [Original adapter PR](https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1015) · [fork's cold-cache caveat](https://github.com/whoalin1/victory-altracing/blob/95e1ca80b56865b3bf2654f27c7550b05a8d54a9/README.md#L59-L64). |
+| victory-altracing + VIctory-NVIDIA #1006 / #1008 | The #1006 source patch reverses cleanly from the target, so there is no second port to make. #1008 conflicts in `memory.rs` despite superficially similar BVH fault handling. | Check ownership and fault accounting before considering adaptation. [#1006](https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1006) · [#1008](https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1008). |
+| Copperframe + Vice-Tay #388 and Copperframe #4 | The same author has separate adaptations of the refresh-ahead approach. The direct transfer into Copperframe conflicts in `host.rs`. | Prefer the native patch as the comparison base. Existing CPU evidence shows why the byte-range invalidation still needs a separate negative control even when sharing KLBF page-copy tracking. [Existing Copperframe delivery](https://github.com/XaviFortes/VIctory-RDNA/pull/4#issuecomment-7231768185) · [Vice-Tay #388](https://github.com/TaynanGT/Vice-Tay/pull/388). |
+| Copperframe and KLBF + VIctory-NVIDIA #1019 | The synthetic Wave32 gather correction applies to both main pins. It is separate from their same-list depth port, which conflicts. | For each target independently, capture 64- and 128-thread results for wrap and inactive source lanes before considering a merge. [Original Wave32 regression](https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1019). |
+| KLBF #89 and #152 | KLBF already has owners for both. #89 remains stacked on open #41. #152 closed unmerged, but the maintainer requested base / serialization-only / full-source runs in the receiving thread. | Use the existing threads for results, preserve actual Proton/driver versions and group-shape evidence, and preserve tested/read-only status. [#89 maintainer decision](https://github.com/PastiiJay/klbf-lab/pull/89#issuecomment-7197873409) · [#152 maintainer decision](https://github.com/PastiiJay/klbf-lab/pull/152#issuecomment-7237920674). |
+
+## Follow-through
+
+- Vice-Tay #392's author isolated the old test flake after the same-base control, with 5/30 failures before and 0/40 after the separate test fix. External contributor maximecmb then measured a second system, RTX 5080, with the original and queued card-copy implementations. At 2,000+ draws, mean delta was approximately 1.4 ms, with ±0.7 ms in the source report; the outdoor-only difference was inside run noise. The PR author integrated the diagnostic A/B toggle in `fb40506`. These are two distinct results from the prior track, with separate attribution. [Flake](https://github.com/TaynanGT/Vice-Tay/pull/392#issuecomment-7232904064) · [External measurement](https://github.com/TaynanGT/Vice-Tay/pull/392#issuecomment-7237442462) · [Author response](https://github.com/TaynanGT/Vice-Tay/pull/392#issuecomment-7237465822).
+- Xbox2Windows #3299 was merged. RonLogic narrowed the AMD control to a vertical-only ramp and added two derivative paths, after the earlier test fixture did not isolate both. Earlier RX 9060 XT results remain valid as observations of the original fixture. The revised fixture has RTX/WARP evidence. Its AMD replay stays open, because the recent 7-pass/1-skip RX 9060 XT receipt covers different runtime tests. [Prior PortBridge handoff](https://github.com/R0Y00/Xbox2Windows/pull/3255#issuecomment-7233284599) · [Author replay](https://github.com/R0Y00/Xbox2Windows/pull/3255#issuecomment-7235184338) · [Merged #3299](https://github.com/R0Y00/Xbox2Windows/pull/3299) · [Unrelated updated AMD receipt](https://github.com/R0Y00/Xbox2Windows/pull/3241#issuecomment-7238366904).
+- Local RTX 4070 Ti SUPER was at 56–58% utilization during spot checks, so no local timing run was used.
+- PortBridge catalog gained three source-backed entries through [PR #162](https://github.com/akimfomin/PortBridge/pull/162). All 336 tests and the publication gate passed locally. Scheduled GitHub runs checked from Nov 24 21:30 UTC to Nov 28 10:17 UTC: 10 successes and one failure. Among the latest eight successful runs, the start gap ranged from 7 h 01 min to 16 h 10 min. These are run receipts, not a seven-day cadence. [Run history](https://github.com/akimfomin/PortBridge/actions/workflows/pages.yml).
+- Requirements remain 83 verified, including 39 open or blocked. No new independent team installations or repeat requests were confirmed in this wave.
+
+## Reproduce
+
+From this directory with Python 3.11+ and a recent Git with `merge-tree --merge-base`. The first two commands validate current public refs against pinned receipts and may skip a moved ref. The last two use immutable SHAs. Downloaded source is used as data.
+
+```powershell
+$env:PB_OPS_REPORT_FILE = "$env:TEMP/pb-git-recheck.json"
+python same-repository.py
+python cross-repository.py git-targets.json "$env:TEMP/pb-cross-recheck.json"
+python check_altracing_stack.py
+python verify_sampler_gate.py
+```
+
+The upstream projects retain authorship of all source changes and existing regressions. The Vice-Tay delta is an adaptation on its GPL source. Primary GitHub links and testable controls identify what PortBridge compared or produced.
+

@@ -1,0 +1,501 @@
+{
+  "whoalin1/victory-altracing": [
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1015",
+      "head": "7a6729d9847562ca7b5f0d906aa5dc8a34b59f48",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1017",
+      "head": "52a4c6f6f43b2d831084b072924c9da01ac896fe",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1018",
+      "head": "c100068f09fd19e0be3f0d7452e2bec208d04444",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1019",
+      "head": "0f5e7e4d96b41d8f50f90d4eb175485ebfe5860c",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/999",
+      "head": "cc3b4655d2ca7ee0ea3dcb70f220cf8556100411",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/pool.rs"
+      ]
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1003",
+      "head": "29409c40b530d915b2ebce0e002998f09a9c9a8c",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1005",
+      "head": "6235b60c56442b34afee3be2de7cfd42b073e68a",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/indirect.rs"
+      ]
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1006",
+      "head": "101cdf284266603ee89e623cca9c5efad1d67be4",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-present"
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1007",
+      "head": "484154f174fbeae59d22eeb60b98e9c7bad57ab2",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/descriptor/host.rs"
+      ]
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1008",
+      "head": "27e89e940b8e610792336b18e315db89495e317c",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/memory.rs"
+      ]
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/390",
+      "head": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+      "base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/descriptor/host.rs"
+      ]
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/392",
+      "head": "fb40506b57a894bce665a9873f863dd79d8bbf1c",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/shadow.rs"
+      ]
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/395",
+      "head": "ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/pipeline/library.rs"
+      ]
+    },
+    {
+      "target": "whoalin1/victory-altracing",
+      "receiving": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/403",
+      "head": "9e37e88af9421e46edb8ab46b260352391857e77",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "skip"
+    }
+  ],
+  "XaviFortes/VIctory-RDNA": [
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+      "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/host.rs"
+      ]
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/389",
+      "head": "d7e5183b6b619d1976ef1b0dce798c7fd042fa82",
+      "base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/port.rs"
+      ]
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/390",
+      "head": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+      "base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/descriptor/host.rs"
+      ]
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/392",
+      "head": "fb40506b57a894bce665a9873f863dd79d8bbf1c",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/shadow.rs"
+      ]
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/393",
+      "head": "1b12e6eef2c23f00bdca67d4b11a7e911780078a",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/395",
+      "head": "ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/pipeline/library.rs"
+      ]
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/403",
+      "head": "9e37e88af9421e46edb8ab46b260352391857e77",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "skip"
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1017",
+      "head": "52a4c6f6f43b2d831084b072924c9da01ac896fe",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1018",
+      "head": "c100068f09fd19e0be3f0d7452e2bec208d04444",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/draw.rs",
+        "crates/victory-gpu/src/host.rs"
+      ]
+    },
+    {
+      "target": "XaviFortes/VIctory-RDNA",
+      "receiving": "4e3a4d2a2c8b47c1c7355d7847def528a506af28",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1019",
+      "head": "0f5e7e4d96b41d8f50f90d4eb175485ebfe5860c",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    }
+  ],
+  "TaynanGT/Vice-Tay": [
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/XaviFortes/VIctory-RDNA/pull/4",
+      "head": "3a592a8ed607055d9328c263b80c27d33506a324",
+      "base": "c0d38c34edcdecb7e1f11a3a83ab2856fa4d8a55",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/host.rs"
+      ]
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1015",
+      "head": "7a6729d9847562ca7b5f0d906aa5dc8a34b59f48",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/pipeline/library.rs"
+      ]
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1017",
+      "head": "52a4c6f6f43b2d831084b072924c9da01ac896fe",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1018",
+      "head": "c100068f09fd19e0be3f0d7452e2bec208d04444",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/draw.rs",
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/resource.rs"
+      ]
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1019",
+      "head": "0f5e7e4d96b41d8f50f90d4eb175485ebfe5860c",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-shader/src/emit/lower.rs"
+      ]
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/994",
+      "head": "1af6babbde233762edc96ad079abc6d995b7e39b",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/shadow.rs"
+      ]
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/fxceless/victory-fork/pull/1496",
+      "head": "ee732dc02b23effce4b59df721c2f55adba14e0c",
+      "base": "cd9355206de35baeab822ce9bb2bbac7e8354eb6",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/memory.rs"
+      ]
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/fxceless/victory-fork/pull/1506",
+      "head": "de6370a12b423fcab73291222cf19df63d7959e8",
+      "base": "6b3ce6ce54288df514585caa6880f91468c8bc54",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "TaynanGT/Vice-Tay",
+      "receiving": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "source": "https://github.com/fxceless/victory-fork/pull/1507",
+      "head": "83879d2ef9f2e4deb274b63a7d1a076b0fce021b",
+      "base": "6b3ce6ce54288df514585caa6880f91468c8bc54",
+      "status": "source-patch-clean"
+    }
+  ],
+  "LooperSalty/AnyXboxX": [
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+      "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/390",
+      "head": "59563b9f3ae0386803b1acb7839fba7feb5f8287",
+      "base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "status": "source-context-mismatch",
+      "paths": [
+        "third_party/victory/crates/victory-gpu/src/descriptor/host.rs:1066"
+      ]
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/392",
+      "head": "fb40506b57a894bce665a9873f863dd79d8bbf1c",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/395",
+      "head": "ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "source-context-mismatch",
+      "paths": [
+        "third_party/victory/crates/victory-gpu/src/pipeline.rs:890"
+      ]
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/403",
+      "head": "9e37e88af9421e46edb8ab46b260352391857e77",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1015",
+      "head": "7a6729d9847562ca7b5f0d906aa5dc8a34b59f48",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-context-mismatch",
+      "paths": [
+        "third_party/victory/crates/victory-gpu/src/pipeline/library.rs:5"
+      ]
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1017",
+      "head": "52a4c6f6f43b2d831084b072924c9da01ac896fe",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1018",
+      "head": "c100068f09fd19e0be3f0d7452e2bec208d04444",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-context-mismatch",
+      "paths": [
+        "third_party/victory/crates/victory-gpu/src/draw.rs:503",
+        "third_party/victory/crates/victory-gpu/src/host.rs:1750",
+        "third_party/victory/crates/victory-gpu/src/resource.rs:4990"
+      ]
+    },
+    {
+      "target": "LooperSalty/AnyXboxX",
+      "receiving": "66b92fbe48c82ecbb334eba19c872f0c538ff1fb",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1019",
+      "head": "0f5e7e4d96b41d8f50f90d4eb175485ebfe5860c",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-context-mismatch",
+      "paths": [
+        "third_party/victory/crates/victory-shader/src/emit/lower.rs:1783"
+      ]
+    }
+  ],
+  "PastiiJay/klbf-lab": [
+    {
+      "target": "PastiiJay/klbf-lab",
+      "receiving": "87e5f7bc8d2fc7bbb8b8b3a0b5c6858bccc10174",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/388",
+      "head": "0334d598083f7e8b1015c316f2b60485acbee4f4",
+      "base": "01482583726a74b1683a0fd9c41bb423c48cb760",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/host.rs"
+      ]
+    },
+    {
+      "target": "PastiiJay/klbf-lab",
+      "receiving": "87e5f7bc8d2fc7bbb8b8b3a0b5c6858bccc10174",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/392",
+      "head": "fb40506b57a894bce665a9873f863dd79d8bbf1c",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/shadow.rs"
+      ]
+    },
+    {
+      "target": "PastiiJay/klbf-lab",
+      "receiving": "87e5f7bc8d2fc7bbb8b8b3a0b5c6858bccc10174",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/395",
+      "head": "ca46856f8250ed0a2f79914fcf3f0d6f4a7ab842",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/host.rs",
+        "crates/victory-gpu/src/pipeline/host.rs",
+        "crates/victory-gpu/src/pipeline/library.rs"
+      ]
+    },
+    {
+      "target": "PastiiJay/klbf-lab",
+      "receiving": "87e5f7bc8d2fc7bbb8b8b3a0b5c6858bccc10174",
+      "source": "https://github.com/TaynanGT/Vice-Tay/pull/403",
+      "head": "9e37e88af9421e46edb8ab46b260352391857e77",
+      "base": "fe7c6e52198f2070805ffafc4e55a7163291bad0",
+      "status": "skip"
+    },
+    {
+      "target": "PastiiJay/klbf-lab",
+      "receiving": "87e5f7bc8d2fc7bbb8b8b3a0b5c6858bccc10174",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1017",
+      "head": "52a4c6f6f43b2d831084b072924c9da01ac896fe",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/replay/play/pixel.rs"
+      ]
+    },
+    {
+      "target": "PastiiJay/klbf-lab",
+      "receiving": "87e5f7bc8d2fc7bbb8b8b3a0b5c6858bccc10174",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1018",
+      "head": "c100068f09fd19e0be3f0d7452e2bec208d04444",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "full-pr-three-way-conflict",
+      "paths": [
+        "crates/victory-gpu/src/draw.rs",
+        "crates/victory-gpu/src/host.rs"
+      ]
+    },
+    {
+      "target": "PastiiJay/klbf-lab",
+      "receiving": "87e5f7bc8d2fc7bbb8b8b3a0b5c6858bccc10174",
+      "source": "https://github.com/trustno1-coder/VIctory-NVIDIA/pull/1019",
+      "head": "0f5e7e4d96b41d8f50f90d4eb175485ebfe5860c",
+      "base": "63b902fe1720a5188ee79d94a88c8de0470f6349",
+      "status": "source-patch-clean"
+    }
+  ]
+}
