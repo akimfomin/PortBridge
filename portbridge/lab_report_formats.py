@@ -31,6 +31,10 @@ REPORT_POLICIES = {
     "xbox2windows-3220-exp2-rounding": (
         "d3d12-wave32", ("native-adapter", "input-11c5", "input-a86d", "input-36b6", "input-b8a5"),
     ),
+    "xbox2windows-3255-implicit-derivatives": (
+        "d3d12-wave32", ("native-adapter", "wave32-shapes", "wave64-shapes", "multidimensional-shapes",
+                        "derivative-operations", "six-thread-refusal", "36-thread-refusal"),
+    ),
 }
 REPORT_HEADER = "portbridge test report v1"
 FIELD_LINE = re.compile(r"(task|revisions|equipment|hardware|pci|os|driver|toolchain|subgroup-width|opt-in):\s*(.+)", re.I)

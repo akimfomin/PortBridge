@@ -22,6 +22,7 @@ from test_portbridge import CatalogFixture
 
 
 PR = "https://github.com/xcl-dev/xcl/pull/99999"
+PR_FORM = "https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml"
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -134,6 +135,38 @@ class DiscoveryPresentationTest(CatalogFixture):
         self.assertEqual(json.loads(result.stdout), [[row["id"] for row in ranked["matches"]], "partial"])
 
     @unittest.skipUnless(browser_binary(), "Chromium is needed to render the search route")
+    def test_published_home_search_routes_pr_to_request_link(self):
+        site = export(self.catalog, self.workspace / "home-search")
+        index = site / "index.html"
+        # Wait for the published snapshot to initialize, then submit the actual home form.
+        submit = f"""<script>
+        const home = document.getElementById('content');
+        const ready = new MutationObserver(() => {{
+          if (home.getAttribute('aria-busy') !== 'false') return;
+          ready.disconnect();
+          document.getElementById('search').value = {json.dumps(PR)};
+          document.getElementById('filters').requestSubmit();
+        }});
+        ready.observe(home, {{attributes: true, attributeFilter: ['aria-busy']}});
+        </script>"""
+        text = index.read_text(encoding="utf-8")
+        index.write_text(text.replace("</body>", submit + "</body>"), encoding="utf-8")
+        with ThreadingHTTPServer(("127.0.0.1", 0), partial(SimpleHTTPRequestHandler, directory=site)) as server:
+            thread = Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            try:
+                page = subprocess.run([
+                    browser_binary(), "--headless", "--disable-gpu", "--disable-background-networking",
+                    "--no-first-run", "--no-sandbox", f"--user-data-dir={self.workspace / 'home-browser'}",
+                    "--virtual-time-budget=4000", "--dump-dom", f"http://127.0.0.1:{server.server_port}/?lang=en",
+                ], capture_output=True, timeout=25, check=True).stdout.decode("utf-8")
+                self.assertIn(f'href="{PR_FORM}"', page)
+                self.assertIn("Ask for a PR check", page)
+            finally:
+                server.shutdown()
+                thread.join()
+
+    @unittest.skipUnless(browser_binary(), "Chromium is needed to render the search route")
     def test_empty_search_route_explains_an_unscanned_pr(self):
         with make_server(self.catalog, 0) as server:
             thread = Thread(target=server.serve_forever, daemon=True)
@@ -145,7 +178,10 @@ class DiscoveryPresentationTest(CatalogFixture):
                     "--no-first-run", f"--user-data-dir={self.workspace / 'browser'}", "--virtual-time-budget=3000",
                     "--dump-dom", route,
                 ], capture_output=True, timeout=25, check=True)
-                self.assertIn("Для этого PR пока нет сохранённого внешнего поиска.", rendered.stdout.decode("utf-8"))
+                page = rendered.stdout.decode("utf-8")
+                self.assertIn("Для этого PR пока нет сохранённого внешнего поиска.", page)
+                self.assertIn(f'href="{PR_FORM}"', page)
+                self.assertIn("Запросить проверку PR", page)
             finally:
                 server.shutdown()
                 thread.join()
@@ -177,6 +213,7 @@ class DiscoveryPresentationTest(CatalogFixture):
                         ], capture_output=True, timeout=25, check=True).stdout.decode("utf-8")
                         self.assertIn("Candidate source-code lines", page)
                         self.assertIn(f"https://github.com/{repo}/blob/{revision}/{source_path}#L1", page)
+                        self.assertIn(f'href="{PR_FORM}"', page)
                     finally:
                         server.shutdown()
                         thread.join()

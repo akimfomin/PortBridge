@@ -14,7 +14,7 @@ Choose AMD, NVIDIA, or CPU in the Test Lab. Check the linked discussion, run the
 
 1. Search for the exact error, instruction, PR number, or PortBridge ID. [Issue catalog](https://akimfomin.github.io/PortBridge/#/problems)
 2. Open the linked issue, PR, or test. Compare its commit, platform, and tested condition with yours. Use automated matches as leads to check.
-3. Share one reproducible result through the [evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml). Keep the original discussion linked.
+3. For a second look at a public PR, use [Ask for a PR check](https://github.com/akimfomin/PortBridge/issues/new?template=pr-check.yml) from the search results. Include the decision you need and the full target commit if reviewing a transfer. Share completed tests through the [evidence form](https://github.com/akimfomin/PortBridge/issues/new?template=evidence.yml).
 
 ## Try Discovery locally
 
