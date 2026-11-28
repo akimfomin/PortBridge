@@ -1,0 +1,36 @@
+{
+  "source_commit": "95e1ca80b56865b3bf2654f27c7550b05a8d54a9",
+  "staged_tree": "74a66f97afcff228896e18a8d1511edeb71d484f",
+  "equipment": {
+    "gpu": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "driver": "617.14",
+    "os": "Windows 11 build 28000",
+    "backend": "native D3D12"
+  },
+  "compiler": "rustc 1.98.1 x86_64-pc-windows-gnu",
+  "diagnostics": true,
+  "device_override": "VICTORY_D3D12_WARP=0",
+  "depth_twins": "1",
+  "mode": "two correctness checks without timing claims or game data",
+  "campaign_external_report": false,
+  "positive_after_negative_controls": [
+    {
+      "test": "depth_probe_reads_the_copied_plane_layout",
+      "exit": 0,
+      "result": [
+        "running 1 test",
+        "test replay::play::pixel::tests::depth_probe_reads_the_copied_plane_layout ... ok",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 540 filtered out; finished in 0.28s"
+      ]
+    },
+    {
+      "test": "a_depth_planes_twin_is_drawn_into_the_plane",
+      "exit": 0,
+      "result": [
+        "running 1 test",
+        "test resource::tests::a_depth_planes_twin_is_drawn_into_the_plane ... ok",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 540 filtered out; finished in 0.42s"
+      ]
+    }
+  ]
+}

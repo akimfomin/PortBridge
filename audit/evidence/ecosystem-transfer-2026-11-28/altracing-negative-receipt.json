@@ -1,0 +1,30 @@
+[
+  {
+    "mode": "packed width",
+    "test": "depth_probe_reads_the_copied_plane_layout",
+    "exit": 101,
+    "result": [
+      "running 1 test",
+      "test replay::play::pixel::tests::depth_probe_reads_the_copied_plane_layout ... FAILED",
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 540 filtered out; finished in 0.27s",
+      "assertion `left == right` failed",
+      "left: 3715488",
+      "right: 3711184",
+      "error: test failed, to rerun pass `-p victory-gpu --lib`"
+    ]
+  },
+  {
+    "mode": "deferred publication",
+    "test": "a_depth_planes_twin_is_drawn_into_the_plane",
+    "exit": 101,
+    "result": [
+      "running 1 test",
+      "test resource::tests::a_depth_planes_twin_is_drawn_into_the_plane ... FAILED",
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 540 filtered out; finished in 0.44s",
+      "assertion `left == right` failed: texel 1, class 65",
+      "left: false",
+      "right: true",
+      "error: test failed, to rerun pass `-p victory-gpu --lib`"
+    ]
+  }
+]
