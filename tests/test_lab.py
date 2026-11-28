@@ -76,6 +76,10 @@ class LabTest(CatalogFixture):
         self.assertEqual(midpoint["revisions"][0]["sha"], "eceb81af87456a1e887738c78c1ceee05c8d02f5")
         self.assertEqual(midpoint["report_cases"], ["native-adapter", "input-11c5", "input-a86d",
                                                   "input-36b6", "input-b8a5"])
+        derivatives = tasks["xbox2windows-3255-implicit-derivatives"]
+        self.assertEqual(derivatives["source_url"], derivatives["revisions"][0]["url"])
+        self.assertEqual(derivatives["revisions"][0]["sha"], "0fe4cebcbc78f6b020a95f6df8f1ff0e9c3ffc86")
+        self.assertEqual((derivatives["status"], derivatives["equipment"]), ("needs_run", ["amd"]))
         for task in tasks.values():
             self.assertEqual(task["adoption"], "pending")
             self.assertTrue(task["steps"] and task["expected"] and task["report"])
