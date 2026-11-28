@@ -1,0 +1,97 @@
+--- a/src/gfx1013_direct_compute.inl
++++ b/src/gfx1013_direct_compute.inl
+@@ -1649,6 +1649,12 @@
+             auto bits = ir.value("bitcast float " + widened + " to i32");
+             // Round with the same integer nearest-even conversion v_cvt_f16_f32 uses.
+             auto rounded = packed_half_rne(bits);
++            if (n == "v_exp_f16") {
++                // Exact exp2(0x11c5) is above the 0x3c00/0x3c01 midpoint, but
++                // rounding through f32 lands on it. Correct this measured input
++                // after source modifiers and before placing the destination half.
++                rounded = select(cmp("eq", source, "4549"), "15361", rounded);
++            }
+             if (rsq || log) {
+                 // Enforce RDNA2's exact special results from the modified half bits.
+                 // The D3D Rsqrt contract does not guarantee a negative infinity for -0.
+--- a/tests/native_f16_alu_check.py
++++ b/tests/native_f16_alu_check.py
+@@ -41,6 +41,7 @@
+ UNARY_INPUTS = M.GRID + [0x8001, 0x0400, 0x3800, 0x4000, 0x4400, 0x3555,
+                          0x4bff, 0x4c00, 0x4c40, 0xce00, 0xce80]  # no 0xce40: exp(-25) is an exact tie to zero
+ # Binary16 rounding of the nine inline float encodings, in encoding order.
++EXP2_BOUNDARY = {0x11c4: 0x3c00, 0x11c5: 0x3c01, 0x11c6: 0x3c01}
+ INLINE_F16 = {
+     240: 0x3800, 241: 0xb800, 242: 0x3c00, 243: 0xbc00, 244: 0x4000,
+     245: 0xc000, 246: 0x4400, 247: 0xc400, 248: 0x3118,
+@@ -99,6 +100,14 @@
+     if got >> 16 != HI_A >> 16 or want >> 16 not in (0, HI_A >> 16):
+         return False
+     return M.same_half_result(got & 0xffff, want & 0xffff, op)
++
++
++def matches_case(got, want, case):
++    if case.op == 'exp':
++        source = modified(case.a, case.abs_mask, case.neg, 0)
++        if source in EXP2_BOUNDARY:
++            return got == HI_A | EXP2_BOUNDARY[source]
++    return same_half(got, want, case.op)
+ 
+ 
+ def _u32(value):
+@@ -238,6 +247,10 @@
+         items.extend(Case(op, a, 0, kind) for kind in ('vop1', 'vop3') for a in UNARY_INPUTS)
+         items.append(Case(op, 0xc000, 0, 'vop3', abs_mask=1))
+         items.append(Case(op, 0x4000, 0, 'vop3', neg=1))
++    items.extend(Case('exp', value, 0, kind)
++                 for kind in ('vop1', 'vop3') for value in EXP2_BOUNDARY)
++    items.append(Case('exp', 0x91c5, 0, 'vop3', abs_mask=1))
++    items.append(Case('exp', 0x11c5, 0, 'vop3', neg=1))
+     assert len(items) < STRIDE
+     return items
+ 
+@@ -348,6 +361,12 @@
+         right = modified(case.b, case.abs_mask, case.neg, 1)
+         got = f32_half(case.op, left, right)
+         assert same_half(HI_A | got, case.want, case.op), (case.op, case.kind, hex(left), hex(right), hex(got), hex(case.want))
++    for source, expected in EXP2_BOUNDARY.items():
++        assert M.half_op('exp', source) == expected
++    midpoint = Case('exp', 0x11c5, 0)
++    assert f32_half('exp', midpoint.a, 0) == 0x3c00
++    assert not matches_case(HI_A | 0x3c00, midpoint.want, midpoint)
++    assert matches_case(HI_A | 0x3c01, midpoint.want, midpoint)
+     wants = [case.want for case in items]
+     assert 0x8000 in wants and 0x0000 in wants and 0x7c00 in wants and 0x3c00 in wants and 0x3c02 in wants
+     assert any(M.is_nan(value) for value in wants)
+@@ -659,7 +678,7 @@
+         stores = sorted(interpret(text))
+         assert [addr for addr, _ in stores] == [4 * i for i in range(len(want))], stores[:4]
+         bad = [(i, hex(got), hex(expected)) for i, ((_, got), expected) in enumerate(zip(stores, want))
+-               if not same_half(got, expected, items[i].op)]
++               if not matches_case(got, expected, items[i])]
+         assert not bad, bad[:8]
+         run = dump(dumper, work, dpp_program(), 'dpp')
+         assert run.returncode == 0 and 'waveReadLaneAt.i32' in run.stdout, (run.stdout, run.stderr)
+@@ -687,7 +706,7 @@
+         subprocess.run([str(Path(sdk) / 'dxc.exe'), '-T', 'rootsig_1_1', '-E', 'SIG', '-Fo', root, src], check=True)
+         sa = struct.pack('<7I', 0, 0, 0, 32 | (1 << 16), 1 | (1 << 20), 0, 0x80 | (5 << 1))
+         items = all_cases()
+-        for name, instructions, reference, ops in (('alu', code, want, [c.op for c in items]),
++        for name, instructions, reference, ops in (('alu', code, want, items),
+                                                    ('dpp', dpp_program(), dpp_reference(), None)):
+             marker = write_request(work, instructions, root.read_bytes(), sa)
+             dest = work / (name + '-readback.bin')
+@@ -700,9 +719,12 @@
+             actual = struct.unpack('<2064I', dest.read_bytes())
+             bad = []
+             for index, got in enumerate(actual):
+-                model, op = results.get(index, (SENTINEL, None))
++                model, case = results.get(index, (SENTINEL, None))
+                 # Compare NaNs by class, keep the destination high half, and check the guard words.
+-                ok = same_half(got, model, op) if index in results else got == model
++                if case is not None:
++                    ok = matches_case(got, model, case)
++                else:
++                    ok = same_half(got, model) if index in results else got == model
+                 if not ok:
+                     bad.append((index, hex(got), hex(model)))
+             assert not bad, (name, bad[:10])

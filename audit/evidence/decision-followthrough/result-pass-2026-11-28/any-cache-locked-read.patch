@@ -1,0 +1,41 @@
+--- a/PrototypeScarlett/emu/shader_cache.py
++++ b/PrototypeScarlett/emu/shader_cache.py
+@@ -72,7 +72,11 @@
+             self.stats.misses += 1
+             return None
+         if not data.startswith(DXIL_MAGIC):
+-            path.unlink(missing_ok=True)
++            try:
++                path.unlink(missing_ok=True)
++            except PermissionError:
++                # A peer may still hold the file open. The cache can miss safely.
++                pass
+             self.stats.misses += 1
+             return None
+         try:
+--- a/tests/test_shader_cache.py
++++ b/tests/test_shader_cache.py
+@@ -37,6 +37,23 @@
+     assert fresh.get(key) is None and not path.exists()
+     with pytest.raises(ValueError):
+         cache.put(key, b"not dxil")
++
++
++def test_corrupted_locked_entry_is_a_miss(tmp_path, monkeypatch):
++    cache = shader_cache.ShaderCache(tmp_path)
++    key = shader_cache.cache_key("locked", "cs_6_0", None)
++    path = cache._path(key)
++    path.parent.mkdir(parents=True)
++    path.write_bytes(b"interrupted publication")
++
++    def locked_unlink(_path, *, missing_ok=False):
++        raise PermissionError(5, "Access is denied")
++
++    monkeypatch.setattr(type(path), "unlink", locked_unlink)
++    assert cache.get(key) is None
++    assert cache.stats.misses == 1
++    assert cache.stats.hits == 0 and key not in cache.memory
++    assert path.read_bytes() == b"interrupted publication"
+ 
+ 
+ def test_oldest_entries_are_pruned(tmp_path):
